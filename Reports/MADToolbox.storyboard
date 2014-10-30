@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Font Picker Navigation Controller-->
         <scene sceneID="HX3-p7-a4t">
             <objects>
-                <navigationController navigationBarHidden="YES" id="lbo-P9-ezy" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" navigationBarHidden="YES" id="lbo-P9-ezy" customClass="MADFontPickerNavigationController" sceneMemberID="viewController">
                     <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GuT-1k-PhY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -24,9 +24,9 @@
         <!--Toolbox Style Style View Controller-->
         <scene sceneID="vVV-PM-W3d">
             <objects>
-                <tableViewController storyboardIdentifier="MADIdentifierStoryboardStyle" id="4AC-SN-miY" customClass="MADToolboxStyleStyleViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MADIdentifierStoryboardStyle" extendedLayoutIncludesOpaqueBars="YES" id="4AC-SN-miY" customClass="MADToolboxStyleStyleViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="bPZ-GA-Bwr" customClass="MADVibrantTableView">
-                        <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <sections>
@@ -260,7 +260,6 @@
                             <outlet property="delegate" destination="4AC-SN-miY" id="o8k-89-gjr"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="Iiy-JZ-BIL"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -309,15 +308,14 @@
         <!--Toolbox View Controller-->
         <scene sceneID="wjq-OG-MYo">
             <objects>
-                <viewController storyboardIdentifier="MADIdentifierStoryboardToolbox" id="RTc-LS-BVF" customClass="MADToolboxViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MADIdentifierStoryboardToolbox" extendedLayoutIncludesOpaqueBars="YES" id="RTc-LS-BVF" customClass="MADToolboxViewController" sceneMemberID="viewController">
                     <containerView key="view" opaque="NO" contentMode="scaleToFill" id="8bZ-99-toH">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
+                        <rect key="frame" x="0.0" y="44" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
                             <segue destination="lbo-P9-ezy" kind="embed" id="Q8N-Oo-DfT"/>
                         </connections>
                     </containerView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="Nlj-8r-lwL">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="eJs-Au-RN1">
@@ -462,9 +460,9 @@
         <!--Font Selector View Controller-->
         <scene sceneID="lge-3C-hK1">
             <objects>
-                <tableViewController storyboardIdentifier="FontListSettingsTableViewController" id="vpu-SA-ssI" customClass="MADFontSelectorViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FontListSettingsTableViewController" extendedLayoutIncludesOpaqueBars="YES" id="vpu-SA-ssI" customClass="MADFontSelectorViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wbx-IV-jv4" customClass="MADVibrantTableView">
-                        <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                        <rect key="frame" x="0.0" y="44" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -665,9 +663,8 @@
                             <outlet property="delegate" destination="vpu-SA-ssI" id="1kl-46-jOD"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableViewCellFontAmericanTypewriter" destination="8On-Ji-GZt" id="xTW-jY-Ww3"/>

@@ -103,11 +103,12 @@
     self.buttonUnderline.layer.borderColor = tintColor.CGColor;
     self.buttonUnderline.layer.cornerRadius = 6.6666f;
     self.buttonUnderline.layer.borderWidth = 1.0000f;
-
+    
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -869,6 +870,7 @@
     if ([segue.identifier isEqualToString:@"MADIdentifierStoryboardSeguePushFontPicker"]) {
         ((MADFontSelectorViewController *)segue.destinationViewController).delegate = self;
         ((MADFontSelectorViewController *)segue.destinationViewController).document = self.document;
+        ((MADFontSelectorViewController *)segue.destinationViewController).clearsBackground = self.clearsBackground;
 
         NSString *fontname = nil;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {

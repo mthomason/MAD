@@ -14,16 +14,14 @@
 
 @implementation MADToolboxStyleStyleViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden: YES
-                                             animated: animated];
-
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationController.navigationBarHidden = YES;
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.tableView.frame = self.navigationController.view.bounds;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 @end

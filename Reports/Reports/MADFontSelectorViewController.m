@@ -36,32 +36,60 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.opaque = NO;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    
+    self.automaticallyAdjustsScrollViewInsets = YES;
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [self checkSelectedFont:self.initalSelectedFont];
-
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [UIView transitionWithView:self.view
+                      duration:UINavigationControllerHideShowBarDuration
+                       options:UIViewAnimationOptionCurveLinear
+                    animations:^ {
+                        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - (self.navigationController.navigationBar.bounds.size.height * 2));
+                    }
+                    completion:^(BOOL finished) { }];
+    
     if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }
 
+    [self checkSelectedFont:self.initalSelectedFont];
+
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-//    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+//    self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
+    
+
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden: YES
+                                             animated: NO];
+    [UIView transitionWithView:self.view
+                      duration:UINavigationControllerHideShowBarDuration / 2
+                       options:UIViewAnimationOptionCurveLinear
+                    animations:^ {
+                        //self.navigationController.navigationBar.frame = CGRectMake(CGPointZero.x,
+                        //                                                            CGPointZero.y - (self.navigationController.navigationBar.bounds.size.height * 5),
+                        //                                                            self.navigationController.navigationBar.bounds.size.width,
+                        //                                                            self.navigationController.navigationBar.bounds.size.height);
+                        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y);
+                        self.navigationController.navigationBar.alpha = 0.0000f;
+                    }
+                    completion:^(BOOL finished) { }];
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //self.tableView.frame = self.navigationController.view.bounds;
     UIEdgeInsets ed = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = ed;
 }
 
 #pragma mark -
@@ -98,7 +126,7 @@
         [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyVerdana];
     } else if ([cell isEqual:[self tableViewCellFontZapfino]]) {
         [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyZapfino];
-    }
+    }              
     
     if (cell.accessoryType != UITableViewCellAccessoryCheckmark) {
         [self uncheckAllCells];

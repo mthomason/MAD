@@ -68,6 +68,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     
     NSString *selectedObjectIds = NSStringFromSelector(@selector(selectedObjectIds));
     NSString *document = NSStringFromSelector(@selector(document));
@@ -92,6 +93,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 }
 
 - (void)setClearsBackground:(BOOL)clearsBackground {
+    _clearsBackground = clearsBackground;
     self.layout.clearsBackground = clearsBackground;
     self.format.clearsBackground = clearsBackground;
     for (UIViewController <MADToolboxDisplayProtocol> *viewController in self.styleNavigationController.viewControllers) {
@@ -129,6 +131,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setClearsBackground: self.clearsBackground];
     UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];

@@ -2224,6 +2224,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)showToolbox:(MTToolboxType)toolboxType { //Never called on iPad
     UIViewController *viewController = [self viewControllerForToolboxType:toolboxType];
+    self.viewControllerToolbox.clearsBackground = YES;
+//    self.viewControllerSectionLayoutSettings.clearsBackground = YES;
     self.childViewController = viewController;
     
     if ([viewController isKindOfClass:[UINavigationController class]]) {
@@ -2365,6 +2367,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.popoverToolbox.permittedArrowDirections = UIPopoverArrowDirectionAny;
         self.popoverToolbox.passthroughViews = self.elementViews.allObjects;
         self.popoverToolbox.delegate = self;
+        self.viewControllerToolbox.clearsBackground = YES;
         [self presentViewController: self.navigationControllerToolbox       //Notify navigation controller it will be displayed in popover....
                            animated: YES
                          completion: nil];
@@ -2587,6 +2590,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 popoverObjectSectionSettings.sourceRect = label.bounds;
                 popoverObjectSectionSettings.sourceView = label;
                 popoverObjectSectionSettings.permittedArrowDirections = UIPopoverArrowDirectionAny;
+
+                self.viewControllerToolbox.clearsBackground = YES;
                 self.popoverObjectSectionSettings = popoverObjectSectionSettings;
                 
                 [self presentViewController:self.navigationControllerSectionLayoutSettings animated:YES completion:nil];
