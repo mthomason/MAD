@@ -40,7 +40,7 @@
 #import "MTFont.h"
 #import "MADPopoverBackgroundView.h"
 
-#import "AAPLOverlayPresentationController.h"
+#import "MADToolboxPresentationController.h"
 
 #import "UIColor+EverydayApps.h"
 #import "UIView+NSObjectIdTag.h"
@@ -2224,7 +2224,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)showToolbox:(MTToolboxType)toolboxType { //Never called on iPad
     UIViewController *viewController = [self viewControllerForToolboxType:toolboxType];
-    self.viewControllerToolbox.clearsBackground = YES;
+    self.viewControllerToolbox.clearsBackground = NO;
 //    self.viewControllerSectionLayoutSettings.clearsBackground = YES;
     self.childViewController = viewController;
     
@@ -2594,7 +2594,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 self.viewControllerToolbox.clearsBackground = YES;
                 self.popoverObjectSectionSettings = popoverObjectSectionSettings;
                 
-                [self presentViewController:self.navigationControllerSectionLayoutSettings animated:YES completion:nil];
+                [self presentViewController: self.navigationControllerSectionLayoutSettings
+                                   animated: YES
+                                 completion: nil];
+                
                 [self setDisplayInactive];
                 
             } else {

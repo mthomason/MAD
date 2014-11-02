@@ -1256,8 +1256,8 @@
 		4CB2936119F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */; };
 		4CB2936C19FB52EB00C0171D /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936B19FB52EB00C0171D /* MADTabBar.m */; };
 		4CB2936D19FB52EB00C0171D /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936B19FB52EB00C0171D /* MADTabBar.m */; };
-		4CB2937019FC9DF700C0171D /* AAPLOverlayPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */; };
-		4CB2937119FC9DF700C0171D /* AAPLOverlayPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */; };
+		4CB2937019FC9DF700C0171D /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936F19FC9DF700C0171D /* MADToolboxPresentationController.m */; };
+		4CB2937119FC9DF700C0171D /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936F19FC9DF700C0171D /* MADToolboxPresentationController.m */; };
 		4CB2937419FCB3F700C0171D /* MADTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2937319FCB3F700C0171D /* MADTabBarController.m */; };
 		4CB2937519FCB3F700C0171D /* MADTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2937319FCB3F700C0171D /* MADTabBarController.m */; };
 		4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
@@ -1495,6 +1495,8 @@
 		4CF3E79319F071320064DA5F /* MADImageClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */; };
 		4CF3E79419F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
 		4CF3E79519F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
+		4CF5318D1A04A96600511BEF /* MADOverlayTransitioner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF5318C1A04A96600511BEF /* MADOverlayTransitioner.m */; };
+		4CF5318E1A04A96700511BEF /* MADOverlayTransitioner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF5318C1A04A96600511BEF /* MADOverlayTransitioner.m */; };
 		4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
@@ -2729,8 +2731,8 @@
 		4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationBarTitleView.m; sourceTree = "<group>"; };
 		4CB2936A19FB52EB00C0171D /* MADTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBar.h; sourceTree = "<group>"; };
 		4CB2936B19FB52EB00C0171D /* MADTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTabBar.m; sourceTree = "<group>"; };
-		4CB2936E19FC9DF700C0171D /* AAPLOverlayPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAPLOverlayPresentationController.h; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/AAPLOverlayPresentationController.h; sourceTree = "<group>"; };
-		4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAPLOverlayPresentationController.m; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/AAPLOverlayPresentationController.m; sourceTree = "<group>"; };
+		4CB2936E19FC9DF700C0171D /* MADToolboxPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADToolboxPresentationController.h; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/MADToolboxPresentationController.h; sourceTree = "<group>"; };
+		4CB2936F19FC9DF700C0171D /* MADToolboxPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADToolboxPresentationController.m; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/MADToolboxPresentationController.m; sourceTree = "<group>"; };
 		4CB2937219FCB3F700C0171D /* MADTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBarController.h; sourceTree = "<group>"; };
 		4CB2937319FCB3F700C0171D /* MADTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTabBarController.m; sourceTree = "<group>"; };
 		4CB3C2281922A43600F3213E /* MTSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSliderPageVertical.h; sourceTree = "<group>"; };
@@ -2987,6 +2989,8 @@
 		4CF3E78D19F071320064DA5F /* MADImageClear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageClear.png; sourceTree = "<group>"; };
 		4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@2x.png"; sourceTree = "<group>"; };
 		4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@3x.png"; sourceTree = "<group>"; };
+		4CF5318B1A04A96600511BEF /* MADOverlayTransitioner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOverlayTransitioner.h; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/MADOverlayTransitioner.h; sourceTree = "<group>"; };
+		4CF5318C1A04A96600511BEF /* MADOverlayTransitioner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOverlayTransitioner.m; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/MADOverlayTransitioner.m; sourceTree = "<group>"; };
 		4CF8670716D6572A00F716A8 /* MTAutoLayoutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoLayoutTableViewCell.h; sourceTree = "<group>"; };
 		4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoLayoutTableViewCell.m; sourceTree = "<group>"; };
 		4CF8670B16D72E0800F716A8 /* MTScrollViewCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTScrollViewCenter.h; sourceTree = "<group>"; };
@@ -3866,6 +3870,10 @@
 		4C4740AA1A0026B200B11434 /* Toolbox */ = {
 			isa = PBXGroup;
 			children = (
+				4CF5318B1A04A96600511BEF /* MADOverlayTransitioner.h */,
+				4CF5318C1A04A96600511BEF /* MADOverlayTransitioner.m */,
+				4CB2936E19FC9DF700C0171D /* MADToolboxPresentationController.h */,
+				4CB2936F19FC9DF700C0171D /* MADToolboxPresentationController.m */,
 				4C47409F1A00154D00B11434 /* MADToolbox.storyboard */,
 				4C4740AB1A0026EF00B11434 /* MADToolboxViewController.h */,
 				4C4740AC1A0026EF00B11434 /* MADToolboxViewController.m */,
@@ -5244,8 +5252,6 @@
 			isa = PBXGroup;
 			children = (
 				4C4740AA1A0026B200B11434 /* Toolbox */,
-				4CB2936E19FC9DF700C0171D /* AAPLOverlayPresentationController.h */,
-				4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */,
 				4CB2934819F8C37800C0171D /* MADImageBackgroundIcon@3x.png */,
 				4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */,
 				4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */,
@@ -6531,6 +6537,7 @@
 				4C23FBDF18FAE4F7009F234F /* MTPaperGovernmentLegal.m in Sources */,
 				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
 				4C0E7728163B5AEC003B951E /* MADToolboxStyleViewController.m in Sources */,
+				4CF5318E1A04A96700511BEF /* MADOverlayTransitioner.m in Sources */,
 				4C23FBDB18FAE4F7009F234F /* MTPaperC9.m in Sources */,
 				4CABE49C1837DF7F007EDD9D /* RptqUserCredentals.m in Sources */,
 				4C23FBC718FAE4F7009F234F /* MTPaperB10.m in Sources */,
@@ -6643,7 +6650,7 @@
 				4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */,
 				4C0E778F163B5AEC003B951E /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
 				4CABE4541837DF77007EDD9D /* RptqDocumentObjectChart.m in Sources */,
-				4CB2937119FC9DF700C0171D /* AAPLOverlayPresentationController.m in Sources */,
+				4CB2937119FC9DF700C0171D /* MADToolboxPresentationController.m in Sources */,
 				4C0E7790163B5AEC003B951E /* MADViewerController.m in Sources */,
 				4C6268DD19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */,
 				4CABE46C1837DF7B007EDD9D /* RptqQuery.m in Sources */,
@@ -6919,6 +6926,7 @@
 				4C23FB3918FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C23FBFA18FAE5DF009F234F /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C76F0B114B4F132005DCE49 /* MADDesignerViewController.m in Sources */,
+				4CF5318D1A04A96600511BEF /* MADOverlayTransitioner.m in Sources */,
 				4CABE4831837DF7D007EDD9D /* RptqDocumentObjectGroupKey.m in Sources */,
 				4C23FB9C18FAE4F7009F234F /* MTPaperA0.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
@@ -7031,7 +7039,7 @@
 				4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */,
 				4C23FC1418FAE633009F234F /* MTDatabaseTable.m in Sources */,
 				4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */,
-				4CB2937019FC9DF700C0171D /* AAPLOverlayPresentationController.m in Sources */,
+				4CB2937019FC9DF700C0171D /* MADToolboxPresentationController.m in Sources */,
 				4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */,
 				4C6268DC19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */,
 				4CABE4871837DF7E007EDD9D /* RptqDocumentObjectLabelDataField.m in Sources */,

@@ -161,7 +161,7 @@
         case MTControlStateAmbiguous:
             select = YES;
             highlight = NO;
-            backgroundColor = [[self.view tintColor] colorWithAlphaComponent:0.5000f];
+            backgroundColor = [self.view.tintColor colorWithAlphaComponent:0.5000f];
             titleColor = [UIColor whiteColor];
             break;
         default:
@@ -232,32 +232,44 @@
             [self.buttonStrike setHighlighted:NO];
             [self.buttonUnderline setSelected:NO];
             [self.buttonUnderline setHighlighted:NO];
-            [[self segmentedControlHorizontalAlignment] setSelected:NO];
-            [[self segmentedControlHorizontalAlignment] setHighlighted:NO];
-            [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
-            [[self segmentedControlHorizontalAlignment] setUserInteractionEnabled:NO];
-            [[self segmentedControlVerticalAlignment] setSelected:NO];
-            [[self segmentedControlVerticalAlignment] setHighlighted:NO];
-            [[self segmentedControlVerticalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
-            [[self segmentedControlVerticalAlignment] setUserInteractionEnabled:NO];
-            [[self fontLabelTableViewCell] setUserInteractionEnabled:NO];
+            [self.segmentedControlHorizontalAlignment setSelected:NO];
+            [self.segmentedControlHorizontalAlignment setHighlighted:NO];
+            [self.segmentedControlHorizontalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
+            [self.segmentedControlHorizontalAlignment setUserInteractionEnabled:NO];
+            [self.segmentedControlVerticalAlignment setSelected:NO];
+            [self.segmentedControlVerticalAlignment setHighlighted:NO];
+            [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
+            [self.segmentedControlVerticalAlignment setUserInteractionEnabled:NO];
+            [self.fontLabelTableViewCell setUserInteractionEnabled:NO];
             [[self stepperFontSize] setUserInteractionEnabled:NO];
             for (UIStepper *stepper in [self steppers]) {
                 [stepper setUserInteractionEnabled:NO];
             }
             
-            self.labelSizeHeight.attributedText = [self sizeHeightForValue:nil andFontSize:[[[self labelSizeHeight] font] pointSize]];
-            self.labelSizeWidth.attributedText = [self sizeWidthForValue:nil andFontSize:[[[self labelSizeWidth] font] pointSize]];
+            self.labelSizeHeight.attributedText = [self sizeHeightForValue: nil
+                                                               andFontSize: self.labelSizeHeight.font.pointSize];
+            self.labelSizeWidth.attributedText = [self sizeWidthForValue: nil
+                                                             andFontSize: self.labelSizeWidth.font.pointSize];
             
-            self.labelMarginTop.attributedText = [self marginTopForValue:nil andFontSize:[[[self labelMarginTop] font] pointSize]];
-            self.labelMarginBottom.attributedText = [self marginBottomForValue:nil andFontSize:[[[self labelMarginBottom] font] pointSize]];
-            self.labelMarginLeft.attributedText = [self marginLeftForValue:nil andFontSize:[[[self labelMarginLeft] font] pointSize]];
-            self.labelMarginRight.attributedText = [self marginRightForValue:nil andFontSize:[[[self labelMarginRight] font] pointSize]];
+            self.labelMarginTop.attributedText = [self marginTopForValue: nil
+                                                             andFontSize: self.labelMarginTop.font.pointSize];
             
-            self.labelPaddingTop.attributedText = [self marginTopForValue:nil andFontSize:[[[self labelPaddingTop] font] pointSize]];
-            self.labelPaddingBottom.attributedText = [self marginBottomForValue:nil andFontSize:[[[self labelPaddingBottom] font] pointSize]];
-            self.labelPaddingLeft.attributedText = [self marginLeftForValue:nil andFontSize:[[[self labelPaddingLeft] font] pointSize]];
-            self.labelPaddingRight.attributedText = [self marginRightForValue:nil andFontSize:[[[self labelPaddingRight] font] pointSize]];
+            self.labelMarginBottom.attributedText = [self marginBottomForValue: nil
+                                                                   andFontSize: self.labelMarginBottom.font.pointSize];
+            
+            self.labelMarginLeft.attributedText = [self marginLeftForValue: nil
+                                                               andFontSize: self.labelMarginLeft.font.pointSize];
+            self.labelMarginRight.attributedText = [self marginRightForValue: nil
+                                                                 andFontSize: self.labelMarginRight.font.pointSize];
+            
+            self.labelPaddingTop.attributedText = [self marginTopForValue: nil
+                                                              andFontSize: self.labelPaddingTop.font.pointSize];
+            self.labelPaddingBottom.attributedText = [self marginBottomForValue: nil
+                                                                    andFontSize: self.labelPaddingBottom.font.pointSize];
+            self.labelPaddingLeft.attributedText = [self marginLeftForValue: nil
+                                                                andFontSize: self.labelPaddingLeft.font.pointSize];
+            self.labelPaddingRight.attributedText = [self marginRightForValue: nil
+                                                                  andFontSize: self.labelPaddingRight.font.pointSize];
             
         } else {
             
@@ -364,8 +376,8 @@
                 
             }
             
-            [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:[horizontalAlignmentHolder integerValue]];
-            [[self segmentedControlVerticalAlignment] setSelectedSegmentIndex:[verticalAlignmentHolder integerValue]];
+            [self.segmentedControlHorizontalAlignment setSelectedSegmentIndex:[horizontalAlignmentHolder integerValue]];
+            [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:[verticalAlignmentHolder integerValue]];
             
             CGFloat labelSize = [UIFont systemFontSize];
             
@@ -402,11 +414,11 @@
             [[self stepperPaddingRight] setValue:[paddingRightHolder doubleValue]];
             
             displayNumber = numberOfSizeHeights == 1 ? sizeHeightHolder : nil;
-            [[self labelSizeHeight] setAttributedText:[self sizeHeightForValue:displayNumber andFontSize:labelSize]];
+            [self.labelSizeHeight setAttributedText:[self sizeHeightForValue:displayNumber andFontSize:labelSize]];
             [[self stepperSizeHeight] setValue:[sizeHeightHolder doubleValue]];
             
             displayNumber = numberOfSizeWidths == 1 ? sizeWidthHolder : nil;
-            [[self labelSizeWidth] setAttributedText:[self sizeWidthForValue:displayNumber andFontSize:labelSize]];
+            [self.labelSizeWidth setAttributedText:[self sizeWidthForValue:displayNumber andFontSize:labelSize]];
             [[self stepperSizeWidth] setValue:[sizeWidthHolder doubleValue]];
             
             switch (numberFonts) {
@@ -441,32 +453,32 @@
             
             /*
              if (controlStateHorizontalAlignment == MTControlStateAmbiguous) {
-             [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
+             [self.segmentedControlHorizontalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
              UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
-             [self segmentedControlHorizontalAlignment].backgroundColor = tentColor;
+             self.segmentedControlHorizontalAlignment.backgroundColor = tentColor;
              } else {
-             //[[self segmentedControlHorizontalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-             [self segmentedControlHorizontalAlignment].backgroundColor = [UIColor clearColor];
+             //[self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+             self.segmentedControlHorizontalAlignment.backgroundColor = [UIColor clearColor];
              }
              if (controlStateVerticalAlignment == MTControlStateAmbiguous) {
              //UIImage *imageButtonSelected = [UIImage imageNamed:@"UIButtonSelected"];
-             [[self segmentedControlVerticalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
-             //[[self segmentedControlVerticalAlignment] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+             [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
+             //[self.segmentedControlVerticalAlignment setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
              UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
-             [self segmentedControlVerticalAlignment].backgroundColor = tentColor;
+             self.segmentedControlVerticalAlignment.backgroundColor = tentColor;
              } else {
-             //[[self segmentedControlVerticalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-             [self segmentedControlVerticalAlignment].backgroundColor = [UIColor clearColor];
+             //[self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+             self.segmentedControlVerticalAlignment.backgroundColor = [UIColor clearColor];
              }
              */
-            [self setStateInControl:[self segmentedControlHorizontalAlignment] forState:controlStateHorizontalAlignment];
-            [self setStateInControl:[self segmentedControlVerticalAlignment] forState:controlStateVerticalAlignment];
+            [self setStateInControl:self.segmentedControlHorizontalAlignment forState:controlStateHorizontalAlignment];
+            [self setStateInControl:self.segmentedControlVerticalAlignment forState:controlStateVerticalAlignment];
             
             
-            [[self fontLabelTableViewCell] setUserInteractionEnabled:YES];
+            [self.fontLabelTableViewCell setUserInteractionEnabled:YES];
             [[self stepperFontSize] setUserInteractionEnabled:YES];
-            [[self segmentedControlHorizontalAlignment] setUserInteractionEnabled:YES];
-            [[self segmentedControlVerticalAlignment] setUserInteractionEnabled:YES];
+            [self.segmentedControlHorizontalAlignment setUserInteractionEnabled:YES];
+            [self.segmentedControlVerticalAlignment setUserInteractionEnabled:YES];
             
         }
         [self setStateInControl:self.buttonBold forState:[self controlStateBold]];
@@ -735,7 +747,7 @@
         NSNumber *value = @(self.stepperSizeWidth.value);
         CGFloat fontSize = self.labelSizeHeight.font.pointSize;
         NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
-        [[self labelSizeHeight] setAttributedText:displayHeight];
+        [self.labelSizeHeight setAttributedText:displayHeight];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -747,7 +759,7 @@
         NSNumber *value = @(self.stepperSizeWidth.value);
         CGFloat fontSize = self.labelSizeHeight.font.pointSize;
         NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
-        [[self labelSizeWidth] setAttributedText:displayWidth];
+        [self.labelSizeWidth setAttributedText:displayWidth];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -755,10 +767,10 @@
             [documentObject saveContext];
         }
         
-    } else if ([sender isEqual:[self segmentedControlHorizontalAlignment]]) {
-        MTHorizontalAlignment horizontalAlignment = [[self segmentedControlHorizontalAlignment] selectedSegmentIndex];
+    } else if ([sender isEqual:self.segmentedControlHorizontalAlignment]) {
+        MTHorizontalAlignment horizontalAlignment = [self.segmentedControlHorizontalAlignment selectedSegmentIndex];
         NSNumber *value = @(horizontalAlignment);
-        [[self segmentedControlHorizontalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+        [self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -766,10 +778,10 @@
             [documentObject saveContext];
         }
         
-    } else if ([sender isEqual:[self segmentedControlVerticalAlignment]]) {
-        MTVerticalAlignment verticalAlignment = [[self segmentedControlVerticalAlignment] selectedSegmentIndex];
+    } else if ([sender isEqual:self.segmentedControlVerticalAlignment]) {
+        MTVerticalAlignment verticalAlignment = [self.segmentedControlVerticalAlignment selectedSegmentIndex];
         NSNumber *value = @(verticalAlignment);
-        [[self segmentedControlVerticalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+        [self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
