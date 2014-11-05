@@ -97,16 +97,21 @@
 - (NSAttributedString *)trademarkStatement {
     NSNumber *superscript = @(1);
     UIFont *font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-    NSDictionary *attributes = @{(__bridge NSString *)kCTSuperscriptAttributeName : superscript, NSFontAttributeName : font};
-    NSAttributedString *r = [[NSAttributedString alloc] initWithString:@"®" attributes:attributes];
+    NSDictionary *attributes = @{(__bridge NSString *)kCTSuperscriptAttributeName : superscript,
+                                 NSFontAttributeName : font};
+    NSAttributedString *r = [[NSAttributedString alloc] initWithString: @"®"
+                                                            attributes: attributes];
     NSString *madTrademark = @"MAD";
-    NSAttributedString *mad = [[NSAttributedString alloc] initWithString:madTrademark
-                                                              attributes:nil];
-    NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString:mad];
+    NSAttributedString *mad = [[NSAttributedString alloc] initWithString: madTrademark
+                                                              attributes: nil];
+    
+    NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString: mad];
     [tm appendAttributedString:r];
+    
     NSAttributedString *statement = [[NSAttributedString alloc] initWithString: @" is a registered trademark of Everyday Apps LLC."
                                                                     attributes: nil];
-    [tm appendAttributedString:statement];
+    [tm appendAttributedString: statement];
+    
     return tm;
 }
 

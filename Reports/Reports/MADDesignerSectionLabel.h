@@ -13,13 +13,13 @@
 
 extern const CGFloat MADesignerSectionLabelFontSize;
 
-@protocol DesignerSectionLabelDelegate;
+@protocol MADDesignerSectionLabelDelegate;
 
 @class RptqDocumentSection;
 
 @interface MADDesignerSectionLabel : UILabel
 
-@property (nonatomic, weak) id <DesignerSectionLabelDelegate> delegate;
+@property (nonatomic, weak) id <MADDesignerSectionLabelDelegate> delegate;
 @property (nonatomic, assign, readonly) BOOL selected;
 @property (nonatomic, assign) BOOL indicatorFormFeed;
 @property (nonatomic, assign) BOOL indicatorVisible;
@@ -31,7 +31,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 
 @end
 
-@protocol DesignerSectionLabelDelegate <NSObject>
+@protocol MADDesignerSectionLabelDelegate <NSObject>
 
 - (void)toggleSectionControlPanel:(MADDesignerSectionLabel *)label;
 

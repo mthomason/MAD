@@ -23,19 +23,36 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
 
-@property (nonatomic, strong) NSString *keyPathDocument;
-@property (nonatomic, strong) NSString *keyPathSelectedObjectIds;
-
-
 @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
 
 @end
 
 @implementation MADToolboxViewController
 
+- (void)dealloc {
+
+    [self removeObserver: self
+              forKeyPath: [MADToolboxViewController keyPathDocument]];
+
+    [self removeObserver: self
+              forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]];
+    
+}
+
++ (NSString *)keyPathSelectedObjectIds {
+    NSString *selectedObjectIds = NSStringFromSelector(@selector(selectedObjectIds));
+    return selectedObjectIds;
+}
+
++ (NSString *)keyPathDocument {
+    NSString *document = NSStringFromSelector(@selector(document));
+    return document;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 
     if (self = [super initWithCoder:aDecoder]) {
+        
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADToolbox"
                                                              bundle: [NSBundle mainBundle]];
@@ -48,6 +65,19 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
         self.format = format;
 
         self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
+        
+        [self addObserver: self
+               forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]
+                  options: 0
+                  context: NULL];
+        
+        [self addObserver: self
+               forKeyPath: [MADToolboxViewController keyPathDocument]
+                  options: 0
+                  context: NULL];
+        
+        self.preferredContentSize = CGSizeMake(320.0000f, 400.0000f);
+
     }
     
     return self;
@@ -70,22 +100,6 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.sceneSelector.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     
-    NSString *selectedObjectIds = NSStringFromSelector(@selector(selectedObjectIds));
-    NSString *document = NSStringFromSelector(@selector(document));
-
-    [self addObserver: self
-           forKeyPath: selectedObjectIds
-              options: 0
-              context: NULL];
-
-    [self addObserver: self
-           forKeyPath: document
-              options: 0
-              context: NULL];
-
-    self.keyPathSelectedObjectIds = selectedObjectIds;
-    self.keyPathDocument = document;
-
 }
 
 - (void)viewWillLayoutSubviews {
@@ -106,12 +120,12 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
                         change:(NSDictionary *)change
                        context:(void *)context {
     
-    if ([keyPath isEqualToString:self.keyPathDocument]) {
+    if ([keyPath isEqualToString:[MADToolboxViewController keyPathDocument]]) {
     
         id <MTToolboxViewControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
         [delegate setDocument:self.document];
 
-    } else if ([keyPath isEqualToString:self.keyPathSelectedObjectIds]) {
+    } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
         
         id <MTToolboxViewControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
         [delegate setSelectedDocumentObjects:self.selectedObjectIds];

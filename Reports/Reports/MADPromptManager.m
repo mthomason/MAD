@@ -39,8 +39,10 @@
 
 - (void)removeString:(NSString *)string {
     NSUInteger i = [self.promptItems indexOfObjectIdenticalTo:string];
-    [self.promptItems removeObjectAtIndex:i];
-    [self updatePrompt];
+    if (i != NSNotFound) {
+        [self.promptItems removeObjectAtIndex:i];
+        [self updatePrompt];
+    }
 }
 
 - (void)removeAll {
