@@ -99,7 +99,8 @@
     UIFont *font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
     NSDictionary *attributes = @{(__bridge NSString *)kCTSuperscriptAttributeName : superscript, NSFontAttributeName : font};
     NSAttributedString *r = [[NSAttributedString alloc] initWithString:@"®" attributes:attributes];
-    NSAttributedString *mad = [[NSAttributedString alloc] initWithString:MTDocumentExtentionMobleApplicationDocument
+    NSString *madTrademark = @"MAD";
+    NSAttributedString *mad = [[NSAttributedString alloc] initWithString:madTrademark
                                                               attributes:nil];
     NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString:mad];
     [tm appendAttributedString:r];
