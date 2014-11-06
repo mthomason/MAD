@@ -17,4 +17,6 @@
 @property (nonatomic, strong) UIView *passthroughContainer;
 @property (nonatomic, strong) NSSet *passthroughViews;
 
+- (BOOL)showOnSide;
+
 @end

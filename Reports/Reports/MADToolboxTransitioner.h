@@ -16,6 +16,8 @@
 
 @interface MADToolboxTransitioningDelegate : NSObject <UIViewControllerTransitioningDelegate>
 
+    @property (nonatomic, strong, readonly) UIPresentationController *presentationController;
+
     //For popover view
     @property (nonatomic, assign) CGRect sourceRect;
     @property (nonatomic, strong) UIView *sourceView;
@@ -25,6 +27,5 @@
     @property (nonatomic, strong) NSSet *passthroughViews;
 
     @property (nonatomic, assign) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
-
 
 @end

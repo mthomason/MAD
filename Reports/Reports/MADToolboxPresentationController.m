@@ -96,24 +96,25 @@
         self.dismissGestureReconizer = down;
         
         ((UINavigationController *)presentedViewController).interactivePopGestureRecognizer.enabled = NO;
-
+//        presentedViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
     }
     
     return self;
 }
 
 - (void)handleSwipeAway:(UIGestureRecognizer *)gestureReconizer {
-    [self.presentedViewController dismissViewControllerAnimated:YES completion:NULL];
+    [self dismiss];
 }
-
 
 - (void)presentationTransitionWillBegin {
 
     UIView *containerView = self.containerView;
     UIViewController *presentedViewController = self.presentedViewController;
-
+    self.presentingViewController.modalTransitionStyle = [self showOnSide] ?
+                                                        UIModalTransitionStyleFlipHorizontal :
+                                                        UIModalTransitionStyleCoverVertical;
     self.dimmingView.frame = containerView.bounds;
-    self.dimmingView.alpha = 0.0;
+    self.dimmingView.alpha = 0.0000f;
 
     [containerView insertSubview:self.dimmingView atIndex:0];
     
@@ -122,12 +123,12 @@
         __weak MADToolboxPresentationController *weakself = self;
         [presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 
-            weakself.dimmingView.alpha = 1.0;
+            weakself.dimmingView.alpha = 1.0000f;
 
         } completion:nil];
 
     } else {
-        self.dimmingView.alpha = 1.0;
+        self.dimmingView.alpha = 1.0000f;
     }
 }
 
@@ -193,13 +194,17 @@
 - (void)dimmingViewTapped:(UIGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateRecognized) {
         if ([self.popoverPresentationControllerDelegate popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)self]) {
-            __weak MADToolboxPresentationController *weakself = self;
-            [self.presentingViewController dismissViewControllerAnimated: YES
-                                                              completion:^{
-                                                                  [weakself.popoverPresentationControllerDelegate popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)weakself];
-                                                              }];
+            [self dismiss];
         }
     }
+}
+
+- (void)dismiss {
+    __weak MADToolboxPresentationController *weakself = self;
+    [self.presentingViewController dismissViewControllerAnimated: YES
+                                                      completion:^{
+                                                          [weakself.popoverPresentationControllerDelegate popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)weakself];
+                                                      }];
 }
 
 @end

@@ -11,7 +11,7 @@
 
 @interface MADToolboxTransitioningDelegate ()
 
-@property (nonatomic, strong) UIPresentationController *presentationController;
+@property (nonatomic, strong, readwrite) UIPresentationController *presentationController;
 
 @end
 
@@ -91,16 +91,26 @@
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
     
-    UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UIView *fromView = [fromViewController view];
-    UIViewController *toViewController   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *toView = [toViewController view];
     
-    UIView *containerView = [transitionContext containerView];
+    
+    UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UIView *fromView = fromViewController.view;
+
+    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIView *toView = toViewController.view;
+    
+    UIView *containerView = transitionContext.containerView;
+    
+    BOOL showOnSide;
+    if ([toViewController.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
+        showOnSide = [((MADToolboxPresentationController *)toViewController.presentationController) showOnSide];
+    } else {
+        showOnSide = [((MADToolboxPresentationController *)fromViewController.presentationController) showOnSide];
+    }
     
     BOOL isToolboxVisible = self.isToolboxVisible;
 
-    if(isToolboxVisible) {
+    if (isToolboxVisible) {
         [containerView addSubview:toView];
     }
     
@@ -110,13 +120,19 @@
     CGRect appearedFrame = [transitionContext finalFrameForViewController:animatingVC];
     
     CGRect dismissedFrame = appearedFrame;
-    dismissedFrame.origin.x += dismissedFrame.size.width;
+    
+    if (showOnSide) {
+        dismissedFrame.origin.x += dismissedFrame.size.width;
+    } else {
+        dismissedFrame.origin.y += dismissedFrame.size.height;
+    }
     
     CGRect initialFrame = isToolboxVisible ? dismissedFrame : appearedFrame;
     CGRect finalFrame = isToolboxVisible ? appearedFrame : dismissedFrame;
 
     animatingView.frame = initialFrame;
     
+    MADToolboxAnimatedTransitioning *weakself = self;
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
                           delay: 0
          usingSpringWithDamping: 300.0
@@ -127,7 +143,7 @@
                     }
                      completion: ^(BOOL finished){
                          
-                         if (self.toolboxVisible == NO) {
+                         if (weakself.toolboxVisible == NO) {
 
                              [fromView removeFromSuperview];
                              
