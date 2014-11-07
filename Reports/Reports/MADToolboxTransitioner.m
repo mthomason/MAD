@@ -60,6 +60,7 @@
 
 - (MADToolboxAnimatedTransitioning *)animationController {
     MADToolboxAnimatedTransitioning *animationController = [[MADToolboxAnimatedTransitioning alloc] init];
+    animationController.passthroughContainer = self.passthroughContainer;
     return animationController;
 }
 
@@ -69,7 +70,6 @@
     
     MADToolboxAnimatedTransitioning *animationController = [self animationController];
     animationController.toolboxVisible = YES;
-    
     return animationController;
 }
 
@@ -91,34 +91,26 @@
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
     
-    
-    
-    UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UIView *fromView = fromViewController.view;
-
-    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *toView = toViewController.view;
+    UITabBarController *tabBarController;
+    UINavigationController *toolboxNavigationController;
+    BOOL isToolboxVisible = self.isToolboxVisible;
+    if (isToolboxVisible == NO) {
+        tabBarController = (UITabBarController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+        toolboxNavigationController = (UINavigationController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    } else {
+        tabBarController = (UITabBarController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+        toolboxNavigationController = (UINavigationController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    }
     
     UIView *containerView = transitionContext.containerView;
     
-    BOOL showOnSide;
-    if ([toViewController.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
-        showOnSide = [((MADToolboxPresentationController *)toViewController.presentationController) showOnSide];
-    } else {
-        showOnSide = [((MADToolboxPresentationController *)fromViewController.presentationController) showOnSide];
-    }
-    
-    BOOL isToolboxVisible = self.isToolboxVisible;
+    BOOL showOnSide = [((MADToolboxPresentationController *)toolboxNavigationController.presentationController) showOnSide];
 
     if (isToolboxVisible) {
-        [containerView addSubview:toView];
+        [containerView addSubview:toolboxNavigationController.view];
     }
     
-    UIViewController *animatingVC = isToolboxVisible ? toViewController : fromViewController;
-    UIView *animatingView = [animatingVC view];
-    
-    CGRect appearedFrame = [transitionContext finalFrameForViewController:animatingVC];
-    
+    CGRect appearedFrame = [transitionContext finalFrameForViewController:toolboxNavigationController];
     CGRect dismissedFrame = appearedFrame;
     
     if (showOnSide) {
@@ -130,7 +122,15 @@
     CGRect initialFrame = isToolboxVisible ? dismissedFrame : appearedFrame;
     CGRect finalFrame = isToolboxVisible ? appearedFrame : dismissedFrame;
 
-    animatingView.frame = initialFrame;
+    toolboxNavigationController.view.frame = initialFrame;
+
+    UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
+    UIViewController *designer = designerNavigationController.viewControllers.firstObject;
+    UIEdgeInsets scrollIndicatorInsets = UIEdgeInsetsMake(designer.topLayoutGuide.length,
+                                                          CGSizeZero.width,
+                                                          isToolboxVisible ? finalFrame.size.height : tabBarController.selectedViewController.bottomLayoutGuide.length,
+                                                          CGSizeZero.width);
+
     
     MADToolboxAnimatedTransitioning *weakself = self;
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
@@ -139,14 +139,16 @@
           initialSpringVelocity: 5.0
                         options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
-                         animatingView.frame = finalFrame;
-                    }
+                         
+                         ((UIScrollView *)weakself.passthroughContainer).contentInset = scrollIndicatorInsets;
+                         ((UIScrollView *)weakself.passthroughContainer).scrollIndicatorInsets = scrollIndicatorInsets;
+                         toolboxNavigationController.view.frame = finalFrame;
+
+                     }
                      completion: ^(BOOL finished){
                          
-                         if (weakself.toolboxVisible == NO) {
-
-                             [fromView removeFromSuperview];
-                             
+                         if (isToolboxVisible == NO) {
+                             [toolboxNavigationController.view removeFromSuperview];
                          }
 
                          [transitionContext completeTransition:YES];

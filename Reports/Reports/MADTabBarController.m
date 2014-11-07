@@ -18,6 +18,15 @@ const NSInteger MADIndexViewer = 2;
 
 @implementation MADTabBarController
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    [self.selectedViewController.view setNeedsLayout];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
 /*
 #pragma mark - Navigation
 

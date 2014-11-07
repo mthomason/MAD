@@ -149,7 +149,7 @@
 }
 
 - (UIModalPresentationStyle)adaptivePresentationStyle {
-    return UIModalPresentationCustom;
+    return UIModalPresentationOverCurrentContext;// UIModalPresentationCustom;
 }
 
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
@@ -160,9 +160,14 @@
 }
 
 - (void)containerViewWillLayoutSubviews {
-    
+    [super containerViewWillLayoutSubviews];
     self.dimmingView.frame = self.containerView.bounds;
     self.presentedView.frame = [self frameOfPresentedViewInContainerView];
+}
+
+- (void)containerViewDidLayoutSubviews {
+    [super containerViewDidLayoutSubviews];
+    
 }
 
 - (BOOL)shouldPresentInFullscreen { return YES; }

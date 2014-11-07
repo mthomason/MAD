@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MADToolboxAnimatedTransitioningProtocol <NSObject>
+
+- (void)performAnimations;
+
+@end
+
 @interface MADToolboxAnimatedTransitioning : NSObject <UIViewControllerAnimatedTransitioning>
 
+    @property (nonatomic, weak) id <MADToolboxAnimatedTransitioningProtocol> delegate;
+    @property (nonatomic, weak) UIView *passthroughContainer;
     @property (nonatomic, assign, getter=isToolboxVisible) BOOL toolboxVisible;
 
 @end

@@ -97,9 +97,9 @@
     
     if (self.userSelectedObjectIds.count == 0) {
 
-        [self.tableViewCellCurrency setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [self.tableViewCellCurrency setAccessoryType:UITableViewCellAccessoryNone];
-        [self.labelNumberOfDecimals setText:NSLocalizedString(@"Decimals", "Decimals")];
+        self.tableViewCellCurrency.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.tableViewCellCurrency.accessoryType = UITableViewCellAccessoryNone;
+        self.labelNumberOfDecimals.text = NSLocalizedString(@"Decimals", "Decimals");
 
     } else {
     
@@ -184,14 +184,15 @@
 }
 
 - (NSAttributedString *)decimalsStringForNumberOfDecimals:(NSInteger)numberOfDecimals {
-    CGFloat pointSize = [[self.labelNumberOfDecimals font] pointSize];
-    UIFont *boldFont = [UIFont boldSystemFontOfSize:pointSize];
-    UIFont *systemFont = [UIFont systemFontOfSize:[[self.labelNumberOfDecimals font] pointSize]];
+
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:self.labelNumberOfDecimals.font.pointSize];
+    UIFont *systemFont = [UIFont systemFontOfSize:self.labelNumberOfDecimals.font.pointSize];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont};
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
     
-    NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Decimals", "Decimals")
-                                                                                                   attributes:boldAttributes];
+    NSString *decimals = NSLocalizedString(@"Decimals", "Decimals");
+    NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: decimals
+                                                                                                   attributes: boldAttributes];
     NSString *pointsString;
     if (numberOfDecimals == -1) {
         pointsString = @"-";

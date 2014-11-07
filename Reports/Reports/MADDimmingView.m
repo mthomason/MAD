@@ -7,7 +7,7 @@
 //
 
 #import "MADDimmingView.h"
-
+#import "MADBackgroundScrollView.h"
 @implementation MADDimmingView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -30,9 +30,15 @@
     for (UIView *foundView in self.passthoughViews) {
         CGRect normalized = [self convertRect: foundView.frame
                                      fromView: foundView];
+
         if (CGRectContainsPoint(normalized, point)) {  // Touched, nice
-            hitview = foundView;
-            break;
+            
+            CGRect visibleRect = [self.passthroughContainer convertRect:self.passthroughContainer.bounds toView:((MADBackgroundScrollView *)self.passthroughContainer).container];
+//            CGRect visibleRect2 = [self.passthroughContainer convertRect:visibleRect toView:self];
+            if (CGRectContainsPoint(visibleRect, point)) {
+                hitview = foundView;
+                break;
+            }
         }
     }
     

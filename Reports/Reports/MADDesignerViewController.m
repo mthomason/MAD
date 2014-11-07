@@ -690,6 +690,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (UIEdgeInsets)desiredScrollInsets {
+    NSLog(@"Bottom layout guide: %f", self.bottomLayoutGuide.length);
+    NSLog(@"Toolbox top:         %f", self.viewControllerToolbox.view.frame.origin.y);
     return UIEdgeInsetsMake(self.topLayoutGuide.length,
                             CGSizeZero.width,
                             self.toolboxVisible ? CGSizeZero.height + [self toolboxHeightCalculated]:
@@ -751,6 +753,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
+    UIEdgeInsets insets = [self desiredScrollInsets];
+    self.contentInset = insets;
+    insets = [self desiredScrollInsets];
+    self.scrollIndicatorInsets = insets;
+
     self.detailDisplayView.frame = [self detailDisplayFrame];
     [self.viewControllerSectionLayoutSettings viewWillLayoutSubviews];
 
@@ -1259,7 +1266,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             __weak MADDesignerViewController *weakself = self;
             [self presentViewController: self.navigationControllerToolbox
                                animated: YES
-                             completion:^{
+                             completion: ^{
                                  [weakself adjustContextOffsetForToolboxWithToolboxType:MTToolboxTypeElement];
                              }];
         } else {
@@ -2604,7 +2611,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
                 self.viewControllerToolbox.clearsBackground = YES;
                 self.popoverObjectSectionSettings = popoverObjectSectionSettings;
-                
+
                 [self presentViewController: self.navigationControllerSectionLayoutSettings
                                    animated: YES
                                  completion: nil];
