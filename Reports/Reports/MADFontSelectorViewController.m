@@ -44,13 +44,13 @@
 
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [UIView transitionWithView:self.view
-                      duration:UINavigationControllerHideShowBarDuration
-                       options:UIViewAnimationOptionCurveLinear
-                    animations:^ {
-                        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - (self.navigationController.navigationBar.bounds.size.height * 2));
-                    }
-                    completion:^(BOOL finished) { }];
+    //[UIView transitionWithView:self.view
+    //                  duration:UINavigationControllerHideShowBarDuration
+    //                   options:UIViewAnimationOptionCurveLinear
+    //                animations:^ {
+                        //self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - (self.navigationController.navigationBar.bounds.size.height * 2));
+      //              }
+      //              completion:^(BOOL finished) { }];
     
     if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
@@ -76,9 +76,9 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    UIEdgeInsets ed = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.tableView.scrollIndicatorInsets = ed;
+    //UIEdgeInsets ed = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    //self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    //self.tableView.scrollIndicatorInsets = ed;
 }
 
 #pragma mark -

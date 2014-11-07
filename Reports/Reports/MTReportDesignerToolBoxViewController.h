@@ -5,14 +5,14 @@
 //  Created by Michael Thomason on 1/28/13.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
-
+/*
 #ifndef Reports_MTReportDesignerToolBoxViewController_h
 #define Reports_MTReportDesignerToolBoxViewController_h
 
 #import <UIKit/UIKit.h>
 
-extern const CGFloat MADDefaultsPopooverWidth;
-extern const CGFloat MADDefaultsPopooverHeight;
+//extern const CGFloat MADDefaultsPopooverWidth;
+//extern const CGFloat MADDefaultsPopooverHeight;
 
 @class MADocument;
 
@@ -33,3 +33,4 @@ extern const CGFloat MADDefaultsPopooverHeight;
 @end
 
 #endif
+*/

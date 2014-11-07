@@ -106,16 +106,16 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [self.navigationController.navigationBar setNeedsLayout];
+    [self.navigationController.view layoutSubviews];
+    //[self.navigationController.navigationBar sizeToFit];
 }
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 //    [coordinator animateAlongsideTransitionInView:self.view animation:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        
+//        [self.navigationController.navigationBar setNeedsLayout];
 //    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        
+//
 //    }];
-//    [self.navigationController.navigationBar setNeedsLayout];
 //}
 
 - (void)setClearsBackground:(BOOL)clearsBackground {
@@ -161,7 +161,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
-    [self updateEdgeInsets:((UIScrollView *)((UIViewController *)((UINavigationController *)self.styleNavigationController).viewControllers.firstObject).view)];
+    //[self updateEdgeInsets:((UIScrollView *)((UIViewController *)((UINavigationController *)self.styleNavigationController).viewControllers.firstObject).view)];
     
 }
 

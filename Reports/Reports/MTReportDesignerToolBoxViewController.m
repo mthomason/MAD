@@ -5,7 +5,7 @@
 //  Created by Michael Thomason on 1/28/13.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
-
+/*
 #if ! __has_feature(objc_arc)
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
@@ -23,11 +23,12 @@
 #import "RptqDocumentObject+Extras.h"
 #import "MTFont.h"
 
-const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
-const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
+//const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
+//const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
 @interface MTReportDesignerToolBoxViewController ()
-    <UINavigationBarDelegate, MTReportDesignerFontSettingsDelegate,
+    <UINavigationBarDelegate,
+        MTReportDesignerFontSettingsDelegate,
         MTReportDesignerFontSelectorDelegate>
 
 @property (nonatomic, copy) NSSet *selectedObjectIds;
@@ -50,7 +51,6 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 - (void)initialize {
     [self initalizeFontListSettingsTableViewController];
     [self initalizeFontSettingsTableViewController];
-    [self initalizeSegmentedControl];
 }
 
 - (void)initalizeFontSettingsTableViewController {
@@ -71,16 +71,11 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
 }
 
-- (void)initalizeSegmentedControl {
-    
-    UINavigationItem *navigationItem = self.navigationBar.items[0];
-    navigationItem.rightBarButtonItem.tintColor = [UIColor tintColorRed];
-
-    UISegmentedControl *segmentedControl = (UISegmentedControl *)navigationItem.leftBarButtonItem.customView;
-    segmentedControl.tintColor = [UIColor tintColorWhite];
-    [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
-    self.sceneSelector = segmentedControl;
-    
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder])  {
+        [self initialize];
+    }
+    return self;
 }
 
 - (void)viewDidLoad {
@@ -269,3 +264,4 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 }
 
 @end
+ */
