@@ -1304,10 +1304,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
             [self setDisplayInactive];
         }
-
-        
-
-        
     }
 }
 
@@ -1351,11 +1347,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - UITabBarControllerDelegate
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    if ([viewController isEqual:self.navigationController] == NO) {
-        [self hideToolbox];
-    }
-}
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController { }
 
 #pragma mark - Actions
 

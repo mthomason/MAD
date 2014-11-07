@@ -26,6 +26,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationItemSceneSelector;
 
 @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
 
