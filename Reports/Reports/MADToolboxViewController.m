@@ -15,6 +15,10 @@ NSString * const MADIdentifierStoryboardLayout  = @"MADIdentifierStoryboardLayou
 NSString * const MADIdentifierStoryboardFormat  = @"MADIdentifierStoryboardFormat";
 NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle";
 
+CGFloat const MADNavigationBarSizeHeightNormal = 44.0000f;
+CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
+
+
 @interface MADToolboxViewController ()
 
 @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout;
@@ -99,14 +103,20 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    self.navigationController.navigationItem.prompt = nil;
-    self.navigationController.navigationItem.title = nil;
-    
+//    self.navigationController.navigationItem.prompt = nil;
+//    self.navigationController.navigationItem.title = nil;
+
+    CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
+    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
+
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [self.navigationController.view layoutSubviews];
+    CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
+    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
+    [self.navigationController.navigationItem.titleView sizeToFit];
+//    [self.navigationController.view layoutSubviews];
     //[self.navigationController.navigationBar sizeToFit];
 }
 

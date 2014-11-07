@@ -291,8 +291,8 @@
         <!--Navigation Controller-->
         <scene sceneID="YwO-zZ-vTV">
             <objects>
-                <navigationController id="7L5-RQ-3Zg" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="LtZ-CW-Izw">
+                <navigationController definesPresentationContext="YES" modalPresentationStyle="overFullScreen" id="7L5-RQ-3Zg" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleAspectFit" id="LtZ-CW-Izw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -331,17 +331,13 @@
                         </segmentedControl>
                     </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="sceneSelector" destination="eJs-Au-RN1" id="5yB-Eo-jQd"/>
                         <outlet property="view" destination="8bZ-99-toH" id="qLN-b5-gA2"/>
                     </connections>
                 </viewController>
-                <swipeGestureRecognizer delaysTouchesBegan="YES" direction="down" id="At8-BT-qsP">
-                    <connections>
-                        <action selector="done:" destination="RTc-LS-BVF" id="2o9-u4-dXO"/>
-                    </connections>
-                </swipeGestureRecognizer>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9aq-sy-5vo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-294" y="6580"/>
