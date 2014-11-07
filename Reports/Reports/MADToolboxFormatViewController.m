@@ -46,9 +46,13 @@
 
 #pragma mark - View lifecycle
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.tableView setContentOffset:CGPointMake(CGPointZero.x, 44.0000f) animated:NO];
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
 - (void)viewWillAppear:(BOOL)animated {

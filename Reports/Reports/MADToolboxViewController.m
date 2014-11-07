@@ -99,12 +99,24 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
+    self.navigationController.navigationItem.prompt = nil;
+    self.navigationController.navigationItem.title = nil;
     
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    [self.navigationController.navigationBar setNeedsLayout];
 }
+
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+//    [coordinator animateAlongsideTransitionInView:self.view animation:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+//    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+//    }];
+//    [self.navigationController.navigationBar setNeedsLayout];
+//}
 
 - (void)setClearsBackground:(BOOL)clearsBackground {
     _clearsBackground = clearsBackground;
@@ -149,6 +161,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
+    [self updateEdgeInsets:((UIScrollView *)((UIViewController *)((UINavigationController *)self.styleNavigationController).viewControllers.firstObject).view)];
     
 }
 
@@ -156,33 +169,51 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     [super didReceiveMemoryWarning];
 }
 
+- (void)updateEdgeInsets:(UIScrollView *)scrollView {
+    scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height,
+                                                        CGSizeZero.width,
+                                                        self.bottomLayoutGuide.length,
+                                                        CGSizeZero.width);
+    scrollView.contentInset = scrollView.scrollIndicatorInsets;
+    [scrollView setContentOffset:
+     CGPointMake(0, -scrollView.contentInset.top) animated:NO];
+}
+
 - (IBAction)valueChanged:(id)sender {
     
     UIViewController *viewControllerToShow = nil;
     UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
     UIViewAnimationOptions options;
+
+    UIScrollView *sv;
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
+    
         case 0:
+        
             viewControllerToShow = self.styleNavigationController;
             viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
             options = UIViewAnimationOptionTransitionFlipFromRight;
+            sv = ((UIScrollView *)((UIViewController *)((UINavigationController *)viewControllerToShow).viewControllers.firstObject).view);
             break;
             
         case 1:
             options = UIViewAnimationOptionTransitionFlipFromBottom;
             viewControllerToShow = self.layout;
             viewControllerToUpdate = self.layout;
+            sv = ((UIScrollView *)viewControllerToShow.view);
             break;
             
         case 2:
             options = UIViewAnimationOptionTransitionFlipFromLeft;
             viewControllerToShow = self.format;
             viewControllerToUpdate = self.format;
+            sv = ((UIScrollView *)viewControllerToShow.view);
             break;
             
         default:
             break;
     }
+    
     options = UIViewAnimationOptionTransitionCrossDissolve;
     [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
     viewControllerToUpdate.document = self.document;
@@ -194,11 +225,13 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     viewControllerToShow.view.frame = self.view.bounds;
     [viewControllerToShow.view layoutIfNeeded];
     
+    
     [self addChildViewController:viewControllerToShow];
     [viewControllerToHide willMoveToParentViewController:nil];
     
     __weak MADToolboxViewController *weakself = self;
     [viewControllerToShow beginAppearanceTransition:YES animated:YES];
+    [self updateEdgeInsets:sv];
     [self transitionFromViewController: viewControllerToHide
                       toViewController: viewControllerToShow
                               duration: 0.23232323f

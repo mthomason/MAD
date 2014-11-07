@@ -292,7 +292,6 @@
         <scene sceneID="YwO-zZ-vTV">
             <objects>
                 <navigationController id="7L5-RQ-3Zg" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LtZ-CW-Izw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -445,6 +444,7 @@
                         <outlet property="tableViewCellCurrency" destination="WJY-xx-L9x" id="K0m-7Q-trr"/>
                         <outlet property="tableViewCellCurrencyLocation" destination="zUd-Za-Shc" id="1oq-Qt-5ye"/>
                         <outlet property="tableViewCellDecimals" destination="HiN-Rp-l2p" id="c59-ni-efW"/>
+                        <outlet property="view" destination="bmh-Nq-yDV" id="Cqc-bf-yrf"/>
                         <outletCollection property="viewsToDisableNumeric" destination="tA5-5B-Mmf" id="5qk-Yg-sIv"/>
                         <outletCollection property="viewsToDisableNumeric" destination="zMI-SA-aIT" id="mm1-q3-MCR"/>
                         <outletCollection property="controlsToDisableNumeric" destination="zMI-SA-aIT" id="vNL-kq-rFg"/>
@@ -455,7 +455,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sf5-yv-vTj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1169" y="6327"/>
+            <point key="canvasLocation" x="1169" y="6320"/>
         </scene>
         <!--Font Selector View Controller-->
         <scene sceneID="lge-3C-hK1">

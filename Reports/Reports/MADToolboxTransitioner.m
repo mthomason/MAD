@@ -128,7 +128,8 @@
     UIViewController *designer = designerNavigationController.viewControllers.firstObject;
     UIEdgeInsets scrollIndicatorInsets = UIEdgeInsetsMake(designer.topLayoutGuide.length,
                                                           CGSizeZero.width,
-                                                          isToolboxVisible ? finalFrame.size.height : tabBarController.selectedViewController.bottomLayoutGuide.length,
+                                                          (isToolboxVisible && !showOnSide) ?
+                                                                    finalFrame.size.height : tabBarController.selectedViewController.bottomLayoutGuide.length,
                                                           CGSizeZero.width);
 
     
@@ -140,8 +141,8 @@
                         options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
                          
-                         ((UIScrollView *)weakself.passthroughContainer).contentInset = scrollIndicatorInsets;
-                         ((UIScrollView *)weakself.passthroughContainer).scrollIndicatorInsets = scrollIndicatorInsets;
+                         //((UIScrollView *)weakself.passthroughContainer).contentInset = scrollIndicatorInsets;
+ //                        ((UIScrollView *)weakself.passthroughContainer).scrollIndicatorInsets = scrollIndicatorInsets;
                          toolboxNavigationController.view.frame = finalFrame;
 
                      }

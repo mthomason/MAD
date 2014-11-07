@@ -108,9 +108,15 @@
 
 - (void)presentationTransitionWillBegin {
 
+    UITabBarController *tabBarController = (UITabBarController *)self.presentingViewController;
+    UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
+    UIViewController *designer = designerNavigationController.viewControllers.firstObject;
+   
+    
     UIView *containerView = self.containerView;
     UIViewController *presentedViewController = self.presentedViewController;
-    self.presentingViewController.modalTransitionStyle = [self showOnSide] ?
+    BOOL showOnSide = [self showOnSide];
+    self.presentingViewController.modalTransitionStyle = showOnSide ?
                                                         UIModalTransitionStyleFlipHorizontal :
                                                         UIModalTransitionStyleCoverVertical;
     self.dimmingView.frame = containerView.bounds;
@@ -122,6 +128,13 @@
         
         __weak MADToolboxPresentationController *weakself = self;
         [presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            UIEdgeInsets scrollIndicatorInsets = UIEdgeInsetsMake(designer.topLayoutGuide.length,
+                                                                  CGSizeZero.width,
+                                                                  !showOnSide ?
+                                                                  presentedViewController.view.bounds.size.height : tabBarController.selectedViewController.bottomLayoutGuide.length,
+                                                                  CGSizeZero.width);
+//            ((UIScrollView *)weakself.passthroughContainer).contentInset = scrollIndicatorInsets;
+//            ((UIScrollView *)weakself.passthroughContainer).scrollIndicatorInsets = scrollIndicatorInsets;
 
             weakself.dimmingView.alpha = 1.0000f;
 
@@ -149,7 +162,7 @@
 }
 
 - (UIModalPresentationStyle)adaptivePresentationStyle {
-    return UIModalPresentationOverCurrentContext;// UIModalPresentationCustom;
+    return UIModalPresentationCustom;//UIModalPresentationOverCurrentContext;// UIModalPresentationCustom;
 }
 
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
@@ -207,7 +220,7 @@
 - (void)dismiss {
     __weak MADToolboxPresentationController *weakself = self;
     [self.presentingViewController dismissViewControllerAnimated: YES
-                                                      completion:^{
+                                                      completion: ^{
                                                           [weakself.popoverPresentationControllerDelegate popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)weakself];
                                                       }];
 }

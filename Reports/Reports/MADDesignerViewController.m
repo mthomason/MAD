@@ -694,8 +694,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSLog(@"Toolbox top:         %f", self.viewControllerToolbox.view.frame.origin.y);
     return UIEdgeInsetsMake(self.topLayoutGuide.length,
                             CGSizeZero.width,
-                            self.toolboxVisible ? CGSizeZero.height + [self toolboxHeightCalculated]:
-                                                  CGSizeZero.height + self.tabBarController.tabBar.frame.size.height,
+                            self.bottomLayoutGuide.length,// self.toolboxVisible ? CGSizeZero.height + [self toolboxHeightCalculated]:
+                                                  //CGSizeZero.height + self.tabBarController.tabBar.frame.size.height,
                             CGSizeZero.width);
 }
 
@@ -753,9 +753,21 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    UIEdgeInsets insets = [self desiredScrollInsets];
+    UIEdgeInsets insets;
+    if (self.toolboxTransitioningDelegate.presentationController.presentedViewController.childViewControllers.count > 0 && self.toolboxTransitioningDelegate.presentationController != nil && [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] && [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
+        
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                  CGSizeZero.width,
+                                  self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
+                                  CGSizeZero.width);
+
+    } else {
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                  CGSizeZero.width,
+                                  self.bottomLayoutGuide.length,
+                                  CGSizeZero.width);
+    }
     self.contentInset = insets;
-    insets = [self desiredScrollInsets];
     self.scrollIndicatorInsets = insets;
 
     self.detailDisplayView.frame = [self detailDisplayFrame];
