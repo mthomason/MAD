@@ -101,18 +101,6 @@ static size_t const kDashedCount            = (2.0f);
     return NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
 }
 
-- (instancetype)init {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Use initWithFrame: andObjectId:.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Use initWithFrame: andObjectId:.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}
-
 - (id)displayObject {
     if (self.displayImage != nil) {
         return self.displayImage;

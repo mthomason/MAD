@@ -36,7 +36,7 @@
 - (void)flash:(void (^)(BOOL finished))completion;
 
 - (instancetype)initWithObjectId:(NSManagedObjectID *)objectId
-                 inObjectContext:(NSManagedObjectContext *)managedObjectContext;
+                 inObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
 
