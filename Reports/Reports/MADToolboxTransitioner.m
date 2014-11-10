@@ -126,14 +126,6 @@
 
     UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
     UIViewController *designer = designerNavigationController.viewControllers.firstObject;
-    UIEdgeInsets scrollIndicatorInsets = UIEdgeInsetsMake(designer.topLayoutGuide.length,
-                                                          CGSizeZero.width,
-                                                          (isToolboxVisible && !showOnSide) ?
-                                                                    finalFrame.size.height : tabBarController.selectedViewController.bottomLayoutGuide.length,
-                                                          CGSizeZero.width);
-
-    
-    MADToolboxAnimatedTransitioning *weakself = self;
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
                           delay: 0
          usingSpringWithDamping: 300.0
