@@ -36,6 +36,8 @@
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
 @property (nonatomic, strong) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
 
+@property (nonatomic, assign) BOOL completedInitalLayout;
+
 @end
 
 @implementation MADToolboxFormatViewController
@@ -48,11 +50,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.tableView setContentOffset:CGPointMake(CGPointZero.x, 44.0000f) animated:NO];
+    self.completedInitalLayout = NO;
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    if (self.completedInitalLayout == NO) {
+        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length)
+                                animated:NO];
+        self.completedInitalLayout = YES;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -72,11 +81,12 @@
     
     BOOL numericTypeInSet = NO;
     NSMutableSet *keepers = [[NSMutableSet alloc] init];
+    
     for (NSManagedObjectID *objectId in objectIds) {
 
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                       managedObjectContext: self.document.managedObjectContext];
-        MTDataType dataType = [[[[[documentObject isLabelDataField] referencesQueryField] databaseSchemaField] dataType] integerValue];
+        MTDataType dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.integerValue;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
             numericTypeInSet = YES;
@@ -84,6 +94,7 @@
             break;
         }
     }
+    
     [self setUserSelectedObjectIds:keepers];
     
     for (UIView *view in [self viewsToDisableNumeric]) {

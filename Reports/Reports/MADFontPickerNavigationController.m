@@ -15,9 +15,14 @@
     self.navigationBar.translucent = YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //[self.view layoutIfNeeded];
+    //self.navigationBar.frame = CGRectMake(CGPointZero.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationBar.bounds.size.width, self.navigationBar.bounds.size.height);
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //self.navigationBar.frame = CGRectMake(CGPointZero.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationBar.bounds.size.width, self.navigationBar.bounds.size.height);
 }
 
 @end

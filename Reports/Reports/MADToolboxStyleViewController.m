@@ -74,6 +74,8 @@
 
 @property (nonatomic, weak) IBOutletCollection(UIStepper) NSArray *steppers;
 
+@property (nonatomic, assign) BOOL completedInitalLayout;
+
 - (IBAction)controlValueChanged:(id)sender;
 
 @end
@@ -104,11 +106,20 @@
     self.buttonUnderline.layer.cornerRadius = 6.6666f;
     self.buttonUnderline.layer.borderWidth = 1.0000f;
     
+    self.completedInitalLayout = NO;
+    
+    
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    //self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    if (self.completedInitalLayout == NO) {
+        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length)
+                                animated:NO];
+        self.completedInitalLayout = YES;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

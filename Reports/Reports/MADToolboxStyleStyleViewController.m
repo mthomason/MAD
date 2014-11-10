@@ -14,17 +14,4 @@
 
 @implementation MADToolboxStyleStyleViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    //self.navigationController.navigationBarHidden = YES;
-    //[self.tableView setContentOffset:CGPointMake(CGPointZero.x, CGPointZero.y + self.topLayoutGuide.length) animated:NO];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    //self.navigationController.navigationBarHidden = YES;
-    [super viewWillAppear:animated];
-}
-
-
-
 @end

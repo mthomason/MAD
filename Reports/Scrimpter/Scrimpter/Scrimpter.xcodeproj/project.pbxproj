@@ -578,6 +578,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_STATIC_ANALYZER_MODE_ON_ANALYZE_ACTION = deep;
 				DSTROOT = /tmp/Scrimpter.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
@@ -593,6 +594,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_STATIC_ANALYZER_MODE_ON_ANALYZE_ACTION = deep;
 				DSTROOT = /tmp/Scrimpter.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";

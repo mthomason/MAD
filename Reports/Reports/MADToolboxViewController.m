@@ -30,6 +30,8 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
 
+@property (nonatomic, assign) BOOL firstTimeViewWillAppear;
+
 @end
 
 @implementation MADToolboxViewController
@@ -66,8 +68,10 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
         self.layout = layout;
         
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
-        
         self.format = format;
+        
+        UINavigationController *styleNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardFontPicker"];
+        self.styleNavigationController = styleNavigationController;
 
         self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
         
@@ -90,9 +94,8 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    UINavigationController *styleNavigationController = self.childViewControllers.firstObject;
-    self.styleNavigationController = styleNavigationController;
+    
+    self.firstTimeViewWillAppear = YES;
     
     self.modalPresentationStyle = UIModalPresentationPopover;
     self.modalTransitionStyle = self.segmentedControlActionStyle;
@@ -110,6 +113,8 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
     self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
 
+        [self valueChanged: self.sceneSelector];
+
 }
 
 - (void)viewWillLayoutSubviews {
@@ -117,7 +122,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
     self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
     [self.navigationController.navigationItem.titleView sizeToFit];
-//    [self.navigationController.view layoutSubviews];
+    //[self.navigationController.view layoutSubviews];
     //[self.navigationController.navigationBar sizeToFit];
 }
 
@@ -181,13 +186,12 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 }
 
 - (void)updateEdgeInsets:(UIScrollView *)scrollView {
-    scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height,
-                                                        CGSizeZero.width,
-                                                        self.bottomLayoutGuide.length,
-                                                        CGSizeZero.width);
-    scrollView.contentInset = scrollView.scrollIndicatorInsets;
-    [scrollView setContentOffset:
-     CGPointMake(0, -scrollView.contentInset.top) animated:NO];
+    //scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height,
+    //                                                    CGSizeZero.width,
+    //                                                    self.bottomLayoutGuide.length,
+    //                                                    CGSizeZero.width);
+    //scrollView.contentInset = scrollView.scrollIndicatorInsets;
+    //[scrollView setContentOffset: CGPointMake(0, self.navigationController.navigationBar.frame.size.height) animated:NO];
 }
 
 - (IBAction)valueChanged:(id)sender {
@@ -234,27 +238,39 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
 
     viewControllerToShow.view.frame = self.view.bounds;
-    [viewControllerToShow.view layoutIfNeeded];
+    //[viewControllerToShow.view layoutIfNeeded];
     
+    if (viewControllerToHide != nil) {
+        [self addChildViewController:viewControllerToShow];
+        [viewControllerToHide willMoveToParentViewController:nil];
+        
+        __weak MADToolboxViewController *weakself = self;
+        [viewControllerToShow beginAppearanceTransition:YES animated:YES];
+        [self updateEdgeInsets:sv];
+        //[sv setContentOffset: CGPointMake(0, viewControllerToShow.topLayoutGuide.length) animated:NO];
+//[sv setContent]
+        [self transitionFromViewController: viewControllerToHide
+                          toViewController: viewControllerToShow
+                                  duration: 0.23232323f
+                                   options: options
+                                animations:^{
+                                    [viewControllerToHide removeFromParentViewController];
+                                    [viewControllerToShow didMoveToParentViewController:weakself];
+                                    [viewControllerToShow endAppearanceTransition];
+                                }
+                                completion:^(BOOL finished) {
+                                    
+                                }];
+    } else {
+        [self addChildViewController:viewControllerToShow];
+        __weak MADToolboxViewController *weakself = self;
+        [viewControllerToShow beginAppearanceTransition:YES animated:NO];
+        [self.view addSubview:viewControllerToShow.view];
+        [viewControllerToShow didMoveToParentViewController:weakself];
+        [viewControllerToShow endAppearanceTransition];
     
-    [self addChildViewController:viewControllerToShow];
-    [viewControllerToHide willMoveToParentViewController:nil];
-    
-    __weak MADToolboxViewController *weakself = self;
-    [viewControllerToShow beginAppearanceTransition:YES animated:YES];
-    [self updateEdgeInsets:sv];
-    [self transitionFromViewController: viewControllerToHide
-                      toViewController: viewControllerToShow
-                              duration: 0.23232323f
-                               options: options
-                            animations:^{
-                                [viewControllerToHide removeFromParentViewController];
-                                [viewControllerToShow didMoveToParentViewController:weakself];
-                                [viewControllerToShow endAppearanceTransition];
-                            }
-                            completion:^(BOOL finished) {
-                                
-                            }];
+        [self updateEdgeInsets:sv];
+    }
 }
 
 - (UIImage *)cropImage:(UIImage *)image toRect:(CGRect)rect {
