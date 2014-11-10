@@ -138,6 +138,169 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 @implementation MADOpenFileViewController
 
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationCloudActivityStarted
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationCloudActivityCompleted
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationReloadSectionLocal
+                                                  object: nil];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    NSMutableArray *documentsLocal = [[NSMutableArray alloc] init];
+    self.documentsLocal = documentsLocal;
+    
+    NSMutableArray *documentsCloud = [[NSMutableArray alloc] init];
+    self.documentsCloud = documentsCloud;
+    
+    self.updatingEnabled = YES;
+    self.cloudActivityRunning = NO;
+    self.cloudActivityRunningDisplay = NO;
+    self.firstViewWillAppear = YES;
+    self.rightBarButtonItemActivityIndicatorVisible = NO;
+    
+    NSStringDrawingContext *collectionViewSizeForItemAtIndexPath = [[NSStringDrawingContext alloc] init];
+    self.collectionViewSizeForItemAtIndexPath = collectionViewSizeForItemAtIndexPath;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(reloadSectionLocal)
+                                                 name: MADNotificationReloadSectionLocal
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
+                                                 name: UIContentSizeCategoryDidChangeNotification
+                                               object: nil];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:[MADOpenFileViewController cellLabelRect]];
+    label.clipsToBounds = NO;
+    label.numberOfLines = 0;
+    
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: label
+                                                                  attribute: NSLayoutAttributeWidth
+                                                                  relatedBy: NSLayoutRelationEqual
+                                                                     toItem: nil
+                                                                  attribute: NSLayoutAttributeNotAnAttribute
+                                                                 multiplier: 1.0000f
+                                                                   constant: MADConstCellDocumentLabelWidth];
+    [label addConstraint:constraint];
+    self.testLabel = label;
+    
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager sharedManager].cloudAvailble ? MADSectionHeaderHeight : CGSizeZero.height),
+                                                                 self.collectionView.contentInset.left,
+                                                                 self.collectionView.contentInset.bottom,
+                                                                 self.collectionView.contentInset.right);
+    
+    
+    [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
+            forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+                   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleCloudActivityStarted:)
+                                                 name: MADNotificationCloudActivityStarted
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleCloudActivityCompleted:)
+                                                 name: MADNotificationCloudActivityCompleted
+                                               object: nil];
+    
+    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                                           target: self
+                                                                                           action: @selector(edit:)];
+    [self setBarButtonItemEditDone:barButtonItemEditDone];
+    
+    [self setEditModeEnabled:NO];
+    [self setEditing:NO animated:NO];
+    
+    UIColor *barTintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [UIColor tintColorWhite];
+    self.navigationController.toolbar.barTintColor = barTintColor;
+    self.navigationController.toolbar.tintColor = tintColor;
+    
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+    UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
+    testimage.frame=self.collectionView.frame;
+    //[watermarkView addSubview:testimage];
+    self.collectionView.backgroundView = testimage;
+    self.collectionView.backgroundColor = [UIColor purpleColor];
+    
+    UIColor *bgColor = [UIColor lightGrayColor];
+    //self.collectionView.backgroundColor = bgColor;
+    
+    [self setSavingActivityIndicatorVisible:NO];
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance applicationName];
+    
+    
+    self.navigationItem.titleView = titleView;
+    self.labelMadDesigner = titleView;
+    
+    self.navigationItem.hidesBackButton = YES;
+    self.editModeEnabled = NO;
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [self tapGestureRecognizer];
+    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
+    
+    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
+    
+    NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
+    [toolbarButtons removeObject:self.barButtonItemAction];
+    
+    // FIXME: Remove cloud down button until feature is added.
+    [toolbarButtons removeObject:self.barButtonItemCloudDown];
+    
+    
+    MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
+    searchBar.delegate = self;
+    searchBar.showsBookmarkButton = NO;
+    searchBar.showsCancelButton = YES;
+    searchBar.showsScopeBar = NO;
+    searchBar.showsSearchResultsButton = NO;
+    searchBar.hidden = YES;
+    
+    [searchBar sizeToFit];
+    self.searchBar = searchBar;
+    
+    if (self.barButtonItemEdit == nil) {
+        UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                              target: self
+                                                                              action: @selector(edit:)];
+        self.barButtonItemEdit = edit;
+    }
+    [toolbarButtons addObject:self.barButtonItemEdit];
+    
+    UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
+    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
+                                                                               style: UIBarButtonItemStylePlain
+                                                                              target: self
+                                                                              action: @selector(duplicate:)];
+    barButtonItemDuplicate.enabled = NO;
+    [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
+    self.barButtonItemDuplicate = barButtonItemDuplicate;
+    
+    [self setToolbarItems:toolbarButtons animated:NO];
+    
+}
+
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible animated:(BOOL)animated {
     
     if (self.rightBarButtonItemActivityIndicatorVisible != rightBarButtonItemActivityIndicatorVisible) {
@@ -158,7 +321,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
         [self.navigationItem setRightBarButtonItem:barButtonItem animated:animated];
     }
 }
-
 
 #pragma mark - UIStateRestoring
 
@@ -234,68 +396,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     [super awakeFromNib];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initialize];
-    }
-    return self;    
-}
-
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
-    self = [super initWithCollectionViewLayout:layout];
-    if (self) {
-        [self initialize];
-    }
-    return self;
-}
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        [self initialize];
-    }
-    return self;
-}
-
-- (void)initialize {
-
-    NSMutableArray *documentsLocal = [[NSMutableArray alloc] init];
-    self.documentsLocal = documentsLocal;
-    
-    NSMutableArray *documentsCloud = [[NSMutableArray alloc] init];
-    self.documentsCloud = documentsCloud;
-    
-    self.updatingEnabled = YES;
-    self.cloudActivityRunning = NO;
-    self.cloudActivityRunningDisplay = NO;
-    self.firstViewWillAppear = YES;
-    self.rightBarButtonItemActivityIndicatorVisible = NO;
-    
-    NSStringDrawingContext *collectionViewSizeForItemAtIndexPath = [[NSStringDrawingContext alloc] init];
-    self.collectionViewSizeForItemAtIndexPath = collectionViewSizeForItemAtIndexPath;
-
-}
-
-- (void)dealloc {
-
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIContentSizeCategoryDidChangeNotification
-                                                  object: nil];
-
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationCloudActivityStarted
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationCloudActivityCompleted
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationReloadSectionLocal
-                                                  object: nil];
-}
-
 #pragma mark - NSNotificationCenter
 
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
@@ -359,134 +459,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
-}
-
-- (void)viewDidLoad {
-
-    [self setNeedsStatusBarAppearanceUpdate];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reloadSectionLocal)
-                                                 name: MADNotificationReloadSectionLocal
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
-                                                 name: UIContentSizeCategoryDidChangeNotification
-                                               object: nil];
-
-    UILabel *label = [[UILabel alloc] initWithFrame:[MADOpenFileViewController cellLabelRect]];
-    label.clipsToBounds = NO;
-    label.numberOfLines = 0;
-    
-    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: label
-                                                                  attribute: NSLayoutAttributeWidth
-                                                                  relatedBy: NSLayoutRelationEqual
-                                                                     toItem: nil
-                                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                                 multiplier: 1.0000f
-                                                                   constant: MADConstCellDocumentLabelWidth];
-    [label addConstraint:constraint];
-    self.testLabel = label;
-    
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager sharedManager].cloudAvailble ? MADSectionHeaderHeight : CGSizeZero.height),
-                                                                 self.collectionView.contentInset.left,
-                                                                 self.collectionView.contentInset.bottom,
-                                                                 self.collectionView.contentInset.right);
-    
-    
-    [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
-            forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-                   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
-  
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleCloudActivityStarted:)
-                                                 name: MADNotificationCloudActivityStarted
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleCloudActivityCompleted:)
-                                                 name: MADNotificationCloudActivityCompleted
-                                               object: nil];
-    
-    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                                           target: self
-                                                                                           action: @selector(edit:)];
-    [self setBarButtonItemEditDone:barButtonItemEditDone];
-
-    [self setEditModeEnabled:NO];
-    [self setEditing:NO animated:NO];
-
-    UIColor *barTintColor = [UIColor tintColorBlue];
-    UIColor *tintColor = [UIColor tintColorWhite];
-    self.navigationController.toolbar.barTintColor = barTintColor;
-    self.navigationController.toolbar.tintColor = tintColor;
-
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
-    testimage.frame=self.collectionView.frame;
-    //[watermarkView addSubview:testimage];
-    self.collectionView.backgroundView = testimage;
-    self.collectionView.backgroundColor = [UIColor purpleColor];
-
-    UIColor *bgColor = [UIColor lightGrayColor];
-    //self.collectionView.backgroundColor = bgColor;
-    
-    [self setSavingActivityIndicatorVisible:NO];
-    
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MTApplicationInstance applicationName];
-    
-
-    self.navigationItem.titleView = titleView;
-    self.labelMadDesigner = titleView;
-
-    self.navigationItem.hidesBackButton = YES;
-    self.editModeEnabled = NO;
-    
-    UITapGestureRecognizer *tapGestureRecognizer = [self tapGestureRecognizer];
-    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
-    
-    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
-
-    NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
-    [toolbarButtons removeObject:self.barButtonItemAction];
-    
-    // FIXME: Remove cloud down button until feature is added.
-    [toolbarButtons removeObject:self.barButtonItemCloudDown];
-
-    
-    MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-    searchBar.delegate = self;
-    searchBar.showsBookmarkButton = NO;
-    searchBar.showsCancelButton = YES;
-    searchBar.showsScopeBar = NO;
-    searchBar.showsSearchResultsButton = NO;
-    searchBar.hidden = YES;
-    
-    [searchBar sizeToFit];
-    self.searchBar = searchBar;
-    
-    if (self.barButtonItemEdit == nil) {
-        UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                              target: self
-                                                                              action: @selector(edit:)];
-        self.barButtonItemEdit = edit;
-    }
-    [toolbarButtons addObject:self.barButtonItemEdit];
-    
-    UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
-    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
-                                                                               style: UIBarButtonItemStylePlain
-                                                                              target: self
-                                                                              action: @selector(duplicate:)];
-    barButtonItemDuplicate.enabled = NO;
-    [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
-    self.barButtonItemDuplicate = barButtonItemDuplicate;
-    
-    [self setToolbarItems:toolbarButtons animated:NO];
-    
 }
 
 - (UITapGestureRecognizer *)tapGestureRecognizer {

@@ -294,83 +294,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                            withSender: sender];
 }
 
-#pragma mark - NSObject
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-        NSMutableSet *presentationControllerPassthroughViews = [[NSMutableSet alloc] init];
-        self.presentationControllerPassthroughViews = presentationControllerPassthroughViews;
-
-        MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-        self.ruler.layer.borderWidth = [UIView borderWidthThin];
-        self.ruler.layer.borderColor = [UIColor blackColor].CGColor;
-        self.ruler = viewRuler;
-        
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
-        self.numberFormatterPercentage = numberFormatter;
-        
-        NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
-        self.borderAppliedToView = d;
-
-        UIFont *captionFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        self.captionFont = captionFont;
-        
-        NSMutableArray *layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] init];
-        self.layoutConstraintSectionLabelHeightContainer = layoutConstraintSectionLabelHeightContainer;
-        
-        NSMutableArray *layoutConstraintSectionLabelContainer = [[NSMutableArray alloc] init];
-        self.layoutConstraintSectionLabelWidthContainer = layoutConstraintSectionLabelContainer;
-        
-        NSMutableArray *layoutConstraintSectionLabelWidthContainer2 = [[NSMutableArray alloc] init];
-        self.layoutConstraintSectionLabelWidthContainer2 = layoutConstraintSectionLabelWidthContainer2;
-        
-        NSMutableArray *layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] init];
-        self.layoutConstraintsSectionsSidesBorder = layoutConstraintsSectionsSidesBorder;
-        
-        NSMutableArray *layoutConstraintsSectionsVerticalBuffer = [[NSMutableArray alloc] init];
-        self.layoutConstraintsSectionsVerticalBuffer = layoutConstraintsSectionsVerticalBuffer;
-        
-        MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
-        self.detailDisplayView = detailDisplay;
-
-        MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [MTApplicationInstance madDesigner];
-        self.navigationItem.titleView = titleView;
-        
-        
-        MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
-        
-        UIStoryboard *storyboardToolbox = [UIStoryboard storyboardWithName: @"MADToolbox"
-                                                                    bundle: [NSBundle mainBundle]];
-        UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
-        navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
-        navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
-        
-//        transitioningDelegate.sourceRect = self.rectForSelectedElements;
-//        transitioningDelegate.sourceView = self.scroller.container;
-//        transitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
-        transitioningDelegate.popoverPresentationControllerDelegate = self;
-//        NSSet *passthroughViews = [NSSet setWithSet:self.elementViews];
-//        transitioningDelegate.passthroughViews = passthroughViews;
-        transitioningDelegate.passthroughContainer = self.scroller;
-        
-        MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
-        viewControllerToolbox.clearsBackground = [self padLike];
-        viewControllerToolbox.document = self.document;
-        viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
-        
-        
-        self.viewControllerToolbox = viewControllerToolbox;
-        self.navigationControllerToolbox = navigationControllerToolbox;
-        self.toolboxTransitioningDelegate = transitioningDelegate;
-
-    }
-    return self;
-}
-
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
@@ -383,10 +306,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
     BOOL animate = previousTraitCollection != nil;
-    [UIView setAnimationsEnabled:animate];
-    [self updatePrompt];
-    [UIView setAnimationsEnabled:YES];
+    if (previousTraitCollection == nil || previousTraitCollection.verticalSizeClass != self.traitCollection.verticalSizeClass) {
+        //[UIView setAnimationsEnabled:animate];
+        //[self updatePrompt];
+        //[UIView setAnimationsEnabled:YES];
+    }
 }
 
 #pragma mark - UIViewController
@@ -401,6 +327,72 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    NSMutableSet *presentationControllerPassthroughViews = [[NSMutableSet alloc] init];
+    self.presentationControllerPassthroughViews = presentationControllerPassthroughViews;
+    
+    MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
+    self.ruler.layer.borderWidth = [UIView borderWidthThin];
+    self.ruler.layer.borderColor = [UIColor blackColor].CGColor;
+    self.ruler = viewRuler;
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
+    self.numberFormatterPercentage = numberFormatter;
+    
+    NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
+    self.borderAppliedToView = d;
+    
+    UIFont *captionFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.captionFont = captionFont;
+    
+    NSMutableArray *layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] init];
+    self.layoutConstraintSectionLabelHeightContainer = layoutConstraintSectionLabelHeightContainer;
+    
+    NSMutableArray *layoutConstraintSectionLabelContainer = [[NSMutableArray alloc] init];
+    self.layoutConstraintSectionLabelWidthContainer = layoutConstraintSectionLabelContainer;
+    
+    NSMutableArray *layoutConstraintSectionLabelWidthContainer2 = [[NSMutableArray alloc] init];
+    self.layoutConstraintSectionLabelWidthContainer2 = layoutConstraintSectionLabelWidthContainer2;
+    
+    NSMutableArray *layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] init];
+    self.layoutConstraintsSectionsSidesBorder = layoutConstraintsSectionsSidesBorder;
+    
+    NSMutableArray *layoutConstraintsSectionsVerticalBuffer = [[NSMutableArray alloc] init];
+    self.layoutConstraintsSectionsVerticalBuffer = layoutConstraintsSectionsVerticalBuffer;
+    
+    MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
+    self.detailDisplayView = detailDisplay;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance madDesigner];
+    self.navigationItem.titleView = titleView;
+    
+    
+    MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
+    
+    UIStoryboard *storyboardToolbox = [UIStoryboard storyboardWithName: @"MADToolbox"
+                                                                bundle: [NSBundle mainBundle]];
+    UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
+    navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
+    navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
+    
+    //        transitioningDelegate.sourceRect = self.rectForSelectedElements;
+    //        transitioningDelegate.sourceView = self.scroller.container;
+    //        transitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    transitioningDelegate.popoverPresentationControllerDelegate = self;
+    //        NSSet *passthroughViews = [NSSet setWithSet:self.elementViews];
+    //        transitioningDelegate.passthroughViews = passthroughViews;
+    transitioningDelegate.passthroughContainer = self.scroller;
+    
+    MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
+    viewControllerToolbox.clearsBackground = [self padLike];
+    viewControllerToolbox.document = self.document;
+    viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+    
+    self.viewControllerToolbox = viewControllerToolbox;
+    self.navigationControllerToolbox = navigationControllerToolbox;
+    self.toolboxTransitioningDelegate = transitioningDelegate;
 
     NSString *defaultPrompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
     MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:defaultPrompt];
@@ -779,9 +771,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-  /*
-    UIEdgeInsets insets;
-    if (self.toolboxTransitioningDelegate.presentationController.presentedViewController.childViewControllers.count > 0 && self.toolboxTransitioningDelegate.presentationController != nil && [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] && [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
+
+    //UIEdgeInsets insets;
+    //id v = self.presentedViewController;
+    /*if (self.presentedViewController.childViewControllers.count > 0 && self.toolboxTransitioningDelegate.presentationController != nil && [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] && [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                   CGSizeZero.width,
@@ -793,18 +786,28 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                   CGSizeZero.width,
                                   self.bottomLayoutGuide.length,
                                   CGSizeZero.width);
-    }
-    self.contentInset = insets;
-    self.scrollIndicatorInsets = insets;
-*/
+    }*/
+    //self.contentInset = insets;
+    //self.scrollIndicatorInsets = insets;
+
     self.detailDisplayView.frame = [self detailDisplayFrame];
-    [self.viewControllerSectionLayoutSettings viewWillLayoutSubviews];
+    [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
+    [self.ruler setNeedsDisplay];
+    
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
+- (void)updateViewConstraints {
+    [super updateViewConstraints];
 
     self.layoutConstraintContainerWidth.constant = self.view.frame.size.width / self.scroller.zoomScale;
-
-    CGFloat zoomscale = self.scroller.zoomScale;
     
+    CGFloat zoomscale = self.scroller.zoomScale;
     CGFloat borderPaddingSides = MTReportDesignerBorderPaddingSides / self.scroller.zoomScale;
+
     [self.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
         constraint.constant = constraint.constant > 0 ? borderPaddingSides : -borderPaddingSides;
     }];
@@ -816,13 +819,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.layoutConstraintSectionLabelHeightContainer enumerateObjectsUsingBlock:^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
         constraint.constant = MTReportDesignerSectionLabelHeight / zoomscale;
     }];
-
+    
     self.layoutConstraintDesignerContentViewHeight.constant = [self designerContentViewSize].height;
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [self.ruler setNeedsDisplay];
 }
 
 - (CGSize)designerContentViewSize {
@@ -848,45 +846,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return designerContentViewSize;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    //__weak MADDesignerViewController *weakself = self;
+    //[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+//        [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+        
+    //} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+       // [weakself.ruler setNeedsDisplay];
+    //}];
     
-    CGFloat toolBarHeight = [self toolbarBottomHeight];
-    __weak MADDesignerViewController *weakself = self;
-    
-    
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        
-        
-        [weakself.ruler setNeedsDisplay];
-        weakself.layoutConstraintToolbarHeight.constant = toolBarHeight;
-        
-        
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        /*__strong MADDesignerViewController *strongself = weakself;
-        
-        
-        if ((strongself.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) == NO) {
-            CGRect navigationToolbarFrame = strongself.navigationController.toolbar.frame;
-            if (navigationToolbarFrame.size.height != [[strongself layoutConstraintToolbarHeight] constant]) {
-                
-                strongself.layoutConstraintToolbarHeight.constant = [strongself toolbarBottomHeight];
-                strongself.viewControllerSectionLayoutSettings.tableView.bounds = CGRectMake(CGPointZero.x,
-                                                                                             CGPointZero.y,
-                                                                                             strongself.toolbox.bounds.size.width,
-                                                                                             strongself.toolbox.bounds.size.height);
-                
-                if (strongself.toolboxIsVisible) {
-                    NSLayoutConstraint *h = strongself.layoutConstraintsToolboxVisiable[0];
-                    h.constant = [strongself toolboxHeightCalculated];
-                }
-            }
-        }*/
-        
-    }];
-    
-    
-}
+//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
@@ -1487,6 +1456,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                        animated: YES
                      completion: ^{
                          [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeElement];
+ //                        id v = self.presentedViewController;
+                         
                      }];
 
 }
@@ -2405,7 +2376,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)setConstraintsForToolboxVisible {
     [self.view removeConstraints:self.layoutConstraintsToolboxHidden];
-    self.layoutConstraintsToolboxVisiable = @[self.layoutConstraintToolBoxViewHeight];
+    NSLayoutConstraint *constraint = self.layoutConstraintToolBoxViewHeight;
+
+    self.layoutConstraintsToolboxVisiable = constraint != nil ? @[constraint] : @[];
     [self.view addConstraints:self.layoutConstraintsToolboxVisiable];
     self.toolboxVisible = YES;
     self.layoutConstraintToolbarHeight.constant = CGSizeZero.height;
@@ -3004,7 +2977,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         self.navigationItem.prompt = self.promptManager.prompt;
     } else {
-        self.navigationItem.prompt = nil;
+        if (self.navigationItem.prompt != nil) {
+            self.navigationItem.prompt = nil;
+        }
     }
 }
 
