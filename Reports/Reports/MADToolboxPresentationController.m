@@ -128,13 +128,6 @@
         
         __weak MADToolboxPresentationController *weakself = self;
         [presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            UIEdgeInsets scrollIndicatorInsets = UIEdgeInsetsMake(designer.topLayoutGuide.length,
-                                                                  CGSizeZero.width,
-                                                                  !showOnSide ?
-                                                                  presentedViewController.view.bounds.size.height : tabBarController.selectedViewController.bottomLayoutGuide.length,
-                                                                  CGSizeZero.width);
-//            ((UIScrollView *)weakself.passthroughContainer).contentInset = scrollIndicatorInsets;
-//            ((UIScrollView *)weakself.passthroughContainer).scrollIndicatorInsets = scrollIndicatorInsets;
 
             weakself.dimmingView.alpha = 1.0000f;
 

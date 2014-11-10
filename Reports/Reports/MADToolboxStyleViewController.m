@@ -115,11 +115,13 @@
     [super viewWillLayoutSubviews];
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+
     if (self.completedInitalLayout == NO) {
-        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length)
-                                animated:NO];
+        [self.tableView setContentOffset: CGPointMake(CGPointZero.x, -self.topLayoutGuide.length)
+                                animated: NO];
         self.completedInitalLayout = YES;
     }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -134,7 +136,6 @@
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-
     if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }

@@ -309,9 +309,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [super traitCollectionDidChange:previousTraitCollection];
     BOOL animate = previousTraitCollection != nil;
     if (previousTraitCollection == nil || previousTraitCollection.verticalSizeClass != self.traitCollection.verticalSizeClass) {
-        //[UIView setAnimationsEnabled:animate];
-        //[self updatePrompt];
-        //[UIView setAnimationsEnabled:YES];
+        [UIView setAnimationsEnabled:animate];
+        [self updatePrompt];
+        [UIView setAnimationsEnabled:YES];
     }
 }
 
@@ -377,12 +377,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
     
-    //        transitioningDelegate.sourceRect = self.rectForSelectedElements;
-    //        transitioningDelegate.sourceView = self.scroller.container;
-    //        transitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     transitioningDelegate.popoverPresentationControllerDelegate = self;
-    //        NSSet *passthroughViews = [NSSet setWithSet:self.elementViews];
-    //        transitioningDelegate.passthroughViews = passthroughViews;
     transitioningDelegate.passthroughContainer = self.scroller;
     
     MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
@@ -709,8 +704,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (UIEdgeInsets)desiredScrollInsets {
-    NSLog(@"Bottom layout guide: %f", self.bottomLayoutGuide.length);
-    NSLog(@"Toolbox top:         %f", self.viewControllerToolbox.view.frame.origin.y);
     return UIEdgeInsetsMake(self.topLayoutGuide.length,
                             CGSizeZero.width,
                             self.bottomLayoutGuide.length,// self.toolboxVisible ? CGSizeZero.height + [self toolboxHeightCalculated]:
@@ -772,9 +765,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    //UIEdgeInsets insets;
-    //id v = self.presentedViewController;
-    /*if (self.presentedViewController.childViewControllers.count > 0 && self.toolboxTransitioningDelegate.presentationController != nil && [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] && [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
+    UIEdgeInsets insets;
+
+    if (self.presentedViewController.childViewControllers.count > 0 &&
+        self.toolboxTransitioningDelegate.presentationController != nil &&
+        [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] &&
+        [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                   CGSizeZero.width,
@@ -782,13 +778,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                   CGSizeZero.width);
 
     } else {
+    
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                   CGSizeZero.width,
                                   self.bottomLayoutGuide.length,
                                   CGSizeZero.width);
-    }*/
-    //self.contentInset = insets;
-    //self.scrollIndicatorInsets = insets;
+    
+    }
+    self.scroller.contentInset = insets;
+    self.scroller.scrollIndicatorInsets = insets;
 
     self.detailDisplayView.frame = [self detailDisplayFrame];
     [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
@@ -2216,11 +2214,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)setContentInset:(UIEdgeInsets)insets {
-    //self.scroller.contentInset = insets;
+    self.scroller.contentInset = insets;
 }
 
 - (void)setScrollIndicatorInsets:(UIEdgeInsets)insets {
-    //self.scroller.scrollIndicatorInsets = insets;
+    self.scroller.scrollIndicatorInsets = insets;
 }
 
 
@@ -2335,41 +2333,46 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest {
-    if (self.scroller.zoomScale <= 1.0000f) {
-        [self.scroller setZoomScale: 1.0000f
-                           animated: YES];
-    }
-    CGFloat adjustment = self.topLayoutGuide.length;
 
-    CGRect visibleRect;
-    visibleRect.origin = CGPointMake(self.scroller.contentOffset.x,
-                                     self.scroller.contentOffset.y);
-    
-    visibleRect.size = CGSizeMake(self.view.frame.size.width,
-                                  self.view.frame.size.height - [self toolboxHeightCalculated]);
-    visibleRect = CGRectAdjustForScale(visibleRect,
-                                       self.scroller.zoomScale);
-    
-    CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ?
-                                                    rectOfInterest :
-                                                    CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
-    
-    CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
-                                            visibleRect.origin.y + adjustment,
-                                            CGFLOAT_MAX,
-                                            visibleRect.size.height - adjustment);
-    
-    if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
+    if ([((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
 
-        CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
-                                                                 visibleRect);
-        if (self.scroller.zoomScale > 1) {
-            contentOffset = CGPointMake(contentOffset.x,
-                                        contentOffset.y * self.scroller.zoomScale);
-        }
-        [self.scroller setContentOffset: contentOffset
+        if (self.scroller.zoomScale <= 1.0000f) {
+            [self.scroller setZoomScale: 1.0000f
                                animated: YES];
+        }
+        CGFloat adjustment = self.topLayoutGuide.length;
         
+        CGRect visibleRect;
+        visibleRect.origin = CGPointMake(self.scroller.contentOffset.x,
+                                         self.scroller.contentOffset.y);
+        
+        visibleRect.size = CGSizeMake(self.view.frame.size.width,
+                                      self.view.frame.size.height - [self toolboxHeightCalculated]);
+        visibleRect = CGRectAdjustForScale(visibleRect,
+                                           self.scroller.zoomScale);
+        
+        CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ?
+        rectOfInterest :
+        CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
+        
+        CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
+                                                visibleRect.origin.y + adjustment,
+                                                CGFLOAT_MAX,
+                                                visibleRect.size.height - adjustment);
+        
+        if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
+            
+            CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
+                                                                     visibleRect);
+            if (self.scroller.zoomScale > 1) {
+                contentOffset = CGPointMake(contentOffset.x,
+                                            contentOffset.y * self.scroller.zoomScale);
+            }
+            [self.scroller setContentOffset: contentOffset
+                                   animated: YES];
+            
+        }
+
     }
 }
 

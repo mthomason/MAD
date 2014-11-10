@@ -141,12 +141,12 @@
                         options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
                          
-                         //((UIScrollView *)weakself.passthroughContainer).contentInset = scrollIndicatorInsets;
- //                        ((UIScrollView *)weakself.passthroughContainer).scrollIndicatorInsets = scrollIndicatorInsets;
                          toolboxNavigationController.view.frame = finalFrame;
 
                      }
                      completion: ^(BOOL finished){
+                         
+                         [designer.view setNeedsLayout];    // Give designer scroll view a chance to update insets
                          
                          if (isToolboxVisible == NO) {
                              [toolboxNavigationController.view removeFromSuperview];
