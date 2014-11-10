@@ -420,7 +420,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleStrayTouch:)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                          action: @selector(handleStrayTouch:)];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
     tap.delegate = self;
@@ -429,11 +430,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.scroller addGestureRecognizer:tap];
     self.scroller.delegate = self;
 
+    
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
     NSLayoutConstraint *constraintContentLeft = [self layoutConstraintViewContentLeft];
+    constraintContentLeft.priority = 999;
     [constraints addObject:constraintContentLeft];
     
     NSLayoutConstraint *constraintContentRight = [self layoutConstraintViewContentRight];
+    constraintContentRight.priority = 999;
     [constraints addObject:constraintContentRight];
 
     NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
@@ -499,6 +503,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.view addConstraints:constraints];
 
     self.scroller.container.backgroundColor = [UIColor greenColor];
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -794,9 +800,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-}
+//- (void)viewDidLayoutSubviews {
+//    [super viewDidLayoutSubviews];
+//}
 
 - (void)updateViewConstraints {
     [super updateViewConstraints];
@@ -914,7 +920,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                 scrollView.contentSize.height * 0.5 + offsetY);
         }
         
+        [self.view setNeedsUpdateConstraints];
+
     }
+    
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
@@ -2340,6 +2349,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [self.scroller setZoomScale: 1.0000f
                                animated: YES];
         }
+        
         CGFloat adjustment = self.topLayoutGuide.length;
         
         CGRect visibleRect;
@@ -3208,7 +3218,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return [NSLayoutConstraint constraintWithItem: self.scroller.container
                                         attribute: NSLayoutAttributeLeft
                                         relatedBy: NSLayoutRelationEqual
-                                           toItem: [UIDevice isModernOS] ? self.scroller : self.view
+                                           toItem: self.view
                                         attribute: NSLayoutAttributeLeft
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
@@ -3218,7 +3228,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return [NSLayoutConstraint constraintWithItem: self.scroller.container
                                         attribute: NSLayoutAttributeRight
                                         relatedBy: NSLayoutRelationEqual
-                                           toItem: [UIDevice isModernOS] ? self.scroller : self.view
+                                           toItem: self.view
                                         attribute: NSLayoutAttributeRight
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
