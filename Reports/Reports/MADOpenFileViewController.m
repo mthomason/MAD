@@ -443,6 +443,9 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     }
 }
 
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.presentedViewController;
+}
 
 - (void)handleCloudActivityCompleted:(NSNotification *)notification {
     self.cloudActivityRunning = NO;

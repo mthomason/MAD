@@ -8,10 +8,12 @@
 
 #import "MADToolboxTransitioner.h"
 #import "MADToolboxPresentationController.h"
+#import "MADViewControllerProtocol.h"
 
 @interface MADToolboxTransitioningDelegate ()
 
 @property (nonatomic, strong, readwrite) UIPresentationController *presentationController;
+@property (nonatomic, assign, readwrite) BOOL popoverStyle;
 
 @end
 
@@ -34,6 +36,7 @@
     UIPresentationController *presentationController;
     if ((UIUserInterfaceSizeClassRegular == source.traitCollection.horizontalSizeClass &&
         UIUserInterfaceSizeClassRegular == source.traitCollection.verticalSizeClass) != NO) {
+        self.popoverStyle = YES;
         
         presentationController = [[UIPopoverPresentationController alloc] initWithPresentedViewController: presented
                                                                                  presentingViewController: presenting];
@@ -47,6 +50,7 @@
         ((UIPopoverPresentationController *)presentationController).delegate = self.popoverPresentationControllerDelegate;
 
     } else {
+        self.popoverStyle = NO;
         presentationController = [[MADToolboxPresentationController alloc] initWithPresentedViewController: presented
                                                                                   presentingViewController: presenting];
         
@@ -125,7 +129,8 @@
     toolboxNavigationController.view.frame = initialFrame;
 
     UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
-    UIViewController *designer = designerNavigationController.viewControllers.firstObject;
+    UIViewController <MADViewControllerProtocol> *designer = designerNavigationController.viewControllers.firstObject;
+    [designer setHidesStatusBar: isToolboxVisible];
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
                           delay: 0
          usingSpringWithDamping: 300.0
@@ -133,6 +138,7 @@
                         options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
                          
+                         [tabBarController setNeedsStatusBarAppearanceUpdate];
                          toolboxNavigationController.view.frame = finalFrame;
 
                      }

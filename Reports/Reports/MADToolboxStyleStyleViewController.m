@@ -14,4 +14,9 @@
 
 @implementation MADToolboxStyleStyleViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
 @end

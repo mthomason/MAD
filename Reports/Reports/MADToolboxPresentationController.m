@@ -9,11 +9,13 @@
 #import "MADToolboxPresentationController.h"
 #import "MADToolboxTransitioner.h"
 #import "MADDimmingView.h"
+#import "MADViewControllerProtocol.h"
 
 @interface MADToolboxPresentationController ()
     <UIGestureRecognizerDelegate>
 
     @property (nonatomic, strong) UIGestureRecognizer *dismissGestureReconizer;
+    @property (nonatomic, weak) UIViewController <MADViewControllerProtocol> *designerViewController;
 
 @end
 
@@ -110,8 +112,8 @@
 
     UITabBarController *tabBarController = (UITabBarController *)self.presentingViewController;
     UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
-    UIViewController *designer = designerNavigationController.viewControllers.firstObject;
-   
+    UIViewController <MADViewControllerProtocol> *designer = designerNavigationController.viewControllers.firstObject;
+    self.designerViewController = designer;
     
     UIView *containerView = self.containerView;
     UIViewController *presentedViewController = self.presentedViewController;
@@ -155,14 +157,20 @@
 }
 
 - (UIModalPresentationStyle)adaptivePresentationStyle {
-    return UIModalPresentationCustom;//UIModalPresentationOverCurrentContext;// UIModalPresentationCustom;
+    return UIModalPresentationCustom;
 }
 
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
 
+    CGSize s = [self showOnSide] ?
+    CGSizeMake(MAX(floorf(parentSize.width / 3.0000f), self.presentedViewController.preferredContentSize.width) , parentSize.height) :
+    CGSizeMake(MAX(parentSize.width, self.presentedViewController.preferredContentSize.width),
+               MIN(self.presentedViewController.preferredContentSize.height, floorf(parentSize.height / 2.0000f)));
+    
     return [self showOnSide] ?
         CGSizeMake(MAX(floorf(parentSize.width / 3.0000f), self.presentedViewController.preferredContentSize.width) , parentSize.height) :
-        CGSizeMake(MAX(parentSize.width, self.presentedViewController.preferredContentSize.width), floorf(parentSize.height / 3.0000f));
+        CGSizeMake(MAX(parentSize.width, self.presentedViewController.preferredContentSize.width),
+                   MIN(self.presentedViewController.preferredContentSize.height, floorf(parentSize.height / 2.0000f)));
 }
 
 - (void)containerViewWillLayoutSubviews {
@@ -212,6 +220,7 @@
 
 - (void)dismiss {
     __weak MADToolboxPresentationController *weakself = self;
+    [((UIViewController <MADViewControllerProtocol> *)self.designerViewController) setHidesStatusBar: NO];
     [self.presentingViewController dismissViewControllerAnimated: YES
                                                       completion: ^{
                                                           [weakself.popoverPresentationControllerDelegate popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)weakself];

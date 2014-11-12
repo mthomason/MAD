@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B17" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="7L5-RQ-3Zg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="7L5-RQ-3Zg">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
@@ -7,8 +7,8 @@
         <!--Font Picker Navigation Controller-->
         <scene sceneID="HX3-p7-a4t">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierStoryboardFontPicker" extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" navigationBarHidden="YES" id="lbo-P9-ezy" customClass="MADFontPickerNavigationController" sceneMemberID="viewController">
-                    <nil key="simulatedTopBarMetrics"/>
+                <navigationController storyboardIdentifier="MADIdentifierStoryboardFontPicker" extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="lbo-P9-ezy" customClass="MADFontPickerNavigationController" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GuT-1k-PhY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -24,7 +24,7 @@
         <!--Toolbox Style Style View Controller-->
         <scene sceneID="vVV-PM-W3d">
             <objects>
-                <tableViewController storyboardIdentifier="MADIdentifierStoryboardStyle" extendedLayoutIncludesOpaqueBars="YES" id="4AC-SN-miY" customClass="MADToolboxStyleStyleViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MADIdentifierStoryboardStyle" extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="4AC-SN-miY" customClass="MADToolboxStyleStyleViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="bPZ-GA-Bwr" customClass="MADVibrantTableView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -69,7 +69,7 @@
                                                 <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="17" minimumValue="1" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="wGv-sh-CRd">
                                                     <rect key="frame" x="486" y="8" width="94" height="29"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="94" id="QUb-9s-lv6"/>
+                                                        <constraint firstAttribute="width" constant="94" placeholder="YES" id="QUb-9s-lv6"/>
                                                     </constraints>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="4AC-SN-miY" eventType="valueChanged" id="6hA-yY-TzO"/>
@@ -288,11 +288,12 @@
             </objects>
             <point key="canvasLocation" x="1169" y="6994"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Toolbox Navigation Controller-->
         <scene sceneID="YwO-zZ-vTV">
             <objects>
-                <navigationController definesPresentationContext="YES" modalPresentationStyle="overFullScreen" id="7L5-RQ-3Zg" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleAspectFit" id="LtZ-CW-Izw">
+                <navigationController storyboardIdentifier="MADIdentifierStoryboardToolboxInital" automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="overCurrentContext" id="7L5-RQ-3Zg" customClass="MADToolboxNavigationController" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleAspectFit" id="LtZ-CW-Izw" customClass="MADNavigationBarFixedSize">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -307,11 +308,12 @@
         <!--Toolbox View Controller-->
         <scene sceneID="wjq-OG-MYo">
             <objects>
-                <viewController storyboardIdentifier="MADIdentifierStoryboardToolbox" extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="RTc-LS-BVF" customClass="MADToolboxViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MADIdentifierStoryboardToolbox" modalPresentationStyle="overCurrentContext" id="RTc-LS-BVF" customClass="MADToolboxViewController" sceneMemberID="viewController">
                     <containerView key="view" opaque="NO" contentMode="scaleToFill" id="8bZ-99-toH">
                         <rect key="frame" x="0.0" y="44" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </containerView>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="Nlj-8r-lwL">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="eJs-Au-RN1">

@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADViewControllerProtocol.h"
 
 typedef void(^MTBlockCompletionSimple)(BOOL finished);
 typedef void(^MTBlockCompletionNoReturn)(void);
@@ -24,9 +25,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 @class MADocument;
 
 @interface MADDesignerViewController : UIViewController
+    <MADViewControllerProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;
+@property (nonatomic, assign) BOOL hidesStatusBar;
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
 - (IBAction)done:(id)sender;

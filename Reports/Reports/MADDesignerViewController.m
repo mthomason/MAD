@@ -97,6 +97,8 @@
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
 
+#import "MADToolboxNavigationController.h"
+
 const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -245,6 +247,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
 
+//@property (nonatomic, assign) BOOL hidesStatusBar;
+
 @end
 
 @implementation MADDesignerViewController
@@ -327,7 +331,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    self.hidesStatusBar = NO;
+    
     NSMutableSet *presentationControllerPassthroughViews = [[NSMutableSet alloc] init];
     self.presentationControllerPassthroughViews = presentationControllerPassthroughViews;
     
@@ -430,7 +436,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.scroller addGestureRecognizer:tap];
     self.scroller.delegate = self;
 
-    
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
     NSLayoutConstraint *constraintContentLeft = [self layoutConstraintViewContentLeft];
     constraintContentLeft.priority = 999;
@@ -504,7 +509,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     self.scroller.container.backgroundColor = [UIColor greenColor];
     
-    
+}
+
+- (void)setHidesStatusBar:(BOOL)hidesStatusBar {
+    _hidesStatusBar = hidesStatusBar;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -671,6 +679,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return self.hidesStatusBar || self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+}
+
 - (NSLayoutConstraint *)layoutConstraintContentWidthCalculated {
     return [NSLayoutConstraint constraintWithItem: self.scroller.container
                                         attribute: NSLayoutAttributeWidth
@@ -712,8 +724,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (UIEdgeInsets)desiredScrollInsets {
     return UIEdgeInsetsMake(self.topLayoutGuide.length,
                             CGSizeZero.width,
-                            self.bottomLayoutGuide.length,// self.toolboxVisible ? CGSizeZero.height + [self toolboxHeightCalculated]:
-                                                  //CGSizeZero.height + self.tabBarController.tabBar.frame.size.height,
+                            self.bottomLayoutGuide.length,
                             CGSizeZero.width);
 }
 
@@ -733,7 +744,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     if (self.shownAndHidden && self.zoomScaleRestore > 1.0001) {
         [self.scroller setZoomScale:self.zoomScaleRestore animated:NO];
-        [self scrollViewDidEndZooming:nil withView:nil atScale: self.scroller.zoomScale];
+        [self scrollViewDidEndZooming: nil
+                             withView: nil
+                              atScale: self.scroller.zoomScale];
         [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
     }
     
@@ -800,10 +813,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-//- (void)viewDidLayoutSubviews {
-//    [super viewDidLayoutSubviews];
-//}
-
 - (void)updateViewConstraints {
     [super updateViewConstraints];
 
@@ -849,17 +858,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [debuggingString appendString:@"*****\n\n\n"];
     return designerContentViewSize;
 }
-
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    //__weak MADDesignerViewController *weakself = self;
-    //[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-//        [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-        
-    //} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-       // [weakself.ruler setNeedsDisplay];
-    //}];
-    
-//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
@@ -1302,9 +1300,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         selectedImage = info[UIImagePickerControllerOriginalImage];
     }
     
-    
     if (selectedImage != nil) {
         __weak MADDesignerViewController *reportDesigner = self;
+        self.hidesStatusBar = NO;
         [self dismissViewControllerAnimated:YES completion:^{
             NSNumber *type = @(MTDocumentObjectTypeImage);
             NSDictionary *defination = @{MTDocumentObjectDefinationType: type,
@@ -1317,6 +1315,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:NULL];
     [self setDisplayActive];
 }
@@ -1410,6 +1409,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)cancel:(id)sender {
+    self.hidesStatusBar = NO;
     __weak MADDesignerViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
         [weakself setDisplayActive];
@@ -1439,6 +1439,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)hideToolbox {
+    self.hidesStatusBar = NO;
     __weak MADDesignerViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
         [weakself dismiss];
@@ -1463,8 +1464,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                        animated: YES
                      completion: ^{
                          [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeElement];
- //                        id v = self.presentedViewController;
-                         
                      }];
 
 }
@@ -1958,15 +1957,17 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [self.scroller setZoomScale: 1.0000f animated:NO];
-        __weak MADDesignerViewController *reportDesigner = self;
+        __weak MADDesignerViewController *weakself = self;
+        self.hidesStatusBar = NO;
         [self dismissViewControllerAnimated:YES completion:^{
-            [reportDesigner.view setNeedsUpdateConstraints];
-            [reportDesigner.scroller.container setNeedsLayout];
-            [reportDesigner.scroller.container setNeedsDisplay];
+            [weakself.view setNeedsUpdateConstraints];
+            [weakself.scroller.container setNeedsLayout];
+            [weakself.scroller.container setNeedsDisplay];
         }];
         
     } else if ([sender isKindOfClass:[MADViewerController class]]) {
         if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {   // ???: Why only dismiss on pad interface????
+            self.hidesStatusBar = NO;
             [self dismissViewControllerAnimated:YES completion:^{}];
             [self setDisplayActive];
         }
@@ -1983,6 +1984,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self insertDocumentObjectWithDefination:
      @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
        MTDocumentObjectDefinationObject : [field objectID]}];
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -2010,7 +2012,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                };
 
     [self insertDocumentObjectWithDefination: documentObjectDefination];
-
+    self.hidesStatusBar = NO;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -2841,11 +2843,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)setDisplayActive {
+    [self setHidesStatusBar: NO];
     self.barButtonAddReportObject.enabled = YES;
     [self enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
+    //self.statusBarHidden = YES;
     self.barButtonAddReportObject.enabled = NO;
     [self disableTabBarItems];
 }
@@ -3506,6 +3510,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         UIView *sectionView = [self detailSectionView];
         CGRect rect = sectionView.frame;
         __weak MADDesignerViewController *weakself = self;
+        self.hidesStatusBar = NO;
         [self dismissViewControllerAnimated:YES completion:^{
             [weakself.scroller scrollRectToVisible:rect animated:YES];
         }];

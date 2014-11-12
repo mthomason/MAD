@@ -895,7 +895,6 @@
         ((MADFontSelectorViewController *)segue.destinationViewController).delegate = self;
         ((MADFontSelectorViewController *)segue.destinationViewController).document = self.document;
         ((MADFontSelectorViewController *)segue.destinationViewController).clearsBackground = self.clearsBackground;
-
         NSString *fontname = nil;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId

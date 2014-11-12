@@ -19,6 +19,7 @@
 @interface MADFontSelectorViewController()
 
 @property (nonatomic, strong) MTFont *initalSelectedFont;
+@property (nonatomic, assign) BOOL firstTimeLayout;
 
 @end
 
@@ -35,22 +36,15 @@
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.opaque = NO;
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    self.automaticallyAdjustsScrollViewInsets = YES;
-
+    self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
+    self.navigationController.navigationBar.alpha = 1.0000f;
+    self.navigationController.navigationBarHidden = NO;
+    self.firstTimeLayout = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    //[UIView transitionWithView:self.view
-    //                  duration:UINavigationControllerHideShowBarDuration
-    //                   options:UIViewAnimationOptionCurveLinear
-    //                animations:^ {
-                        //self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - (self.navigationController.navigationBar.bounds.size.height * 2));
-      //              }
-      //              completion:^(BOOL finished) { }];
     
     if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
@@ -61,24 +55,22 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden: YES
-                                             animated: NO];
-    [UIView transitionWithView:self.view
-                      duration:UINavigationControllerHideShowBarDuration / 2
-                       options:UIViewAnimationOptionCurveLinear
-                    animations:^ {
-                        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y);
-                        self.navigationController.navigationBar.alpha = 0.0000f;
-                    }
-                    completion:^(BOOL finished) { }];
     [super viewWillDisappear:animated];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if (self.firstTimeLayout) {
+        self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+        self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
+        self.firstTimeLayout = NO;
+    }
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //UIEdgeInsets ed = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    //self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    //self.tableView.scrollIndicatorInsets = ed;
 }
 
 #pragma mark -
@@ -172,7 +164,6 @@
     [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryNone];
     [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryNone];
     [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryNone];
-    
 }
 
 @end

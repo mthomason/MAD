@@ -25,6 +25,7 @@
 @interface MADToolboxTransitioningDelegate : NSObject <UIViewControllerTransitioningDelegate>
 
     @property (nonatomic, strong, readonly) UIPresentationController *presentationController;
+    @property (nonatomic, assign, readonly) BOOL popoverStyle;
 
     //For popover view
     @property (nonatomic, assign) CGRect sourceRect;

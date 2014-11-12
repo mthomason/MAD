@@ -27,6 +27,10 @@ const NSInteger MADIndexViewer = 2;
     [super viewDidLayoutSubviews];
 }
 
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.selectedViewController;
+}
+
 /*
 #pragma mark - Navigation
 

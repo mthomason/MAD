@@ -12,7 +12,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationBar.translucent = YES;
+    //self.navigationBar.translucent = YES;
+    //self.navigationBar.backgroundColor = [UIColor greenColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -111,7 +111,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 //    self.navigationController.navigationItem.title = nil;
 
     CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
-    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
+    //self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
 
         [self valueChanged: self.sceneSelector];
 
@@ -119,9 +119,14 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
-    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
-    [self.navigationController.navigationItem.titleView sizeToFit];
+
+//    [self.navigationController.navigationBar sizeToFit];
+    //[self.navigationItemSceneSelector.titleView sizeToFit];
+    //[self.sceneSelector setNeedsLayout];
+    //[self.navigationController.navigationBar sizeToFit];
+    //CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightConstrained;
+    //self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
+//    [self.navigationController.navigationItem.titleView sizeToFit];
     //[self.navigationController.view layoutSubviews];
     //[self.navigationController.navigationBar sizeToFit];
 }
@@ -133,6 +138,12 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 //
 //    }];
 //}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    //[self.navigationItemSceneSelector.titleView sizeToFit];
+    //[self.sceneSelector setNeedsLayout];
+}
 
 - (void)setClearsBackground:(BOOL)clearsBackground {
     _clearsBackground = clearsBackground;
