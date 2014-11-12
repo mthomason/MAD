@@ -241,18 +241,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 }
 
 - (IBAction)valueChanged:(id)sender {
-/*
-    id cvc = self.childViewControllers.firstObject;
-    if ([cvc isEqual:self.styleNavigationController]) {
-        id vvc = self.styleNavigationController.visibleViewController;
-        if ([vvc isEqual:self.styleNavigationController.viewControllers.firstObject] == NO) {
-            
-            [self.styleNavigationController popToViewController:self.styleNavigationController.viewControllers.firstObject
-                                                       animated:NO];
-        }
 
-    }
-    */
     UIViewController *viewControllerToShow = nil;
     UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
     UIViewAnimationOptions options;
@@ -261,11 +250,9 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     
         case 0:
             
-            [self showStyle]; return;
+            [self showStyle];   //Handles this case alone...
+            return;
             
-            viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
-            viewControllerToShow = self.styleNavigationController;
-            options = UIViewAnimationOptionTransitionFlipFromRight;
             break;
             
         case 1:
