@@ -48,7 +48,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
 @interface MTFont()
 
-@property (nonatomic, strong) NSString *familyName;
+@property (nonatomic, strong, readwrite) NSString *familyName;
 @property (nonatomic, assign) BOOL bold;
 @property (nonatomic, assign) BOOL italic;
 
@@ -373,7 +373,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (NSString *)name {
-    return [self familyName];
+    return self.familyName;
 }
 
 @end

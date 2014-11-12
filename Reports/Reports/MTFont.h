@@ -26,13 +26,14 @@ extern NSString * const MTFontFamilyZapfino;
 
 @interface MTFont : NSObject
 
-@property (assign) CGFloat pointSize;
-
 + (instancetype)fontWithFamilyName:(NSString *)familyName;
 - (instancetype)init;
 - (instancetype)initWithFamilyName:(NSString *)familyName;
 - (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic NS_DESIGNATED_INITIALIZER;
+
+@property (nonatomic, strong, readonly) NSString *familyName;
+@property (assign) CGFloat pointSize;
 
 - (UIFont *)font;
 - (CTFontRef)coreTextFont;
@@ -40,7 +41,6 @@ extern NSString * const MTFontFamilyZapfino;
 - (UIFont *)italicFont;
 - (UIFont *)boldFont;
 - (UIFont *)boldItalicFont;
-- (NSString *)name;
 
 + (NSArray *)familyNames;
 

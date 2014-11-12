@@ -621,14 +621,15 @@
 }
 
 - (void)chooseFont:(MTFont *)font {
-    [self.labelFontName setFont:[font font]];
-    [self.labelFontName setText:[font name]];
-    [self.labelFontName setAttributedText:[self boldSystemString:[font name] ofSize:[[self.labelFontName font] pointSize]]];
+    self.labelFontName.font = [font font];
+    self.labelFontName.text = font.familyName;
+    [self.labelFontName setAttributedText:[self boldSystemString: font.familyName
+                                                          ofSize: self.labelFontName.font.pointSize]];
 
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                       managedObjectContext: self.document.managedObjectContext];
-        [documentObject setFontname:[font name]];
+        [documentObject setFontname:font.familyName];
     }
     [self.document saveContext];
 

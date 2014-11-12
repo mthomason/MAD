@@ -125,27 +125,27 @@
 - (void)checkSelectedFont:(MTFont *)font {
     [self uncheckAllCells];
     
-    if ([[font name] isEqualToString:MTFontFamilyAmericanTypewriter]) {
+    if ([font.familyName isEqualToString:MTFontFamilyAmericanTypewriter]) {
         [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyArial]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyArial]) {
         [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyCourierNew]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyCourierNew]) {
         [[self tableViewCellFontCourierNew] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyCourier]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyCourier]) {
         [[self tableViewCellFontCourier] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyGeorgia]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyGeorgia]) {
         [[self tableViewCellFontGeorgia] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyHelvetica]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyHelvetica]) {
         [[self tableViewCellFontHelvetica] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyHelveticaNeue]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyHelveticaNeue]) {
         [[self tableViewCellFontHelveticaNeue] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyTimesNewRoman]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyTimesNewRoman]) {
         [[self tableViewCellFontTimesNewRoman] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyTrebuchet]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyTrebuchet]) {
         [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyVerdana]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyVerdana]) {
         [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([[font name] isEqualToString:MTFontFamilyZapfino]) {
+    } else if ([font.familyName isEqualToString:MTFontFamilyZapfino]) {
         [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
 }
