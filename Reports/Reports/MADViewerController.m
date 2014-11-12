@@ -541,19 +541,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    
-    if (self.tabBarController.selectedViewController == self && self.activityExporting == NO) {
+    if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == NO) {
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
-        //UIView *displayView = [pageViewController view];
         
         [self setFrameBeforeRotation: [displayView frame]];
         
         [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
         [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
         
-        
-        //MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         [displayView setNeedsDisplay];
         
         CGRect oldBounds = displayView.bounds;
