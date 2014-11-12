@@ -162,11 +162,6 @@
 
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
 
-    CGSize s = [self showOnSide] ?
-    CGSizeMake(MAX(floorf(parentSize.width / 3.0000f), self.presentedViewController.preferredContentSize.width) , parentSize.height) :
-    CGSizeMake(MAX(parentSize.width, self.presentedViewController.preferredContentSize.width),
-               MIN(self.presentedViewController.preferredContentSize.height, floorf(parentSize.height / 2.0000f)));
-    
     return [self showOnSide] ?
         CGSizeMake(MAX(floorf(parentSize.width / 3.0000f), self.presentedViewController.preferredContentSize.width) , parentSize.height) :
         CGSizeMake(MAX(parentSize.width, self.presentedViewController.preferredContentSize.width),
