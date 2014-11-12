@@ -36,9 +36,6 @@
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.opaque = NO;
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
-    self.navigationController.navigationBar.alpha = 1.0000f;
-    self.navigationController.navigationBarHidden = NO;
     self.firstTimeLayout = YES;
 }
 
@@ -51,6 +48,11 @@
     }
 
     [self checkSelectedFont:self.initalSelectedFont];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
+    self.navigationController.navigationBar.alpha = 1.0000f;
+    self.navigationController.navigationBarHidden = NO;
+    self.firstTimeLayout = YES;
 
 }
 

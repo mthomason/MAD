@@ -521,6 +521,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [self.collectionView.backgroundView setNeedsDisplay];
+    
     __weak MADOpenFileViewController *weakself = self;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

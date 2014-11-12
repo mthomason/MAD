@@ -7,19 +7,22 @@
 //
 
 #import "MADFontPickerNavigationController.h"
+#import "MADFontSelectorViewController.h"
 
 @implementation MADFontPickerNavigationController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //self.navigationBar.translucent = YES;
-    //self.navigationBar.backgroundColor = [UIColor greenColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //[self.view layoutIfNeeded];
-    //self.navigationBar.frame = CGRectMake(CGPointZero.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationBar.bounds.size.width, self.navigationBar.bounds.size.height);
+    UIViewController *visibleViewController = self.visibleViewController;
+    if ([visibleViewController isKindOfClass:[MADFontSelectorViewController class]]) {
+        [self setNavigationBarHidden:NO animated:NO];
+    } else {
+        [self setNavigationBarHidden:YES animated:NO];
+    }
 }
 
 - (void)viewDidLayoutSubviews {

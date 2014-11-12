@@ -597,9 +597,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         __weak MADViewerController *weakself = self;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
             
-            
-            //__strong MADViewerController *strongself = weakself;
-            //[strongself localWillAnimateRotation];
         } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
             __strong MADViewerController *strongself = weakself;
             [strongself localDidRotate];

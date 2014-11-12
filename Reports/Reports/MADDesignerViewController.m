@@ -1144,7 +1144,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - NSManagedObjectContextObjectsDidChangeNotification
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
-    NSArray *updatedObjects = [notification userInfo][NSUpdatedObjectsKey];
+    NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
 
     for (id updatedObject in updatedObjects) {
         
@@ -1195,7 +1195,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - NSManagedObjectContextDidSaveNotification
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    NSArray *managedObjectsUpdated = [notification userInfo][NSUpdatedObjectsKey];
+    NSArray *managedObjectsUpdated = notification.userInfo[NSUpdatedObjectsKey];
     for (NSManagedObject *managedObject in managedObjectsUpdated) {
         MADDesignerElementView *elementView = [self elementViewForManagedObject:managedObject];
         [elementView updateForManagedObjectContent:managedObject.managedObjectContext];

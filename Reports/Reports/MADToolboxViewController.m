@@ -26,7 +26,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
-@property (weak, nonatomic) IBOutlet UINavigationItem *navigationItemSceneSelector;
+@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
 
 @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
 
@@ -107,13 +107,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-//    self.navigationController.navigationItem.prompt = nil;
-//    self.navigationController.navigationItem.title = nil;
-
-    CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightNormal;
-    //self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
-
-        [self valueChanged: self.sceneSelector];
+    [self valueChanged: self.sceneSelector];
 
 }
 
@@ -188,52 +182,47 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
-    //[self updateEdgeInsets:((UIScrollView *)((UIViewController *)((UINavigationController *)self.styleNavigationController).viewControllers.firstObject).view)];
-    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (void)updateEdgeInsets:(UIScrollView *)scrollView {
-    //scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height,
-    //                                                    CGSizeZero.width,
-    //                                                    self.bottomLayoutGuide.length,
-    //                                                    CGSizeZero.width);
-    //scrollView.contentInset = scrollView.scrollIndicatorInsets;
-    //[scrollView setContentOffset: CGPointMake(0, self.navigationController.navigationBar.frame.size.height) animated:NO];
-}
-
 - (IBAction)valueChanged:(id)sender {
+
+    id cvc = self.childViewControllers.firstObject;
+    if ([cvc isEqual:self.styleNavigationController]) {
+        id vvc = self.styleNavigationController.visibleViewController;
+        if ([vvc isEqual:self.styleNavigationController.viewControllers.firstObject] == NO) {
+            [self.styleNavigationController popToViewController:self.styleNavigationController.viewControllers.firstObject
+                                                       animated:YES];
+        }
+
+    }
     
     UIViewController *viewControllerToShow = nil;
     UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
     UIViewAnimationOptions options;
 
-    UIScrollView *sv;
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
     
         case 0:
         
-            viewControllerToShow = self.styleNavigationController;
             viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+            viewControllerToShow = self.styleNavigationController;
             options = UIViewAnimationOptionTransitionFlipFromRight;
-            sv = ((UIScrollView *)((UIViewController *)((UINavigationController *)viewControllerToShow).viewControllers.firstObject).view);
             break;
             
         case 1:
             options = UIViewAnimationOptionTransitionFlipFromBottom;
             viewControllerToShow = self.layout;
             viewControllerToUpdate = self.layout;
-            sv = ((UIScrollView *)viewControllerToShow.view);
             break;
             
         case 2:
             options = UIViewAnimationOptionTransitionFlipFromLeft;
             viewControllerToShow = self.format;
             viewControllerToUpdate = self.format;
-            sv = ((UIScrollView *)viewControllerToShow.view);
             break;
             
         default:
@@ -249,7 +238,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
 
     viewControllerToShow.view.frame = self.view.bounds;
-    //[viewControllerToShow.view layoutIfNeeded];
     
     if (viewControllerToHide != nil) {
         [self addChildViewController:viewControllerToShow];
@@ -257,9 +245,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
         
         __weak MADToolboxViewController *weakself = self;
         [viewControllerToShow beginAppearanceTransition:YES animated:YES];
-        [self updateEdgeInsets:sv];
-        //[sv setContentOffset: CGPointMake(0, viewControllerToShow.topLayoutGuide.length) animated:NO];
-//[sv setContent]
+
         [self transitionFromViewController: viewControllerToHide
                           toViewController: viewControllerToShow
                                   duration: 0.23232323f
@@ -279,8 +265,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
         [self.view addSubview:viewControllerToShow.view];
         [viewControllerToShow didMoveToParentViewController:weakself];
         [viewControllerToShow endAppearanceTransition];
-    
-        [self updateEdgeInsets:sv];
     }
 }
 
