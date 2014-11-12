@@ -11,6 +11,7 @@
 
 #import "UIColor+EverydayApps.h"
 
+NSString * const MADToolbox                     = @"MADToolbox";
 NSString * const MADIdentifierStoryboardLayout  = @"MADIdentifierStoryboardLayout";
 NSString * const MADIdentifierStoryboardFormat  = @"MADIdentifierStoryboardFormat";
 NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle";
@@ -107,36 +108,48 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    [self valueChanged: self.sceneSelector];
+}
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-
-//    [self.navigationController.navigationBar sizeToFit];
-    //[self.navigationItemSceneSelector.titleView sizeToFit];
-    //[self.sceneSelector setNeedsLayout];
-    //[self.navigationController.navigationBar sizeToFit];
-    //CGFloat height = self.navigationController.navigationBar.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? MADNavigationBarSizeHeightConstrained : MADNavigationBarSizeHeightConstrained;
-    //self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.navigationController.navigationBar.frame.origin.y, self.navigationController.navigationBar.frame.size.width, height);
-//    [self.navigationController.navigationItem.titleView sizeToFit];
-    //[self.navigationController.view layoutSubviews];
-    //[self.navigationController.navigationBar sizeToFit];
+    if (self.firstTimeViewWillAppear) {
+        self.firstTimeViewWillAppear = NO;
+        [self showInitalChildViewController];
+    }
 }
 
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-//    [coordinator animateAlongsideTransitionInView:self.view animation:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-//        [self.navigationController.navigationBar setNeedsLayout];
-//    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-//
-//    }];
-//}
+- (void)showInitalChildViewController {
+    
+    UIViewController *viewControllerToShow = nil;
+    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
+    UIViewAnimationOptions options;
+    
+    viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    viewControllerToShow = self.styleNavigationController;
+    
+    options = UIViewAnimationOptionTransitionCrossDissolve;
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
+    viewControllerToUpdate.document = self.document;
+    viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
+    
+    viewControllerToShow.view.frame = self.view.bounds;
+    [self addChildViewController:viewControllerToShow];
+    __weak MADToolboxViewController *weakself = self;
+    [viewControllerToShow beginAppearanceTransition:YES animated:NO];
+    [self.view addSubview:viewControllerToShow.view];
+    [viewControllerToShow didMoveToParentViewController:weakself];
+    [viewControllerToShow endAppearanceTransition];
+    
+
+}
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //[self.navigationItemSceneSelector.titleView sizeToFit];
-    //[self.sceneSelector setNeedsLayout];
 }
 
 - (void)setClearsBackground:(BOOL)clearsBackground {
@@ -188,18 +201,58 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction)valueChanged:(id)sender {
+- (void)showStyle {
+    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    UIViewController *viewControllerToShow = self.styleNavigationController;
+    UIViewAnimationOptions options = UIViewAnimationOptionTransitionFlipFromRight;
+    options = UIViewAnimationOptionTransitionCrossDissolve;
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
+    viewControllerToUpdate.document = self.document;
+    viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
+    
+    UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
+    viewControllerToShow.view.frame = self.view.bounds;
+    
+    NSAssert(viewControllerToHide == nil, @"No view controller to hide.");
+    __weak MADToolboxViewController *weakself = self;
+    [self addChildViewController:viewControllerToShow];
+    [viewControllerToHide willMoveToParentViewController:nil];
+    [viewControllerToShow beginAppearanceTransition:YES animated:YES];
+    [self.styleNavigationController.topViewController beginAppearanceTransition:YES animated:YES];
+    
+    [self transitionFromViewController: viewControllerToHide
+                      toViewController: viewControllerToShow
+                              duration: 0.23232323f
+                               options: options
+                            animations:^{
+                                
+                            }
+                            completion:^(BOOL finished) {
+                                if (finished) {
+                                    [viewControllerToHide removeFromParentViewController];
+                                    [viewControllerToShow didMoveToParentViewController:weakself];
+                                    [((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:weakself];
 
+                                }
+                                
+                            }];
+
+}
+
+- (IBAction)valueChanged:(id)sender {
+/*
     id cvc = self.childViewControllers.firstObject;
     if ([cvc isEqual:self.styleNavigationController]) {
         id vvc = self.styleNavigationController.visibleViewController;
         if ([vvc isEqual:self.styleNavigationController.viewControllers.firstObject] == NO) {
+            
             [self.styleNavigationController popToViewController:self.styleNavigationController.viewControllers.firstObject
-                                                       animated:YES];
+                                                       animated:NO];
         }
 
     }
-    
+    */
     UIViewController *viewControllerToShow = nil;
     UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
     UIViewAnimationOptions options;
@@ -207,7 +260,9 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
     
         case 0:
-        
+            
+            [self showStyle]; return;
+            
             viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
             viewControllerToShow = self.styleNavigationController;
             options = UIViewAnimationOptionTransitionFlipFromRight;
@@ -234,38 +289,33 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
-  
+    
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
 
     viewControllerToShow.view.frame = self.view.bounds;
     
-    if (viewControllerToHide != nil) {
-        [self addChildViewController:viewControllerToShow];
-        [viewControllerToHide willMoveToParentViewController:nil];
-        
-        __weak MADToolboxViewController *weakself = self;
-        [viewControllerToShow beginAppearanceTransition:YES animated:YES];
-
-        [self transitionFromViewController: viewControllerToHide
-                          toViewController: viewControllerToShow
-                                  duration: 0.23232323f
-                                   options: options
-                                animations:^{
+    NSAssert(viewControllerToHide == nil, @"No view controller to hide.");
+    
+    __weak MADToolboxViewController *weakself = self;
+    [self addChildViewController:viewControllerToShow];
+    [viewControllerToHide willMoveToParentViewController:nil];
+    [viewControllerToShow beginAppearanceTransition:YES animated:YES];
+    
+    
+    [self transitionFromViewController: viewControllerToHide
+                      toViewController: viewControllerToShow
+                              duration: 0.23232323f
+                               options: options
+                            animations:^{
+                                
+                            }
+                            completion:^(BOOL finished) {
+                                if (finished) {
                                     [viewControllerToHide removeFromParentViewController];
                                     [viewControllerToShow didMoveToParentViewController:weakself];
                                     [viewControllerToShow endAppearanceTransition];
                                 }
-                                completion:^(BOOL finished) {
-                                    
-                                }];
-    } else {
-        [self addChildViewController:viewControllerToShow];
-        __weak MADToolboxViewController *weakself = self;
-        [viewControllerToShow beginAppearanceTransition:YES animated:NO];
-        [self.view addSubview:viewControllerToShow.view];
-        [viewControllerToShow didMoveToParentViewController:weakself];
-        [viewControllerToShow endAppearanceTransition];
-    }
+                            }];
 }
 
 - (UIImage *)cropImage:(UIImage *)image toRect:(CGRect)rect {

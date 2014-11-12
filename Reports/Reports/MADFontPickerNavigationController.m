@@ -17,16 +17,35 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     UIViewController *visibleViewController = self.visibleViewController;
     if ([visibleViewController isKindOfClass:[MADFontSelectorViewController class]]) {
         [self setNavigationBarHidden:NO animated:NO];
     } else {
         [self setNavigationBarHidden:YES animated:NO];
     }
+    [self.visibleViewController.view setNeedsLayout];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.visibleViewController.view setNeedsLayout];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+}
+
+- (void)setNavigationBarHidden:(BOOL)navigationBarHidden {
+    [super setNavigationBarHidden:navigationBarHidden];
+}
+
+- (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
+    [super setNavigationBarHidden:hidden animated:animated];
 }
 
 @end
