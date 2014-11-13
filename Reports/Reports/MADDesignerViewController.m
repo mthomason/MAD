@@ -2345,7 +2345,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest {
 
-    if ([self.toolboxTransitioningDelegate.presentationController isKindOfClass:[UIPopoverPresentationController class]]) {
+    if ([self.toolboxTransitioningDelegate.presentationController isKindOfClass:[UIPopoverPresentationController class]] == NO) {
 
         if (self.scroller.zoomScale <= 1.0000f) {
             [self.scroller setZoomScale: 1.0000f
