@@ -2057,9 +2057,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSDictionary *defination = @{MTDocumentObjectDefinationType: type,
                                  MTDocumentObjectDefinationObject : labelText};
     [self insertDocumentObjectWithDefination:defination];
-//    if (self.presentationController != nil || self.navigationController.isMovingFromParentViewController == NO) {
-//        [self dismissViewControllerAnimated:YES completion:nil];
-//   }
 }
 
 #pragma mark - Gesture Recognizer Delegate

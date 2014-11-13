@@ -9,10 +9,5 @@
 #import "MADNavigationBarFixedSize.h"
 
 @implementation MADNavigationBarFixedSize
-- (CGSize)sizeThatFits:(CGSize)size {
-    return [super sizeThatFits:size];
-//    CGSize newSize = CGSizeMake(self.frame.size.width, 32.0000f);
-//    return newSize;
-}
 
 @end
