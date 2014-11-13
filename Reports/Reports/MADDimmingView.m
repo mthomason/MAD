@@ -24,32 +24,43 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     id hitview = nil;
-    
-    
-    
     for (UIView *foundView in self.passthoughViews) {
         CGRect normalized = [self convertRect: foundView.frame
                                      fromView: foundView];
 
-        if (CGRectContainsPoint(normalized, point)) {  // Touched, nice
+        if (CGRectContainsPoint(normalized, point)) {
             
-            CGRect visibleRect = [self.passthroughContainer convertRect:self.passthroughContainer.bounds toView:((MADBackgroundScrollView *)self.passthroughContainer).container];
-//            CGRect visibleRect2 = [self.passthroughContainer convertRect:visibleRect toView:self];
+            CGRect visibleRect = [self.passthroughContainer convertRect: self.passthroughContainer.bounds
+                                                                 toView: ((MADBackgroundScrollView *)self.passthroughContainer).container];
             if (CGRectContainsPoint(visibleRect, point)) {
                 hitview = foundView;
+                goto shortThisB;
                 break;
             }
         }
     }
     
     if (hitview == nil) {
-        if (self.passthroughContainer != nil) {
+        
+        for (UIView *v in self.passthoughContainers) {
+            CGRect normalized = [self.passthroughContainer convertRect: v.frame
+                                                              fromView:v];
+            CGPoint normalizedPoint = [v convertPoint: point
+                                               toView: self.passthroughContainer];
+            if (CGRectContainsPoint(normalized, normalizedPoint)) {
+                hitview = v;
+                goto shortThisB;
+                break;
+            }
+        }
+        
+        if (hitview == nil && self.passthroughContainer != nil) {
             hitview = self.passthroughContainer;
-        } else {
+        } else if (hitview == nil) {
             hitview = [super hitTest:point withEvent:event];
         }
     }
-
+shortThisB:
     return hitview;
 }
 

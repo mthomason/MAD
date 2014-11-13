@@ -54,6 +54,7 @@
         presentationController = [[MADToolboxPresentationController alloc] initWithPresentedViewController: presented
                                                                                   presentingViewController: presenting];
         
+        ((MADToolboxPresentationController *)presentationController).passthroughContainers = self.passthoughContainers;
         ((MADToolboxPresentationController *)presentationController).passthroughViews = self.passthroughViews;
         ((MADToolboxPresentationController *)presentationController).passthroughContainer = self.passthroughContainer;
         ((MADToolboxPresentationController *)presentationController).popoverPresentationControllerDelegate = self.popoverPresentationControllerDelegate;
@@ -142,7 +143,7 @@
                          toolboxNavigationController.view.frame = finalFrame;
 
                      }
-                     completion: ^(BOOL finished){
+                     completion: ^(BOOL finished) {
                          
                          [designer.view setNeedsLayout];    // Give designer scroll view a chance to update insets
                          

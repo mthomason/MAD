@@ -247,6 +247,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
 
+@property (nonatomic, strong) NSSet *passthoughContainers;
 //@property (nonatomic, assign) BOOL hidesStatusBar;
 
 @end
@@ -254,6 +255,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @implementation MADDesignerViewController
 
 #pragma mark - Exit
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [self.view setNeedsLayout];
+}
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
     
@@ -571,6 +577,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSMutableArray *sectionControlViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     NSMutableArray *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
+    NSMutableSet *passthroughContainers = [[NSMutableSet alloc] initWithCapacity:sectionEnumerator.count];
+    
     CGFloat borderWidthThin = [UIView borderWidthThin];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
@@ -647,9 +655,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             [self.scroller.container addSubview:sectionView];
             [self.scroller.container addSubview:sectionViewLabel];
+            
+            [passthroughContainers addObject:sectionView];
         }
     }
     
+    self.passthoughContainers = [NSSet setWithSet: passthroughContainers];
+
     self.sectionViewsArray = sectionViewsArray;
     self.sectionControlViewsArray = sectionControlViewsArray;
     
@@ -795,6 +807,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                   CGSizeZero.width,
                                   self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
                                   CGSizeZero.width);
+        
 
     } else {
     
@@ -810,6 +823,26 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.detailDisplayView.frame = [self detailDisplayFrame];
     [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
     [self.ruler setNeedsDisplay];
+    
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame;
+    if (presentedRect.origin.x > CGPointZero.x) {
+        
+        
+        for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+            sectionView.scrollIndicatorInsets = sectionView.contentInset;
+        }
+        
+    } else {
+        for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+            sectionView.contentInset = UIEdgeInsetsZero;
+            sectionView.scrollIndicatorInsets = UIEdgeInsetsZero;
+        }
+    }
     
 }
 
@@ -1452,6 +1485,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
     NSSet *passthroughViews = [NSSet setWithSet:self.elementViews];
+    self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
     self.toolboxTransitioningDelegate.passthroughViews = passthroughViews;
     self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
     
@@ -2037,11 +2071,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
     shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     
-    BOOL sameViews = [gestureRecognizer.view isEqual:otherGestureRecognizer.view];
-    BOOL scrollBackgroundAndScroller = [gestureRecognizer.view isEqual:self.scroller] == NO &&
-                                            [otherGestureRecognizer.view isEqual:self.scroller] == NO;
-    return sameViews || scrollBackgroundAndScroller;
-
+    return [gestureRecognizer.view isEqual:otherGestureRecognizer.view] ||
+            [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] ||
+            [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] ||
+            ([gestureRecognizer.view isEqual:self.scroller] == NO &&
+                                        [otherGestureRecognizer.view isEqual:self.scroller] == NO);
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
@@ -2345,46 +2379,61 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest {
 
-    if ([self.toolboxTransitioningDelegate.presentationController isKindOfClass:[UIPopoverPresentationController class]] == NO) {
+    if ([self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
 
-        if (self.scroller.zoomScale <= 1.0000f) {
-            [self.scroller setZoomScale: 1.0000f
-                               animated: YES];
-        }
+        CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame;
         
-        CGFloat adjustment = self.topLayoutGuide.length;
-        
-        CGRect visibleRect;
-        visibleRect.origin = CGPointMake(self.scroller.contentOffset.x,
-                                         self.scroller.contentOffset.y);
-        
-        visibleRect.size = CGSizeMake(self.view.frame.size.width,
-                                      self.view.frame.size.height - [self toolboxHeightCalculated]);
-        visibleRect = CGRectAdjustForScale(visibleRect,
-                                           self.scroller.zoomScale);
-        
-        CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ?
-        rectOfInterest :
-        CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
-        
-        CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
-                                                visibleRect.origin.y + adjustment,
-                                                CGFLOAT_MAX,
-                                                visibleRect.size.height - adjustment);
-        
-        if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
-            
-            CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
-                                                                     visibleRect);
-            if (self.scroller.zoomScale > 1) {
-                contentOffset = CGPointMake(contentOffset.x,
-                                            contentOffset.y * self.scroller.zoomScale);
-            }
-            [self.scroller setContentOffset: contentOffset
+        if (presentedRect.origin.y > CGPointZero.y) {
+
+            if (self.scroller.zoomScale <= 1.0000f) {
+                [self.scroller setZoomScale: 1.0000f
                                    animated: YES];
+            }
             
+            CGFloat adjustment = self.topLayoutGuide.length;
+            
+            CGRect visibleRect;
+            visibleRect.origin = CGPointMake(self.scroller.contentOffset.x,
+                                             self.scroller.contentOffset.y);
+            
+            visibleRect.size = CGSizeMake(self.view.frame.size.width,
+                                          self.view.frame.size.height - [self toolboxHeightCalculated]);
+            
+            visibleRect = CGRectAdjustForScale(visibleRect,
+                                               self.scroller.zoomScale);
+            
+            CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ?
+            rectOfInterest :
+            CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
+            
+            CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
+                                                    visibleRect.origin.y + adjustment,
+                                                    CGFLOAT_MAX,
+                                                    visibleRect.size.height - adjustment);
+            
+            if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
+                
+                CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
+                                                                         visibleRect);
+                if (self.scroller.zoomScale > 1) {
+                    contentOffset = CGPointMake(contentOffset.x,
+                                                contentOffset.y * self.scroller.zoomScale);
+                }
+                [self.scroller setContentOffset: contentOffset
+                                       animated: YES];
+                
+            }
         }
 
+        if (presentedRect.origin.x > CGPointZero.x) {
+            
+            for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+                sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+                sectionView.scrollIndicatorInsets = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+            }
+            
+        }
+        
     }
 }
 

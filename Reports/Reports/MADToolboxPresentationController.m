@@ -62,6 +62,7 @@
     } else if ([keyPath isEqualToString:[MADToolboxPresentationController keyPathPassthroughContainer]]) {
 
         self.dimmingView.passthroughContainer = self.passthroughContainer;
+        self.dimmingView.passthoughContainers = self.passthroughContainers;
         
     }
 }

@@ -11,15 +11,10 @@
 
 @implementation MADFontPickerNavigationController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    UIViewController *visibleViewController = self.visibleViewController;
-    if ([visibleViewController isKindOfClass:[MADFontSelectorViewController class]]) {
+    if ([self.visibleViewController isKindOfClass:[MADFontSelectorViewController class]]) {
         [self setNavigationBarHidden:NO animated:NO];
     } else {
         [self setNavigationBarHidden:YES animated:NO];
@@ -31,21 +26,16 @@
     [super viewDidAppear:animated];
     [self.visibleViewController.view setNeedsLayout];
 }
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+/*
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [super pushViewController:viewController animated:animated];
+    self.preferredContentSize = viewController.preferredContentSize;
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated {
+    UIViewController *result = [super popViewControllerAnimated:animated];
+    self.preferredContentSize = result.preferredContentSize;
+    return result;
 }
-
-- (void)setNavigationBarHidden:(BOOL)navigationBarHidden {
-    [super setNavigationBarHidden:navigationBarHidden];
-}
-
-- (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-    [super setNavigationBarHidden:hidden animated:animated];
-}
-
+*/
 @end

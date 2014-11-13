@@ -39,21 +39,19 @@
     self.firstTimeLayout = YES;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
     self.navigationController.navigationBar.alpha = 1.0000f;
-    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden: NO animated: animated];
     if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }
 
     [self checkSelectedFont:self.initalSelectedFont];
     
-    //self.firstTimeLayout = YES;
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -62,13 +60,17 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-        self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
-        self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+
+    self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f, 680.0000f);
+
+    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     if (self.firstTimeLayout) {
         self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
         self.firstTimeLayout = NO;
     }
+
 }
 
 - (void)viewDidLayoutSubviews {

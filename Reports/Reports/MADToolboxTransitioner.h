@@ -33,6 +33,7 @@
     @property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
 
     @property (nonatomic, strong) UIView *passthroughContainer;
+    @property (nonatomic, strong) NSSet *passthoughContainers;
     @property (nonatomic, strong) NSSet *passthroughViews;
 
     @property (nonatomic, assign) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;

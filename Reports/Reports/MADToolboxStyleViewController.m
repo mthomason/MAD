@@ -113,6 +113,8 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    //self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f, 280.0000f);
+
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
 
