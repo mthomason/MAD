@@ -255,7 +255,7 @@
             [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
             [self.segmentedControlVerticalAlignment setUserInteractionEnabled:NO];
             [self.fontLabelTableViewCell setUserInteractionEnabled:NO];
-            [[self stepperFontSize] setUserInteractionEnabled:NO];
+            [self.stepperFontSize setUserInteractionEnabled:NO];
             for (UIStepper *stepper in [self steppers]) {
                 [stepper setUserInteractionEnabled:NO];
             }
@@ -452,7 +452,7 @@
                     break;
             }
             
-            [[self stepperFontSize] setValue:fontSizeHolder];
+            [self.stepperFontSize setValue:fontSizeHolder];
             
             
             self.controlStateBold = numberBold > 0 ? ( numberNotBold > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
@@ -490,7 +490,7 @@
             
             
             [self.fontLabelTableViewCell setUserInteractionEnabled:YES];
-            [[self stepperFontSize] setUserInteractionEnabled:YES];
+            [self.stepperFontSize setUserInteractionEnabled:YES];
             [self.segmentedControlHorizontalAlignment setUserInteractionEnabled:YES];
             [self.segmentedControlVerticalAlignment setUserInteractionEnabled:YES];
             
@@ -748,8 +748,8 @@
 
 - (IBAction)controlValueChanged:(id)sender {
     
-    if ([sender isEqual:[self stepperFontSize]]) {
-        NSNumber *value = @([[self stepperFontSize] value]);
+    if ([sender isEqual:self.stepperFontSize]) {
+        NSNumber *value = @([self.stepperFontSize value]);
         [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[value floatValue]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
@@ -759,7 +759,7 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeHeight]]) {
-        NSNumber *value = @(self.stepperSizeWidth.value);
+        NSNumber *value = @(self.stepperSizeHeight.value);
         CGFloat fontSize = self.labelSizeHeight.font.pointSize;
         NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
         [self.labelSizeHeight setAttributedText:displayHeight];
@@ -772,7 +772,7 @@
 
     } else if ([sender isEqual:[self stepperSizeWidth]]) {
         NSNumber *value = @(self.stepperSizeWidth.value);
-        CGFloat fontSize = self.labelSizeHeight.font.pointSize;
+        CGFloat fontSize = self.labelSizeWidth.font.pointSize;
         NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
         [self.labelSizeWidth setAttributedText:displayWidth];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
