@@ -32,7 +32,7 @@
     UIViewController *rightViewController = splitViewController.viewControllers[1];
     self.secondaryViewController = rightViewController;
     
-    UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithVerticalSizeClass:UIUserInterfaceSizeClassRegular];
+   // UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithVerticalSizeClass:UIUserInterfaceSizeClassRegular];
    // [self setOverrideTraitCollection:traitCollection forChildViewController:leftViewController];
     
 }
