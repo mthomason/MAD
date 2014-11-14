@@ -18,8 +18,4 @@
     return YES;
 }
 
-//- (CGSize)preferredContentSize {
-//    return [self.visibleViewController preferredContentSize];
-//}
-
 @end
