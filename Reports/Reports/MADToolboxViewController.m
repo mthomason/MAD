@@ -95,10 +95,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     return self;
 }
 
-//- (CGSize)preferredContentSize {
-//    return self.currentViewController.preferredContentSize;
-//}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -116,8 +112,15 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.styleNavigationController popToRootViewControllerAnimated:animated];
+
+    [self setClearsBackground: self.clearsBackground];
+    UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    [style setDocument:self.document];
+    [style setSelectedDocumentObjects:self.selectedObjectIds];
+
 }
 
 - (void)viewWillLayoutSubviews {
@@ -151,7 +154,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     [self.view addSubview:viewControllerToShow.view];
     [viewControllerToShow didMoveToParentViewController:weakself];
     [viewControllerToShow endAppearanceTransition];
-    
 
 }
 
@@ -196,13 +198,10 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     return delegate;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self setClearsBackground: self.clearsBackground];
-    UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
-    [style setDocument:self.document];
-    [style setSelectedDocumentObjects:self.selectedObjectIds];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
