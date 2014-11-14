@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderAdvancedSchemaViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MADViewController.h"
 
 @protocol MADQueryVisualizationSchemaDelegate
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
@@ -17,7 +18,7 @@
 
 @class MTSchemaFieldCell, NSManagedObjectID, MADocument;
 
-@interface MADQueryVisualizationSchemaViewController : UIViewController
+@interface MADQueryVisualizationSchemaViewController : MADViewController
     <UIDynamicItem>
 
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;

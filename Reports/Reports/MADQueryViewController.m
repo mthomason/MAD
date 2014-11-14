@@ -384,17 +384,12 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     self.navigationController.toolbar.barTintColor = barTintColor;
     self.navigationController.toolbar.tintColor = tintColor;
 
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance madQuery];
     
-    //if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        
-        MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [MTApplicationInstance madQuery];
-
-        self.navigationItem.titleView = titleView;
-    //}
+    self.navigationItem.titleView = titleView;
     
     [self enableTabBarItems];
-    //[self.navigationItem.titleView sizeToFit];
 
 }
 

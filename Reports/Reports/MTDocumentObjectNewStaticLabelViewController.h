@@ -11,10 +11,11 @@
 
 #import <UIKit/UIKit.h>
 #import "MTUnwindProtocol.h"
+#import "MADViewController.h"
 
 extern NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier;
 
-@interface MTDocumentObjectNewStaticLabelViewController : UITableViewController
+@interface MTDocumentObjectNewStaticLabelViewController : MADTableViewController
     <UITableViewDelegate, UITextFieldDelegate, MTUnwindProtocol>
 
 - (NSString *)userInputedText;

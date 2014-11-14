@@ -11,8 +11,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADViewController.h"
 
-@interface MTConnectionViewController : UITableViewController
+@interface MTConnectionViewController : MADTableViewController
     <UITableViewDelegate,
         UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,

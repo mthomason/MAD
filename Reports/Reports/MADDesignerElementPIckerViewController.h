@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADViewController.h"
 #import "MADAggregateGroupByType.h"
 #import "MTAggregateFunctionType.h"
 #import "MTAggregateFunctionInputType.h"
@@ -34,7 +35,7 @@ extern NSInteger const MTViewTagFieldOrFormulaSelector;
 - (void)viewControllerDidFinish:(id)sender;
 @end
 
-@interface MADDesignerElementPIckerViewController : UICollectionViewController
+@interface MADDesignerElementPIckerViewController : MADCollectionViewController
 
 @property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
 @property (nonatomic, weak) MADocument *document;

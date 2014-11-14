@@ -434,6 +434,13 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     
+    __weak MADOpenFileViewController *weakself = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakself.collectionView.backgroundView setNeedsDisplay];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakself.navigationItem.titleView sizeToFit];
+    }];
+
 }
 
 - (void)displayActivityIndictor {
@@ -585,16 +592,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.collectionView.backgroundView setNeedsDisplay];
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    __weak MADOpenFileViewController *weakself = self;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakself.collectionView.backgroundView setNeedsDisplay];
-    } completion:nil];
-
 }
 
 - (IBAction)addDocument:(id)sender {

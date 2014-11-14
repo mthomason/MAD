@@ -13,6 +13,7 @@
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTUnwindProtocol.h"
+#import "MADViewController.h"
 
 extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier;
@@ -23,7 +24,7 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 - (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo;
 @end
 
-@interface MTViewControllerBarcode : UIViewController
+@interface MTViewControllerBarcode : MADViewController
     <MTViewControllerBarcodePreviewDelegate,
         MTViewControllerBarcodeOptionsDelegate,
         MTUnwindProtocol>

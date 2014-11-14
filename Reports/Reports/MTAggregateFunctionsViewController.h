@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTAggregateFunctionType.h"
+#import "MADViewController.h"
 
 extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 
@@ -18,7 +19,7 @@ extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 - (void)didSelectFunction:(MTAggregateFunctionType)functionType;
 @end
 
-@interface MTAggregateFunctionsViewController : UITableViewController
+@interface MTAggregateFunctionsViewController : MADTableViewController
 
 @property (nonatomic, assign) id <MTAggregateFunctionsViewControllerDelegate> delegate;
 @property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;

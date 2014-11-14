@@ -10,10 +10,10 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UIKit.h>
-
+#import "MADViewController.h"
 @class MTCollectionViewCellDocument;
 
-@interface MADOpenFileViewController : UICollectionViewController
+@interface MADOpenFileViewController : MADCollectionViewController
 
 @property (nonatomic, weak) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 @property (nonatomic, strong, readonly) UIPopoverController *aboutPopoverController;

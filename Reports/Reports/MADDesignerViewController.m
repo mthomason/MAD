@@ -256,11 +256,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - Exit
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [self.view setNeedsLayout];
-}
-
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
     
     if ([action.identifier isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {

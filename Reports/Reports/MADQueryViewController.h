@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADViewController.h"
 
 @class MADocument;
 
@@ -23,7 +24,7 @@ extern NSString * const NSFetchedResultsCacheGroups;
 extern NSString * const NSFetchedResultsCachePredicates;
 extern NSString * const MNSSegueShowSql;
 
-@interface MADQueryViewController : UITableViewController
+@interface MADQueryViewController : MADTableViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;

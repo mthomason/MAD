@@ -362,6 +362,114 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [self timerDealloc];
 }
 
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    
+    if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == NO) {
+        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+        MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
+        
+        [self setFrameBeforeRotation: [displayView frame]];
+        
+        [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
+        [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
+        
+        [displayView setNeedsDisplay];
+        
+        CGRect oldBounds = displayView.bounds;
+        [self redrawWithFrame:oldBounds];
+        
+        pageViewController = [self currentPageviewController];
+        displayView = (MTReportViewerReportPageView *)pageViewController.view;
+        
+        [self setFrameAfterRotation: oldBounds];
+        [UIView setAnimationsEnabled:NO];
+        [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
+        
+        
+        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x,
+                                                  self.frameBeforeRotation.origin.y,
+                                                  self.frameBeforeRotation.size.width,
+                                                  self.snapshotAfterRotation.frame.size.height);
+        
+        self.snapshotAfterRotation.frame = framePreservingHeight;
+        
+        UIImage *imageBeforeRotation = self.snapshotBeforeRotation.image;
+        imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        
+        UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
+        imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        
+        [UIView setAnimationsEnabled:YES];
+        
+        if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
+            [self.snapshotAfterRotation setAlpha:0.0000f];
+            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+            [self.snapshotAfterRotation setAlpha:1.0000f];
+        } else {
+            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+            [[self snapshotBeforeRotation] setAlpha:0.0000f];
+        }
+        
+        [[self snapshotAfterRotation] setFrame:self.frameAfterRotation];
+        framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+        [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
+        
+        if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
+            ((MTReportViewerReportPageView *)displayView).drawBlankPage = YES;
+        }
+        
+        [displayView setNeedsDisplay];
+    }
+    
+    __weak MADViewerController *weakself = self;
+
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+
+        __strong MADViewerController *strongself = weakself;
+        [strongself.navigationItem.titleView sizeToFit];
+        [strongself localDidRotate];
+
+    }];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
+
 #pragma mark - add controls
 
 - (void)addProgressViewToView {
@@ -536,75 +644,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
     snapshotView.frame = targetView.frame;
     return snapshotView;
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == NO) {
-        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-        MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
-        
-        [self setFrameBeforeRotation: [displayView frame]];
-        
-        [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
-        [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
-        
-        [displayView setNeedsDisplay];
-        
-        CGRect oldBounds = displayView.bounds;
-        [self redrawWithFrame:oldBounds];
-        
-        pageViewController = [self currentPageviewController];
-        displayView = (MTReportViewerReportPageView *)pageViewController.view;
-        
-        [self setFrameAfterRotation: oldBounds];
-        [UIView setAnimationsEnabled:NO];
-        [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
-        
-        
-        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x,
-                                                  self.frameBeforeRotation.origin.y,
-                                                  self.frameBeforeRotation.size.width,
-                                                  self.snapshotAfterRotation.frame.size.height);
-        self.snapshotAfterRotation.frame = framePreservingHeight;
-        
-        UIImage *imageBeforeRotation = self.snapshotBeforeRotation.image;
-        imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        
-        UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
-        imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        
-        [UIView setAnimationsEnabled:YES];
-        
-        if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
-            [self.snapshotAfterRotation setAlpha:0.0000f];
-            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
-            [self.snapshotAfterRotation setAlpha:1.0000f];
-        } else {
-            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
-            [[self snapshotBeforeRotation] setAlpha:0.0000f];
-        }
-        
-        [[self snapshotAfterRotation] setFrame:self.frameAfterRotation];
-        framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
-        [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
-        
-        if ([displayView respondsToSelector:@selector(setDrawBlankPage:)])
-            ((MTReportViewerReportPageView *)displayView).drawBlankPage = YES;
-        [displayView setNeedsDisplay];
-
-        __weak MADViewerController *weakself = self;
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            __strong MADViewerController *strongself = weakself;
-            [strongself localDidRotate];
-        }];
-
-    }
-    
-    
 }
 
 - (void)localDidRotate {

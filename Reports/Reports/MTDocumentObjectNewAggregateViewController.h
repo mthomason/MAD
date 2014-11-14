@@ -15,6 +15,7 @@
 #import "MTAggregateFunctionInputType.h"
 #import "MADAggregateGroupByType.h"
 #import "MTAggregateFunctionType.h"
+#import "MADViewController.h"
 
 extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;
@@ -30,7 +31,7 @@ extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
                               groupNumber:(NSNumber *)groupNumber;
 @end
 
-@interface MTDocumentObjectNewAggregateViewController : UITableViewController
+@interface MTDocumentObjectNewAggregateViewController : MADTableViewController
     <UITableViewDelegate, MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> delegate;

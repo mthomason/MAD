@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "RptqDocumentObjectAggregate+Extras.h"
+#import "MADViewController.h"
 
 extern NSString * const MTGroupByViewControllerIdentifier;
 
@@ -23,7 +24,7 @@ extern NSString * const MTGroupByViewControllerIdentifier;
 - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber;
 @end
 
-@interface MTGroupByViewController : UITableViewController
+@interface MTGroupByViewController : MADTableViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) id <MTGroupByViewControllerDelegate> delegate;

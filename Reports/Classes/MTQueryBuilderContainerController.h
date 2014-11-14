@@ -11,12 +11,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADViewController.h"
 
 @class MADQueryViewController,
         MADQueryVisualizationViewController,
         MADocument;
 
-@interface MTQueryBuilderContainerController : UISplitViewController
+@interface MTQueryBuilderContainerController : MADSplitViewController
     <MTViewControllerProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;

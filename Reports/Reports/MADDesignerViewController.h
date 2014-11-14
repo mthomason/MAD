@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADViewController.h"
 #import "MADViewControllerProtocol.h"
 
 typedef void(^MTBlockCompletionSimple)(BOOL finished);
@@ -24,7 +25,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 @class MADocument;
 
-@interface MADDesignerViewController : UIViewController
+@interface MADDesignerViewController : MADViewController
     <MADViewControllerProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;

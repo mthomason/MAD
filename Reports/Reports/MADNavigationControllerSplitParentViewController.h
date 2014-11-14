@@ -6,9 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADNavigationControllerSplitParentViewController_h
+#define MAD_MADNavigationControllerSplitParentViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTNavigationController.h"
 
 @interface MADNavigationControllerSplitParentViewController : MTNavigationController
 
 @end
+
+#endif

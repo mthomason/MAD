@@ -61,7 +61,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Database Settings", @"Database Settings");
     self.navigationItem.titleView = titleView;
-//      self.navigationItem.title = titleView.text;
 }
 
 #pragma mark - Actions
