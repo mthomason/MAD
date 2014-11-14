@@ -1179,6 +1179,8 @@
 		4CA16347167CAE7600540A14 /* RptqQuerySort+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA16345167CAE7500540A14 /* RptqQuerySort+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CA1634C167CAEA900540A14 /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1634B167CAEA800540A14 /* RptqRelationship+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CA1634D167CAEA900540A14 /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1634B167CAEA800540A14 /* RptqRelationship+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CA19F821A15C197004DDA52 /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
+		4CA19F831A15C197004DDA52 /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
 		4CA226A716C963CC00315EA2 /* MADDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MADDesignerSectionView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CA226A816C963CC00315EA2 /* MADDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MADDesignerSectionView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
@@ -2660,6 +2662,8 @@
 		4CA16345167CAE7500540A14 /* RptqQuerySort+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuerySort+Extras.m"; sourceTree = "<group>"; };
 		4CA1634A167CAEA700540A14 /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4CA1634B167CAEA800540A14 /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqRelationship+Extras.m"; sourceTree = "<group>"; };
+		4CA19F801A15C197004DDA52 /* MADViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewController.h; sourceTree = "<group>"; };
+		4CA19F811A15C197004DDA52 /* MADViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewController.m; sourceTree = "<group>"; };
 		4CA226A516C963CC00315EA2 /* MADDesignerSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionView.h; sourceTree = "<group>"; };
 		4CA226A616C963CC00315EA2 /* MADDesignerSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionView.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -5311,6 +5315,8 @@
 				4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */,
 				4CCB2EE419F891E0000D15C1 /* MADTransparentPresentationController.h */,
 				4CCB2EE519F891E0000D15C1 /* MADTransparentPresentationController.m */,
+				4CA19F801A15C197004DDA52 /* MADViewController.h */,
+				4CA19F811A15C197004DDA52 /* MADViewController.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -6893,6 +6899,7 @@
 				4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C23FB1D18FADD67009F234F /* MTLog.m in Sources */,
 				4C0CAB641902FAD10044D866 /* MTDatabaseDataBinding.m in Sources */,
+				4CA19F831A15C197004DDA52 /* MADViewController.m in Sources */,
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
@@ -7285,6 +7292,7 @@
 				4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C0CAB631902FAD10044D866 /* MTDatabaseDataBinding.m in Sources */,
 				4C23FB3018FADE65009F234F /* MTCellEnterText.m in Sources */,
+				4CA19F821A15C197004DDA52 /* MADViewController.m in Sources */,
 				4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 				4C84EEB5178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
