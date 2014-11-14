@@ -22,6 +22,7 @@ extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MTDocumentInfoKeyThumbnail;
+extern NSString * const MADTrademark;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator;

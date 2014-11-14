@@ -120,6 +120,7 @@ NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed t
 NSString * const MNSInterfaceTitleProblem                           = @"Problem";
 
 NSString * const MADManagedObjectModelName = @"MAD";
+NSString * const MADTrademark = @"MAD";
 NSString * const MADManagedObjectModelExtention = @"momd";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
