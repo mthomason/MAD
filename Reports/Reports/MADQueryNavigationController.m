@@ -32,15 +32,15 @@
     UIViewController *rightViewController = splitViewController.viewControllers[1];
     self.secondaryViewController = rightViewController;
     
-   // UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithVerticalSizeClass:UIUserInterfaceSizeClassRegular];
-   // [self setOverrideTraitCollection:traitCollection forChildViewController:leftViewController];
-    
 }
 
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationBar.frame.size.width, self.navigationBar.frame.size.height);
+    self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x,
+                                          CGPointZero.y + self.topLayoutGuide.length,
+                                          self.navigationBar.frame.size.width,
+                                          self.navigationBar.frame.size.height);
 }
 
 - (void)viewDidLayoutSubviews {
