@@ -1278,7 +1278,30 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
  
  */
 
+- (void)dismissSectionPresentationIfOpen {
+    if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil
+        && self.sectionSettingsVisible) {
+        self.sectionSettingsVisible = NO;
+        [self dismissViewControllerAnimated:YES completion:NULL];
+        [self removeBorderFromAllSectionViews];
+        [self.document.managedObjectContext save:nil];
+    }
+}
+
+- (void)dismissToolboxPresentationIfOpen {
+    if (self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil
+        && self.toolboxVisible) {
+        self.sectionSettingsVisible = NO;
+        [self dismissViewControllerAnimated:YES completion:NULL];
+        [self deselectAllElementsAnimated:YES];
+        [self.document.managedObjectContext save:nil];
+    }
+}
+
 - (void)didTouchElementView:(MADDesignerElementView *)elementView {
+    
+    [self dismissSectionPresentationIfOpen];
+    
     [self removeBorderFromSectionViews];
     
     if ([self elementViewIsSelected:elementView] == NO) {
@@ -1475,11 +1498,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
     [self dismiss];
+    [self setDisplayActive];
 }
 
 - (void)dismiss {
     [self deselectAllElementsAnimated:YES];
-    [self setDisplayActive];
     [self.document.managedObjectContext save:nil];
 }
 
@@ -1488,6 +1511,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     __weak MADDesignerViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
         [weakself dismiss];
+        [weakself setDisplayActive];
     }];
 }
 
@@ -1500,13 +1524,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
     
-    //NSSet *i = [NSSet setWithSet:self.elementViews];
-    NSSet *passthroughViews = [NSSet setWithArray:self.sectionControlViewsArray];
-    
-    //self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
+    NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsArray];
+    NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromArray:self.sectionViewsArray];
     self.settingsTransitioningDelegate.passthroughViews = passthroughViews;
-    //self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
- 
+    
     if (self.sectionSettingsVisible == NO) {
         self.sectionSettingsVisible = YES;
         __weak MADDesignerViewController *weakself = self;
@@ -1530,7 +1551,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    NSSet *passthroughViews = [NSSet setWithSet:self.elementViews];
+    NSSet *elementViews = [NSSet setWithSet:self.elementViews];
+    NSSet *passthroughViews = [elementViews setByAddingObjectsFromArray:self.sectionControlViewsArray];
     self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
     self.toolboxTransitioningDelegate.passthroughViews = passthroughViews;
     self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
@@ -2562,9 +2584,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)toggleSectionControlPanel:(MADDesignerSectionLabel *)label {
-    
     [[UIMenuController sharedMenuController] setMenuVisible: NO
                                                    animated: YES];
+    
+    [self dismissToolboxPresentationIfOpen];
+    
     NSSet *selectedElementViews = [self selectedElementViews];
     
     if (selectedElementViews.count >= 1) {
