@@ -192,7 +192,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
 @property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
-//@property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSectionSettings;
 
 @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
@@ -1494,26 +1493,31 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     
-    self.sectionSettingsVisible = YES;
     self.toolboxVisible = NO;
     
-    self.settingsTransitioningDelegate.sourceRect = self.rectForSelectedElements;
+    self.settingsTransitioningDelegate.sourceRect = label.frame;
     self.settingsTransitioningDelegate.sourceView = self.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
     
-    NSSet *i = [NSSet setWithSet:self.elementViews];
-    NSSet *passthroughViews = [i setByAddingObject:label];;
-    self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
+    //NSSet *i = [NSSet setWithSet:self.elementViews];
+    NSSet *passthroughViews = [NSSet setWithArray:self.sectionControlViewsArray];
+    
+    //self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
     self.settingsTransitioningDelegate.passthroughViews = passthroughViews;
-    self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
+    //self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
  
-    __weak MADDesignerViewController *weakself = self;
-    [self presentViewController: self.navigationControllerSectionLayoutSettings
-                       animated: YES
-                     completion: ^{
-                         [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
-                     }];
+    if (self.sectionSettingsVisible == NO) {
+        self.sectionSettingsVisible = YES;
+        __weak MADDesignerViewController *weakself = self;
+        [self presentViewController: self.navigationControllerSectionLayoutSettings
+                           animated: YES
+                         completion: ^{
+                             [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
+                         }];
+    } else {
+        [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
+    }
     
 }
 
@@ -2601,7 +2605,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [self.viewControllerSectionLayoutSettings updateDisplay];
             
             UIEdgeInsets ei = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
-            self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height + self.tabBarController.tabBar.bounds.size.height, ei.right);
+            self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top,
+                                                                                                        ei.left,
+                                                                                                        CGSizeZero.height + self.tabBarController.tabBar.bounds.size.height,
+                                                                                                        ei.right);
             self.viewControllerSectionLayoutSettings.tableView.contentInset = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
             
             [self showSectionSettingsFromLabel:label];
