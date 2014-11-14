@@ -719,13 +719,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                       MADSizeHeightViewDetailDisplay);
 }
 
-//- (UIEdgeInsets)desiredEdgeInsets {
-//    return UIEdgeInsetsMake(self.topLayoutGuide.length,
-//                            CGSizeZero.width,
-//                            self.toolboxVisible ? CGSizeZero.height : self.tabBarController.tabBar.frame.size.height,
-//                            CGSizeZero.height);
-//}
-
 - (CGFloat)toolboxHeightCalculated {
     return ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame.size.height;
 }
@@ -1158,8 +1151,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSError *error = nil;
     [self.document.managedObjectContext save:&error];
     
-    [self.document saveToURL:self.document.fileURL forSaveOperation:UIDocumentSaveForOverwriting
-           completionHandler:^(BOOL success) {
+    [self.document saveToURL: self.document.fileURL
+            forSaveOperation: UIDocumentSaveForOverwriting
+           completionHandler: ^(BOOL success) {
 
         if (insertNewSection) {
             NSInteger index = numberOfRows - 1;
@@ -1170,7 +1164,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
             [documentSectionView deleteSections:indexSet];
         }
-    }];
+
+           }];
+    
 }
 
 #pragma mark - MTDocumentSectionViewDelegate
@@ -1512,10 +1508,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.settingsTransitioningDelegate.passthroughViews = passthroughViews;
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
  
-    //self.viewControllerToolbox.clearsBackground = [self padLike];
-    //self.viewControllerToolbox.document = self.document;
-    //self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
-    
     __weak MADDesignerViewController *weakself = self;
     [self presentViewController: self.navigationControllerSectionLayoutSettings
                        animated: YES
@@ -2298,16 +2290,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return viewController;
 }
 
-- (void)dismissToolboxPopoverControllers {
-    /*if (self.presentedViewController != nil) {
-        __weak MADDesignerViewController *weakself = self;
-        [self dismissViewControllerAnimated:YES completion:^{
-            [weakself setDisplayActive];
-        }];
-        [self setDisplayActive];
-    }*/
-}
-
 - (void)setContentInset:(UIEdgeInsets)insets {
     self.scroller.contentInset = insets;
 }
@@ -2325,76 +2307,79 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)adjustContentOffsetForSelectedElements {
-    [self positionForRectOfInterest: [self rectForSelectedElements]];
+    if (self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil &&
+        [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
+        CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame;
+        [self positionForRectOfInterest: [self rectForSelectedElements]
+                      withPresentedRect: presentedRect];
+    }
 }
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
     RptqQuery *query = [[self.document activeDocumentModel] defaultQuery];
     RptqDocumentSection *documentSection = [query documentSectionForRow: reportDesigner.lastSelectedSectionControlPanel];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
-    [self positionForRectOfInterest: selectedSectionView.frame];
+    if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
+        [self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
+        CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.settingsTransitioningDelegate).presentationController.presentedViewController.view.frame;
+        [self positionForRectOfInterest: selectedSectionView.frame
+                      withPresentedRect: presentedRect];
+    }
 }
 
-- (void)positionForRectOfInterest:(CGRect)rectOfInterest {
+- (void)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect {
 
-    if ([self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
-
-        CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame;
+    if (presentedRect.origin.y > CGPointZero.y) {
         
-        if (presentedRect.origin.y > CGPointZero.y) {
-
-            if (self.scroller.zoomScale <= 1.0000f) {
-                [self.scroller setZoomScale: 1.0000f
-                                   animated: YES];
-            }
-            
-            CGFloat adjustment = self.topLayoutGuide.length;
-            
-            CGRect visibleRect;
-            visibleRect.origin = CGPointMake(self.scroller.contentOffset.x,
-                                             self.scroller.contentOffset.y);
-            
-            visibleRect.size = CGSizeMake(self.view.frame.size.width,
-                                          self.view.frame.size.height - [self toolboxHeightCalculated]);
-            
-            visibleRect = CGRectAdjustForScale(visibleRect,
-                                               self.scroller.zoomScale);
-            
-            CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ?
-            rectOfInterest :
-            CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
-            
-            CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
-                                                    visibleRect.origin.y + adjustment,
-                                                    CGFLOAT_MAX,
-                                                    visibleRect.size.height - adjustment);
-            
-            if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
-                
-                CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
-                                                                         visibleRect);
-                if (self.scroller.zoomScale > 1) {
-                    contentOffset = CGPointMake(contentOffset.x,
-                                                contentOffset.y * self.scroller.zoomScale);
-                }
-                [self.scroller setContentOffset: contentOffset
-                                       animated: YES];
-                
-            }
+        if (self.scroller.zoomScale <= 1.0000f) {
+            [self.scroller setZoomScale: 1.0000f
+                               animated: YES];
         }
-
-        if (presentedRect.origin.x > CGPointZero.x) {
+        
+        CGFloat adjustment = self.topLayoutGuide.length;
+        
+        CGRect visibleRect;
+        visibleRect.origin = CGPointMake(self.scroller.contentOffset.x,
+                                         self.scroller.contentOffset.y);
+        
+        visibleRect.size = CGSizeMake(self.view.frame.size.width,
+                                      self.view.frame.size.height - presentedRect.size.height);
+        
+        visibleRect = CGRectAdjustForScale(visibleRect,
+                                           self.scroller.zoomScale);
+        
+        CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ?
+        rectOfInterest :
+        CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
+        
+        CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
+                                                visibleRect.origin.y + adjustment,
+                                                CGFLOAT_MAX,
+                                                visibleRect.size.height - adjustment);
+        
+        if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
             
-            for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
-                sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
-                sectionView.scrollIndicatorInsets = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+            CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
+                                                                     visibleRect);
+            if (self.scroller.zoomScale > 1) {
+                contentOffset = CGPointMake(contentOffset.x,
+                                            contentOffset.y * self.scroller.zoomScale);
             }
+            [self.scroller setContentOffset: contentOffset
+                                   animated: YES];
             
+        }
+    }
+    
+    if (presentedRect.origin.x > CGPointZero.x) {
+        
+        for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+            sectionView.scrollIndicatorInsets = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
         }
         
     }
 }
-
 
 - (void)setConstraintsForToolboxVisible {
     [self.view removeConstraints:self.layoutConstraintsToolboxHidden];
