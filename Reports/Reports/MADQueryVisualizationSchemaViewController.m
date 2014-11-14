@@ -143,6 +143,22 @@
     [self.schemaTableViewController reloadData];
 }
 
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    
+    __weak UIViewController *weakself = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakself.navigationItem.titleView sizeToFit];
+    }];
+    
+}
+
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
