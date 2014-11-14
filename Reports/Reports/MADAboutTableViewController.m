@@ -23,6 +23,7 @@
 #import "MADVibrantTableView.h"
 #import <CoreText/CoreText.h>
 #import "MACloudManager.h"
+#import "MADocument.h"
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
@@ -101,8 +102,7 @@
                                  NSFontAttributeName : font};
     NSAttributedString *r = [[NSAttributedString alloc] initWithString: @"®"
                                                             attributes: attributes];
-    NSString *madTrademark = @"MAD";
-    NSAttributedString *mad = [[NSAttributedString alloc] initWithString: madTrademark
+    NSAttributedString *mad = [[NSAttributedString alloc] initWithString: MADTrademark
                                                               attributes: nil];
     
     NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString: mad];
