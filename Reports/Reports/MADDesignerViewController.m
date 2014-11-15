@@ -249,6 +249,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) UIGestureRecognizer *strayTouchGesture;
 
+@property (nonatomic, weak) UILabel *lastSelectedLabel;
+
 @end
 
 @implementation MADDesignerViewController
@@ -1006,7 +1008,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([UIDevice isModernOS] && [scrollView isEqual:self.scroller]) {
+    if ([scrollView isEqual:self.scroller]) {
         [self adjustScroller];
     }
     self.detailDisplayView.frame = [self detailDisplayFrame];
@@ -1030,6 +1032,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)adjustScroller {
+    
+    [self adjustContextOffsetForOpenPopover];
+    
     if (self.scroller.contentOffset.x != 0) {
         CGPoint offset = self.scroller.contentOffset;
         offset.x = CGPointZero.x;
@@ -1473,7 +1478,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.toolboxVisible = YES;
     self.sectionSettingsVisible = NO;
     
-    self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
     self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
@@ -1484,7 +1488,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     self.viewControllerToolbox.clearsBackground = [self padLike];
     self.viewControllerToolbox.document = self.document;
-    self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+    [self adjustToolboxLocation];
     
     __weak MADDesignerViewController *weakself = self;
     [self presentViewController: self.navigationControllerToolbox
@@ -2582,24 +2586,50 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return [self.scroller.container viewWithTag: objectID.hash];
 }
 
-- (void)dismissSectionPresentationIfOpen {
-    if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil
-        && self.sectionSettingsVisible) {
-        self.sectionSettingsVisible = NO;
-        [self dismissViewControllerAnimated:YES completion:NULL];
-        [self removeBorderFromAllSectionViews];
-        [self.document.managedObjectContext save:nil];
+- (void)adjustContextOffsetForOpenPopover {
+    if ([self padLike]) {
+        if (self.sectionSettingsVisible &&
+            self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
+            
+            [self adjustSettingsLocation];
+            
+        } else if (self.toolboxVisible &&
+                   self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
+            
+            [self adjustToolboxLocation];
+            
+        }
     }
 }
 
+- (void)dismissSectionPresentationIfOpen {
+
+    if (self.sectionSettingsVisible &&
+        self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
+        
+        self.sectionSettingsVisible = NO;
+        [self dismissViewControllerAnimated: YES
+                                 completion: NULL];
+        [self removeBorderFromAllSectionViews];
+        [self.document.managedObjectContext save:nil];
+        
+    }
+
+}
+
 - (void)dismissToolboxPresentationIfOpen {
-    if (self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil
-        && self.toolboxVisible) {
+    
+    if (self.toolboxVisible &&
+        self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
+        
         self.toolboxVisible = NO;
-        [self dismissViewControllerAnimated:YES completion:NULL];
+        [self dismissViewControllerAnimated: YES
+                                 completion: NULL];
         [self deselectAllElementsAnimated:YES];
         [self.document.managedObjectContext save:nil];
+        
     }
+
 }
 
 #pragma mark Gesture handlers
@@ -2779,9 +2809,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 [self deselectAllElementsAnimated:YES];
                 
                 self.lastSelectedSectionControlPanel = label.tag;
+                self.lastSelectedLabel = label;
                 RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
-                
-                
                 UIView *superView = [self getSectionViewForDocumentSection: section];
                 [self applyBorderToSection:superView];
                 [label dimView];
@@ -2804,7 +2833,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 
             }
         }
-        
     }
 }
 
@@ -2823,6 +2851,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             Hide toolbx
  
  */
+
+- (void)adjustSettingsLocation {
+    self.settingsTransitioningDelegate.sourceRect = self.lastSelectedLabel.frame;
+}
+
+- (void)adjustToolboxLocation {
+    self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
+    self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+}
 
 - (void)handleToggleElementView:(UITapGestureRecognizer *)sender {
 
@@ -2846,9 +2883,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 
             } else {
                 
-                // Adjust toolbox location
-                self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
-                self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+                [self adjustToolboxLocation];
                 
             }
             
@@ -2870,10 +2905,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 
             } else {
                 
-                // Adjust toolbox location
-                
-                self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
-                self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+                [self adjustToolboxLocation];
                 [self setDisplayInactive];
             }
         }

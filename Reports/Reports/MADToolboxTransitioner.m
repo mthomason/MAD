@@ -20,13 +20,18 @@
 @implementation MADToolboxTransitioningDelegate
 
 - (void)setSourceRect:(CGRect)sourceRect {
+
     if (CGRectEqualToRect(sourceRect, self.sourceRect) == NO) {
+        
         if (self.presentationController && [self.presentationController isKindOfClass:[UIPopoverPresentationController class]]) {
             ((UIPopoverPresentationController *)self.presentationController).sourceRect = sourceRect;
-            [((UIPopoverPresentationController *)self.presentationController).containerView setNeedsLayout];
         }
         _sourceRect = sourceRect;
+        
     }
+    
+    [((UIPopoverPresentationController *)self.presentationController).containerView setNeedsLayout];
+    
 }
 
 - (UIPresentationController *)presentationControllerForPresentedViewController: (UIViewController *)presented

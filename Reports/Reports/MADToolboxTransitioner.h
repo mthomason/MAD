@@ -29,7 +29,7 @@
 
     //For popover view
     @property (nonatomic, assign) CGRect sourceRect;
-    @property (nonatomic, strong) UIView *sourceView;
+    @property (nonatomic, weak) UIView *sourceView;
     @property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
 
     @property (nonatomic, weak) UIView *container;
