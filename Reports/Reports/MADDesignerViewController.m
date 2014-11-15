@@ -992,8 +992,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView
+                       withView: (UIView *)view
+                        atScale: (CGFloat)scale {
+    
     if ([scrollView isEqual:self.scroller]) {
+
         CGFloat scaleWithScreen = scale * self.scroller.traitCollection.displayScale;
         
         self.ruler.contentScaleFactor = scaleWithScreen;
@@ -1009,7 +1013,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [controlView setNeedsDisplay];
         }
         
-        for (UICollectionView *section in [self.sectionViews objectEnumerator]) {
+        for (UICollectionView *section in self.sectionViews.objectEnumerator) {
             section.contentScaleFactor = scale;
         }
         
@@ -1017,6 +1021,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [self.detailDisplayView hide];
     }
+    
+    [self adjustContextOffsetForOpenPopover];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -1051,7 +1057,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         CGPoint offset = self.scroller.contentOffset;
         offset.x = CGPointZero.x;
         self.scroller.contentOffset = offset;
-        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
+        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width,
+                                               self.scroller.contentSize.height);
     }
 }
 
@@ -1091,6 +1098,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
     documentSectionView.backgroundColor = color;
     */
+    
     [self.document saveContext];
 }
 
@@ -1170,6 +1178,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [rowToDelete setInSection:nil];
         
     }
+    
     [documentSection setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
     UICollectionView *collectionView = self.sectionViews[[documentSection sectionKey]];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
@@ -1818,6 +1827,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark UICollectionViewDataSource
 
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self adjustPassthroughViews];
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -1953,9 +1966,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 #pragma mark - UICollectionViewDelegate
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
       forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
@@ -2612,6 +2622,21 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         }
     }
+}
+
+- (void)adjustPassthroughViews {
+    
+    if (self.sectionSettingsVisible) {
+        self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
+        self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];           //Fix me... not properly updating the element views onscreen.
+        self.settingsTransitioningDelegate.passthroughContainer = self.scroller;                    // Use cellWillDisplay, cellWillDisapear, etc...
+    } else if (self.toolboxVisible) {
+        self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
+        self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
+        self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
+    }
+    
+    
 }
 
 - (void)dismissSectionPresentationIfOpen {
