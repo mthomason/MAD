@@ -10,7 +10,8 @@
 
 @interface MADDimmingView : UIView
 
-@property (nonatomic, strong) UIView *passthroughContainer;
+@property (nonatomic, weak) UIView *container;
+@property (nonatomic, weak) UIView *passthroughContainer;
 @property (nonatomic, strong) NSSet *passthoughContainers;
 @property (nonatomic, strong) NSSet *passthoughViews;
 

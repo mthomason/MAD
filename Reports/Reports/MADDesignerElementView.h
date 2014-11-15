@@ -13,14 +13,8 @@
 
 @class MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 
-@protocol MTElementViewDelegate
-- (void)didTouchElementView:(MADDesignerElementView *)elementView;
-@end
-
 @interface MADDesignerElementView : UIView
     <UIGestureRecognizerDelegate>
-
-@property (nonatomic, weak) id <MTElementViewDelegate> delegate;
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;

@@ -63,7 +63,7 @@
 
         self.dimmingView.passthroughContainer = self.passthroughContainer;
         self.dimmingView.passthoughContainers = self.passthroughContainers;
-        
+        self.dimmingView.container = self.container;
     }
 }
 
@@ -207,7 +207,7 @@
 }
 
 - (void)dimmingViewTapped:(UIGestureRecognizer *)gesture {
-    if (gesture.state == UIGestureRecognizerStateRecognized) {
+    if (gesture.state == UIGestureRecognizerStateEnded) {
         if ([self.popoverPresentationControllerDelegate popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)self]) {
             [self dismiss];
         }

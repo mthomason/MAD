@@ -54,12 +54,6 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
                                               forAxis: UILayoutConstraintAxisHorizontal];
         self.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                                               action: @selector(toggleSectionControlPanel:)];
-        tapGestureRecognizer.numberOfTapsRequired = 1;
-        tapGestureRecognizer.numberOfTouchesRequired = 1;
-        tapGestureRecognizer.delegate = self;
-        [self addGestureRecognizer: tapGestureRecognizer];
         
     }
     return self;
@@ -99,12 +93,6 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 - (void)tintColorDidChange {
 
-}
-
-- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateEnded) {
-        [self.delegate toggleSectionControlPanel:self];
-    }
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "MADDimmingView.h"
 #import "MADBackgroundScrollView.h"
+
 @implementation MADDimmingView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -24,31 +25,31 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     id hitview = nil;
+    
+    CGPoint pointNormalized = [self.container convertPoint: point
+                                                  fromView: self];
+    CGRect rectNormalized;
+    
     for (UIView *foundView in self.passthoughViews) {
-        CGRect normalized = [self convertRect: foundView.frame
-                                     fromView: foundView];
+        
+        rectNormalized = [foundView convertRect: foundView.bounds
+                                         toView: self.container];
 
-        if (CGRectContainsPoint(normalized, point)) {
+        if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
             
-            CGRect visibleRect = [self.passthroughContainer convertRect: self.passthroughContainer.bounds
-                                                                 toView: ((MADBackgroundScrollView *)self.passthroughContainer).container];
-            if (CGRectContainsPoint(visibleRect, point)) {
-                hitview = foundView;
-                goto shortThisB;
-                break;
-            }
+            hitview = foundView;
+            goto shortThisB;
+            break;
         }
     }
     
     if (hitview == nil) {
         
-        for (UIView *v in self.passthoughContainers) {
-            CGRect normalized = [self.passthroughContainer convertRect: v.frame
-                                                              fromView:v];
-            CGPoint normalizedPoint = [v convertPoint: point
-                                               toView: self.passthroughContainer];
-            if (CGRectContainsPoint(normalized, normalizedPoint)) {
-                hitview = v;
+        for (UIView *passthroughContainer in self.passthoughContainers) {
+            rectNormalized = [passthroughContainer convertRect: passthroughContainer.bounds
+                                                      toView: self.container];
+            if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
+                hitview = passthroughContainer;
                 goto shortThisB;
                 break;
             }

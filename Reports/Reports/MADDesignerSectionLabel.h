@@ -19,7 +19,6 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 
 @interface MADDesignerSectionLabel : UILabel
 
-@property (nonatomic, weak) id <MADDesignerSectionLabelDelegate> delegate;
 @property (nonatomic, assign, readonly) BOOL selected;
 @property (nonatomic, assign) BOOL indicatorFormFeed;
 @property (nonatomic, assign) BOOL indicatorVisible;
@@ -29,11 +28,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 - (void)dimView;
 - (void)normalView;
 
-@end
-
-@protocol MADDesignerSectionLabelDelegate <NSObject>
-
-- (void)toggleSectionControlPanel:(MADDesignerSectionLabel *)label;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 

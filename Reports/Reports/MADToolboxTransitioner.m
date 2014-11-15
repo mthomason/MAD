@@ -44,8 +44,11 @@
         ((UIPopoverPresentationController *)presentationController).sourceView = self.sourceView;
         ((UIPopoverPresentationController *)presentationController).sourceRect = self.sourceRect;
 
-        NSArray *allPassthoughViews =  self.passthroughViews.allObjects;
-        ((UIPopoverPresentationController *)presentationController).passthroughViews = allPassthoughViews;
+        NSArray *allElementViews =  self.passthroughViews.allObjects;
+        NSArray *allContainerObjects = self.passthoughContainers.allObjects;
+        NSArray *passthoughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
+        NSArray *passthoughViewsWithBackground = [passthoughViews arrayByAddingObject:self.passthroughContainer];
+        ((UIPopoverPresentationController *)presentationController).passthroughViews = [passthoughViewsWithBackground arrayByAddingObjectsFromArray:passthoughViewsWithBackground];
         ((UIPopoverPresentationController *)presentationController).permittedArrowDirections = self.permittedArrowDirections;
         ((UIPopoverPresentationController *)presentationController).delegate = self.popoverPresentationControllerDelegate;
 
@@ -54,6 +57,7 @@
         presentationController = [[MADToolboxPresentationController alloc] initWithPresentedViewController: presented
                                                                                   presentingViewController: presenting];
         
+        ((MADToolboxPresentationController *)presentationController).container = self.container;
         ((MADToolboxPresentationController *)presentationController).passthroughContainers = self.passthoughContainers;
         ((MADToolboxPresentationController *)presentationController).passthroughViews = self.passthroughViews;
         ((MADToolboxPresentationController *)presentationController).passthroughContainer = self.passthroughContainer;

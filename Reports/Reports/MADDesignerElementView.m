@@ -136,8 +136,6 @@ static size_t const kDashedCount            = (2.0f);
 
     if (self) {
         
-        
-
         MTElementCanvas *canvasView = [[MTElementCanvas alloc] initWithFrame:viewFrame];
         canvasView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         canvasView.backgroundColor = [UIColor clearColor];
@@ -145,13 +143,7 @@ static size_t const kDashedCount            = (2.0f);
         
         [self addSubview:canvasView];
         self.canvasView = canvasView;
-        
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSelection:)];
-        [tapGestureRecognizer setNumberOfTapsRequired:1];
-        [tapGestureRecognizer setNumberOfTouchesRequired:1];
-        tapGestureRecognizer.delegate =  self;
-        [self addGestureRecognizer:tapGestureRecognizer];
-        
+                
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
 
@@ -212,12 +204,6 @@ static size_t const kDashedCount            = (2.0f);
 
 - (BOOL)isWobbleRunning {
     return [self displayWobbling];
-}
-
-- (void)toggleSelection:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [self.delegate didTouchElementView:self];
-    }
 }
 
 - (id)debugQuickLookObject {
