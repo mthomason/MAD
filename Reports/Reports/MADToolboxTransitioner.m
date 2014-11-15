@@ -34,6 +34,53 @@
     
 }
 
+- (void)setPassthoughContainers:(NSSet *)passthoughContainers {
+    
+    if (_passthoughContainers != passthoughContainers) {
+        _passthoughContainers = passthoughContainers;
+        [self updatePassthroughViews];
+    }
+    
+}
+
+- (void)setPassthroughContainer:(UIView *)passthroughContainer {
+    
+    if (_passthroughContainer != passthroughContainer) {
+        _passthroughContainer = passthroughContainer;
+        [self updatePassthroughViews];
+    }
+    
+}
+
+- (void)setPassthroughViews:(NSSet *)passthroughViews {
+    
+    if (_passthroughViews != passthroughViews) {
+        _passthroughViews = passthroughViews;
+        [self updatePassthroughViews];
+    }
+    
+}
+
+- (void)updatePassthroughViews {
+    if (self.popoverStyle) {
+        
+        NSArray *allElementViews =  self.passthroughViews.allObjects;
+        NSArray *allContainerObjects = self.passthoughContainers.allObjects;
+        NSArray *passthoughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
+        NSArray *passthoughViewsWithBackground = [passthoughViews arrayByAddingObject:self.passthroughContainer];
+        NSArray *passthroughViewsAll = [passthoughViewsWithBackground arrayByAddingObjectsFromArray:passthoughViewsWithBackground];
+        ((UIPopoverPresentationController *)self.presentationController).passthroughViews = passthroughViewsAll;
+        
+        
+    } else {
+        
+        ((MADToolboxPresentationController *)self.presentationController).passthroughContainers = self.passthoughContainers;
+        ((MADToolboxPresentationController *)self.presentationController).passthroughViews = self.passthroughViews;
+        ((MADToolboxPresentationController *)self.presentationController).passthroughContainer = self.passthroughContainer;
+        
+    }
+}
+
 - (UIPresentationController *)presentationControllerForPresentedViewController: (UIViewController *)presented
                                                       presentingViewController: (UIViewController *)presenting
                                                           sourceViewController: (UIViewController *)source {

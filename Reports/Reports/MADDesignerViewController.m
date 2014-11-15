@@ -153,8 +153,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-//@property (nonatomic, strong) NSMutableSet *presentationControllerPassthroughViews;
-
 @property (nonatomic, weak) IBOutlet UIView *toolbox;                               //iPhone only
 @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
@@ -204,8 +202,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) NSMutableDictionary *collectionViewReuseIdentifiers;
 
-@property (nonatomic, weak) IBOutlet UIToolbar *toolbarBottom;                          //iPhone only
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonAddReportObject;
+@property (nonatomic, weak)   IBOutlet UIToolbar *toolbarBottom;                          //iPhone only
+@property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonAddReportObject;
 
 @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
 
@@ -240,7 +238,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) UIFont *captionFont;
 
-@property (nonatomic, weak) UIViewController *childViewController;
+@property (nonatomic, weak)   UIViewController *childViewController;
 
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
@@ -249,7 +247,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) UIGestureRecognizer *strayTouchGesture;
 
-@property (nonatomic, weak) UILabel *lastSelectedLabel;
+@property (nonatomic, weak)   UILabel *lastSelectedLabel;
+
+@property (nonatomic, strong) NSSet *visibleElementViews;
 
 @end
 
@@ -314,11 +314,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     BOOL animate = previousTraitCollection != nil;
-    if (previousTraitCollection == nil || previousTraitCollection.verticalSizeClass != self.traitCollection.verticalSizeClass) {
+    
+    if (previousTraitCollection == nil ||
+        previousTraitCollection.verticalSizeClass != self.traitCollection.verticalSizeClass) {
+        
         [UIView setAnimationsEnabled:animate];
         [self updatePrompt];
         [UIView setAnimationsEnabled:YES];
     }
+    
 }
 
 #pragma mark - UIViewController
@@ -334,10 +338,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.hidesStatusBar = NO;
+    NSSet *emptySet = [NSSet set];
+    self.visibleElementViews = emptySet;
     
-    //NSMutableSet *presentationControllerPassthroughViews = [[NSMutableSet alloc] init];
-    //self.presentationControllerPassthroughViews = presentationControllerPassthroughViews;
+    self.hidesStatusBar = NO;
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
     self.ruler.layer.borderWidth = [UIView borderWidthThin];
@@ -1002,7 +1006,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         self.ruler.contentScaleFactor = scaleWithScreen;
         
-        for (MADDesignerElementView *elementView in [self elementViews]) {
+        NSSet *elementViews = self.visibleElementViews; //[self elementViews]
+        for (MADDesignerElementView *elementView in elementViews) {
             elementView.contentScaleFactor = scaleWithScreen;
         }
 
@@ -1490,7 +1495,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSSet *)passthoughViews {
     NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsArray];
-    NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:[self elementViews]];
+    NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
     return passthroughViews;
 }
 
@@ -1822,13 +1827,35 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     } else {
         result = CGSizeZero;
     }
+    
     return result;
 }
 
 #pragma mark UICollectionViewDataSource
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+       willDisplayCell:(UICollectionViewCell *)cell
+    forItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
+    NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
+    self.visibleElementViews = visibleElementViews;
     [self adjustPassthroughViews];
+
+}
+
+- (void)collectionView:(UICollectionView *)collectionView
+  didEndDisplayingCell:(UICollectionViewCell *)cell
+    forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
+    NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
+    [elementViews removeObject:elementView];
+    NSSet *elementViewsUpdated = [NSSet setWithSet: elementViews];
+    self.visibleElementViews = elementViewsUpdated;
+    
+    [self adjustPassthroughViews];
+
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
@@ -1858,7 +1885,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             case MTDocumentObjectTypeAggregate:
             default: {
 
-                for (UIView *subview in [[cell contentView] subviews]) {
+                NSArray *subviews = cell.contentView.subviews;
+                for (id subview in subviews) {
                     [subview removeFromSuperview];
                 }
 
@@ -1884,7 +1912,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 [elementView addGestureRecognizer:pinchGesture];
                 
                 elementView.frame = cellFrame;
-                [cell setObjectIdTag: documentObject.objectID];
+                cell.objectIdTag = documentObject.objectID;
 
                 cell.userInteractionEnabled = YES;
                 
@@ -2251,33 +2279,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSInteger)removeBorderFromAllSectionViews {
     NSUInteger deselectedSectionViewCounter = 0;
-    for (UIView *view in [self.sectionControlViews objectEnumerator]) {
+    NSArray *sectionControlViews = self.sectionControlViews.allValues;
+    id view;
+    for (view in sectionControlViews) {
         deselectedSectionViewCounter += [self  removeBorderFromView:view] ? 1 : 0;
     }
     return deselectedSectionViewCounter;
-}
-
-- (UIViewController *)viewControllerForToolboxType:(MTToolboxType)tooboxType {
-    UIViewController *viewController;
-    switch (tooboxType) {
-            
-        case MTToolboxTypeElement:
-            self.popoverToolbox.passthroughViews = self.elementViews.allObjects;
-            [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
-            self.viewControllerToolbox.document = self.document;
-            viewController = self.navigationControllerToolbox;
-            break;
-            
-        case MTToolboxTypeSection: {
-            [self.navigationControllerSectionLayoutSettings setNavigationBarHidden:NO animated:NO];
-            viewController = self.navigationControllerSectionLayoutSettings;
-            break;
-        }
-        default:
-            NSAssert(false, @"%s: ToolboxType unkonwn.", __PRETTY_FUNCTION__);
-            break;
-    }
-    return viewController;
 }
 
 - (void)setContentInset:(UIEdgeInsets)insets {
@@ -2628,8 +2635,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     if (self.sectionSettingsVisible) {
         self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-        self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];           //Fix me... not properly updating the element views onscreen.
-        self.settingsTransitioningDelegate.passthroughContainer = self.scroller;                    // Use cellWillDisplay, cellWillDisapear, etc...
+        self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
+        self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     } else if (self.toolboxVisible) {
         self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
         self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
@@ -3033,12 +3040,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
             
             for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
-                MADDesignerElementView *elementView = [self elementViewAtIndexPath: [NSIndexPath indexPathForItem:item inSection:section]
-                                                         inCollectionView: documentSectionView];
+                
+                NSIndexPath *path = [NSIndexPath indexPathForItem:item inSection:section];
+                MADDesignerElementView *elementView = [self elementViewAtIndexPath: path
+                                                                  inCollectionView: documentSectionView];
                 if (elementView != nil) {
                     [results addObject:elementView];
                 }
             }
+            
         }
     }
     return results;
@@ -3059,7 +3069,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
-    if ([self.selectedObjectIds count] > 0) {
+    if (self.selectedObjectIds.count > 0) {
+        
         //Try quick hash method...
         BOOL quickHashWorks = YES;
         for (NSManagedObjectID *selectedObjectId in self.selectedObjectIds) {
