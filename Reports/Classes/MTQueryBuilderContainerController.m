@@ -93,13 +93,11 @@
     return self;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size
-       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
+              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection:newCollection
+                 withTransitionCoordinator:coordinator];
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-    [super viewWillTransitionToSize: size
-          withTransitionCoordinator: coordinator];
-
 }
 
 - (void)viewDidLoad {

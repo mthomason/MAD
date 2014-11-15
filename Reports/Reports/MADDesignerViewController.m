@@ -916,11 +916,23 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
     
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
         [segue.destinationViewController setDocument:self.document];
     }
 
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak MADDesignerViewController *weakself = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakself adjustContextOffsetForOpenPopover];
+    }];
 }
 
 #pragma mark - UINavigationControllerDelegate
