@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 @end
 
 @interface MTResizeHandleView : UIView {
-    CGGradientRef gradient;
+    CGGradientRef _gradient;
 }
 
 @property (weak) IBOutlet id <MTResizeHandleViewDelegate> delegate;

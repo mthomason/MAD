@@ -23,6 +23,8 @@
 @property (nonatomic, strong) UIImage *displayImage;
 @property (nonatomic, strong) MTBarcode *displayBarcode;
 
+@property (nonatomic, assign, readwrite, getter=isResizingEnabled) BOOL enableResizing;
+
 + (NSStringDrawingOptions)drawingOptions;
 
 - (void)setWobbleRunning:(BOOL)running;

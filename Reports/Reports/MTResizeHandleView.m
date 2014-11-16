@@ -10,27 +10,22 @@
 
 @implementation MTResizeHandleView
 
-@synthesize delegate = _delegate;
-@synthesize type = _type;
-@synthesize initalPoint = _initalPoint;
-@synthesize highlighted = _highlighted;
-
 - (instancetype)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
     self = [super initWithFrame:frame];
     if (self) {
 
-        [self setInitalPoint:[self center]];
-        [self setType: position];
-        [self setHighlighted: NO];
+        self.initalPoint = self.center;
+        self.type = position;
+        self.highlighted = NO;
 
         // Initialization code
 		CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
 		CGFloat colors[] = {
-			204.0 / 255.0, 224.0 / 255.0, 244.0 / 255.0, 1.00,
-            29.0 / 255.0, 156.0 / 255.0, 215.0 / 255.0, 1.00,
-            0.0 / 255.0,  50.0 / 255.0, 126.0 / 255.0, 1.00,
+			204.0000f / 255.0000f, 224.0000f / 255.0000f, 244.0000f / 255.0000f, 1.00000f,
+            29.0000f / 255.0000f, 156.0000f / 255.0000f, 215.0000f / 255.0000f, 1.00000f,
+            0.0000f / 255.0000f,  50.0000f / 255.0000f, 126.0000f / 255.0000f, 1.00000f,
 		};
-		gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
+		_gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
 		CGColorSpaceRelease(rgb);
         self.backgroundColor =  [UIColor clearColor];
     }
@@ -52,22 +47,22 @@
     [[UIColor clearColor] setFill];
     CGContextDrawPath(currentContext, kCGPathFillStroke);
 
-    CGContextDrawRadialGradient(currentContext, gradient, start, startRadius, end, endRadius, options);
+    CGContextDrawRadialGradient(currentContext, _gradient, start, startRadius, end, endRadius, options);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self setHighlighted: YES];
+    self.highlighted = YES;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self setHighlighted: NO];
+    self.highlighted = NO;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGPoint pointAfterMove = [self center];
-    switch ([self type]) {
+    switch (self.type) {
         case west:
-            pointAfterMove = CGPointMake([[touches anyObject] locationInView: [self superview]].x, [self initalPoint].y);
+            pointAfterMove = CGPointMake([touches.anyObject locationInView: self.superview].x, self.initalPoint.y);
             break;
         case northWest:
             break;

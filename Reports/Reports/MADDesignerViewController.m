@@ -1850,7 +1850,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
-    [elementViews removeObject:elementView];
+    if (elementView != nil) {
+        [elementViews removeObject:elementView];
+    }
     NSSet *elementViewsUpdated = [NSSet setWithSet: elementViews];
     self.visibleElementViews = elementViewsUpdated;
     
@@ -1871,7 +1873,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
     cell.delegate = self;
-    if ([objects count] > indexPath.row) {
+    if (objects.count > indexPath.row) {
         
         RptqDocumentObject *documentObject = objects[indexPath.row];
     
@@ -1970,14 +1972,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                     withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
                                                            forIndexPath: indexPath];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
-        label.text = @"Header";
+        label.text = NSLocalizedString(@"Header", @"Header");
         [result addSubview:label];
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
         result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
                                                     withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
                                                            forIndexPath: indexPath];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
-        label.text = @"Footer";
+        label.text = NSLocalizedString(@"Footer", @"Footer");
         [result addSubview:label];
     } else {
         result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
@@ -2914,11 +2916,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [self removeBorderFromSectionViews];
         
-        if ([self elementViewIsSelected:elementView] == NO) {
-            [self selectElementView:elementView];
+        if ([self elementViewIsSelected: elementView] == NO) {
+            [self selectElementView: elementView];
             
             // Select a unselected element
-            [self.promptManager addString:elementView.displayStringAttributed.string];
+            [self.promptManager addString: elementView.displayStringAttributed.string];
             [self updatePrompt];
             
             if (self.selectedObjectIds.count == 1) {    // Show toolbox if we are selecting the first item.
@@ -2935,11 +2937,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         } else {
             
-            [self deselectElementView:elementView animated:YES];
-            [self.selectedObjectIds removeObject:elementView.objectIdTag];
-            [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
+            [self deselectElementView: elementView
+                             animated: YES];
+            [self.selectedObjectIds removeObject: elementView.objectIdTag];
+            [self.viewControllerToolbox setSelectedObjectIds: self.selectedObjectIds];
             
-            [self.promptManager removeString:elementView.displayStringAttributed.string];
+            [self.promptManager removeString: elementView.displayStringAttributed.string];
             [self updatePrompt];
             
             if (self.selectedObjectIds.count == 0) {
@@ -3169,8 +3172,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 }
 
-- (void)applyBorderToView:(UIView *)view {
-
+- (void)applyBorderToView:(MADDesignerElementView *)view {
+    view.enableResizing = YES;
     NSNumber *key = @([view tag]);
     [self borderAppliedToView][key] = @YES;
     UIColor *tintColor = [UIColor tintColorAnalogous4];
@@ -3179,7 +3182,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-- (BOOL)removeBorderFromView:(UIView *)view {
+- (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
         NSNumber *key = @([view tag]);
@@ -3188,6 +3191,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         view.layer.borderColor = [UIColor blackColor].CGColor;
         view.layer.borderWidth = 0.0000f;
+        view.enableResizing = NO;
     } else {
         result = NO;
     }
