@@ -75,7 +75,8 @@
     if (self) {
 
         MADDimmingView *dimmingView = [[MADDimmingView alloc] init];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dimmingViewTapped:)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                              action: @selector(dimmingViewTapped:)];
         tap.numberOfTapsRequired = 1;
         tap.numberOfTouchesRequired = 1;
         [dimmingView addGestureRecognizer:tap];
@@ -93,7 +94,8 @@
                   context: NULL];
 
         
-        UISwipeGestureRecognizer *down = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeAway:)];
+        UISwipeGestureRecognizer *down = [[UISwipeGestureRecognizer alloc] initWithTarget: self
+                                                                                   action: @selector(handleSwipeAway:)];
         down.direction = UISwipeGestureRecognizerDirectionDown;
         [presentedViewController.view addGestureRecognizer:down];
         self.dismissGestureReconizer = down;

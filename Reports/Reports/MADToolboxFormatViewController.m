@@ -163,12 +163,12 @@
                 counter++;
             }
             if (allTheSame) {
-                [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:lastInteger]];
+                self.labelNumberOfDecimals.attributedText = [self decimalsStringForNumberOfDecimals:lastInteger];
             } else {
                 NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@""];
-                [self.labelNumberOfDecimals setAttributedText:attributedString];
+                self.labelNumberOfDecimals.attributedText = attributedString;
             }
-            [self.stepperNumberOfDecimals setValue:lastInteger];
+            self.stepperNumberOfDecimals.value = lastInteger;
         }
 
     }
