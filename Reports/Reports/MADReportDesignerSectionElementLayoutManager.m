@@ -16,7 +16,8 @@
 
 @interface MADReportDesignerSectionElementLayoutManager ()
 
-@property (nonatomic, strong, readwrite) NSArray *items;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *items;
+@property (nonatomic, weak) MADReportDesignerSectionLayoutAttributes *lastItem;
 @property (nonatomic, assign) BOOL lastOpperationWasAdditon;
 
 @end
@@ -26,7 +27,7 @@
 - (instancetype)init {
     
     if (self = [super init]) {
-        NSArray *items = @[];
+        NSMutableDictionary *items = [NSMutableDictionary dictionary];
         self.items = items;
     }
     
@@ -36,9 +37,22 @@
 
 - (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item {
 
+    
     [self appendItemToItems:item];
     self.lastOpperationWasAdditon = YES;
 
+}
+
+- (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
+    
+    NSIndexPath *path = [NSIndexPath indexPathForItem:self.items.count
+                                            inSection:0];
+    
+    MADReportDesignerSectionLayoutAttributes *layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+    layout.objectID = objectID;
+    layout.frame = frame;
+    [self.items setObject: layout
+                   forKey: objectID];
 }
 
 - (void)layout {
@@ -63,60 +77,60 @@
 
 - (MADReportDesignerSectionLayoutAttributes *)getAnOutOfPositionItem {
 
-    MADReportDesignerSectionLayoutAttributes *opp = nil;
-    NSArray *allItems = self.items;
+    __block MADReportDesignerSectionLayoutAttributes *opp = nil;
     MADReportDesignerSectionLayoutAttributes *layout;
-    for (layout in allItems) {
-        if ([self isItemMisplaced:layout]) {
+    __weak MADReportDesignerSectionElementLayoutManager *weakself = self;
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([weakself isItemMisplaced:layout]) {
             opp = layout;
-            break;
+            *stop = YES;
         }
-    }
+    }];
     return opp;
 }
 
 - (BOOL)isItemMisplaced:(MADReportDesignerSectionLayoutAttributes *)item {
     
-    BOOL originFound = NO;
-        CGFloat x1, x2, y1, y2;
-        CGPoint p0, p1, p2, p3;
-        NSArray *allItems = self.items;
-        MADReportDesignerSectionLayoutAttributes *layout;
-        for (layout in allItems) {
-            if (item != layout) {
-                
-                //There exist four potental placement spots for each alredy placed rect
-                x1 = layout.frame.origin.x;
-                x2 = layout.frame.origin.x + layout.frame.size.width;
-                y1 = layout.frame.origin.y;
-                y2 = layout.frame.origin.y + layout.frame.size.height;
-                
+    __block BOOL originFound = NO;
+    __block CGFloat x1, x2, y1, y2;
+    __block CGPoint p0, p1, p2, p3;
+
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
+        if (item != layout) {
             
-                p0 = CGPointMake(x1, y1);
-                if (CGPointEqualToPoint(item.frame.origin, p0)) {
-                    originFound = YES;
-                    break;
-                }
-                
-                p1 = CGPointMake(x2, y1);
-                if (CGPointEqualToPoint(item.frame.origin, p1)) {
-                    originFound = YES;
-                    break;
-                }
-
-                p2 = CGPointMake(x2, y2);
-                if (CGPointEqualToPoint(item.frame.origin, p2)) {
-                    originFound = YES;
-                    break;
-                }
-
-                p3 = CGPointMake(x1, y2);
-                if (CGPointEqualToPoint(item.frame.origin, p3)) {
-                    originFound = YES;
-                    break;
-                }
+            //There exist four potental placement spots for each alredy placed rect
+            x1 = layout.frame.origin.x;
+            x2 = layout.frame.origin.x + layout.frame.size.width;
+            y1 = layout.frame.origin.y;
+            y2 = layout.frame.origin.y + layout.frame.size.height;
+            
+            
+            p0 = CGPointMake(x1, y1);
+            if (CGPointEqualToPoint(item.frame.origin, p0)) {
+                originFound = YES;
+                *stop = YES;
+            }
+            
+            p1 = CGPointMake(x2, y1);
+            if (CGPointEqualToPoint(item.frame.origin, p1)) {
+                originFound = YES;
+                *stop = YES;
+            }
+            
+            p2 = CGPointMake(x2, y2);
+            if (CGPointEqualToPoint(item.frame.origin, p2)) {
+                originFound = YES;
+                *stop = YES;
+            }
+            
+            p3 = CGPointMake(x1, y2);
+            if (CGPointEqualToPoint(item.frame.origin, p3)) {
+                originFound = YES;
+                *stop = YES;
             }
         }
+        
+    }];
     return originFound == NO;
 }
 
@@ -124,40 +138,55 @@
     
 }
 
-- (void)removeItem:(MADReportDesignerSectionLayoutAttributes *)itemToRemove {
-    MADReportDesignerSectionLayoutAttributes *item;
-    NSMutableArray *items = [self.items mutableCopy];
-    for (item in self.items) {
-        if (itemToRemove.objectID == item.objectID) {
-            [items removeObject:item];
-        } else if (item.indexPath.item >= itemToRemove.indexPath.item) {
-            item.indexPath = [NSIndexPath indexPathForItem:item.indexPath.item - 1 inSection: item.indexPath.section];
+- (void)removeItemWithID:(NSManagedObjectID *)objectID {
+    
+    MADReportDesignerSectionLayoutAttributes *item = [self.items objectForKey:objectID];
+    NSIndexPath *pathToRemvoe = item.indexPath;
+    
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *obj, BOOL *stop) {
+        if (obj.indexPath.item >= pathToRemvoe.item) {
+            obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1
+                                                inSection: obj.indexPath.section];
         }
-    }
-    self.items = items;
+    }];
+
+    [self.items removeObjectForKey:objectID];
+    self.lastOpperationWasAdditon = NO;
+}
+
+- (void)removeItem:(MADReportDesignerSectionLayoutAttributes *)itemToRemove {
+    
+    NSIndexPath *pathToRemvoe = itemToRemove.indexPath;
+    
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *obj, BOOL *stop) {
+        if (obj.indexPath.item >= pathToRemvoe.item) {
+            obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1
+                                                inSection: obj.indexPath.section];
+        }
+    }];
+    
+    [self.items removeObjectForKey:itemToRemove.objectID];
     self.lastOpperationWasAdditon = NO;
 }
 
 - (CGSize)size {
-    CGSize size = CGSizeZero;
-    NSArray *items = self.items;
-    MADReportDesignerSectionLayoutAttributes *layout;
-    for (layout in items) {
+    __block CGSize size = CGSizeZero;
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
         size.width = MAX(size.width, layout.frame.origin.x + layout.frame.size.width);
         size.height = MAX(size.height, layout.frame.origin.y + layout.frame.size.height);
-    }
+    }];
     return size;
 }
 
 #pragma mark - Helpers
 
 - (void)appendItemToItems:(MADReportDesignerSectionLayoutAttributes *)item {
-    NSArray *newArray = [self.items arrayByAddingObject:item];
-    self.items = newArray;
+    [self.items setObject:item forKey:item.objectID];
+    self.lastItem = item;
 }
 
 - (void)positionLastItem {
-    MADReportDesignerSectionLayoutAttributes *attributes = self.items.lastObject;
+    MADReportDesignerSectionLayoutAttributes *attributes = self.lastItem;
     NSArray *validLocations = [self allValidLocationsForLastItem];
     CGPoint newLocation = [self pointNearestDropPoint: attributes.frame.origin
                                       fromValidPoints: validLocations];
@@ -177,7 +206,7 @@
 
 - (void)positionAllItemsAroundLastItem {
     NSArray *overlappingItems = [self itemsThatOverlapLastItem];
-    MADReportDesignerSectionLayoutAttributes *attributes = self.items.lastObject;
+    MADReportDesignerSectionLayoutAttributes *attributes = self.lastItem;
     CGPoint origin = attributes.frame.origin;
 
     MTPair *sepratedItems = [self seperateByDestionationDirection:overlappingItems];
@@ -202,7 +231,7 @@
          directon: (MADDirection)direction {
     MADReportDesignerSectionLayoutAttributes *attributes;
     NSArray *overlappingItems = items;
-    NSObject *lastItem = self.items.lastObject;
+    NSObject *lastItem = self.lastItem;
     for (attributes in overlappingItems) {
         if (lastItem != attributes) {
             [self pushItem:attributes directon:direction];
@@ -213,7 +242,7 @@
 - (void)pushItem: (MADReportDesignerSectionLayoutAttributes *)pushItem
         directon: (MADDirection)direction {
 
-    MADReportDesignerSectionLayoutAttributes *lastItem = self.items.lastObject;
+    MADReportDesignerSectionLayoutAttributes *lastItem = self.lastItem;
     CGPoint newOrigin;
     CGFloat distance;
     switch (direction) {
@@ -234,12 +263,13 @@
                  itemNeedsUpdate: pushItem];
     
     MADReportDesignerSectionLayoutAttributes *attributes;
-    NSArray *allItems = self.items;
-    for (attributes in allItems) {
+    __weak MADReportDesignerSectionElementLayoutManager *weakself = self;
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if (lastItem != attributes && attributes != pushItem && CGRectIntersectsRect(pushItem.frame, attributes.frame)) {
-            [self pushItem:attributes directon:direction];
+            [weakself pushItem: attributes
+                      directon: direction];
         }
-    }
+    }];
     
     // Now make sure each item is at an anchor point...
     //  if not at anchor point, move to nearest anchor point in same direction as current move...
@@ -248,13 +278,13 @@
 }
 
 - (MTPair *)seperateByDestionationDirection:(NSArray *)overlappingItems {
-    MADReportDesignerSectionLayoutAttributes *droppedAttributes = self.items.lastObject;
+    MADReportDesignerSectionLayoutAttributes *droppedAttributes = self.lastItem;
     CGFloat x = droppedAttributes.frame.origin.x + droppedAttributes.frame.size.width;
     CGFloat y = droppedAttributes.frame.origin.y + droppedAttributes.frame.size.height;
     CGPoint bottomLeft, topRight;
     
     MADReportDesignerSectionLayoutAttributes *attributes;
-    NSArray *items = self.items;
+    NSArray *items = self.items.allValues;
     NSArray *itemsLeft = @[];
     NSArray *itemsRight = @[];
     CGFloat d1, d2;
@@ -288,8 +318,8 @@
 - (NSArray *)itemsThatOverlapLastItem {
     
     MADReportDesignerSectionLayoutAttributes *layout;
-    NSArray *allItems = self.items;
-    MADReportDesignerSectionLayoutAttributes *lastItem = self.items.lastObject;
+    NSArray *allItems = self.items.allValues;
+    MADReportDesignerSectionLayoutAttributes *lastItem = self.lastItem;
     NSArray *results = @[];
     for (layout in allItems) {
         if (lastItem != layout) {
@@ -310,7 +340,9 @@
     switch (direction) {
     
         case left:
+            
             for (attributes in itemsToSlide) {
+                
                 attributes.frame = CGRectMake(attributes.frame.origin.x - distance,
                                               attributes.frame.origin.y,
                                               attributes.frame.size.width,
@@ -320,10 +352,13 @@
                              itemNeedsUpdate: attributes];
 
             }
+            
             break;
             
         case right:
+            
             for (attributes in itemsToSlide) {
+                
                 attributes.frame = CGRectMake(attributes.frame.origin.x + distance,
                                               attributes.frame.origin.y,
                                               attributes.frame.size.width,
@@ -333,9 +368,11 @@
                              itemNeedsUpdate: attributes];
 
             }
+            
             break;
             
         case up:
+            
             for (attributes in itemsToSlide) {
                 attributes.frame = CGRectMake(attributes.frame.origin.x,
                                               attributes.frame.origin.y + distance,
@@ -346,9 +383,11 @@
                              itemNeedsUpdate: attributes];
                 
             }
+            
             break;
             
         case down:
+            
             for (attributes in itemsToSlide) {
                 attributes.frame = CGRectMake(attributes.frame.origin.x,
                                               attributes.frame.origin.y - distance,
@@ -359,6 +398,7 @@
                              itemNeedsUpdate: attributes];
 
             }
+            
             break;
             
         default:
@@ -373,8 +413,8 @@
     NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
     NSArray *allValidLocations = @[];
     NSArray *potentialPlacements = @[];
-    id lastItem = self.items.lastObject;
-    NSArray *allItems = self.items;
+    id lastItem = self.lastItem;
+    NSArray *allItems = self.items.allValues;
     MADReportDesignerSectionLayoutAttributes *layout;
     for (layout in allItems) {
         if (lastItem != layout) {
@@ -412,7 +452,7 @@
     NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
     NSArray *allValidLocations = @[];
     NSArray *potentialPlacements = @[];
-    NSArray *allItems = self.items;
+    NSArray *allItems = self.items.allValues;
     MADReportDesignerSectionLayoutAttributes *layout;
     for (layout in allItems) {
         

@@ -25,11 +25,12 @@
 
 @interface MADReportDesignerSectionElementLayoutManager : NSObject
 
-@property (nonatomic, strong, readonly) NSArray *items;
+@property (nonatomic, strong, readonly) NSMutableDictionary *items;
 @property (nonatomic, weak) id <MADReportDesignerSectionElementLayoutManagerDelegate>delegate;
 
 - (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item;
 - (void)removeItem:(MADReportDesignerSectionLayoutAttributes *)item;
+- (void)removeItemWithID:(NSManagedObjectID *)objectID;
 - (CGSize)size;
 - (void)layout;
 
