@@ -15,18 +15,23 @@
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate
 
-- (MTCollectionViewLayoutLiquidAttributes *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-                        layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (void)collectionView: (UICollectionView *)collectionView
+         prepareLayout: (UICollectionViewLayout *)collectionViewLayout;
 
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-          setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath;
+- (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView
+                                                    layout: (UICollectionViewLayout *)collectionViewLayout
+                        layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath;
 
-- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-                                     updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (CGSize)collectionView: (UICollectionView *)collectionView
+           sizeForLayout: (UICollectionViewLayout *)collectionViewLayout;
 
-- (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
+- (NSUInteger)numberOfItemsInSection: (NSUInteger)section
+                    ofCollectionView: (UICollectionView *)collectionView;
 
-- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView;
+- (NSArray *)collectionView: (UICollectionView *)collectionView
+        attributesForLayout: (UICollectionViewLayout *)collectionViewLayout;
+
+- (void)collectionViewDidFinishUpdates: (UICollectionView *)collectionView;
 
 @end
 
@@ -35,6 +40,7 @@
 @property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 
 @property (nonatomic, assign) CGSize contentSize;
+@property (nonatomic, assign) NSUInteger tag;
 
 @end
 

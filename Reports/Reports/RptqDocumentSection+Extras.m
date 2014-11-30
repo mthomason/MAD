@@ -139,23 +139,23 @@
 }
 
 - (NSString *)keyForIdentifier {
-    return [self.objectID key];
+    return self.objectID.key;
 }
 
 - (NSUInteger)nextDropIndexForSection {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex))
                                                                      ascending: NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    request.sortDescriptors = @[sortDescriptor];
+    request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest: request
+                                                                     error: &error];
     NSUInteger dropIndex = 0;
     if (error == nil) {
-        RptqDocumentObject *lastObject = [fetchResults lastObject];
-        BOOL tempObjectId = [[lastObject objectID] isTemporaryID];
-        if (tempObjectId == NO) {
-            dropIndex = [[lastObject dropIndex] integerValue] + 1;
+        RptqDocumentObject *lastObject = fetchResults.lastObject;
+        if (lastObject.objectID.isTemporaryID == NO) {
+            dropIndex = lastObject.dropIndex.integerValue + 1;
         }
     }
     return dropIndex;

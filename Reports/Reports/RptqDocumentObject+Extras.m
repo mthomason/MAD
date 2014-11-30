@@ -240,7 +240,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 #pragma mark - Member
 
 - (MTDocumentObjectType)getType {
-    return [self.type integerValue];
+    return self.type.integerValue;
 }
 
 - (NSString *)designerRepresentationText {

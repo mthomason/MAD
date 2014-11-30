@@ -99,6 +99,9 @@
 
 #import "MADToolboxNavigationController.h"
 
+#import "MADReportDesignerSectionElementLayoutManager.h"
+#import "MTReportDesignerSectionViewLayoutLiquid.h"
+
 const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -137,7 +140,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         MTDocumentSectionViewDelegate,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderChooseFieldDelegate,
-        MTTabBarImageProtocol,
+        MTTabBarImageProtocol, MADReportDesignerSectionElementLayoutManagerDelegate,
         UIPopoverPresentationControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
@@ -251,6 +254,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) NSSet *visibleElementViews;
 
+@property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
+
 @end
 
 @implementation MADDesignerViewController
@@ -337,6 +342,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
+    self.sectionLayoutManagers = sectionLayoutManagers;
     
     NSSet *emptySet = [NSSet set];
     self.visibleElementViews = emptySet;
@@ -491,7 +499,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     layoutConstraintViewToolbarHeightHidden.constant = CGSizeZero.height;
     [constraints addObject: layoutConstraintViewToolbarHeightHidden];
     
-    
     NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [self layoutConstraintToolboxHeightHidden];
     [constraints addObject: layoutConstraintToolboxHeightHidden];
     
@@ -527,6 +534,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
  
+    [self.sectionLayoutManagers removeAllObjects];
     NSMutableArray *constraintsScroller = [NSMutableArray new];
     NSMutableArray *constraintsContainer = [NSMutableArray new];
     
@@ -587,7 +595,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         //@autoreleasepool {
+        
+        MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] init];
+        
+        
+        
+        
             
+            
+        
+        
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
 
             MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection
@@ -596,7 +613,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             sectionView.sectionDelegate = self;
             sectionView.dataSource = self;
             sectionView.layer.borderWidth = borderWidthThin;
-            
+            ((MTReportDesignerSectionViewLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
+        
             MADDesignerSectionLabel *sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
             
             UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
@@ -607,13 +625,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             tapGestureRecognizer.delaysTouchesEnded = NO;
             tapGestureRecognizer.delegate = self;
             [self.strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
-        //[self strayTouchGesture requireGestureRecognizerToFail sectionView.tapGestureRecognizer]
             [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
             
             sectionViewLabel.tag = sectionCounter;
-            NSString *lastKey = [reportSectionKeyTracker lastObject];
+            NSString *lastKey = reportSectionKeyTracker.lastObject;
             id constraintItem =  sectionCounter == 0 ? self.ruler :
-            self.sectionViews[lastKey];
+                                        self.sectionViews[lastKey];
             
             sectionView.showsVerticalScrollIndicator = YES;
             
@@ -670,7 +687,24 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [self.scroller.container addSubview:sectionViewLabel];
             
             [passthroughContainers addObject:sectionView];
-        //}
+        
+        
+        RptqDocumentSectionRows *rows = reportSection.hasRows.firstObject;
+        NSOrderedSet *objects = rows.hasObjects;
+        NSInteger itemCounter = 0;
+        RptqDocumentObject *object;
+        MADReportDesignerSectionLayoutAttributes *layout;
+        //NSIndexPath *path;
+        for (object in objects) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
+            layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+            layout.objectID = object.objectID;
+            layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue, object.sizewidth.floatValue, object.sizeheight.floatValue);
+            [layoutManager addItem:layout];
+            itemCounter++;
+        }
+        layoutManager.delegate = self;
+        [self.sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
     }
     
     self.passthoughContainers = [NSSet setWithSet: passthroughContainers];
@@ -702,6 +736,20 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.scroller addConstraints: constraintsScroller];
     [self.scroller.container addConstraints: constraintsContainer];
     
+}
+
+- (void)layoutManager:(MADReportDesignerSectionElementLayoutManager *)layoutManager
+      itemNeedsUpdate:(MADReportDesignerSectionLayoutAttributes *)attributes {
+
+    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
+    RptqDocumentObject *documentObject;
+    documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+    documentObject.originx = @(attributes.frame.origin.x);
+    documentObject.originy = @(attributes.frame.origin.y);
+    documentObject.sizewidth = @(attributes.frame.size.width);
+    documentObject.sizeheight = @(attributes.frame.size.height);
+    [objectContext save:nil];
+
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -968,7 +1016,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         UIFont *font = [self.captionFont fontWithSize:(pointsize / scrollView.zoomScale)];
         NSDictionary *attributes = @{NSFontAttributeName : font};
         
-        for (MADDesignerSectionLabel *controlView in [self sectionControlViewsArray]) {
+        NSArray *sectionControlViewsArray = self.sectionControlViewsArray;
+        MADDesignerSectionLabel *controlView;
+        for (controlView in sectionControlViewsArray) {
             CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size
                                                                          options:-1
                                                                       attributes:attributes
@@ -979,16 +1029,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
             [controlView setNeedsDisplay];
         }
-
-        if ([UIDevice isModernOS]) {
-            
-            [self adjustScroller];
-            [self.scroller.container invalidateIntrinsicContentSize];
-            CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
-            CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
-            self.scroller.container.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                                                scrollView.contentSize.height * 0.5 + offsetY);
-        }
+        
+        [self adjustScroller];
+        [self.scroller.container invalidateIntrinsicContentSize];
+        CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
+        CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
+        self.scroller.container.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                                                     scrollView.contentSize.height * 0.5 + offsetY);
         
         [self.view setNeedsUpdateConstraints];
 
@@ -1012,7 +1059,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         }
 
         CGFloat pointsize = self.captionFont.pointSize;
-        for (MADDesignerSectionLabel *controlView in [self sectionControlViewsArray]) {
+        NSArray *sectionControlViewsArray = self.sectionControlViewsArray;
+        MADDesignerSectionLabel *controlView;
+        for (controlView in sectionControlViewsArray) {
             controlView.font = [self.captionFont fontWithSize:pointsize / scale];
             controlView.contentScaleFactor = scaleWithScreen;
             [controlView setNeedsDisplay];
@@ -1377,7 +1426,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     popoverController.delegate = self;
     popoverController.barButtonItem = sender;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    [self presentViewController:navigationController animated:YES completion:nil];
+    [self presentViewController: navigationController
+                       animated: YES
+                     completion: nil];
     [self setDisplayInactive];
     
 }
@@ -1469,7 +1520,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     
     self.toolboxVisible = NO;
-    
     self.settingsTransitioningDelegate.sourceRect = label.frame;
     self.settingsTransitioningDelegate.sourceView = self.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -1549,11 +1599,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     NSManagedObjectID *objectId = [cell objectIdTag];
+    __weak MADDesignerViewController *weakself = self;
     [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
         if (finished) {
-            NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
+            __strong MADDesignerViewController *strongself = weakself;
+            NSManagedObjectContext *managedObjectContext = [strongself.document managedObjectContext];
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
-            [[self.document activeDocumentModel] removeDocumentObject:documentObject];
+            [[strongself.document activeDocumentModel] removeDocumentObject:documentObject];
         }
     }];
 }
@@ -1805,6 +1857,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
 
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                     inManagedObjectContext: self.document.managedObjectContext];
     return documentSection.height.floatValue;
@@ -1813,22 +1868,37 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger row = indexPath.row;
-    NSInteger section = indexPath.section;
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    
-    NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
-    CGSize result;
-    if ([objects count] > row) {
-        RptqDocumentObject *documentObject = objects[row];
-        result = [documentObject size];
-    } else {
-        result = CGSizeZero;
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
     }
     
-    return result;
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    
+    MADReportDesignerSectionLayoutAttributes *attributes;
+    for (attributes in layoutManager.items) {
+        if (attributes.indexPath.section == indexPath.section &&
+            attributes.indexPath.row == indexPath.row) {
+            break;
+        }
+    }
+    
+    return attributes.frame.size;
+
+    //NSInteger row = indexPath.row;
+    //NSInteger section = indexPath.section;
+    //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
+    //                                                                inManagedObjectContext: self.document.managedObjectContext];
+    
+    //NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
+    //CGSize result;
+    //if ([objects count] > row) {
+    //    RptqDocumentObject *documentObject = objects[row];
+    //    result = [documentObject size];
+    //} else {
+    //    result = CGSizeZero;
+    //}
+    
+    //return result;
 }
 
 #pragma mark UICollectionViewDataSource
@@ -1836,6 +1906,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)collectionView:(UICollectionView *)collectionView
        willDisplayCell:(UICollectionViewCell *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
 
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
@@ -1848,6 +1922,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
   didEndDisplayingCell:(UICollectionViewCell *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
     if (elementView != nil) {
@@ -1862,109 +1940,127 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+    
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+
+    __block MADReportDesignerSectionLayoutAttributes *attributes;
+    [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *object, BOOL *stop) {
+        if (object.indexPath.section == indexPath.section &&
+            object.indexPath.row == indexPath.row) {
+            attributes = object;
+            *stop = YES;
+        }
+    }];
+    
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: attributes.objectID
+                                                                  managedObjectContext: self.document.managedObjectContext];
     
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
-
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [[documentSection hasRows][indexPath.section] hasObjects];
     NSString *resuseId = [MTCollectionViewCellElement reuseIdentifier];
     
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
     cell.delegate = self;
-    if (objects.count > indexPath.row) {
-        
-        RptqDocumentObject *documentObject = objects[indexPath.row];
     
-        CGSize documentObjectSize = [documentObject size];
-        CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
-        
-        switch ([documentObject getType]) {
-            case MTDocumentObjectTypeFormula:
-            case MTDocumentObjectTypeLabelStatic:
-            case MTDocumentObjectTypeLabelDynamic:
-            case MTDocumentObjectTypeAggregate:
-            default: {
-
-                NSArray *subviews = cell.contentView.subviews;
-                for (id subview in subviews) {
-                    [subview removeFromSuperview];
-                }
-
-                cell.backgroundColor = [UIColor clearColor];
-                cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-                
-                MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
-                
-                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self
-                                                                                             action: @selector(handlePanPiece:)];
-                panGesture.minimumNumberOfTouches = 1;
-                panGesture.maximumNumberOfTouches = 2;
-                panGesture.delegate = self;
-                
-                UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: self
-                                                                                                   action: @selector(handlePinchPiece:)];
-                pinchGesture.delegate = self;
-                
-                [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
-                [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
-                
-                [elementView addGestureRecognizer:panGesture];
-                [elementView addGestureRecognizer:pinchGesture];
-                
-                elementView.frame = cellFrame;
-                cell.objectIdTag = documentObject.objectID;
-
-                cell.userInteractionEnabled = YES;
-                
-                if ([self.selectedObjectIds containsObject:documentObject.objectID]) {
-                    [self applyBorderToView:elementView];
-                }
-                
-                [cell.contentView addSubview:elementView];
-                
-                if (self.objectIdJustDisplayed != nil) {
-                    
-                    if (self.objectIdJustDisplayed == documentObject.objectID) {
-                        __weak MADDesignerViewController *weakself = self;
-                        
-                        [elementView flash:^(BOOL finished) {
-                            if (finished) {
-                                weakself.objectIdJustDisplayed = nil;
-                            }
-                        }];
-                        
-                    }
-                    
-                }
-                __weak UICollectionViewCell *blockCell = cell;
-                __weak MADDesignerElementView *blockElementView = elementView;
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [blockCell setContentScaleFactor:contextScale];
-                        [blockCell.contentView setContentScaleFactor:contextScale];
-                        [blockElementView setContentScaleFactor:contextScale];
-                    });
-                });
-                break;
+    CGSize documentObjectSize = [documentObject size];
+    CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
+    
+    switch ([documentObject getType]) {
+        case MTDocumentObjectTypeFormula:
+        case MTDocumentObjectTypeLabelStatic:
+        case MTDocumentObjectTypeLabelDynamic:
+        case MTDocumentObjectTypeAggregate:
+        default: {
+            
+            NSArray *subviews = cell.contentView.subviews;
+            for (id subview in subviews) {
+                [subview removeFromSuperview];
             }
+            
+            cell.backgroundColor = [UIColor clearColor];
+            cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            
+            MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
+            
+            UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self
+                                                                                         action: @selector(handlePanPiece:)];
+            panGesture.minimumNumberOfTouches = 1;
+            panGesture.maximumNumberOfTouches = 2;
+            panGesture.delegate = self;
+            
+            UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: self
+                                                                                               action: @selector(handlePinchPiece:)];
+            pinchGesture.delegate = self;
+            
+            [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
+            [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
+            
+            [elementView addGestureRecognizer:panGesture];
+            [elementView addGestureRecognizer:pinchGesture];
+            
+            elementView.frame = cellFrame;
+            cell.objectIdTag = documentObject.objectID;
+            
+            cell.userInteractionEnabled = YES;
+            
+            if ([self.selectedObjectIds containsObject:documentObject.objectID]) {
+                [self applyBorderToView:elementView];
+            }
+            
+            [cell.contentView addSubview:elementView];
+            
+            if (self.objectIdJustDisplayed != nil) {
+                
+                if (self.objectIdJustDisplayed == documentObject.objectID) {
+                    __weak MADDesignerViewController *weakself = self;
+                    
+                    [elementView flash:^(BOOL finished) {
+                        if (finished) {
+                            weakself.objectIdJustDisplayed = nil;
+                        }
+                    }];
+                    
+                }
+                
+            }
+            __weak UICollectionViewCell *blockCell = cell;
+            __weak MADDesignerElementView *blockElementView = elementView;
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [blockCell setContentScaleFactor:contextScale];
+                    [blockCell.contentView setContentScaleFactor:contextScale];
+                    [blockElementView setContentScaleFactor:contextScale];
+                });
+            });
+            break;
         }
     }
     return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    return layoutManager.items.count;
     
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
-    return [objects count];
+//    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
+//                                                                    inManagedObjectContext: self.document.managedObjectContext];
+//    NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
+//    return objects.count;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
            viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
     MTCollectionReuseableViewDefault *result = nil;
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
@@ -1990,17 +2086,29 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
-                                                                    inManagedObjectContext:self.document.managedObjectContext];
-    return [[documentSection hasRows] count];
+    return 1;
 }
 
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
-      forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
+      forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
+}
+
+- (BOOL)collectionView: (UICollectionView *)collectionView
+      canPerformAction: (SEL)action
+    forItemAtIndexPath: (NSIndexPath *)indexPath
+            withSender: (id)sender {
+    
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
     BOOL result = NO;
     if (action == @selector(delete:) || action == @selector(edit:)) {
         result = YES;
@@ -2008,7 +2116,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return result;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (void)collectionView: (UICollectionView *)collectionView
+         performAction: (SEL)action
+    forItemAtIndexPath: (NSIndexPath *)indexPath
+            withSender: (id)sender {
+    
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
     NSInteger row = indexPath.row;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
@@ -2028,6 +2143,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
     [self dismissAllPopovers];
     [self dismissSectionPresentationIfOpen];
     [self dismissToolboxPresentationIfOpen];
@@ -2038,13 +2157,32 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
 
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
+}
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
 
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+}
 
 #pragma mark - MUIViewControllerDelegate
 
@@ -2138,7 +2276,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
  
  */
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+- (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer
+       shouldReceiveTouch: (UITouch *)touch {
     return YES;
 }
 
@@ -2188,26 +2327,65 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - MTReportDesignerSectionViewLayoutLiquidDelegate
 
+- (void)collectionView: (UICollectionView *)collectionView
+         prepareLayout: (MTReportDesignerSectionViewLayoutLiquid *)collectionViewLayout {
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    //[layoutManager layout];
+    
+    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
+    MADReportDesignerSectionLayoutAttributes *attributes;
+    RptqDocumentObject *documentObject;
+    NSArray *allItems = layoutManager.items.allValues;
+    for (attributes in allItems) {
+        documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+        documentObject.originx = @(attributes.frame.origin.x);
+        documentObject.originy = @(attributes.frame.origin.y);
+        documentObject.sizewidth = @(attributes.frame.size.width);
+        documentObject.sizeheight = @(attributes.frame.size.height);
+    }
+    [objectContext save:nil];
+}
+
 - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView
-                                                    layout: (UICollectionViewLayout *)collectionViewLayout
+                                                    layout: (MTReportDesignerSectionViewLayoutLiquid *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
     
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    __block MTCollectionViewLayoutLiquidAttributes *item;
+    [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MTCollectionViewLayoutLiquidAttributes *object, BOOL *stop) {
+        if (object.indexPath.item == indexPath.item && object.indexPath.section == indexPath.section) {
+            item = object;
+            *stop = YES;
+        }
+    }];
+    return item;
+/*
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                     inManagedObjectContext: self.document.managedObjectContext];
-    RptqDocumentSectionRows *rows =[[documentSection hasRows] firstObject];
-    NSOrderedSet *objects = [rows hasObjects];
+    RptqDocumentSectionRows *rows =[documentSection.hasRows firstObject];
+    NSOrderedSet *objects = rows.hasObjects;
     MTCollectionViewLayoutLiquidAttributes *result = [MTCollectionViewLayoutLiquidAttributes layoutAttributesForCellWithIndexPath:indexPath];
     
-    if ([objects count] > [indexPath item]) {
-        RptqDocumentObject *documentObject = objects[[indexPath item]];
-        [result setDropPoint: CGPointMake([[documentObject dropPointX] floatValue], [[documentObject dropPointY] floatValue])];
+    if (objects.count > [indexPath item]) {
+        
+        RptqDocumentObject *documentObject = objects[indexPath.item];
+        result.dropPoint = CGPointMake(documentObject.dropPointX.floatValue,
+                                       documentObject.dropPointY.floatValue);
+        
         CGSize documentObjectSize = documentObject.size;
-        [result setFrame:CGRectMake(result.dropPoint.x, result.dropPoint.y, documentObjectSize.width, documentObjectSize.height)];
+        result.frame = CGRectMake(result.dropPoint.x,
+                                  result.dropPoint.y,
+                                  documentObjectSize.width,
+                                  documentObjectSize.height);
         
         result.lastTouchPoint = result.dropPoint;
         result.dropIndex = documentObject.dropIndex.integerValue;
         result.layoutDescription = [documentObject toStringHumanReadable];
+        
     } else {
         result.dropPoint = CGPointZero;
         result.lastTouchPoint = CGPointZero;
@@ -2215,56 +2393,33 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         result.frame = CGRectZero;
     }
     result.lastTouchPointValid = NO;
-    return result;
+    return result;*/
 }
 
 - (NSUInteger)numberOfItemsInSection: (NSUInteger)section
                     ofCollectionView: (UICollectionView *)collectionView {
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:collectionView.objectIdTag
-                                                                    inManagedObjectContext:self.document.managedObjectContext];
-    NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
-    return [objects count];
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    return layoutManager.items.count;
+    /*
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
+                                                                    inManagedObjectContext: self.document.managedObjectContext];
+    NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
+    return objects.count;*/
 }
 
-- (NSUInteger)collectionView:(UICollectionView *)collectionView
-                      layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
-                                                                    inManagedObjectContext:self.document.managedObjectContext];
-    
-    NSOrderedSet *objects = [[documentSection hasRows][indexPath.section] hasObjects];
-    NSUInteger dropIndex = 0;
-    if ([objects count] > indexPath.row) {
-        RptqDocumentObject *documentObject = objects[indexPath.row];
-        NSNumber *dropIndex = @([documentSection nextDropIndexForSection]);
-        documentObject.dropIndex = dropIndex;
-        NSError *error = nil;
-        [documentObject.managedObjectContext save:&error];
-    }
-    return dropIndex;
+- (NSArray *)collectionView: (UICollectionView *)collectionView
+        attributesForLayout: (MTReportDesignerSectionViewLayoutLiquid *)collectionViewLayout {
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    return layoutManager.items.allValues;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-                layout:(UICollectionViewLayout *)collectionViewLayout
-          setDropPoint:(CGPoint)dropPoint
-    forItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger row = indexPath.row;
-    NSInteger section = indexPath.section;
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
-                                                                            inManagedObjectContext: self.document.managedObjectContext];
-    
-    
-    NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
-    
-    if ([objects count] > row) {
-        RptqDocumentObject *documentObject = objects[row];
-        if (CGPointEqualToPoint(dropPoint, [documentObject dropPoint]) == NO) {
-            [documentObject setDropPoint:dropPoint];
-            [self.document.managedObjectContext save:nil];
-        }
-    }
+- (CGSize)collectionView: (UICollectionView *)collectionView
+           sizeForLayout: (MTReportDesignerSectionViewLayoutLiquid *)collectionViewLayout {
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
+    return [layoutManager size];
 }
 
 #pragma mark - Helpers
@@ -2272,11 +2427,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark General
 
 - (BOOL)oneOrMoreElementsSelected {
-    return [self.selectedObjectIds count] > 0;
+    return self.selectedObjectIds.count > 0;
 }
 
 - (BOOL)elementViewIsSelected:(MADDesignerElementView *)elementView {
-    return [self.selectedObjectIds containsObject:[elementView objectIdTag]];
+    return [self.selectedObjectIds containsObject:elementView.objectIdTag];
 }
 
 - (NSInteger)removeBorderFromAllSectionViews {
@@ -2464,7 +2619,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView {
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
     for (int i = 0; i < [collectionView numberOfItemsInSection:0]; i++) {
+
         NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:i inSection:0];
         MADDesignerElementView *elementView = [self elementViewAtIndexPath: insertedPath
                                                           inCollectionView: collectionView];
@@ -2508,7 +2668,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (MADDesignerElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
                                   inCollectionView:(UICollectionView *)collectionView {
-    
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+
     return [self elementViewForCollectionViewCell:[collectionView cellForItemAtIndexPath:indexPath]];
 }
 
@@ -2545,8 +2708,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                      inSection: 0];
         NSArray *indexPaths = @[indexPath];
         [detailSection insertItemsAtIndexPaths:indexPaths];
-        
         [documentObject saveContext];
+        
     } completion:^(BOOL finished) {
         
         
@@ -2562,29 +2725,44 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
                                     completion:(void (^)(BOOL finished))completion {
     
+    
+    
+    
+
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
                                                                   managedObjectContext: self.document.managedObjectContext];
     
-    RptqDocumentSectionRows *sectionRow = [documentObject inSectionRow];
-    RptqDocumentSection *section = [sectionRow inSection];
-    NSInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
+    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+    RptqDocumentSection *section = sectionRow.inSection;
     UICollectionView *sectionCollectionView = [self getSectionViewForDocumentSection:section];
+    __weak UICollectionView *weakSectionCollectionView = sectionCollectionView;
     
     __weak MADDesignerViewController *weakself = self;
     
-    __weak UICollectionView *weakSectionCollectionView = sectionCollectionView;
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [sectionRow hasObjects]];
-    [hasObjects removeObjectAtIndex:deleteIndex];
-    
     [sectionCollectionView performBatchUpdates:^{
+        __strong MADDesignerViewController *strongself = weakself;
+        
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
+                                                                      managedObjectContext: strongself.document.managedObjectContext];
+        
+        RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+        NSInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
+
+        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
+        [hasObjects removeObjectAtIndex:deleteIndex];
+        
+        MADReportDesignerSectionElementLayoutManager *layoutManager = strongself.sectionLayoutManagers[sectionCollectionView.objectIdTag];
+        MADReportDesignerSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:elementViewId];
+        NSIndexPath *deletePath = itemToRemove.indexPath.copy;
+
+        [layoutManager removeItemWithID:elementViewId];
         
         sectionRow.hasObjects = hasObjects;
         documentObject.inSectionRow = nil;
         
         NSError *error = nil;
-        [weakself.document.managedObjectContext save:&error];
+        [strongself.document.managedObjectContext save:&error];
         
-        NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
         [weakSectionCollectionView deleteItemsAtIndexPaths: @[deletePath]];
         
     } completion:^(BOOL finished) {
@@ -2734,11 +2912,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             gestureRecognizer.view.center = newCenter;
             
             __weak MADDesignerViewController *weakself = self;
-            [self removeCollectionViewCellForElementView: gestureRecognizer.view.objectIdTag completion: ^(BOOL finished) {
-                UICollectionView *sectionView = [weakself sectionViewFor:gestureRecognizer];
-                [weakself relayoutSectionView:sectionView];
-                [weakself.view setNeedsLayout];
-                gestureRecognizer.view.center = [weakself.scroller locationInMainWindow:gestureRecognizer];
+            [self removeCollectionViewCellForElementView: gestureRecognizer.view.objectIdTag
+                                              completion: ^(BOOL finished) {
+                __strong MADDesignerViewController *strongself = weakself;
+                UICollectionView *sectionView = [strongself sectionViewFor:gestureRecognizer];
+                [strongself relayoutSectionView:sectionView];
+                [strongself.view setNeedsLayout];
+                gestureRecognizer.view.center = [strongself.scroller locationInMainWindow:gestureRecognizer];
             }];
             
             break;
@@ -2775,28 +2955,46 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                                                        inManagedObjectContext: managedObjectContext];
                 __weak UICollectionView *weakSectionView = sectionView;
                 __weak MADDesignerViewController *weakself = self;
+
                 
                 [sectionView performBatchUpdates:^(void) {
                     
-                    [weakGestureRecognizerView removeFromSuperview];
+                    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[sectionView.objectIdTag];
                     
+                    NSIndexPath *path = [NSIndexPath indexPathForItem:layoutManager.items.count inSection:0];
+                    MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+                    la.objectID = objectId;
                     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                                   managedObjectContext: managedObjectContext];
                     
-                    NSIndexPath *indexPathInsert = [documentSection addDocumentObject: documentObject
-                                                                        withDropPoint: frame.origin];
-                    NSArray *indexPathsInserted = @[indexPathInsert];
+                    la.frame = CGRectMake(frame.origin.x,
+                                          frame.origin.y,
+                                          documentObject.sizewidth.floatValue,
+                                          documentObject.sizeheight.floatValue);
+                    [layoutManager addItem:la];
+                    [layoutManager layout];
+                    NSArray *indexPathsInserted = @[path];
+
+                    
+                    
+                    [weakGestureRecognizerView removeFromSuperview];
+                    
+//                    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+//                                                                                  managedObjectContext: managedObjectContext];
+                    
+                    [documentSection addDocumentObject: documentObject
+                                         withDropPoint: frame.origin];
                     [weakSectionView insertItemsAtIndexPaths:indexPathsInserted];
                     [documentSection.managedObjectContext save:nil];
                     
                 } completion:^(BOOL finished) {
                     if (finished) {
                         NSNumber *height = @([weakSectionView intrinsicContentSize].height);
-                        [documentSection setHeight:height];
+                        documentSection.height = height;
                         [UIView animateWithDuration:0.6666f animations:^{
                             [weakSectionView invalidateIntrinsicContentSize];
                         }];
-                        [managedObjectContext save:nil];
+                        [managedObjectContext save:nil];    // FIXME: Triggers a collection view invalidate layout...
                         [weakself redrawAllElementViewsInCollectionView:weakSectionView];
                         [weakself.view setNeedsLayout];
                     }
@@ -2825,7 +3023,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)handleToggleSectionControlPanel:(UITapGestureRecognizer *)sender {
     
-    if ([sender state] == UIGestureRecognizerStateEnded) {
+    if (sender.state == UIGestureRecognizerStateEnded) {
         
         MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
         

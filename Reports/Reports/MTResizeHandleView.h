@@ -10,17 +10,7 @@
 #define Reports_MTResizeHandleView_h
 
 #import <UIKit/UIKit.h>
-
-typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
-	north = 1,
-	south,
-	east,
-	west,
-    northEast,
-    northWest,
-    southEast,
-    southWest
-};
+#import "CGGeometry+Extras.h"
 
 @class MTResizeHandleView;
 
@@ -34,11 +24,11 @@ typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 }
 
 @property (weak) IBOutlet id <MTResizeHandleViewDelegate> delegate;
-@property (assign) MNSCompusPosition type;
+@property (assign) MADCompusDirection type;
 @property (assign) CGPoint initalPoint;
 @property (assign, getter = isHighlighted) BOOL highlighted;
 
-- (instancetype)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position NS_DESIGNATED_INITIALIZER;
 
 @end
 

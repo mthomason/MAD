@@ -10,7 +10,7 @@
 
 @implementation MTResizeHandleView
 
-- (instancetype)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
+- (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position {
     self = [super initWithFrame:frame];
     if (self) {
 

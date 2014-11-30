@@ -37,36 +37,44 @@ struct CGLineSegment {
 };
 typedef struct CGLineSegment CGLineSegment;
 
-typedef NS_ENUM(NSUInteger, MTDirection) {
-    MTDirectionNorth,       //60˚-120˚
-    MTDirectionNorthWest,   //120˚-150˚
-    MTDirectionNorthEast,
-    MTDirectionSouth,       //240˚-300˚
-    MTDirectionSouthWest,   //210˚-240˚
-    MTDirectionSouthEast,
-    MTDirectionEast,        //330˚-360˚,0-30˚
-    MTDirectionWest,        //210˚-150˚
+typedef NS_ENUM(NSUInteger, MADCompusDirection) {
+    north = 1,
+    south,
+    east,
+    west,
+    northEast,
+    northWest,
+    southEast,
+    southWest
 };
 
-CG_INLINE MTDirection generalDirectionOfDegrees(CGFloat degrees);
-CG_INLINE MTDirection generalDirectionOfDegrees(CGFloat degrees) {
-    MTDirection direction = MTDirectionNorth;
+typedef NS_ENUM(NSUInteger, MADDirection) {
+    left = 1,
+    right,
+    up,
+    down,
+    noDirection
+};
+
+CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees);
+CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees) {
+    MADCompusDirection direction = north;
     if (degrees > 60.0000f && degrees < 120.0000f) {
-        direction = MTDirectionNorth;
+        direction = north;
     } else if (degrees > 30.0000f && degrees < 60.0000f) {
-        direction = MTDirectionNorthEast;
+        direction = northEast;
     } else if ( degrees > 120.0000f && degrees < 150.0000f ) {
-        direction = MTDirectionNorthWest;
+        direction = northWest;
     } else if ( degrees > 240.0000f && degrees < 300.0000f ) {
-        direction = MTDirectionSouth;
+        direction = south;
     } else if ( degrees > 300.0000f && degrees < 330.0000f ) {
-        direction = MTDirectionSouthEast;
+        direction = southEast;
     } else if ( degrees > 210.0000f && degrees < 240.0000f ) {
-        direction = MTDirectionSouthWest;
+        direction = southWest;
     } else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
-        direction = MTDirectionEast;
+        direction = east;
     } else if ( degrees > 150.0000f && degrees < 210.0000f) {
-        direction = MTDirectionWest;
+        direction = west;
     }
     return direction;
 }
