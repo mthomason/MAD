@@ -79,45 +79,64 @@ static NSNumberFormatter *currencyNumberFormatter;
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
                                                                      ascending: NO];
     
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    request.sortDescriptors = @[sortDescriptor];
+    request.fetchLimit = 1;
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
+    NSUInteger idNumber = 0;
     NSUInteger lastDropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        idNumber = [[lastObject identifier] integerValue] + 1;
         lastDropIndex = [[lastObject dropIndex] integerValue] + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
-    // MARK: Default style.
-    [self setFontname:[MTFont defaultFamily]];
-    [self setFontsize:@([MTFont defaultSize])];
-    [self setBold:@NO];
-    [self setItalic:@NO];
-    [self setUnderline:@NO];
-    [self setStrike:@NO];
-    [self setMarginBottom:@(CGSizeZero.height)];
-    [self setMarginTop:@(CGSizeZero.height)];
-    [self setMarginLeft:@(CGSizeZero.width)];
-    [self setMarginRight:@(CGSizeZero.width)];
-    [self setPaddingBottom:@(CGSizeZero.height)];
-    [self setPaddingTop:@(CGSizeZero.height)];
-    [self setPaddingLeft:@(CGSizeZero.width)];
-    [self setPaddingRight:@(CGSizeZero.width)];
+    NSNumber *identifier = @(idNumber);
+    NSString *fontname = [MTFont defaultFamily];
+    NSNumber *fontSize = @([MTFont defaultSize]);
+    NSNumber *bold = @NO;
+    NSNumber *italic = @NO;
+    NSNumber *underline = @NO;
+    NSNumber *strike = @NO;
+    NSNumber *marginBottom = @(CGSizeZero.height);
+    NSNumber *marginTop = @(CGSizeZero.height);
+    NSNumber *marginLeft = @(CGSizeZero.width);
+    NSNumber *marginRigth = @(CGSizeZero.width);
+    NSNumber *paddingBottom = @(CGSizeZero.height);
+    NSNumber *paddingTop = @(CGSizeZero.height);
+    NSNumber *paddingLeft = @(CGSizeZero.width);
+    NSNumber *paddingRight = @(CGSizeZero.width);
+    NSNumber *borderHeightBottom = @(CGSizeZero.width);
+    NSNumber *borderWidthLeft = @(CGSizeZero.width);
+    NSNumber *borderWidthRight = @(CGSizeZero.width);
+    NSNumber *borderHeightTop = @(CGSizeZero.width);
+    NSNumber *verticalAlignment = @(MTVerticalAlignmentTop);
+    NSNumber *horizontalAlignment = @(MTHorizontalAlignmentLeft);
+    NSNumber *sectionRowNumber = @(1);
+    NSNumber *dropIndex = @(lastDropIndex);
 
-    [self setBorderHeightBottom:@(CGSizeZero.width)];
-    [self setBorderWidthLeft:@(CGSizeZero.width)];
-    [self setBorderWidthRight:@(CGSizeZero.width)];
-    [self setBorderHeightTop:@(CGSizeZero.width)];
-    
-    [self setVerticalAlignment:@(MTVerticalAlignmentTop)];
-    [self setHorizontalAlignment:@(MTHorizontalAlignmentLeft)];
-    [self setSectionRowNumber:@(1)];
-    [self setDropPoint:CGPointZero];
-    [self setDropIndex:@(lastDropIndex)];
+    self.identifier = identifier;
+    self.fontname = fontname;
+    self.fontsize = fontSize;
+    self.bold = bold;
+    self.italic = italic;
+    self.underline = underline;
+    self.strike = strike;
+    self.marginBottom = marginBottom;
+    self.marginTop = marginTop;
+    self.marginLeft = marginLeft;
+    self.marginRight = marginRigth;
+    self.paddingBottom = paddingBottom;
+    self.paddingTop = paddingTop;
+    self.paddingLeft = paddingLeft;
+    self.paddingRight = paddingRight;
+    self.borderHeightBottom = borderHeightBottom;
+    self.borderWidthLeft = borderWidthLeft;
+    self.borderWidthRight = borderWidthRight;
+    self.borderHeightTop = borderHeightTop;
+    self.verticalAlignment = verticalAlignment;
+    self.horizontalAlignment = horizontalAlignment;
+    self.sectionRowNumber = sectionRowNumber;
+    self.dropIndex = dropIndex;
     
 }
 
@@ -219,16 +238,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     CGFloat sizeWidth = elementViewBounds.size.width;
     CGFloat sizeHeight = elementViewBounds.size.height;
     return CGRectMake(originX, originY, sizeWidth, sizeHeight);
-}
-
-- (void)setDropPoint:(CGPoint)drop {
-    NSNumber *x = @(drop.x), *y = @(drop.y);
-    self.dropPointX = x;
-    self.dropPointY = y;
-}
-
-- (CGPoint)dropPoint {
-    return CGPointMake(self.dropPointX.floatValue, self.dropPointY.floatValue);
 }
 
 - (void)setOrigin:(CGPoint)origin {
@@ -347,7 +356,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     CGFloat sizeHeight = nearbyintf(rect.size.height);
     self.sizewidth = @(sizeWidth);
     self.sizeheight = @(sizeHeight);
-    [self setDropPoint: rect.origin];
 }
 
 #pragma mark - MTProtocolCompare
