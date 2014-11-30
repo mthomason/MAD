@@ -386,13 +386,13 @@
                                         NSString *fieldKey = [database safeQueryField:queryField];
                                         
                                         NSArray *groupKeys;
-                                        NSInteger groupCount = [[aggregateField groupNumber] integerValue];
+                                        NSInteger groupCount = [aggregateField.groupNumber integerValue];
                                         if (groupCount < [groupLevelKeys count]) {
                                             NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
                                             groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
                                         }
                                         
-                                        MTAggregateFunctionType functionType = [[aggregateField function] integerValue];
+                                        MTAggregateFunctionType functionType = [aggregateField.function integerValue];
                                         RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
                                         NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
                                         MTDataType aggregateType = [databaseSchemaFieldDataType integerValue];
@@ -403,26 +403,26 @@
                                         
                                         if (calculateInMemory == NO) {
                                             
-                                            aggregateResult = [[self dataTable] resultsForAggregateType: [[aggregateField groupType] integerValue]
-                                                                                                                         function: [[aggregateField function] integerValue]
-                                                                                                                         fieldKey: fieldKey
-                                                                                                                        groupKeys: groupKeys
-                                                                                                                           rowids: [self.reportFormatter rowidsForPage:pageIndex]];
+                                            aggregateResult = [self.dataTable resultsForAggregateType: [aggregateField.groupType integerValue]
+                                                                                             function: [aggregateField.function integerValue]
+                                                                                             fieldKey: fieldKey
+                                                                                            groupKeys: groupKeys
+                                                                                               rowids: [self.reportFormatter rowidsForPage:pageIndex]];
                                             
                                         } else {    //Handle first and last
                                             
                                             NSArray *dataForGroup = nil;
                                             NSDictionary *dataOfInterest = nil;
-                                            NSNumber *aggregateFieldGroupType = [aggregateField groupType];
+                                            NSNumber *aggregateFieldGroupType = aggregateField.groupType;
                                             MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
                                             
                                             switch (aggregateGroupType) {
                                                 case MTAggregateGroupByTypeSection: {
-                                                    NSInteger groupCount = [[aggregateField groupNumber] integerValue];
+                                                    NSInteger groupCount = [aggregateField.groupNumber integerValue];
                                                     if (groupCount < [groupLevelKeys count]) {
                                                         NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
                                                         NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
-                                                        dataForGroup = [[self dataTable] objectsForGroupKeys:groupKeys];
+                                                        dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
                                                     } else {
                                                         dataForGroup = @[];
                                                     }
@@ -467,7 +467,7 @@
                                                                         break;
                                                                     }
                                                                 }
-                                                                dataOfInterest =  firstRowid != nil ? [[self dataTable] dataForCacheId:firstRowid] : nil;
+                                                                dataOfInterest =  firstRowid != nil ? [self.dataTable dataForCacheId:firstRowid] : nil;
                                                             break;
                                                         }
                                                         case MTAggregateFunctionTypeLast: {
@@ -484,7 +484,7 @@
                                                                     break;
                                                                 }
                                                             }
-                                                            dataOfInterest = lastRowid != nil ? [[self dataTable] dataForCacheId:lastRowid] : nil;
+                                                            dataOfInterest = lastRowid != nil ? [self.dataTable dataForCacheId:lastRowid] : nil;
                                                             break;
                                                             
                                                     }
@@ -506,7 +506,7 @@
                                                                     break;
                                                                 }
                                                             }
-                                                            dataOfInterest =  firstRowid != nil ? [[self dataTable] dataForCacheId:firstRowid] : nil;
+                                                            dataOfInterest =  firstRowid != nil ? [self.dataTable dataForCacheId:firstRowid] : nil;
                                                             break;
                                                         }
                                                         case MTAggregateFunctionTypeLast: {
@@ -519,7 +519,7 @@
                                                                     break;
                                                                 }
                                                             }
-                                                            dataOfInterest = lastRowid != nil ? [[self dataTable] dataForCacheId:lastRowid] : nil;
+                                                            dataOfInterest = lastRowid != nil ? [self.dataTable dataForCacheId:lastRowid] : nil;
                                                             break;
                                                         }
                                                         default:
@@ -550,7 +550,7 @@
                                         
                                     case MTDocumentObjectTypeBarcode: {
                                         detailRowId = pageSection[MTReportDetailRowId];
-                                        NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [[self dataTable] dataForCacheId:detailRowId]];
+                                        NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
 
                                         RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
                                         RptqQueryField *queryField1 = [barcodeObject referencesField1];
@@ -583,7 +583,7 @@
                                         
                                     case MTDocumentObjectTypeLabelDynamic: {
                                         detailRowId = pageSection[MTReportDetailRowId];
-                                        NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [[self dataTable] dataForCacheId:detailRowId]];
+                                        NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
                                         if (rowData != nil) {
                                             RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
                                             RptqQueryField *queryField = [labelDataField referencesQueryField];
@@ -613,8 +613,8 @@
                                     }
                                 }
                                 
-                                CGFloat originPointXPadding = item.dropPointX.floatValue + sectionRect.origin.x + item.spacingLeft;
-                                CGFloat originPointYPadding = item.dropPointY.floatValue + sectionRect.origin.y + item.spacingTop;
+                                CGFloat originPointXPadding = item.originx.floatValue + sectionRect.origin.x + item.spacingLeft;
+                                CGFloat originPointYPadding = item.originy.floatValue + sectionRect.origin.y + item.spacingTop;
                                 
                                 CGFloat sizeWidthPadding = item.sizewidth.floatValue + item.spacingRight;
                                 CGFloat sizeHeightPadding = item.sizeheight.floatValue + item.spacingBottom;

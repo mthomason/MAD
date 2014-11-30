@@ -50,6 +50,9 @@
                                                                                                    excludingItems: @[]];
     [self moveItem:item toNearestPointInGroup:allPotentalDropPoints];
     
+    // FIXME: May need this...
+    //[self.delegate layoutManager:self itemNeedsUpdate:item];
+    
 }
 
 - (void)moveItem:(MADReportDesignerSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints {
