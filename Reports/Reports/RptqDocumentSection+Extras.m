@@ -165,7 +165,6 @@
                      withDropPoint:(CGPoint)origin {
     
     [documentObject setOrigin:origin];
-    [documentObject setDropPoint:origin];
     
     NSUInteger sectionZero = 0;
     RptqDocumentSectionRows *sectionRow = [self hasRows][sectionZero];
