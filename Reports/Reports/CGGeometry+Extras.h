@@ -56,6 +56,32 @@ typedef NS_ENUM(NSUInteger, MADDirection) {
     noDirection
 };
 
+CG_INLINE BOOL CGFloatCompare(CGFloat x, CGFloat y);
+CG_INLINE BOOL
+CGFloatCompare(CGFloat x, CGFloat y) {
+    return (fabs(x-y) < .0001 * FLT_EPSILON * fabs(x+y) || fabs(x-y) < FLT_MIN);
+}
+
+CG_INLINE MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2);
+CG_INLINE MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2) {
+    return CGFloatCompare(p2.x, p1.x) ? noDirection : p2.x > p1.x ? left : right;
+}
+
+CG_INLINE MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2);
+CG_INLINE MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2) {
+    return CGFloatCompare(p2.x, p1.x) ? noDirection : p2.y > p1.y ? down : up;
+}
+
+CG_INLINE BOOL MADDirectionIsHorizontal(MADDirection d);
+CG_INLINE BOOL MADDirectionIsHorizontal(MADDirection d) {
+    return d == left || d == right;
+}
+
+CG_INLINE BOOL MADDirectionIsVertical(MADDirection d);
+CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
+    return d == up || d == down;
+}
+
 CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees);
 CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees) {
     MADCompusDirection direction = north;
@@ -411,12 +437,6 @@ CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
 					    ( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.x - p2b.x) - ((  p1a.x  -    p1b.x) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ),
 					   -( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.y - p2b.y) - (((-p1a.y) - (-p1b.y)) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ) );
     
-}
-
-CG_INLINE BOOL CGFloatCompare(CGFloat x, CGFloat y);
-CG_INLINE BOOL
-CGFloatCompare(CGFloat x, CGFloat y) {
-    return (fabs(x-y) < .0001 * FLT_EPSILON * fabs(x+y) || fabs(x-y) < FLT_MIN);
 }
 
 CG_INLINE BOOL CGFloatMax(CGFloat n1, CGFloat n2);

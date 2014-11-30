@@ -1852,94 +1852,17 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 #pragma mark -
-#pragma mark Collection View Layout Delegate
+#pragma mark MTReportDesignerSectionViewLayoutLiquidDelegate
 
-- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
-
-- (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    return documentSection.height.floatValue;
+- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView {
+    
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-    
-    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
-    
-    MADReportDesignerSectionLayoutAttributes *attributes;
-    for (attributes in layoutManager.items) {
-        if (attributes.indexPath.section == indexPath.section &&
-            attributes.indexPath.row == indexPath.row) {
-            break;
-        }
-    }
-    
-    return attributes.frame.size;
-
-    //NSInteger row = indexPath.row;
-    //NSInteger section = indexPath.section;
-    //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
-    //                                                                inManagedObjectContext: self.document.managedObjectContext];
-    
-    //NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
-    //CGSize result;
-    //if ([objects count] > row) {
-    //    RptqDocumentObject *documentObject = objects[row];
-    //    result = [documentObject size];
-    //} else {
-    //    result = CGSizeZero;
-    //}
-    
-    //return result;
-}
-
+#pragma mark -
 #pragma mark UICollectionViewDataSource
 
-- (void)collectionView:(UICollectionView *)collectionView
-       willDisplayCell:(UICollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-
-    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
-    NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
-    self.visibleElementViews = visibleElementViews;
-    [self adjustPassthroughViews];
-
-}
-
-- (void)collectionView:(UICollectionView *)collectionView
-  didEndDisplayingCell:(UICollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-
-    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
-    NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
-    if (elementView != nil) {
-        [elementViews removeObject:elementView];
-    }
-    NSSet *elementViewsUpdated = [NSSet setWithSet: elementViews];
-    self.visibleElementViews = elementViewsUpdated;
-    
-    [self adjustPassthroughViews];
-
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView
+                  cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     if (collectionView.tag == 1) {
         NSLog(@"%s", __PRETTY_FUNCTION__);
     }
@@ -2041,25 +1964,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return cell;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
+- (NSInteger)collectionView: (UICollectionView *)collectionView
+     numberOfItemsInSection: (NSInteger)section {
 
     MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
-    
-//    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
-//                                                                    inManagedObjectContext: self.document.managedObjectContext];
-//    NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
-//    return objects.count;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
-           viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
+- (UICollectionReusableView *)collectionView: (UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind: (NSString *)kind
+                                 atIndexPath: (NSIndexPath *)indexPath {
 
     MTCollectionReuseableViewDefault *result = nil;
     
@@ -2091,12 +2005,43 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
-      forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-
+- (void)collectionView: (UICollectionView *)collectionView
+       willDisplayCell: (UICollectionViewCell *)cell
+    forItemAtIndexPath: (NSIndexPath *)indexPath {
+    
     if (collectionView.tag == 1) {
         NSLog(@"%s", __PRETTY_FUNCTION__);
     }
+    
+    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
+    NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
+    self.visibleElementViews = visibleElementViews;
+    [self adjustPassthroughViews];
+    
+}
+
+- (void)collectionView: (UICollectionView *)collectionView
+  didEndDisplayingCell: (UICollectionViewCell *)cell
+    forItemAtIndexPath: (NSIndexPath *)indexPath {
+    
+    if (collectionView.tag == 1) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+    }
+    
+    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
+    NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
+    if (elementView != nil) {
+        [elementViews removeObject:elementView];
+    }
+    NSSet *elementViewsUpdated = [NSSet setWithSet: elementViews];
+    self.visibleElementViews = elementViewsUpdated;
+    
+    [self adjustPassthroughViews];
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
+      forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
 
 }
 
@@ -2157,32 +2102,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-}
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-}
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 #pragma mark - MUIViewControllerDelegate
 
@@ -2877,7 +2803,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: ((MADDesignerElementView *)gestureRecognizer.view).objectIdTag
                                                                           managedObjectContext: weakself.document.managedObjectContext];
-            [documentObject dropAtRect:gestureRecognizer.view.frame];
+            [documentObject dropAtRect:gestureRecognizer.view.frame];   // FIXME: Handle padding, etc...
             [documentObject.managedObjectContext save:nil];
             
             [gestureRecognizer.view setNeedsLayout];

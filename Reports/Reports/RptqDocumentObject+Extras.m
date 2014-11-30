@@ -272,7 +272,7 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
         
         case MTDocumentObjectTypeGroupKey: {
-            NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
+            NSInteger groupNumber = self.isGroupKey.groupNumber.integerValue;
             NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: @(groupNumber)
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
@@ -365,8 +365,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     if ([self isEqual:sender]) {
         result = YES;
     } else {
-        RptqDocumentObject *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:((RptqDocumentObject *)sender).identifier];
     }
     return result;
 }
@@ -558,8 +557,8 @@ static NSNumberFormatter *currencyNumberFormatter;
     }
     
     NSNumber *baselineOffset = @(0.0000f);
-    NSNumber *underlineStyle = [[self underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    NSNumber *strikethroughStyle = [[self strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSNumber *underlineStyle = self.underline.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSNumber *strikethroughStyle = self.strike.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     return  @{
               NSFontAttributeName : customFont,
               NSBaselineOffsetAttributeName : baselineOffset,

@@ -287,7 +287,7 @@
     __block NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
     placement0Value = [NSValue valueWithCGPoint:CGPointZero];
     __block NSArray *allValidLocations = @[placement0Value];
-    BOOL directionIsHorizontal = [MADReportDesignerSectionElementLayoutManager directionIsHorizontal:direction];
+    BOOL directionIsHorizontal = MADDirectionIsHorizontal(direction);
     NSMutableArray *placemntValues = [[NSMutableArray alloc] initWithCapacity:4];
     [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
         
@@ -306,52 +306,44 @@
             
             if (directionIsHorizontal) {
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager horizontalDirectionOfPoint: placement0
-                                                                                        inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionHorizontalDirectionOfPoint(placement0, pushedItem.frame.origin)) {
                     placement0Value = [NSValue valueWithCGPoint: placement0];
                     [placemntValues addObject:placement0Value];
                 }
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager horizontalDirectionOfPoint: placement1
-                                                                                        inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionHorizontalDirectionOfPoint(placement1, pushedItem.frame.origin)) {
                     placement1Value = [NSValue valueWithCGPoint: placement1];
                     [placemntValues addObject:placement1Value];
                 }
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager horizontalDirectionOfPoint: placement2
-                                                                                        inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionHorizontalDirectionOfPoint(placement2, pushedItem.frame.origin)) {
                     placement2Value = [NSValue valueWithCGPoint: placement2];
                     [placemntValues addObject:placement2Value];
                 }
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager horizontalDirectionOfPoint: placement3
-                                                                                        inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionHorizontalDirectionOfPoint(placement3, pushedItem.frame.origin)) {
                     placement3Value = [NSValue valueWithCGPoint: placement3];
                     [placemntValues addObject:placement3Value];
                 }
                 
             } else {
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager verticalDirectionOfPoint: placement0
-                                                                                      inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionVerticalDirectionOfPoint(placement0, pushedItem.frame.origin)) {
                     placement0Value = [NSValue valueWithCGPoint: placement0];
                     [placemntValues addObject:placement0Value];
                 }
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager verticalDirectionOfPoint: placement1
-                                                                                      inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionVerticalDirectionOfPoint(placement1, pushedItem.frame.origin)) {
                     placement1Value = [NSValue valueWithCGPoint: placement1];
                     [placemntValues addObject:placement1Value];
                 }
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager verticalDirectionOfPoint: placement2
-                                                                                      inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionVerticalDirectionOfPoint(placement2, pushedItem.frame.origin)) {
                     placement2Value = [NSValue valueWithCGPoint: placement2];
                     [placemntValues addObject:placement2Value];
                 }
                 
-                if (direction == [MADReportDesignerSectionElementLayoutManager verticalDirectionOfPoint: placement3
-                                                                                      inRelationToPoint: pushedItem.frame.origin]) {
+                if (direction == MADDirectionVerticalDirectionOfPoint(placement3, pushedItem.frame.origin)) {
                     placement3Value = [NSValue valueWithCGPoint: placement3];
                     [placemntValues addObject:placement3Value];
                 }
@@ -370,37 +362,19 @@
     
 }
 
-+ (MADDirection)horizontalDirectionOfPoint:(CGPoint)p1 inRelationToPoint:(CGPoint)p2 {
-    return CGFloatCompare(p2.x, p1.x) ? noDirection : p2.x > p1.x ? left : right;
-}
-
-+ (MADDirection)verticalDirectionOfPoint:(CGPoint)p1 inRelationToPoint:(CGPoint)p2 {
-    return CGFloatCompare(p2.x, p1.x) ? noDirection : p2.y > p1.y ? down : up;
-}
-
-+ (BOOL)directionIsHorizontal:(MADDirection)direction {
-    return direction == left || direction == right;
-}
-
-+ (BOOL)directionIsVertical:(MADDirection)direction {
-    return direction == up || direction == down;
-}
-
 - (void)moveItem:(MADReportDesignerSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
        direction:(MADDirection)direction {
     CGPoint nearestPoint = CGPointZero;
-//    static CGFloat minDistanceToInvoikeAutoLayout = 13.0000f;
     CGFloat distanceToLastDropPoint = -1.0000f;
     BOOL foundNearDropPoint = NO;
     CGPoint currentPointOrigin = item.frame.origin;
     for (NSValue *pointObj in dropPoints) {
         CGPoint dropPoint = pointObj.CGPointValue;
         CGFloat distanceToDropPoint = CGDistance(dropPoint, currentPointOrigin);
-        MADDirection pointObjDirection = [MADReportDesignerSectionElementLayoutManager directionIsHorizontal:direction] ?
-                                            [MADReportDesignerSectionElementLayoutManager horizontalDirectionOfPoint: dropPoint
-                                                                                                   inRelationToPoint: currentPointOrigin] :
-                                            [MADReportDesignerSectionElementLayoutManager verticalDirectionOfPoint: dropPoint
-                                                                                                 inRelationToPoint: currentPointOrigin];
+        MADDirection pointObjDirection = MADDirectionIsHorizontal(direction) ?
+                                            MADDirectionHorizontalDirectionOfPoint(dropPoint, currentPointOrigin) :
+                                            MADDirectionVerticalDirectionOfPoint(dropPoint, currentPointOrigin);
+        
         if ((distanceToDropPoint <= distanceToLastDropPoint || foundNearDropPoint == NO) && direction == pointObjDirection)         //Not yet found
         {
             switch (pointObjDirection) {
