@@ -324,67 +324,67 @@
                 
                 if (documentObject != nil) {
                     
-                    if (![[documentObject fontname] isEqualToString:fontDisplayName]) {
-                        fontDisplayName = [documentObject fontname];
-                        fontSizeHolder = [[documentObject fontsize] floatValue];
+                    if (![documentObject.fontname isEqualToString:fontDisplayName]) {
+                        fontDisplayName = documentObject.fontname;
+                        fontSizeHolder = documentObject.fontsize.floatValue;
                         numberFonts++;
                     }
                     
-                    if (![[documentObject marginTop] isEqualToNumber:marginTopHolder] ) {
-                        marginTopHolder = [documentObject marginTop];
+                    if (![documentObject.marginTop isEqualToNumber:marginTopHolder] ) {
+                        marginTopHolder = documentObject.marginTop;
                         numberOfMarginTop++;
                     }
-                    if (![[documentObject marginBottom] isEqualToNumber:marginBottomHolder] ) {
-                        marginBottomHolder = [documentObject marginBottom];
+                    if (![documentObject.marginBottom isEqualToNumber:marginBottomHolder] ) {
+                        marginBottomHolder = documentObject.marginBottom;
                         numberOfMarginBottom++;
                     }
-                    if (![[documentObject marginLeft] isEqualToNumber:marginLeftHolder] ) {
-                        marginLeftHolder = [documentObject marginLeft];
+                    if (![documentObject.marginLeft isEqualToNumber:marginLeftHolder] ) {
+                        marginLeftHolder = documentObject.marginLeft;
                         numberOfMarginLeft++;
                     }
-                    if (![[documentObject marginRight] isEqualToNumber:marginRightHolder] ) {
-                        marginRightHolder = [documentObject marginRight];
+                    if (![documentObject.marginRight isEqualToNumber:marginRightHolder] ) {
+                        marginRightHolder = documentObject.marginRight;
                         numberOfMarginRight++;
                     }
-                    if (![[documentObject paddingTop] isEqualToNumber:paddingTopHolder] ) {
-                        paddingTopHolder = [documentObject paddingTop];
+                    if (![documentObject.paddingTop isEqualToNumber:paddingTopHolder] ) {
+                        paddingTopHolder = documentObject.paddingTop;
                         numberOfPaddingTop++;
                     }
-                    if (![[documentObject paddingBottom] isEqualToNumber:paddingBottomHolder] ) {
-                        paddingBottomHolder = [documentObject paddingBottom];
+                    if (![documentObject.paddingBottom isEqualToNumber:paddingBottomHolder] ) {
+                        paddingBottomHolder = documentObject.paddingBottom;
                         numberOfPaddingBottom++;
                     }
-                    if (![[documentObject paddingLeft] isEqualToNumber:paddingLeftHolder] ) {
-                        paddingLeftHolder = [documentObject paddingLeft];
+                    if (![documentObject.paddingLeft isEqualToNumber:paddingLeftHolder] ) {
+                        paddingLeftHolder = documentObject.paddingLeft;
                         numberOfPaddingLeft++;
                     }
-                    if (![[documentObject paddingRight] isEqualToNumber:paddingRightHolder] ) {
-                        paddingRightHolder = [documentObject paddingRight];
+                    if (![documentObject.paddingRight isEqualToNumber:paddingRightHolder] ) {
+                        paddingRightHolder = documentObject.paddingRight;
                         numberOfPaddingRight++;
                     }
                     
-                    if (![[documentObject sizewidth] isEqualToNumber:sizeWidthHolder] ) {
-                        sizeWidthHolder = [documentObject sizewidth];
+                    if (![documentObject.sizewidth isEqualToNumber:sizeWidthHolder] ) {
+                        sizeWidthHolder = documentObject.sizewidth;
                         numberOfSizeWidths++;
                     }
-                    if (![[documentObject sizeheight] isEqualToNumber:sizeHeightHolder] ) {
-                        sizeHeightHolder = [documentObject sizeheight];
+                    if (![documentObject.sizeheight isEqualToNumber:sizeHeightHolder] ) {
+                        sizeHeightHolder = documentObject.sizeheight;
                         numberOfSizeHeights++;
                     }
                     
-                    if (![[documentObject verticalAlignment] isEqualToNumber:verticalAlignmentHolder] ) {
-                        verticalAlignmentHolder = [documentObject verticalAlignment];
+                    if (![documentObject.verticalAlignment isEqualToNumber:verticalAlignmentHolder] ) {
+                        verticalAlignmentHolder = documentObject.verticalAlignment;
                         numberOfVerticalAlignments++;
                     }
-                    if (![[documentObject horizontalAlignment] isEqualToNumber:horizontalAlignmentHolder] ) {
-                        horizontalAlignmentHolder = [documentObject horizontalAlignment];
+                    if (![documentObject.horizontalAlignment isEqualToNumber:horizontalAlignmentHolder] ) {
+                        horizontalAlignmentHolder = documentObject.horizontalAlignment;
                         numberOfHorazontalAlignments++;
                     }
                     
-                    [[documentObject bold] boolValue] ? numberBold++ : numberNotBold++;
-                    [[documentObject underline] boolValue] ? numberUnderline++ : numberNotUnderline++;
-                    [[documentObject strike] boolValue] ? numberStrike++ : numberNotStrike++;
-                    [[documentObject italic] boolValue] ? numberItalic++ : numberNotItalic++;
+                    documentObject.bold.boolValue ? numberBold++ : numberNotBold++;
+                    documentObject.underline.boolValue ? numberUnderline++ : numberNotUnderline++;
+                    documentObject.strike.boolValue ? numberStrike++ : numberNotStrike++;
+                    documentObject.italic.boolValue ? numberItalic++ : numberNotItalic++;
                     
                 }
                 
@@ -396,44 +396,54 @@
             CGFloat labelSize = [UIFont systemFontSize];
             
             NSNumber *displayNumber = numberOfMarginTop == 1 ? marginTopHolder : nil;
-            [[self labelMarginTop] setAttributedText: [self marginTopForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperMarginTop] setValue:[marginTopHolder doubleValue]];
+            self.labelMarginTop.attributedText = [self marginTopForValue: displayNumber
+                                                             andFontSize: labelSize];
+            self.stepperMarginTop.value = marginTopHolder.doubleValue;
             
             displayNumber = numberOfMarginBottom == 1 ? marginBottomHolder : nil;
-            [[self labelMarginBottom] setAttributedText: [self marginBottomForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperMarginBottom] setValue:[marginBottomHolder doubleValue]];
+            self.labelMarginBottom.attributedText = [self marginBottomForValue: displayNumber
+                                                                   andFontSize: labelSize];
+            self.stepperMarginBottom.value = marginBottomHolder.doubleValue;
             
             displayNumber = numberOfMarginLeft == 1 ? marginLeftHolder : nil;
-            [[self labelMarginLeft] setAttributedText: [self marginLeftForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperMarginLeft] setValue:[marginLeftHolder doubleValue]];
+            self.labelMarginLeft.attributedText = [self marginLeftForValue: displayNumber
+                                                               andFontSize: labelSize];
+            self.stepperMarginLeft.value = marginLeftHolder.doubleValue;
             
             displayNumber = numberOfMarginRight == 1 ? marginRightHolder : nil;
-            [[self labelMarginRight] setAttributedText: [self marginRightForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperMarginRight] setValue:[marginRightHolder doubleValue]];
+            self.labelMarginRight.attributedText = [self marginRightForValue: displayNumber
+                                                                 andFontSize: labelSize];
+            self.stepperMarginRight.value = marginRightHolder.doubleValue;
             
             displayNumber = numberOfPaddingTop == 1 ? paddingTopHolder : nil;
-            [[self labelPaddingTop] setAttributedText: [self marginTopForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperPaddingTop] setValue:[paddingTopHolder doubleValue]];
+            self.labelPaddingTop.attributedText = [self marginTopForValue: displayNumber
+                                                              andFontSize: labelSize];
+            self.stepperPaddingTop.value = paddingTopHolder.doubleValue;
             
             displayNumber = numberOfPaddingBottom == 1 ? paddingBottomHolder : nil;
-            [[self labelPaddingBottom] setAttributedText: [self marginBottomForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperPaddingBottom] setValue:[paddingBottomHolder doubleValue]];
+            self.labelPaddingBottom.attributedText = [self marginBottomForValue: displayNumber
+                                                                    andFontSize: labelSize];
+            self.stepperPaddingBottom.value = paddingBottomHolder.doubleValue;
             
             displayNumber = numberOfPaddingLeft == 1 ? paddingLeftHolder : nil;
-            [[self labelPaddingLeft] setAttributedText: [self marginLeftForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperPaddingLeft] setValue:[paddingLeftHolder doubleValue]];
+            self.labelPaddingLeft.attributedText = [self marginLeftForValue: displayNumber
+                                                                andFontSize: labelSize];
+            self.stepperPaddingLeft.value = paddingLeftHolder.doubleValue;
             
             displayNumber = numberOfPaddingRight == 1 ? paddingRightHolder : nil;
-            [[self labelPaddingRight] setAttributedText: [self marginRightForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperPaddingRight] setValue:[paddingRightHolder doubleValue]];
+            self.labelPaddingRight.attributedText = [self marginRightForValue: displayNumber
+                                                                  andFontSize: labelSize];
+            self.stepperPaddingRight.value = paddingRightHolder.doubleValue;
             
             displayNumber = numberOfSizeHeights == 1 ? sizeHeightHolder : nil;
-            [self.labelSizeHeight setAttributedText:[self sizeHeightForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperSizeHeight] setValue:[sizeHeightHolder doubleValue]];
+            self.labelSizeHeight.attributedText = [self sizeHeightForValue: displayNumber
+                                                               andFontSize: labelSize];
+            self.stepperSizeHeight.value = sizeHeightHolder.doubleValue;
             
             displayNumber = numberOfSizeWidths == 1 ? sizeWidthHolder : nil;
-            [self.labelSizeWidth setAttributedText:[self sizeWidthForValue:displayNumber andFontSize:labelSize]];
-            [[self stepperSizeWidth] setValue:[sizeWidthHolder doubleValue]];
+            self.labelSizeWidth.attributedText = [self sizeWidthForValue: displayNumber
+                                                             andFontSize: labelSize];
+            self.stepperSizeWidth.value = sizeWidthHolder.doubleValue;
             
             switch (numberFonts) {
                 case 0:
@@ -495,10 +505,14 @@
             [self.segmentedControlVerticalAlignment setUserInteractionEnabled:YES];
             
         }
-        [self setStateInControl:self.buttonBold forState:[self controlStateBold]];
-        [self setStateInControl:self.buttonItalic forState:[self controlStateItalic]];
-        [self setStateInControl:self.buttonStrike forState:[self controlStateStrike]];
-        [self setStateInControl:self.buttonUnderline forState:[self controlStateUnderline]];
+        [self setStateInControl: self.buttonBold
+                       forState: self.controlStateBold];
+        [self setStateInControl: self.buttonItalic
+                       forState: self.controlStateItalic];
+        [self setStateInControl: self.buttonStrike
+                       forState: self.controlStateStrike];
+        [self setStateInControl: self.buttonUnderline
+                       forState: self.controlStateUnderline];
     }
 }
 
@@ -576,7 +590,8 @@
 
 - (NSAttributedString *)stringForSubject:(NSString *)subject value:(NSString *)value andFontSize:(CGFloat)pointSize {
     NSAttributedString *boldSubject = [self boldSystemString:subject ofSize:pointSize];
-    NSAttributedString *normalValue = [self systemString:[@" " stringByAppendingString:value] ofSize:pointSize];
+    NSAttributedString *normalValue = [self systemString: [@" " stringByAppendingString:value]
+                                                  ofSize: pointSize];
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithAttributedString:boldSubject];
     [result appendAttributedString:normalValue];
     return result;
@@ -750,11 +765,11 @@
     
     if ([sender isEqual:self.stepperFontSize]) {
         NSNumber *value = @([self.stepperFontSize value]);
-        [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[value floatValue]]];
-        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        self.labelFontSize.attributedText = [self fontSizeStringForSizeInPoints:value.floatValue];
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
-            [documentObject setFontsize:value];
+            documentObject.fontsize = value;
             [documentObject saveContext];
         }
 
@@ -816,7 +831,7 @@
 
     } else if ([sender isEqual:[self stepperPaddingLeft]]) {
         NSNumber *value = @([[self stepperPaddingLeft] value]);
-        [[self labelPaddingLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelPaddingLeft] font] pointSize]]];
+        [self.labelPaddingLeft setAttributedText:[self marginLeftForValue:value andFontSize:[[self.labelPaddingLeft font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -826,7 +841,7 @@
 
     } else if ([sender isEqual:[self stepperPaddingRight]]) {
         NSNumber *value = @([[self stepperPaddingRight] value]);
-        [[self labelPaddingRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelPaddingRight] font] pointSize]]];
+        [self.labelPaddingRight setAttributedText:[self marginRightForValue:value andFontSize:[[self.labelPaddingRight font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -874,17 +889,20 @@
             [documentObject saveContext];
         }
 
-    } else if ([sender isEqual:[self stepperMarginRight]]) {
-        NSNumber *value = @([[self stepperMarginRight] value]);
-        [[self labelMarginRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelMarginRight] font] pointSize]]];
-        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+    } else if ([sender isEqual:self.stepperMarginRight]) {
+        
+        NSNumber *value = @(self.stepperMarginRight.value);
+        self.labelMarginRight.attributedText = [self marginRightForValue: value
+                                                             andFontSize: self.labelMarginRight.font.pointSize];
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
             [documentObject setMarginRight:value];
             [documentObject saveContext];
         }
+        
     }
-    [self.document saveContext];
+    //[self.document saveContext];
 }
 
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {

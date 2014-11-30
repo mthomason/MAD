@@ -699,7 +699,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
             layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
             layout.objectID = object.objectID;
-            layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue, object.sizewidth.floatValue, object.sizeheight.floatValue);
+            CGSize size = object.size;
+            layout.frame = CGRectMake(object.originx.floatValue,
+                                      object.originy.floatValue,
+                                      size.width,
+                                      size.height);
             [layoutManager addItem:layout];
             itemCounter++;
         }
@@ -746,8 +750,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
     documentObject.originx = @(attributes.frame.origin.x);
     documentObject.originy = @(attributes.frame.origin.y);
-    documentObject.sizewidth = @(attributes.frame.size.width);
-    documentObject.sizeheight = @(attributes.frame.size.height);
+    //documentObject.sizewidth = @(attributes.frame.size.width);
+    //documentObject.sizeheight = @(attributes.frame.size.height);
     [objectContext save:nil];
 
 }
@@ -2266,8 +2270,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
         documentObject.originx = @(attributes.frame.origin.x);
         documentObject.originy = @(attributes.frame.origin.y);
-        documentObject.sizewidth = @(attributes.frame.size.width);
-        documentObject.sizeheight = @(attributes.frame.size.height);
+        //documentObject.sizewidth = @(attributes.frame.size.width);
+        //documentObject.sizeheight = @(attributes.frame.size.height);
     }
     [objectContext save:nil];
 }
@@ -2892,11 +2896,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                     la.objectID = objectId;
                     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                                   managedObjectContext: managedObjectContext];
+                    CGSize size = documentObject.size;
                     
                     la.frame = CGRectMake(frame.origin.x,
                                           frame.origin.y,
-                                          documentObject.sizewidth.floatValue,
-                                          documentObject.sizeheight.floatValue);
+                                          size.width,
+                                          size.height);
                     [layoutManager addItem:la];
                     [layoutManager layout];
                     NSArray *indexPathsInserted = @[path];
