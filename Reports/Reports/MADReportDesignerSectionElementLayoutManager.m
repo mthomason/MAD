@@ -37,10 +37,39 @@
 
 - (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item {
 
-    
     [self appendItemToItems:item];
+    [self positionItem:item];
+    
     self.lastOpperationWasAdditon = YES;
 
+}
+
+- (void)positionItem:(MADReportDesignerSectionLayoutAttributes *)item {
+    NSArray *allPotentalDropPoints = [MADReportDesignerSectionElementLayoutManager allValidLocationsForAttributes:item withAttributes:self.items.allValues];
+    [self moveItem:item toNearestPointInGroup:allPotentalDropPoints];
+}
+
+- (void)moveItem:(MADReportDesignerSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints {
+    CGPoint nearestPoint = CGPointZero;
+    static CGFloat minDistanceToInvoikeAutoLayout = 13.0000f;
+    CGFloat distanceToLastDropPoint = 13.0000f;
+    BOOL foundNearDropPoint = NO;
+    for (NSValue *pointObj in dropPoints) {
+        CGPoint dropPoint = pointObj.CGPointValue;
+        CGFloat distanceToDropPoint = CGDistance(dropPoint, item.frame.origin);
+        if ((distanceToDropPoint <= minDistanceToInvoikeAutoLayout &&
+                distanceToDropPoint <= distanceToLastDropPoint &&
+                distanceToLastDropPoint > CGSizeZero.width))                                       //Not yet found
+        {
+            
+            nearestPoint = dropPoint;
+            foundNearDropPoint = YES;
+            distanceToLastDropPoint = distanceToDropPoint;
+        }
+    }
+    if (foundNearDropPoint) {
+        item.frame = CGRectMake(nearestPoint.x, nearestPoint.y, item.frame.size.width, item.frame.size.height);
+    }
 }
 
 - (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
@@ -409,7 +438,7 @@
 
 - (NSArray *)allValidLocationsForLastItem {
     CGFloat x1, x2, y1, y2;
-    CGRect placement0, placement1, placement2, placement3;
+    CGPoint placement0, placement1, placement2, placement3;
     NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
     NSArray *allValidLocations = @[];
     NSArray *potentialPlacements = @[];
@@ -425,15 +454,54 @@
             y1 = layout.frame.origin.y;
             y2 = layout.frame.origin.y + layout.frame.size.height;
             
-            placement0 = CGRectMake(x1, y1, layout.frame.size.width, layout.frame.size.height);
-            placement1 = CGRectMake(x2, y1, layout.frame.size.width, layout.frame.size.height);
-            placement2 = CGRectMake(x2, y2, layout.frame.size.width, layout.frame.size.height);
-            placement3 = CGRectMake(x1, y2, layout.frame.size.width, layout.frame.size.height);
+            placement0 = CGPointMake(x1, y1);
+            placement1 = CGPointMake(x2, y1);
+            placement2 = CGPointMake(x2, y2);
+            placement3 = CGPointMake(x1, y2);
             
-            placement0Value = [NSValue valueWithCGRect: placement0];
-            placement1Value = [NSValue valueWithCGRect: placement1];
-            placement2Value = [NSValue valueWithCGRect: placement2];
-            placement3Value = [NSValue valueWithCGRect: placement3];
+            placement0Value = [NSValue valueWithCGPoint: placement0];
+            placement1Value = [NSValue valueWithCGPoint: placement1];
+            placement2Value = [NSValue valueWithCGPoint: placement2];
+            placement3Value = [NSValue valueWithCGPoint: placement3];
+            
+            potentialPlacements = @[placement0Value,
+                                    placement1Value,
+                                    placement2Value,
+                                    placement3Value];
+            
+            allValidLocations = [allValidLocations arrayByAddingObjectsFromArray:potentialPlacements];
+        }
+    }
+    return allValidLocations;
+}
+
++ (NSArray *)allValidLocationsForAttributes: (MADReportDesignerSectionLayoutAttributes *)attribute
+                             withAttributes: (NSArray *)attributes {
+    CGFloat x1, x2, y1, y2;
+    CGPoint placement0, placement1, placement2, placement3;
+    NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
+    placement0Value = [NSValue valueWithCGPoint:CGPointZero];
+    NSArray *allValidLocations = @[placement0Value];
+    NSArray *potentialPlacements = @[];
+    MADReportDesignerSectionLayoutAttributes *layout;
+    for (layout in attributes) {
+        if (attribute != layout) {
+            
+            //There exist four potental placement spots for each alredy placed rect
+            x1 = layout.frame.origin.x;
+            x2 = layout.frame.origin.x + layout.frame.size.width;
+            y1 = layout.frame.origin.y;
+            y2 = layout.frame.origin.y + layout.frame.size.height;
+            
+            placement0 = CGPointMake(x1, y1);
+            placement1 = CGPointMake(x2, y1);
+            placement2 = CGPointMake(x2, y2);
+            placement3 = CGPointMake(x1, y2);
+            
+            placement0Value = [NSValue valueWithCGPoint: placement0];
+            placement1Value = [NSValue valueWithCGPoint: placement1];
+            placement2Value = [NSValue valueWithCGPoint: placement2];
+            placement3Value = [NSValue valueWithCGPoint: placement3];
             
             potentialPlacements = @[placement0Value,
                                     placement1Value,
@@ -448,7 +516,7 @@
 
 - (NSArray *)allValidLocations {
     CGFloat x1, x2, y1, y2;
-    CGRect placement0, placement1, placement2, placement3;
+    CGPoint placement0, placement1, placement2, placement3;
     NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
     NSArray *allValidLocations = @[];
     NSArray *potentialPlacements = @[];
@@ -462,15 +530,15 @@
         y1 = layout.frame.origin.y;
         y2 = layout.frame.origin.y + layout.frame.size.height;
         
-        placement0 = CGRectMake(x1, y1, layout.frame.size.width, layout.frame.size.height);
-        placement1 = CGRectMake(x2, y1, layout.frame.size.width, layout.frame.size.height);
-        placement2 = CGRectMake(x2, y2, layout.frame.size.width, layout.frame.size.height);
-        placement3 = CGRectMake(x1, y2, layout.frame.size.width, layout.frame.size.height);
+        placement0 = CGPointMake(x1, y1);
+        placement1 = CGPointMake(x2, y1);
+        placement2 = CGPointMake(x2, y2);
+        placement3 = CGPointMake(x1, y2);
         
-        placement0Value = [NSValue valueWithCGRect: placement0];
-        placement1Value = [NSValue valueWithCGRect: placement1];
-        placement2Value = [NSValue valueWithCGRect: placement2];
-        placement3Value = [NSValue valueWithCGRect: placement3];
+        placement0Value = [NSValue valueWithCGPoint: placement0];
+        placement1Value = [NSValue valueWithCGPoint: placement1];
+        placement2Value = [NSValue valueWithCGPoint: placement2];
+        placement3Value = [NSValue valueWithCGPoint: placement3];
         
         potentialPlacements = @[placement0Value,
                                 placement1Value,
@@ -489,20 +557,22 @@
 
 - (CGPoint)pointNearestDropPoint: (CGPoint)dropPoint
                  fromValidPoints: (NSArray *)validLocations {
+    
     CGPoint nearestPoint = dropPoint;
     CGFloat distance = CGSizeZero.width;
     CGFloat d2;
     NSValue *value;
-    CGRect frame;
+    CGPoint point;
     for (value in validLocations) {
-        frame = [value CGRectValue];
-        d2 = CGDistance(dropPoint, frame.origin);
+        point = [value CGPointValue];
+        d2 = CGDistance(dropPoint, point);
         if (d2 < distance) {
             distance = d2;
             nearestPoint = dropPoint;
         }
     }
     return nearestPoint;
+    
 }
 
 @end
