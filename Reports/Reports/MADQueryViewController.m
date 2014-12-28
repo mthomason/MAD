@@ -611,7 +611,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 #pragma mark - MTQueryBuilderAddTableDelegate
 
-- (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectId {
+- (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable {
     UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
         [weakself enableTabBarItems];
@@ -628,7 +628,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSArray *oldLayoutSectionTypes = oldLayout[MTTableSectionSectionsKey];
 
     // Add new table to the query
-    [reportDocument addQuerySelectSchemeTable:objectId];
+    [reportDocument addQuerySelectSchemeTable:schemaTable];
     
     // Account for new sections in the query builder.
     NSDictionary *newLayout = [self datamodel];

@@ -62,17 +62,6 @@
     return (RptqQueryTable *)[managedObjectContext objectRegisteredForID:objectID];
 }
 
-
-+ (instancetype)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table {
-     RptqDatabase *database = [table inDatabase];
-     RptqDocument *document = [database ownedByQueryAsStaticResource];
-     RptqQuery *query = [database.hasQueries anyObject];
-    
-    RptqQueryTable *newQueryTable = [query addQueryTableBasedOnSchemaTable:table];
-     return newQueryTable;
- }
- 
-
 + (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
                                            database:(RptqDatabase *)database {
 

@@ -26,7 +26,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MADTrademark;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
-        MTDataTable, MTQuery, MTActivityIndicator, NSManagedObjectID;
+        MTDataTable, MTQuery, MTActivityIndicator, RptqDatabaseSchemaTable, NSManagedObjectID;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
@@ -81,7 +81,7 @@ extern NSString * const MADTrademark;
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
                        andSortOrder:(MNSSortOrder)sortOrder;
 
-- (void)addQuerySelectSchemeTable:(NSManagedObjectID *)schemaTableObjectID;
+- (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable;
 
 @end
 

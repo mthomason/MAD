@@ -15,7 +15,6 @@
 
 + (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
                                            database:(RptqDatabase *)database;
-+ (instancetype)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table;
 + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)queryAlias;

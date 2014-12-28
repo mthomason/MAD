@@ -502,19 +502,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark - Reporting Functions
 #pragma mark Query Building
 
-- (void)addQuerySelectSchemeTable:(NSManagedObjectID *)schemaTableObjectID {
-    
-    
-    NSIndexSet *indexSetSections = nil;
-    
+- (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable {
     RptqDocument *document = [self activeDocumentModel];
-    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
-    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
-        
-    RptqDatabaseSchemaTable *table = (RptqDatabaseSchemaTable *)[managedObjectContext objectWithID:schemaTableObjectID];
-    [RptqQueryTable queryTableWithSchemaTable:table];
-    
+    RptqQuery *query = [document defaultQuery];
+    [query addQueryTableBasedOnSchemaTable:schemaTable];
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
