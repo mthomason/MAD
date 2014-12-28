@@ -2620,18 +2620,29 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     __weak MADDesignerViewController *reportDesigner = self;
     __weak UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
-    
+    __weak MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[detailSection.objectIdTag];
+
     [detailSection performBatchUpdates:^{
-        
+
         RptqDocumentObject *documentObject = [document addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
         reportDesigner.objectIdJustDisplayed = documentObject.objectID;
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: 0
-                                                     inSection: 0];
+
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: layoutManager.items.count
+                                                inSection: 0];
+        MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+        la.objectID = documentObject.objectID;
+        la.frame = CGRectMake(documentObject.originx.floatValue,
+                              documentObject.originy.floatValue,
+                              documentObject.size.width,
+                              documentObject.size.height);
+        [layoutManager addItem:la];
+        [layoutManager layout];
+
         NSArray *indexPaths = @[indexPath];
         [detailSection insertItemsAtIndexPaths:indexPaths];
-        [documentObject saveContext];
+        NSError *error = nil;
+        [reportDesigner.document.managedObjectContext save:&error];
         
     } completion:^(BOOL finished) {
         
@@ -3802,9 +3813,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     MTQueryBuilderChooseFieldViewController *dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)viewController;
     RptqQueryField *queryField = [dynamicFieldController queryField];
-    [self insertDocumentObjectWithDefination:
-     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-       MTDocumentObjectDefinationObject : [queryField objectID]}];
+    NSDictionary *definations = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+                                  MTDocumentObjectDefinationObject : queryField.objectID};
+    [self insertDocumentObjectWithDefination: definations];
     
     [self scrollToDetailSectionView];
 }

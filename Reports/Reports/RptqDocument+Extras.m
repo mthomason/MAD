@@ -111,7 +111,7 @@
 }
 
 - (RptqDatabase *)defaultDatabase {
-    return [[self hasDatabaseSchemas] anyObject];
+    return self.hasDatabaseSchemas.anyObject;
 }
 
 - (RptqQuery *)defaultQuery {
