@@ -15,24 +15,36 @@
 
 #import "MTDatabaseField.h"
 #import "MTDatabase.h"
+
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
+
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+
 #import "RptqQuery.h"
+
 #import "RptqQueryGroup.h"
+
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+
 #import "RptqDatabaseSchemaTable.h"
+
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
+
 #import "RptqDatabase.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
+
 #import "MADSortOrder.h"
 
 @implementation RptqQuery (Extras)
@@ -235,6 +247,29 @@
         }
     }
     return sortedSortDescriptorsGroup;
+}
+
+- (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable {
+    NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[self hasQueryTables]];
+    RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable: schemaTable
+                                                                           database: self.inDatabase];
+    NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[schemaTable hasFields] count]];
+    for (RptqDatabaseSchemaField *field in [schemaTable hasFields]) {
+        @autoreleasepool {
+            RptqQueryField *newQueryField = [RptqQueryField queryFieldFactory:[schemaTable managedObjectContext]];
+            [newQueryField setInQueryTable:newQueryTable];
+            [newQueryField setDatabaseSchemaField:field];
+            [newQueryTable setInQuery:self];
+            [newQueryFields addObject:newQueryField];
+        }
+    }
+    [newQueryTable setHasQueryFields:newQueryFields];
+    [tablesInQuery addObject:newQueryTable];
+    
+    [self setHasQueryTables:tablesInQuery];
+    [schemaTable.managedObjectContext save:nil];
+    
+    return newQueryTable;
 }
 
 #pragma mark - MTProtocolCompare

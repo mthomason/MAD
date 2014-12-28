@@ -16,6 +16,7 @@
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"
 #import "MADActivityProtocol.h"
+#import "MADSortOrder.h"
 
 extern NSString * const MADMimeType;
 extern NSString * const MTReportSectionType;
@@ -25,7 +26,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MADTrademark;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
-        MTDataTable, MTQuery, MTActivityIndicator;
+        MTDataTable, MTQuery, MTActivityIndicator, NSManagedObjectID;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
@@ -35,6 +36,7 @@ extern NSString * const MADTrademark;
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) RptqDocument *document;
+
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
 @property (nonatomic, strong, readonly) MTQuery *mainQuery;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
@@ -54,6 +56,7 @@ extern NSString * const MADTrademark;
 - (void)addConnection:(MTDatabaseConnection *)connection
                status:(void (^)(NSString *status, CGFloat progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
+
 - (void)regenThumbnailWithTraits:(UITraitCollection *)traits;
 
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
@@ -63,8 +66,9 @@ extern NSString * const MADTrademark;
 
 - (NSURL *)cachedDataUrl;
 
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 - (UIImage *)fullyRenderedThumbnail;
+
++ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
@@ -73,6 +77,11 @@ extern NSString * const MADTrademark;
 - (void)prepareForQuery;
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
+
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
+                       andSortOrder:(MNSSortOrder)sortOrder;
+
+- (void)addQuerySelectSchemeTable:(NSManagedObjectID *)schemaTableObjectID;
 
 @end
 

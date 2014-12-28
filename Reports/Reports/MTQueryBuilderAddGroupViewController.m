@@ -130,11 +130,13 @@
 #pragma mark - Actions
 
 - (IBAction)cancel:(id)sender {
-    [self.delegate viewControllerDidCancel:self];
+    [self.delegate viewControllerDidCancel: self];
 }
 
 - (IBAction)save:(id)sender {
-    [self.delegate addQueryGroupWithQueryField:[self fieldId] andSortOrder:[self sortOrder]];
+    // FIXME: No validation???
+    [self.delegate addQueryGroupWithQueryField: self.fieldId
+                                  andSortOrder: self.sortOrder];
 }
 
 #pragma mark - Table View Sort Type Delegate

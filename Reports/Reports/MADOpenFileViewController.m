@@ -1202,7 +1202,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     MTApplicationInstance *app = [AppDelegate app];
     
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    app.openFiles.openDocument = document;
+    app.fileManager.openDocument = document;
     __weak MTApplicationInstance *weakapp = app;
     [self displaySavingReportActivityIndicator];
     
@@ -1380,7 +1380,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     } else {
         
         MTApplicationInstance *app = [AppDelegate app];
-        NSComparisonResult comparionResult = [app.openFiles.openUrl.lastPathComponent caseInsensitiveCompare: url.lastPathComponent];
+        NSComparisonResult comparionResult = [app.fileManager.openUrl.lastPathComponent caseInsensitiveCompare: url.lastPathComponent];
         if (comparionResult == NSOrderedSame) {
             [cell.activityIndicator startAnimating];
         } else {
@@ -1469,7 +1469,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
         NSURL *visibleUrl = [self documentForIndexPath:path];
         MTApplicationInstance *app = [AppDelegate app];
-        BOOL animate = [app.openFiles.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
+        BOOL animate = [app.fileManager.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
         if (animate) {
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
             if (cell != nil) {

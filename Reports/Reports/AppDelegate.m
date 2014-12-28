@@ -269,9 +269,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MADocument *documentReport = [self.applicationInstance currentdocappinst];
-    [documentReport saveToURL: documentReport.fileURL
-             forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
+    MADocument *documentReport = [self.applicationInstance openDocument];
+    if (documentReport != nil) {
+        [documentReport saveToURL: documentReport.fileURL
+                 forSaveOperation: UIDocumentSaveForOverwriting
+                completionHandler: nil];
+    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
@@ -401,7 +404,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.applicationInstance.openFiles.openUrl.path.lastPathComponent
+    [userDefaults setObject:self.applicationInstance.fileManager.openUrl.path.lastPathComponent
                      forKey:@"MADStateRestorationOpenFileWithExtension"];
     [userDefaults synchronize];
     

@@ -39,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.281";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.281";
-NSString * const MTGlobalBundleRev                                  = @"1656";
+NSString * const MTGlobalBundleVersion                              = @"7.0.282";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.282";
+NSString * const MTGlobalBundleRev                                  = @"1657";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -60,8 +60,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 @property (nonatomic, strong, readwrite) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
-@property (nonatomic, strong) NSMutableDictionary *documents;   //MADocument stored by their NSURLS
-@property (nonatomic, strong, readwrite) MADFileManager *openFiles;
+//@property (nonatomic, strong) NSMutableDictionary *documents;   //MADocument stored by their NSURLS
+@property (nonatomic, strong, readwrite) MADFileManager *fileManager;
 
 
 @end
@@ -89,7 +89,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     if (self) {
         
         MADFileManager *openFiles = [MADFileManager new];
-        self.openFiles = openFiles;
+        self.fileManager = openFiles;
 
         MTUser *user = [[MTUser alloc] init];
         self.user = user;
@@ -105,8 +105,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
         NSCAssert([[MTApplicationInstance bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
         
-        NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
-        self.documents = documents;
+//        NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
+//        self.documents = documents;
         
     }
     return self;
@@ -160,16 +160,6 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
-}
-
-- (MADocument *)currentdocappinst {
-    MADocument *result = nil;
-    if ([self reportState] == MTReportStateOpen) {
-        NSDictionary *documents = [self documents];
-        NSURL *currentUrl = [self currentDocument];
-        result = documents[currentUrl];
-    }
-    return result;
 }
 
 + (BOOL)isMadViewer {
@@ -464,7 +454,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
                     [activeDocument closeWithCompletionHandler:^(BOOL success) {
                         if (success) {
                             weakself.reportState = MTReportStateClosed;
-                            [weakself.openFiles removeDocumentWithUrl:weakself.openFiles.openUrl];
+                            [weakself.fileManager removeDocumentWithUrl:weakself.fileManager.openUrl];
                         }
                         completionHandler(success);
                     }];
@@ -478,7 +468,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 - (MADocument *)openDocument {
     MADocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
-        result = (MADocument *)self.openFiles.openDocument;
+        result = (MADocument *)self.fileManager.openDocument;
     }
     return result;
 }

@@ -34,9 +34,7 @@ extern NSString * const MTGlobalBundleRev;
 @property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
 
-@property (nonatomic, strong, readonly) MADFileManager *openFiles;
-
-- (MADocument *)currentdocappinst;
+@property (nonatomic, strong, readonly) MADFileManager *fileManager;
 
 - (void)initalizeAppearance;
 - (void)registerDefaultsFromSettingsBundle;

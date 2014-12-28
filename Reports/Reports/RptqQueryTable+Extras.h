@@ -9,10 +9,12 @@
 #import "RptqQueryTable.h"
 #import "MTProtocolCompare.h"
 
-@class RptqDocument, RptqDatabaseSchemaTable, NSManagedObjectID;
+@class RptqDocument, RptqDatabase, RptqDatabaseSchemaTable, NSManagedObjectID;
 
 @interface RptqQueryTable (Extras) <MTProtocolCompare>
 
++ (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+                                           database:(RptqDatabase *)database;
 + (instancetype)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table;
 + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

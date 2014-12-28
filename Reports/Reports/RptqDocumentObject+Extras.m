@@ -220,8 +220,8 @@ static NSNumberFormatter *currencyNumberFormatter;
     CGFloat paddingBoundsSizeWidth = self.paddingLeft.floatValue + self.paddingRight.floatValue + self.sizewidth.floatValue;
     CGFloat paddingBoundsSizeHeight = self.paddingTop.floatValue + self.paddingBottom.floatValue + self.sizeheight.floatValue;
     CGRect paddingViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
-    CGFloat originX = CGPointZero.x + [[self marginLeft] floatValue];
-    CGFloat originY = CGPointZero.y + [[self marginTop] floatValue];
+    CGFloat originX = CGPointZero.x + self.marginLeft.floatValue;
+    CGFloat originY = CGPointZero.y + self.marginTop.floatValue;
     CGFloat sizeWidth = paddingViewBounds.size.width;
     CGFloat sizeHeight = paddingViewBounds.size.height;
     return CGRectMake(originX, originY, sizeWidth, sizeHeight);
@@ -256,7 +256,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 
     NSString *result = nil;
     
-    switch ([self getType]) {
+    switch (self.type.integerValue) {
     
         case MTDocumentObjectTypeAggregate: {
             result = [[self isAggregate] designerRepresentationText];

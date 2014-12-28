@@ -596,14 +596,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         //@autoreleasepool {
         
-        MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] init];
-        
-        
-        
-        
-            
-            
-        
+            MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] init];
         
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
 
@@ -2891,7 +2884,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                     
                     MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[sectionView.objectIdTag];
                     
-                    NSIndexPath *path = [NSIndexPath indexPathForItem:layoutManager.items.count inSection:0];
+                    NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count
+                                                            inSection: 0];
                     MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
                     la.objectID = objectId;
                     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
@@ -2906,16 +2900,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                     [layoutManager layout];
                     NSArray *indexPathsInserted = @[path];
 
-                    
-                    
                     [weakGestureRecognizerView removeFromSuperview];
-                    
-//                    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-//                                                                                  managedObjectContext: managedObjectContext];
                     
                     [documentSection addDocumentObject: documentObject
                                          withDropPoint: frame.origin];
-                    [weakSectionView insertItemsAtIndexPaths:indexPathsInserted];
+                    [weakSectionView insertItemsAtIndexPaths: indexPathsInserted];
                     [documentSection.managedObjectContext save:nil];
                     
                 } completion:^(BOOL finished) {

@@ -14,10 +14,16 @@
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+
+#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+
 #import "RptqDatabaseSchemaTable.h"
 
 @implementation RptqQueryTable (Extras)
@@ -61,33 +67,16 @@
      RptqDatabase *database = [table inDatabase];
      RptqDocument *document = [database ownedByQueryAsStaticResource];
      RptqQuery *query = [database.hasQueries anyObject];
-     NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
-     
-     RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable:table document:document];
-     
-     NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
-     for (RptqDatabaseSchemaField *field in [table hasFields]) {
-         @autoreleasepool {
-             RptqQueryField *newQueryField = [RptqQueryField queryFieldFactory:[table managedObjectContext]];
-             [newQueryField setInQueryTable:newQueryTable];
-             [newQueryField setDatabaseSchemaField:field];
-             [newQueryTable setInQuery:query];
-             [newQueryFields addObject:newQueryField];
-         }
-     }
-     [newQueryTable setHasQueryFields:newQueryFields];
-     [tablesInQuery addObject:newQueryTable];
-     
-     [query setHasQueryTables:tablesInQuery];
-     [[table managedObjectContext] save:nil];
-     
+    
+    RptqQueryTable *newQueryTable = [query addQueryTableBasedOnSchemaTable:table];
      return newQueryTable;
  }
  
 
-+ (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable document:(RptqDocument *)document {
++ (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+                                           database:(RptqDatabase *)database {
 
-    RptqDatabase *database = [document defaultDatabase];
+    //RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     
     NSSet *queryTables = [query hasQueryTables];

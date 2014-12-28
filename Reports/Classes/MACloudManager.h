@@ -98,7 +98,8 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 // Managing the cache
 - (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;
 - (NSUInteger)numberOfDocuments:(MACloudManagerSection)section;
-- (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location inSection:(MACloudManagerSection)section;
+- (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location
+                                 inSection:(MACloudManagerSection)section;
 
 - (void)reloadCacheCloud:(NSString *)searchString;
 - (void)reloadCacheLocal:(NSString *)searchString;

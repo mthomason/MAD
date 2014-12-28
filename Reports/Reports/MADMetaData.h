@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MADSortOrder_h
-#define MAD_MADSortOrder_h
+#ifndef MAD_MADMetaData_h
+#define MAD_MADMetaData_h
 
 #import <Foundation/Foundation.h>
 

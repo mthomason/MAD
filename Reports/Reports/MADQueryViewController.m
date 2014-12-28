@@ -596,20 +596,15 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 #pragma mark - MTQueryBuilderAddGroupDelegate
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldId andSortOrder:(MNSSortOrder)sortOrder {
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID
+                       andSortOrder:(MNSSortOrder)sortOrder {
+    
     UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
         [weakself enableTabBarItems];
     }];
 
-    RptqDocument *document = [self.document activeDocumentModel];
-    NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
-    RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID:queryFieldId managedObjectContext:managedObjectContext];
-    RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
-    [query addHasQueryGroupsObject: queryGroup];
-    [self.document saveContext];
+    [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];
     
     [self performFetchGroups];
 }
@@ -627,33 +622,20 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSIndexSet *indexSetSections = nil;
 
     MADocument *reportDocument = self.document;
-    
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    RptqDocument *document = [reportDocument activeDocumentModel];
-    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
 
+    // Get old layout
     NSDictionary *oldLayout = [self datamodel];
     NSArray *oldLayoutSectionTypes = oldLayout[MTTableSectionSectionsKey];
-    
-    RptqDatabaseSchemaTable *table = (RptqDatabaseSchemaTable *)[managedObjectContext objectWithID:objectId];
-    RptqQueryTable *newQueryTable = [RptqQueryTable queryTableWithSchemaTable:table];
-    
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *queryTablesArray = [[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]];
 
-    NSUInteger indexCounter = 0;
-    for (RptqQueryTable *queryTable in queryTablesArray) {
-        if ([[queryTable alias] compare:[newQueryTable alias]] == NSOrderedAscending) {
-            indexCounter++;
-        }
-    }
+    // Add new table to the query
+    [reportDocument addQuerySelectSchemeTable:objectId];
     
+    // Account for new sections in the query builder.
     NSDictionary *newLayout = [self datamodel];
     NSArray *newLayoutSectionTypes = newLayout[MTTableSectionSectionsKey];
 
-    if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
-        if ([oldLayoutSectionTypes count] < [newLayoutSectionTypes count]) { //add sections
+    if (oldLayoutSectionTypes.count != newLayoutSectionTypes.count) {
+        if (oldLayoutSectionTypes.count < newLayoutSectionTypes.count) { //add sections
             //Constrained that it only will work when sections being added in an index set, or next to each other.
             NSInteger secctr = 0;
             BOOL startIndexSet = NO;
@@ -684,25 +666,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             }
         }
     }
-    if (indexSetSections != nil) {
-        
-        //[self.tableView beginUpdates];
-        //[self.tableView insertRowsAtIndexPaths: @[insertedRowIndexPath]
-        //                        withRowAnimation: UITableViewRowAnimationAutomatic];
-        //[self.tableView insertSections: indexSetSections
-        //                withRowAnimation: UITableViewRowAnimationAutomatic];
-//        NSError *error = nil;
-        [document saveContext];
-        
-    } else {
-        
-        //[self.tableView beginUpdates];
-        //[self.tableView insertRowsAtIndexPaths: @[insertedRowIndexPath]
-        //                        withRowAnimation: UITableViewRowAnimationAutomatic];
-        NSError *error = nil;
-        [document.managedObjectContext save:&error];
-       // [self.tableView endUpdates];
-    }
+    
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
     [self performFetchTables];

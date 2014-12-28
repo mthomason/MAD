@@ -12,7 +12,7 @@
 #import "RptqQuery.h"
 #import "MTProtocolCompare.h"
 
-@class RptqDocument, MTDatabase, RptqDocumentSection;
+@class RptqDocument, MTDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 
@@ -23,6 +23,7 @@
 - (void)deleteQueryGroupAtIndex:(NSInteger)index;
 - (NSUInteger)numberOfTables;
 - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)mainDatabase;
+- (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable;
 
 @end
 

@@ -661,8 +661,12 @@
     [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
     
-    UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f];
-    UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f];
+    UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f
+                                           green:170.0000f/256.0000f
+                                            blue:170.0000f/256.0000f alpha:0.8000f];
+    UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f
+                                               green:85.0000f/256.0000f
+                                                blue:85.0000f/256.0000f alpha:0.8000f];
     NSNumber *strokeWidth = @(3.0000f);
     NSDictionary *results = @{NSFontAttributeName : customFont,
                               NSStrokeWidthAttributeName : strokeWidth,
@@ -689,9 +693,12 @@
             CGContextSaveGState(ctx);
             {
                 static CGFloat angle315Degrees = 7.0000f * M_PI / 4.0000f;
-                CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
+                CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ?
+                                      y :
+                                      y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
                 CGContextRotateCTM(ctx, angle315Degrees);
-                [getMad drawInRect:CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height)];
+                [getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y,
+                                              logoRect.size.width, logoRect.size.height)];
             }
             CGContextRestoreGState(ctx);
             columnCounter++;

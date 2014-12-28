@@ -55,11 +55,13 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqQuery+Extras.h"
 
 #import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
 
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
 #import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
 
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
@@ -495,6 +497,43 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
     }
     return writeAdditionalContent;
+}
+
+#pragma mark - Reporting Functions
+#pragma mark Query Building
+
+- (void)addQuerySelectSchemeTable:(NSManagedObjectID *)schemaTableObjectID {
+    
+    
+    NSIndexSet *indexSetSections = nil;
+    
+    RptqDocument *document = [self activeDocumentModel];
+    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
+    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
+        
+    RptqDatabaseSchemaTable *table = (RptqDatabaseSchemaTable *)[managedObjectContext objectWithID:schemaTableObjectID];
+    [RptqQueryTable queryTableWithSchemaTable:table];
+    
+}
+
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
+                       andSortOrder:(MNSSortOrder)sortOrder; {
+    
+    RptqDocument *document = [self activeDocumentModel];
+    NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+    RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID
+                                                  managedObjectContext: managedObjectContext];
+    RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor: queryField
+                                                             andSort: sortOrder
+                                              inManagedObjectContext: managedObjectContext];
+    
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+    RptqQuery *query = database.hasQueries.anyObject;
+    [query addHasQueryGroupsObject: queryGroup];
+    
+    [self saveContext];
+
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate
