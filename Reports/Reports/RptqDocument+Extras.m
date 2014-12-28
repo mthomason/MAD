@@ -665,35 +665,44 @@
 }
 
 - (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
-    MTDocumentObjectType objectType = [[documentObject type] integerValue];
-    NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
+
+    MTDocumentObjectType objectType = documentObject.type.integerValue;
+    NSManagedObjectContext *managedObjectContext = documentObject.managedObjectContext;
     
     switch (objectType) {
+            
         case MTDocumentObjectTypeLabelDynamic: {
-            [managedObjectContext deleteObject:[documentObject isLabelDataField]];
+            [managedObjectContext deleteObject:documentObject.isLabelDataField];
             break;
         }
+            
         case MTDocumentObjectTypeLabelStatic: {
-            [managedObjectContext deleteObject:[documentObject isLabel]];
+            [managedObjectContext deleteObject:documentObject.isLabel];
             break;
         }
+            
         case MTDocumentObjectTypeAggregate: {
-            [managedObjectContext deleteObject:[documentObject isAggregate]];
+            [managedObjectContext deleteObject:documentObject.isAggregate];
             break;
         }
+            
         case MTDocumentObjectTypeImage: {
-            [managedObjectContext deleteObject:[documentObject isImage]];
+            [managedObjectContext deleteObject:documentObject.isImage];
             break;
         }
+            
         case MTDocumentObjectTypeWhtiespace: {
             break;
         }
+            
         case MTDocumentObjectTypeBarcode: {
-            [managedObjectContext deleteObject:[documentObject isBarcode]];
+            [managedObjectContext deleteObject:documentObject.isBarcode];
             break;
         }
+            
         default:
             break;
+            
     }
     [managedObjectContext deleteObject: documentObject];
     [managedObjectContext save:nil];
