@@ -619,54 +619,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-    NSIndexSet *indexSetSections = nil;
+    [self.document addQuerySelectSchemeTable:schemaTable];
 
-    MADocument *reportDocument = self.document;
-
-    // Get old layout
-    NSDictionary *oldLayout = [self datamodel];
-    NSArray *oldLayoutSectionTypes = oldLayout[MTTableSectionSectionsKey];
-
-    // Add new table to the query
-    [reportDocument addQuerySelectSchemeTable:schemaTable];
-    
-    // Account for new sections in the query builder.
-    NSDictionary *newLayout = [self datamodel];
-    NSArray *newLayoutSectionTypes = newLayout[MTTableSectionSectionsKey];
-
-    if (oldLayoutSectionTypes.count != newLayoutSectionTypes.count) {
-        if (oldLayoutSectionTypes.count < newLayoutSectionTypes.count) { //add sections
-            //Constrained that it only will work when sections being added in an index set, or next to each other.
-            NSInteger secctr = 0;
-            BOOL startIndexSet = NO;
-            NSInteger startIndex = -1;
-            NSInteger lengtho = [newLayoutSectionTypes count] - [oldLayoutSectionTypes count];
-            for (NSNumber *typenum in newLayoutSectionTypes) {
-                MTQuerySections stsection = [typenum integerValue];
-                if (secctr < [oldLayoutSectionTypes count]) {
-                    if (stsection == [oldLayoutSectionTypes[secctr] integerValue]) {
-                        secctr++;
-                    } else {
-                        if (!startIndexSet) {
-                            startIndex = secctr;
-                            startIndexSet = YES;
-                        }
-                    }
-                } else {
-                    if (!startIndexSet) {
-                        startIndex = secctr;
-                        startIndexSet = YES;
-                    }
-                    secctr++;
-                }
-            }
-            if (startIndexSet) {
-                NSRange sectionRange = NSMakeRange(startIndex, lengtho);
-                indexSetSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
-            }
-        }
-    }
-    
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
     [self performFetchTables];
