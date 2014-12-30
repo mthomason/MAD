@@ -1565,9 +1565,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
     
-    RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: [NSIndexPath indexPathForRow: indexPath.row inSection: 0]];
+    NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
+    RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: indexPathUpdate];
     MTTableController *tableController = [self tableControllerForTable:table];
-//    [tableController.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController pushViewController: tableController
                                          animated: YES];
 
@@ -1583,9 +1583,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
-        for (RptqDocumentObject *documentObject in objectsToDelete) {
-            [context deleteObject:[documentObject isLabelDataField]];
-            [context deleteObject:documentObject];
+        RptqDocumentObject *documentObject;
+        for (documentObject in objectsToDelete) {
+            [context deleteObject: documentObject.isLabelDataField];
+            [context deleteObject: documentObject];
         }
         [context save:&fetchError];
     }
@@ -1868,7 +1869,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     RptqDocument *document = [self.document activeDocumentModel];
-    [[document defaultQuery] deleteQueryGroupAtIndex:indexPath.row];
+    RptqQueryGroup *groupToRemove = [document.defaultQuery queryGroupForIndex:indexPath.row];
+    [self.document removeGroup:groupToRemove];
 }
 
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
@@ -1884,19 +1886,23 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     switch (querySection) {
             
         case MTQuerySectionsTables:
-            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryTableFromTableView: tableView
+                                    atIndexPath: indexPath];
             break;
             
         case MTQuerySectionsLinks:
-            [self deleteQueryLinksFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryLinksFromTableView: tableView
+                                    atIndexPath: indexPath];
             break;
             
         case MTQuerySectionsGroups:
-            [self deleteQueryGroupFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryGroupFromTableView: tableView
+                                    atIndexPath: indexPath];
             break;
             
         case MTQuerySectionsPredicate:
-            [self deleteQueryPredicateFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryPredicateFromTableView: tableView
+                                        atIndexPath: indexPath];
             break;
             
         default:

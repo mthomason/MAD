@@ -82,6 +82,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MADReportDesignerSectionElementLayoutManager.h"
 
 #import "NSManagedObject+Extras.h"
+#import "NSManagedObjectID+Extras.h"
 
 /*
  {
@@ -196,6 +197,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 #pragma mark - UIDocument
+
+- (NSDictionary *)layoutHeightsBySectionKey {
+    __block NSMutableDictionary *dictionary = [NSMutableDictionary new];
+    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADReportDesignerSectionElementLayoutManager *secManager, BOOL *stop) {
+        
+        NSString *k = [key key];
+        dictionary[k] = @(secManager.size.height);
+        
+    }];
+    return dictionary;
+}
 
 - (instancetype)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
@@ -584,9 +596,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [queryGroup addHasSectionObject:dsFooter];
     
     MADReportDesignerSectionElementLayoutManager *layoutManagerHeader = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:dsHeader];
+    layoutManagerHeader.delegate = self;
+    [self.sectionLayoutManagers setObject: layoutManagerHeader
+                                   forKey: dsHeader.objectID];
+    
     MADReportDesignerSectionElementLayoutManager *layoutManagerFooter = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:dsFooter];
-    [self.sectionLayoutManagers setObject:layoutManagerHeader forKey:dsHeader.objectID];
-    [self.sectionLayoutManagers setObject:layoutManagerFooter forKey:dsFooter.objectID];
+    layoutManagerFooter.delegate = self;
+    [self.sectionLayoutManagers setObject: layoutManagerFooter
+                                   forKey: dsFooter.objectID];
     
     return queryGroup;
 }
@@ -704,11 +721,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     if (database) {
         [self setMainDatabase:database];
-        [rptqDocument addDatabase:self.mainDatabase status:^(NSString *message, CGFloat progress) {
+        
+        [rptqDocument addDatabase: self.mainDatabase
+                           status: ^(NSString *message, CGFloat progress) {
             status(message, progress);
         } completion:^(BOOL success, MTErrorContainer *errorContainer) {
             completion(success, errorContainer);
         }];
+        
     } else {
         completion(NO, nil);
     }
@@ -729,11 +749,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         if (self.reportFormatter == nil) {
             [self initalizeMainQuery];
-            [self initalizeReportFormatter];
-        }
-        
-        if (self.sectionLayoutManagers == nil) {
             [self initalizeSectionLayoutManagers];
+            [self initalizeReportFormatter];
         }
 
     }
@@ -745,27 +762,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
-        MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] init];
-
-        RptqDocumentSectionRows *rows = reportSection.hasRows.firstObject;
-        NSOrderedSet *objects = rows.hasObjects;
-        NSInteger itemCounter = 0;
-        RptqDocumentObject *object;
-        MADReportDesignerSectionLayoutAttributes *layout;
-        //NSIndexPath *path;
-        for (object in objects) {
-            NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
-            layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-            layout.objectID = object.objectID;
-            CGSize size = object.size;
-            layout.frame = CGRectMake(object.originx.floatValue,
-                                      object.originy.floatValue,
-                                      size.width,
-                                      size.height);
-            [layoutManager addItem:layout];
-            itemCounter++;
-        }
-        
+        MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:reportSection];
         layoutManager.delegate = self;
         [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
     }
@@ -844,7 +841,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove {
     if (groupToRemove) {
         RptqQuery *query = [groupToRemove inQuery];
-//        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
 
         NSArray *sections = groupToRemove.hasSection.allObjects;
         NSAssert(section.count == 2, @"Expecting a header and footer.");
@@ -873,6 +869,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             group.weight = counterWrapper;
             counter++;
         }
+        
         [self saveContext];
     }
 }
@@ -905,7 +902,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)initalizeReportFormatter {
     MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
-                                                                              layout: self.document
+                                                                              layout: self
                                                                              options: MTReportFormatterOptionsNone];
     reportFormatter.dataDelegate = self;
     reportFormatter.cachedDelegate = self;
@@ -1063,7 +1060,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (UIPrintPageRenderer *)printerPrintPageRender {
     MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
-                                                                              layout: [self activeDocumentModel]
+                                                                              layout: self
                                                                              options: MTReportFormatterOptionsMargin];
     reportFormatter.cachedDelegate = self;
     reportFormatter.overrideIdentifier = @"madprinter";

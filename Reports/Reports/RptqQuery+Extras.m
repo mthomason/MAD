@@ -195,31 +195,6 @@
     return [[self hasQueryGroups] sortedArrayUsingDescriptors:sortDescriptors];
 }
 
-- (void)deleteQueryGroupAtIndex:(NSInteger)index {
-    RptqQueryGroup *groupToRemove = [self queryGroupForIndex:index];
-    if (groupToRemove) {
-        NSSet *sectionsToRemove = [groupToRemove hasSection];
-        NSArray *sections = [sectionsToRemove allObjects];
-        if ([sections count] == 2) {
-            [groupToRemove removeHasSectionObject: sections[0]];
-            [groupToRemove removeHasSectionObject: sections[1]];
-        }
-        [[self managedObjectContext] deleteObject: groupToRemove];
-        [self removeHasQueryGroupsObject: groupToRemove];
-        
-        [[self managedObjectContext] save:nil];
-        NSString *weight = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        NSArray *sortedQueryGroups = [[self hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        NSUInteger counter = 0;
-        for (RptqQueryGroup *group in sortedQueryGroups) {
-            [group setWeight:@(counter)];
-            counter++;
-        }
-        [[self managedObjectContext] save:nil];
-    }
-}
-
 - (NSUInteger)numberOfTables {
     return self.hasQueryTables.count;
 }
@@ -232,14 +207,13 @@
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
             RptqQueryField *groupField = [queryGroup hasField];
             
-            NSString *queryTable = [[groupField inQueryTable] queryAlias];
-            NSString *safeQueryTable = [mainDatabase safeIdentifier:queryTable];
-            NSString *fieldName = [[groupField databaseSchemaField] name];
-            NSString *safeFieldName = [mainDatabase safeIdentifier:fieldName];
+            NSString *queryTable = [groupField.inQueryTable queryAlias];
+            NSString *safeQueryTable = [mainDatabase safeIdentifier: queryTable];
+            NSString *safeFieldName = [mainDatabase safeIdentifier: groupField.databaseSchemaField.name];
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
-            SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
+            SEL sel = [MTDatabaseField selectorForSorting: groupField.databaseSchemaField.dataType.integerValue];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
                                                                            ascending: sortAscending
                                                                             selector: sel];
@@ -250,23 +224,26 @@
 }
 
 - (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable {
-    NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[self hasQueryTables]];
+
+    NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: self.hasQueryTables];
     RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable: schemaTable
                                                                            database: self.inDatabase];
-    NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[schemaTable hasFields] count]];
+    NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:schemaTable.hasFields.count];
     for (RptqDatabaseSchemaField *field in [schemaTable hasFields]) {
         @autoreleasepool {
-            RptqQueryField *newQueryField = [RptqQueryField queryFieldFactory:[schemaTable managedObjectContext]];
-            [newQueryField setInQueryTable:newQueryTable];
-            [newQueryField setDatabaseSchemaField:field];
-            [newQueryTable setInQuery:self];
+            
+            RptqQueryField *newQueryField = [RptqQueryField queryFieldFactory:schemaTable.managedObjectContext];
+            newQueryField.inQueryTable = newQueryTable;
+            newQueryField.databaseSchemaField = field;
+            newQueryTable.inQuery = self;
             [newQueryFields addObject:newQueryField];
+            
         }
     }
-    [newQueryTable setHasQueryFields:newQueryFields];
+    newQueryTable.hasQueryFields = newQueryFields;
     [tablesInQuery addObject:newQueryTable];
     
-    [self setHasQueryTables:tablesInQuery];
+    self.hasQueryTables = tablesInQuery;
     [schemaTable.managedObjectContext save:nil];
     
     return newQueryTable;

@@ -27,10 +27,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        
-        if (self.collectionView.tag == 1) {
-            NSLog(@"%s", __PRETTY_FUNCTION__);
-        }
 
         NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] init];
         self.itemAttributesBySection = itemAttributesBySection;
@@ -91,9 +87,6 @@
 
 - (void)prepareLayout {
     [super prepareLayout];
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
     
     [self.delegate collectionView:self.collectionView prepareLayout:self];
     
@@ -135,10 +128,6 @@
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
     [super prepareForCollectionViewUpdates:updateItems];
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-
 }
 
 - (void)finalizeCollectionViewUpdates {
@@ -148,9 +137,6 @@
 
 - (void)invalidateLayout {
     [super invalidateLayout];
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
 }
 
 @end

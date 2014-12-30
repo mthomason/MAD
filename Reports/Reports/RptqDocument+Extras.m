@@ -317,20 +317,6 @@
     return [section producesFormFeed];
 }
 
-- (NSDictionary *)layoutHeightsBySectionKey {
-    NSMutableDictionary *dictionary = [NSMutableDictionary new];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:self];
-    NSString *marginLeftMethod = NSStringFromSelector(@selector(marginLeft));
-    for (RptqDocumentSection *sec in enumerator) {
-        @autoreleasepool {
-            [sec valueForKey:marginLeftMethod]; //Fire fault
-            NSString *sectionKey = [sec sectionKey];
-            dictionary[sectionKey] = @([sec layoutHeightCalculated]);
-        }
-    }
-    return dictionary;
-}
-
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *status, CGFloat progress))status
          completion:(void (^)(BOOL success, MTErrorContainer *error))completion {

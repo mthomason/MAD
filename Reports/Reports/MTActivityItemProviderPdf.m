@@ -87,7 +87,7 @@
         CGRect letterRect = [MTPaper rectLetter];
         [[weakdoc mainDataTable] sortUsingDescriptors:[weakdoc sortDescriptors]];
         MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakdoc.mainQuery
-                                                                     layout:weakdoc.document
+                                                                     layout:weakdoc
                                                                     options:MTReportFormatterOptionsMargin];
         [rf setCachedDelegate:weakdoc];
         [rf setDataDelegate:weakdoc];

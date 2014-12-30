@@ -62,7 +62,7 @@ NSString * const MTNullIdentifier = @"(null)";
     @property (nonatomic, strong, readwrite) MTReportFormatterPageDefinition *page;
 
     @property (nonatomic, assign) MTReportFormatterOptions options;
-    @property (nonatomic, strong, readwrite) RptqDocument *layout;
+    @property (nonatomic, weak, readwrite) MADocument *layout;
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportIndexes;
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportLayout;
 
@@ -101,18 +101,18 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)dealloc { }
 
 - (instancetype)initWithQuery: (MTQueryFull *)query
-                       layout: (RptqDocument *)layout
+                       layout: (MADocument *)layout
                       options: (MTReportFormatterOptions)options  {
     self = [super initWithQuery:query];
     if (self) {
-        [self setOptions:options];
-        [self setLayout:layout];
+        self.options = options;
+        self.layout = layout;
     }
     return self;
 }
 
 + (instancetype)reportFormatterWithQuery: (MTQuery *)query
-                                  layout: (RptqDocument *)layout
+                                  layout: (MADocument *)layout
                                  options: (MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
     return result;
@@ -126,8 +126,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (NSUInteger)layoutIdentifier {
     NSUInteger layoutIdentifier;
     if (self.overrideIdentifier == nil) {
-        NSManagedObjectID *objid = [[self layout] objectID];
-        NSURL *url = [objid URIRepresentation];
+        NSURL *url = [self.layout.document.objectID URIRepresentation];
         NSString *s = [url absoluteString];
         layoutIdentifier = [s hash];
     } else {
@@ -199,7 +198,7 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
     [self setPageIndexesTemporary:temporaryDataForPage];
     
-    if ([self layout]) {
+    if (self.layout) {
         NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     } else {
@@ -437,7 +436,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     for (NSInteger i=0; i<[containerDetails count]; i++) {
         @autoreleasepool {
-            [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
+            [self addHeightFromDocumentSectionToReportLayout:[self.layout.document hasDetailSection]];
             NSNumber *rowid = containerDetails[i][@"ROWID"];
             self.machineState.detailRowId = rowid;
             [self addDetail];
@@ -477,7 +476,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
     CGFloat layoutHeight = [self heightForSection:documentSection];
     if ([documentSection producesFormFeed]) {
-        [self forcePageBreakWithFooterHeight:[self heightForSection:self.layout.hasPageFooterSection]];
+        [self forcePageBreakWithFooterHeight:[self heightForSection:self.layout.document.hasPageFooterSection]];
     } else {
         [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
     }
@@ -500,7 +499,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self initReportLayoutContainers];
     self.machineState.rowCounter = 0;
     
-    RptqDocumentSection *detailSection = [[self layout] hasDetailSection];
+    RptqDocumentSection *detailSection = [self.layout.document hasDetailSection];
     
     BOOL firstRow = YES;
         
@@ -587,7 +586,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     BOOL newPageCreated = NO;
     
-    CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.hasPageFooterSection];
+    CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.document.hasPageFooterSection];
     
     if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > [self printableHeight]) {
         
@@ -613,7 +612,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     self.machineState.pageCounter++;
     [[MTNotificationDidFormatPage sharedObject] reportFormatter:self formattedPage:self.machineState.pageCounter];
-    RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
+    RptqDocumentSection *pageHeaderSection = [self.layout.document hasPageHeaderSection];
     CGFloat pageHeaderHeight = CGPointZero.y;
     pageHeaderHeight += [self heightForSection:pageHeaderSection];
     self.machineState.counterHeightUsedCurrentPage = pageHeaderHeight;
@@ -622,7 +621,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addReportHeaderToReportLayout {
-    RptqDocumentSection *reportHeaderSection = [[self layout] hasReportHeaderSection];
+    RptqDocumentSection *reportHeaderSection = [self.layout.document hasReportHeaderSection];
     CGFloat reportHeaderHeight = [self heightForSection:reportHeaderSection];
     CGFloat printableSpaceUsed = self.machineState.counterHeightUsedCurrentPage + reportHeaderHeight;
     self.machineState.counterHeightUsedCurrentPage = printableSpaceUsed;
@@ -630,7 +629,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addPageHeaderToReportLayout {
-    RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
+    RptqDocumentSection *pageHeaderSection = [self.layout.document hasPageHeaderSection];
     CGFloat pageHeaderHeight = [self heightForSection:pageHeaderSection];
     CGFloat printableSpaceUsed = self.machineState.counterHeightUsedCurrentPage + pageHeaderHeight;
     self.machineState.counterHeightUsedCurrentPage = printableSpaceUsed;
@@ -638,12 +637,12 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addPageFooterToReportLayout {
-    [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasPageFooterSection]];
+    [self addHeightFromDocumentSectionToReportLayout:[self.layout.document hasPageFooterSection]];
     [self addPageFooter];
 }
 
 - (void)addReportFooterToReportLayout {
-    [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasReportFooterSection]];
+    [self addHeightFromDocumentSectionToReportLayout:[self.layout.document hasReportFooterSection]];
     [self addPageFooterToReportLayout];
     [self addReportFooter];
 }

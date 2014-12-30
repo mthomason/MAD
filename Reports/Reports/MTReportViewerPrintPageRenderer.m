@@ -46,7 +46,6 @@
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectImage.h"
 
-//#import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIDevice+Hack.h"
 #import "MTPaper.h"
 #import "RptqQuery+Extras.h"
@@ -105,14 +104,21 @@
     self.showWaterMark = NO;
     self.debugMode = NO;
 
-    [self setCachedPageSize:CGSizeZero];
-    [self setCachedPageRect:CGRectZero];
+    self.cachedPageSize = CGSizeZero;
+    self.cachedPageRect = CGRectZero;
+    
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+
     if ([standardUserDefaults valueForKey:@"MTCachedSizeHorizontal"] == nil) {
 
-        [standardUserDefaults setObject:NSStringFromCGSize(CGSizeZero) forKey:@"MTCachedSizeHorizontal"];
-        [standardUserDefaults setObject:NSStringFromCGSize(CGSizeZero) forKey:@"MTCachedSizeVertical"];
+        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
+                                 forKey: @"MTCachedSizeHorizontal"];
+        
+        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
+                                 forKey: @"MTCachedSizeVertical"];
+        
         [standardUserDefaults synchronize];
+        
     }
 }
 
@@ -159,6 +165,7 @@
         CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
         CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
         CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
+
         //zig
         CGFloat zigDivisor = 4.0000f;
         int topRandNumber = 4;
@@ -174,7 +181,6 @@
             CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
         }
         CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-        //CGContextClosePath (context);
         CGContextAddPath(context, zigPath);
         CGContextClip(context);
         CGPathRelease(zigPath);
@@ -306,7 +312,7 @@
 
     NSUInteger rowIndex = 0;
     
-    RptqDatabase *databaseSchemas = [[self.reportFormatter.layout hasDatabaseSchemas] anyObject];
+    RptqDatabase *databaseSchemas = [[self.reportFormatter.layout.document hasDatabaseSchemas] anyObject];
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
@@ -334,7 +340,7 @@
                 NSInteger groupLevel = [pageSection[MTReportGroupLevel] integerValue];
                 
                 MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
-                RptqDocumentSection *documentSection = [self.reportFormatter.layout documentSectionForType:typeDocumentSection andLevel:groupLevel];
+                RptqDocumentSection *documentSection = [self.reportFormatter.layout.document documentSectionForType:typeDocumentSection andLevel:groupLevel];
 
                 
                 CGFloat sizeHeight = documentSection.visibility.boolValue ? [self.reportFormatter heightForSection:documentSection] : CGSizeZero.height;
@@ -342,7 +348,7 @@
                     case MNSDocumentSectionTypePageFooter: {
                         BOOL lastPage = pageIndex == numberOfPages - 1;
                         if (lastPage) {
-                            originY = pageRect.origin.y + pageRect.size.height - sizeHeight - [self.reportFormatter heightForSection:[self.reportFormatter.layout hasReportFooterSection]];
+                            originY = pageRect.origin.y + pageRect.size.height - sizeHeight - [self.reportFormatter heightForSection:[self.reportFormatter.layout.document hasReportFooterSection]];
                         } else {
                             originY = pageRect.origin.y + pageRect.size.height - sizeHeight;
                         }

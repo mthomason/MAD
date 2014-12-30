@@ -100,6 +100,8 @@ extern NSString * const MADTrademark;
                  fromSection:(NSManagedObjectID *)sectionID;
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 
+- (NSDictionary *)layoutHeightsBySectionKey;
+
 @end
 
 #endif

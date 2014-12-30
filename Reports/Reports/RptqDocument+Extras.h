@@ -25,7 +25,6 @@
 - (RptqDatabase *)defaultDatabase;
 
 - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
-- (NSDictionary *)layoutHeightsBySectionKey;
 
 - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSInteger)sectionRow;
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;

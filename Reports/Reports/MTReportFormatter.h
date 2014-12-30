@@ -22,7 +22,8 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
 
 extern NSString * const MTNullIdentifier;
 
-@class RptqDocumentSection, RptqDocument, MADArrayCaching, MTReportFormatterPageDefinition;
+@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching,
+        MTReportFormatterPageDefinition;
 
 @interface MTReportFormatter : MTTableFormatter
 
@@ -30,8 +31,12 @@ extern NSString * const MTNullIdentifier;
 
 - (void)initalizeStateMachine;
 
-- (instancetype)initWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options;
-+ (instancetype)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options;
+- (instancetype)initWithQuery: (MTQuery *)query
+                       layout: (MADocument *)layout
+                      options: (MTReportFormatterOptions)options;
++ (instancetype)reportFormatterWithQuery: (MTQuery *)query
+                                  layout: (MADocument *)layout
+                                 options: (MTReportFormatterOptions)options;
 + (NSValue *)KeyReportSectionType;
 
 - (void)formatForSize:(CGSize)printableSize;
@@ -56,7 +61,7 @@ extern NSString * const MTNullIdentifier;
 
 @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
-@property (nonatomic, strong, readonly) RptqDocument *layout;
+@property (nonatomic, weak, readonly) MADocument *layout;
 
 @property (nonatomic, strong, readonly) MADArrayCaching *reportIndexes;
 @property (nonatomic, strong, readonly) MADArrayCaching *reportLayout;

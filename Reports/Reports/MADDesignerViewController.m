@@ -593,9 +593,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     CGFloat borderWidthThin = [UIView borderWidthThin];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
-        //@autoreleasepool {
-        
-            //MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] init];
+        @autoreleasepool {
         
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
 
@@ -680,7 +678,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             [passthroughContainers addObject:sectionView];
         
-        
+        }
     }
     
     self.passthoughContainers = [NSSet setWithSet: passthroughContainers];
@@ -1853,10 +1851,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView
                   cellForItemAtIndexPath: (NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-    
+
     MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
 
     __block MADReportDesignerSectionLayoutAttributes *attributes;
@@ -1941,13 +1936,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             }
             __weak UICollectionViewCell *blockCell = cell;
             __weak MADDesignerElementView *blockElementView = elementView;
-            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            //    dispatch_sync(dispatch_get_main_queue(), ^{
-            //        [blockCell setContentScaleFactor:contextScale];
-            //        [blockCell.contentView setContentScaleFactor:contextScale];
-            //        [blockElementView setContentScaleFactor:contextScale];
-            //    });
-            //});
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [blockCell setContentScaleFactor:contextScale];
+                    [blockCell.contentView setContentScaleFactor:contextScale];
+                    [blockElementView setContentScaleFactor:contextScale];
+                });
+            });
             break;
         }
     }
@@ -1999,10 +1994,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
        willDisplayCell: (UICollectionViewCell *)cell
     forItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-    
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
     self.visibleElementViews = visibleElementViews;
@@ -2013,10 +2004,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)collectionView: (UICollectionView *)collectionView
   didEndDisplayingCell: (UICollectionViewCell *)cell
     forItemAtIndexPath: (NSIndexPath *)indexPath {
-    
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
     
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
@@ -2040,10 +2027,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     forItemAtIndexPath: (NSIndexPath *)indexPath
             withSender: (id)sender {
     
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-
     BOOL result = NO;
     if (action == @selector(delete:) || action == @selector(edit:)) {
         result = YES;
@@ -2056,9 +2039,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     forItemAtIndexPath: (NSIndexPath *)indexPath
             withSender: (id)sender {
     
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
     NSInteger row = indexPath.row;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
@@ -2078,9 +2058,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
 
     [self dismissAllPopovers];
     [self dismissSectionPresentationIfOpen];
@@ -2266,10 +2243,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                     layout: (MTReportDesignerSectionViewLayoutLiquid *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
-    
     MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     __block MTCollectionViewLayoutLiquidAttributes *item;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MTCollectionViewLayoutLiquidAttributes *object, BOOL *stop) {
@@ -2279,44 +2252,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         }
     }];
     return item;
-/*
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    RptqDocumentSectionRows *rows =[documentSection.hasRows firstObject];
-    NSOrderedSet *objects = rows.hasObjects;
-    MTCollectionViewLayoutLiquidAttributes *result = [MTCollectionViewLayoutLiquidAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    
-    if (objects.count > [indexPath item]) {
-        
-        RptqDocumentObject *documentObject = objects[indexPath.item];
-        result.dropPoint = CGPointMake(documentObject.dropPointX.floatValue,
-                                       documentObject.dropPointY.floatValue);
-        
-        CGSize documentObjectSize = documentObject.size;
-        result.frame = CGRectMake(result.dropPoint.x,
-                                  result.dropPoint.y,
-                                  documentObjectSize.width,
-                                  documentObjectSize.height);
-        
-        result.lastTouchPoint = result.dropPoint;
-        result.dropIndex = documentObject.dropIndex.integerValue;
-        result.layoutDescription = [documentObject toStringHumanReadable];
-        
-    } else {
-        result.dropPoint = CGPointZero;
-        result.lastTouchPoint = CGPointZero;
-        result.dropIndex = 0;
-        result.frame = CGRectZero;
-    }
-    result.lastTouchPointValid = NO;
-    return result;*/
+
 }
 
 - (NSUInteger)numberOfItemsInSection: (NSUInteger)section
                     ofCollectionView: (UICollectionView *)collectionView {
-    if (collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
+
     MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
     /*
@@ -2497,22 +2438,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         self.viewControllerToolbox.document = self.document;
         self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
-        
-        //[self.presentationControllerPassthroughViews addObject:elementView];
-        
-        //if (self.popoverToolbox.passthroughViews != nil) {
-        //NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:self.popoverToolbox.passthroughViews];
-        //[passThroughViews addObject:elementView];
-        //self.popoverToolbox.passthroughViews = passThroughViews.allObjects;
-        //}
+
     }
 }
 
 - (void)deselectElementView:(MADDesignerElementView *)elementView animated:(BOOL)animated {
     
     [self removeBorderFromView: elementView];
-    //[self.presentationControllerPassthroughViews removeObject: elementView];
-    
+
     if (self.popoverToolbox.passthroughViews != nil) {
         NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray: self.popoverToolbox.passthroughViews];
         [passThroughViews removeObject: elementView];
@@ -2611,40 +2544,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     [detailSection performBatchUpdates:^{
 
-        //RptqDocumentObject *documentObject = [document addDocumentObject:documentObjectDefination];
-        //[documentObject obtainPermanentID];
-        //reportDesigner.objectIdJustDisplayed = documentObject.objectID;
-
         reportDesigner.objectIdJustDisplayed = [reportDesigner.document insertDocumentObjectWithDefination: documentObjectDefination
                                                                                            toSectionWithID: detailSection.objectIdTag];
 
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem: layoutManager.items.count
                                                 inSection: 0];
-        //MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-        //la.objectID = documentObject.objectID;
-        //la.frame = CGRectMake(documentObject.originx.floatValue,
-        //                      documentObject.originy.floatValue,
-        //                      documentObject.size.width,
-        //                      documentObject.size.height);
-        //[layoutManager addItem:la];
-        //[layoutManager layout];
 
         NSArray *indexPaths = @[indexPath];
         [detailSection insertItemsAtIndexPaths:indexPaths];
         
-        //NSError *error = nil;
-        //[reportDesigner.document.managedObjectContext save:&error];
-        
-
-        
     } completion:^(BOOL finished) {
         
-        
-       // RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: detailSection.objectIdTag
-        //                                                                inManagedObjectContext: reportDesigner.document.managedObjectContext];
-       // documentSection.height = @([detailSection intrinsicContentSize].height);
         [reportDesigner.scroller.container setNeedsUpdateConstraints];
-       // [reportDesigner.document saveContext];
         
     }];
 }
