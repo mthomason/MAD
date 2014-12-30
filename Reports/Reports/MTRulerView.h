@@ -9,6 +9,8 @@
 #ifndef Reports_MTRulerView_h
 #define Reports_MTRulerView_h
 
+const CGFloat MTReportDesignerRulerHeight;
+
 #import <UIKit/UIKit.h>
 
 @interface MTRulerView : UIView

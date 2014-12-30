@@ -11,6 +11,8 @@
 #import "UIColor+EverydayApps.h"
 #import "UIView+Extras.h"
 
+const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
+
 @interface MTRulerView ()
 
 @property (nonatomic, strong) NSDictionary *attributes;
@@ -137,6 +139,10 @@
     CGPathRelease(pathInchMarks);
     CGPathRelease(pathCmMarks);
     
+}
+
+- (CGSize)intrinsicContentSize {
+    return CGSizeMake(self.bounds.size.width, MTReportDesignerRulerHeight);
 }
 
 @end

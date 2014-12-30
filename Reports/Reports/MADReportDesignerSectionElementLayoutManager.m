@@ -10,6 +10,11 @@
 #import "CGGeometry+Extras.h"
 #import "MTPair.h"
 
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSectionRows.h"
+
 @implementation MADReportDesignerSectionLayoutAttributes
 
 @end
@@ -23,6 +28,38 @@
 @end
 
 @implementation MADReportDesignerSectionElementLayoutManager
+
+- (instancetype)initWithDocumentSection:(RptqDocumentSection *)section {
+
+    if (self = [super init]) {
+        
+        NSMutableDictionary *items = [NSMutableDictionary dictionary];
+        self.items = items;
+        
+        RptqDocumentSectionRows *rows = section.hasRows.firstObject;
+        NSOrderedSet *objects = rows.hasObjects;
+        NSInteger itemCounter = 0;
+        RptqDocumentObject *object;
+        MADReportDesignerSectionLayoutAttributes *layout;
+        for (object in objects) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
+            layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+            layout.objectID = object.objectID;
+            CGSize size = object.size;
+            layout.frame = CGRectMake(object.originx.floatValue,
+                                      object.originy.floatValue,
+                                      size.width,
+                                      size.height);
+            [self addItem:layout];
+            itemCounter++;
+        }
+
+    }
+    
+    return self;
+
+}
+
 
 - (instancetype)init {
     

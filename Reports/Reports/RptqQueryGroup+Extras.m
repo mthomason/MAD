@@ -88,66 +88,20 @@
     return (error) ? 0 : result;
 }
 
-// MARK: Creating group. Updates document sections to reflect new group.
-+ (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
-                                                                   inManagedObjectContext:managedObjectContext];
-    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class])
-                                                                        inManagedObjectContext:managedObjectContext];
-
-    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup
-                                         insertIntoManagedObjectContext:managedObjectContext];
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSError *error = nil;
-    NSInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
-    groupCount = (error) ? 0 : groupCount;
-    
-    queryGroup.hasField = queryField;
-    queryGroup.sort = @(sortOrder);
-    NSInteger newWeight = [queryGroup lastWeight] + 1;
-    [queryGroup setWeight:@(newWeight)];
-
-    RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                              inManagedObjectContext: managedObjectContext];
-    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
-    
-    RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
-    NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
-    dsHeader.type = HeaderType;
-    dsHeader.hasRows = hasRows1;
-    dsHeader.visibility = @YES;
-    [headerSectionRow setInSection:dsHeader];
-    [queryGroup addHasSectionObject:dsHeader];
-
-    RptqDocumentSectionRows *footerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                              inManagedObjectContext: managedObjectContext];
-    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
-
-    RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
-    NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
-    dsFooter.type = type;
-    dsFooter.hasRows = hasRows;
-    dsFooter.visibility = @YES;
-    footerSectionRow.inSection = dsFooter;
-    [queryGroup addHasSectionObject:dsFooter];
-
-    return queryGroup;
-}
-
 #pragma mark - Member functions
 
 - (NSInteger)lastWeight {
     
     NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight"
+                                                                     ascending: NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *queryGroupLast = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSArray *queryGroupLast = [self.managedObjectContext executeFetchRequest: request
+                                                                       error: &error];
     NSInteger weight = 0;
     if (queryGroupLast.count > 0) {
         RptqQueryGroup *lastGroup = queryGroupLast[0];
@@ -157,11 +111,11 @@
 }
 
 - (NSString *)fieldNameNice {
-    return [[self hasField] toStringHumanReadable];
+    return [self.hasField toStringHumanReadable];
 }
 
 - (NSString *)fieldNameQuery {
-    return [[self hasField] toString];
+    return [self.hasField toString];
 }
 
 - (NSString *)sortDisplayNice {

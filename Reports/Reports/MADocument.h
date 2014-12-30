@@ -18,6 +18,16 @@
 #import "MADActivityProtocol.h"
 #import "MADSortOrder.h"
 
+typedef NS_ENUM(NSUInteger, MTQuerySections) {
+    MTQuerySectionsDocumentGroups = 0,
+    MTQuerySectionsDatasource = 1,
+    MTQuerySectionsTables = 2,
+    MTQuerySectionsLinks = 3,
+    MTQuerySectionsGroups = 4,
+    MTQuerySectionsPredicate = 5,
+    MTQuerySectionsSql = 6
+};
+
 extern NSString * const MADMimeType;
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
@@ -26,7 +36,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MADTrademark;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
-        MTDataTable, MTQuery, MTActivityIndicator, RptqDatabaseSchemaTable, NSManagedObjectID;
+        MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
+        NSManagedObjectID;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
@@ -47,6 +58,8 @@ extern NSString * const MADTrademark;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
+
+@property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
 - (void)saveContext;
@@ -80,8 +93,12 @@ extern NSString * const MADTrademark;
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
                        andSortOrder:(MNSSortOrder)sortOrder;
-
 - (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable;
+- (NSManagedObjectID *)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination
+                                          toSectionWithID:(NSManagedObjectID *)objectID;
+- (void)removeDocumentObject:(NSManagedObjectID *)objectID
+                 fromSection:(NSManagedObjectID *)sectionID;
+- (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 
 @end
 

@@ -27,6 +27,7 @@
 - (id)initWithFrame:(CGRect)frame {
     
     MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
+
     self = [super initWithFrame:frame collectionViewLayout:layout];
     if (self) {
         
@@ -38,11 +39,16 @@
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
         NSString *documentElementReuseIdentifier = [MTCollectionViewCellElement reuseIdentifier];
         
-        [self registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
-        [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-                                                                             withReuseIdentifier: supplmentaryViewReuseIdHeader];
-        [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
-                                                                             withReuseIdentifier: supplmentaryViewReuseIdHeader];
+        [self registerClass: [MTCollectionViewCellElement class]
+ forCellWithReuseIdentifier: documentElementReuseIdentifier];
+        
+        [self registerClass: [MTCollectionReuseableViewDefault class]
+ forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+        withReuseIdentifier: supplmentaryViewReuseIdHeader];
+        
+        [self registerClass: [MTCollectionReuseableViewDefault class]
+ forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
+        withReuseIdentifier: supplmentaryViewReuseIdHeader];
         
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -53,6 +59,7 @@
         
         [self setContentHuggingPriority: UILayoutPriorityDefaultLow
                                 forAxis: UILayoutConstraintAxisVertical];
+        
         [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
                                               forAxis: UILayoutConstraintAxisVertical];
         
@@ -68,9 +75,8 @@
 }
 
 - (CGSize)intrinsicContentSize {
-    CGSize intrinsicContentSize = [[self collectionViewLayout] collectionViewContentSize];
-    CGSize fingerSize = CGSizeFingerDefault();
-    return CGSizeMake(intrinsicContentSize.width, intrinsicContentSize.height + fingerSize.height);
+    CGSize intrinsicContentSize = self.collectionViewLayout.collectionViewContentSize;
+    return CGSizeMake(intrinsicContentSize.width, intrinsicContentSize.height + MTDefaultFingerSizeHeight);
 }
 
 @end

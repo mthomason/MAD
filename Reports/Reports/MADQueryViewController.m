@@ -98,16 +98,6 @@
 
 #import "MADNavigationBarTitleView.h"
 
-typedef NS_ENUM(NSUInteger, MTQuerySections) {
-    MTQuerySectionsDocumentGroups = 0,
-    MTQuerySectionsDatasource = 1,
-    MTQuerySectionsTables = 2,
-    MTQuerySectionsLinks = 3,
-    MTQuerySectionsGroups = 4,
-    MTQuerySectionsPredicate = 5,
-    MTQuerySectionsSql = 6
-};
-
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -174,14 +164,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.document = [AppDelegate app].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     [super decodeRestorableStateWithCoder:coder];
 }
 
@@ -1277,38 +1264,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [self.tableView setUserInteractionEnabled:NO];
 }
 
-- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
-    if (groupToRemove) {
-        RptqQuery *query = [groupToRemove inQuery];
-        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
-        
-        NSSet *sectionsToRemove = [groupToRemove hasSection];
-        NSArray *sections = [sectionsToRemove allObjects];
-        if ([sections count] == 2) {
-            [groupToRemove removeHasSectionObject: sections[0]];
-            [groupToRemove removeHasSectionObject: sections[1]];
-        }
-        [[query managedObjectContext] deleteObject: groupToRemove];
-        [query removeHasQueryGroupsObject: groupToRemove];
-        [managedObjectContext save:nil];
-        
-        //Reweight Groups
-        NSString *weight = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        NSArray *sortDescriptors = @[sortDescriptor];
-        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:sortDescriptors];
-        NSUInteger counter = 0;
-        for (RptqQueryGroup *group in sortedQueryGroups) {
-            NSNumber *counterWrapper = @(counter);
-            group.weight = counterWrapper;
-            counter++;
-        }
-        NSError *error = nil;
-        [managedObjectContext save:&error];
-        NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
-    }
-}
-
 - (void)reloadDocument:(MADocument *)reportDocument animated:(BOOL)animated {
     
     if (reportDocument) {
@@ -1661,6 +1616,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSFetchedResultsController *fetchedLinkes = [self fetchedResultsControllerLinks];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
+    
     for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
         NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = nil;
@@ -1713,7 +1669,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
                 
                 if ([groupToRemove.hasField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
-                    [self removeGroup:groupToRemove];
+                    [self.document removeGroup:groupToRemove];
                     [cellsToDelete addObject:groupIndexPath];
                 }
             }
@@ -1776,11 +1732,32 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         MTQuerySections querySection = [self tableSectionTypeForIndexPathSection: section
                                                               withNumberOfTables: numberOfTables + 1];
         if (querySection == MTQuerySectionsLinks) {
-            cells = [self deleteLinksRelatedToSection:querySection sectionIndex:section table:deleatedTableObjectId inTableView:tableView numberOfTables:numberOfTables inContext:context];
+            
+            cells = [self deleteLinksRelatedToSection: querySection
+                                         sectionIndex: section
+                                                table: deleatedTableObjectId
+                                          inTableView: tableView
+                                       numberOfTables: numberOfTables
+                                            inContext: context];
+            
         } else if (querySection == MTQuerySectionsGroups) {
-            cells = [self deleteGroupsRelatedToSection:querySection sectionIndex:section table:deleatedTableObjectId inTableView:tableView numberOfTables:numberOfTables inContext:context];
+
+            cells = [self deleteGroupsRelatedToSection: querySection
+                                          sectionIndex: section
+                                                 table: deleatedTableObjectId
+                                           inTableView: tableView
+                                        numberOfTables: numberOfTables
+                                             inContext: context];
+            
         } else if (querySection == MTQuerySectionsPredicate) {
-            cells = [self deletePredicateRelatedToSection:querySection sectionIndex:section table:deleatedTableObjectId inTableView:tableView numberOfTables:numberOfTables inContext:context];
+            
+            cells = [self deletePredicateRelatedToSection: querySection
+                                             sectionIndex: section
+                                                    table: deleatedTableObjectId
+                                              inTableView: tableView
+                                           numberOfTables: numberOfTables
+                                                inContext: context];
+            
         }
         [cellsToDelete addObjectsFromArray:cells];
     }

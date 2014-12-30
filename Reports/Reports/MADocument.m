@@ -13,6 +13,9 @@
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MADocument.h"
+
+#import <CoreData/CoreData.h>
+
 #import "CGGeometry+Extras.h"
 
 #import "MADocumentState.h"
@@ -63,12 +66,22 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
+#import "RptqDocumentSectionRows.h"
+
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
+
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
 #import "NSFileManager+Common.h"
 #import "NSThread+Extras.h"
+
+#import "SectionEnumerator.h"
+#import "MADReportDesignerSectionElementLayoutManager.h"
+
+#import "NSManagedObject+Extras.h"
 
 /*
  {
@@ -132,7 +145,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
 @interface MADocument ()
-    <MTDatabaseProtocol>
+    <MTDatabaseProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
 
 @property (nonatomic, strong) UIImage *thumbnail;
 
@@ -503,28 +516,79 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark Query Building
 
 - (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable {
-    RptqDocument *document = [self activeDocumentModel];
-    RptqQuery *query = [document defaultQuery];
+    RptqQuery *query = [self.document defaultQuery];
     [query addQueryTableBasedOnSchemaTable:schemaTable];
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
                        andSortOrder:(MNSSortOrder)sortOrder; {
     
-    RptqDocument *document = [self activeDocumentModel];
     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
     RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID
                                                   managedObjectContext: managedObjectContext];
-    RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor: queryField
-                                                             andSort: sortOrder
-                                              inManagedObjectContext: managedObjectContext];
     
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+    RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField
+                                                   andSort: sortOrder];
+    
+    RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     [query addHasQueryGroupsObject: queryGroup];
     
     [self saveContext];
 
+}
+
+- (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField
+                                andSort:(MNSSortOrder)sortOrder {
+    
+    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
+                                                                   inManagedObjectContext:self.managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class])
+                                                                        inManagedObjectContext:self.managedObjectContext];
+    
+    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup
+                                         insertIntoManagedObjectContext:self.managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSError *error = nil;
+    NSInteger groupCount = [self.managedObjectContext countForFetchRequest:request error:&error];
+    groupCount = (error) ? 0 : groupCount;
+    
+    queryGroup.hasField = queryField;
+    queryGroup.sort = @(sortOrder);
+    NSInteger newWeight = [queryGroup lastWeight] + 1;
+    [queryGroup setWeight:@(newWeight)];
+    
+    RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                              inManagedObjectContext: self.managedObjectContext];
+    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
+    
+    RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:self.managedObjectContext];
+    NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
+    dsHeader.type = HeaderType;
+    dsHeader.hasRows = hasRows1;
+    dsHeader.visibility = @YES;
+    [headerSectionRow setInSection:dsHeader];
+    [queryGroup addHasSectionObject:dsHeader];
+    
+    RptqDocumentSectionRows *footerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                              inManagedObjectContext: self.managedObjectContext];
+    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
+    
+    RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:self.managedObjectContext];
+    NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
+    dsFooter.type = type;
+    dsFooter.hasRows = hasRows;
+    dsFooter.visibility = @YES;
+    footerSectionRow.inSection = dsFooter;
+    [queryGroup addHasSectionObject:dsFooter];
+    
+    MADReportDesignerSectionElementLayoutManager *layoutManagerHeader = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:dsHeader];
+    MADReportDesignerSectionElementLayoutManager *layoutManagerFooter = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:dsFooter];
+    [self.sectionLayoutManagers setObject:layoutManagerHeader forKey:dsHeader.objectID];
+    [self.sectionLayoutManagers setObject:layoutManagerFooter forKey:dsFooter.objectID];
+    
+    return queryGroup;
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate
@@ -667,9 +731,150 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             [self initalizeMainQuery];
             [self initalizeReportFormatter];
         }
+        
+        if (self.sectionLayoutManagers == nil) {
+            [self initalizeSectionLayoutManagers];
+        }
 
     }
     return self.document;
+}
+
+- (void)initalizeSectionLayoutManagers {
+    NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document];
+    for (RptqDocumentSection *reportSection in sectionEnumerator) {
+        
+        MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] init];
+
+        RptqDocumentSectionRows *rows = reportSection.hasRows.firstObject;
+        NSOrderedSet *objects = rows.hasObjects;
+        NSInteger itemCounter = 0;
+        RptqDocumentObject *object;
+        MADReportDesignerSectionLayoutAttributes *layout;
+        //NSIndexPath *path;
+        for (object in objects) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
+            layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+            layout.objectID = object.objectID;
+            CGSize size = object.size;
+            layout.frame = CGRectMake(object.originx.floatValue,
+                                      object.originy.floatValue,
+                                      size.width,
+                                      size.height);
+            [layoutManager addItem:layout];
+            itemCounter++;
+        }
+        
+        layoutManager.delegate = self;
+        [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
+    }
+    
+    self.sectionLayoutManagers = sectionLayoutManagers;
+    
+}
+
+- (void)layoutManager:(MADReportDesignerSectionElementLayoutManager *)layoutManager
+      itemNeedsUpdate:(MADReportDesignerSectionLayoutAttributes *)attributes {
+    
+    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
+    RptqDocumentObject *documentObject;
+    documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+    documentObject.originx = @(attributes.frame.origin.x);
+    documentObject.originy = @(attributes.frame.origin.y);
+    [objectContext save:nil];
+    
+}
+
+- (NSManagedObjectID *)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination
+                                          toSectionWithID:(NSManagedObjectID *)objectID {
+    
+    __weak MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[objectID];
+    
+    
+    RptqDocumentObject *documentObject = [self.document addDocumentObject:documentObjectDefination];
+    [documentObject obtainPermanentID];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: layoutManager.items.count
+                                                 inSection: 0];
+    MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+    la.objectID = documentObject.objectID;
+    la.frame = CGRectMake(documentObject.originx.floatValue,
+                          documentObject.originy.floatValue,
+                          documentObject.size.width,
+                          documentObject.size.height);
+    [layoutManager addItem:la];
+    [layoutManager layout];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectID
+                                                                    inManagedObjectContext: self.document.managedObjectContext];
+    documentSection.height = @(layoutManager.size.height);
+    
+    [self saveContext];
+    
+    return documentObject.objectID;
+}
+
+- (void)removeDocumentObject:(NSManagedObjectID *)objectID
+                 fromSection:(NSManagedObjectID *)sectionID {
+    
+    
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID
+                                                                  managedObjectContext: self.document.managedObjectContext];
+    
+    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+    RptqDocumentSection *section = sectionRow.inSection;
+    NSInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
+    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
+    [hasObjects removeObjectAtIndex:deleteIndex];
+    
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
+    
+    [layoutManager removeItemWithID:objectID];
+    [layoutManager layout];
+    sectionRow.hasObjects = hasObjects;
+    documentObject.inSectionRow = nil;
+    section.height = @(layoutManager.size.height);
+    
+    [self saveContext];
+
+}
+
+- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
+    if (groupToRemove) {
+        RptqQuery *query = [groupToRemove inQuery];
+//        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
+
+        NSArray *sections = groupToRemove.hasSection.allObjects;
+        NSAssert(section.count == 2, @"Expecting a header and footer.");
+        
+        RptqDocumentSection *section0 = sections[0];
+        RptqDocumentSection *section1 = sections[1];
+        [self.sectionLayoutManagers removeObjectForKey:section0.objectID];
+        [self.sectionLayoutManagers removeObjectForKey:section1.objectID];
+    
+        [groupToRemove removeHasSectionObject: section0];
+        [groupToRemove removeHasSectionObject: section1];
+        
+        [query.managedObjectContext deleteObject: groupToRemove];
+        [query removeHasQueryGroupsObject: groupToRemove];
+        
+        [self saveContext];
+        
+        //Reweight Groups
+        NSString *weight = NSStringFromSelector(@selector(weight));
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+        NSArray *sortDescriptors = @[sortDescriptor];
+        NSArray *sortedQueryGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+        NSUInteger counter = 0;
+        for (RptqQueryGroup *group in sortedQueryGroups) {
+            NSNumber *counterWrapper = @(counter);
+            group.weight = counterWrapper;
+            counter++;
+        }
+        [self saveContext];
+    }
 }
 
 - (void)initalizeMainQuery {

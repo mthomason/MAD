@@ -67,6 +67,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 NSString * const MADNotificationReloadSectionLocal              = @"MADNotificationReloadSectionLocal";
 
+NSString * const MADPredicateFormatDuplcate                     = @"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@";
+
 CGFloat const MADSectionHeaderHeight = 32.0000f;
 CGFloat const MADConstCellDocumentLabelWidth = 124.0000f;
 CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
@@ -1901,8 +1903,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self selectionsUpdated];
 }
 
-NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@";
-
 - (NSString *)uniquieCloudNameForHandle:(NSString *)handle {
     NSString *maybe = handle;
     NSPredicate *predicateMatchesName = [NSPredicate predicateWithFormat:MADPredicateFormatDuplcate, maybe];
@@ -2117,6 +2117,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
 }
 
 - (void)rename:(id)sender {
+    
     MTCollectionViewCellDocument *cellDocument;
     if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
         cellDocument = sender;

@@ -103,16 +103,10 @@
 }
 
 - (CGSize)collectionViewContentSize {
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
     return [self.delegate collectionView:self.collectionView sizeForLayout:self];
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
 
     NSArray *layoutAttributes = [self.delegate collectionView: self.collectionView
                                           attributesForLayout: self];
@@ -128,18 +122,12 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
 
     return [self.delegate collectionView:self.collectionView layout:self layoutAttributesForItemAtIndexPath:indexPath];
 
 }
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.collectionView.tag == 1) {
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-    }
 
     return [self.delegate collectionView:self.collectionView layout:self layoutAttributesForItemAtIndexPath:indexPath];
 

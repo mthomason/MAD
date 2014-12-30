@@ -19,9 +19,6 @@
 @interface RptqQueryGroup (Extras) <MTProtocolCompare, MTProtocolEnumerator>
 
 + (NSInteger)numberOfGroupsForQuery:(RptqQuery *)query;
-+ (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)field
-                                andSort:(MNSSortOrder)sortOrder
-                 inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)fieldNameNice;
 - (NSString *)fieldNameQuery;
