@@ -2272,18 +2272,27 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uu-8R-Ec3">
-                                            <rect key="frame" x="49" y="169" width="42" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2.24 MB" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uu-8R-Ec3">
+                                            <rect key="frame" x="38" y="169" width="65" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MADImageToolbarCloud.png" translatesAutoresizingMaskIntoConstraints="NO" id="dSE-E7-hqG">
+                                            <rect key="frame" x="108" y="8" width="24" height="24"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="24" id="1oE-aG-Zhn"/>
+                                                <constraint firstAttribute="width" constant="24" id="sek-Po-dk0"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
+                                    <constraint firstItem="dSE-E7-hqG" firstAttribute="trailing" secondItem="anu-JF-du3" secondAttribute="trailingMargin" id="3xv-Mb-nA7"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="N8i-ts-oFY" secondAttribute="trailing" id="EdD-pj-SDP"/>
                                     <constraint firstItem="2uu-8R-Ec3" firstAttribute="centerX" secondItem="N8i-ts-oFY" secondAttribute="centerX" id="OwP-3t-Llx"/>
+                                    <constraint firstItem="dSE-E7-hqG" firstAttribute="top" secondItem="anu-JF-du3" secondAttribute="topMargin" id="RVa-2p-CIK"/>
                                     <constraint firstItem="2uu-8R-Ec3" firstAttribute="top" secondItem="N8i-ts-oFY" secondAttribute="bottom" constant="2" id="WTl-MQ-pI3"/>
                                     <constraint firstItem="hwh-42-DIx" firstAttribute="top" secondItem="anu-JF-du3" secondAttribute="top" constant="9" id="myZ-NC-BM8"/>
                                     <constraint firstAttribute="centerX" secondItem="hwh-42-DIx" secondAttribute="centerX" id="oAJ-5U-LVR"/>
@@ -2308,6 +2317,11 @@
                         <barButtonItem enabled="NO" systemItem="action" id="B8W-SU-UV0">
                             <connections>
                                 <action selector="activity:" destination="9ul-yk-EvR" id="2Ox-j6-hkn"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem enabled="NO" image="MADImageIconInfo.png" id="YqP-1z-fV1">
+                            <connections>
+                                <action selector="documentInformation:" destination="9ul-yk-EvR" id="Dbw-1d-uRb"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem image="MADImageToolbarCloudDownload.png" id="TpV-3i-yet">
@@ -2347,6 +2361,7 @@
                         <outlet property="barButtonItemAddNewDocument" destination="YQ8-FP-cM9" id="4Sy-dl-INf"/>
                         <outlet property="barButtonItemCloudDown" destination="TpV-3i-yet" id="Y6q-eR-yJg"/>
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
+                        <outlet property="barButtonItemInformationDocument" destination="YqP-1z-fV1" id="ZNo-lj-QEs"/>
                         <outlet property="barButtonItemSearch" destination="2wM-rP-7Tw" id="i6k-eQ-lDw"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
                         <segue destination="NEH-Kw-MQz" kind="modal" identifier="MADSegueOpenDocument" id="Oc4-uK-0Zg"/>
@@ -2639,6 +2654,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="MADImageIconInfo.png" width="28" height="28"/>
+        <image name="MADImageToolbarCloud.png" width="28" height="18"/>
         <image name="MADImageToolbarCloudDownload.png" width="22" height="22"/>
         <image name="UIBarButtonItemDatabase.png" width="48" height="32"/>
         <image name="UIBarButtonItemMadDesigner.png" width="48" height="32"/>

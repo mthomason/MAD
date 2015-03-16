@@ -51,6 +51,7 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
 @property (nonatomic, strong, readwrite) NSString *ubiquitousItemContainerDisplayName;
 @property (nonatomic, strong, readwrite) NSURL *ubiquitousItemURLInLocalContainer;
 
+@property (nonatomic, retain) NSNumberFormatter *numberFormatterFileSize;
 
 @end
 
@@ -102,7 +103,9 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
         self.ubiquitousItemIsExternalDocument = NO;
         self.ubiquitousItemContainerDisplayName = @"";
         self.ubiquitousItemURLInLocalContainer = nil;
-    
+
+        [self commonInit];
+
     }
     return self;
 }
@@ -184,9 +187,20 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
             self.ubiquitousItemURLInLocalContainer = ubiquitousItemURLInLocalContainer;
             
         }
+
+        [self commonInit];
         
     }
     return self;
+}
+
+- (void)commonInit {
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    [numberFormatter setDecimalSeparator:@"."];
+    [numberFormatter setGroupingSeparator:@""];
+    self.numberFormatterFileSize = numberFormatter;
 }
 
 - (NSString *)description {
@@ -196,5 +210,11 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
                                                                         self.fileSystemFileCreationDate];
 }
 
+- (NSString *)fileSystemSizeMB {
+    NSNumber *fileSizeMB = @((double)self.fileSystemFileSize / 1000000);
+    NSString *sizeInMB = [self.numberFormatterFileSize stringFromNumber:fileSizeMB];
+    return [NSString stringWithFormat:@"%@ MB", sizeInMB];
+
+}
 
 @end

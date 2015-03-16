@@ -56,6 +56,8 @@
 @property (nonatomic, strong, readonly) NSString *ubiquitousItemContainerDisplayName;
 @property (nonatomic, strong, readonly) NSURL *ubiquitousItemURLInLocalContainer;
 
+- (NSString *)fileSystemSizeMB;
+
 @end
 
 #endif

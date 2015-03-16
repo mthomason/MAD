@@ -37,8 +37,8 @@ CGFloat const MTAnimationRotateDeg = 1.0000f;
 }
 
 - (void)stopWobble {
-    [[self layer] removeAllAnimations];
-    [self setTransform: CGAffineTransformIdentity];
+    [self.layer removeAllAnimations];
+    self.transform = CGAffineTransformIdentity;
 }
 
 @end

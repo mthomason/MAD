@@ -57,6 +57,7 @@
 #import "MTNavigationController.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
+#import "MADDocumentInformationTableViewController.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -90,6 +91,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformationDocument;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemLicensing;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemEditDone;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTrash;
@@ -102,6 +104,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 @property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
 @property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
+@property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
+
 @property (nonatomic, strong) MTNavigationController *aboutNavigationController;
 
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
@@ -138,25 +142,9 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, strong) NSMutableArray *documentsLocal;
 @property (nonatomic, strong) NSMutableArray *documentsCloud;
 
-@property (nonatomic, retain) NSNumberFormatter *numberFormatterFileSize;
-
 @end
 
 @implementation MADOpenFileViewController
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        [numberFormatter setMaximumFractionDigits:2];
-        [numberFormatter setDecimalSeparator:@"."];
-        [numberFormatter setGroupingSeparator:@""];
-        self.numberFormatterFileSize = numberFormatter;
-        
-    }
-    return self;
-}
 
 - (void)dealloc {
     
@@ -259,9 +247,9 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                                            target: self
                                                                                            action: @selector(edit:)];
-    [self setBarButtonItemEditDone:barButtonItemEditDone];
+    self.barButtonItemEditDone = barButtonItemEditDone;
+    self.editModeEnabled = NO;
     
-    [self setEditModeEnabled:NO];
     [self setEditing:NO animated:NO];
     
     UIColor *barTintColor = [UIColor tintColorBlue];
@@ -273,6 +261,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
     testimage.frame=self.collectionView.frame;
     //[watermarkView addSubview:testimage];
+    
     self.collectionView.backgroundView = testimage;
     self.collectionView.backgroundColor = [UIColor purpleColor];
     
@@ -301,7 +290,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     
     // FIXME: Remove cloud down button until feature is added.
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
-    
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
     searchBar.delegate = self;
@@ -791,7 +779,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
-    if ([controller isEqual:self.aboutPopoverPresentationController] || [controller isEqual:self.infoPopoverPresentationController]) {
+    if ([controller isEqual:self.aboutPopoverPresentationController] || [controller isEqual:self.infoPopoverPresentationController] ||
+        [controller isEqual:self.documentInformationPopoverPresentationController]) {
         style = UIModalPresentationNone;
     }
     return style;
@@ -1309,12 +1298,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
 
-- (NSString *)formattedFilesize:(unsigned long long)fileSizeBytes {
-    NSNumber *fileSizeMB = @((double)fileSizeBytes / 1000000);
-    NSString *sizeInMB = [self.numberFormatterFileSize stringFromNumber:fileSizeMB];
-    return [NSString stringWithFormat:@"%@ MB", sizeInMB];
-}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1324,19 +1307,14 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     NSURL *url = metadata.url;
     NSString *filename = [MADocument fileNameForMadUrl:url];
     
-    NSString *size = [self formattedFilesize:metadata.fileSystemFileSize];
+    NSString *size = [metadata fileSystemSizeMB];
     
     NSDictionary *attributesCaption = [MTCollectionViewCellDocument attributesCaption];
     NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument attributesCaption];
 
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
                                                                            attributes: attributesCaption];
-/*    self.testLabel.frame = [MADOpenFileViewController cellLabelRect];
-    self.testLabel.attributedText = attributedString;
-    self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.testLabel.contentScaleFactor = self.collectionView.contentScaleFactor;
-    [self.testLabel sizeToFit];
-*/
+
     CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
                                            contentScaleFactor: self.collectionView.contentScaleFactor
                                                          font: [MTCollectionViewCellDocument CaptionFont]];
@@ -1426,8 +1404,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSString *filename = [MADocument fileNameForMadUrl:url];
     cell.text = filename;
     cell.labelTitle.text = filename;
-    
-    cell.labelTitleSub.text = [self formattedFilesize:metadata.fileSystemFileSize];
+    cell.labelTitleSub.text = [metadata fileSystemSizeMB];
     
     [cell.labelTitle layoutIfNeeded];
     [cell loadPreviewImageForUrl:url];
@@ -1575,16 +1552,19 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSUInteger selectedCellCounter = [self numberOfItemsSelected];
     switch (selectedCellCounter) {
         case 0:
+            self.barButtonItemInformationDocument.enabled = NO;
             self.barButtonItemTrash.enabled = NO;
             self.barButtonItemDuplicate.enabled = NO;
             self.barButtonItemAction.enabled = NO;
             break;
         case 1:
+            self.barButtonItemInformationDocument.enabled = YES;
             self.barButtonItemTrash.enabled = YES;
             self.barButtonItemDuplicate.enabled = YES;
             self.barButtonItemAction.enabled = YES;
             break;
         default:
+            self.barButtonItemInformationDocument.enabled = YES;
             self.barButtonItemTrash.enabled = YES;
             self.barButtonItemDuplicate.enabled = YES;
             self.barButtonItemAction.enabled = NO;
@@ -1704,7 +1684,43 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
-- (IBAction)done:(id)sender { }
+- (void)done:(id)sender {
+    self.editModeEnabled = NO;
+    self.barButtonItemLicensing.enabled = YES;
+    self.barButtonItemAddNewDocument.enabled = YES;
+    self.barButtonItemAbout.enabled = YES;
+    self.barButtonItemInformation.enabled = YES;
+    
+    self.barButtonItemTrash.enabled = NO;
+    self.barButtonItemInformationDocument.enabled = NO;
+    self.barButtonItemDuplicate.enabled = NO;
+    self.barButtonItemAction.enabled = NO;
+    
+    self.collectionView.allowsMultipleSelection = NO;
+    
+    [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
+    
+    NSMutableArray *items = [self.toolbarItems mutableCopy];
+    [items removeObject:self.barButtonItemEditDone];
+    [items addObject:self.barButtonItemEdit];
+    [self setToolbarItems:items animated:YES];
+    
+    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+        [self.collectionView deselectItemAtIndexPath:path animated:YES];
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
+        [cell stopWobble];
+        [cell performDeselectionAnimations];
+        
+        NSURL *fileUrl = [self documentForIndexPath:path];
+        NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+        NSString *path = [url path];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+        if (image == nil) {
+            image = [MTTableViewCellDocument defaultThumbnail];
+        }
+        [[cell imagePreview] setImage:image];
+    }
+}
 
 - (IBAction)edit:(id)sender {
     
@@ -1732,41 +1748,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                           animated: YES];
 
     } else {
-
-        self.editModeEnabled = NO;
-        self.barButtonItemLicensing.enabled = YES;
-        self.barButtonItemAddNewDocument.enabled = YES;
-        self.barButtonItemAbout.enabled = YES;
-        self.barButtonItemInformation.enabled = YES;
-        
-        self.barButtonItemTrash.enabled = NO;
-        self.barButtonItemDuplicate.enabled = NO;
-        self.barButtonItemAction.enabled = NO;
-        
-        self.collectionView.allowsMultipleSelection = NO;
-        
-        [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
-        
-        NSMutableArray *items = [self.toolbarItems mutableCopy];
-        [items removeObject:self.barButtonItemEditDone];
-        [items addObject:self.barButtonItemEdit];
-        [self setToolbarItems:items animated:YES];
-
-        for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
-            [self.collectionView deselectItemAtIndexPath:path animated:YES];
-            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
-            [cell stopWobble];
-            [cell performDeselectionAnimations];
-            
-            NSURL *fileUrl = [self documentForIndexPath:path];
-            NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-            NSString *path = [url path];
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
-            if (image == nil) {
-                image = [MTTableViewCellDocument defaultThumbnail];
-            }
-            [[cell imagePreview] setImage:image];
-        }
+        [self done:sender];
     }
 }
 
@@ -1802,6 +1784,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+    
     [self addStandardPassthoughViewsToController:ppc];
 
     ppc.backgroundColor = [UIColor clearColor];
@@ -1878,6 +1861,44 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
+- (IBAction)documentInformation:(id)sender {
+    
+    MADMetaData *metadata = nil;
+    NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
+    NSIndexPath *indexPath;
+    NSMutableArray *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
+    for (indexPath in selectedItems) {
+        metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
+                                                                   inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
+        [metadataItems addObject:metadata];
+    }
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardDocumentInformation" bundle:[NSBundle mainBundle]];
+    MADDocumentInformationTableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierDocumentInformationTableViewController"];
+    
+    aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+    
+    [self addStandardPassthoughViewsToController:ppc];
+    
+    ppc.backgroundColor = [UIColor clearColor];
+    ppc.delegate = self;
+    ppc.barButtonItem = sender;
+    self.documentInformationPopoverPresentationController = ppc;
+    
+    aboutViewController.metadataItems = metadataItems;
+    [self showViewController:aboutViewController sender:self];
+    
+    /*
+    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+        [self.collectionView deselectItemAtIndexPath:path animated:YES];
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
+        [cell stopWobble];
+        [cell performDeselectionAnimations];
+    }*/
+    [self done:sender];
+}
+
 - (IBAction)delete:(id)sender {
     
     self.updatingEnabled = NO;
@@ -1930,10 +1951,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
             [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
         } completion:^(BOOL finished) {
-            __strong MADOpenFileViewController *strongself = weakself;
-            [[MACloudManager sharedManager] reloadCacheLocal:strongself.searchBar.text];
-            [[MACloudManager sharedManager] reloadCacheCloud:strongself.searchBar.text];
-            strongself.updatingEnabled = YES;
+            __strong MADOpenFileViewController *strongself2 = weakself;
+            [[MACloudManager sharedManager] reloadCacheLocal:strongself2.searchBar.text];
+            [[MACloudManager sharedManager] reloadCacheCloud:strongself2.searchBar.text];
+            strongself2.updatingEnabled = YES;
         }];
         
         
