@@ -258,15 +258,15 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     self.navigationController.toolbar.tintColor = tintColor;
     
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
-    testimage.frame=self.collectionView.frame;
+    //UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
+    //testimage.frame=self.collectionView.frame;
     //[watermarkView addSubview:testimage];
     
-    self.collectionView.backgroundView = testimage;
-    self.collectionView.backgroundColor = [UIColor purpleColor];
+    self.collectionView.backgroundView = watermarkView;
+    //self.collectionView.backgroundColor = [UIColor purpleColor];
     
     UIColor *bgColor = [UIColor lightGrayColor];
-    //self.collectionView.backgroundColor = bgColor;
+    self.collectionView.backgroundColor = bgColor;
     
     [self setSavingActivityIndicatorVisible:NO];
     
@@ -1889,13 +1889,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     aboutViewController.metadataItems = metadataItems;
     [self showViewController:aboutViewController sender:self];
     
-    /*
-    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
-        [self.collectionView deselectItemAtIndexPath:path animated:YES];
-        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
-        [cell stopWobble];
-        [cell performDeselectionAnimations];
-    }*/
     [self done:sender];
 }
 

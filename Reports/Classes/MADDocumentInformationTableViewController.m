@@ -35,7 +35,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -45,30 +45,30 @@
     MADMetaData *metadata = self.metadataItems[indexPath.section];
     switch (indexPath.row) {
         case 0:
-            cell.label.text = metadata.fileSystemName;
+            cell.label.text = metadata.displayName;
             cell.label.textAlignment = NSTextAlignmentCenter;
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             break;
         case 1:
             cell.label.text = metadata.fileSystemSizeMB;
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.label.textAlignment = NSTextAlignmentRight;
             break;
-        case 2:
-            cell.label.text = [NSDateFormatter localizedStringFromDate:metadata.fileSystemFileCreationDate
-                                                             dateStyle:NSDateFormatterShortStyle
-                                                             timeStyle:NSDateFormatterFullStyle];
+        case 2: {
+            NSString *date = [NSDateFormatter localizedStringFromDate: metadata.fileSystemFileCreationDate
+                                                            dateStyle: NSDateFormatterShortStyle
+                                                            timeStyle: NSDateFormatterShortStyle];
+            cell.label.text = [NSString stringWithFormat:@"Created %@", date];
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.label.textAlignment = NSTextAlignmentRight;
             break;
-        case 3:
-            cell.label.text = [NSDateFormatter localizedStringFromDate:metadata.fileSystemContentChangeDate
-                                                             dateStyle:NSDateFormatterShortStyle
-                                                             timeStyle:NSDateFormatterFullStyle];
+        }
+        case 3: {
+            NSString *date = [NSDateFormatter localizedStringFromDate: metadata.fileSystemContentChangeDate
+                                                            dateStyle: NSDateFormatterShortStyle
+                                                            timeStyle: NSDateFormatterShortStyle];
+            cell.label.text = [NSString stringWithFormat:@"Last changed %@", date];
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.label.textAlignment = NSTextAlignmentRight;
             break;
-            
+        }
         default:
             break;
     }
@@ -76,22 +76,6 @@
     cell.textLabel.text = @"";
     cell.detailTextLabel.text = @"";
     return cell;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    MADMetaData *metadata = self.metadataItems[section];
-    UILabel *label = [[UILabel alloc] init];
-    label.text = metadata.displayName;
-    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-    label.backgroundColor = [UIColor clearColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    [label sizeToFit];
-    return label;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    MADMetaData *metadata = self.metadataItems[section];
-    return metadata.displayName;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
