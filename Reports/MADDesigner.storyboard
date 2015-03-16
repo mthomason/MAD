@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -2272,11 +2272,19 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uu-8R-Ec3">
+                                            <rect key="frame" x="49" y="169" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
                                     <constraint firstAttribute="trailingMargin" secondItem="N8i-ts-oFY" secondAttribute="trailing" id="EdD-pj-SDP"/>
+                                    <constraint firstItem="2uu-8R-Ec3" firstAttribute="centerX" secondItem="N8i-ts-oFY" secondAttribute="centerX" id="OwP-3t-Llx"/>
+                                    <constraint firstItem="2uu-8R-Ec3" firstAttribute="top" secondItem="N8i-ts-oFY" secondAttribute="bottom" constant="2" id="WTl-MQ-pI3"/>
                                     <constraint firstItem="hwh-42-DIx" firstAttribute="top" secondItem="anu-JF-du3" secondAttribute="top" constant="9" id="myZ-NC-BM8"/>
                                     <constraint firstAttribute="centerX" secondItem="hwh-42-DIx" secondAttribute="centerX" id="oAJ-5U-LVR"/>
                                     <constraint firstItem="N8i-ts-oFY" firstAttribute="leading" secondItem="anu-JF-du3" secondAttribute="leadingMargin" id="sVp-1e-dVG"/>
@@ -2286,6 +2294,7 @@
                                 <connections>
                                     <outlet property="imagePreview" destination="hwh-42-DIx" id="gZd-dG-cfO"/>
                                     <outlet property="labelTitle" destination="N8i-ts-oFY" id="WcS-xb-xWc"/>
+                                    <outlet property="labelTitleSub" destination="2uu-8R-Ec3" id="5m2-06-Kcj"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

@@ -129,16 +129,34 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
 @property (nonatomic, strong) NSStringDrawingContext *collectionViewSizeForItemAtIndexPath;
+
 @property (nonatomic, strong) UILabel *testLabel;
+@property (nonatomic, strong) UILabel *testLabelSub;
 
 // Local cache
 @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 @property (nonatomic, strong) NSMutableArray *documentsLocal;
 @property (nonatomic, strong) NSMutableArray *documentsCloud;
 
+@property (nonatomic, retain) NSNumberFormatter *numberFormatterFileSize;
+
 @end
 
 @implementation MADOpenFileViewController
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        [numberFormatter setMaximumFractionDigits:2];
+        [numberFormatter setDecimalSeparator:@"."];
+        [numberFormatter setGroupingSeparator:@""];
+        self.numberFormatterFileSize = numberFormatter;
+        
+    }
+    return self;
+}
 
 - (void)dealloc {
     
@@ -202,6 +220,20 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
                                                                    constant: MADConstCellDocumentLabelWidth];
     [label addConstraint:constraint];
     self.testLabel = label;
+    
+    UILabel *subLabel = [[UILabel alloc] initWithFrame:[MADOpenFileViewController cellLabelRect]];
+    subLabel.clipsToBounds = NO;
+    subLabel.numberOfLines = 0;
+    
+    NSLayoutConstraint *constraintSub = [NSLayoutConstraint constraintWithItem: subLabel
+                                                                  attribute: NSLayoutAttributeWidth
+                                                                  relatedBy: NSLayoutRelationEqual
+                                                                     toItem: nil
+                                                                  attribute: NSLayoutAttributeNotAnAttribute
+                                                                 multiplier: 1.0000f
+                                                                   constant: MADConstCellDocumentLabelWidth];
+    [subLabel addConstraint:constraintSub];
+    self.testLabelSub = subLabel;
     
     self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager sharedManager].cloudAvailble ? MADSectionHeaderHeight : CGSizeZero.height),
                                                                  self.collectionView.contentInset.left,
@@ -1277,6 +1309,12 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
 
+- (NSString *)formattedFilesize:(unsigned long long)fileSizeBytes {
+    NSNumber *fileSizeMB = @((double)fileSizeBytes / 1000000);
+    NSString *sizeInMB = [self.numberFormatterFileSize stringFromNumber:fileSizeMB];
+    return [NSString stringWithFormat:@"%@ MB", sizeInMB];
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1286,20 +1324,41 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     NSURL *url = metadata.url;
     NSString *filename = [MADocument fileNameForMadUrl:url];
     
+    NSString *size = [self formattedFilesize:metadata.fileSystemFileSize];
     
-    
-    NSDictionary *attributes = [MTCollectionViewCellDocument attributes];
+    NSDictionary *attributesCaption = [MTCollectionViewCellDocument attributesCaption];
+    NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument attributesCaption];
 
-    
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
-                                                                           attributes: attributes];
-    self.testLabel.frame = [MADOpenFileViewController cellLabelRect];
+                                                                           attributes: attributesCaption];
+/*    self.testLabel.frame = [MADOpenFileViewController cellLabelRect];
     self.testLabel.attributedText = attributedString;
     self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.testLabel.contentScaleFactor = self.collectionView.contentScaleFactor;
     [self.testLabel sizeToFit];
+*/
+    CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
+                                           contentScaleFactor: self.collectionView.contentScaleFactor
+                                                         font: [MTCollectionViewCellDocument CaptionFont]];
     
-    return CGSizeMake(140.0000f, 128.0000f + ceil(self.testLabel.frame.size.height) + 20.0000f);
+    NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
+                                                                              attributes: attributesCaption2];
+    CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub
+                                              contentScaleFactor: self.collectionView.contentScaleFactor
+                                                            font: [MTCollectionViewCellDocument CaptionFont2]];
+    return CGSizeMake(140.0000f, 128.0000f /*+ ceil(self.testLabel.frame.size.height)*/ + ceilf(sizeLabelHeight) + ceilf(sizeLabelSubHeight) + 20.0000f);
+}
+
+- (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
+                  contentScaleFactor:(CGFloat)contentScaleFactor
+                                font:(UIFont *)font {
+    self.testLabel.frame = [MADOpenFileViewController cellLabelRect];
+    self.testLabel.font = font;
+    self.testLabel.attributedText = attributedString;
+    self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.testLabel.contentScaleFactor = contentScaleFactor;
+    [self.testLabel sizeToFit];
+    return self.testLabel.frame.size.height;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -1367,8 +1426,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSString *filename = [MADocument fileNameForMadUrl:url];
     cell.text = filename;
     cell.labelTitle.text = filename;
+    
+    cell.labelTitleSub.text = [self formattedFilesize:metadata.fileSystemFileSize];
+    
     [cell.labelTitle layoutIfNeeded];
-    //[cell sizeToFit];
     [cell loadPreviewImageForUrl:url];
     
     if (self.isEditing) {

@@ -113,7 +113,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - NSMetadataQuery Notifications
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
-    NSLog(@"\n%@\n", NSMetadataQueryDidStartGatheringNotification);
+    NSLog(@"\n%@\n\t%@", NSMetadataQueryDidStartGatheringNotification, notification);
     
     [self.results removeAllObjects];
     
@@ -124,7 +124,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
-    NSLog(@"\n%@ %@\n", NSMetadataQueryGatheringProgressNotification, notification);
+    NSLog(@"\n%@\n\t%@\n", NSMetadataQueryGatheringProgressNotification, notification);
 }
 
 - (void)handleMetadataQueryDidFinishGatheringNotification:(NSNotification *)notification {
@@ -132,7 +132,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
                                                         object: nil];
 
-    NSLog(@"\n%@\n", NSMetadataQueryDidFinishGatheringNotification);
+    NSLog(@"\n%@\n\t%@", NSMetadataQueryDidFinishGatheringNotification, notification);
     
     [self.metadataQuery disableUpdates];
     [self.results removeAllObjects];
@@ -168,7 +168,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (void)handleMetadataQueryDidUpdateNotification:(NSNotification *)notification {
     
-    NSLog(@"\n%@\n", NSMetadataQueryDidUpdateNotification);
+    NSLog(@"\n%@\n\t%@", NSMetadataQueryDidUpdateNotification, notification);
     
     [self.metadataQuery disableUpdates];
     
@@ -187,6 +187,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         }
         
         MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+        NSLog(@"%@", metaData);
         NSNumber *key = @(metadataItem.hash);
         [self.results setObject:metaData forKey:key];
     }
@@ -215,6 +216,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         [self.results removeObjectForKey:key];
         
     }
+    
+    //NSLog(@"Results: %@", self.results);
     
     [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
                                                         removedItems:removedItems

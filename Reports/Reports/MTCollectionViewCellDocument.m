@@ -32,6 +32,14 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 @implementation MTCollectionViewCellDocument
 
++ (UIFont *)CaptionFont {
+    return [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+}
+
++ (UIFont *)CaptionFont2 {
+    return [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+}
+
 - (void)awakeFromNib {
     
     self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -57,7 +65,15 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.labelTitle.clipsToBounds = NO;
     self.labelTitle.numberOfLines = 0;
     self.labelTitle.backgroundColor = [UIColor clearColor];
+    self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     [self.labelTitle setNeedsLayout];
+    
+    self.labelTitleSub.textColor = self.colorTextNormal;
+    self.labelTitleSub.clipsToBounds = NO;
+    self.labelTitleSub.numberOfLines = 0;
+    self.labelTitleSub.backgroundColor = [UIColor clearColor];
+    self.labelTitleSub.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    [self.labelTitleSub setNeedsLayout];
 
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
                                                                                                              action: @selector(activateEditMode:)];
@@ -135,11 +151,11 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     [self normalizeTint];
 }
 
-- (void)configureCellForUrl:(NSURL *)url {
+/*- (void)configureCellForUrl:(NSURL *)url {
     self.text = [MADocument fileNameForMadUrl:url];
     self.labelTitle.text = [MADocument fileNameForMadUrl:url];
     [self loadPreviewImageForUrl:url];
-}
+}*/
 
 - (void)loadPreviewImageForUrl:(NSURL *)url {
     __weak MTCollectionViewCellDocument *weakself = self;
@@ -161,6 +177,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 - (void)setNeedsLayout {
     [super setNeedsLayout];
     [self.labelTitle setNeedsLayout];
+    [self.labelTitleSub setNeedsLayout];
 }
 
 - (void)setBounds:(CGRect)bounds {
@@ -170,24 +187,35 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 - (void)setText:(NSString *)text {
 
-    NSDictionary *attributes = [MTCollectionViewCellDocument attributes];
-
+    NSDictionary *attributes = [MTCollectionViewCellDocument attributesCaption];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: text
                                                                                          attributes: attributes];
-    self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     self.labelTitle.attributedText = attributedString;
     self.labelTitle.text = text;
 }
 
-+ (NSDictionary *)attributes {
++ (NSDictionary *)attributesCaption {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    UIFont *fonta = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    UIFont *font = [self CaptionFont];
     NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
-                                 NSFontAttributeName : fonta,
+                                 NSFontAttributeName : font,
+                                 NSParagraphStyleAttributeName : paragraphStyle};
+    return attributes;
+}
+
++ (NSDictionary *)attributesCaption2 {
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    
+    UIFont *font = [self CaptionFont2];
+    NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
+                                 NSFontAttributeName : font,
                                  NSParagraphStyleAttributeName : paragraphStyle};
     return attributes;
 }

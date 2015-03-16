@@ -17,12 +17,19 @@
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
+@property (nonatomic, weak) IBOutlet UILabel *labelTitleSub;
 @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
+
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
 
-- (void)configureCellForUrl:(NSURL *)url;
++ (UIFont *)CaptionFont;
++ (UIFont *)CaptionFont2;
+
++ (NSDictionary *)attributesCaption;
++ (NSDictionary *)attributesCaption2;
+
 - (void)loadPreviewImageForUrl:(NSURL *)url;
 
 - (void)normalizeTint;
@@ -30,7 +37,6 @@
 - (void)performDeselectionAnimations;
 - (void)setText:(NSString *)text;
 
-+ (NSDictionary *)attributes;
 - (void)updateFont;
 
 @end

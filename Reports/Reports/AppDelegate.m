@@ -77,7 +77,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                              name: NSUbiquityIdentityDidChangeNotification
                            object: nil];
     
-    [defaultCenter removeObserver:self name:MADNotificationFileManagerDidUpdateFileLocations object:nil];
+    [defaultCenter removeObserver:self
+                             name:MADNotificationFileManagerDidUpdateFileLocations object:nil];
     
     [defaultCenter removeObserver: self
                              name: MADNotificationCloudStateUpdated

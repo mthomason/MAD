@@ -39,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.288";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.288";
-NSString * const MTGlobalBundleRev                                  = @"1663";
+NSString * const MTGlobalBundleVersion                              = @"7.0.289";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.289";
+NSString * const MTGlobalBundleRev                                  = @"1664";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";

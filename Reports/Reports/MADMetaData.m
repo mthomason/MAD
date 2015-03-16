@@ -189,5 +189,12 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
     return self;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %@, %@", self.fileSystemName,
+                                                                        self.fileSystemFileSize,
+                                                                        self.fileSystemContentChangeDate,
+                                                                        self.fileSystemFileCreationDate];
+}
+
 
 @end
