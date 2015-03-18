@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign, getter=isUbiquitous, readonly) BOOL ubiquitous;
 @property (nonatomic, assign, readonly) BOOL ubiquitousItemHasUnresolvedConflicts;
-@property (nonatomic, strong, readonly) NSString  *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
+@property (nonatomic, strong, readonly) NSString *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
 
 @property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly)
                                     BOOL ubiquitousItemDownloadingStatusNotDownloaded;        // this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.

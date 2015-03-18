@@ -2301,6 +2301,7 @@
                                 </constraints>
                                 <size key="customSize" width="140" height="300"/>
                                 <connections>
+                                    <outlet property="imageCloudIndicator" destination="dSE-E7-hqG" id="x0N-DK-4Kk"/>
                                     <outlet property="imagePreview" destination="hwh-42-DIx" id="gZd-dG-cfO"/>
                                     <outlet property="labelTitle" destination="N8i-ts-oFY" id="WcS-xb-xWc"/>
                                     <outlet property="labelTitleSub" destination="2uu-8R-Ec3" id="5m2-06-Kcj"/>

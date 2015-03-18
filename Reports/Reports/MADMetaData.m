@@ -8,6 +8,7 @@
 
 #import "MADMetaData.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import <UIKit/UIKit.h>
 
 @interface MADMetaData ()
 
@@ -25,14 +26,7 @@
 
 @property (nonatomic, assign, getter=isUbiquitous, readwrite) BOOL ubiquitous;
 @property (nonatomic, assign, readwrite) BOOL ubiquitousItemHasUnresolvedConflicts;
-@property (nonatomic, strong, readwrite) NSString  *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
-
-@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusNotDownloaded, readwrite)
-BOOL ubiquitousItemDownloadingStatusNotDownloaded;        // this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.
-@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusDownloaded, readwrite)
-BOOL ubiquitousItemDownloadingStatusDownloaded;           // there is a local version of this item available. The most current version will get downloaded as soon as possible.
-@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusCurrent, readwrite)
-BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local version of this item and it is the most up-to-date version known to this device.
+@property (nonatomic, strong, readwrite) NSString *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
 
 @property (nonatomic, assign, readwrite) BOOL ubiquitousItemIsDownloading;
 @property (nonatomic, assign, readwrite) BOOL ubiquitousItemIsUploaded;
@@ -89,10 +83,7 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
         
         self.ubiquitous = NO;
         self.ubiquitousItemHasUnresolvedConflicts = NO;
-        self.ubiquitousItemDownloadingStatus = @"";
-        self.ubiquitousItemDownloadingStatusNotDownloaded = NO;
-        self.ubiquitousItemDownloadingStatusDownloaded = NO;
-        self.ubiquitousItemDownloadingStatusCurrent = YES;
+        self.ubiquitousItemDownloadingStatus = NSMetadataUbiquitousItemDownloadingStatusCurrent;
         self.ubiquitousItemIsDownloading = NO;
         self.ubiquitousItemIsUploaded = NO;
         self.ubiquitousItemPercentDownloaded = 1;
@@ -139,22 +130,14 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
         self.contentTypeTree = itemContentTypeTree;
         
         NSNumber *itemIsUbiquitous = [item valueForAttribute:NSMetadataItemIsUbiquitousKey];
-        if ((self.ubiquitous = itemIsUbiquitous.boolValue)) {   //If the result of the assignment is true...
+        self.ubiquitous = itemIsUbiquitous.boolValue;
+        if (self.ubiquitous) {   //If the result of the assignment is true...
             
             NSNumber *ubiquitousItemHasUnresolvedConflictsKey = [item valueForAttribute:NSMetadataUbiquitousItemHasUnresolvedConflictsKey];
             self.ubiquitousItemHasUnresolvedConflicts = ubiquitousItemHasUnresolvedConflictsKey.boolValue;
             
             NSString *ubiquitousItemDownloadingStatus = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey];
             self.ubiquitousItemDownloadingStatus = ubiquitousItemDownloadingStatus;
-            
-            NSNumber *ubiquitousItemDownloadingStatusNotDownloaded = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-            self.ubiquitousItemDownloadingStatusNotDownloaded = ubiquitousItemDownloadingStatusNotDownloaded.boolValue;
-            
-            NSNumber *ubiquitousItemDownloadingStatusDownloaded = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusDownloaded];
-            self.ubiquitousItemDownloadingStatusDownloaded = ubiquitousItemDownloadingStatusDownloaded.boolValue;
-            
-            NSNumber *ubiquitousItemDownloadingStatusCurrent = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusCurrent];
-            self.ubiquitousItemDownloadingStatusCurrent = ubiquitousItemDownloadingStatusCurrent.boolValue;
             
             NSNumber *ubiquitousItemIsDownloading = [item valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey];
             self.ubiquitousItemIsDownloading = ubiquitousItemIsDownloading.boolValue;
@@ -163,10 +146,10 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
             self.ubiquitousItemIsUploaded = ubiquitousItemIsUploaded.boolValue;
             
             NSNumber *ubiquitousItemPercentDownloaded = [item valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
-            self.ubiquitousItemPercentDownloaded = ubiquitousItemPercentDownloaded.boolValue;
+            self.ubiquitousItemPercentDownloaded = ubiquitousItemPercentDownloaded.doubleValue;
             
             NSNumber *ubiquitousItemPercentUploaded = [item valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey];
-            self.ubiquitousItemPercentUploaded = ubiquitousItemPercentUploaded.boolValue;
+            self.ubiquitousItemPercentUploaded = ubiquitousItemPercentUploaded.doubleValue;
             
             NSError *ubiquitousItemDownloadingError = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey];
             self.ubiquitousItemDownloadingError = ubiquitousItemDownloadingError;
@@ -192,6 +175,16 @@ BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local ve
         
     }
     return self;
+}
+
+- (UIImage *)imageForCloudStatus {
+    UIImage *result;
+    if ([self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = [UIImage imageNamed:@"MADImageToolbarCloudDownload"];
+    } else {
+        result = [UIImage imageNamed:@"MADImageToolbarCloud"];
+    }
+    return result;
 }
 
 - (void)commonInit {

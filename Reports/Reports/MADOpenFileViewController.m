@@ -1406,6 +1406,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     cell.labelTitle.text = filename;
     cell.labelTitleSub.text = [metadata fileSystemSizeMB];
     
+    cell.imageCloudIndicator.image = metadata.isUbiquitous ?
+                                        (metadata.isUbiquitousItemDownloadingStatusNotDownloaded ?
+                                         [UIImage imageNamed:@"MADImageToolbarCloud"] :
+                                         [UIImage imageNamed:@"MADImageToolbarCloudDownload"]) :
+                                        nil;
+    
+    
+    
     [cell.labelTitle layoutIfNeeded];
     [cell loadPreviewImageForUrl:url];
     
@@ -1893,71 +1901,100 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 }
 
 - (IBAction)delete:(id)sender {
+
+    NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
+    NSNumber *selectedItemsCount = @(selectedItems.count);
+    NSString *numberOfItems = [NSNumberFormatter localizedStringFromNumber: selectedItemsCount
+                                                               numberStyle: NSNumberFormatterSpellOutStyle];
+    NSString *title = NSLocalizedString(@"Confirm", @"Confirm");
+    NSString *messageTemplate = selectedItems.count > 1 ?
+                                    NSLocalizedString(@"Are you sure you would like to delete %@ items?  This action is final.", @"Delete message template (plural)") :
+                                    NSLocalizedString(@"Are you sure you would like to delete %@ item?  This action is final.", @"Delete message template");
+    NSString *message = [NSString stringWithFormat:messageTemplate, numberOfItems];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleActionSheet];
+    NSString *titleCancel = NSLocalizedString(@"Cancel", @"Cancel");
+    NSString *titleDestructiveTemplate = selectedItems.count > 1 ?
+                                                NSLocalizedString(@"Remove %@ items", @"Remove %@ items (plural)") :
+                                                NSLocalizedString(@"Remove %@ item", @"Remove %@ item");
+    NSString *titleDestructive = [NSString stringWithFormat:titleDestructiveTemplate, numberOfItems];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:titleCancel
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *action) {
+                                                             
+                                                         }];
+    __weak MADOpenFileViewController *weakself = self;
+    UIAlertAction *actionDestructive = [UIAlertAction actionWithTitle:titleDestructive
+                                                                style:UIAlertActionStyleDestructive
+                                                              handler:^(UIAlertAction *action) {
+                                                                  __strong MADOpenFileViewController *strongself = weakself;
+                                                                  [strongself deleteAction:selectedItems];
+                                                              }];
+    [alertController addAction:actionCancel];
+    [alertController addAction:actionDestructive];
+    [self presentViewController:alertController
+                       animated:YES completion:^{
+                           
+                       }];
     
+}
+
+- (void)deleteAction:(NSArray *)selectedItems {
     self.updatingEnabled = NO;
     
-    if (self.collectionView != nil) {
-        NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
-        
-        NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
-        NSMutableDictionary *urlsToDeleteByIndexPath = [[NSMutableDictionary alloc] init];
-        
-        for (NSIndexPath *selectedItem in selectedItems) {
-            NSURL *documentUrl = [self documentForIndexPath:selectedItem];
-            [urlsToDelete addObject:documentUrl];
-            [urlsToDeleteByIndexPath setObject:documentUrl forKey:selectedItem];
-        }
-        
-        __block NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
-        
-        [urlsToDeleteByIndexPath enumerateKeysAndObjectsUsingBlock:^(id indexPath, id url, BOOL *stop) {
-            BOOL success = [[MACloudManager sharedManager] deleteDocument:url];
-            if (success) {
-                [deletedUrlsAndKeys setObject:url forKey:indexPath];
-                
-            }
-        }];
-        
-        NSMutableIndexSet *indexSetCloud = [[NSMutableIndexSet alloc] init];
-        NSMutableIndexSet *indexSetLocal = [[NSMutableIndexSet alloc] init];
-        for (NSIndexPath *path in deletedUrlsAndKeys.allKeys) {
-            switch (path.section) {
-
-                case 0:
-                    [indexSetLocal addIndex:path.item];
-                    break;
-
-                case 1:
-                    [indexSetCloud addIndex:path.item];
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-        
-        
-        __weak MADOpenFileViewController *weakself = self;
-        [self.collectionView performBatchUpdates:^{
-            __strong MADOpenFileViewController *strongself = weakself;
-            [strongself.documentsLocal removeObjectsAtIndexes:indexSetLocal];
-            [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
-            [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
-        } completion:^(BOOL finished) {
-            __strong MADOpenFileViewController *strongself2 = weakself;
-            [[MACloudManager sharedManager] reloadCacheLocal:strongself2.searchBar.text];
-            [[MACloudManager sharedManager] reloadCacheCloud:strongself2.searchBar.text];
-            strongself2.updatingEnabled = YES;
-        }];
-        
-        
-        
-        
-    } else {
-        self.updatingEnabled = YES;
-    }
-    [self selectionsUpdated];
+    NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
+    NSMutableDictionary *urlsToDeleteByIndexPath = [[NSMutableDictionary alloc] init];
     
+    for (NSIndexPath *selectedItem in selectedItems) {
+        NSURL *documentUrl = [self documentForIndexPath:selectedItem];
+        [urlsToDelete addObject:documentUrl];
+        [urlsToDeleteByIndexPath setObject: documentUrl
+                                    forKey: selectedItem];
+    }
+    
+    __block NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
+    
+    [urlsToDeleteByIndexPath enumerateKeysAndObjectsUsingBlock:^(id indexPath, id url, BOOL *stop) {
+        BOOL success = [[MACloudManager sharedManager] deleteDocument:url];
+        if (success) {
+            [deletedUrlsAndKeys setObject:url forKey:indexPath];
+            
+        }
+    }];
+    
+    NSMutableIndexSet *indexSetCloud = [[NSMutableIndexSet alloc] init];
+    NSMutableIndexSet *indexSetLocal = [[NSMutableIndexSet alloc] init];
+    for (NSIndexPath *path in deletedUrlsAndKeys.allKeys) {
+        switch (path.section) {
+                
+            case 0:
+                [indexSetLocal addIndex:path.item];
+                break;
+                
+            case 1:
+                [indexSetCloud addIndex:path.item];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    __weak MADOpenFileViewController *weakself = self;
+    [self.collectionView performBatchUpdates:^{
+        __strong MADOpenFileViewController *strongself = weakself;
+        [strongself.documentsLocal removeObjectsAtIndexes:indexSetLocal];
+        [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
+        [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
+    } completion:^(BOOL finished) {
+        __strong MADOpenFileViewController *strongself2 = weakself;
+        [[MACloudManager sharedManager] reloadCacheLocal:strongself2.searchBar.text];
+        [[MACloudManager sharedManager] reloadCacheCloud:strongself2.searchBar.text];
+        strongself2.updatingEnabled = YES;
+    }];
+    
+    [self selectionsUpdated];
 }
 
 // FIXME: Not updated with file coordnation... but likely unused
