@@ -39,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.292";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.292";
-NSString * const MTGlobalBundleRev                                  = @"1667";
+NSString * const MTGlobalBundleVersion                              = @"7.0.293";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.293";
+NSString * const MTGlobalBundleRev                                  = @"1668";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -264,7 +264,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 }
 
 + (NSAttributedString *)waterMarkStringMad {
-    NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart];
+    NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart].uppercaseString;
     UIColor *foregroundColor = [UIColor lightTextColor];
     CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
     UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
