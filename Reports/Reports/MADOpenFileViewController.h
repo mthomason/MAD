@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MADViewController.h"
+
 @class MTCollectionViewCellDocument;
 
 @interface MADOpenFileViewController : MADCollectionViewController
@@ -22,7 +23,11 @@
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;
+
 - (void)reloadData;
+- (void)reloadDataCloudWithInserts:(NSIndexSet *)inserts
+                           updates:(NSIndexSet *)updates
+                           deletes:(NSIndexSet *)deletes;
 
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;

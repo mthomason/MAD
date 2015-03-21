@@ -113,8 +113,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - NSMetadataQuery Notifications
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
-    NSLog(@"\n%@\n\t%@", NSMetadataQueryDidStartGatheringNotification, notification);
-    
+    NSMetadataQuery *query = notification.object;
+    NSLog(@"\n%@\n\t%@\nnumberResults%d", NSMetadataQueryDidStartGatheringNotification, query, query.resultCount);
     [self.results removeAllObjects];
     
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
@@ -124,7 +124,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
-    NSLog(@"\n%@\n\t%@\n", NSMetadataQueryGatheringProgressNotification, notification);
+    NSMetadataQuery *query = notification.object;
+    NSLog(@"\n%@\n\t%@\nnumberResults%d", NSMetadataQueryGatheringProgressNotification, query, query.resultCount);
 }
 
 - (void)handleMetadataQueryDidFinishGatheringNotification:(NSNotification *)notification {
@@ -132,7 +133,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
                                                         object: nil];
 
-    NSLog(@"\n%@\n\t%@", NSMetadataQueryDidFinishGatheringNotification, notification);
+    NSMetadataQuery *query = notification.object;
+    NSLog(@"\n%@\n\t%@\nnumberResults%d", NSMetadataQueryDidFinishGatheringNotification, query, query.resultCount);
     
     [self.metadataQuery disableUpdates];
     [self.results removeAllObjects];

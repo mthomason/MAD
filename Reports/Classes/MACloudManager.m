@@ -21,10 +21,13 @@ NSString * const MTICloudUbiquityToken                                  = @"com.
 NSString * const MADPreferencesCloudOptionsSelected                     = @"com.everydayapps.mad.designer.cloud.options.selected";
 
 NSString * const MADNotificationFileManagerDidUpdateFileLocations       = @"MADNotificationFileManagerDidUpdateFileLocations";
+NSString * const MADNotificationCloudStateUpdated                       = @"MADNotificationCloudStateUpdated";
+NSString * const MADNotificationUbiquitousContainerFetchingWillBegin    = @"MADNotificationUbiquitousContainerFetchingWillBegin";
+NSString * const MADNotificationUbiquitousContainerFetchingDidEnd       = @"MADNotificationUbiquitousContainerFetchingDidEnd";
 
-NSString * const MADNotificationCloudStateUpdated                       = @"ICloudStateUpdatedNotification";
-NSString * const MADNotificationUbiquitousContainerFetchingWillBegin    = @"UbiquitousContainerFetchingWillBeginNotification";
-NSString * const MADNotificationUbiquitousContainerFetchingDidEnd       = @"UbiquitousContainerFetchingDidEndNotification";
+NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyInserted    =   @"i";
+NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated     =   @"u";
+NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     =   @"d";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
 NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
@@ -54,7 +57,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 @property (nonatomic, assign, readwrite) BOOL cloudAvailble;
 
-@property (nonatomic, strong, readwrite) NSFileCoordinator *fileCoordinator;
 @property (nonatomic, strong) NSFileManager *fileManager;
 
 @property (nonatomic, assign) NSUInteger    documentCacheCloudCount;
@@ -98,10 +100,9 @@ static MACloudManager *sharedSingleton;
         self.searchString = @"";
         
         NSFileManager *fileManager = [[NSFileManager alloc] init];
-        NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        
         
         self.fileManager = fileManager;
-        self.fileCoordinator = fileCoordinator;
         
         NSString *homeDirectory = NSHomeDirectory();
         NSString *pathTemporaryDirectory = NSTemporaryDirectory();
@@ -164,7 +165,8 @@ static MACloudManager *sharedSingleton;
     if (token != nil) {
         
         NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:token];
-        [[NSUserDefaults standardUserDefaults] setObject: newTokenData forKey: MTICloudUbiquityToken];
+        [[NSUserDefaults standardUserDefaults] setObject: newTokenData
+                                                  forKey: MTICloudUbiquityToken];
         
         [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudStateUpdated
                                                             object: nil];
@@ -253,8 +255,9 @@ static MACloudManager *sharedSingleton;
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                 
+                NSFileManager *fileManager = [NSFileManager defaultManager];
                 //This call may be SLOW, so only do on BACKGROUND thread.
-                NSURL *url = [self.fileManager URLForUbiquityContainerIdentifier: MADUbiquityIdentifier];
+                NSURL *url = [fileManager URLForUbiquityContainerIdentifier: MADUbiquityIdentifier];
                 [weakself setDataAndDocumentUrlsWithBaseUrl:url];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
@@ -358,13 +361,20 @@ static MACloudManager *sharedSingleton;
 
 #pragma mark - MADFileLocationManagerDelegate
 
+/* Only called on iCloud items. */
+
 - (void)listCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
                                              removedItems:(NSIndexSet *)removedItems
                                              updatedItems:(NSIndexSet *)updatedItems {
-
+    
     [self reloadCacheCloud:self.searchString];
+    NSDictionary *updates = @{
+                              MADNotificationFileManagerDidUpdateFileLocationsKeyInserted : insertedItems,
+                              MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated : updatedItems,
+                              MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved : removedItems
+                              };
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
-                                                        object: nil];
+                                                        object: updates];
         
 }
 
@@ -394,16 +404,6 @@ static MACloudManager *sharedSingleton;
                                                                                                                                  completion: nil];
 }
 
-#pragma mark File Name
-
-+ (NSString *)filenameId:(NSUInteger)tag {
-    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-}
-
-+ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
-    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
-}
-
 #pragma mark File Helpers
 
 - (void)createDirectoryIfDoesNotExist:(NSURL *)url {
@@ -411,19 +411,20 @@ static MACloudManager *sharedSingleton;
     if ([self.fileManager fileExistsAtPath:url.path] == NO) {
 
         NSError *error = nil;
-        [self.fileCoordinator coordinateWritingItemAtURL: url
-                                                 options: 0
-                                                   error: &error
-                                              byAccessor: ^(NSURL *newURL) {
-
-                                                  NSError *errorCreateNew = nil;
-                                                  [[NSFileManager defaultManager] createDirectoryAtPath: newURL.path
-                                                                            withIntermediateDirectories: YES
-                                                                                             attributes: nil
-                                                                                                  error: &errorCreateNew];
-                                                  
-                                                  NSAssert(errorCreateNew != nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
-        }];
+        NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        [coordinator coordinateWritingItemAtURL: url
+                                        options: 0
+                                          error: &error
+                                     byAccessor: ^(NSURL *newURL) {
+                                         
+                                         NSError *errorCreateNew = nil;
+                                         [[NSFileManager defaultManager] createDirectoryAtPath: newURL.path
+                                                                   withIntermediateDirectories: YES
+                                                                                    attributes: nil
+                                                                                         error: &errorCreateNew];
+                                         
+                                         NSAssert(errorCreateNew != nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
+                                     }];
         NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
@@ -433,9 +434,10 @@ static MACloudManager *sharedSingleton;
      completion: (void (^)(BOOL, NSURL *, NSError *))completion {
     
     __block BOOL success = NO;
-    NSFileCoordinator *coordinator = self.fileCoordinator;
-    
     NSError *error = nil;
+
+    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+    
     [coordinator coordinateReadingItemAtURL: urlToCopy
                                     options: NSFileCoordinatorReadingForUploading
                            writingItemAtURL: uniqueUrl
@@ -474,12 +476,10 @@ static MACloudManager *sharedSingleton;
     NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
                                    withDesiredHandle:handle
                                         andExtension:extention];
-    NSFileCoordinator *coordinator = self.fileCoordinator;
+    
+    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
 
-//    dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
- //   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-
-        NSError *error = nil;
+    NSError *error = nil;
     [coordinator coordinateReadingItemAtURL: urlToDupe
                                     options: NSFileCoordinatorReadingForUploading
                            writingItemAtURL: uniqueUrl
@@ -501,10 +501,7 @@ static MACloudManager *sharedSingleton;
                                          NSLog(@"%@", error);
                                      }
                                      completion(success, uniqueUrl, error);
-  //                                   dispatch_semaphore_signal(semaphoreDelete);
                                  }];
-   // });
-//    dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
     return success;
  }
 
@@ -547,33 +544,29 @@ static MACloudManager *sharedSingleton;
     NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
                                  withDesiredHandle:handle
                                       andExtension:extention];
-
-    __weak MACloudManager *weakself = self;
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        
-        NSError *error = nil;
-        NSFileCoordinator *coordinator = weakself.fileCoordinator;
-        [coordinator coordinateReadingItemAtURL: urlToDupe
-                                        options: NSFileCoordinatorReadingForUploading
-                               writingItemAtURL: uniqueUrl
-                                        options: NSFileCoordinatorWritingForMoving
-                                          error: &error
-                                     byAccessor: ^(NSURL *source, NSURL *destinaion) {
-                                         
-                                         NSError *errorCopy = nil;
+    
+    NSError *error = nil;
+    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+    [coordinator coordinateReadingItemAtURL: urlToDupe
+                                    options: NSFileCoordinatorReadingForUploading
+                           writingItemAtURL: uniqueUrl
+                                    options: NSFileCoordinatorWritingForMoving
+                                      error: &error
+                                 byAccessor: ^(NSURL *source, NSURL *destinaion) {
+                                     
+                                     NSError *errorCopy = nil;
+                                     [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
+                                     
+                                     success = [[NSFileManager defaultManager] copyItemAtURL: source
+                                                                                       toURL: destinaion
+                                                                                       error: &errorCopy];
+                                     
+                                     NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                     
+                                     if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
-                                         
-                                         success = [[NSFileManager defaultManager] copyItemAtURL: source
-                                                                                           toURL: destinaion
-                                                                                           error: &errorCopy];
-                                         
-                                         NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
-                                         
-                                         if (success) {
-                                             [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
-                                         }
-                                     }];
-    //});
+                                     }
+                                 }];
     return success;
 }
 
@@ -581,7 +574,7 @@ static MACloudManager *sharedSingleton;
 - (BOOL)deleteDocument:(NSURL *)fileUrl {
     __block BOOL success = NO;
     dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
         [fileCoordinator coordinateWritingItemAtURL: fileUrl
@@ -589,17 +582,14 @@ static MACloudManager *sharedSingleton;
                                               error: nil
                                          byAccessor: ^(NSURL* writingURL) {
                                              NSError *error = nil;
-                                             NSFileManager* fileManager = [[NSFileManager alloc] init];
+                                             NSFileManager* fileManager = [NSFileManager defaultManager];
                                              if ([fileManager fileExistsAtPath:writingURL.path]) {
                                                  [fileManager removeItemAtURL:writingURL error:&error];
                                                  success = error ? NO : YES;
-                                                 dispatch_semaphore_signal(semaphoreDelete);
-                                             } else {
-                                                 success = NO;
-                                                 dispatch_semaphore_signal(semaphoreDelete);
                                              }
+                                             dispatch_semaphore_signal(semaphoreDelete);
                                          }];
-    });
+    //});
     dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
     return success;
 }
@@ -795,5 +785,17 @@ static MACloudManager *sharedSingleton;
     }
     return metatdata;
 }
+
+#pragma mark File Name
+
++ (NSString *)filenameId:(NSUInteger)tag {
+    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+}
+
++ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
+    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
+}
+
+
 
 @end

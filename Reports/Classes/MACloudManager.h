@@ -25,6 +25,10 @@ extern NSString * const MADNotificationCloudStateUpdated;
 extern NSString * const MADNotificationUbiquitousContainerFetchingWillBegin;
 extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
+extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyInserted;
+extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated;
+extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved;
+
 @protocol MADCloudManagerProtocol <NSObject>
 
 - (void)ubiquityIdentityDidChange;

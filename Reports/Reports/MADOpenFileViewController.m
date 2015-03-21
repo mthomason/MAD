@@ -89,18 +89,18 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
         MTViewControllerProtocol,
         MTDocumentCellProtocol>
 
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformationDocument;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemLicensing;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemEditDone;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTrash;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformation;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAbout;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemCloudDown;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSearch;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
+@property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
+@property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
+@property (nonatomic, strong)           UIBarButtonItem *barButtonItemLicensing;
+@property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
+@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
+@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformation;
+@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAbout;
+@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
+@property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
+@property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemSearch;
+@property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
 
 @property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
 @property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
@@ -109,7 +109,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, strong) MTNavigationController *aboutNavigationController;
 
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
-//@property (nonatomic, strong) UIPopoverController *aboutPopoverController;
 @property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
@@ -137,6 +136,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, strong) UILabel *testLabel;
 @property (nonatomic, strong) UILabel *testLabelSub;
 
+@property (nonatomic, strong) UIProgressView *progressViewFileManager;
+
 // Local cache
 @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 @property (nonatomic, strong) NSMutableArray *documentsLocal;
@@ -145,6 +146,24 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @end
 
 @implementation MADOpenFileViewController
+
+static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection);
+static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection) {
+    switch (displaySection) {
+            
+        case 0:
+            return MACloudManagerSectionLocal;
+            break;
+            
+        case 1:
+            return MACloudManagerSectionCloud;
+            break;
+            
+        default:
+            return MACloudManagerSectionLocal;
+            break;
+    }
+}
 
 - (void)dealloc {
     
@@ -163,6 +182,13 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationReloadSectionLocal
                                                   object: nil];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initalizeProgressBar];
+    }
+    return self;
 }
 
 - (void)viewDidLoad {
@@ -323,6 +349,14 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     
 }
 
+- (void)initalizeProgressBar {
+    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    progressView.trackTintColor = [UIColor tintColorRed];
+    progressView.tintColor = [UIColor tintColorBlue];
+    progressView.progress = 0.0000f;
+    self.progressViewFileManager = progressView;
+}
+
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible animated:(BOOL)animated {
     
     if (self.rightBarButtonItemActivityIndicatorVisible != rightBarButtonItemActivityIndicatorVisible) {
@@ -342,6 +376,18 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
         }
         [self.navigationItem setRightBarButtonItem:barButtonItem animated:animated];
     }
+}
+
+#pragma mark - add controls
+
+- (void)addProgressViewToView {
+    self.progressViewFileManager.progress = 0.0000f;
+    [self.view addSubview:self.progressViewFileManager];
+    [self.view bringSubviewToFront:self.progressViewFileManager];
+}
+
+- (void)removeProgressViewFromView {
+    [self.progressViewFileManager removeFromSuperview];
 }
 
 #pragma mark - UIStateRestoring
@@ -622,23 +668,14 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
                                                          bundle: [NSBundle mainBundle]];
     MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
-    //navControl.transitioningDelegate = navControl;
     
     MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
     vc.delegate = self;
     self.definesPresentationContext = YES;
-//    self.modalPresentationStyle = UIModalPresentationCurrentContext;
     self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
     UIPresentationController *pc = navControl.presentationController;
     pc.presentedView.backgroundColor = [UIColor whiteColor];
-//    pc.containerView.backgroundColor = UIC
- ///   pc.containerView.backgroundColor = [UIColor blueColor];
-    
-//    navControl.view.backgroundColor = [UIColor clearColor];
-//    navControl.view.superview.backgroundColor = [UIColor purpleColor];
-//    navControl.view.superview.backgroundColor = [UIColor purpleColor];
-//    navControl.view.superview.superview.backgroundColor = [UIColor blueColor];
     [self showViewController:navControl sender:self];
 }
 
@@ -785,10 +822,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     }
     return style;
 }
-
-//- (UIViewController *)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
-    
-//}
 
 #pragma mark - UIPopoverPresentationControllerDelegate
 
@@ -980,18 +1013,60 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     }
 }
 
+- (void)reloadDataCloudWithInserts:(NSIndexSet *)inserts
+                           updates:(NSIndexSet *)updates
+                           deletes:(NSIndexSet *)deletes {
+    NSArray *indexPathsInserted = [self indexSetToIndexPaths:inserts section:1];
+    NSArray *indexPathsUpdated = [self indexSetToIndexPaths:updates section:1];
+    NSArray *indexPathsRemoved = [self indexSetToIndexPaths:deletes section:1];
+    if (indexPathsUpdated.count > 0 ||
+        indexPathsInserted.count > 0 ||
+        indexPathsRemoved.count > 0) {
+        [self.collectionView performBatchUpdates:^{
+            [self updateData];
+            if (indexPathsInserted.count > 0) {
+                NSLog(@"Insert");
+                [self.collectionView insertItemsAtIndexPaths: indexPathsInserted];
+            }
+            if (indexPathsRemoved.count > 0) {
+                NSLog(@"Remove");
+                [self.collectionView deleteItemsAtIndexPaths: indexPathsRemoved];
+            }
+            if (indexPathsUpdated.count > 0) {
+                NSLog(@"Update");
+                [self.collectionView reloadItemsAtIndexPaths: indexPathsUpdated];
+            }
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
+}
+
+
+- (NSArray *)indexSetToIndexPaths:(NSIndexSet *)indexSet section:(NSUInteger)section {
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] initWithCapacity:indexSet.count];
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:idx inSection:section];
+        [indexPaths addObject:path];
+    }];
+    return indexPaths;
+}
+
 - (void)reloadData {
     if (self.isUpdatingEnabled) {
-        NSLog(@"Reload Data");
-        
-        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-        
-        [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
-        [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
-        
+        NSLog(@"Reload Data called by %@",  [NSThread callStackSymbols][1]);
+        [self updateData];
         [self.collectionView reloadData];
     }
+}
+
+- (void)updateData {
+    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+    
+    [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
+    [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
@@ -1368,24 +1443,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     return self.documentsLocal.count + self.documentsCloud.count;
 }
 
-static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection);
-static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection) {
-    switch (displaySection) {
-            
-        case 0:
-            return MACloudManagerSectionLocal;
-            break;
-            
-        case 1:
-            return MACloudManagerSectionCloud;
-            break;
-            
-        default:
-            return MACloudManagerSectionLocal;
-            break;
-    }
-}
-
 - (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView
                   cellForItemAtIndexPath: (NSIndexPath *)indexPath {
 
@@ -1404,15 +1461,30 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSString *filename = [MADocument fileNameForMadUrl:url];
     cell.text = filename;
     cell.labelTitle.text = filename;
-    cell.labelTitleSub.text = [metadata fileSystemSizeMB];
     
-    cell.imageCloudIndicator.image = metadata.isUbiquitous ?
-                                        (metadata.isUbiquitousItemDownloadingStatusNotDownloaded ?
-                                         [UIImage imageNamed:@"MADImageToolbarCloud"] :
-                                         [UIImage imageNamed:@"MADImageToolbarCloudDownload"]) :
-                                        nil;
+    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
+    cell.progressViewUpload.hidden = YES;//!metadata.ubiquitousItemIsUploading;
     
+    cell.labelTitleSub.text = (notDownloaded ? NSLocalizedString(@"Not Downloaded", @"Not Downloaded") : [metadata fileSystemSizeMB]);
+
+    if (metadata.ubiquitousItemIsUploading) {
+        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded
+                              animated:YES];
+    } else {
+        [cell.progressViewUpload setProgress:0.0000f animated:YES];
+    }
+        
+    if (metadata.ubiquitousItemIsDownloading) {
+        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded
+                              animated:YES];
+    } else {
+        [cell.progressViewDownload setProgress:0.0000f animated:YES];
+    }
     
+    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
+                                                [UIImage imageNamed:@"MADImageToolbarCloudDownload"] :
+                                                nil;
     
     [cell.labelTitle layoutIfNeeded];
     [cell loadPreviewImageForUrl:url];
@@ -1429,6 +1501,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         
         MTApplicationInstance *app = [AppDelegate app];
         NSComparisonResult comparionResult = [app.fileManager.openUrl.lastPathComponent caseInsensitiveCompare: url.lastPathComponent];
+        
         if (comparionResult == NSOrderedSame) {
             [cell.activityIndicator startAnimating];
         } else {

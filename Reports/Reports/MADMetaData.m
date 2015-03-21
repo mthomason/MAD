@@ -51,7 +51,7 @@
 
 @implementation MADMetaData
 
-- (instancetype)initWithLocalUrl:(NSURL *)url {
+- (id)initWithLocalUrl:(NSURL *)url {
     self = [super init];
     if (self) {
         
@@ -101,7 +101,7 @@
     return self;
 }
 
-- (instancetype)initWithMetadataItem:(NSMetadataItem *)item {
+- (id)initWithMetadataItem:(NSMetadataItem *)item {
     self = [super init];
     if (self) {
 
@@ -133,41 +133,27 @@
         self.ubiquitous = itemIsUbiquitous.boolValue;
         if (self.ubiquitous) {   //If the result of the assignment is true...
             
-            NSNumber *ubiquitousItemHasUnresolvedConflictsKey = [item valueForAttribute:NSMetadataUbiquitousItemHasUnresolvedConflictsKey];
-            self.ubiquitousItemHasUnresolvedConflicts = ubiquitousItemHasUnresolvedConflictsKey.boolValue;
+            self.ubiquitousItemHasUnresolvedConflicts = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemHasUnresolvedConflictsKey]).boolValue;
             
-            NSString *ubiquitousItemDownloadingStatus = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey];
-            self.ubiquitousItemDownloadingStatus = ubiquitousItemDownloadingStatus;
+            self.ubiquitousItemDownloadingStatus = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey];
             
-            NSNumber *ubiquitousItemIsDownloading = [item valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey];
-            self.ubiquitousItemIsDownloading = ubiquitousItemIsDownloading.boolValue;
+            self.ubiquitousItemIsDownloading = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey]).boolValue;
             
-            NSNumber *ubiquitousItemIsUploaded = [item valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey];
-            self.ubiquitousItemIsUploaded = ubiquitousItemIsUploaded.boolValue;
+            self.ubiquitousItemIsUploaded = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue;
+            self.ubiquitousItemIsUploading = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue;
             
-            NSNumber *ubiquitousItemPercentDownloaded = [item valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
-            self.ubiquitousItemPercentDownloaded = ubiquitousItemPercentDownloaded.doubleValue;
+            self.ubiquitousItemPercentDownloaded = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue;
             
-            NSNumber *ubiquitousItemPercentUploaded = [item valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey];
-            self.ubiquitousItemPercentUploaded = ubiquitousItemPercentUploaded.doubleValue;
+            self.ubiquitousItemPercentUploaded = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey]).doubleValue;
             
-            NSError *ubiquitousItemDownloadingError = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey];
-            self.ubiquitousItemDownloadingError = ubiquitousItemDownloadingError;
+            self.ubiquitousItemDownloadingError = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey];
+            self.ubiquitousItemUploadingError = [item valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey];
             
-            NSError *ubiquitousItemUploadingError = [item valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey];
-            self.ubiquitousItemUploadingError = ubiquitousItemUploadingError;
+            self.ubiquitousItemDownloadRequested = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey]).boolValue;
             
-            NSNumber *ubiquitousItemDownloadRequested = [item valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey];
-            self.ubiquitousItemDownloadRequested = ubiquitousItemDownloadRequested.boolValue;
-            
-            NSNumber *ubiquitousItemIsExternalDocument = [item valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
-            self.ubiquitousItemIsExternalDocument = ubiquitousItemIsExternalDocument.boolValue;
-            
-            NSString *ubiquitousItemContainerDisplayName = [item valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
-            self.ubiquitousItemContainerDisplayName = ubiquitousItemContainerDisplayName;
-            
-            NSURL *ubiquitousItemURLInLocalContainer = [item valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey];
-            self.ubiquitousItemURLInLocalContainer = ubiquitousItemURLInLocalContainer;
+            self.ubiquitousItemIsExternalDocument = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey]).boolValue;
+            self.ubiquitousItemContainerDisplayName = [item valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
+            self.ubiquitousItemURLInLocalContainer = [item valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey];
             
         }
 
@@ -208,6 +194,11 @@
     NSString *sizeInMB = [self.numberFormatterFileSize stringFromNumber:fileSizeMB];
     return [NSString stringWithFormat:@"%@ MB", sizeInMB];
 
+}
+
+- (BOOL)isSyncing {
+    return self.isUbiquitous && (self.ubiquitousItemIsDownloading ||
+                                 self.ubiquitousItemIsUploading);
 }
 
 @end

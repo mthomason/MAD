@@ -204,16 +204,16 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
     [self initalizeStatusMessages];
-    [self initalizeProgressBars];
+    [self initalizeProgressBar];
+    [self.toolbarSideRight addSubview:self.pageSlider];
 }
 
-- (void)initalizeProgressBars {
+- (void)initalizeProgressBar {
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-    [progressView setTrackTintColor:[UIColor tintColorRed]];
-    [progressView setTintColor:[UIColor tintColorBlue]];
-    [progressView setProgress:0.0000f animated:NO];
-    [self setProgressView:progressView];
-    [[self toolbarSideRight] addSubview:self.pageSlider];
+    progressView.trackTintColor = [UIColor tintColorRed];
+    progressView.tintColor = [UIColor tintColorBlue];
+    progressView.progress = 0.0000f;
+    self.progressView = progressView;
 }
 
 - (void)initializeVerticalSlider {
@@ -437,48 +437,17 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
     }];
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 #pragma mark - add controls
 
 - (void)addProgressViewToView {
-    [self.view addSubview:[self progressView]];
-    [self.view bringSubviewToFront:[self progressView]];
+    [self.view addSubview:self.progressView];
+    [self.view bringSubviewToFront:self.progressView];
 }
 
 - (void)removeProgressViewFromView {
-    [[self progressView] removeFromSuperview];
+    [self.progressView removeFromSuperview];
 }
 
 - (void)addPageSliderToView {
@@ -578,7 +547,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         pageOne.delegate = self;
         
         __block MADViewerController *reportViewer = self;
-        [self.view bringSubviewToFront:[self toolbarSideRight]];
+        [self.view bringSubviewToFront:self.toolbarSideRight];
         [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
             if (finished) {
                 [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
@@ -619,7 +588,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [self.barButtonItemSliderView setWidth:width];
     [self.sliderView setFrame:CGRectMake(self.sliderView.frame.origin.x, self.sliderView.frame.origin.y, width, self.sliderView.frame.size.height)];
     [self.navigationController.toolbar setNeedsLayout];
-    [self.view bringSubviewToFront:[self toolbarSideRight]];
+    [self.view bringSubviewToFront:self.toolbarSideRight];
     [self addSliderPagination];
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }

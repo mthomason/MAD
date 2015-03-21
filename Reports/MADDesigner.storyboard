@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
@@ -2285,6 +2285,16 @@
                                                 <constraint firstAttribute="width" constant="24" id="sek-Po-dk0"/>
                                             </constraints>
                                         </imageView>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.30000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Mve-Nt-261">
+                                            <rect key="frame" x="20" y="134" width="100" height="3"/>
+                                            <color key="backgroundColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
+                                        </progressView>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="l2R-ss-MRX">
+                                            <rect key="frame" x="20" y="131" width="100" height="3"/>
+                                            <color key="progressTintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="trackTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
+                                        </progressView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -2305,6 +2315,8 @@
                                     <outlet property="imagePreview" destination="hwh-42-DIx" id="gZd-dG-cfO"/>
                                     <outlet property="labelTitle" destination="N8i-ts-oFY" id="WcS-xb-xWc"/>
                                     <outlet property="labelTitleSub" destination="2uu-8R-Ec3" id="5m2-06-Kcj"/>
+                                    <outlet property="progressViewDownload" destination="Mve-Nt-261" id="Uod-xH-90E"/>
+                                    <outlet property="progressViewUpload" destination="l2R-ss-MRX" id="K3Y-vf-ECg"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

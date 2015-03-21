@@ -201,9 +201,25 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     });
 }
 
+/*
+ *  handles MADNotificationFileManagerDidUpdateFileLocations
+ */
+
 - (void)handleNotificationFileManagerDidUpdateFileLocations:(NSNotification *)notification {
-    [self.openFileViewController reloadData];
+    if (notification.object == nil) {
+        [self.openFileViewController reloadData];
+    } else {
+        
+        [self.openFileViewController reloadDataCloudWithInserts:notification.object[MADNotificationFileManagerDidUpdateFileLocationsKeyInserted]
+                                                        updates:notification.object[MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated]
+                                                        deletes:notification.object[MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved]];
+
+    }
 }
+
+/*
+ *  handles MADNotificationUbiquitousContainerFetchingWillBegin
+ */
 
 - (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Start timer, and display activity indictor if it takes too long

@@ -68,7 +68,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     [self.labelTitle setNeedsLayout];
     
-    self.labelTitleSub.textColor = self.colorTextNormal;
+    self.labelTitleSub.textColor = [UIColor lightGrayColor];
     self.labelTitleSub.clipsToBounds = NO;
     self.labelTitleSub.numberOfLines = 0;
     self.labelTitleSub.backgroundColor = [UIColor clearColor];
