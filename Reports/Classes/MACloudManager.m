@@ -704,8 +704,8 @@ static MACloudManager *sharedSingleton;
                                                             selector: @selector(localizedCaseInsensitiveCompare:)];
     NSArray *sorts = @[sort];
     
-    //NSArray *debug = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
-    [self.documentCacheCloudMetaDataItems setArray: [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts]];
+    NSArray *filteredDocumentCacheCloudMetaDataSorted = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
+    [self.documentCacheCloudMetaDataItems setArray: filteredDocumentCacheCloudMetaDataSorted];
     self.documentCacheCloudCount = filteredDocumentCacheCloudMetaData.count;
 }
 

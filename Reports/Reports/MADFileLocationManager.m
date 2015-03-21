@@ -47,6 +47,15 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 }
 
++ (NSArray *)sortDescriptorsDisplayName {
+    NSString *displayName = NSStringFromSelector(@selector(displayName));
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: displayName
+                                                           ascending: YES
+                                                            selector: @selector(localizedCaseInsensitiveCompare:)];
+    NSArray *sorts = @[sort];
+    return sorts;
+}
+
 - (instancetype)initWithPathExtension:(NSString *)pathExtension {
     
     if (self = [super init]) {
@@ -60,6 +69,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                   NSMetadataItemContentTypeKey, MADUtiType];
         metadataQuery.predicate = predicate;
         metadataQuery.notificationBatchingInterval = 0.5000;
+        //metadataQuery.sortDescriptors = [MADFileLocationManager sortDescriptorsDisplayName];
         
         NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
         self.results = results;

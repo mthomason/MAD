@@ -1012,6 +1012,18 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [self thumbnailUrlForMadUrl:madUrl];
 }
 
++ (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
+    NSError *error = nil;
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
+    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory
+                                                                     includingPropertiesForKeys:nil options:0 error:&error];
+    for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
+        [defaultManager removeItemAtURL:cachedFile error:&error];
+    }
+    [defaultManager removeItemAtURL:cachedDirectory error:&error];
+}
+
 // FIXME: Only ever called when creating of report failes
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
