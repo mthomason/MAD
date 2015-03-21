@@ -953,50 +953,25 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         indexPathsRemoved.count > 0) {
         [self.collectionView performBatchUpdates:^{
 
+            [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+            
+            self.documentsCloud.array = [MACloudManager sharedManager].documentCacheCloudMetaDataItems;
+
+            NSArray *adjustedIndexPaths;
             if (indexPathsInserted.count > 0) {
                 
-                // Inserted set comes from [[MACloudManager sharedManager].fileLocationManager.metadataQuery.results
-                // but that is sorted differetly than we are displaying the results.
-                // So we have to convert the index paths that are sent over to index paths that
-                // will be displayed.
+                adjustedIndexPaths = [self convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:indexPathsInserted];
+                [self.collectionView insertItemsAtIndexPaths: adjustedIndexPaths];
                 
-                NSMutableArray *insertedItems = [[NSMutableArray alloc] initWithCapacity: indexPathsInserted.count];
-                for (NSIndexPath *indexPath in indexPathsInserted) {
-                    NSMetadataItem *metadataItem = [[MACloudManager sharedManager].fileLocationManager.metadataQuery.results objectAtIndex:indexPath.item];
-                    [insertedItems addObject:metadataItem];
-                }
-                
-                [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-                [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
-                
-                NSMutableArray *adjustedInsertedIndexPaths = [[NSMutableArray alloc] initWithCapacity: indexPathsInserted.count];
-                NSInteger indexPathCounter = 0;
-                for (MADMetaData *metadataSorted in self.documentsCloud) {
-                    for (NSMetadataItem *metadataItem in insertedItems) {
-                        NSString *metadataPath = [metadataItem valueForKey:NSMetadataItemPathKey];
-                        if ([metadataSorted.url.path isEqualToString:metadataPath]) {
-                            NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:indexPathCounter inSection:1];
-                            [adjustedInsertedIndexPaths addObject:insertedPath];
-                        }
-                    }
-                    indexPathCounter++;
-                }
-
-                [self.collectionView insertItemsAtIndexPaths: adjustedInsertedIndexPaths];
             }
             if (indexPathsRemoved.count > 0) {
-                NSLog(@"Remove");
+                adjustedIndexPaths = [self convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:indexPathsRemoved];
+                [self.collectionView deleteItemsAtIndexPaths: adjustedIndexPaths];
                 
-                [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
-
-                [self.collectionView deleteItemsAtIndexPaths: indexPathsRemoved];
             }
             if (indexPathsUpdated.count > 0) {
-                NSLog(@"Update");
-                
-                [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
-
-                [self.collectionView reloadItemsAtIndexPaths: indexPathsUpdated];
+                adjustedIndexPaths = [self convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:indexPathsUpdated];
+                [self.collectionView reloadItemsAtIndexPaths: adjustedIndexPaths];
             }
         } completion:^(BOOL finished) {
             
@@ -1005,6 +980,28 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
 }
 
+- (NSArray *)convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:(NSArray *)indexPathsPointingToQueryResults {
+    NSMutableArray *insertedItems = [[NSMutableArray alloc] initWithCapacity: indexPathsPointingToQueryResults.count];
+    NSMutableArray *adjustedInsertedIndexPaths = [[NSMutableArray alloc] initWithCapacity: indexPathsPointingToQueryResults.count];
+
+    for (NSIndexPath *indexPath in indexPathsPointingToQueryResults) {
+        NSMetadataItem *metadataItem = [[MACloudManager sharedManager].fileLocationManager.metadataQuery.results objectAtIndex:indexPath.item];
+        [insertedItems addObject:metadataItem];
+    }
+    
+    NSInteger indexPathCounter = 0;
+    for (MADMetaData *metadataSorted in self.documentsCloud) {
+        for (NSMetadataItem *metadataItem in insertedItems) {
+            NSString *metadataPath = [metadataItem valueForKey:NSMetadataItemPathKey];
+            if ([metadataSorted.url.path isEqualToString:metadataPath]) {
+                NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:indexPathCounter inSection:1];
+                [adjustedInsertedIndexPaths addObject:insertedPath];
+            }
+        }
+        indexPathCounter++;
+    }
+    return adjustedInsertedIndexPaths;
+}
 
 - (NSArray *)indexSetToIndexPaths:(NSIndexSet *)indexSet section:(NSUInteger)section {
     NSMutableArray *indexPaths = [[NSMutableArray alloc] initWithCapacity:indexSet.count];
