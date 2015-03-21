@@ -63,7 +63,6 @@ NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenI
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
-NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 NSString * const MADNotificationReloadSectionLocal              = @"MADNotificationReloadSectionLocal";
@@ -165,6 +164,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
+#pragma mark - NSObject
+
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -190,6 +191,16 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
     return self;
 }
+
+- (void)initalizeProgressBar {
+    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    progressView.trackTintColor = [UIColor tintColorRed];
+    progressView.tintColor = [UIColor tintColorBlue];
+    progressView.progress = 0.0000f;
+    self.progressViewFileManager = progressView;
+}
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -347,35 +358,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
-}
-
-- (void)initalizeProgressBar {
-    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-    progressView.trackTintColor = [UIColor tintColorRed];
-    progressView.tintColor = [UIColor tintColorBlue];
-    progressView.progress = 0.0000f;
-    self.progressViewFileManager = progressView;
-}
-
-- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible animated:(BOOL)animated {
-    
-    if (self.rightBarButtonItemActivityIndicatorVisible != rightBarButtonItemActivityIndicatorVisible) {
-
-        UIBarButtonItem *barButtonItem;
-        if ((self.rightBarButtonItemActivityIndicatorVisible = rightBarButtonItemActivityIndicatorVisible)) {
-            
-            self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
-            barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
-                                                                           target: nil
-                                                                           action: nil];
-            
-        } else {
-            
-            barButtonItem = (UIBarButtonItem *)self.rightBarButtonItemHolderWhileActivity;
-            
-        }
-        [self.navigationItem setRightBarButtonItem:barButtonItem animated:animated];
-    }
 }
 
 #pragma mark - add controls
@@ -593,9 +575,18 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self search: self];
 }
 
+- (void)reenableDataWithSearch {
+    if (self.searchBar) {
+        [self searchBar: self.searchBar
+          textDidChange: self.searchBar.text];
+    } else {
+        [self reloadData];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     [self.collectionView.backgroundView setNeedsDisplay];
     
     __weak MADOpenFileViewController *weakself = self;
@@ -614,21 +605,12 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             [weakself addActionItemToToolbar:animated];
         }
     }];
-
+    
     if (self.firstViewWillAppear == NO) {
         [self reenableDataWithSearch];
     }
     
     self.firstViewWillAppear = NO;
-}
-
-- (void)reenableDataWithSearch {
-    if (self.searchBar) {
-        [self searchBar: self.searchBar
-          textDidChange: self.searchBar.text];
-    } else {
-        [self reloadData];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -662,22 +644,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self.collectionView.backgroundView setNeedsDisplay];
 }
 
-- (IBAction)addDocument:(id)sender {
-
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardNewDocument"
-                                                         bundle: [NSBundle mainBundle]];
-    MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
-    navControl.modalPresentationStyle = UIModalPresentationFormSheet;
-    
-    MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
-    vc.delegate = self;
-    self.definesPresentationContext = YES;
-    self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-
-    UIPresentationController *pc = navControl.presentationController;
-    pc.presentedView.backgroundColor = [UIColor whiteColor];
-    [self showViewController:navControl sender:self];
-}
+#pragma mark - Segues
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
@@ -859,7 +826,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     return YES;
 }
 
-#pragma mark - UIDocumentInteractionControllerDelegatex
+#pragma mark - UIDocumentInteractionControllerDelegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
     return self.navigationController;
@@ -905,11 +872,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
 }
 
-- (IBAction)cancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.barButtonItemAddNewDocument setEnabled:YES];
-}
-
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
@@ -950,39 +912,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         [self setToolbarItems:toolbarButtons animated:animated];
     }
 
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout*)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
-    
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
-                                                                                         UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
-    
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-                    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
-    
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
-    
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-                    referenceSizeForHeaderInSection:(NSInteger)section {
-    
-    return [MACloudManager sharedManager].cloudAvailble ? CGSizeMake(collectionView.bounds.size.width, MADSectionHeaderHeight) : CGSizeZero;
-    
 }
 
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
@@ -1088,6 +1017,41 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [defaultManager removeItemAtURL:cachedDirectory error:&error];
 }
 
+#pragma mark - UICollectionView Layout
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
+                        layout:(UICollectionViewLayout*)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section {
+    
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
+                                                                                         UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+                    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+                    referenceSizeForHeaderInSection:(NSInteger)section {
+    
+    return [MACloudManager sharedManager].cloudAvailble ? CGSizeMake(collectionView.bounds.size.width, MADSectionHeaderHeight) : CGSizeZero;
+    
+}
+
 #pragma mark - MFMailComposeViewController delegate protocol
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller
@@ -1105,7 +1069,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     return YES;
 }
 
-- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error
+    movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
     
     //Only allow the thumbnails to proceed to after an error.
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
@@ -1547,7 +1512,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
-
 #pragma mark UI Helpers
 
 - (BOOL)dismissAllPopovers {
@@ -1653,16 +1617,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
-#pragma mark - Actions
-
-- (IBAction)download:(id)sender {
-    NSArray *documentTypes = @[MADUtiType];
-    UIDocumentPickerViewController *vc = [[UIDocumentPickerViewController alloc] initWithDocumentTypes: documentTypes
-                                                                                                inMode: UIDocumentPickerModeImport];
-    vc.delegate = self;
-    [self presentViewController:vc animated:YES completion:^{}];
-}
-
 #pragma mark - UIDocumentPickerDelegate
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
@@ -1674,10 +1628,34 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [controller removeFromParentViewController];
 }
 
+#pragma mark - Actions
+
+- (IBAction)addDocument:(id)sender {
+
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardNewDocument"
+                                                         bundle: [NSBundle mainBundle]];
+    MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
+    navControl.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
+    vc.delegate = self;
+    self.definesPresentationContext = YES;
+    self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+
+    UIPresentationController *pc = navControl.presentationController;
+    pc.presentedView.backgroundColor = [UIColor whiteColor];
+    [self showViewController:navControl sender:self];
+}
+
+- (IBAction)cancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
+}
+
 - (IBAction)search:(id)sender {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.searchBar.isHidden) {
-//        self.searchBar.showsCancelButton = YES;
+        //        self.searchBar.showsCancelButton = YES;
         
         //[self.searchBar sizeToFit];
         self.searchBar.hidden = NO;
@@ -1702,45 +1680,45 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         self.searchBar.backgroundColor = [UIColor clearColor];
         self.searchBar.barTintColor = [UIColor whiteColor];
         self.searchBar.tintColor = [UIColor whiteColor];
-
-
-/*
-        for (UIView *subview in self.searchBar.subviews) {
-            for (id subview2 in subview.subviews) {
-                if ([subview2 isKindOfClass:[UITextField class]]) {
-                    ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                    ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-                    ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                    for (UIView *view in ((UITextField *)subview2).subviews) {
-                        if ([view isKindOfClass:[UIButton class]]) {
-                            
-                            
-                            UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                            ((UIButton *)view).tintColor = [UIColor whiteColor];
-                            [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                        }
-                    }
-                    ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                    ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-                }
-            }
-        }*/
         
         
-//        self.navigationController.navigationBar.
+        /*
+         for (UIView *subview in self.searchBar.subviews) {
+         for (id subview2 in subview.subviews) {
+         if ([subview2 isKindOfClass:[UITextField class]]) {
+         ((UITextField *)subview2).textColor = [UIColor whiteColor];
+         ((UITextField *)subview2).tintColor = [UIColor whiteColor];
+         ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+         ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
+         for (UIView *view in ((UITextField *)subview2).subviews) {
+         if ([view isKindOfClass:[UIButton class]]) {
+         
+         
+         UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+         ((UIButton *)view).tintColor = [UIColor whiteColor];
+         [((UIButton *)view) setImage:image forState:UIControlStateNormal];
+         }
+         }
+         ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+         ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
+         ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
+         }
+         }
+         }*/
+        
+        
+        //        self.navigationController.navigationBar.
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
                                weakself.searchBar.alpha = 1.0000f;
                                weakself.labelMadDesigner.alpha = 0.0000f;
                                weakself.navigationItem.titleView = searchViewHolder;
-        } completion:^(BOOL finished) {
-            if (weakself.searchBar.isFirstResponder == NO) {
-                [weakself.searchBar becomeFirstResponder];
-            }
-        }];
+                           } completion:^(BOOL finished) {
+                               if (weakself.searchBar.isFirstResponder == NO) {
+                                   [weakself.searchBar becomeFirstResponder];
+                               }
+                           }];
         
     } else {
         if (self.searchBar.text.length > 0) {
@@ -1757,11 +1735,41 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
-            weakself.searchBar.alpha = 0.0000f;
-            weakself.labelMadDesigner.alpha = 1.0000f;
-            weakself.navigationItem.titleView = weakself.labelMadDesigner;
-        } completion:nil];
+                               weakself.searchBar.alpha = 0.0000f;
+                               weakself.labelMadDesigner.alpha = 1.0000f;
+                               weakself.navigationItem.titleView = weakself.labelMadDesigner;
+                           } completion:nil];
         
+    }
+}
+
+- (IBAction)edit:(id)sender {
+    
+    BOOL startEdit = ![self isEditing];
+    [self setEditing:startEdit animated:YES];
+    
+    if (startEdit) {
+        self.editModeEnabled = YES;
+        self.barButtonItemLicensing.enabled = NO;
+        self.barButtonItemAddNewDocument.enabled = NO;
+        self.barButtonItemAbout.enabled = NO;
+        self.barButtonItemInformation.enabled = NO;
+        self.collectionView.allowsMultipleSelection = YES;
+        
+        for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
+            [cell startWobble];
+        }
+        
+        NSMutableArray *items = [self.toolbarItems mutableCopy];
+        [items removeObject:self.barButtonItemEdit];
+        [items addObject:self.barButtonItemEditDone];
+        [self setToolbarItems:items animated:YES];
+        [self.navigationItem setRightBarButtonItem: nil
+                                          animated: YES];
+        
+    } else {
+        [self done:sender];
     }
 }
 
@@ -1803,34 +1811,38 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
-- (IBAction)edit:(id)sender {
-    
-    BOOL startEdit = ![self isEditing];
-    [self setEditing:startEdit animated:YES];
-    
-    if (startEdit) {
-        self.editModeEnabled = YES;
-        self.barButtonItemLicensing.enabled = NO;
-        self.barButtonItemAddNewDocument.enabled = NO;
-        self.barButtonItemAbout.enabled = NO;
-        self.barButtonItemInformation.enabled = NO;
-        self.collectionView.allowsMultipleSelection = YES;
-        
-        for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
-            [cell startWobble];
-        }
-        
-        NSMutableArray *items = [self.toolbarItems mutableCopy];
-        [items removeObject:self.barButtonItemEdit];
-        [items addObject:self.barButtonItemEditDone];
-        [self setToolbarItems:items animated:YES];
-        [self.navigationItem setRightBarButtonItem: nil
-                                          animated: YES];
+- (IBAction)download:(id)sender {
+    NSArray *documentTypes = @[MADUtiType];
+    UIDocumentPickerViewController *vc = [[UIDocumentPickerViewController alloc] initWithDocumentTypes: documentTypes
+                                                                                                inMode: UIDocumentPickerModeImport];
+    vc.delegate = self;
+    [self presentViewController:vc animated:YES completion:^{}];
+}
 
-    } else {
-        [self done:sender];
+- (void)cut:(id)sender {
+    [super cut:sender];
+}
+
+- (void)copy:(id)sender {
+    [super copy:sender];
+}
+
+// FIXME: Not updated with file coordnation... but likely unused
+- (void)paste:(id)sender {
+    NSURL *url = [[UIPasteboard generalPasteboard] URL];
+    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+    NSURL *destinationUrl = [url uniqueUrl];
+    
+    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+    NSError* fileWrittingError = nil;
+    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    if (fileWrittingError) {
+        fileWrittingError = nil;
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
     }
+    [self reloadData];
+    [self selectionsUpdated];
 }
 
 - (void)addStandardPassthoughViewsToController:(UIPopoverPresentationController *)controller {
@@ -1890,14 +1902,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                            animated: YES
                          completion: nil];
     }
-}
-
-- (void)cut:(id)sender {
-    [super cut:sender];
-}
-
-- (void)copy:(id)sender {
-    [super copy:sender];
 }
 
 - (IBAction)activity:(id)sender {
@@ -2067,24 +2071,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         strongself2.updatingEnabled = YES;
     }];
     
-    [self selectionsUpdated];
-}
-
-// FIXME: Not updated with file coordnation... but likely unused
-- (void)paste:(id)sender {
-    NSURL *url = [[UIPasteboard generalPasteboard] URL];
-    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    NSURL *destinationUrl = [url uniqueUrl];
-    
-    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-    NSError* fileWrittingError = nil;
-    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-    if (fileWrittingError) {
-        fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-    }
-    [self reloadData];
     [self selectionsUpdated];
 }
 
@@ -2402,6 +2388,28 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
     [self showViewController:alert sender:self];
     
+}
+
+- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
+                                             animated:(BOOL)animated {
+    
+    if (self.rightBarButtonItemActivityIndicatorVisible != rightBarButtonItemActivityIndicatorVisible) {
+
+        UIBarButtonItem *barButtonItem;
+        if ((self.rightBarButtonItemActivityIndicatorVisible = rightBarButtonItemActivityIndicatorVisible)) {
+            
+            self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
+            barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
+                                                                           target: nil
+                                                                           action: nil];
+            
+        } else {
+            
+            barButtonItem = (UIBarButtonItem *)self.rightBarButtonItemHolderWhileActivity;
+            
+        }
+        [self.navigationItem setRightBarButtonItem:barButtonItem animated:animated];
+    }
 }
 
 - (NSString *)renameFilter:(NSString *)text {

@@ -102,6 +102,8 @@ NSString * const MTDocumentAdditionalContentKey         = @"additionalContent";
 NSString * const MTDocumentFileTypeKey                  = @"fileType";
 NSString * const MTDocumentParentContextKey             = @"parentContext";
 
+NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
+
 NSString * const MTDocumentAdditionalContentFileName    = @"sup";
 NSString * const MTDocumentGeneratorFileName            = @"gen";
 NSString * const MTDocumentThumbnailFileName            = @"img";
@@ -983,7 +985,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 + (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
     NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension;
     NSString *fileName = [handle stringByAppendingString:@"1024"];
-    fileName = [fileName stringByAppendingPathExtension:@"png"];
+    fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     
     NSString *fileNameId = [MACloudManager filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
@@ -992,8 +994,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
-    NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
-    NSString *fileName = [handle stringByAppendingString:extention];
+    NSString *name = [UIDevice isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
+    
+    NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     
     NSString *fileNameId = [MACloudManager filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
