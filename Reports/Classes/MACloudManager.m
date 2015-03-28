@@ -8,7 +8,7 @@
 
 #import "MACloudManager.h"
 #import <UIKit/UIKit.h>
-#import "MADFileLocationManager.h"
+#import "MADMetadataQueryManager.h"
 #import "MADMetaData.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
@@ -51,16 +51,13 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 @property (nonatomic, strong, readwrite) id <NSObject, NSCopying, NSCoding> ubiquityIdentityToken;
 
-@property (nonatomic, strong, readwrite) MADFileLocationManager *fileLocationManager;
+@property (nonatomic, strong, readwrite) MADMetadataQueryManager *fileLocationManager;
 
 @property (atomic, assign) BOOL checkingCloudPreferencesLock;
 
 @property (nonatomic, assign, readwrite) BOOL cloudAvailble;
 
 @property (nonatomic, strong) NSFileManager *fileManager;
-
-@property (nonatomic, assign) NSUInteger    documentCacheCloudCount;
-@property (nonatomic, assign) NSUInteger    documentCacheLocalCount;
 
 @property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheCloudMetaDataItems;
 @property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheLocalUrls;
@@ -77,8 +74,28 @@ static MACloudManager *sharedSingleton;
 
 - (id)debugQuickLookObject {
     NSMutableString *debuggingString = [NSMutableString new];
+    
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquitousDocumentsDirectory)), self.ubiquitousDocumentsDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityContainer)), self.ubiquityContainer.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localDataDirectory)), self.localDataDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localDocumentDirectory)), self.localDocumentDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localHomeDirectory)), self.localHomeDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localTemporaryDirectory)), self.localTemporaryDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localCachesDirectory)), self.localCachesDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localApplicationSupportDirectory)), self.localApplicationSupportDirectory.path];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityIdentityToken)), self.ubiquityIdentityToken];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileLocationManager)), self.fileLocationManager];
+
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(checkingCloudPreferencesLock)), self.checkingCloudPreferencesLock ? @"YES" : @"NO"];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudAvailble)), self.cloudAvailble ? @"YES" : @"NO"];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityContainer)), self.ubiquityContainer];
+    
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(documentCacheCloudMetaDataItems)), self.documentCacheCloudMetaDataItems];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(documentCacheLocalUrls)), self.documentCacheLocalUrls];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileNamesSortedLocal)), self.fileNamesSortedLocal];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileNamesSortedCloud)), self.fileNamesSortedCloud];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileNamesSortedCombined)), self.fileNamesSortedCombined];
+    
+    
     return debuggingString;
 }
 
@@ -123,7 +140,7 @@ static MACloudManager *sharedSingleton;
         NSURL *docsUrl = [NSURL fileURLWithPath: docPaths.firstObject
                                     isDirectory: YES];
         
-        MADFileLocationManager *fileLocationManager = [[MADFileLocationManager alloc] initWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
+        MADMetadataQueryManager *fileLocationManager = [[MADMetadataQueryManager alloc] initWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
         self.fileLocationManager = fileLocationManager;
         self.localHomeDirectory = homeDirectoryUrl;
         self.localTemporaryDirectory = urlTemporaryDirectory;
@@ -153,7 +170,7 @@ static MACloudManager *sharedSingleton;
     return self;
 }
 
-+ (MACloudManager*)sharedManager {
++ (MACloudManager *)sharedManager {
     return sharedSingleton;
 }
 
@@ -200,21 +217,6 @@ static MACloudManager *sharedSingleton;
 
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
                                                         object: nil];
-}
-
-- (NSArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
-
-    [self.fileLocationManager startQuery];
-    NSArray *result;
-    if (self.cloudAvailble) {
-        NSArray *r = [self.fileLocationManager calculatedUrls];
-        result = [NSArray arrayWithArray:r];
-    } else {
-        NSArray *r = [self contentOfLocalDocumentsDirectoryWithExtention:extension];
-        result  = [NSArray arrayWithArray:r];
-    }
-    
-    return result;
 }
 
 - (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion {
@@ -455,8 +457,6 @@ static MACloudManager *sharedSingleton;
                                      
                                      if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:destinaion];
-                                     } else {
-                                         NSLog(@"%@", error);
                                      }
                                      completion(success, uniqueUrl, error);
                                  }];
@@ -497,8 +497,6 @@ static MACloudManager *sharedSingleton;
                                      
                                      if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
-                                     } else {
-                                         NSLog(@"%@", error);
                                      }
                                      completion(success, uniqueUrl, error);
                                  }];
@@ -677,7 +675,7 @@ static MACloudManager *sharedSingleton;
 }
 
 - (void)reloadCacheCloud:(NSString *)searchString {
-    NSDictionary *documentCacheCloudMetaData = [NSDictionary dictionaryWithDictionary: self.fileLocationManager.results];
+/*    NSDictionary *documentCacheCloudMetaData = [NSDictionary dictionaryWithDictionary: self.fileLocationManager.results];
     
     NSArray *filteredDocumentCacheCloudMetaData;
     
@@ -704,9 +702,26 @@ static MACloudManager *sharedSingleton;
                                                             selector: @selector(localizedCaseInsensitiveCompare:)];
     NSArray *sorts = @[sort];
     
-    NSArray *filteredDocumentCacheCloudMetaDataSorted = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
-    [self.documentCacheCloudMetaDataItems setArray: filteredDocumentCacheCloudMetaDataSorted];
-    self.documentCacheCloudCount = filteredDocumentCacheCloudMetaData.count;
+    NSArray *filteredDocumentCacheCloudMetaDataSorted = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];*/
+    self.documentCacheCloudMetaDataItems.array = [self documentsFilteredBySearchString:searchString];
+}
+
+- (NSArray *)documentsFilteredBySearchString:(NSString *)searchString {
+    NSArray *result;
+    if (searchString.length > 0) {
+
+        NSPredicate *predicateMetadata = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *metadataWrapper, NSDictionary *bindings) {
+            MADMetaData *metadata = metadataWrapper[MADKeyMetadataShort];
+            NSRange range = NSMakeRange(0, MIN(searchString.length, metadata.displayName.length));
+            return [metadata.displayName compare: searchString
+                                         options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
+                                           range: range] == NSOrderedSame;
+        }];
+        result = [self.fileLocationManager.metadata filteredArrayUsingPredicate:predicateMetadata];
+    } else {
+        result = self.fileLocationManager.metadata;
+    }
+    return [NSArray arrayWithArray:result];
 }
 
 - (void)reloadCacheLocal:(NSString *)searchString {
@@ -738,8 +753,7 @@ static MACloudManager *sharedSingleton;
                                                            ascending: YES
                                                             selector: @selector(localizedCaseInsensitiveCompare:)];
     NSArray *sorts = @[sort];
-    [self.documentCacheLocalUrls setArray: [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts]];
-    self.documentCacheLocalCount = filteredDocumentCacheLocalUrls.count;
+    self.documentCacheLocalUrls.array = [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts];
 
 }
 
@@ -748,11 +762,11 @@ static MACloudManager *sharedSingleton;
     switch (section) {
 
         case MACloudManagerSectionCloud:
-            return self.documentCacheCloudCount;
+            return self.documentCacheCloudMetaDataItems.count;
             break;
         
         case MACloudManagerSectionLocal:
-            return self.documentCacheLocalCount;
+            return self.documentCacheLocalUrls.count;
             break;
         
         default:
@@ -763,14 +777,15 @@ static MACloudManager *sharedSingleton;
 }
 
 - (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location inSection:(MACloudManagerSection)section {
-
+    NSDictionary *metadataDictionary;
     MADMetaData *metatdata = nil;
     id item = nil;
 
     switch (section) {
     
         case MACloudManagerSectionCloud:
-            metatdata = self.documentCacheCloudMetaDataItems[location];
+            metadataDictionary = self.documentCacheCloudMetaDataItems[location];
+            metatdata = metadataDictionary[MADKeyMetadataShort];
             break;
             
         case MACloudManagerSectionLocal:

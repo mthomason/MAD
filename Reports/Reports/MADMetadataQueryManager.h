@@ -14,6 +14,7 @@
 extern NSString * const MADUtiType;
 extern NSString * const MADNotificationCloudActivityStarted;
 extern NSString * const MADNotificationCloudActivityCompleted;
+extern NSString * const MADKeyMetadataShort;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 
@@ -25,16 +26,17 @@ extern NSString * const MADNotificationCloudActivityCompleted;
 
 @end
 
-@interface MADFileLocationManager : NSObject
+@interface MADMetadataQueryManager : NSObject
 
 @property (nonatomic, weak) id<MADFileLocationManagerDelegate> delegate;
 @property (nonatomic, strong, readonly) NSMetadataQuery *metadataQuery;
 @property (nonatomic, strong, readonly) NSMutableDictionary *results;
+@property (nonatomic, strong, readonly) NSArray *metadata;
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension;
 - (BOOL)startQuery;
 - (void)stopQuery;
-- (NSMutableArray *)calculatedUrls;
++ (NSString *)keyResults;
 
 @end
 

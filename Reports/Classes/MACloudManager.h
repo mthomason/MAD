@@ -35,7 +35,7 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 @end
 
-@class MADFileLocationManager, MADMetaData;
+@class MADMetadataQueryManager, MADMetaData;
 
 @interface MACloudManager : NSObject
 
@@ -55,7 +55,7 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 @property (nonatomic, strong) NSString *searchString;
 
-@property (nonatomic, strong, readonly) MADFileLocationManager *fileLocationManager;
+@property (nonatomic, strong, readonly) MADMetadataQueryManager *fileLocationManager;
 
 @property (nonatomic, strong, readonly) NSMutableArray       *documentCacheCloudMetaDataItems;
 @property (nonatomic, strong, readonly) NSMutableArray       *documentCacheLocalUrls;
@@ -70,8 +70,6 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification;
 
 // File operations
-
-- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 
 - (void)moveDocument: (NSURL *)source
           toLocation: (NSURL *)destination
@@ -101,7 +99,6 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 // Managing the cache
 - (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;
-- (NSUInteger)numberOfDocuments:(MACloudManagerSection)section;
 - (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location
                                  inSection:(MACloudManagerSection)section;
 

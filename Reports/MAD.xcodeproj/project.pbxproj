@@ -535,12 +535,12 @@
 		4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22419D5D16800B7A417 /* Test_Cloud.m */; };
-		4C26F22F19D5D37D00B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
-		4C26F23019D5D37D00B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
+		4C26F22F19D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */; };
+		4C26F23019D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */; };
 		4C26F23119D5E25100B7A417 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
 		4C26F23219D5E25C00B7A417 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4C26F23319D5E27A00B7A417 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
-		4C26F23419D5E40300B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
+		4C26F23419D5E40300B7A417 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */; };
 		4C27381B191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1468,6 +1468,12 @@
 		4CDA77691825FFCD00E462F6 /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76FB1825E8D500E462F6 /* libBarcodes.a */; };
 		4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
 		4CDA778B18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
+		4CDB48871ABFBA9E00E76879 /* NSMetadataItem+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48861ABFBA9E00E76879 /* NSMetadataItem+Description.m */; };
+		4CDB48881ABFBA9E00E76879 /* NSMetadataItem+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48861ABFBA9E00E76879 /* NSMetadataItem+Description.m */; };
+		4CDB48C21ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */; };
+		4CDB48C31ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */; };
+		4CDB48C61ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C51ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m */; };
+		4CDB48C71ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C51ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m */; };
 		4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1998,8 +2004,8 @@
 		4C26F22019D5D16800B7A417 /* Test Cloud.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Cloud.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C26F22319D5D16800B7A417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C26F22419D5D16800B7A417 /* Test_Cloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
-		4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileLocationManager.m; sourceTree = "<group>"; };
-		4C26F22E19D5D37D00B7A417 /* MADFileLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileLocationManager.h; sourceTree = "<group>"; };
+		4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetadataQueryManager.m; sourceTree = "<group>"; };
+		4C26F22E19D5D37D00B7A417 /* MADMetadataQueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetadataQueryManager.h; sourceTree = "<group>"; };
 		4C273819191AE4E600304A02 /* MTQueryCacheIndexCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexCreate.h; sourceTree = "<group>"; };
 		4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
 		4C273826191AE4FF00304A02 /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
@@ -2993,6 +2999,12 @@
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Barcodes.xcodeproj; path = Barcodes/Barcodes.xcodeproj; sourceTree = "<group>"; };
 		4CDA778918275B5700E462F6 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeView.h; path = Barcodes/Barcodes/MTBarcodeView.h; sourceTree = "<group>"; };
+		4CDB48851ABFBA9E00E76879 /* NSMetadataItem+Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMetadataItem+Description.h"; sourceTree = "<group>"; };
+		4CDB48861ABFBA9E00E76879 /* NSMetadataItem+Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMetadataItem+Description.m"; sourceTree = "<group>"; };
+		4CDB48C01ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMetadataQueryResultGroup+Description.h"; sourceTree = "<group>"; };
+		4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMetadataQueryResultGroup+Description.m"; sourceTree = "<group>"; };
+		4CDB48C41ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMetadataQueryAttributeValueTuple+Description.h"; sourceTree = "<group>"; };
+		4CDB48C51ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMetadataQueryAttributeValueTuple+Description.m"; sourceTree = "<group>"; };
 		4CDB61ED14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderPredicateFormatViewController.h; sourceTree = "<group>"; };
 		4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderPredicateFormatViewController.m; sourceTree = "<group>"; };
 		4CDB625014E395E400A5389E /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EverydayApps.h"; sourceTree = "<group>"; };
@@ -3138,6 +3150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */,
 				4CC7F6A91962A2EF00A84FC0 /* libScrimpter.a in Frameworks */,
 				4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */,
@@ -3156,7 +3169,6 @@
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
 				4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */,
-				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */,
 				4C77333B19100098005AE7C2 /* libmysqlclient.a in Frameworks */,
 				4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */,
@@ -3668,8 +3680,8 @@
 			children = (
 				4C23FB1218FADD4C009F234F /* MACloudManager.h */,
 				4C23FB1318FADD4C009F234F /* MACloudManager.m */,
-				4C26F22E19D5D37D00B7A417 /* MADFileLocationManager.h */,
-				4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */,
+				4C26F22E19D5D37D00B7A417 /* MADMetadataQueryManager.h */,
+				4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */,
 			);
 			name = Cloud;
 			sourceTree = "<group>";
@@ -5477,6 +5489,12 @@
 				4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */,
 				4C712E6619E068EC00808779 /* UIAlertController+CommonAlerts.h */,
 				4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */,
+				4CDB48851ABFBA9E00E76879 /* NSMetadataItem+Description.h */,
+				4CDB48861ABFBA9E00E76879 /* NSMetadataItem+Description.m */,
+				4CDB48C01ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.h */,
+				4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */,
+				4CDB48C41ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.h */,
+				4CDB48C51ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -6698,6 +6716,7 @@
 				4CABE4A01837DF80007EDD9D /* RptqDatabaseSchemaTable.m in Sources */,
 				4C23FBED18FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m in Sources */,
 				4C0E773F163B5AEC003B951E /* MTConnectionViewController.m in Sources */,
+				4CDB48881ABFBA9E00E76879 /* NSMetadataItem+Description.m in Sources */,
 				4C23FAEB18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */,
 				4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */,
 				4C23FB3118FADE65009F234F /* MTCellEnterText.m in Sources */,
@@ -6719,7 +6738,7 @@
 				4C23FBC318FAE4F7009F234F /* MTPaperB8.m in Sources */,
 				4C0CAB5C1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
 				4C0E775B163B5AEC003B951E /* MTQueryBuilderAddTableViewController.m in Sources */,
-				4C26F23019D5D37D00B7A417 /* MADFileLocationManager.m in Sources */,
+				4C26F23019D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */,
 				4C0E775C163B5AEC003B951E /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C2F6E7E194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */,
@@ -6736,6 +6755,7 @@
 				4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4C23FB3A18FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C273829191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */,
+				4CDB48C31ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */,
 				4C0E7762163B5AEC003B951E /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
 				4C0E7763163B5AEC003B951E /* MTTableViewCellQueryPredicate.m in Sources */,
 				4C23FBE518FAE4F7009F234F /* MTPaperLetter.m in Sources */,
@@ -6806,6 +6826,7 @@
 				4C23FC0F18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */,
 				4C23FB0318FADCE4009F234F /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C0E7799163B5AEC003B951E /* MTRulerView.m in Sources */,
+				4CDB48C71ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
 				4CB4A47C183C7290008D52B5 /* RptqDocumentObject.m in Sources */,
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
 				4C77328D190FFD6A005AE7C2 /* MysqlDelete.m in Sources */,
@@ -7049,7 +7070,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C26F23419D5E40300B7A417 /* MADFileLocationManager.m in Sources */,
+				4C26F23419D5E40300B7A417 /* MADMetadataQueryManager.m in Sources */,
 				4C60484819E3C77100E1E3A0 /* MADMetaData.m in Sources */,
 				4C26F23319D5E27A00B7A417 /* NSFileManager+Common.m in Sources */,
 				4C26F23219D5E25C00B7A417 /* NSURL+Document.m in Sources */,
@@ -7093,6 +7114,7 @@
 				4CABE47F1837DF7D007EDD9D /* RptqDocument.m in Sources */,
 				4CABE4BB1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */,
 				4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */,
+				4CDB48871ABFBA9E00E76879 /* NSMetadataItem+Description.m in Sources */,
 				4C23FADD18FADA40009F234F /* MTDataTable.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MTConnectionViewController.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* MADQueryViewController.m in Sources */,
@@ -7113,7 +7135,7 @@
 				4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */,
 				4C23FB0818FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C0CAB5B1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
-				4C26F22F19D5D37D00B7A417 /* MADFileLocationManager.m in Sources */,
+				4C26F22F19D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */,
 				4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */,
 				4C2F6E7D194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
@@ -7131,6 +7153,7 @@
 				4C23FBD218FAE4F7009F234F /* MTPaperC5.m in Sources */,
 				4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */,
 				4CABE46F1837DF7C007EDD9D /* RptqDocumentObjectImage.m in Sources */,
+				4CDB48C21ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */,
 				4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C23FBA818FAE4F7009F234F /* MTPaperA6.m in Sources */,
 				4C23FBCC18FAE4F7009F234F /* MTPaperC2.m in Sources */,
@@ -7201,6 +7224,7 @@
 				4CABE4AB1837DF81007EDD9D /* RptqQueryTable.m in Sources */,
 				4CC24AA51503E3AB00C4EE98 /* MTGradientView.m in Sources */,
 				4C87407A15052D3D007FC473 /* MTClipboardView.m in Sources */,
+				4CDB48C61ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
 				4C23FBDC18FAE4F7009F234F /* MTPaperC10.m in Sources */,
 				4C23FB9E18FAE4F7009F234F /* MTPaperA1.m in Sources */,
 				4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */,

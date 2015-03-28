@@ -45,7 +45,9 @@
 @property (nonatomic, strong, readwrite) NSString *ubiquitousItemContainerDisplayName;
 @property (nonatomic, strong, readwrite) NSURL *ubiquitousItemURLInLocalContainer;
 
-@property (nonatomic, retain) NSNumberFormatter *numberFormatterFileSize;
+@property (nonatomic, strong) NSNumberFormatter *numberFormatterFileSize;
+
+@property (nonatomic, strong) NSString *path;
 
 @end
 
@@ -66,6 +68,7 @@
         
         NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath:url.path];
         self.displayName = displayName;
+        self.path = url.path;
         
         NSNumber *filesize = [attributes objectForKey:NSFileSize];
         self.fileSystemFileSize = filesize.unsignedLongLongValue;
@@ -107,6 +110,9 @@
 
         NSString *itemFsName = [item valueForAttribute: NSMetadataItemFSNameKey];
         self.fileSystemName = itemFsName;
+        
+        NSString *path = [item valueForAttribute:NSMetadataItemPathKey];
+        self.path = path;
         
         NSString *itemDisplayName = [item valueForAttribute: NSMetadataItemDisplayNameKey];
         self.displayName = itemDisplayName;

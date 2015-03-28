@@ -43,7 +43,7 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 
 #import "MADFileManager.h"
-#import "MADFileLocationManager.h"
+#import "MADMetadataQueryManager.h"
 #import "MADUpgradeManager.h"
 #import "MADBarButtonItem.h"
 
@@ -58,6 +58,7 @@
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDocumentInformationTableViewController.h"
+#import "NSMetadataItem+Description.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -146,6 +147,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 @implementation MADOpenFileViewController
 
+#pragma mark - Static Functions
+
 static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection);
 static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection) {
     switch (displaySection) {
@@ -162,6 +165,13 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             return MACloudManagerSectionLocal;
             break;
     }
+}
+
++ (NSString *)keySubviews {
+    return NSStringFromSelector(@selector(subviews));
+}
++ (NSString *)keyLeftView {
+    return NSStringFromSelector(@selector(leftView));
 }
 
 #pragma mark - NSObject
@@ -183,6 +193,11 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationReloadSectionLocal
                                                   object: nil];
+    
+    NSString *keyResults = [MADMetadataQueryManager keyResults];
+    [[MACloudManager sharedManager].fileLocationManager.metadataQuery removeObserver: self
+                                                                          forKeyPath: keyResults];
+
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -190,6 +205,67 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         [self initalizeProgressBar];
     }
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if ([keyPath isEqualToString:[MADOpenFileViewController keySubviews]]) {
+        if ([object isKindOfClass:[UITextField class]]) {
+            
+            
+            for (UIView *view in ((UITextField *)object).subviews) {
+                if ([view isKindOfClass:[UIButton class]]) {
+                    
+                    
+                    UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    ((UIButton *)view).tintColor = [UIColor whiteColor];
+                    [((UIButton *)view) setImage:image forState:UIControlStateNormal];
+                }
+            }
+        }
+    } else if ([keyPath isEqualToString:[MADOpenFileViewController keyLeftView]]) {
+        
+    } else if ([keyPath isEqualToString:[MADMetadataQueryManager keyResults]]) {
+        
+        NSKeyValueChange changeType = ((NSNumber *)change[NSKeyValueChangeKindKey]).unsignedIntegerValue;
+        NSArray *changeValueNew = change[NSKeyValueChangeNewKey];
+        NSArray *changeValueOld = change[NSKeyValueChangeOldKey];
+        NSIndexSet *changeIndexes = change[NSKeyValueChangeIndexesKey];
+        BOOL changePrior = ((NSNumber *)change[NSKeyValueChangeNotificationIsPriorKey]).boolValue;
+        
+        switch (changeType) {
+            case NSKeyValueChangeInsertion:
+                NSLog(@"Insert \t\nnew %@\t\nold %@\t\n at indexes \t\n%@\t\nPri %@", changeValueNew, changeValueOld, changeIndexes, changePrior ? @"YES":@"NO");
+                break;
+            case NSKeyValueChangeRemoval:
+                NSLog(@"Remove \t\nnew %@\t\nold %@\t\n at indexes \t\n%@\t\nPri %@", changeValueNew, changeValueOld, changeIndexes, changePrior ? @"YES":@"NO");
+                break;
+            case NSKeyValueChangeReplacement:
+                NSLog(@"Replace \t\nnew %@\t\nold %@\t\n at indexes \t\n%@\t\nPri %@", changeValueNew, changeValueOld, changeIndexes, changePrior ? @"YES":@"NO");
+                break;
+            case NSKeyValueChangeSetting:
+                NSLog(@"Settings \t\nnew %@\t\nold %@\t\n at indexes \t\n%@\t\nPri %@", [MADOpenFileViewController logTitles:changeValueNew], [MADOpenFileViewController logTitles:changeValueOld], changeIndexes, changePrior ? @"YES":@"NO");
+                break;
+            default:
+                break;
+        }
+    }
+}
+
++ (NSString *)logTitles:(NSArray *)metadataItems {
+    NSMutableString *result = [[NSMutableString alloc] initWithString:@"(\n"];
+    int ctr = 0;
+    for (NSMetadataItem *item in metadataItems) {
+        if (ctr>0) {
+            [result appendString:@",\n"];
+        }
+        [result appendFormat:@"\t\"%@\"", [item valueForAttribute:NSMetadataItemFSNameKey]];
+        ctr++;
+    }
+    [result appendString:@"\n)\n"];
+    return result;
 }
 
 - (void)initalizeProgressBar {
@@ -204,6 +280,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSString *keyResults = [MADMetadataQueryManager keyResults];
+    [[MACloudManager sharedManager].fileLocationManager.metadataQuery addObserver:self
+                                                                       forKeyPath:keyResults
+                                                                          options:(NSKeyValueObservingOptionNew |
+                                                                                   NSKeyValueObservingOptionOld |
+                                                                                   NSKeyValueObservingOptionPrior)
+                                                                          context:NULL];
     
     NSMutableArray *documentsLocal = [[NSMutableArray alloc] init];
     self.documentsLocal = documentsLocal;
@@ -533,29 +617,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)textFieldDidBeginEditing:(UITextField *)textField { }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
-    if ([keyPath isEqualToString:@"subviews"]) {
-        if ([object isKindOfClass:[UITextField class]]) {
-            
-            
-            for (UIView *view in ((UITextField *)object).subviews) {
-                if ([view isKindOfClass:[UIButton class]]) {
-                    
-                    
-                    UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    ((UIButton *)view).tintColor = [UIColor whiteColor];
-                    [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                }
-            }
-        }
-    } else if ([keyPath isEqualToString:@"leftView"]) {
-        
-    }
-}
 
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
@@ -957,21 +1018,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             
             self.documentsCloud.array = [MACloudManager sharedManager].documentCacheCloudMetaDataItems;
 
-            NSArray *adjustedIndexPaths;
             if (indexPathsInserted.count > 0) {
-                
-                adjustedIndexPaths = [self convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:indexPathsInserted];
-                [self.collectionView insertItemsAtIndexPaths: adjustedIndexPaths];
-                
+                [self.collectionView insertItemsAtIndexPaths: indexPathsInserted];
             }
             if (indexPathsRemoved.count > 0) {
-                adjustedIndexPaths = [self convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:indexPathsRemoved];
-                [self.collectionView deleteItemsAtIndexPaths: adjustedIndexPaths];
-                
+                [self.collectionView deleteItemsAtIndexPaths: indexPathsRemoved];
             }
             if (indexPathsUpdated.count > 0) {
-                adjustedIndexPaths = [self convertIndexPathsPointingToQueryResultsToIndexPathsUsingSortedCloudMetaDataItems:indexPathsUpdated];
-                [self.collectionView reloadItemsAtIndexPaths: adjustedIndexPaths];
+                [self.collectionView reloadItemsAtIndexPaths: indexPathsUpdated];
             }
         } completion:^(BOOL finished) {
             
@@ -984,17 +1038,22 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSMutableArray *insertedItems = [[NSMutableArray alloc] initWithCapacity: indexPathsPointingToQueryResults.count];
     NSMutableArray *adjustedInsertedIndexPaths = [[NSMutableArray alloc] initWithCapacity: indexPathsPointingToQueryResults.count];
 
+    NSMetadataItem *metadataItem;
     for (NSIndexPath *indexPath in indexPathsPointingToQueryResults) {
-        NSMetadataItem *metadataItem = [[MACloudManager sharedManager].fileLocationManager.metadataQuery.results objectAtIndex:indexPath.item];
+        metadataItem = [[MACloudManager sharedManager].fileLocationManager.metadataQuery.results objectAtIndex:indexPath.item];
         [insertedItems addObject:metadataItem];
     }
     
+    MADMetaData *metadataSorted;
+    NSString *metadataPath;
+    NSIndexPath *insertedPath;
     NSInteger indexPathCounter = 0;
-    for (MADMetaData *metadataSorted in self.documentsCloud) {
-        for (NSMetadataItem *metadataItem in insertedItems) {
-            NSString *metadataPath = [metadataItem valueForKey:NSMetadataItemPathKey];
+    for (NSDictionary *metadataSortedDictionary in self.documentsCloud) {
+        metadataSorted =  metadataSortedDictionary[MADKeyMetadataShort];
+        for (metadataItem in insertedItems) {
+            metadataPath = [metadataItem valueForKey:NSMetadataItemPathKey];
             if ([metadataSorted.url.path isEqualToString:metadataPath]) {
-                NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:indexPathCounter inSection:1];
+                insertedPath = [NSIndexPath indexPathForItem:indexPathCounter inSection:1];
                 [adjustedInsertedIndexPaths addObject:insertedPath];
             }
         }
@@ -1404,7 +1463,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView
-    numberOfItemsInSection:(NSInteger)section {
+     numberOfItemsInSection:(NSInteger)section {
     
     switch (section) {
         
@@ -2217,11 +2276,13 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 
     //Remove indexes of items that still exist
-    for (MADMetaData *updatedData in updatedCloudUrlsOrdered) {
-        
+    for (NSDictionary *updatedDataDictionary in updatedCloudUrlsOrdered) {
+        MADMetaData *updatedData = updatedDataDictionary[MADKeyMetadataShort];
         NSUInteger index = NSNotFound;
         NSUInteger ctr = 0;
-        for (MADMetaData *metad in self.documentsCloud) {
+        NSDictionary *metadic;
+        for (metadic in self.documentsCloud) {
+            MADMetaData *metad = metadic[MADKeyMetadataShort];
             NSString *path1 = [metad.url.path.lastPathComponent stringByDeletingPathExtension];
             NSString *path2 = [updatedData.url.path.lastPathComponent stringByDeletingPathExtension];
             if ([path1 isEqualToString:path2]) {
@@ -2247,7 +2308,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         NSUInteger index = NSNotFound;
         NSUInteger ctr = 0;
         for (NSURL *url in updatedLocalUrlsOrdered) {
-            if ([[url.path.lastPathComponent stringByDeletingPathExtension] isEqualToString:[localUrl.path.lastPathComponent stringByDeletingPathExtension]]) {
+            if ([url.path.lastPathComponent.stringByDeletingPathExtension isEqualToString:localUrl.path.lastPathComponent.stringByDeletingPathExtension]) {
                 index = ctr;
                 break;
             }
@@ -2266,11 +2327,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
     
     //Remove indexes of items that still exist
-    for (MADMetaData *data in self.documentsCloud) {
+    NSDictionary *metatdataWrapper;
+    for (metatdataWrapper in self.documentsCloud) {
+        MADMetaData *data = metatdataWrapper[MADKeyMetadataShort];
         
         NSUInteger index = NSNotFound;
         NSUInteger ctr = 0;
-        for (MADMetaData *metad in updatedCloudUrlsOrdered) {
+        for (NSDictionary *updatedDataDictionary in updatedCloudUrlsOrdered) {
+            MADMetaData *metad = updatedDataDictionary[MADKeyMetadataShort];
             NSString *path1 = [metad.url.path.lastPathComponent stringByDeletingPathExtension];
             NSString *path2 = [data.url.path.lastPathComponent stringByDeletingPathExtension];
             if ([path1 isEqualToString:path2]) {

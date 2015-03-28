@@ -19,6 +19,7 @@
 @property (nonatomic, strong, readonly) NSString  *fileSystemName;
 @property (nonatomic, strong, readonly) NSString  *displayName;
 @property (nonatomic, strong, readonly) NSURL     *url;
+@property (nonatomic, strong, readonly) NSString *path;
 
 @property (nonatomic, assign, readonly) unsigned long long fileSystemFileSize;
 
