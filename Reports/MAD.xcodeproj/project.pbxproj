@@ -1539,6 +1539,15 @@
 		4CF3E79319F071320064DA5F /* MADImageClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */; };
 		4CF3E79419F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
 		4CF3E79519F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
+		4CF46F361AC6411C007C0A82 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F351AC6411C007C0A82 /* InterfaceController.m */; };
+		4CF46F391AC6411D007C0A82 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F381AC6411D007C0A82 /* NotificationController.m */; };
+		4CF46F3C1AC6411D007C0A82 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F3B1AC6411D007C0A82 /* GlanceController.m */; };
+		4CF46F3E1AC6411D007C0A82 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F3D1AC6411D007C0A82 /* Images.xcassets */; };
+		4CF46F421AC6411D007C0A82 /* MAD Designer WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */; };
+		4CF46F4A1AC6411D007C0A82 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F481AC6411D007C0A82 /* Interface.storyboard */; };
+		4CF46F4C1AC6411D007C0A82 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F4B1AC6411D007C0A82 /* Images.xcassets */; };
+		4CF46F501AC6411D007C0A82 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4CF46F571AC645DA007C0A82 /* MAD Designer.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E2414B29789007B4F48 /* MAD Designer.app */; };
 		4CF5319B1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4CF5319C1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4CF5319D1A08092F00511BEF /* MADToolboxTransitioner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF5319A1A08092F00511BEF /* MADToolboxTransitioner.m */; };
@@ -1657,6 +1666,41 @@
 			remoteGlobalIDString = 4CF3C5A5194F80F600E5705B;
 			remoteInfo = ScrimpterTests;
 		};
+		4CF46F431AC6411D007C0A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CF46F401AC6411D007C0A82;
+			remoteInfo = "MAD Designer WatchKit App";
+		};
+		4CF46F4D1AC6411D007C0A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CF46F2E1AC6411C007C0A82;
+			remoteInfo = "MAD Designer WatchKit Extension";
+		};
+		4CF46F581AC645DA007C0A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C384E2314B29789007B4F48;
+			remoteInfo = "MAD Designer";
+		};
+		4CF46F831AC64BA7007C0A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF46F641AC64BA5007C0A82;
+			remoteInfo = CloudManager;
+		};
+		4CF46F851AC64BA7007C0A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF46F6F1AC64BA5007C0A82;
+			remoteInfo = CloudManagerTests;
+		};
 		4CFFD9F219D5CC54001D0B02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
@@ -1665,6 +1709,20 @@
 			remoteInfo = "Tds Tests";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4CF46F501AC6411D007C0A82 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelStrikethrough.h; sourceTree = "<group>"; };
@@ -3066,6 +3124,21 @@
 		4CF3E78D19F071320064DA5F /* MADImageClear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageClear.png; sourceTree = "<group>"; };
 		4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@2x.png"; sourceTree = "<group>"; };
 		4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@3x.png"; sourceTree = "<group>"; };
+		4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MAD Designer WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF46F321AC6411C007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CF46F331AC6411C007C0A82 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		4CF46F341AC6411C007C0A82 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		4CF46F351AC6411C007C0A82 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		4CF46F371AC6411C007C0A82 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		4CF46F381AC6411D007C0A82 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		4CF46F3A1AC6411D007C0A82 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
+		4CF46F3B1AC6411D007C0A82 /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
+		4CF46F3D1AC6411D007C0A82 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF46F471AC6411D007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CF46F491AC6411D007C0A82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		4CF46F4B1AC6411D007C0A82 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CloudManager.xcodeproj; path = libCloudManager/CloudManager/CloudManager.xcodeproj; sourceTree = "<group>"; };
 		4CF531971A08092F00511BEF /* MADToolboxPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxPresentationController.h; sourceTree = "<group>"; };
 		4CF531981A08092F00511BEF /* MADToolboxTransitioner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxTransitioner.h; sourceTree = "<group>"; };
 		4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxPresentationController.m; sourceTree = "<group>"; };
@@ -3232,6 +3305,13 @@
 				4C94ADE917C3514200037FCB /* UIKit.framework in Frameworks */,
 				4C94ADEA17C3514200037FCB /* Foundation.framework in Frameworks */,
 				4C94ADEB17C3514200037FCB /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF46F2C1AC6411C007C0A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3714,6 +3794,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4CF46F5A1AC64A2F007C0A82 /* libraries */,
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C49DA5319DCE77700CB4DB8 /* MAD iOS */,
@@ -3725,6 +3806,8 @@
 				4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */,
 				4C5BED6818E9081F00BDDDB8 /* Protocols */,
 				4C0E785F163B5C51003B951E /* Resources */,
+				4CF46F301AC6411C007C0A82 /* MAD Designer WatchKit Extension */,
+				4CF46F451AC6411D007C0A82 /* MAD Designer WatchKit App */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -3742,6 +3825,8 @@
 				4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */,
 				4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */,
 				4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */,
+				4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */,
+				4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3749,15 +3834,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4CC7F6B51962A44000A84FC0 /* libscrimpter */,
-				4C77324B190FFC51005AE7C2 /* libMySqlClientObjectiveC */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
-				4C3A969F189F7E30007AF476 /* libbarcodes */,
-				4C3A969E189F7DFC007AF476 /* libsqlite3 */,
-				4C3A969D189F7DCF007AF476 /* libsybdb */,
-				4C3A969C189F7D51007AF476 /* libmtdatastructures */,
-				4C3A969B189F7D10007AF476 /* libmysqlclient */,
-				4C434AD518B5F3E800750B6B /* openssl */,
 				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
 				4CA54D3D18938801006B301A /* libSystem.dylib */,
 				4CA54D371893830E006B301A /* libsystem_pthread.dylib */,
@@ -3803,49 +3880,50 @@
 			name = Scripts;
 			sourceTree = "<group>";
 		};
-		4C3A969B189F7D10007AF476 /* libmysqlclient */ = {
+		4C3A969B189F7D10007AF476 /* libMySqlClient */ = {
 			isa = PBXGroup;
 			children = (
+				4C77324B190FFC51005AE7C2 /* libMySqlClientObjectiveC */,
 				4C7732AD19100097005AE7C2 /* include */,
 				4C77332419100098005AE7C2 /* libmysqlclient.a */,
 			);
-			name = libmysqlclient;
+			name = libMySqlClient;
 			sourceTree = "<group>";
 		};
-		4C3A969C189F7D51007AF476 /* libmtdatastructures */ = {
+		4C3A969C189F7D51007AF476 /* libDataStructures */ = {
 			isa = PBXGroup;
 			children = (
 				4C4C6F1C1676424C004A3B04 /* MTDataStructures */,
 				4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */,
 			);
-			name = libmtdatastructures;
+			name = libDataStructures;
 			sourceTree = "<group>";
 		};
-		4C3A969D189F7DCF007AF476 /* libsybdb */ = {
+		4C3A969D189F7DCF007AF476 /* libSybdb */ = {
 			isa = PBXGroup;
 			children = (
 				4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */,
 				4C6DAA411761AEBA00FF770A /* TdsClient */,
 			);
-			name = libsybdb;
+			name = libSybdb;
 			sourceTree = "<group>";
 		};
-		4C3A969E189F7DFC007AF476 /* libsqlite3 */ = {
+		4C3A969E189F7DFC007AF476 /* libSqlite3 */ = {
 			isa = PBXGroup;
 			children = (
 				4C502A4518189ED200C88CD4 /* libSqlite3_8.h */,
 				4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */,
 			);
-			name = libsqlite3;
+			name = libSqlite3;
 			sourceTree = "<group>";
 		};
-		4C3A969F189F7E30007AF476 /* libbarcodes */ = {
+		4C3A969F189F7E30007AF476 /* libBarcodes */ = {
 			isa = PBXGroup;
 			children = (
 				4C3A96A0189F7E5A007AF476 /* includes */,
 				4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */,
 			);
-			name = libbarcodes;
+			name = libBarcodes;
 			sourceTree = "<group>";
 		};
 		4C3A96A0189F7E5A007AF476 /* includes */ = {
@@ -3859,14 +3937,14 @@
 			name = includes;
 			sourceTree = "<group>";
 		};
-		4C434AD518B5F3E800750B6B /* openssl */ = {
+		4C434AD518B5F3E800750B6B /* libSsl */ = {
 			isa = PBXGroup;
 			children = (
 				4C434AD618B5F3E800750B6B /* include */,
 				4C434B2318B5F3E800750B6B /* libcrypto.a */,
 				4C434B2418B5F3E800750B6B /* libssl.a */,
 			);
-			name = openssl;
+			name = libSsl;
 			path = ../Compressor/library/openssl;
 			sourceTree = "<group>";
 		};
@@ -5221,13 +5299,13 @@
 			name = User;
 			sourceTree = "<group>";
 		};
-		4CC7F6B51962A44000A84FC0 /* libscrimpter */ = {
+		4CC7F6B51962A44000A84FC0 /* libScrimpter */ = {
 			isa = PBXGroup;
 			children = (
 				4CC7F6B61962A45800A84FC0 /* headers */,
 				4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */,
 			);
-			name = libscrimpter;
+			name = libScrimpter;
 			sourceTree = "<group>";
 		};
 		4CC7F6B61962A45800A84FC0 /* headers */ = {
@@ -5652,6 +5730,80 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4CF46F301AC6411C007C0A82 /* MAD Designer WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F341AC6411C007C0A82 /* InterfaceController.h */,
+				4CF46F351AC6411C007C0A82 /* InterfaceController.m */,
+				4CF46F371AC6411C007C0A82 /* NotificationController.h */,
+				4CF46F381AC6411D007C0A82 /* NotificationController.m */,
+				4CF46F3A1AC6411D007C0A82 /* GlanceController.h */,
+				4CF46F3B1AC6411D007C0A82 /* GlanceController.m */,
+				4CF46F3D1AC6411D007C0A82 /* Images.xcassets */,
+				4CF46F311AC6411C007C0A82 /* Supporting Files */,
+			);
+			path = "MAD Designer WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		4CF46F311AC6411C007C0A82 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F321AC6411C007C0A82 /* Info.plist */,
+				4CF46F331AC6411C007C0A82 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CF46F451AC6411D007C0A82 /* MAD Designer WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F481AC6411D007C0A82 /* Interface.storyboard */,
+				4CF46F4B1AC6411D007C0A82 /* Images.xcassets */,
+				4CF46F461AC6411D007C0A82 /* Supporting Files */,
+			);
+			path = "MAD Designer WatchKit App";
+			sourceTree = "<group>";
+		};
+		4CF46F461AC6411D007C0A82 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F471AC6411D007C0A82 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CF46F5A1AC64A2F007C0A82 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F871AC64BBE007C0A82 /* libCloudManager */,
+				4CC7F6B51962A44000A84FC0 /* libScrimpter */,
+				4C3A969E189F7DFC007AF476 /* libSqlite3 */,
+				4C3A969D189F7DCF007AF476 /* libSybdb */,
+				4C3A969C189F7D51007AF476 /* libDataStructures */,
+				4C3A969B189F7D10007AF476 /* libMySqlClient */,
+				4C3A969F189F7E30007AF476 /* libBarcodes */,
+				4C434AD518B5F3E800750B6B /* libSsl */,
+			);
+			name = libraries;
+			sourceTree = "<group>";
+		};
+		4CF46F7F1AC64BA5007C0A82 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F841AC64BA7007C0A82 /* libCloudManager.a */,
+				4CF46F861AC64BA7007C0A82 /* CloudManagerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CF46F871AC64BBE007C0A82 /* libCloudManager */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */,
+			);
+			name = libCloudManager;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -5717,10 +5869,12 @@
 				4C384E2014B29789007B4F48 /* Sources */,
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
+				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4CF46F4E1AC6411D007C0A82 /* PBXTargetDependency */,
 			);
 			name = "MAD Designer";
 			productName = TheReportViewer;
@@ -5814,6 +5968,40 @@
 			productReference = 4C94ADE817C3514100037FCB /* MAD Launch Images.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4CF46F2E1AC6411C007C0A82 /* MAD Designer WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF46F541AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */;
+			buildPhases = (
+				4CF46F2B1AC6411C007C0A82 /* Sources */,
+				4CF46F2C1AC6411C007C0A82 /* Frameworks */,
+				4CF46F2D1AC6411C007C0A82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CF46F441AC6411D007C0A82 /* PBXTargetDependency */,
+				4CF46F591AC645DA007C0A82 /* PBXTargetDependency */,
+			);
+			name = "MAD Designer WatchKit Extension";
+			productName = "MAD Designer WatchKit Extension";
+			productReference = 4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		4CF46F401AC6411D007C0A82 /* MAD Designer WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF46F511AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit App" */;
+			buildPhases = (
+				4CF46F3F1AC6411D007C0A82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MAD Designer WatchKit App";
+			productName = "MAD Designer WatchKit App";
+			productReference = 4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -5866,6 +6054,13 @@
 						CreatedOnToolsVersion = 6.1;
 						TestTargetID = 4C49D9FA19DCE32E00CB4DB8;
 					};
+					4CF46F2E1AC6411C007C0A82 = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = D3C58YS54A;
+					};
+					4CF46F401AC6411D007C0A82 = {
+						CreatedOnToolsVersion = 6.2;
+					};
 				};
 			};
 			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD" */;
@@ -5916,6 +6111,10 @@
 					ProjectRef = 4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */;
 				},
 				{
+					ProductGroup = 4CF46F7F1AC64BA5007C0A82 /* Products */;
+					ProjectRef = 4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */;
+				},
+				{
 					ProductGroup = 4C4C6F0E167635B8004A3B04 /* Products */;
 					ProjectRef = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
 				},
@@ -5936,6 +6135,8 @@
 			targets = (
 				4C384E2314B29789007B4F48 /* MAD Designer */,
 				4C0E771F163B5AEC003B951E /* MAD Viewer */,
+				4CF46F401AC6411D007C0A82 /* MAD Designer WatchKit App */,
+				4CF46F2E1AC6411C007C0A82 /* MAD Designer WatchKit Extension */,
 				4C94ADE717C3514100037FCB /* MAD Launch Images */,
 				4C25803C192D090F00BE74EB /* Caching Array Tests */,
 				4C26F21F19D5D16800B7A417 /* Test Cloud */,
@@ -5995,6 +6196,20 @@
 			fileType = wrapper.cfbundle;
 			path = ScrimpterTests.xctest;
 			remoteRef = 4CF3C5CE194F80F700E5705B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CF46F841AC64BA7007C0A82 /* libCloudManager.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCloudManager.a;
+			remoteRef = 4CF46F831AC64BA7007C0A82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CF46F861AC64BA7007C0A82 /* CloudManagerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CloudManagerTests.xctest;
+			remoteRef = 4CF46F851AC64BA7007C0A82 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4CFFD9F319D5CC54001D0B02 /* Tds Tests.xctest */ = {
@@ -6645,6 +6860,25 @@
 				4C94ADF917C3514200037FCB /* Default.png in Resources */,
 				4C94ADFB17C3514200037FCB /* Default@2x.png in Resources */,
 				4C94ADFD17C3514200037FCB /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF46F2D1AC6411C007C0A82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF46F3E1AC6411D007C0A82 /* Images.xcassets in Resources */,
+				4CF46F571AC645DA007C0A82 /* MAD Designer.app in Resources */,
+				4CF46F421AC6411D007C0A82 /* MAD Designer WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF46F3F1AC6411D007C0A82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF46F4A1AC6411D007C0A82 /* Interface.storyboard in Resources */,
+				4CF46F4C1AC6411D007C0A82 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7663,6 +7897,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CF46F2B1AC6411C007C0A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF46F391AC6411D007C0A82 /* NotificationController.m in Sources */,
+				4CF46F361AC6411C007C0A82 /* InterfaceController.m in Sources */,
+				4CF46F3C1AC6411D007C0A82 /* GlanceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -7685,6 +7929,21 @@
 			isa = PBXTargetDependency;
 			target = 4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */;
 			targetProxy = 4C49DA1119DCE32E00CB4DB8 /* PBXContainerItemProxy */;
+		};
+		4CF46F441AC6411D007C0A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CF46F401AC6411D007C0A82 /* MAD Designer WatchKit App */;
+			targetProxy = 4CF46F431AC6411D007C0A82 /* PBXContainerItemProxy */;
+		};
+		4CF46F4E1AC6411D007C0A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CF46F2E1AC6411C007C0A82 /* MAD Designer WatchKit Extension */;
+			targetProxy = 4CF46F4D1AC6411D007C0A82 /* PBXContainerItemProxy */;
+		};
+		4CF46F591AC645DA007C0A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
+			targetProxy = 4CF46F581AC645DA007C0A82 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -7753,6 +8012,14 @@
 				4C94ADF017C3514200037FCB /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4CF46F481AC6411D007C0A82 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CF46F491AC6411D007C0A82 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -8428,6 +8695,106 @@
 			};
 			name = Release;
 		};
+		4CF46F521AC6411D007C0A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IBSC_MODULE = MAD_Designer_WatchKit_Extension;
+				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		4CF46F531AC6411D007C0A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IBSC_MODULE = MAD_Designer_WatchKit_Extension;
+				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
+		4CF46F551AC6411D007C0A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Designer WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4CF46F561AC6411D007C0A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Designer WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -8520,6 +8887,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		4CF46F511AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF46F521AC6411D007C0A82 /* Debug */,
+				4CF46F531AC6411D007C0A82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4CF46F541AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF46F551AC6411D007C0A82 /* Debug */,
+				4CF46F561AC6411D007C0A82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 
