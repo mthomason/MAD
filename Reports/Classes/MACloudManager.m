@@ -219,14 +219,19 @@ static MACloudManager *sharedSingleton;
                                                         object: nil];
 }
 
-- (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion {
++ (NSArray *)madDocumentsLocal {
+    return [self contentOfLocalDocumentsDirectoryWithExtention: MTDocumentExtentionMobleApplicationDocument];
+}
+
++ (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     
     NSError *error = nil;
-    NSFileManager *fm = self.fileManager;
-    NSArray *directoryContents = [fm contentsOfDirectoryAtPath:self.localDocumentDirectory.path error:&error];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSArray *directoryContents = [fm contentsOfDirectoryAtPath:docPaths.firstObject error:&error];
     for (NSString *filename in directoryContents) {
-        NSString *fullPath = [self.localDocumentDirectory.path stringByAppendingPathComponent:filename];
+        NSString *fullPath = [docPaths.firstObject stringByAppendingPathComponent:filename];
         NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
         BOOL isDirectory;
         if ([fm fileExistsAtPath:fileURL.path isDirectory:&isDirectory]) {
@@ -726,7 +731,7 @@ static MACloudManager *sharedSingleton;
 
 - (void)reloadCacheLocal:(NSString *)searchString {
     // Setup local cache
-    NSArray *documentCacheLocalUrls = [self contentOfLocalDocumentsDirectoryWithExtention: MTDocumentExtentionMobleApplicationDocument];
+    NSArray *documentCacheLocalUrls = [MACloudManager contentOfLocalDocumentsDirectoryWithExtention: MTDocumentExtentionMobleApplicationDocument];
     
     NSArray *filteredDocumentCacheLocalUrls;
     

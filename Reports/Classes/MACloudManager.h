@@ -63,6 +63,8 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 + (MACloudManager *)sharedManager;
 
++ (NSArray *)madDocumentsLocal;
+
 - (void)activate;
 
 // Notification hooks
