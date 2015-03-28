@@ -11,7 +11,7 @@
 
 #import "RptqDocumentObjectLabelLink.h"
 #import "MTProtocolCompare.h"
-#import "MTDatabaseField.h"
+#import "MTDataType.h"
 
 @interface RptqDocumentObjectLabelLink (Extras) <MTProtocolCompare>
 

@@ -8,7 +8,7 @@
 #import "RptqDocumentObjectFormula.h"
 #import "RptqDocumentObjectFactory.h"
 #import "MTProtocolLog.h"
-#import "MTDatabaseField.h"
+#import "MTDataType.h"
 
 @interface RptqDocumentObjectFormula (Extras) <RptqDocumentObjectFactory, MTProtocolLog>
 

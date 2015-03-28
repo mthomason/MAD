@@ -12,7 +12,6 @@
 
 #import "RptqQueryLinks+Extras.h"
 #import <CoreData/CoreData.h>
-#import "AppDelegate.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"

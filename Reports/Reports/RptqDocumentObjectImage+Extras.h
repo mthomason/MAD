@@ -7,7 +7,7 @@
 //
 
 #import "RptqDocumentObjectImage.h"
-#import "MTDatabaseField.h"
+#import "MTDataType.h"
 
 @interface RptqDocumentObjectImage (Extras)
 

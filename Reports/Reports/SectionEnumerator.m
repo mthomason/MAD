@@ -11,7 +11,6 @@
 #endif
 
 #import "SectionEnumerator.h"
-#import "AppDelegate.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"

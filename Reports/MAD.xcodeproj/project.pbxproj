@@ -3424,7 +3424,6 @@
 			isa = PBXGroup;
 			children = (
 				4C5CD3D81821A0AA005FC6DD /* SampleReports */,
-				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
 				4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */,
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
 				4C4EBFBE17EFC2B700D10622 /* Fonts */,
@@ -4838,6 +4837,7 @@
 		4C8F7DE414CFFA13006171A7 /* Rptq */ = {
 			isa = PBXGroup;
 			children = (
+				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
 				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */,
 				4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */,
@@ -5072,6 +5072,13 @@
 				4CFA64DF17B92B7A0025BE1E /* MADIcon320.png */,
 			);
 			name = "Document Icons";
+			sourceTree = "<group>";
+		};
+		4CB5680A1AC662B700756775 /* libRptq */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = libRptq;
 			sourceTree = "<group>";
 		};
 		4CBABB7018C7E11F00EE5768 /* Paper */ = {
@@ -5640,6 +5647,8 @@
 		4CF46F5A1AC64A2F007C0A82 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4CB5680A1AC662B700756775 /* libRptq */,
+				4CF46FB71AC65EF8007C0A82 /* libReportig */,
 				4CF46F871AC64BBE007C0A82 /* libCloudManager */,
 				4CC7F6B51962A44000A84FC0 /* libScrimpter */,
 				4C3A969E189F7DFC007AF476 /* libSqlite3 */,
@@ -5670,6 +5679,13 @@
 				4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */,
 			);
 			name = libCloudManager;
+			sourceTree = "<group>";
+		};
+		4CF46FB71AC65EF8007C0A82 /* libReportig */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = libReportig;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -8449,8 +8465,7 @@
 				4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */,
 			);
 			currentVersion = 4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */;
-			name = MAD.xcdatamodeld;
-			path = Reports/MAD.xcdatamodeld;
+			path = MAD.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

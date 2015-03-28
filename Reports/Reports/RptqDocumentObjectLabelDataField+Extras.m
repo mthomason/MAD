@@ -15,7 +15,6 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"
-#import "MTDatabaseField.h"
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 

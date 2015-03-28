@@ -11,7 +11,6 @@
 #endif
 
 #import "RptqFieldSelectorManager.h"
-#import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqDatabaseSchemaTable.h"
