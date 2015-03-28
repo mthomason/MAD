@@ -10,9 +10,8 @@
 #import <UIKit/UIKit.h>
 #import "MADMetadataQueryManager.h"
 #import "MADMetaData.h"
+
 #import "NSFileManager+Common.h"
-#import "NSURL+Document.h"
-#import "NSThread+Extras.h"
 
 NSString * const MTDocumentExtentionMobleApplicationDocumentArchive     = @"mada";
 NSString * const MTDocumentExtentionMobleApplicationDocument            = @"mad";
@@ -478,7 +477,7 @@ static MACloudManager *sharedSingleton;
     NSString *lastPathComponent = [urlToDupe lastPathComponent];
     NSString *handle = [lastPathComponent stringByDeletingPathExtension];
     NSString *extention = [lastPathComponent pathExtension];
-    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
+    NSURL *uniqueUrl = [MACloudManager uniqueUrlInDirectory:directory
                                    withDesiredHandle:handle
                                         andExtension:extention];
     
@@ -544,7 +543,7 @@ static MACloudManager *sharedSingleton;
     NSString *lastPathComponent = [urlToDupe lastPathComponent];
     NSString *handle = [lastPathComponent stringByDeletingPathExtension];
     NSString *extention = [lastPathComponent pathExtension];
-    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
+    NSURL *uniqueUrl = [MACloudManager uniqueUrlInDirectory:directory
                                  withDesiredHandle:handle
                                       andExtension:extention];
     
@@ -602,14 +601,34 @@ static MACloudManager *sharedSingleton;
                           withExtension:(NSString *)extension
                             inContainer:(MACloudManagerSection)container {
     if (container == MACloudManagerSectionCloud) {
-        return [NSURL uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
+        return [MACloudManager uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
                          withDesiredHandle: name
                               andExtension: extension];
     } else {
-        return [NSURL uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
+        return [MACloudManager uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
                          withDesiredHandle: name
                               andExtension: extension];
     }
+    
+}
+
++ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
+    
+    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+    NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
+    NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
+    [baseUrl URLByAppendingPathExtension: extension] :
+    baseUrl;
+    NSInteger ctr = 0;
+    BOOL isDir1;
+    while ([defaultFileManager fileExistsAtPath:applicationFileUrlWithExtention.path isDirectory:&isDir1]) {
+        
+        NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
+        NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
+        applicationFileUrlWithExtention = [baseUrlFormatted URLByAppendingPathExtension: extension];
+        ctr++;
+    }
+    return applicationFileUrlWithExtention;
     
 }
 

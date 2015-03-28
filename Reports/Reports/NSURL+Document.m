@@ -16,26 +16,6 @@
     return self.lastPathComponent.stringByDeletingPathExtension;
 }
 
-+ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
-
-    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-    NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
-    NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
-                                                [baseUrl URLByAppendingPathExtension: extension] :
-                                                baseUrl;
-    NSInteger ctr = 0;
-    BOOL isDir1;
-    while ([defaultFileManager fileExistsAtPath:applicationFileUrlWithExtention.path isDirectory:&isDir1]) {
-        
-        NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
-        NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
-        applicationFileUrlWithExtention = [baseUrlFormatted URLByAppendingPathExtension: extension];
-        ctr++;
-    }
-    return applicationFileUrlWithExtention;
-    
-}
-
 - (NSURL *)uniqueUrl {
 
     NSInteger ctr = 0;
