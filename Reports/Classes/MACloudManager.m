@@ -11,8 +11,6 @@
 #import "MADMetadataQueryManager.h"
 #import "MADMetaData.h"
 
-#import "NSFileManager+Common.h"
-
 NSString * const MTDocumentExtentionMobleApplicationDocumentArchive     = @"mada";
 NSString * const MTDocumentExtentionMobleApplicationDocument            = @"mad";
 
@@ -662,17 +660,6 @@ static MACloudManager *sharedSingleton;
                                  }];
 }
 
-- (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
-    NSError *error = nil;
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
-    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error];
-    for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
-        [defaultManager removeItemAtURL:cachedFile error:&error];
-    }
-    [defaultManager removeItemAtURL:cachedDirectory error:&error];
-}
-
 - (void)setDataAndDocumentUrlsWithBaseUrl:(NSURL *)url {
     self.ubiquityContainer = url;
 
@@ -699,34 +686,6 @@ static MACloudManager *sharedSingleton;
 }
 
 - (void)reloadCacheCloud:(NSString *)searchString {
-/*    NSDictionary *documentCacheCloudMetaData = [NSDictionary dictionaryWithDictionary: self.fileLocationManager.results];
-    
-    NSArray *filteredDocumentCacheCloudMetaData;
-    
-    if (searchString.length > 0) {
-        
-        NSPredicate *predicateMetadata = [NSPredicate predicateWithBlock:^BOOL(MADMetaData *metadata, NSDictionary *bindings) {
-            
-            NSRange range = NSMakeRange(0, MIN(searchString.length, metadata.displayName.length));
-            return [metadata.displayName compare: searchString
-                                         options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
-                                           range: range] == NSOrderedSame;
-        }];
-        
-        filteredDocumentCacheCloudMetaData = [documentCacheCloudMetaData.allValues filteredArrayUsingPredicate:predicateMetadata];
-        
-    } else {
-        
-        filteredDocumentCacheCloudMetaData = documentCacheCloudMetaData.allValues;
-    }
-
-    NSString *displayName = NSStringFromSelector(@selector(displayName));
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: displayName
-                                                           ascending: YES
-                                                            selector: @selector(localizedCaseInsensitiveCompare:)];
-    NSArray *sorts = @[sort];
-    
-    NSArray *filteredDocumentCacheCloudMetaDataSorted = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];*/
     self.documentCacheCloudMetaDataItems.array = [self documentsFilteredBySearchString:searchString];
 }
 
