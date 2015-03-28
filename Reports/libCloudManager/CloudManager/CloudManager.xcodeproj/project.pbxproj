@@ -1,0 +1,371 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4CF46F681AC64BA5007C0A82 /* CloudManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46F671AC64BA5007C0A82 /* CloudManager.h */; };
+		4CF46F6A1AC64BA5007C0A82 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F691AC64BA5007C0A82 /* CloudManager.m */; };
+		4CF46F701AC64BA5007C0A82 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F641AC64BA5007C0A82 /* libCloudManager.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4CF46F711AC64BA5007C0A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF46F5C1AC64BA5007C0A82 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CF46F631AC64BA5007C0A82;
+			remoteInfo = CloudManager;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4CF46F621AC64BA5007C0A82 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				4CF46F681AC64BA5007C0A82 /* CloudManager.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4CF46F641AC64BA5007C0A82 /* libCloudManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF46F671AC64BA5007C0A82 /* CloudManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloudManager.h; sourceTree = "<group>"; };
+		4CF46F691AC64BA5007C0A82 /* CloudManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudManager.m; sourceTree = "<group>"; };
+		4CF46F6F1AC64BA5007C0A82 /* CloudManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloudManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF46F751AC64BA5007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4CF46F611AC64BA5007C0A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF46F6C1AC64BA5007C0A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF46F701AC64BA5007C0A82 /* libCloudManager.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4CF46F5B1AC64BA5007C0A82 = {
+			isa = PBXGroup;
+			children = (
+				4CF46F661AC64BA5007C0A82 /* CloudManager */,
+				4CF46F731AC64BA5007C0A82 /* CloudManagerTests */,
+				4CF46F651AC64BA5007C0A82 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CF46F651AC64BA5007C0A82 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F641AC64BA5007C0A82 /* libCloudManager.a */,
+				4CF46F6F1AC64BA5007C0A82 /* CloudManagerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CF46F661AC64BA5007C0A82 /* CloudManager */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F671AC64BA5007C0A82 /* CloudManager.h */,
+				4CF46F691AC64BA5007C0A82 /* CloudManager.m */,
+			);
+			path = CloudManager;
+			sourceTree = "<group>";
+		};
+		4CF46F731AC64BA5007C0A82 /* CloudManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F741AC64BA5007C0A82 /* Supporting Files */,
+			);
+			path = CloudManagerTests;
+			sourceTree = "<group>";
+		};
+		4CF46F741AC64BA5007C0A82 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CF46F751AC64BA5007C0A82 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4CF46F631AC64BA5007C0A82 /* CloudManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF46F781AC64BA5007C0A82 /* Build configuration list for PBXNativeTarget "CloudManager" */;
+			buildPhases = (
+				4CF46F601AC64BA5007C0A82 /* Sources */,
+				4CF46F611AC64BA5007C0A82 /* Frameworks */,
+				4CF46F621AC64BA5007C0A82 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CloudManager;
+			productName = CloudManager;
+			productReference = 4CF46F641AC64BA5007C0A82 /* libCloudManager.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4CF46F6E1AC64BA5007C0A82 /* CloudManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF46F7B1AC64BA5007C0A82 /* Build configuration list for PBXNativeTarget "CloudManagerTests" */;
+			buildPhases = (
+				4CF46F6B1AC64BA5007C0A82 /* Sources */,
+				4CF46F6C1AC64BA5007C0A82 /* Frameworks */,
+				4CF46F6D1AC64BA5007C0A82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CF46F721AC64BA5007C0A82 /* PBXTargetDependency */,
+			);
+			name = CloudManagerTests;
+			productName = CloudManagerTests;
+			productReference = 4CF46F6F1AC64BA5007C0A82 /* CloudManagerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4CF46F5C1AC64BA5007C0A82 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+				TargetAttributes = {
+					4CF46F631AC64BA5007C0A82 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					4CF46F6E1AC64BA5007C0A82 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
+			};
+			buildConfigurationList = 4CF46F5F1AC64BA5007C0A82 /* Build configuration list for PBXProject "CloudManager" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4CF46F5B1AC64BA5007C0A82;
+			productRefGroup = 4CF46F651AC64BA5007C0A82 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4CF46F631AC64BA5007C0A82 /* CloudManager */,
+				4CF46F6E1AC64BA5007C0A82 /* CloudManagerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4CF46F6D1AC64BA5007C0A82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4CF46F601AC64BA5007C0A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF46F6A1AC64BA5007C0A82 /* CloudManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF46F6B1AC64BA5007C0A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4CF46F721AC64BA5007C0A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CF46F631AC64BA5007C0A82 /* CloudManager */;
+			targetProxy = 4CF46F711AC64BA5007C0A82 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4CF46F761AC64BA5007C0A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4CF46F771AC64BA5007C0A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4CF46F791AC64BA5007C0A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4CF46F7A1AC64BA5007C0A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4CF46F7C1AC64BA5007C0A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CloudManagerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4CF46F7D1AC64BA5007C0A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CloudManagerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4CF46F5F1AC64BA5007C0A82 /* Build configuration list for PBXProject "CloudManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF46F761AC64BA5007C0A82 /* Debug */,
+				4CF46F771AC64BA5007C0A82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CF46F781AC64BA5007C0A82 /* Build configuration list for PBXNativeTarget "CloudManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF46F791AC64BA5007C0A82 /* Debug */,
+				4CF46F7A1AC64BA5007C0A82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4CF46F7B1AC64BA5007C0A82 /* Build configuration list for PBXNativeTarget "CloudManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF46F7C1AC64BA5007C0A82 /* Debug */,
+				4CF46F7D1AC64BA5007C0A82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4CF46F5C1AC64BA5007C0A82 /* Project object */;
+}
