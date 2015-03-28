@@ -26,12 +26,6 @@ NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyInserted    
 NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated     =   @"u";
 NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     =   @"d";
 
-#if MAD_DESIGNER == 1 || MAD_TEST == 1
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
-#elif MAD_VIEWER == 1
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
-#endif
-
 @interface MACloudManager ()
     <MADFileLocationManagerDelegate>
 
@@ -261,7 +255,8 @@ static MACloudManager *sharedSingleton;
                 
                 NSFileManager *fileManager = [NSFileManager defaultManager];
                 //This call may be SLOW, so only do on BACKGROUND thread.
-                NSURL *url = [fileManager URLForUbiquityContainerIdentifier: MADUbiquityIdentifier];
+                NSString *ubiquityIdentifier = [self.delegateApplication ubiquityIdentifier];
+                NSURL *url = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
                 [weakself setDataAndDocumentUrlsWithBaseUrl:url];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{

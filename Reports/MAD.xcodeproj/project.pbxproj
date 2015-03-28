@@ -409,8 +409,6 @@
 		4C23FB0D18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1018FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1118FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; };
-		4C23FB1618FADD4C009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
-		4C23FB1718FADD4D009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
 		4C23FB1818FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1918FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1C18FADD67009F234F /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1A18FADD67009F234F /* MTLog.m */; };
@@ -534,13 +532,6 @@
 		4C258046192D090F00BE74EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C258044192D090F00BE74EB /* InfoPlist.strings */; };
 		4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22419D5D16800B7A417 /* Test_Cloud.m */; };
-		4C26F22F19D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */; };
-		4C26F23019D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */; };
-		4C26F23119D5E25100B7A417 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
-		4C26F23219D5E25C00B7A417 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
-		4C26F23319D5E27A00B7A417 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
-		4C26F23419D5E40300B7A417 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */; };
 		4C27381B191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -747,9 +738,6 @@
 		4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C5CD39C181EBCB6005FC6DD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C60484619E3BA6D00E1E3A0 /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60484519E3BA6D00E1E3A0 /* MADMetaData.m */; };
-		4C60484719E3BA6D00E1E3A0 /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60484519E3BA6D00E1E3A0 /* MADMetaData.m */; };
-		4C60484819E3C77100E1E3A0 /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60484519E3BA6D00E1E3A0 /* MADMetaData.m */; };
 		4C611981199130700090ECC4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C6268DC19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
@@ -1539,15 +1527,7 @@
 		4CF3E79319F071320064DA5F /* MADImageClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */; };
 		4CF3E79419F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
 		4CF3E79519F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
-		4CF46F361AC6411C007C0A82 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F351AC6411C007C0A82 /* InterfaceController.m */; };
-		4CF46F391AC6411D007C0A82 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F381AC6411D007C0A82 /* NotificationController.m */; };
-		4CF46F3C1AC6411D007C0A82 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F3B1AC6411D007C0A82 /* GlanceController.m */; };
-		4CF46F3E1AC6411D007C0A82 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F3D1AC6411D007C0A82 /* Images.xcassets */; };
-		4CF46F421AC6411D007C0A82 /* MAD Designer WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */; };
-		4CF46F4A1AC6411D007C0A82 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F481AC6411D007C0A82 /* Interface.storyboard */; };
-		4CF46F4C1AC6411D007C0A82 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CF46F4B1AC6411D007C0A82 /* Images.xcassets */; };
-		4CF46F501AC6411D007C0A82 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		4CF46F571AC645DA007C0A82 /* MAD Designer.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E2414B29789007B4F48 /* MAD Designer.app */; };
+		4CF46FB11AC6508F007C0A82 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F841AC64BA7007C0A82 /* libCloudManager.a */; };
 		4CF5319B1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4CF5319C1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4CF5319D1A08092F00511BEF /* MADToolboxTransitioner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF5319A1A08092F00511BEF /* MADToolboxTransitioner.m */; };
@@ -1602,13 +1582,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4C7674CD18F2F391007CEBD3;
 			remoteInfo = MTGraphTest;
-		};
-		4C26F22619D5D16800B7A417 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C384E2314B29789007B4F48;
-			remoteInfo = "MAD Designer";
 		};
 		4C49D9E219DCE31400CB4DB8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1666,27 +1639,6 @@
 			remoteGlobalIDString = 4CF3C5A5194F80F600E5705B;
 			remoteInfo = ScrimpterTests;
 		};
-		4CF46F431AC6411D007C0A82 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CF46F401AC6411D007C0A82;
-			remoteInfo = "MAD Designer WatchKit App";
-		};
-		4CF46F4D1AC6411D007C0A82 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CF46F2E1AC6411C007C0A82;
-			remoteInfo = "MAD Designer WatchKit Extension";
-		};
-		4CF46F581AC645DA007C0A82 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C384E2314B29789007B4F48;
-			remoteInfo = "MAD Designer";
-		};
 		4CF46F831AC64BA7007C0A82 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */;
@@ -1717,7 +1669,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				4CF46F501AC6411D007C0A82 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1919,8 +1870,6 @@
 		4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTableViewControllerBarcodeExtraQrCode.m; path = Classes/MTTableViewControllerBarcodeExtraQrCode.m; sourceTree = "<group>"; };
 		4C23FB0E18FADD17009F234F /* objcmad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objcmad.h; path = Classes/objcmad.h; sourceTree = "<group>"; };
 		4C23FB0F18FADD17009F234F /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = objcmad.c; path = Classes/objcmad.c; sourceTree = "<group>"; };
-		4C23FB1218FADD4C009F234F /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = ../Classes/MACloudManager.h; sourceTree = "<group>"; };
-		4C23FB1318FADD4C009F234F /* MACloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MACloudManager.m; path = ../Classes/MACloudManager.m; sourceTree = "<group>"; };
 		4C23FB1418FADD4C009F234F /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKeyChain.h; path = Classes/MTKeyChain.h; sourceTree = "<group>"; };
 		4C23FB1518FADD4C009F234F /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKeyChain.m; path = Classes/MTKeyChain.m; sourceTree = "<group>"; };
 		4C23FB1A18FADD67009F234F /* MTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTLog.m; path = Classes/MTLog.m; sourceTree = "<group>"; };
@@ -2059,11 +2008,7 @@
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C267AA718FA6BA80097D166 /* MTQueryCustomNoResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCustomNoResults.h; sourceTree = "<group>"; };
 		4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCustomNoResults.m; sourceTree = "<group>"; };
-		4C26F22019D5D16800B7A417 /* Test Cloud.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Cloud.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C26F22319D5D16800B7A417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C26F22419D5D16800B7A417 /* Test_Cloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
-		4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetadataQueryManager.m; sourceTree = "<group>"; };
-		4C26F22E19D5D37D00B7A417 /* MADMetadataQueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetadataQueryManager.h; sourceTree = "<group>"; };
 		4C273819191AE4E600304A02 /* MTQueryCacheIndexCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexCreate.h; sourceTree = "<group>"; };
 		4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
 		4C273826191AE4FF00304A02 /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
@@ -2398,8 +2343,6 @@
 		4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
 		4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
-		4C60484419E3BA6D00E1E3A0 /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaData.h; sourceTree = "<group>"; };
-		4C60484519E3BA6D00E1E3A0 /* MADMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaData.m; sourceTree = "<group>"; };
 		4C6268D919F5DBF400DCCC2E /* MADVibrantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVibrantTableViewCell.h; path = Reports/MADVibrantTableViewCell.h; sourceTree = "<group>"; };
 		4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADVibrantTableViewCell.m; path = Reports/MADVibrantTableViewCell.m; sourceTree = "<group>"; };
 		4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MADVibrantTableViewCell.xib; path = Reports/MADVibrantTableViewCell.xib; sourceTree = "<group>"; };
@@ -3124,21 +3067,10 @@
 		4CF3E78D19F071320064DA5F /* MADImageClear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageClear.png; sourceTree = "<group>"; };
 		4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@2x.png"; sourceTree = "<group>"; };
 		4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@3x.png"; sourceTree = "<group>"; };
-		4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MAD Designer WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CF46F321AC6411C007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4CF46F331AC6411C007C0A82 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		4CF46F341AC6411C007C0A82 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
-		4CF46F351AC6411C007C0A82 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
-		4CF46F371AC6411C007C0A82 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
-		4CF46F381AC6411D007C0A82 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
-		4CF46F3A1AC6411D007C0A82 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
-		4CF46F3B1AC6411D007C0A82 /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
-		4CF46F3D1AC6411D007C0A82 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CF46F471AC6411D007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4CF46F491AC6411D007C0A82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		4CF46F4B1AC6411D007C0A82 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CloudManager.xcodeproj; path = libCloudManager/CloudManager/CloudManager.xcodeproj; sourceTree = "<group>"; };
+		4CF46FB21AC652E3007C0A82 /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetaData.h; path = libCloudManager/CloudManager/CloudManager/MADMetaData.h; sourceTree = "<group>"; };
+		4CF46FB31AC652E3007C0A82 /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = libCloudManager/CloudManager/CloudManager/MACloudManager.h; sourceTree = "<group>"; };
+		4CF46FB41AC652E3007C0A82 /* MADMetadataQueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetadataQueryManager.h; path = libCloudManager/CloudManager/CloudManager/MADMetadataQueryManager.h; sourceTree = "<group>"; };
 		4CF531971A08092F00511BEF /* MADToolboxPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxPresentationController.h; sourceTree = "<group>"; };
 		4CF531981A08092F00511BEF /* MADToolboxTransitioner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxTransitioner.h; sourceTree = "<group>"; };
 		4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxPresentationController.m; sourceTree = "<group>"; };
@@ -3212,17 +3144,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C26F21D19D5D16800B7A417 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C384E2114B29789007B4F48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF46FB11AC6508F007C0A82 /* libCloudManager.a in Frameworks */,
 				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */,
 				4CC7F6A91962A2EF00A84FC0 /* libScrimpter.a in Frameworks */,
@@ -3305,13 +3231,6 @@
 				4C94ADE917C3514200037FCB /* UIKit.framework in Frameworks */,
 				4C94ADEA17C3514200037FCB /* Foundation.framework in Frameworks */,
 				4C94ADEB17C3514200037FCB /* CoreGraphics.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4CF46F2C1AC6411C007C0A82 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3443,8 +3362,6 @@
 				4CC2BE8319D9078B006AAB24 /* MADControlState.h */,
 				4CC2BE8419D90AEA006AAB24 /* MADDocumentObjectType.h */,
 				4CC2BE8519D90BD1006AAB24 /* MADSectionHeaderViewDelegate.h */,
-				4C60484419E3BA6D00E1E3A0 /* MADMetaData.h */,
-				4C60484519E3BA6D00E1E3A0 /* MADMetaData.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -3732,7 +3649,6 @@
 		4C26F22119D5D16800B7A417 /* Test Cloud */ = {
 			isa = PBXGroup;
 			children = (
-				4C26F22419D5D16800B7A417 /* Test_Cloud.m */,
 				4C26F22219D5D16800B7A417 /* Supporting Files */,
 			);
 			path = "Test Cloud";
@@ -3758,10 +3674,6 @@
 		4C26F22C19D5D2C600B7A417 /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
-				4C23FB1218FADD4C009F234F /* MACloudManager.h */,
-				4C23FB1318FADD4C009F234F /* MACloudManager.m */,
-				4C26F22E19D5D37D00B7A417 /* MADMetadataQueryManager.h */,
-				4C26F22D19D5D37D00B7A417 /* MADMetadataQueryManager.m */,
 			);
 			name = Cloud;
 			sourceTree = "<group>";
@@ -3806,8 +3718,6 @@
 				4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */,
 				4C5BED6818E9081F00BDDDB8 /* Protocols */,
 				4C0E785F163B5C51003B951E /* Resources */,
-				4CF46F301AC6411C007C0A82 /* MAD Designer WatchKit Extension */,
-				4CF46F451AC6411D007C0A82 /* MAD Designer WatchKit App */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -3820,13 +3730,10 @@
 				4C0E785B163B5AEC003B951E /* MAD Viewer.app */,
 				4C94ADE817C3514100037FCB /* MAD Launch Images.app */,
 				4C25803D192D090F00BE74EB /* Caching Array Tests.xctest */,
-				4C26F22019D5D16800B7A417 /* Test Cloud.xctest */,
 				4C49D9CC19DCE31400CB4DB8 /* MAD Designer X.app */,
 				4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */,
 				4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */,
 				4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */,
-				4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */,
-				4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5730,48 +5637,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4CF46F301AC6411C007C0A82 /* MAD Designer WatchKit Extension */ = {
-			isa = PBXGroup;
-			children = (
-				4CF46F341AC6411C007C0A82 /* InterfaceController.h */,
-				4CF46F351AC6411C007C0A82 /* InterfaceController.m */,
-				4CF46F371AC6411C007C0A82 /* NotificationController.h */,
-				4CF46F381AC6411D007C0A82 /* NotificationController.m */,
-				4CF46F3A1AC6411D007C0A82 /* GlanceController.h */,
-				4CF46F3B1AC6411D007C0A82 /* GlanceController.m */,
-				4CF46F3D1AC6411D007C0A82 /* Images.xcassets */,
-				4CF46F311AC6411C007C0A82 /* Supporting Files */,
-			);
-			path = "MAD Designer WatchKit Extension";
-			sourceTree = "<group>";
-		};
-		4CF46F311AC6411C007C0A82 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4CF46F321AC6411C007C0A82 /* Info.plist */,
-				4CF46F331AC6411C007C0A82 /* PushNotificationPayload.apns */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4CF46F451AC6411D007C0A82 /* MAD Designer WatchKit App */ = {
-			isa = PBXGroup;
-			children = (
-				4CF46F481AC6411D007C0A82 /* Interface.storyboard */,
-				4CF46F4B1AC6411D007C0A82 /* Images.xcassets */,
-				4CF46F461AC6411D007C0A82 /* Supporting Files */,
-			);
-			path = "MAD Designer WatchKit App";
-			sourceTree = "<group>";
-		};
-		4CF46F461AC6411D007C0A82 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4CF46F471AC6411D007C0A82 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		4CF46F5A1AC64A2F007C0A82 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -5799,6 +5664,9 @@
 		4CF46F871AC64BBE007C0A82 /* libCloudManager */ = {
 			isa = PBXGroup;
 			children = (
+				4CF46FB21AC652E3007C0A82 /* MADMetaData.h */,
+				4CF46FB31AC652E3007C0A82 /* MACloudManager.h */,
+				4CF46FB41AC652E3007C0A82 /* MADMetadataQueryManager.h */,
 				4CF46F7E1AC64BA5007C0A82 /* CloudManager.xcodeproj */,
 			);
 			name = libCloudManager;
@@ -5843,24 +5711,6 @@
 			productReference = 4C25803D192D090F00BE74EB /* Caching Array Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		4C26F21F19D5D16800B7A417 /* Test Cloud */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4C26F22819D5D16800B7A417 /* Build configuration list for PBXNativeTarget "Test Cloud" */;
-			buildPhases = (
-				4C26F21C19D5D16800B7A417 /* Sources */,
-				4C26F21D19D5D16800B7A417 /* Frameworks */,
-				4C26F21E19D5D16800B7A417 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4C26F22719D5D16800B7A417 /* PBXTargetDependency */,
-			);
-			name = "Test Cloud";
-			productName = "Test Cloud";
-			productReference = 4C26F22019D5D16800B7A417 /* Test Cloud.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		4C384E2314B29789007B4F48 /* MAD Designer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "MAD Designer" */;
@@ -5874,7 +5724,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4CF46F4E1AC6411D007C0A82 /* PBXTargetDependency */,
 			);
 			name = "MAD Designer";
 			productName = TheReportViewer;
@@ -5968,40 +5817,6 @@
 			productReference = 4C94ADE817C3514100037FCB /* MAD Launch Images.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4CF46F2E1AC6411C007C0A82 /* MAD Designer WatchKit Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4CF46F541AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */;
-			buildPhases = (
-				4CF46F2B1AC6411C007C0A82 /* Sources */,
-				4CF46F2C1AC6411C007C0A82 /* Frameworks */,
-				4CF46F2D1AC6411C007C0A82 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4CF46F441AC6411D007C0A82 /* PBXTargetDependency */,
-				4CF46F591AC645DA007C0A82 /* PBXTargetDependency */,
-			);
-			name = "MAD Designer WatchKit Extension";
-			productName = "MAD Designer WatchKit Extension";
-			productReference = 4CF46F2F1AC6411C007C0A82 /* MAD Designer WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
-		};
-		4CF46F401AC6411D007C0A82 /* MAD Designer WatchKit App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4CF46F511AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit App" */;
-			buildPhases = (
-				4CF46F3F1AC6411D007C0A82 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "MAD Designer WatchKit App";
-			productName = "MAD Designer WatchKit App";
-			productReference = 4CF46F411AC6411D007C0A82 /* MAD Designer WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -6021,11 +5836,6 @@
 						};
 					};
 					4C25803C192D090F00BE74EB = {
-						DevelopmentTeam = D3C58YS54A;
-						TestTargetID = 4C384E2314B29789007B4F48;
-					};
-					4C26F21F19D5D16800B7A417 = {
-						CreatedOnToolsVersion = 6.0.1;
 						DevelopmentTeam = D3C58YS54A;
 						TestTargetID = 4C384E2314B29789007B4F48;
 					};
@@ -6053,13 +5863,6 @@
 					4C49DA0F19DCE32E00CB4DB8 = {
 						CreatedOnToolsVersion = 6.1;
 						TestTargetID = 4C49D9FA19DCE32E00CB4DB8;
-					};
-					4CF46F2E1AC6411C007C0A82 = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = D3C58YS54A;
-					};
-					4CF46F401AC6411D007C0A82 = {
-						CreatedOnToolsVersion = 6.2;
 					};
 				};
 			};
@@ -6135,11 +5938,8 @@
 			targets = (
 				4C384E2314B29789007B4F48 /* MAD Designer */,
 				4C0E771F163B5AEC003B951E /* MAD Viewer */,
-				4CF46F401AC6411D007C0A82 /* MAD Designer WatchKit App */,
-				4CF46F2E1AC6411C007C0A82 /* MAD Designer WatchKit Extension */,
 				4C94ADE717C3514100037FCB /* MAD Launch Images */,
 				4C25803C192D090F00BE74EB /* Caching Array Tests */,
-				4C26F21F19D5D16800B7A417 /* Test Cloud */,
 				4C49D9CB19DCE31400CB4DB8 /* MAD Designer X */,
 				4C49D9E019DCE31400CB4DB8 /* MAD Designer XTests */,
 				4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */,
@@ -6514,13 +6314,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C26F21E19D5D16800B7A417 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C384E2214B29789007B4F48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6863,25 +6656,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4CF46F2D1AC6411C007C0A82 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CF46F3E1AC6411D007C0A82 /* Images.xcassets in Resources */,
-				4CF46F571AC645DA007C0A82 /* MAD Designer.app in Resources */,
-				4CF46F421AC6411D007C0A82 /* MAD Designer WatchKit App.app in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4CF46F3F1AC6411D007C0A82 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CF46F4A1AC6411D007C0A82 /* Interface.storyboard in Resources */,
-				4CF46F4C1AC6411D007C0A82 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -6972,7 +6746,6 @@
 				4C23FBC318FAE4F7009F234F /* MTPaperB8.m in Sources */,
 				4C0CAB5C1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
 				4C0E775B163B5AEC003B951E /* MTQueryBuilderAddTableViewController.m in Sources */,
-				4C26F23019D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */,
 				4C0E775C163B5AEC003B951E /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C2F6E7E194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */,
@@ -7019,7 +6792,6 @@
 				4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */,
 				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
-				4C60484719E3BA6D00E1E3A0 /* MADMetaData.m in Sources */,
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
 				4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */,
@@ -7217,7 +6989,6 @@
 				4C23FBA718FAE4F7009F234F /* MTPaperA5.m in Sources */,
 				4C8155C517009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C91700C90700D5330E /* MTGroupByViewController.m in Sources */,
-				4C23FB1718FADD4D009F234F /* MACloudManager.m in Sources */,
 				4C08B31E1AB680CC00B54D3A /* MADDocumentInformationTableViewController.m in Sources */,
 				4C4740AE1A0026EF00B11434 /* MADToolboxViewController.m in Sources */,
 				4CB4574B1705F6DB005269B7 /* RptqRelationship.m in Sources */,
@@ -7300,19 +7071,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C26F21C19D5D16800B7A417 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C26F23419D5E40300B7A417 /* MADMetadataQueryManager.m in Sources */,
-				4C60484819E3C77100E1E3A0 /* MADMetaData.m in Sources */,
-				4C26F23319D5E27A00B7A417 /* NSFileManager+Common.m in Sources */,
-				4C26F23219D5E25C00B7A417 /* NSURL+Document.m in Sources */,
-				4C26F23119D5E25100B7A417 /* MACloudManager.m in Sources */,
-				4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C384E2014B29789007B4F48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -7352,7 +7110,6 @@
 				4C23FADD18FADA40009F234F /* MTDataTable.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MTConnectionViewController.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* MADQueryViewController.m in Sources */,
-				4C23FB1618FADD4C009F234F /* MACloudManager.m in Sources */,
 				4C4177D0192B0DE0006EC472 /* MTQueryCacheSelectRowId.m in Sources */,
 				4C23FAF018FADC68009F234F /* MTViewControllerBarcode.m in Sources */,
 				4CB2936C19FB52EB00C0171D /* MADTabBar.m in Sources */,
@@ -7369,7 +7126,6 @@
 				4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */,
 				4C23FB0818FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C0CAB5B1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
-				4C26F22F19D5D37D00B7A417 /* MADMetadataQueryManager.m in Sources */,
 				4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */,
 				4C2F6E7D194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
@@ -7417,7 +7173,6 @@
 				4CABE4671837DF7A007EDD9D /* RptqQuerySort.m in Sources */,
 				4C1A586614E23DDB00184445 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */,
-				4C60484619E3BA6D00E1E3A0 /* MADMetaData.m in Sources */,
 				4C23FB0C18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
 				4CA1500018B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C23FAEA18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */,
@@ -7897,16 +7652,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4CF46F2B1AC6411C007C0A82 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CF46F391AC6411D007C0A82 /* NotificationController.m in Sources */,
-				4CF46F361AC6411C007C0A82 /* InterfaceController.m in Sources */,
-				4CF46F3C1AC6411D007C0A82 /* GlanceController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -7914,11 +7659,6 @@
 			isa = PBXTargetDependency;
 			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
 			targetProxy = 4C25804A192D090F00BE74EB /* PBXContainerItemProxy */;
-		};
-		4C26F22719D5D16800B7A417 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
-			targetProxy = 4C26F22619D5D16800B7A417 /* PBXContainerItemProxy */;
 		};
 		4C49D9E319DCE31400CB4DB8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -7929,21 +7669,6 @@
 			isa = PBXTargetDependency;
 			target = 4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */;
 			targetProxy = 4C49DA1119DCE32E00CB4DB8 /* PBXContainerItemProxy */;
-		};
-		4CF46F441AC6411D007C0A82 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4CF46F401AC6411D007C0A82 /* MAD Designer WatchKit App */;
-			targetProxy = 4CF46F431AC6411D007C0A82 /* PBXContainerItemProxy */;
-		};
-		4CF46F4E1AC6411D007C0A82 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4CF46F2E1AC6411C007C0A82 /* MAD Designer WatchKit Extension */;
-			targetProxy = 4CF46F4D1AC6411D007C0A82 /* PBXContainerItemProxy */;
-		};
-		4CF46F591AC645DA007C0A82 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
-			targetProxy = 4CF46F581AC645DA007C0A82 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -8012,14 +7737,6 @@
 				4C94ADF017C3514200037FCB /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4CF46F481AC6411D007C0A82 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4CF46F491AC6411D007C0A82 /* Base */,
-			);
-			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -8184,63 +7901,6 @@
 				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
-		4C26F22919D5D16800B7A417 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"MAD_TEST=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Test Cloud/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer.app/MAD Designer";
-			};
-			name = Debug;
-		};
-		4C26F22A19D5D16800B7A417 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Test Cloud/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer.app/MAD Designer";
 			};
 			name = Release;
 		};
@@ -8695,106 +8355,6 @@
 			};
 			name = Release;
 		};
-		4CF46F521AC6411D007C0A82 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = MAD_Designer_WatchKit_Extension;
-				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Debug;
-		};
-		4CF46F531AC6411D007C0A82 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = MAD_Designer_WatchKit_Extension;
-				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Release;
-		};
-		4CF46F551AC6411D007C0A82 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MAD Designer WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		4CF46F561AC6411D007C0A82 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MAD Designer WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -8812,15 +8372,6 @@
 			buildConfigurations = (
 				4C25804D192D091000BE74EB /* Debug */,
 				4C25804E192D091000BE74EB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4C26F22819D5D16800B7A417 /* Build configuration list for PBXNativeTarget "Test Cloud" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4C26F22919D5D16800B7A417 /* Debug */,
-				4C26F22A19D5D16800B7A417 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -8887,22 +8438,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		4CF46F511AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4CF46F521AC6411D007C0A82 /* Debug */,
-				4CF46F531AC6411D007C0A82 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		4CF46F541AC6411D007C0A82 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4CF46F551AC6411D007C0A82 /* Debug */,
-				4CF46F561AC6411D007C0A82 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 

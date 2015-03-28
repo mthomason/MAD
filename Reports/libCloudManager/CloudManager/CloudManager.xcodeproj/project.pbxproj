@@ -10,6 +10,10 @@
 		4CF46F681AC64BA5007C0A82 /* CloudManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46F671AC64BA5007C0A82 /* CloudManager.h */; };
 		4CF46F6A1AC64BA5007C0A82 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F691AC64BA5007C0A82 /* CloudManager.m */; };
 		4CF46F701AC64BA5007C0A82 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F641AC64BA5007C0A82 /* libCloudManager.a */; };
+		4CF46FAA1AC64F94007C0A82 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FA91AC64F94007C0A82 /* MACloudManager.m */; };
+		4CF46FAD1AC64FD3007C0A82 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FAC1AC64FD3007C0A82 /* MADMetadataQueryManager.m */; };
+		4CF46FB01AC65024007C0A82 /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FAF1AC65024007C0A82 /* MADMetaData.m */; };
+		4CF46FB61AC65520007C0A82 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FB51AC65520007C0A82 /* Test_Cloud.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +45,13 @@
 		4CF46F691AC64BA5007C0A82 /* CloudManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudManager.m; sourceTree = "<group>"; };
 		4CF46F6F1AC64BA5007C0A82 /* CloudManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloudManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF46F751AC64BA5007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CF46FA81AC64F94007C0A82 /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MACloudManager.h; sourceTree = "<group>"; };
+		4CF46FA91AC64F94007C0A82 /* MACloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MACloudManager.m; sourceTree = "<group>"; };
+		4CF46FAB1AC64FD3007C0A82 /* MADMetadataQueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetadataQueryManager.h; sourceTree = "<group>"; };
+		4CF46FAC1AC64FD3007C0A82 /* MADMetadataQueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetadataQueryManager.m; sourceTree = "<group>"; };
+		4CF46FAE1AC65024007C0A82 /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaData.h; sourceTree = "<group>"; };
+		4CF46FAF1AC65024007C0A82 /* MADMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaData.m; sourceTree = "<group>"; };
+		4CF46FB51AC65520007C0A82 /* Test_Cloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +94,12 @@
 		4CF46F661AC64BA5007C0A82 /* CloudManager */ = {
 			isa = PBXGroup;
 			children = (
+				4CF46FAE1AC65024007C0A82 /* MADMetaData.h */,
+				4CF46FAF1AC65024007C0A82 /* MADMetaData.m */,
+				4CF46FA81AC64F94007C0A82 /* MACloudManager.h */,
+				4CF46FA91AC64F94007C0A82 /* MACloudManager.m */,
+				4CF46FAB1AC64FD3007C0A82 /* MADMetadataQueryManager.h */,
+				4CF46FAC1AC64FD3007C0A82 /* MADMetadataQueryManager.m */,
 				4CF46F671AC64BA5007C0A82 /* CloudManager.h */,
 				4CF46F691AC64BA5007C0A82 /* CloudManager.m */,
 			);
@@ -92,6 +109,7 @@
 		4CF46F731AC64BA5007C0A82 /* CloudManagerTests */ = {
 			isa = PBXGroup;
 			children = (
+				4CF46FB51AC65520007C0A82 /* Test_Cloud.m */,
 				4CF46F741AC64BA5007C0A82 /* Supporting Files */,
 			);
 			path = CloudManagerTests;
@@ -193,7 +211,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF46FAD1AC64FD3007C0A82 /* MADMetadataQueryManager.m in Sources */,
 				4CF46F6A1AC64BA5007C0A82 /* CloudManager.m in Sources */,
+				4CF46FAA1AC64F94007C0A82 /* MACloudManager.m in Sources */,
+				4CF46FB01AC65024007C0A82 /* MADMetaData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF46FB61AC65520007C0A82 /* Test_Cloud.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +378,7 @@
 				4CF46F7A1AC64BA5007C0A82 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4CF46F7B1AC64BA5007C0A82 /* Build configuration list for PBXNativeTarget "CloudManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -364,6 +387,7 @@
 				4CF46F7D1AC64BA5007C0A82 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

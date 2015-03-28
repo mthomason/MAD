@@ -29,7 +29,11 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyInser
 extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated;
 extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved;
 
-@protocol MADCloudManagerProtocol <NSObject>
+@protocol MADCloudManagerProtocolAppDetails <NSObject>
+- (NSString *)ubiquityIdentifier;
+@end
+
+@protocol MADCloudManagerProtocolCallbacks <NSObject>
 
 - (void)ubiquityIdentityDidChange;
 
@@ -39,7 +43,8 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 @interface MACloudManager : NSObject
 
-@property (nonatomic, weak) id <MADCloudManagerProtocol> delegate;
+@property (nonatomic, weak) id <MADCloudManagerProtocolCallbacks> delegate;
+@property (nonatomic, weak) id <MADCloudManagerProtocolAppDetails> delegateApplication;
 
 @property (nonatomic, strong, readonly) NSURL *localTemporaryDirectory;
 @property (nonatomic, strong, readonly) NSURL *localCachesDirectory;

@@ -26,11 +26,18 @@
 #import "MADocument.h"
 
 #import "MADOpenFileViewController.h"
+
 #import "MACloudManager.h"
 #import "MTLog.h"
 
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
+
+#if MAD_DESIGNER == 1 || MAD_TEST == 1
+NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
+#elif MAD_VIEWER == 1
+NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
+#endif
 
 const NSInteger MADTagAlertViewNewDocument = 3838;
 const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it will be enabled,
@@ -38,7 +45,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                     //  otherwise load window in didFinishLaunchingWithOptions
 
 @interface AppDelegate()
-    <UIDocumentInteractionControllerDelegate>
+    <UIDocumentInteractionControllerDelegate,
+        MADCloudManagerProtocolAppDetails>
 
 @property (nonatomic, strong) MTApplicationInstance *applicationInstance;
 @property (nonatomic, strong) UIStoryboard *storyboard;
@@ -180,8 +188,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [self.applicationInstance initalizeAppearance];
 
     //[MTStoreKitController sharedObject];
-    [MACloudManager sharedManager];
+    [MACloudManager sharedManager].delegateApplication = self;
     return YES;
+}
+
+- (NSString *)ubiquityIdentifier {
+    return MADUbiquityIdentifier;
 }
 
 + (void)deleteCoreDataCache {
