@@ -193,12 +193,12 @@ empty_directory() {
 # Globals
 #
 
-readonly version_openssl="1.0.1g"
-readonly version_mysql="6.1.3"
+readonly version_openssl="1.0.1m"
+readonly version_mysql="6.1.6"
 readonly version_freetds="0.91"
 readonly version_tds=7.1
 readonly version_zint="2.4.2"
-readonly version_png="1.6.10"
+readonly version_png="1.6.16"
 readonly version_unixodbc="2.3.2"
 readonly version_classpath="0.98"
 readonly version_glib="2.38.2"
@@ -210,7 +210,7 @@ readonly version_acl="2.2.52"
 readonly version_attr="2.4.47"
 
 readonly version_mysql_6_0="6.0.2"  #do not change
-readonly version_mysql_6_1="6.1.3"
+readonly version_mysql_6_1="6.1.6"
 
 readonly platform_iphoneos="iphoneos"
 readonly platform_simulator="iphonesimulator"
@@ -223,13 +223,14 @@ readonly path_xcode=$( xcode-select -print-path )
 readonly version_macosx=$( version_for_platform $platform_macosx )
 readonly version_ios=$( version_for_platform $platform_iphoneos )
 
-readonly version_ios_min="6.0"
+readonly version_ios_min="7.0"
 
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
-readonly archs="armv7 armv7s arm64 i386 x86_64"
-#readonly archs="arm64 x86_64"
+#readonly archs="armv7 armv7s arm64 i386 x86_64"
+readonly archs="arm64"
+
 readonly archs_macosx="i386 x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
@@ -269,13 +270,13 @@ readonly archive_classpath="${archive_name_classpath}.tar.gz"
 
 readonly archive_freetds_base_url="ftp://ftp.freetds.org/pub/freetds/stable/"
 readonly archive_name_freetds="freetds-${version_freetds}"
-readonly archive_freetds="freetds-stable.tgz"
+readonly archive_freetds="${archive_name_freetds}.tar.gz"
 
 readonly archive_zint_base_url="https://github.com/downloads/zint/zint/"
 readonly archive_name_zint="zint-${version_zint}"
 readonly archive_zint="${archive_name_zint}.tar.gz"
 
-readonly archive_png_base_url="ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/"
+readonly archive_png_base_url="http://prdownloads.sourceforge.net/libpng/"
 readonly archive_name_png="libpng-${version_png}"
 readonly archive_png="${archive_name_png}.tar.gz"
 
@@ -335,6 +336,12 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    local log=$6
    local additional_work=$7
 
+printf "%s\t\t%s\n" "architecture" $architecture
+printf "%s\t\t%s\n" "additional_config" $additional_config
+printf "%s\t\t%s\n" "path_make" $path_make
+printf "%s\t\t%s\n" "log" $log
+printf "%s\t\t%s\n" "additional_work" $additional_work
+
     if [[ "${#additional_config}" > 0 ]];
     then
         s="s/${additional_config_blank}//g"
@@ -370,7 +377,7 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    developer_root=$( xcode-select -print-path )
    platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
 
-   export DEVROOT="${platform_root}/Developer "
+   export DEVROOT="${platform_root}/Developer"
    export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
    export CC=$( xcrun -find gcc )
    export CFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min} ${CFLAGS} "
@@ -391,13 +398,13 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
 
    if [[ "${#additional_config}" > 0 ]];
    then
-
+        printf "Performing additional config"
         additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
         pwd
         ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} >> "${log}.error.log" &
         spinner $!
    else
-
+        printf "Skipping additional config"
       ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" >> "${log}.error.log" &
       spinner $!
 
@@ -405,6 +412,8 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
 
    if [[ "${#additional_work}" > 0 ]];
    then
+        printf "Doing Extra Work"
+        printf "%s %s" ${additional_work} "${path_make}"
         ${additional_work} "${path_make}"
    fi
 
@@ -413,12 +422,12 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
     spinner $!
 
     printf "\nmake\n"
-    make -j8 >> "${log}.error.log"
+    make  >> "${log}.error.log"
     spinner $!
 
     printf "\nmake install"
 
-    make -j8 install >> "${log}.error.log" &
+    make install >> "${log}.error.log" &
     spinner $!
 
    printf "\n"
@@ -1014,6 +1023,12 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
       export BUILD_TOOLS="${env_build_tools}"
       export CC="${env_cc}"
 
+      printf "%s:\t\t%s\n" "CROSS_TOP" "${env_cross_top}"
+      printf "%s:\t\t%s\n" "CROSS_SDK" "${env_cross_sdk}"
+      printf "%s:\t\t%s\n" "BUILD_TOOLS" "${env_build_tools}"
+      printf "%s:\t\t%s\n" "CC" "${env_cc}"
+
+      printf "%s\n\t%s\n\t%s\n" "Extracting source" $path_media_ssl $path_source
       extract_source $path_media_ssl $path_source
 
        #
@@ -1054,14 +1069,22 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
        printf "Building OpenSSL.\n"
 
        set +e
-       if [[ "$version_openssl" =~ 1.0.0. ]]; then
-          ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       elif [ "${arch}" == "x86_64" ]; then
+       #if [[ "$version_openssl" =~ 1.0.0. ]]; then
+       #   ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+       #elif [ "${arch}" == "x86_64" ]; then
+       #   ./Configure darwin64-x86_64-cc --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+       #else
+       #   ./Configure iphoneos-cross --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+       #fi
+       
+       if [[ "${arch}" == "x86_64" ]]; then
           ./Configure darwin64-x86_64-cc --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+       elif [ "${arch}" == "i386" ]; then
+	  ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
        else
           ./Configure iphoneos-cross --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       fi
-     
+       fi    
+
        if [ $? != 0 ];
        then 
           echo "Problem while configure - Please check ${log_build_openssl}"
@@ -1311,7 +1334,7 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 
         if [ $mysql_custom_openssl == $true ]
         then
-            cmake -DWITH_SSL=$path_library_openssl -Wno-dev -GXcode # >> $log_build_mysql &
+            cmake -DOPENSSL_ROOT_DIR=$path_library_openssl -Wno-dev -GXcode # >> $log_build_mysql &
             spinner $!
         else
             cmake -Wno-dev -GXcode >> $log_build_mysql &
@@ -1380,8 +1403,8 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 
     cp -R "${path_source_mysql}/include" "${path_library_mysql}"
 
-    sed -ie 's/#include <mysql\/plugin_auth_common.h>/#include "plugin_auth_common.h"/g' '${path_source_mysql}/include/mysql/client_plugin.h'
-    sed -ie 's/#include <mysql/psi/psi_memory.h>/#include "mysql/psi/psi_memory.h"/g' '${path_source_mysql}/include/mysql/psi/psi_memory.h'
+    #sed -ie 's/#include <mysql\/plugin_auth_common.h>/#include "plugin_auth_common.h"/g' '${path_source_mysql}/include/mysql/client_plugin.h'
+    #sed -ie 's/#include <mysql/psi/psi_memory.h>/#include "mysql/psi/psi_memory.h"/g' '${path_source_mysql}/include/mysql/psi/psi_memory.h'
 
     path_library_mysql="${path_library_mysql}/libmysqlclient.a"
     command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
@@ -1524,15 +1547,48 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
       platform_version_arch="${platform}${version_ios}-${arch}"
       path_build_png_arch="${path_build_png}/$platform_version_arch.sdk"
 
-      mkdir -p "${path_build_png_arch}"
-      rm -rf -- "${path_build_png_arch}"
-      log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
-      > "$log_build_png"
 
-      cd "${path_base}"
 
-      extract_source $path_media_png $path_source &
-      spinner $!
+
+
+
+
+
+
+
+
+
+
+        printf "Extracting libpng source code.\n"
+        rm -rf -- "${path_source_png}"
+        mkdir -p "${path_source_png}"
+        tar zxf ${path_media_png} -C ${path_source}
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_unixodbc_arch="${path_build_png}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_png_arch}"
+        rm -rf -- "${path_build_png_arch}"
+        mkdir -p "${path_build_png_arch}"
+        log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
+        > "$log_build_png"
+
+        cd "${path_base}"
+
+        extract_source $path_media_png $path_source &
+        spinner $!
+
+
+
+      #mkdir -p "${path_build_png_arch}"
+      #rm -rf -- "${path_build_png_arch}"
+      #log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
+      #> "$log_build_png"
+
+      #cd "${path_base}"
+
+      #extract_source $path_media_png $path_source &
+      #spinner $!
 
       cd "${path_source_png}"
 
@@ -1598,27 +1654,27 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
    done
 
-   printf "mkdir %s\n" "${path_library_tds}"
+   #printf "mkdir %s\n" "${path_library_tds}"
 
-   mkdir -p "${path_library_tds}"
-   rm -rf -- "${path_library_tds}"
-   mkdir -p "${path_library_tds}"
+   #mkdir -p "${path_library_tds}"
+   #rm -rf -- "${path_library_tds}"
+   #mkdir -p "${path_library_tds}"
 
-   printf "cp -R %s\n" "${path_build_tds_arch}/include\" \"${path_library_tds}"
+   #printf "cp -R %s\n" "${path_build_tds_arch}/include\" \"${path_library_tds}"
 
-   cp -R $path_build_tds_arch/include $path_library_tds
+   #cp -R $path_build_tds_arch/include $path_library_tds
 
-   command_lipo_tds="${command_lipo_tds} -output ${path_library_tds}/libsybdb.a"
-   command_lipo_ct="${command_lipo_ct} -output ${path_library_tds}/libct.a"
+   #command_lipo_tds="${command_lipo_tds} -output ${path_library_tds}/libsybdb.a"
+   #command_lipo_ct="${command_lipo_ct} -output ${path_library_tds}/libct.a"
 
-   echo ""
-   echo "${command_lipo_tds}"
-   echo ""
-   echo "${command_lipo_ct}"
-   echo ""
+   #echo ""
+   #echo "${command_lipo_tds}"
+   #echo ""
+   #echo "${command_lipo_ct}"
+   #echo ""
 
-   $command_lipo_tds
-   $command_lipo_ct
+   #$command_lipo_tds
+   #$command_lipo_ct
 
 fi
 
@@ -1796,7 +1852,7 @@ if [[ $build_acl == $true && $show_help == $false ]]; then
     build_acl_static_ios
 fi
 
-empty_directory $path_build
-empty_directory $path_source
+#empty_directory $path_build
+#empty_directory $path_source
 
 printf "Compressor is done.\n"
