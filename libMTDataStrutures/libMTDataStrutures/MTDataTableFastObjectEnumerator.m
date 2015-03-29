@@ -12,7 +12,7 @@
 
 #import "MTDataTableFastObjectEnumerator.h"
 #import "MTDataColumn.h"
-#import "libSqlite3_8.h"
+#import "sqlite3.h"
 #import "MTQuery.h"
 #import "MTLog.h"
 #import "MTDatabaseSqlite3.h"

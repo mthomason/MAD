@@ -18,7 +18,7 @@
 #import "MTDataTableFastObjectEnumerator.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabase.h"
-#import "libSqlite3_8.h"
+#import "sqlite3.h"
 #import "MTLog.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTPair.h"

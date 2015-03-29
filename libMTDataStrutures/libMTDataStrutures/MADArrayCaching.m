@@ -16,7 +16,7 @@
 #import "MTDatabaseCache.h"
 #import "MTDataColumn.h"
 #import "MTQuery.h"
-#import "libSqlite3_8.h"
+#import "sqlite3.h"
 #import "MTPair.h"
 #import "MTDatabaseField.h"
 
