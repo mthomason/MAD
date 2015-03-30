@@ -91,7 +91,6 @@
 		4C8ECDDF16BF63E2003D3B30 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolEnumerator.h; sourceTree = "<group>"; };
 		4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolCompare.h; sourceTree = "<group>"; };
 		4CA16362167EB67C00540A14 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		4CFFD94119D5C828001D0B02 /* MTGraphTest copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MTGraphTest copy-Info.plist"; path = "/Users/mthomason/Desktop/Reports/libMTDataStrutures/MTGraphTest copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +121,6 @@
 				4C7674D118F2F391007CEBD3 /* MTGraphTest */,
 				4C4C6EFE167635B8004A3B04 /* Frameworks */,
 				4C4C6EFD167635B8004A3B04 /* Products */,
-				4CFFD94119D5C828001D0B02 /* MTGraphTest copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
