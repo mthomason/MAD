@@ -51,8 +51,8 @@
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);
-        [button setImage:[UIImage imageNamed:@"carat"] forState:UIControlStateNormal];
-        [button setImage:[UIImage imageNamed:@"carat-open"] forState:UIControlStateSelected];
+        [button setImage:[UIImage imageNamed:@"MADImageCarat"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"MADImageCaratOpen"] forState:UIControlStateSelected];
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
         [self setDisclosureButton: button];
