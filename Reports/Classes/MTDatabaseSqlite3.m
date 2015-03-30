@@ -497,13 +497,16 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                                 int *pNotNull = 0;
                                 int *pPrimaryKey = 0;
                                 int *pAutoinc = 0;
-                                
-                                sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
-                                
+                            
+                                if (tableName != NULL) {
+                                    sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
+                                }
+                            
                                 [dataColumn setFieldName: fieldName];
                                 [dataColumn setNativeColumnType:nativeColumnType];
                                 NSNumber *columnType = @([MTDatabaseSqlite3 dataTypeForAffentyType:affentyType]);
                                 [dataColumn setColumnType:columnType];
+                            
                                 [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
                                 [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
                                 [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
