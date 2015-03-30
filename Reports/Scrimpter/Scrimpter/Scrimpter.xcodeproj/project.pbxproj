@@ -36,6 +36,7 @@
 		4C1044D41956B57F00820EFE /* MTAstNodeArithmetic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044D21956B57F00820EFE /* MTAstNodeArithmetic.m */; };
 		4C1044D71956B88400820EFE /* MTAstNodeUniaryMinus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */; };
 		4C1044D81956B88400820EFE /* MTAstNodeUniaryMinus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */; };
+		4C8394F81AC8F1510055EDE9 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1044AA1956764F00820EFE /* libMTDataStrutures.a */; };
 		4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */; };
 		4C9E0FD51952041E0052AED6 /* MADSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD41952041E0052AED6 /* MADSymbol.m */; };
 		4C9E0FD8195204860052AED6 /* MADSymbolReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD7195204860052AED6 /* MADSymbolReference.m */; };
@@ -99,7 +100,6 @@
 		4C0F848B1958CC4B00EF4BC9 /* MTAstNodeResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeResult.h; sourceTree = "<group>"; };
 		4C0F848C1958CC4B00EF4BC9 /* MTAstNodeResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeResult.m; sourceTree = "<group>"; };
 		4C1044AA1956764F00820EFE /* libMTDataStrutures.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMTDataStrutures.a; path = "../../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/libMTDataStrutures.a"; sourceTree = "<group>"; };
-		4C1044AD1956766900820EFE /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../../../../libMTDataStrutures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
 		4C1044AE195683F000820EFE /* MTAbstractSyntaxTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAbstractSyntaxTree.h; sourceTree = "<group>"; };
 		4C1044AF195683F000820EFE /* MTAbstractSyntaxTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAbstractSyntaxTree.m; sourceTree = "<group>"; };
 		4C1044B3195687B200820EFE /* MTAstNodeFunctionCallEmbedded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeFunctionCallEmbedded.h; sourceTree = "<group>"; };
@@ -114,13 +114,14 @@
 		4C1044C51956891200820EFE /* MTAstNodeSymbolReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeSymbolReference.m; sourceTree = "<group>"; };
 		4C1044C81956893400820EFE /* MTAstNodeSymbolAsignNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeSymbolAsignNumber.h; sourceTree = "<group>"; };
 		4C1044C91956893400820EFE /* MTAstNodeSymbolAsignNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeSymbolAsignNumber.m; sourceTree = "<group>"; };
-		4C1044CC19569FE000820EFE /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../../../../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
 		4C1044CD1956B22D00820EFE /* MTAstNodeComparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeComparson.h; sourceTree = "<group>"; };
 		4C1044CE1956B22D00820EFE /* MTAstNodeComparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeComparson.m; sourceTree = "<group>"; };
 		4C1044D11956B57F00820EFE /* MTAstNodeArithmetic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeArithmetic.h; sourceTree = "<group>"; };
 		4C1044D21956B57F00820EFE /* MTAstNodeArithmetic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeArithmetic.m; sourceTree = "<group>"; };
 		4C1044D51956B88400820EFE /* MTAstNodeUniaryMinus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeUniaryMinus.h; sourceTree = "<group>"; };
 		4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeUniaryMinus.m; sourceTree = "<group>"; };
+		4C8394FA1AC8F2110055EDE9 /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../../libMTDataStrutures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
+		4C8394FB1AC8F2230055EDE9 /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
 		4C9E0FD0195203D80052AED6 /* MADSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbolTable.h; sourceTree = "<group>"; };
 		4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbolTable.m; sourceTree = "<group>"; };
 		4C9E0FD31952041E0052AED6 /* MADSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbol.h; sourceTree = "<group>"; };
@@ -158,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8394F81AC8F1510055EDE9 /* libMTDataStrutures.a in Frameworks */,
 				4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -190,8 +192,6 @@
 			isa = PBXGroup;
 			children = (
 				4C1044B71956888A00820EFE /* Nodes */,
-				4C1044AD1956766900820EFE /* MTTree.h */,
-				4C1044CC19569FE000820EFE /* MTPair.h */,
 				4C9E0FD0195203D80052AED6 /* MADSymbolTable.h */,
 				4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */,
 			);
@@ -286,6 +286,8 @@
 		4CF3C597194F80F600E5705B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C8394FA1AC8F2110055EDE9 /* MTTree.h */,
+				4C8394FB1AC8F2230055EDE9 /* MTPair.h */,
 				4C1044AA1956764F00820EFE /* libMTDataStrutures.a */,
 				4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */,
 				4CF3C598194F80F600E5705B /* Foundation.framework */,
