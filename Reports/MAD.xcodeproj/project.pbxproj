@@ -877,6 +877,12 @@
 		4C83948A1AC886FF0055EDE9 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F841AC64BA7007C0A82 /* libCloudManager.a */; };
 		4C83948B1AC886FF0055EDE9 /* libMysqlClientObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB56DCC1AC6835200756775 /* libMysqlClientObjC.a */; };
 		4C8394D21AC8A9B20055EDE9 /* libSqlite3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8394BC1AC8A4F90055EDE9 /* libSqlite3.a */; };
+		4C8394DB1AC8EEE80055EDE9 /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */; };
+		4C8394DC1AC8EEE80055EDE9 /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */; };
+		4C8394DD1AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */; };
+		4C8394DE1AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */; };
+		4C8394DF1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
+		4C8394E01AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C84EEB5178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1262,12 +1268,6 @@
 		4CB0FF6D16F501ED00B88626 /* MADToolboxFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */; };
 		4CB0FF6E16F501ED00B88626 /* MADToolboxFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */; };
 		4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CB2934B19F8C37800C0171D /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934819F8C37800C0171D /* MADImageBackgroundIcon@3x.png */; };
-		4CB2934C19F8C37800C0171D /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934819F8C37800C0171D /* MADImageBackgroundIcon@3x.png */; };
-		4CB2934D19F8C37800C0171D /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */; };
-		4CB2934E19F8C37800C0171D /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */; };
-		4CB2934F19F8C37800C0171D /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */; };
-		4CB2935019F8C37800C0171D /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */; };
 		4CB2936019F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */; };
 		4CB2936119F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */; };
 		4CB2936C19FB52EB00C0171D /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936B19FB52EB00C0171D /* MADTabBar.m */; };
@@ -2482,6 +2482,9 @@
 		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C8394B61AC8A4F80055EDE9 /* Sqlite3.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sqlite3.xcodeproj; path = libSqlite3/Sqlite3/Sqlite3.xcodeproj; sourceTree = "<group>"; };
 		4C8394D71AC8AB750055EDE9 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libSqlite3/Sqlite3/Sqlite3/sqlite3.h; sourceTree = "<group>"; };
+		4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageBackgroundIcon.png; path = Resources/Images/MADImageBackgroundIcon.png; sourceTree = "<group>"; };
+		4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@2x.png"; path = "Resources/Images/MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
+		4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@3x.png"; path = "Resources/Images/MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
 		4C84EEB3178B43F20028BF49 /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Border.h"; sourceTree = "<group>"; };
 		4C84EEB4178B43F20028BF49 /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Border.m"; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
@@ -2701,9 +2704,6 @@
 		4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxFormatViewController.m; sourceTree = "<group>"; };
 		4CB12C9C14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderLinkBuilderViewController.h; sourceTree = "<group>"; };
 		4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderLinkBuilderViewController.m; sourceTree = "<group>"; };
-		4CB2934819F8C37800C0171D /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@3x.png"; path = "../../MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
-		4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@2x.png"; path = "../../MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
-		4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageBackgroundIcon.png; path = ../../MADImageBackgroundIcon.png; sourceTree = "<group>"; };
 		4CB2935E19F9F50B00C0171D /* MADNavigationBarTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationBarTitleView.h; sourceTree = "<group>"; };
 		4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationBarTitleView.m; sourceTree = "<group>"; };
 		4CB2936A19FB52EB00C0171D /* MADTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBar.h; sourceTree = "<group>"; };
@@ -3449,6 +3449,9 @@
 		4C0E7860163B5C8D003B951E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */,
+				4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */,
+				4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */,
 				4C5CD3D6181ED238005FC6DD /* Misc Tool Images */,
 				4C94AE0A17C354EB00037FCB /* Launch Images */,
 				4C47571917B4094500530CAF /* Icons */,
@@ -5381,9 +5384,6 @@
 			isa = PBXGroup;
 			children = (
 				4C4740AA1A0026B200B11434 /* Toolbox */,
-				4CB2934819F8C37800C0171D /* MADImageBackgroundIcon@3x.png */,
-				4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */,
-				4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */,
 				4C15669C19F5A83A00EE465D /* testimage.jpg */,
 				4C38E9C319F232FC000E0B2F /* MADQueryNavigationController.h */,
 				4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */,
@@ -6103,7 +6103,6 @@
 				4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
 				4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */,
 				4C4EBFB917EDEB9500D10622 /* carat@2x.png in Resources */,
-				4CB2935019F8C37800C0171D /* MADImageBackgroundIcon.png in Resources */,
 				4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */,
 				4CB56ECF1AC683CC00756775 /* my_config.he in Resources */,
 				4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */,
@@ -6190,6 +6189,7 @@
 				4C08B2FA1AB6791F00B54D3A /* MADImageToolbarCloudUpload@2x.png in Resources */,
 				4C4EBFB717EDEB9500D10622 /* carat-open@2x.png in Resources */,
 				4C92956D18C4E0770010AAEF /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
+				4C8394E01AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C0E7800163B5AEC003B951E /* UIImagePatternGoldParchment.png in Resources */,
 				4C0E7801163B5AEC003B951E /* UIImagePatternGoldParchment@2x.png in Resources */,
 				4C0E7802163B5AEC003B951E /* UIImagePatternGoldVellum.png in Resources */,
@@ -6204,9 +6204,9 @@
 				4C5CB7CE189E2A7D00BB5AF8 /* sqlfront.h in Resources */,
 				4C0E7807163B5AEC003B951E /* UIImagePatternGrayGranite@2x.png in Resources */,
 				4C0E7808163B5AEC003B951E /* UIImagePatternGreenAndBlack.png in Resources */,
+				4C8394DE1AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png in Resources */,
 				4C0E7809163B5AEC003B951E /* UIImagePatternGreenAndBlack@2x.png in Resources */,
 				4C0E780A163B5AEC003B951E /* UIImagePatternGreenWithFibers.png in Resources */,
-				4CB2934E19F8C37800C0171D /* MADImageBackgroundIcon@2x.png in Resources */,
 				4C0E780B163B5AEC003B951E /* UIImagePatternGreenWithFibers@2x.png in Resources */,
 				4C0E780C163B5AEC003B951E /* UIImagePatternGreyVellum.png in Resources */,
 				4C0E780D163B5AEC003B951E /* UIImagePatternGreyVellum@2x.png in Resources */,
@@ -6214,6 +6214,7 @@
 				4C08B2F41AB6791F00B54D3A /* MADImageToolbarCloudDownloadSelected.png in Resources */,
 				4C0E780F163B5AEC003B951E /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4C0E7810163B5AEC003B951E /* UIImagePatternKraftPaper.png in Resources */,
+				4C8394DC1AC8EEE80055EDE9 /* MADImageBackgroundIcon.png in Resources */,
 				4C0E7811163B5AEC003B951E /* UIImagePatternKraftPaper@2x.png in Resources */,
 				4C0E7812163B5AEC003B951E /* UIImagePatternKraftPaper2.png in Resources */,
 				4C0E7813163B5AEC003B951E /* UIImagePatternKraftPaper2@2x.png in Resources */,
@@ -6295,7 +6296,6 @@
 				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C0E784C163B5AEC003B951E /* UIImageExportTypeCSV.png in Resources */,
 				4C5CB7C2189E2A7D00BB5AF8 /* bkpublic.h in Resources */,
-				4CB2934C19F8C37800C0171D /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */,
 				4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */,
 				4C92957118C4E0770010AAEF /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
@@ -6388,9 +6388,9 @@
 				4C76F0C514B52ABE005DCE49 /* UIImageLandscape.png in Resources */,
 				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
 				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
-				4CB2934B19F8C37800C0171D /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C92956C18C4E0770010AAEF /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
+				4C8394DB1AC8EEE80055EDE9 /* MADImageBackgroundIcon.png in Resources */,
 				4CB3C2301923374200F3213E /* MTSliderThumb@2x.png in Resources */,
 				4CF3E79019F071320064DA5F /* MADImageClear.png in Resources */,
 				4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */,
@@ -6513,7 +6513,6 @@
 				4CCD8D79150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png in Resources */,
 				4C5CB7D5189E2A7D00BB5AF8 /* tds_sysdep_public.h in Resources */,
 				4CCD8D7A150385DA002B9E77 /* UIImagePatternGreenWithFibers.png in Resources */,
-				4CB2934F19F8C37800C0171D /* MADImageBackgroundIcon.png in Resources */,
 				4CCD8D7B150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png in Resources */,
 				4CCD8D7C150385DA002B9E77 /* UIImagePatternGreyVellum.png in Resources */,
 				4CCD8D7D150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png in Resources */,
@@ -6540,6 +6539,7 @@
 				4C92956618C4E0770010AAEF /* MTImageLaunchViewerPadLandscape.png in Resources */,
 				4CCD8D8A150385DA002B9E77 /* UIImagePatternLined.png in Resources */,
 				4CCD8D8B150385DA002B9E77 /* UIImagePatternLined@2x.png in Resources */,
+				4C8394DD1AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png in Resources */,
 				4C1BB6EB1813D2610027C508 /* UIBarButtonItemMadViewer.png in Resources */,
 				4C5CB7C3189E2A7D00BB5AF8 /* cspublic.h in Resources */,
 				4CCD8D8C150385DA002B9E77 /* UIImagePatternLinen.png in Resources */,
@@ -6626,7 +6626,6 @@
 				4C80A6061831F28200242703 /* MTBarcodePdf417Iso15438.h in Resources */,
 				4C80A5F5183185B000242703 /* MTBarcodeMicroQrCode.h in Resources */,
 				4C1BB6E31813D1520027C508 /* UIBarButtonItemPaintRoller.png in Resources */,
-				4CB2934D19F8C37800C0171D /* MADImageBackgroundIcon@2x.png in Resources */,
 				4C5CB7C1189E2A7D00BB5AF8 /* bkpublic.h in Resources */,
 				4C1BB6E71813D1C70027C508 /* UIBarButtonItemDatabase.png in Resources */,
 				4CFD36591836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */,
@@ -6661,6 +6660,7 @@
 				4C80A5FA1831ED4200242703 /* MTBarcodeCodeOne.h in Resources */,
 				4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
+				4C8394DF1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C92956418C4E0770010AAEF /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4CFA64E017B92B7A0025BE1E /* MADIcon64.png in Resources */,
 				4CFA64E217B92B7A0025BE1E /* MADIcon320.png in Resources */,
