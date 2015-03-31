@@ -13,7 +13,7 @@
 #import "MTDataTable.h"
 
 @interface MTDataTableFast : MTDataTable
-<NSCoding, NSFastEnumeration>
+    <NSCoding, NSFastEnumeration>
 
 @end
 

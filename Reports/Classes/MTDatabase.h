@@ -23,8 +23,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeVerify
 };
 
-@class RptqDocument, RptqDatabase, RptqQuery, RptqQueryField, RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
-        RptqUserCredentals, MTDatabaseConnection, MTQuery, MTDataTable;
+@class MTDatabaseConnection, MTQuery, MTDataTable;
 
 @protocol MTDatabaseProtocol <NSObject>
 @required
@@ -62,7 +61,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)selectPartWithLimitedResults:(NSInteger)limit;
 - (NSString *)sqlLimitClause;
 - (NSString *)sqlLimitClause:(NSInteger)limit;
-- (NSString *)sqlAllFieldsInTable:(RptqDatabaseSchemaTable *)schemaTable;
 - (NSString *)tableAliasForTable:(NSString *)tableName;
 - (NSString *)fieldAliasForField:(NSString *)field
                withSafeTableName:(NSString *)safeTableName;
@@ -72,7 +70,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (NSString *)sqlAggregateFunctionLength;
 - (NSString *)sqlAggregateFunctionMax;
-- (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField;
+
+- (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName;
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion;
 

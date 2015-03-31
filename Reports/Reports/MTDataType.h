@@ -36,4 +36,11 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
     MTDataTypeNull          = 24
 };
 
+@interface MTDataTypeObject : NSObject
+
++ (SEL)selectorForSorting:(MTDataType)dataType;
+
+@end
+
 #endif
+

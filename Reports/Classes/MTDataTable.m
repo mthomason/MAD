@@ -16,7 +16,6 @@
 #import "MTDataColumn.h"
 #import "NSFileManager+Common.h"
 #import "MTLog.h"
-#import "MACloudManager.h"
 #import "MTAggregateFunctionType.h"
 
 @interface MTDataTable ()
@@ -217,10 +216,16 @@
     //}
 }
 
+- (NSString *)filenameMDCache {
+    NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
+    return [tag stringByAppendingString:@"mdcache"];
+}
+
 - (NSURL *)url {
-    NSString *filename = [MACloudManager filenameId:self.tag extention:@"mdcache"];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
-    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    NSString *filename = [self filenameMDCache];
+    NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager localCacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
+    return [cacheDirectory URLByAppendingPathComponent:filename
+                                           isDirectory:NO];
 }
 
 - (void)loadFromCache {

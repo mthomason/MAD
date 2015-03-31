@@ -771,7 +771,8 @@
         [self.delegate didSetField2:field];
     }
     
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:[field databaseSchemaField]];
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+                                                                object: field.databaseSchemaField];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];

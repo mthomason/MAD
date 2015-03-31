@@ -30,7 +30,6 @@
 + (BOOL)isNumeric:(MTDataType)dataType;
 
 - (SEL)selectorForSorting;
-+ (SEL)selectorForSorting:(MTDataType)dataType;
 
 @end
 

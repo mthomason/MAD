@@ -14,16 +14,10 @@
 #import "NSFileManager+Common.h"
 #import "MTQuery.h"
 #import "MTDataColumn.h"
-#import "MTDatabaseField.h"
 #import "MTDataTableFastObjectEnumerator.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabase.h"
-#import "sqlite3.h"
-#import "MTLog.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTPair.h"
 #import "MTDatabaseConnectionSqlite3.h"
-#import "MACloudManager.h"
 
 @interface MTDataTableFast ()
 
@@ -190,10 +184,15 @@
     return self;
 }
 
+- (NSString *)filenameCacheMadDB {
+    NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
+    return [tag stringByAppendingString:@"maddb"];
+}
+
 - (NSURL *)urlFastCache {
-    NSString *filename = [MACloudManager filenameId:self.tag extention:@"maddb"];
+    NSString *filename = [self filenameCacheMadDB];
     NSURL *cacheDirectory = self.cacheDelegate == nil ?
-                            [[NSFileManager defaultManager] localCacheDirectory] :
+                            [NSFileManager localCacheDirectory] :
                                 [[self cacheDelegate] cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -346,7 +345,7 @@
                     if ([[column fieldName] isEqualToString:[sort key]]) {
                         NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey
                                                                                 ascending:[sort ascending]
-                                                                                 selector:[MTDatabaseField selectorForSorting:[[column columnType] integerValue]]];
+                                                                                 selector:[MTDataTypeObject selectorForSorting:[[column columnType] integerValue]]];
                         [newSorts addObject:sortn];
                         [[self groupKeys] addObject:@(i)];
                         break;

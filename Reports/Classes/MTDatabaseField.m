@@ -22,9 +22,9 @@
 - (instancetype)initWithName:(NSString *)name {
     self = [super init];
     if (self) {
-        [self setLabel: name];
-        [self setName: name];
-        [self setCalculatedWidth:0];
+        self.label = name;
+        self.name = name;
+        self.calculatedWidth = 0;
     }
     return self;
 }
@@ -71,39 +71,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MTDatabaseField selectorForSorting:[self fieldType]];
-}
-
-+ (SEL)selectorForSorting:(MTDataType)dataType {
-    SEL result;
-    switch (dataType) {
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        case MTDataTypeImage:
-        case MTDataTypeSet:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeUnknown:
-            //NSAssert(false, @"Not implemented: selectorForSorted in MTDatabaseField.");
-        case MTDataTypeBit:
-        case MTDataTypeFloat:
-        case MTDataTypeInteger:
-        case MTDataTypeNumber:
-            result = @selector(compare:);
-            break;
-        case MTDataTypeBlob:
-            result = @selector(compareData:);
-            break;
-        case MTDataTypeString:
-            result = @selector(localizedCaseInsensitiveCompare:);
-            break;
-        default:
-            result = @selector(compare:);
-            break;
-    }
-    return result;
+    return [MTDataTypeObject selectorForSorting:self.fieldType];
 }
 
 @end

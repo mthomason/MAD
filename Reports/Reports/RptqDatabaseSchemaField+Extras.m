@@ -98,7 +98,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MTDatabaseField selectorForSorting:[[self dataType] integerValue]];
+    return [MTDataTypeObject selectorForSorting:[[self dataType] integerValue]];
 }
 
 #pragma mark - MTProtocolLog

@@ -12,14 +12,8 @@
 
 @implementation NSFileManager (Common)
 
-- (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl {
-    NSString *handle = [fileUrl filenameMinusExtention];
-    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
-    return [self localCacheDirectoryNamed:fileNameId];
-}
-
 - (NSURL *)localCacheDirectoryNamed:(NSString *)handle {
-    NSURL *cachedArrayDirectories = [[self localCacheDirectory] URLByAppendingPathComponent:handle isDirectory:YES];
+    NSURL *cachedArrayDirectories = [[NSFileManager localCacheDirectory] URLByAppendingPathComponent:handle isDirectory:YES];
     BOOL exist, isDirectory;
     exist = [self fileExistsAtPath: cachedArrayDirectories.path
                        isDirectory: &isDirectory];
@@ -55,16 +49,6 @@
     return result;
 }
 
-+ (BOOL)createDirectoryForUrlIfItDoesNotExist:(NSURL *)url {
-    NSError *error = nil;
-    BOOL directoryGood = [[NSFileManager defaultManager] createDirectoryAtPath:[url path] withIntermediateDirectories:YES attributes:nil error:&error];
-    if (error != nil) {
-        directoryGood = NO;
-        NSAssert(error, @"Error creating directory!  %@", error);
-    }
-    return directoryGood;
-}
-
 - (NSURL *)localApplicationSupportDirectory {
     
     NSBundle *mainBundle = [NSBundle mainBundle];
@@ -93,19 +77,35 @@
     return appSupportDirectoryForApp;
 }
 
-- (NSURL *)localDocumentsDirectory {
++ (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl {
+    NSString *handle = [fileUrl filenameMinusExtention];
+    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
+    return [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
+}
+
++ (BOOL)createDirectoryForUrlIfItDoesNotExist:(NSURL *)url {
+    NSError *error = nil;
+    BOOL directoryGood = [[NSFileManager defaultManager] createDirectoryAtPath:[url path] withIntermediateDirectories:YES attributes:nil error:&error];
+    if (error != nil) {
+        directoryGood = NO;
+        NSAssert(error, @"Error creating directory!  %@", error);
+    }
+    return directoryGood;
+}
+
++ (NSURL *)localDocumentsDirectory {
     NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [documentsDirectories firstObject];
     return [NSURL URLWithString:path];
 }
 
-- (NSURL *)localTemporaryDirectory {
++ (NSURL *)localTemporaryDirectory {
     NSString *homeDirectory = NSHomeDirectory();
     NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
     return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
 }
 
-- (NSURL *)localCacheDirectory {
++ (NSURL *)localCacheDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     return [NSURL fileURLWithPath:paths.firstObject isDirectory:YES];
 }

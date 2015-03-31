@@ -14,11 +14,11 @@
 @interface NSFileManager (Common)
 
 - (NSURL *)localApplicationSupportDirectory;
-- (NSURL *)localTemporaryDirectory;
-- (NSURL *)localDocumentsDirectory;
-- (NSURL *)localCacheDirectory;
++ (NSURL *)localTemporaryDirectory;
++ (NSURL *)localDocumentsDirectory;
++ (NSURL *)localCacheDirectory;
 - (NSURL *)localCacheDirectoryNamed:(NSString *)handle;
-- (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl;
++ (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl;
 
 @end
 

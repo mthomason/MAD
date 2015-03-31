@@ -213,7 +213,7 @@
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
-            SEL sel = [MTDatabaseField selectorForSorting: groupField.databaseSchemaField.dataType.integerValue];
+            SEL sel = [MTDataTypeObject selectorForSorting: groupField.databaseSchemaField.dataType.integerValue];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
                                                                            ascending: sortAscending
                                                                             selector: sel];

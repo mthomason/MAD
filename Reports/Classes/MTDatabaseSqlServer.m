@@ -1605,11 +1605,13 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return @"";
 }
 
-- (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
+- (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
     
-    NSString *safeField = [MTDatabaseSqlServer safeQueryField:schemaField.inTable.name andTable:schemaField.name];
-    NSString *safeFieldAlias = [self fieldAliasForField:schemaField.name withSafeTableName:schemaField.inTable.name];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *safeField = [self safeQueryField: fieldName
+                                      andTable: tableName];
+    NSString *safeFieldAlias = [self fieldAliasForField: fieldName
+                                      withSafeTableName: tableName];
+    NSString *safeTable = [self safeIdentifier: tableName];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT TOP 511 "
                      @"%@ %@ %@ "
                      @"%@ %@ ",

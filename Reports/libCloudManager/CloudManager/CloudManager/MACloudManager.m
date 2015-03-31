@@ -785,10 +785,4 @@ static MACloudManager *sharedSingleton;
     return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
 }
 
-+ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
-    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
-}
-
-
-
 @end

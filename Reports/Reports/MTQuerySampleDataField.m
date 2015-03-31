@@ -19,11 +19,9 @@
 #import "MTDatabaseConnection.h"
 
 @interface MTQuerySampleDataField ()
-<MTDatabaseProtocol>
+    <MTDatabaseProtocol>
 
 @property (nonatomic, strong) MTDataTable *datatable;
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -52,10 +50,11 @@
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
-    NSString *key = [[self database] fieldAliasForField:((RptqDatabaseSchemaField *)self.queryObject).name
-                                           andTableName:((RptqDatabaseSchemaField *)self.queryObject).inTable.name];
-    [[self fieldKeys] addObject:key];
-    return [[self database] sqlSampleDataForField:((RptqDatabaseSchemaField *)self.queryObject)];
+    NSString *key = [self.database fieldAliasForField: ((RptqDatabaseSchemaField *)self.queryObject).name
+                                         andTableName: ((RptqDatabaseSchemaField *)self.queryObject).inTable.name];
+    [self.fieldKeys addObject:key];
+    return [self.database sqlSampleDataForField: ((RptqDatabaseSchemaField *)self.queryObject).name
+                                       andTable: ((RptqDatabaseSchemaField *)self.queryObject).inTable.name];
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {

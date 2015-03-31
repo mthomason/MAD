@@ -144,7 +144,8 @@
     RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField managedObjectForObjectID: [self schemaFieldObjectId]
                                                                andManagedObjectContext: self.document.managedObjectContext];
     
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField
+                                                                object:field];
 
     [self setQuerySampleDataField:querySampleDataField];
     

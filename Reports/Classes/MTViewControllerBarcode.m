@@ -146,7 +146,8 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         if ([self queryField1] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             
-            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
+            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+                                                                        object: schemaField];
             __weak MTViewControllerBarcode *weakself = self;
             [querySampleDataField database].delegate = self;
             [self setQuery:querySampleDataField];
@@ -161,7 +162,8 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         
         if ([self queryField2] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
-            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
+            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+                                                                        object: schemaField];
             __weak MTViewControllerBarcode *weakself = self;
             [querySampleDataField database].delegate = self;
             [self setQuery2:querySampleDataField];

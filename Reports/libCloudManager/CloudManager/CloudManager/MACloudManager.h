@@ -102,7 +102,6 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 // File name helpers
 
 + (NSString *)filenameId:(NSUInteger)tag;
-+ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
 // Managing the cache
 - (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;

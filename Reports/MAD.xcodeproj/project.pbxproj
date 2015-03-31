@@ -746,6 +746,8 @@
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F998A1AC9E1FF006D3996 /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8F99871AC9E1CB006D3996 /* libSqlite.a */; };
+		4C8F99941ACA7096006D3996 /* MTDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99931ACA7096006D3996 /* MTDataType.m */; };
+		4C8F99951ACA7096006D3996 /* MTDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99931ACA7096006D3996 /* MTDataType.m */; };
 		4C90D47E19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
 		4C90D47F19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
@@ -2538,6 +2540,7 @@
 		4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
 		4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sqlite.xcodeproj; path = libSqlite/Sqlite/Sqlite.xcodeproj; sourceTree = "<group>"; };
+		4C8F99931ACA7096006D3996 /* MTDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataType.m; sourceTree = "<group>"; };
 		4C90D47C19E7892D005136B2 /* MADGroupedCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGroupedCollectionViewLayout.h; sourceTree = "<group>"; };
 		4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGroupedCollectionViewLayout.m; sourceTree = "<group>"; };
 		4C928ABC19784133008E56ED /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTCacheProtocol.h; path = Reports/MTCacheProtocol.h; sourceTree = "<group>"; };
@@ -3451,6 +3454,7 @@
 				4CC2BE8319D9078B006AAB24 /* MADControlState.h */,
 				4CC2BE8419D90AEA006AAB24 /* MADDocumentObjectType.h */,
 				4CC2BE8519D90BD1006AAB24 /* MADSectionHeaderViewDelegate.h */,
+				4C8F99931ACA7096006D3996 /* MTDataType.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -7065,6 +7069,7 @@
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
 				4C77328D190FFD6A005AE7C2 /* MysqlDelete.m in Sources */,
 				4C23FBD918FAE4F7009F234F /* MTPaperC8.m in Sources */,
+				4C8F99951ACA7096006D3996 /* MTDataType.m in Sources */,
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
 				4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */,
 				4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */,
@@ -7446,6 +7451,7 @@
 				4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */,
 				4C77328C190FFD6A005AE7C2 /* MysqlDelete.m in Sources */,
 				4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */,
+				4C8F99941ACA7096006D3996 /* MTDataType.m in Sources */,
 				4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */,
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,

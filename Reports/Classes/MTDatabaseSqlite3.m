@@ -16,14 +16,6 @@
 #import "MTDatabaseField.h"
 #import "MTQuery.h"
 
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
 #import "NSError+Constructors.h"
 
 #import "MTLog.h"
@@ -69,7 +61,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 - (void)openDatabaseWithFlags:(int)flags {
     NSError *error = nil;
     //Open conneciton... closed in dealloc.
-    if ([self isOpen] == NO) {
+    if (self.isOpen == NO) {
         NSString *filepath = [[[self databaseConnection] databaseUrl] path];
         const char *path = [filepath UTF8String];
         BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;

@@ -16,11 +16,6 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseTable.h"
-//#import "MTStoreKitController.h"
-//#import "MTStoreKitController+NonRenewableLicensing.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
 #import "MTKeyChain.h"
 #import "MTNotificationDidReadRows.h"
 #import "NSError+UserInterface.h"
@@ -139,24 +134,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return [self safeIdentifier: table];
 }
 
-- (NSString *)sqlAllFieldsInTable:(RptqDatabaseSchemaTable *)schemaTable {
-    NSUInteger *fieldCounter = 0;
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    NSString *safeTableName = [self tableAliasForTable:schemaTable.toString];
-    
-    for (RptqDatabaseSchemaField *field in [schemaTable hasFields]) {
-        
-        NSString *fieldAlias = [self fieldAliasForField:field.name
-                                      withSafeTableName:safeTableName];
-
-        if (fieldCounter > 0)  [sql appendString:@",\n"];
-        [sql appendFormat: @"\t%@", fieldAlias];
-        
-        fieldCounter++;
-    }
-    return sql;
-}
-
 - (NSString *)tableAliasConnector {
     return @" AS ";
 }
@@ -200,12 +177,12 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return @"MAX";
 }
 
-- (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
-    NSString *safeField = [MTDatabase safeQueryField: schemaField.name
-                                            andTable: schemaField.inTable.name];
-    NSString *safeFieldAlias = [self fieldAliasForField: schemaField.name
-                                           andTableName: schemaField.inTable.name];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+- (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
+    NSString *safeField = [self safeQueryField: fieldName
+                                      andTable: tableName];
+    NSString *safeFieldAlias = [self fieldAliasForField: fieldName
+                                           andTableName: tableName];
+    NSString *safeTable = [self safeIdentifier:tableName];
     NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT "
                      @"%@ %@ %@ "
                      @"%@ %@ "
