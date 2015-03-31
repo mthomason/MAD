@@ -745,6 +745,7 @@
 		4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C8F998A1AC9E1FF006D3996 /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8F99871AC9E1CB006D3996 /* libSqlite.a */; };
 		4C90D47E19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
 		4C90D47F19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
@@ -1588,8 +1589,6 @@
 		4CE17E261650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E241650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE17E291650C6B50002F8EA /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E281650C6B50002F8EA /* RptqUserCredentals+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE17E2A1650C6B50002F8EA /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E281650C6B50002F8EA /* RptqUserCredentals+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CE19BE31AC9C8E600200578 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CE19BE01AC9C8E600200578 /* sqlite3.c */; };
-		4CE19BE41AC9C8E600200578 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CE19BE01AC9C8E600200578 /* sqlite3.c */; };
 		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
@@ -1688,6 +1687,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4C7674CD18F2F391007CEBD3;
 			remoteInfo = MTGraphTest;
+		};
+		4C8F99861AC9E1CB006D3996 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C8F99581AC9E0ED006D3996;
+			remoteInfo = Sqlite;
+		};
+		4C8F99881AC9E1CB006D3996 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C8F99631AC9E0EE006D3996;
+			remoteInfo = SqliteTests;
 		};
 		4CB56DCB1AC6835200756775 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2524,6 +2537,7 @@
 		4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstTableViewController.m; sourceTree = "<group>"; };
 		4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
+		4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sqlite.xcodeproj; path = libSqlite/Sqlite/Sqlite.xcodeproj; sourceTree = "<group>"; };
 		4C90D47C19E7892D005136B2 /* MADGroupedCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGroupedCollectionViewLayout.h; sourceTree = "<group>"; };
 		4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGroupedCollectionViewLayout.m; sourceTree = "<group>"; };
 		4C928ABC19784133008E56ED /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTCacheProtocol.h; path = Reports/MTCacheProtocol.h; sourceTree = "<group>"; };
@@ -3116,10 +3130,6 @@
 		4CE17E241650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabaseSchemaTable+Extras.m"; sourceTree = "<group>"; };
 		4CE17E271650C6B40002F8EA /* RptqUserCredentals+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqUserCredentals+Extras.h"; sourceTree = "<group>"; };
 		4CE17E281650C6B50002F8EA /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
-		4CE19BDD1AC9C8E600200578 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libSqlite/Sqlite/Sqlite/sqlite3.h; sourceTree = "<group>"; };
-		4CE19BDE1AC9C8E600200578 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = libSqlite/Sqlite/Sqlite/sqlite3ext.h; sourceTree = "<group>"; };
-		4CE19BDF1AC9C8E600200578 /* shell.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = shell.c; path = libSqlite/Sqlite/Sqlite/shell.c; sourceTree = "<group>"; };
-		4CE19BE01AC9C8E600200578 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libSqlite/Sqlite/Sqlite/sqlite3.c; sourceTree = "<group>"; };
 		4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignVerticalCenter20.png; path = Reports/UIImageAlignVerticalCenter20.png; sourceTree = "<group>"; };
 		4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignVerticalCenter20@2x.png"; path = "Reports/UIImageAlignVerticalCenter20@2x.png"; sourceTree = "<group>"; };
 		4CE314131694BCEC00114431 /* UIImageAlignTop20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignTop20.png; path = Reports/UIImageAlignTop20.png; sourceTree = "<group>"; };
@@ -3230,6 +3240,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8F998A1AC9E1FF006D3996 /* libSqlite.a in Frameworks */,
 				4CF46FB11AC6508F007C0A82 /* libCloudManager.a in Frameworks */,
 				4CC7F6A91962A2EF00A84FC0 /* libScrimpter.a in Frameworks */,
 				4C1FA44A1AC7DA3F000E7D14 /* libcrypto.a in Frameworks */,
@@ -3899,10 +3910,7 @@
 		4C3A969E189F7DFC007AF476 /* libSqlite3 */ = {
 			isa = PBXGroup;
 			children = (
-				4CE19BDD1AC9C8E600200578 /* sqlite3.h */,
-				4CE19BDE1AC9C8E600200578 /* sqlite3ext.h */,
-				4CE19BDF1AC9C8E600200578 /* shell.c */,
-				4CE19BE01AC9C8E600200578 /* sqlite3.c */,
+				4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */,
 			);
 			name = libSqlite3;
 			sourceTree = "<group>";
@@ -4819,6 +4827,15 @@
 				4C8BA95B17417FC800B646E2 /* RptqQueryField+Extras.m */,
 			);
 			name = Rptq;
+			sourceTree = "<group>";
+		};
+		4C8F99821AC9E1CB006D3996 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C8F99871AC9E1CB006D3996 /* libSqlite.a */,
+				4C8F99891AC9E1CB006D3996 /* SqliteTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4C92957C18C4E14B0010AAEF /* Designer */ = {
@@ -6028,6 +6045,10 @@
 					ProductGroup = 4CF3C5BF194F80F600E5705B /* Products */;
 					ProjectRef = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
 				},
+				{
+					ProductGroup = 4C8F99821AC9E1CB006D3996 /* Products */;
+					ProjectRef = 4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -6056,6 +6077,20 @@
 			fileType = wrapper.cfbundle;
 			path = MTGraphTest.xctest;
 			remoteRef = 4C8394E81AC8F0230055EDE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C8F99871AC9E1CB006D3996 /* libSqlite.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSqlite.a;
+			remoteRef = 4C8F99861AC9E1CB006D3996 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C8F99891AC9E1CB006D3996 /* SqliteTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SqliteTests.xctest;
+			remoteRef = 4C8F99881AC9E1CB006D3996 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4CB56DCC1AC6835200756775 /* libMysqlClientObjC.a */ = {
@@ -7249,7 +7284,6 @@
 				4C40EC1A1934A77400F12AAC /* MAReportDocumentState.m in Sources */,
 				4C23FBB518FAE4F7009F234F /* MTPaperB1.m in Sources */,
 				4CB46B6617C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
-				4CE19BE41AC9C8E600200578 /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7631,7 +7665,6 @@
 				4C40EC191934A77400F12AAC /* MAReportDocumentState.m in Sources */,
 				4CABE45B1837DF79007EDD9D /* RptqQueryField.m in Sources */,
 				4CB46B6517C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
-				4CE19BE31AC9C8E600200578 /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

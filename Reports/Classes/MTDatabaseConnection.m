@@ -19,6 +19,7 @@
 
 #import "NSFileManager+Common.h"
 #import "MTQuery.h"
+#import "NSString+Extras.h"
 
 @interface MTDatabaseConnection ()
 
@@ -40,15 +41,15 @@
     
     if ([[MTDatabaseConnectionMySql identifier] isEqualToString:typeIdentifier]) {
         
-        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: @""
-                                                                  database: @""
+        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: [NSString empty]
+                                                                  database: [NSString empty]
                                                                    andPort: 3306];
         
     } else if ([[MTDatabaseConnectionSqlServer identifier] isEqualToString:typeIdentifier]) {
         
-        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: @""
-                                                                        server: @""
-                                                                      database: @""
+        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: [NSString empty]
+                                                                        server: [NSString empty]
+                                                                      database: [NSString empty]
                                                                        andPort: 1433];
         
     } else if ([[MTDatabaseConnectionSqlite3 identifier] isEqualToString:typeIdentifier]) {

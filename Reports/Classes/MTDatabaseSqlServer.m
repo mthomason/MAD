@@ -1573,21 +1573,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return [self databaseConnection];
 }
 
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName];
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [NSString stringWithFormat:@"[%@].[%@]", tableName, fieldName];
 }
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTDatabaseSqlServer safeQueryField:queryField];
-}
-
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName];
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [MTDatabaseSqlServer safeQueryField:fieldName andTable:tableName];
 }
 
 - (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
@@ -1617,8 +1607,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
     
-    NSString *safeField = [self safeQuerySchemaField:schemaField];
-    NSString *safeFieldAlias = [self fieldAliasForField:schemaField];
+    NSString *safeField = [MTDatabaseSqlServer safeQueryField:schemaField.inTable.name andTable:schemaField.name];
+    NSString *safeFieldAlias = [self fieldAliasForField:schemaField.name withSafeTableName:schemaField.inTable.name];
     NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT TOP 511 "
                      @"%@ %@ %@ "

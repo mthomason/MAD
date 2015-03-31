@@ -15,17 +15,17 @@
 @implementation MTDatabaseConnectionSqlServer
 
 - (instancetype)initWithHost:(NSString *)host
-            server:(NSString *)server
-          database:(NSString *)database
-           andPort:(NSInteger)port {
+                      server:(NSString *)server
+                    database:(NSString *)database
+                     andPort:(NSInteger)port {
     
     self = [super init];
     if (self) {
-        [self setHost: host];
-        [self setServer: server];
-        [self setDatabase: database];
-        [self setPort: port];
-        [self setDatabaseTypeIdentifier: [MTDatabaseConnectionSqlServer identifier]];
+        self.host = host;
+        self.server = server;
+        self.database = database;
+        self.port = port;
+        self.databaseTypeIdentifier = [self identifier];
     }
     return self;
 }

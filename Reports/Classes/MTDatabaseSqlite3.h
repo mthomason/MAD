@@ -27,8 +27,8 @@
 - (NSString *)identifier;
 + (NSString *)identifier;
 
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField;
-- (NSString *)safeQueryField:(RptqQueryField *)queryField;
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;

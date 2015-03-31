@@ -15,6 +15,7 @@
 #import "MTDatabaseField.h"
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDataTable.h"
@@ -66,9 +67,10 @@
             RptqDatabaseSchemaTable *table = [field inTable];
             [tables addObject:table];
 
-            NSString *fieldAliasSafe = [[self database] fieldAliasForField:field];
-
-            NSString *safeFieldName = [[self database] safeQuerySchemaField:field];
+            NSString *fieldAliasSafe = [[self database] fieldAliasForField:field.name
+                                                              andTableName:field.inTable.name];
+            NSString *safeFieldName = [[self database] safeQueryField:field.name
+                                                             andTable:field.inTable.name];
             [self fields][fieldAliasSafe] = dbField;
             [[self fieldKeys] addObject:fieldAliasSafe];
             
@@ -92,7 +94,7 @@
             if (counter > 0) {
                 [tableNamePart appendString:@", "];
             }
-            NSString *safeTableName = [[self database] tableAliasForTable:table];
+            NSString *safeTableName = [[self database] tableAliasForTable:table.toString];
             [tableNamePart appendString:safeTableName];
             counter++;
         }

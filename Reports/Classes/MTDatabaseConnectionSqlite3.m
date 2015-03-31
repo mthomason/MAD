@@ -18,10 +18,10 @@
     
     self = [super init];
     if (self) {
+
         NSURL *databaseUrl = [url copy];
-        [self setDatabaseUrl: databaseUrl];
-        
-        [self setDatabaseTypeIdentifier: [MTDatabaseConnectionSqlite3 identifier]];
+        self.databaseUrl = databaseUrl;
+        self.databaseTypeIdentifier = [self identifier];
 
     }
     return self;

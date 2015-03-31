@@ -57,12 +57,12 @@
     
     [sql appendString:[[self database] sqlAllFieldsInTable:table]];
     
-    NSString *safeTableName = [[self database] tableAliasForTable:table];
+    NSString *safeTableName = [[self database] tableAliasForTable:table.toString];
 
     if ([[self fieldKeys] count] <= 0) {
         for (RptqDatabaseSchemaField *field in [table hasFields]) {
             MTDatabaseField *dbField = [field databaseFieldWrapper];
-            NSString *fieldAlias = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
+            NSString *fieldAlias = [[self database] fieldAliasForField:field.name withSafeTableName:safeTableName];
             [self fields][fieldAlias] = dbField;
             [[self fieldKeys] addObject:fieldAlias];
         }
@@ -76,9 +76,9 @@
             
             [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
                 
-                NSString *safeTableName = [[queryMaxFieldLenght database] tableAliasForTable:[field inTable]];
-                NSString *okey = [[queryMaxFieldLenght database] fieldAliasForField:field withSafeTableName:safeTableName];
-                NSString *ckey = [[queryMaxFieldLenght database] fieldAliasForField:field];
+                NSString *safeTableName = [queryMaxFieldLenght.database tableAliasForTable:field.inTable.toString];
+                NSString *okey = [queryMaxFieldLenght.database fieldAliasForField:field.name withSafeTableName:safeTableName];
+                NSString *ckey = [queryMaxFieldLenght.database fieldAliasForField:field.name andTableName:field.inTable.name];
                 NSDictionary *widthsByField = [[self dataTableMaxFieldLength] objectAtRow:0];
                 NSNumber *widthByField = widthsByField[ckey];
                 NSInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : [widthByField integerValue];

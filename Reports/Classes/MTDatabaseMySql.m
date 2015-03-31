@@ -22,12 +22,6 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-
-#import "RptqQueryLinks.h"
-#import "RptqQueryLinks+Extras.h"
-
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
@@ -36,9 +30,6 @@
 
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-
-#import "RptqQueryPredicate.h"
-#import "RptqQueryPredicate+Extras.h"
 
 #import "MTKeyChain.h"
 #import "NSError+UserInterface.h"
@@ -452,20 +443,12 @@
     return [MTDatabaseConnectionMySql identifier];
 }
 
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTDatabaseMySql safeQueryField:queryField];
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
 }
 
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [MTDatabaseMySql safeQueryField:fieldName andTable:tableName];
 }
 
 - (NSString *)safeIdentifierForTable:(NSString *)tableName andField:(NSString *)fieldName {

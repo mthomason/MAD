@@ -14,6 +14,7 @@
 @interface NSString (Extras)
 
 + (const char *)cStringFromString:(NSString *)theString;
++ (NSString *)empty;
 
 @end
 

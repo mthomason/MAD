@@ -184,7 +184,8 @@
             
             RptqQueryField *leftField = [queryPredicate hasLeftField];
             
-            leftValue = [[[self dataDelegate] database] safeQueryField:leftField];
+            leftValue = [self.dataDelegate.database safeQueryField: leftField.databaseSchemaField.name
+                                                          andTable: leftField.inQueryTable.queryAlias];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
             
@@ -196,10 +197,12 @@
             
             RptqQueryField *rightField = [queryPredicate hasRightField];
             
-            rightValue = [[[self dataDelegate] database] safeQueryField:rightField];
+            rightValue = [self.dataDelegate.database safeQueryField: rightField.databaseSchemaField.name
+                                                           andTable: rightField.inQueryTable.queryAlias];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
-            MTDataType dataType = [[[[queryPredicate hasLeftField] databaseSchemaField] dataType] integerValue];
+            
+            MTDataType dataType = queryPredicate.hasLeftField.databaseSchemaField.dataType.integerValue;
             BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
             
             if (isNumeric == NO) {
@@ -481,12 +484,14 @@
                                 
                                 RptqQueryField *leftField = queryLink.hasLeftField;
                                 if (leftField) {
-                                    NSString *s = [[[self dataDelegate] database] safeQueryField:leftField];
+                                    NSString *s = [self.dataDelegate.database safeQueryField: leftField.databaseSchemaField.name
+                                                                                    andTable: leftField.inQueryTable.queryAlias];
                                     [result appendString: s];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    NSString *s = [[[self dataDelegate] database] safeQueryField:rightField];
+                                    NSString *s = [self.dataDelegate.database safeQueryField: rightField.databaseSchemaField.name
+                                                                                    andTable: rightField.inQueryTable.queryAlias];
                                     [result appendString: s];
                                 }
                             }

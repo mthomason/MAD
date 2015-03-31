@@ -52,9 +52,10 @@
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
-    NSString *key = [[self database] fieldAliasForField:[self queryObject]];
+    NSString *key = [[self database] fieldAliasForField:((RptqDatabaseSchemaField *)self.queryObject).name
+                                           andTableName:((RptqDatabaseSchemaField *)self.queryObject).inTable.name];
     [[self fieldKeys] addObject:key];
-    return [[self database] sqlSampleDataForField:[self queryObject]];
+    return [[self database] sqlSampleDataForField:((RptqDatabaseSchemaField *)self.queryObject)];
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {

@@ -705,28 +705,18 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return [MTDatabaseConnectionSqlite3 identifier];
 }
 
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTDatabaseSqlite3 safeQueryField:queryField];
-}
-
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
     // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName];
+    return [NSString stringWithFormat:@"\"%@\".\"%@\"", tableName, fieldName];
+}
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    return [MTDatabaseSqlite3 safeQueryField:fieldName andTable:tableName];
 }
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     // FIXME: Use backticks `` to make more robust.
     NSString *result = [MTDatabaseSqlite3SafeQuote stringByAppendingString:fieldOrTableName];
     return [result stringByAppendingString:MTDatabaseSqlite3SafeQuote];
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName];
 }
 
 - (NSString *)tableAliasConnector {

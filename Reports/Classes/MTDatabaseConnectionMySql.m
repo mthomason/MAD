@@ -17,10 +17,10 @@
 - (instancetype)initWithHost:(NSString *)host database:(NSString *)database andPort:(NSInteger)port {
     self = [super init];
     if (self) {
-        [self setServer: host];
-        [self setDatabase: database];
-        [self setPort: port];
-        [self setDatabaseTypeIdentifier: [MTDatabaseConnectionMySql identifier]];
+        self.server = host;
+        self.database = database;
+        self.port = port;
+        self.databaseTypeIdentifier = [self identifier];
     }
     return self;
 }

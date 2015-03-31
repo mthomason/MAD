@@ -27,6 +27,9 @@
 #import "RptqDocumentObject+Extras.h"
 
 #import "RptqDatabase.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+
 #import "RptqQueryField.h"
 #import "RptqUserCredentals.h"
 
@@ -389,7 +392,8 @@
                                         
                                         RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
                                         RptqQueryField *queryField = [aggregateField aggregateField];
-                                        NSString *fieldKey = [database safeQueryField:queryField];
+                                        NSString *fieldKey = [database safeQueryField: queryField.databaseSchemaField.name
+                                                                             andTable: queryField.inQueryTable.queryAlias];
                                         
                                         NSArray *groupKeys;
                                         NSInteger groupCount = [aggregateField.groupNumber integerValue];
@@ -561,8 +565,10 @@
                                         RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
                                         RptqQueryField *queryField1 = [barcodeObject referencesField1];
                                         RptqQueryField *queryField2 = [barcodeObject referencesField2];
-                                        NSString *tableFieldKey1 = [database safeQueryField:queryField1];
-                                        NSString *tableFieldKey2 = [database safeQueryField:queryField2];
+                                        NSString *tableFieldKey1 = [database safeQueryField: queryField1.databaseSchemaField.name
+                                                                                   andTable: queryField1.inQueryTable.queryAlias];
+                                        NSString *tableFieldKey2 = [database safeQueryField: queryField2.databaseSchemaField.name
+                                                                                   andTable: queryField2.inQueryTable.queryAlias];
                                         id value1 = rowData[tableFieldKey1];
                                         id value2 = rowData[tableFieldKey2];
                                         RptqDatabaseSchemaField *schemaField1 = [queryField1 databaseSchemaField];
@@ -593,7 +599,8 @@
                                         if (rowData != nil) {
                                             RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
                                             RptqQueryField *queryField = [labelDataField referencesQueryField];
-                                            NSString *tableFieldKey = [database safeQueryField:queryField];
+                                            NSString *tableFieldKey = [database safeQueryField: queryField.databaseSchemaField.name
+                                                                                      andTable: queryField.inQueryTable.queryAlias];
                                             id value = rowData[tableFieldKey];
                                             RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
                                             NSNumber *dataTypeNumber = [schemaField dataType];

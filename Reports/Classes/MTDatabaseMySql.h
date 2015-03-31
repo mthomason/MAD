@@ -21,8 +21,8 @@
 - (void)getFieldsForTableName: (NSString *)tableName
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField;
-- (NSString *)safeQueryField:(RptqQueryField *)queryField;
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
 - (NSString *)identifier;

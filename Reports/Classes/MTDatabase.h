@@ -54,20 +54,20 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)identifier;
 + (NSString *)identifier;
 
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField;
-- (NSString *)safeQueryField:(RptqQueryField *)queryField;
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField;
+
 - (NSString *)selectPart;
 - (NSString *)selectPartWithLimitedResults:(NSInteger)limit;
 - (NSString *)sqlLimitClause;
 - (NSString *)sqlLimitClause:(NSInteger)limit;
 - (NSString *)sqlAllFieldsInTable:(RptqDatabaseSchemaTable *)schemaTable;
-- (NSString *)tableAliasForTable:(RptqDatabaseSchemaTable *)table;
-- (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field
+- (NSString *)tableAliasForTable:(NSString *)tableName;
+- (NSString *)fieldAliasForField:(NSString *)field
                withSafeTableName:(NSString *)safeTableName;
-- (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field;
-
+- (NSString *)fieldAliasForField:(NSString *)fieldName
+                    andTableName:(NSString *)tableName;
 - (NSString *)tableAliasConnector;
 
 - (NSString *)sqlAggregateFunctionLength;
