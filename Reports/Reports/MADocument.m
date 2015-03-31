@@ -1015,7 +1015,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 + (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
     NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
+    NSURL *cachedDirectory = [NSFileManager localCachedDirectoryForFileUrl:documentUrl];
     NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory
                                                                      includingPropertiesForKeys:nil options:0 error:&error];
     for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
@@ -1220,8 +1220,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
  - (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
     NSString *filename = [madUrl.lastPathComponent stringByDeletingPathExtension];
     NSString *destinationName = [filename stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSURL *destinationDirectoryUrl = [fileManager localTemporaryDirectory];
+    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
     NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
     [directories lastObject];
     return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
