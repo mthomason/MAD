@@ -7,9 +7,19 @@
 //
 
 #import "InterfaceController.h"
-
+#import "UIColor+EverydayApps.h"
 
 @interface InterfaceController()
+
+@property (weak, nonatomic) IBOutlet WKInterfaceGroup *groupTop;
+@property (weak, nonatomic) IBOutlet WKInterfaceLabel *labelTop;
+
+@property (weak, nonatomic) IBOutlet WKInterfaceGroup *groupMiddle;
+@property (weak, nonatomic) IBOutlet WKInterfaceTable *tableMain;
+
+@property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonInfo;
+@property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonExport;
+@property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonMad;
 
 @end
 
@@ -20,6 +30,10 @@
     [super awakeWithContext:context];
 
     // Configure interface objects here.
+    UIColor *backgroundColor = [UIColor tintColorAnalogous4];
+    [self.groupTop setBackgroundColor:backgroundColor];
+    
+    [self.labelTop setText:@"MAD Viewer"];
 }
 
 - (void)willActivate {

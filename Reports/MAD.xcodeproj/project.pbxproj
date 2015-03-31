@@ -756,6 +756,7 @@
 		4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C01ACA97C8006D3996 /* Interface.storyboard */; };
 		4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C31ACA97C9006D3996 /* Images.xcassets */; };
 		4C8F99C71ACA97C9006D3996 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C8F99A71ACA97C8006D3996 /* MAD Designer WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C8F99D01ACB226E006D3996 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C90D47E19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
 		4C90D47F19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
@@ -7867,6 +7868,7 @@
 			files = (
 				4C8F99B11ACA97C8006D3996 /* NotificationController.m in Sources */,
 				4C8F99AE1ACA97C8006D3996 /* InterfaceController.m in Sources */,
+				4C8F99D01ACB226E006D3996 /* UIColor+EverydayApps.m in Sources */,
 				4C8F99B41ACA97C8006D3996 /* GlanceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
