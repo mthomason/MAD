@@ -12,7 +12,7 @@
 
 #import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>
-
+#import "MADConstants.h"
 #import "MADQueryViewController.h"
 
 #import "MADocument.h"
@@ -39,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.336";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.336";
-NSString * const MTGlobalBundleRev                                  = @"1711";
+NSString * const MTGlobalBundleVersion                              = @"7.0.337";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.337";
+NSString * const MTGlobalBundleRev                                  = @"1712";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -114,9 +114,9 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 
 #pragma mark - App settings
 
-+ (NSString *)applicationNamePrefixPart {
-    return MTDocumentExtentionMobleApplicationDocument;
-}
+//+ (NSString *)applicationNamePrefixPart {
+//    return MTDocumentExtentionMobleApplicationDocument;
+//}
 
 + (NSString *)applicationNamePrefixPartFormat {
     return @"MAD %@";
@@ -264,7 +264,6 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 }
 
 + (NSAttributedString *)waterMarkStringMad {
-    NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart].uppercaseString;
     UIColor *foregroundColor = [UIColor lightTextColor];
     CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
     UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
@@ -272,7 +271,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
                                  NSForegroundColorAttributeName : foregroundColor,
                                  NSFontAttributeName : customFont
                                  };
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: displayStringText
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: MADTrademark
                                                                            attributes: attributes];
     return attributedString;
 }

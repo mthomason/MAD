@@ -12,6 +12,7 @@
 
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
+#import "MADConstants.h"
 
 #import "MTApplicationInstance.h"
 #import "MTNavigationController.h"
@@ -286,7 +287,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [AppDelegate deleteCoreDataCache];
-    [[MACloudManager sharedManager] activate];
+    [[MACloudManager sharedManager] setFileExtention:MADFileExtentionMobleApplicationDocument];
+    [[MACloudManager sharedManager] activateWithGroupID:MADIdentifierGroup];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }

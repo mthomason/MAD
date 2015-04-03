@@ -24,6 +24,7 @@
 #import <CoreText/CoreText.h>
 #import "MACloudManager.h"
 #import "MADocument.h"
+#import "MADConstants.h"
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,

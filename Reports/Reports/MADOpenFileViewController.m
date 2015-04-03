@@ -11,6 +11,7 @@
 #endif
 
 #import "MADOpenFileViewController.h"
+#import "MADConstants.h"
 #import <MessageUI/MessageUI.h>
 
 #import "AppDelegate.h"
@@ -2187,7 +2188,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                 NSString *maybe = [self uniquieCloudNameForHandle: url.lastPathComponent.stringByDeletingPathExtension];
                 NSURL *toDirectory = [url URLByDeletingLastPathComponent];
                 NSURL *toUrl = [toDirectory URLByAppendingPathComponent:maybe];
-                NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+                NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
                 [[MACloudManager sharedManager] copyUrl:url toUrl:toUrlWithExtention completion:^(BOOL success, NSURL *url , NSError *error) {
                     
                 }];
@@ -2418,7 +2419,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                       }
                                                                       
                                                                       NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: maybe
-                                                                                                                                     withExtension: MTDocumentExtentionMobleApplicationDocument
+                                                                                                                                     withExtension: MADFileExtentionMobleApplicationDocument
                                                                                                                                        inContainer: indexPath.section == 0 ? MACloudManagerSectionLocal : MACloudManagerSectionCloud];
                                                                       __weak MADOpenFileViewController *weakself2 = strongself;
                                                                       [[MACloudManager sharedManager] moveDocument: urlToRename
@@ -2557,7 +2558,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
             mailComposer.subject = [NSString stringWithFormat:formatString, documentReport.fileName];
             [mailComposer setMessageBody:messageBody isHTML:NO];
-            NSString *name = [NSString stringWithFormat:@"%@.%@", documentReport.fileName, MTDocumentExtentionMobleApplicationDocument];
+            NSString *name = [NSString stringWithFormat:@"%@.%@", documentReport.fileName, MADFileExtentionMobleApplicationDocument];
             [mailComposer addAttachmentData:data mimeType:MADMimeType fileName:name];
             mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
             

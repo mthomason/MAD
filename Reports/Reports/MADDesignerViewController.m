@@ -11,6 +11,7 @@
 #endif
 
 #import "MADDesignerViewController.h"
+#import "MADConstants.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
 #import "MADocument.h"
@@ -410,7 +411,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.navigationControllerToolbox = navigationControllerToolbox;
     self.toolboxTransitioningDelegate = transitioningDelegate;
 
-    NSString *defaultPrompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+    NSString *defaultPrompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
     MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:defaultPrompt];
     self.promptManager = promptManager;
 

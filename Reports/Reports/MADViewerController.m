@@ -11,6 +11,7 @@
 #endif
 
 #import "MADViewerController.h"
+#import "MADConstants.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportViewerReportPageView.h"
@@ -317,7 +318,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
         for (UIView *view in self.navigationItem.titleView.subviews) {
             NSLog(@"%@", view);
         }

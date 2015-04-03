@@ -11,6 +11,7 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MADocument.h"
 #import "UIDevice+Hack.h"
@@ -181,7 +182,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     NSAssert(blockSender == nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSURL *applicationFileUrlWithExtention = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: self.textFieldReportName.text
-                                                                                            withExtension: MTDocumentExtentionMobleApplicationDocument
+                                                                                            withExtension: MADFileExtentionMobleApplicationDocument
                                                                                               inContainer: MACloudManagerSectionLocal];
     
     MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:self.databaseType];

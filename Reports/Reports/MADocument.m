@@ -13,6 +13,7 @@
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MADocument.h"
+#import "MADConstants.h"
 
 #import <CoreData/CoreData.h>
 
@@ -138,7 +139,6 @@ NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed t
 NSString * const MNSInterfaceTitleProblem                           = @"Problem";
 
 NSString * const MADManagedObjectModelName = @"MAD";
-NSString * const MADTrademark = @"MAD";
 NSString * const MADManagedObjectModelExtention = @"momd";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
@@ -290,7 +290,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     //Unpack files from binary NSData url to NSFileWrapper in tmp folder
     BOOL success = NO;
-    if ([url.pathExtension isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+    if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
         
         [self deleteCoreDataFilesAtDirectory:self.urlGuts];
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
@@ -418,7 +418,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSString *)fileNameExtensionForType: (NSString *)typeName
                          saveOperation: (UIDocumentSaveOperation)saveOperation {
-    return MTDocumentExtentionMobleApplicationDocument;
+    return MADFileExtentionMobleApplicationDocument;
 }
 
 #pragma mark UIManagedDocument
@@ -1219,7 +1219,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
  - (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
     NSString *filename = [madUrl.lastPathComponent stringByDeletingPathExtension];
-    NSString *destinationName = [filename stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+    NSString *destinationName = [filename stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
     NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
     NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
     [directories lastObject];
