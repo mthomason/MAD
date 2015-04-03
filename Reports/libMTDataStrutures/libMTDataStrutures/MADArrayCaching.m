@@ -198,7 +198,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (NSURL *)urlForIdentifier:(NSString *)identifer {
     
-    NSURL *cachedArrayDirectories = [[NSFileManager defaultManager] localCacheDirectory];
+    NSURL *cachedArrayDirectories = [NSFileManager localCacheDirectory];
     NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
     return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -206,7 +206,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (NSURL *)url {
     NSURL *result = nil;
     NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
-                                        [[NSFileManager defaultManager] localCacheDirectory] :
+                                        [NSFileManager localCacheDirectory] :
                                         [self.cachedDelegate cachedFilesDirectory];
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
