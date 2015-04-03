@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryBuilderContainerController.h"
+#import "MADConstants.h"
 #import <CoreData/CoreData.h>
 
 #import "MADocument.h"
@@ -103,7 +104,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+    self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
 
     self.delegate = self;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
@@ -274,7 +275,7 @@
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;
