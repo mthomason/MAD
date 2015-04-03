@@ -16,8 +16,6 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
     MACloudManagerSectionCloud = 1,
 };
 
-extern NSString * const MTDocumentExtentionMobleApplicationDocument;
-extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 
 extern NSString * const MADNotificationFileManagerDidUpdateFileLocations;
 extern NSString * const MADNotificationCloudStateUpdated;
@@ -43,6 +41,8 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 @interface MACloudManager : NSObject
 
+@property (nonatomic, strong) NSString *fileExtention;
+
 @property (nonatomic, weak) id <MADCloudManagerProtocolCallbacks> delegate;
 @property (nonatomic, weak) id <MADCloudManagerProtocolAppDetails> delegateApplication;
 
@@ -65,12 +65,11 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 @property (nonatomic, strong, readonly) NSMutableArray       *documentCacheCloudMetaDataItems;
 @property (nonatomic, strong, readonly) NSMutableArray       *documentCacheLocalUrls;
 
+@property (nonatomic, strong, readonly) NSString *groupId;
 
 + (MACloudManager *)sharedManager;
 
-+ (NSArray *)madDocumentsLocal;
-
-- (void)activate;
+- (void)activateWithGroupID:(NSString *)groupId;
 
 // Notification hooks
 

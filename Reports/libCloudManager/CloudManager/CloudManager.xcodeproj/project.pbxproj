@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C37E0FE1ACC83A500B4BC0D /* MADMetaData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46FAE1AC65024007C0A82 /* MADMetaData.h */; };
+		4C37E0FF1ACC83AD00B4BC0D /* MACloudManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46FA81AC64F94007C0A82 /* MACloudManager.h */; };
+		4C37E1001ACC83B400B4BC0D /* MADMetadataQueryManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46FAB1AC64FD3007C0A82 /* MADMetadataQueryManager.h */; };
+		4CA27EE31ACCECC400697AB6 /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */; };
 		4CF46F681AC64BA5007C0A82 /* CloudManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46F671AC64BA5007C0A82 /* CloudManager.h */; };
 		4CF46F6A1AC64BA5007C0A82 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46F691AC64BA5007C0A82 /* CloudManager.m */; };
 		4CF46F701AC64BA5007C0A82 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F641AC64BA5007C0A82 /* libCloudManager.a */; };
@@ -33,6 +37,9 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				4C37E1001ACC83B400B4BC0D /* MADMetadataQueryManager.h in CopyFiles */,
+				4C37E0FF1ACC83AD00B4BC0D /* MACloudManager.h in CopyFiles */,
+				4C37E0FE1ACC83A500B4BC0D /* MADMetaData.h in CopyFiles */,
 				4CF46F681AC64BA5007C0A82 /* CloudManager.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,6 +47,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
+		4CA27EE41ACCECE200697AB6 /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../../CocoaExtensions/CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4CA27EE51ACCED6200697AB6 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../../../CocoaExtensions/CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
 		4CF46F641AC64BA5007C0A82 /* libCloudManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF46F671AC64BA5007C0A82 /* CloudManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloudManager.h; sourceTree = "<group>"; };
 		4CF46F691AC64BA5007C0A82 /* CloudManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudManager.m; sourceTree = "<group>"; };
@@ -59,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA27EE31ACCECC400697AB6 /* libCocoaExtensions.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,9 +84,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C37E0F21ACB285800B4BC0D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C37E0F31ACB286300B4BC0D /* libCocoaExtentions */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4C37E0F31ACB286300B4BC0D /* libCocoaExtentions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = libCocoaExtentions;
+			sourceTree = "<group>";
+		};
 		4CF46F5B1AC64BA5007C0A82 = {
 			isa = PBXGroup;
 			children = (
+				4CA27EE41ACCECE200697AB6 /* NSFileManager+Common.h */,
+				4CA27EE51ACCED6200697AB6 /* NSURL+Document.h */,
+				4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */,
+				4C37E0F21ACB285800B4BC0D /* Resources */,
 				4CF46F661AC64BA5007C0A82 /* CloudManager */,
 				4CF46F731AC64BA5007C0A82 /* CloudManagerTests */,
 				4CF46F651AC64BA5007C0A82 /* Products */,
@@ -314,6 +344,11 @@
 		4CF46F791AC64BA5007C0A82 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/mthomason/Desktop/Reports/Reports/libCocoaExtension/CocoaExtentions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -323,6 +358,11 @@
 		4CF46F7A1AC64BA5007C0A82 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/mthomason/Desktop/Reports/Reports/libCocoaExtension/CocoaExtentions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

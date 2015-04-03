@@ -10,9 +10,10 @@
 #import <UIKit/UIKit.h>
 #import "MADMetadataQueryManager.h"
 #import "MADMetaData.h"
+#import "NSFileManager+Common.h"
 
-NSString * const MTDocumentExtentionMobleApplicationDocumentArchive     = @"mada";
-NSString * const MTDocumentExtentionMobleApplicationDocument            = @"mad";
+//NSString * const MTDocumentExtentionMobleApplicationDocumentArchive     = @"mada";
+//NSString * const MTDocumentExtentionMobleApplicationDocument            = @"mad";
 
 NSString * const MTICloudUbiquityToken                                  = @"com.everydayapps.mad.designer.cloud.ubiquityIdentityToken";
 NSString * const MADPreferencesCloudOptionsSelected                     = @"com.everydayapps.mad.designer.cloud.options.selected";
@@ -56,6 +57,8 @@ NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     
 @property (nonatomic, strong) NSArray       *fileNamesSortedLocal;
 @property (nonatomic, strong) NSArray       *fileNamesSortedCloud;
 @property (nonatomic, strong) NSArray       *fileNamesSortedCombined;
+
+@property (nonatomic, strong, readwrite) NSString *groupId;
 
 @end
 
@@ -112,33 +115,7 @@ static MACloudManager *sharedSingleton;
         
         self.fileManager = fileManager;
         
-        NSString *homeDirectory = NSHomeDirectory();
-        NSString *pathTemporaryDirectory = NSTemporaryDirectory();
         
-        NSURL *homeDirectoryUrl = [NSURL fileURLWithPath: homeDirectory
-                                             isDirectory: YES];
-        
-        NSURL *urlTemporaryDirectory = [NSURL fileURLWithPath: pathTemporaryDirectory
-                                                  isDirectory: YES];
-        
-        NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        
-        NSURL *cacheUrl = [NSURL fileURLWithPath: cachePaths.firstObject
-                                     isDirectory: YES];
-        
-        NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        
-        NSURL *docsUrl = [NSURL fileURLWithPath: docPaths.firstObject
-                                    isDirectory: YES];
-        
-        MADMetadataQueryManager *fileLocationManager = [[MADMetadataQueryManager alloc] initWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
-        self.fileLocationManager = fileLocationManager;
-        self.localHomeDirectory = homeDirectoryUrl;
-        self.localTemporaryDirectory = urlTemporaryDirectory;
-        self.localCachesDirectory = cacheUrl;
-        self.localDocumentDirectory = docsUrl;
-        self.checkingCloudPreferencesLock = NO;
-        self.fileLocationManager.delegate = self;
         
     }
     return self;
@@ -189,7 +166,37 @@ static MACloudManager *sharedSingleton;
 
 #pragma mark - Exposed Methods
 
-- (void)activate {
+- (void)activateWithGroupID:(NSString *)groupId {
+    
+    if (self.fileLocationManager == nil) {
+        
+        NSString *homeDirectory = NSHomeDirectory();
+        NSString *pathTemporaryDirectory = NSTemporaryDirectory();
+        
+        NSURL *homeDirectoryUrl = [NSURL fileURLWithPath: homeDirectory
+                                             isDirectory: YES];
+        
+        NSURL *urlTemporaryDirectory = [NSURL fileURLWithPath: pathTemporaryDirectory
+                                                  isDirectory: YES];
+        
+        NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        
+        NSURL *cacheUrl = [NSURL fileURLWithPath: cachePaths.firstObject
+                                     isDirectory: YES];
+        
+        MADMetadataQueryManager *fileLocationManager = [[MADMetadataQueryManager alloc] initWithPathExtension: self.fileExtention];
+        self.fileLocationManager = fileLocationManager;
+        self.localHomeDirectory = homeDirectoryUrl;
+        self.localTemporaryDirectory = urlTemporaryDirectory;
+        self.localCachesDirectory = cacheUrl;
+        
+        NSURL *documentDirectory = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupId];
+        self.localDocumentDirectory = documentDirectory;
+        self.groupId = groupId;
+        self.checkingCloudPreferencesLock = NO;
+        self.fileLocationManager.delegate = self;
+    }
+    self.groupId = groupId;
     
     [self reloadCacheLocal: @""];
 
@@ -210,32 +217,7 @@ static MACloudManager *sharedSingleton;
                                                         object: nil];
 }
 
-+ (NSArray *)madDocumentsLocal {
-    return [self contentOfLocalDocumentsDirectoryWithExtention: MTDocumentExtentionMobleApplicationDocument];
-}
 
-+ (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    
-    NSError *error = nil;
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSArray *directoryContents = [fm contentsOfDirectoryAtPath:docPaths.firstObject error:&error];
-    for (NSString *filename in directoryContents) {
-        NSString *fullPath = [docPaths.firstObject stringByAppendingPathComponent:filename];
-        NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
-        BOOL isDirectory;
-        if ([fm fileExistsAtPath:fileURL.path isDirectory:&isDirectory]) {
-            NSString *pathExtension = [fileURL pathExtension];
-            if ([pathExtension isEqualToString:extenstion]) {
-                [result addObject:fileURL];
-            }
-        }
-    }
-
-    
-    return result;
-}
 
 #pragma mark - Internal Methods
 
@@ -334,7 +316,7 @@ static MACloudManager *sharedSingleton;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             
             for (NSURL *documentURL in localDocuments) {
-                if ([documentURL.pathExtension isEqualToString: MTDocumentExtentionMobleApplicationDocument]) { // ???: MAD Files only
+                if ([documentURL.pathExtension isEqualToString: self.fileExtention]) { // ???: MAD Files only
                     NSURL *destinationURL = [remoteDirectory URLByAppendingPathComponent:documentURL.lastPathComponent];
                     NSError *errorUpload = nil;
                     [weakself.fileManager setUbiquitous: YES
@@ -704,7 +686,8 @@ static MACloudManager *sharedSingleton;
 
 - (void)reloadCacheLocal:(NSString *)searchString {
     // Setup local cache
-    NSArray *documentCacheLocalUrls = [MACloudManager contentOfLocalDocumentsDirectoryWithExtention: MTDocumentExtentionMobleApplicationDocument];
+    NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier:self.groupId andExtention:self.fileExtention];
+    //NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentOfLocalDocumentsDirectoryWithExtention: self.fileExtention];;
     
     NSArray *filteredDocumentCacheLocalUrls;
     
