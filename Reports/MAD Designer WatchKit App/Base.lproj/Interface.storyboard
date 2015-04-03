@@ -10,20 +10,21 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
-                        <group width="1" alignment="left" id="25f-QB-E58">
-                            <items>
-                                <label alignment="left" text="Label" id="d6e-c6-Fc1">
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                </label>
-                            </items>
-                        </group>
                         <group width="1" alignment="left" id="Ck0-cG-jZw">
                             <items>
                                 <table alignment="left" id="czm-DK-wde">
                                     <items>
-                                        <tableRow id="T86-zG-IDt">
-                                            <group key="rootItem" width="1" alignment="left" id="HFr-ZQ-myu"/>
+                                        <tableRow identifier="RowTypeDocumentLocal" id="T86-zG-IDt" customClass="RowTypeDocumentLocal">
+                                            <group key="rootItem" width="1" alignment="left" id="HFr-ZQ-myu">
+                                                <items>
+                                                    <imageView width="32" height="32" alignment="left" verticalAlignment="center" id="IWp-Cm-uLm"/>
+                                                    <label alignment="left" verticalAlignment="center" text="Label" id="R9r-bh-VWO"/>
+                                                </items>
+                                            </group>
                                             <connections>
+                                                <outlet property="groupMain" destination="HFr-ZQ-myu" id="9ta-yU-opk"/>
+                                                <outlet property="image" destination="IWp-Cm-uLm" id="bgF-ZE-CJb"/>
+                                                <outlet property="label" destination="R9r-bh-VWO" id="FXx-Fg-pZa"/>
                                                 <segue destination="lIk-Y7-yHz" kind="push" id="jwP-XW-QgE"/>
                                             </connections>
                                         </tableRow>
@@ -46,14 +47,12 @@
                             </items>
                         </group>
                     </items>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <outlet property="buttonExport" destination="EVR-hT-abi" id="iap-Ko-Ki8"/>
                         <outlet property="buttonInfo" destination="Fhm-UU-0Cs" id="fq4-4d-lcF"/>
                         <outlet property="buttonMad" destination="q3Z-ua-uUb" id="Dqi-r5-HOn"/>
                         <outlet property="groupMiddle" destination="Ck0-cG-jZw" id="O00-mt-xTE"/>
-                        <outlet property="groupTop" destination="25f-QB-E58" id="gCI-cZ-CUO"/>
-                        <outlet property="labelTop" destination="d6e-c6-Fc1" id="06M-bm-HVP"/>
                         <outlet property="tableMain" destination="czm-DK-wde" id="fCY-0N-ev4"/>
                     </connections>
                 </controller>
@@ -124,4 +123,5 @@
             <point key="canvasLocation" x="553" y="906"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
 </document>

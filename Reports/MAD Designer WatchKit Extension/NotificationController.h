@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <WatchKit/WatchKit.h>
 #import <Foundation/Foundation.h>
+#import <WatchKit/WatchKit.h>
 
 @interface NotificationController : WKUserNotificationInterfaceController
 
