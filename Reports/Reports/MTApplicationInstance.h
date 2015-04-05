@@ -30,6 +30,7 @@ extern NSString * const MTGlobalBundleRev;
 @property (nonatomic, assign) MTReportState reportState;
 
 @property (nonatomic, strong, readonly) MTUser *user;
+
 @property (nonatomic, strong, readonly) MTReportDesigner *reportDesigner;
 @property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
@@ -44,18 +45,21 @@ extern NSString * const MTGlobalBundleRev;
 + (NSAttributedString *)localizedAttributedApplicationNameMadViewer;
 + (NSAttributedString *)localizedAttributedApplicationNameMadQuery;
 
++ (NSString *)applicationNamePrefixPartFormat;
++ (NSString *)applicationNameSufixPart;
+
 + (BOOL)isMadViewer;
 + (BOOL)isMadDesigner;
 + (NSString *)bundleId;
 + (NSString *)bundleVersion;
 
-+ (UIStoryboard *)storyboard;
++ (NSString *)storyboardName;
+//+ (UIStoryboard *)storyboard;
 
 + (NSString *)madDesigner;
 + (NSString *)madViewer;
 + (NSString *)madQuery;
 
-+ (void)drawMadWatermarkInRect:(CGRect)rect;
 + (NSString *)bundleDisplayName;
 
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;

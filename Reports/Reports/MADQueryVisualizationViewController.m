@@ -128,7 +128,8 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.tableDisplayCounter = 0;
     
-    UIStoryboard *sb = [MTApplicationInstance storyboard];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
     self.storyboardDefault = sb;
 
     CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
@@ -1266,7 +1267,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
     
-    UIStoryboard *sb = [MTApplicationInstance storyboard];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
     MADQueryVisualizationSchemaViewController *viewController = [sb instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier];
     viewController.document = self.document;
     viewController.delegate = self;

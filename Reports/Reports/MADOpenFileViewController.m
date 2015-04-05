@@ -1364,7 +1364,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                 
                 MTApplicationInstance *app = [AppDelegate app];
                 [[app openDocument] activeDocumentModel];
-                UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+                NSString *storyboardName = [MTApplicationInstance storyboardName];
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
                 UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
                 
                 tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;

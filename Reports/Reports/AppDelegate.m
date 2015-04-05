@@ -115,8 +115,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     self.applicationInstance = appInstance;
 
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
-    id initViewController = [storyBoard instantiateInitialViewController];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
+    id initViewController = [storyboard instantiateInitialViewController];
     
     NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
 
@@ -130,7 +131,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
 
     self.window = window;
-    self.storyboard = storyBoard;
+    self.storyboard = storyboard;
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -360,8 +361,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     self.application = application;
     if (self.storyboard == nil) {
-        UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
-        self.storyboard = storyBoard;
+        NSString *storyboardName = [MTApplicationInstance storyboardName];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
+        self.storyboard = storyboard;
     }
     
     UIViewController *vc = nil;

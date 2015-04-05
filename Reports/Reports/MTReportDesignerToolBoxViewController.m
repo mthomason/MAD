@@ -54,7 +54,8 @@
 }
 
 - (void)initalizeFontSettingsTableViewController {
-    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
     MADToolboxStyleViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
     [[reportDesignerFontSettingsViewController tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -64,7 +65,8 @@
 }
 
 - (void)initalizeFontListSettingsTableViewController {
-    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
     MADFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
     reportDesignerFontSelectorViewController.document = self.document;
@@ -118,7 +120,8 @@
 
 - (IBAction)valueChanged:(id)sender {
     [sender setEnabled:NO];
-    UIStoryboard *sbFontTableView = [MTApplicationInstance storyboard];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *sbFontView = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
 
     id newViewController = nil;
 

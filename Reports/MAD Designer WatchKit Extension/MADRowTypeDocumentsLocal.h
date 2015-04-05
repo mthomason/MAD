@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <WatchKit/WatchKit.h>
+#import <Foundation/Foundation.h>
 
-@interface RowTypeDocumentLocal : NSObject
+@interface MADRowTypeDocumentsLocal : NSObject
 
 @property (weak, nonatomic) IBOutlet WKInterfaceGroup *groupMain;
 @property (weak, nonatomic) IBOutlet WKInterfaceImage *image;

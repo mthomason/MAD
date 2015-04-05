@@ -13,11 +13,11 @@
 
 @interface MTReportDesigner : NSObject
 
-@property (nonatomic, assign) CGFloat zoomScaleRestore;
-@property (nonatomic, assign) CGRect boundsOnDisappear;
+//@property (nonatomic, assign) CGFloat zoomScaleRestore;
+//@property (nonatomic, assign) CGRect boundsOnDisappear;
 @property (nonatomic, assign) BOOL shownAndHidden;
 @property (nonatomic, assign) BOOL toolboxIsVisible;
-@property (nonatomic, assign) CGPoint contentOffsetOnShowToolbox;
+//@property (nonatomic, assign) CGPoint contentOffsetOnShowToolbox;
 
 @end
 

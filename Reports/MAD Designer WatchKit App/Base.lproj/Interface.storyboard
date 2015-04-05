@@ -5,16 +5,16 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
+        <!--MAD KPIs-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController">
+                <controller identifier="MADInterfaceControllerDocumentsLocal" title="MAD KPIs" id="AgC-eL-Hgc" customClass="MADInterfaceControllerDocumentsLocal">
                     <items>
-                        <group width="1" alignment="left" id="Ck0-cG-jZw">
+                        <group alignment="left" id="Ck0-cG-jZw">
                             <items>
                                 <table alignment="left" id="czm-DK-wde">
                                     <items>
-                                        <tableRow identifier="RowTypeDocumentLocal" id="T86-zG-IDt" customClass="RowTypeDocumentLocal">
+                                        <tableRow identifier="MADRowTypeDocumentsLocal" id="T86-zG-IDt" customClass="MADRowTypeDocumentsLocal">
                                             <group key="rootItem" width="1" alignment="left" id="HFr-ZQ-myu">
                                                 <items>
                                                     <imageView width="32" height="32" alignment="left" verticalAlignment="center" id="IWp-Cm-uLm"/>
@@ -22,10 +22,10 @@
                                                 </items>
                                             </group>
                                             <connections>
-                                                <outlet property="groupMain" destination="HFr-ZQ-myu" id="9ta-yU-opk"/>
-                                                <outlet property="image" destination="IWp-Cm-uLm" id="bgF-ZE-CJb"/>
-                                                <outlet property="label" destination="R9r-bh-VWO" id="FXx-Fg-pZa"/>
-                                                <segue destination="lIk-Y7-yHz" kind="push" id="jwP-XW-QgE"/>
+                                                <outlet property="groupMain" destination="HFr-ZQ-myu" id="n8b-gi-8bd"/>
+                                                <outlet property="image" destination="IWp-Cm-uLm" id="OYB-zi-pan"/>
+                                                <outlet property="label" destination="R9r-bh-VWO" id="Swj-Fk-Ado"/>
+                                                <segue destination="eKK-Ob-hpr" kind="push" id="pHU-ms-GoA"/>
                                             </connections>
                                         </tableRow>
                                     </items>
@@ -49,42 +49,51 @@
                     </items>
                     <color key="backgroundColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
-                        <outlet property="buttonExport" destination="EVR-hT-abi" id="iap-Ko-Ki8"/>
-                        <outlet property="buttonInfo" destination="Fhm-UU-0Cs" id="fq4-4d-lcF"/>
-                        <outlet property="buttonMad" destination="q3Z-ua-uUb" id="Dqi-r5-HOn"/>
-                        <outlet property="groupMiddle" destination="Ck0-cG-jZw" id="O00-mt-xTE"/>
-                        <outlet property="tableMain" destination="czm-DK-wde" id="fCY-0N-ev4"/>
+                        <outlet property="groupMiddle" destination="hoK-8Y-zHp" id="U6d-en-zdW"/>
+                        <outlet property="tableMain" destination="czm-DK-wde" id="5Op-Jq-Jel"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="444"/>
         </scene>
-        <!--Interface Controller-->
-        <scene sceneID="8iO-ai-Sap">
+        <!--Interface ControllerKPI-->
+        <scene sceneID="5ue-8u-ySv">
             <objects>
-                <controller id="lIk-Y7-yHz">
+                <controller id="eKK-Ob-hpr" customClass="MADInterfaceControllerKPI">
                     <items>
-                        <group width="1" height="100" alignment="left" id="NPS-5c-Efo">
+                        <group width="1" height="1" alignment="left" id="N6C-fi-zft">
                             <items>
-                                <table alignment="left" id="TJl-he-Dpj">
+                                <table alignment="left" id="kZH-Af-jpq">
                                     <items>
-                                        <tableRow id="u3E-ot-zQe">
-                                            <group key="rootItem" width="1" alignment="left" id="vIu-Dc-EZe">
+                                        <tableRow id="b3r-0r-9PJ" customClass="MADRowTypeKeyValue">
+                                            <group key="rootItem" width="1" alignment="left" id="kbe-16-dSX">
                                                 <items>
-                                                    <label alignment="left" text="Label" id="94U-XZ-HaQ"/>
-                                                    <label alignment="left" text="Label" id="2Oe-fU-CD5"/>
+                                                    <label alignment="left" verticalAlignment="center" text="KPI:" id="u0T-jf-mDN">
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                                    </label>
+                                                    <label alignment="left" verticalAlignment="center" text="Value" id="rXc-sf-EGa">
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </label>
                                                 </items>
                                             </group>
+                                            <connections>
+                                                <outlet property="labelKey" destination="u0T-jf-mDN" id="Vzz-HO-9Pt"/>
+                                            </connections>
                                         </tableRow>
                                     </items>
                                 </table>
                             </items>
                         </group>
-                        <group width="1" alignment="left" verticalAlignment="bottom" id="K7C-W2-ze9"/>
                     </items>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="groupKPI" destination="N6C-fi-zft" id="kXh-ns-sbf"/>
+                        <outlet property="tableKPI" destination="kZH-Af-jpq" id="ZOB-UD-nVy"/>
+                    </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="487" y="444"/>
+            <point key="canvasLocation" x="476" y="444"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">

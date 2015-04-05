@@ -39,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.337";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.337";
-NSString * const MTGlobalBundleRev                                  = @"1712";
+NSString * const MTGlobalBundleVersion                              = @"7.0.347";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.347";
+NSString * const MTGlobalBundleRev                                  = @"1722";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -97,6 +97,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
         self.reportDesigner = reportDesigner;
         
+#ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
         NSCAssert([[MTApplicationInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
@@ -104,7 +105,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
         NSCAssert([[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadDesigner] || [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
         NSCAssert([[MTApplicationInstance bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
-        
+#endif
 //        NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
 //        self.documents = documents;
         
@@ -261,98 +262,6 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     NSString *storyboardName = [MTApplicationInstance storyboardName];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
     return storyboard;
-}
-
-+ (NSAttributedString *)waterMarkStringMad {
-    UIColor *foregroundColor = [UIColor lightTextColor];
-    CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
-    UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
-    NSDictionary *attributes = @{
-                                 NSForegroundColorAttributeName : foregroundColor,
-                                 NSFontAttributeName : customFont
-                                 };
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: MADTrademark
-                                                                           attributes: attributes];
-    return attributedString;
-}
-
-+ (NSAttributedString *)waterMarkStringDesigner {
-    NSString *displayStringText = [[MTApplicationInstance applicationNameSufixPart] uppercaseString];
-    UIColor *foregroundColor = [UIColor lightTextColor];
-    CGFloat fontSize =  [MTApplicationInstance isMadDesigner] ? 44.5000f : 46.0000f;
-    UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
-    NSDictionary *attributes = @{
-                                 NSForegroundColorAttributeName : foregroundColor,
-                                 NSFontAttributeName : customFont,
-                                 NSParagraphStyleAttributeName : paragraphStyle
-                                 };
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
-    return attributedString;
-}
-
-+ (void)drawMadWatermarkInRect:(CGRect)rect {
-
-    NSAttributedString *displayString = [MTApplicationInstance waterMarkStringMad];
-    NSAttributedString *displayString2 = [MTApplicationInstance waterMarkStringDesigner];
-
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    NSInteger rowCounter = 0, columnCounter = 0;
-    CGSize logoSize = [displayString size];
-    CGSize logoSize2 = [displayString2 size];
-    CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
-    CGRect logoRect, logoRect2;
-    
-    CGFloat xHalfSize = logoMargin.width / 2.0000f - logoSize.width / 2.0000f;
-    CGFloat xOffset = xHalfSize - 66.0000f;
-    CGFloat yOffset = logoMargin.height / 2.0000f - logoSize.height / 2.0000f - 150.0000f;
-    
-    do {
-        columnCounter = 0;
-        
-        do {
-            @autoreleasepool {
-
-                BOOL moveLeft = rowCounter % 2 == 0;
-                CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width + xOffset;
-                CGFloat xQuarterSize = xOffset / 2;
-                if (moveLeft) {
-                    x -= xQuarterSize;
-                } else {
-                    x += xQuarterSize;
-                }
-                CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height + logoSize2.height + yOffset;
-                logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
-                CGFloat y2 = y + logoSize.height;
-                logoRect2 = CGRectMake(x, y2, logoSize2.width, logoSize2.height);
-                
-                CGContextSaveGState(ctx);
-                
-                {
-                    CGFloat yResolved = columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f);
-                    CGFloat yt = logoRect.size.height - 24.0000f;
-                    CGFloat firstT = yResolved + yt;
-                    x += 2.000f;
-                    CGContextTranslateCTM(ctx, x, firstT);
-                    
-                    CGFloat rect2Offset = 0.0000f;
-                    
-                    CGRect rect2 = CGRectMake(rect2Offset, 0.0000f, logoRect2.size.width, logoRect2.size.height);
-                    [displayString2 drawInRect:rect2];
-                    CGContextTranslateCTM(ctx, -2.0000f, -yt);
-                    CGRect rect1 = CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height);
-                    [displayString drawInRect:rect1];
-                }
-                CGContextRestoreGState(ctx);
-
-            }
-            columnCounter++;
-        } while (logoRect.origin.x + logoRect.size.width < rect.size.width);
-        rowCounter++;
-    } while (logoRect.origin.y + logoRect.size.height < rect.size.height);
-    
 }
 
 - (void)initalizeAppearance {

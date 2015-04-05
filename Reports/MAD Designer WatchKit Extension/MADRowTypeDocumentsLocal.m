@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RowTypeDocumentLocal.h"
+#import "MADRowTypeDocumentsLocal.h"
 
-@implementation RowTypeDocumentLocal
+@implementation MADRowTypeDocumentsLocal
 
 @end

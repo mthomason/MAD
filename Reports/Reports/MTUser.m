@@ -11,7 +11,8 @@
 #endif
 
 #import "MTUser.h"
-#import "MACloudManager.h"
+#import "NSFileManager+Common.h"
+#import "MADConstants.h"
 
 @interface MTUser()
 
@@ -28,11 +29,10 @@
 }
 
 - (BOOL)addDocument:(NSURL *)url error:(NSError **)error {
-    NSURL *destinationUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: url.lastPathComponent.stringByDeletingPathExtension
-                                                                           withExtension: url.pathExtension
-                                                                             inContainer: MACloudManagerSectionLocal];
-    [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:error];
-    return error == nil;
+    NSURL *documentsDirectory = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
+    BOOL success = [[NSFileManager defaultManager] moveItemAtURL:url toURL:destination error:error];
+    return success && error == nil;
 }
 
 @end
