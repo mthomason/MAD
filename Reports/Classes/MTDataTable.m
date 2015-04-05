@@ -280,7 +280,7 @@
         [cache writeToURL:[self url]
                   options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
                     error:&error];
-        NSAssert(@"%s %@", __PRETTY_FUNCTION__, error);
+        NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 

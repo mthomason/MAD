@@ -7,9 +7,12 @@
 //
 
 #import "MADInterfaceControllerKPI.h"
-
+#import "MADocument.h"
 
 @interface MADInterfaceControllerKPI()
+
+@property (nonatomic, strong) NSURL *madFile;
+@property (nonatomic, strong) MADocument *document;
 
 @end
 
@@ -19,7 +22,22 @@
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
     
+    NSURL *fileURL = context;
+    self.madFile = fileURL;
+    
+    NSString *title = [self.madFile.lastPathComponent stringByDeletingPathExtension];
+    [self setTitle:title];
+    
     NSLog(@"%@", context);
+    
+    MADocument *document = [[MADocument alloc] initWithFileURL:self.madFile];
+    self.document = document;
+    [self.document openWithCompletionHandler:^(BOOL success) {
+        
+        [self.document activeDocumentModel];
+        NSLog(@"%@", success ? @"YES" : @"NO");
+        
+    }];
     //AAPLListInfo *listInfo = context;
     //self.listDocument = [[AAPLListDocument alloc] initWithFileURL:listInfo.URL];
     
@@ -27,6 +45,7 @@
     //[self setUpInterfaceTable];
     
     // Configure interface objects here.
+    
 }
 
 - (void)willActivate {
@@ -37,6 +56,7 @@
 - (void)didDeactivate {
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
+    [self.document closeWithCompletionHandler:nil];
 }
 
 @end

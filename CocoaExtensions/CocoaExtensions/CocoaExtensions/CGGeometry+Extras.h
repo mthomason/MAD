@@ -9,6 +9,8 @@
 #ifndef Reports_CGGeometry_Extras_h
 #define Reports_CGGeometry_Extras_h
 
+#import <UIKit/UIKit.h>
+
 /* Make a point from `(x, y)'. */
 
 #define            SQUARE(x)             ( (x) * (x) )

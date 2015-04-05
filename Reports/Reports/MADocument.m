@@ -10,8 +10,6 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-typedef void (^MTCompletionHandlerSuccess)(BOOL success);
-
 #import "MADocument.h"
 #import "MADConstants.h"
 
@@ -84,6 +82,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
+
+typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 /*
  {
@@ -845,7 +845,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         RptqQuery *query = [groupToRemove inQuery];
 
         NSArray *sections = groupToRemove.hasSection.allObjects;
-        NSAssert(section.count == 2, @"Expecting a header and footer.");
+        NSAssert(sections.count == 2, @"Expecting a header and footer.");
         
         RptqDocumentSection *section0 = sections[0];
         RptqDocumentSection *section1 = sections[1];
@@ -915,8 +915,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)initalizeMainDatabase {
     RptqDatabase *database = [self.document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
-    RptqUserCredentals *userCredentals = [[query inDatabase] ownedByUser];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:query.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
     db.delegate = self;
     self.mainDatabase = db;

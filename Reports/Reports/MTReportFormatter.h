@@ -10,6 +10,7 @@
 #define MAD_MTReportFormatter_h
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "MTTableFormatter.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"

@@ -748,10 +748,6 @@
     return allValidLocations;
 }
 
-- (NSArray *)itemsNotAtDropPoints:(NSArray *)allValidLocations {
-    
-}
-
 - (CGPoint)pointNearestDropPoint: (CGPoint)dropPoint
                  fromValidPoints: (NSArray *)validLocations {
     

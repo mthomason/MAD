@@ -35,15 +35,19 @@
     self = [super init];
     
     if (self) {
-    
-        //MTApplicationInstance *app = [[MTApplicationInstance alloc] init];
-        //self.app = app;
+
+        Class rowControllerClassDocumentsLocal = [MADRowTypeDocumentsLocal class];
+        NSString *identifierRowTypeDocumentLocal = NSStringFromClass(rowControllerClassDocumentsLocal);
+        NSArray *rowTypes = @[identifierRowTypeDocumentLocal];
+        [self.tableMain setRowTypes:rowTypes];
 
         NSArray *files = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier: MADIdentifierGroup
                                                                                             andExtention: MADFileExtentionMobleApplicationDocument];
         
         
-        //[self.tableMain insertRowsAtIndexes:indexes withRowType:identifierRowTypeDocumentLocal];
+        [self.tableMain setNumberOfRows: files.count
+                            withRowType: identifierRowTypeDocumentLocal];
+
         self.filesByURL = files;
 
     }
@@ -54,24 +58,10 @@
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
 
-    // Configure interface objects here.
-    //UIColor *backgroundColor = [UIColor tintColorAnalogous4];
-    //[self.groupTop setBackgroundColor:backgroundColor];
+    NSString *MADTitle = @"MAD KPIs";
+    NSString *localalizedTitle = NSLocalizedString(MADTitle, MADTitle);
+    [self setTitle:localalizedTitle];
     
-    [self setTitle:@"MAD KPIs"];
-    
-    
-    Class rowControllerClassDocumentsLocal = [MADRowTypeDocumentsLocal class];
-    NSString *identifierRowTypeDocumentLocal = NSStringFromClass(rowControllerClassDocumentsLocal);
-    NSArray *rowTypes = @[identifierRowTypeDocumentLocal];
-    [self.tableMain setRowTypes:rowTypes];
-    [self.tableMain setNumberOfRows:self.filesByURL.count
-                        withRowType:@"MADRowTypeDocumentsLocal"];
-    NSRange range = NSMakeRange(0, self.filesByURL.count);
-    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:range];
-    //[self.tableMain insertRowsAtIndexes:indexes withRowType:identifierRowTypeDocumentLocal];
-    
-
     NSString *filename;
     MADRowTypeDocumentsLocal *rowController;
     for (NSInteger i=0; i<self.filesByURL.count; i++) {

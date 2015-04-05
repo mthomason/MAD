@@ -14,3 +14,5 @@
 @interface MTQueryDefinitionField : NSObject
 
 @end
+
+#endif

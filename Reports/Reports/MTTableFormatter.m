@@ -21,6 +21,7 @@
 
         self.query = query;
         self.didRefresh = NO;
+        
     }
     return self;
 }

@@ -9,7 +9,7 @@
 #ifndef Reports_NSError_UserInterface_h
 #define Reports_NSError_UserInterface_h
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface NSError (UserInterface)
 

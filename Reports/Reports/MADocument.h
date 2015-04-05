@@ -12,6 +12,8 @@
 #define Reports_MADocument_h
 
 #import <Foundation/Foundation.h>
+//#import <CoreData/CoreData.h>
+#import <UIKit/UIKit.h>
 #import "MTReportFormatterDataSource.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"

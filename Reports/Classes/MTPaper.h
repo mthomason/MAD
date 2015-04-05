@@ -10,6 +10,7 @@
 #define Reports_MTPaper_h
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, MTPaperType) {
     MTPaperTypeLetter = 2,

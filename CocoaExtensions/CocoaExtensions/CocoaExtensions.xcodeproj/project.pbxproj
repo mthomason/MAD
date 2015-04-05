@@ -14,6 +14,8 @@
 		4C37E12C1ACC87C600B4BC0D /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E12A1ACC87C600B4BC0D /* NSURL+Document.m */; };
 		4C37E12D1ACC87DB00B4BC0D /* NSFileManager+Common.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */; };
 		4C37E12E1ACC87DB00B4BC0D /* NSURL+Document.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */; };
+		4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */; };
+		4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,11 @@
 		4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Document.h"; sourceTree = "<group>"; };
 		4C37E1291ACC87C600B4BC0D /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Common.m"; sourceTree = "<group>"; };
 		4C37E12A1ACC87C600B4BC0D /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Document.m"; sourceTree = "<group>"; };
+		4C4AC1C21AD1125000D4C461 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
+		4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
+		4C4AC1C51AD1128600D4C461 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
+		4CF8891C1AD1BBA700ED21FC /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
+		4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hack.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +100,11 @@
 		4C37E10F1ACC864500B4BC0D /* CocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4C4AC1C51AD1128600D4C461 /* MADCocoaExtensions.h */,
+				4CF8891C1AD1BBA700ED21FC /* UIDevice+Hack.h */,
+				4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */,
+				4C4AC1C21AD1125000D4C461 /* CGGeometry+Extras.h */,
+				4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */,
 				4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */,
 				4C37E1291ACC87C600B4BC0D /* NSFileManager+Common.m */,
 				4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */,
@@ -209,6 +221,8 @@
 			files = (
 				4C37E12C1ACC87C600B4BC0D /* NSURL+Document.m in Sources */,
 				4C37E1131ACC864500B4BC0D /* CocoaExtensions.m in Sources */,
+				4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */,
+				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
 				4C37E12B1ACC87C600B4BC0D /* NSFileManager+Common.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

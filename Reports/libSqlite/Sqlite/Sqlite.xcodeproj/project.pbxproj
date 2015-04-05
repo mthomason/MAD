@@ -10,7 +10,7 @@
 		4C8F995C1AC9E0ED006D3996 /* Sqlite.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C8F995B1AC9E0ED006D3996 /* Sqlite.h */; };
 		4C8F995E1AC9E0ED006D3996 /* Sqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F995D1AC9E0ED006D3996 /* Sqlite.m */; };
 		4C8F99641AC9E0EE006D3996 /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8F99581AC9E0ED006D3996 /* libSqlite.a */; };
-		4C8F99801AC9E120006D3996 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F997E1AC9E120006D3996 /* sqlite3.c */; };
+		4C8F99801AC9E120006D3996 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F997E1AC9E120006D3996 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

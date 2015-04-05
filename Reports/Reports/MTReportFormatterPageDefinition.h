@@ -9,7 +9,7 @@
 #ifndef MAD_MTReportFormatterPageDefinition_h
 #define MAD_MTReportFormatterPageDefinition_h
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface MTReportFormatterPageDefinition : NSObject
 

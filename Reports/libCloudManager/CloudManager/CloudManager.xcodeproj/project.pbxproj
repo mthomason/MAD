@@ -47,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C4AC1C71AD112E600D4C461 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../../../CocoaExtensions/CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4CA27EE41ACCECE200697AB6 /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../../CocoaExtensions/CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4CA27EE51ACCED6200697AB6 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../../../CocoaExtensions/CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 			children = (
 				4CA27EE41ACCECE200697AB6 /* NSFileManager+Common.h */,
 				4CA27EE51ACCED6200697AB6 /* NSURL+Document.h */,
+				4C4AC1C71AD112E600D4C461 /* CGGeometry+Extras.h */,
 				4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */,
 				4C37E0F21ACB285800B4BC0D /* Resources */,
 				4CF46F661AC64BA5007C0A82 /* CloudManager */,

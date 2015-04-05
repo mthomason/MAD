@@ -9,6 +9,7 @@
 #ifndef Reports_RptqDocumentSection_Extras_h
 #define Reports_RptqDocumentSection_Extras_h
 
+#import <UIKit/UIKit.h>
 #import "RptqDocumentSection.h"
 #import "MTProtocolCompare.h"
 

@@ -9,7 +9,7 @@
 #ifndef MAD_MTReportFormatterCache_h
 #define MAD_MTReportFormatterCache_h
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface MTReportFormatterCache : NSObject
 

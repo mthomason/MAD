@@ -742,8 +742,12 @@ NSString * const MTNullIdentifier = @"(null)";
 #pragma mark - Help functions
 
 - (BOOL)isLandscape {
+#ifdef MADWATCHKIT
+    return NO;
+#else
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+#endif
 }
 
 @end
