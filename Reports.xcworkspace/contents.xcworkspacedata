@@ -8,6 +8,6 @@
       location = "group:CloudManager/CloudManager.xcodeproj">
    </FileRef>
    <FileRef
-      location = "container:Reports/MAD.xcodeproj">
+      location = "container:Reports/MAD Designer.xcodeproj">
    </FileRef>
 </Workspace>

@@ -905,7 +905,7 @@
 		4C8F99B11ACA97C8006D3996 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99B01ACA97C8006D3996 /* NotificationController.m */; };
 		4C8F99B41ACA97C8006D3996 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99B31ACA97C8006D3996 /* GlanceController.m */; };
 		4C8F99B61ACA97C8006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B51ACA97C8006D3996 /* Images.xcassets */; };
-		4C8F99BA1ACA97C8006D3996 /* MAD Designer WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B91ACA97C8006D3996 /* MAD Designer WatchKit App.app */; };
+		4C8F99BA1ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B91ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app */; };
 		4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C01ACA97C8006D3996 /* Interface.storyboard */; };
 		4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C31ACA97C9006D3996 /* Images.xcassets */; };
 		4C8F99C71ACA97C9006D3996 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C8F99A71ACA97C8006D3996 /* MAD Designer WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -2242,9 +2242,9 @@
 		4C258026192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectGroupKeys.h; sourceTree = "<group>"; };
 		4C258027192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectGroupKeys.m; sourceTree = "<group>"; };
 		4C25803D192D090F00BE74EB /* Caching Array Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Caching Array Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C258043192D090F00BE74EB /* MAD Designer Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Designer Tests-Info.plist"; sourceTree = "<group>"; };
+		4C258043192D090F00BE74EB /* MAD Designer Designer Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Designer Designer Tests-Info.plist"; sourceTree = "<group>"; };
 		4C258045192D090F00BE74EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4C258049192D090F00BE74EB /* MAD Designer Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAD Designer Tests-Prefix.pch"; sourceTree = "<group>"; };
+		4C258049192D090F00BE74EB /* MAD Designer Designer Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAD Designer Designer Tests-Prefix.pch"; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C267AA718FA6BA80097D166 /* MTQueryCustomNoResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCustomNoResults.h; sourceTree = "<group>"; };
@@ -2435,7 +2435,7 @@
 		4C49D9D619DCE31400CB4DB8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4C49D9D819DCE31400CB4DB8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4C49D9DB19DCE31400CB4DB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer XTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49D9E119DCE31400CB4DB8 /* MAD Designer X Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer X Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C49D9E619DCE31400CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C49D9E719DCE31400CB4DB8 /* MAD_Designer_XTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Designer_XTests.m; sourceTree = "<group>"; };
 		4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer X.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2447,7 +2447,7 @@
 		4C49DA0519DCE32E00CB4DB8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4C49DA0719DCE32E00CB4DB8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4C49DA0A19DCE32E00CB4DB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Viewer XTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49DA1019DCE32E00CB4DB8 /* MAD Viewer X Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Viewer X Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C49DA1519DCE32E00CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C49DA1619DCE32E00CB4DB8 /* MAD_Viewer_XTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Viewer_XTests.m; sourceTree = "<group>"; };
 		4C49DA5A19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTableViewControllerBarcodeExtraPdf417Iso24728.h; path = Classes/MTTableViewControllerBarcodeExtraPdf417Iso24728.h; sourceTree = "<group>"; };
@@ -2716,7 +2716,7 @@
 		4C8F99B21ACA97C8006D3996 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
 		4C8F99B31ACA97C8006D3996 /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
 		4C8F99B51ACA97C8006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4C8F99B91ACA97C8006D3996 /* MAD Designer WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8F99B91ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer Designer WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8F99BF1ACA97C8006D3996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C8F99C11ACA97C8006D3996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		4C8F99C31ACA97C9006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -2728,11 +2728,11 @@
 		4C94AA3A17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesPadOS7.storyboard; sourceTree = "<group>"; };
 		4C94AA3C17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
 		4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageJustified@2x.png"; path = "Reports/UIImageJustified@2x.png"; sourceTree = "<group>"; };
-		4C94ADE817C3514100037FCB /* MAD Launch Images.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Launch Images.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C94ADEE17C3514200037FCB /* MAD Launch Images-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Launch Images-Info.plist"; sourceTree = "<group>"; };
+		4C94ADE817C3514100037FCB /* MAD Designer Launch Images.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer Launch Images.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C94ADEE17C3514200037FCB /* MAD Designer Launch Images-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Designer Launch Images-Info.plist"; sourceTree = "<group>"; };
 		4C94ADF017C3514200037FCB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C94ADF217C3514200037FCB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4C94ADF417C3514200037FCB /* MAD Launch Images-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAD Launch Images-Prefix.pch"; sourceTree = "<group>"; };
+		4C94ADF417C3514200037FCB /* MAD Designer Launch Images-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAD Designer Launch Images-Prefix.pch"; sourceTree = "<group>"; };
 		4C94ADF517C3514200037FCB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C94ADF617C3514200037FCB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C94ADF817C3514200037FCB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -3915,9 +3915,9 @@
 		4C258042192D090F00BE74EB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4C258043192D090F00BE74EB /* MAD Designer Tests-Info.plist */,
+				4C258043192D090F00BE74EB /* MAD Designer Designer Tests-Info.plist */,
 				4C258044192D090F00BE74EB /* InfoPlist.strings */,
-				4C258049192D090F00BE74EB /* MAD Designer Tests-Prefix.pch */,
+				4C258049192D090F00BE74EB /* MAD Designer Designer Tests-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -4003,10 +4003,10 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C7AC2A51ACD01870022C0AD /* MADConstants.h */,
-				4C7AC2A61ACD01870022C0AD /* MADConstants.m */,
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
+				4C7AC2A51ACD01870022C0AD /* MADConstants.h */,
+				4C7AC2A61ACD01870022C0AD /* MADConstants.m */,
 				4CF46F5A1AC64A2F007C0A82 /* libraries */,
 				4C49DA5319DCE77700CB4DB8 /* MAD iOS */,
 				4C49DA5919DCE99F00CB4DB8 /* MAD OS X */,
@@ -4029,14 +4029,14 @@
 			children = (
 				4C384E2414B29789007B4F48 /* MAD Designer.app */,
 				4C0E785B163B5AEC003B951E /* MAD Viewer.app */,
-				4C94ADE817C3514100037FCB /* MAD Launch Images.app */,
+				4C94ADE817C3514100037FCB /* MAD Designer Launch Images.app */,
 				4C25803D192D090F00BE74EB /* Caching Array Tests.xctest */,
 				4C49D9CC19DCE31400CB4DB8 /* MAD Designer X.app */,
-				4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */,
+				4C49D9E119DCE31400CB4DB8 /* MAD Designer X Tests.xctest */,
 				4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */,
-				4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */,
+				4C49DA1019DCE32E00CB4DB8 /* MAD Viewer X Tests.xctest */,
 				4C8F99A71ACA97C8006D3996 /* MAD Designer WatchKit Extension.appex */,
-				4C8F99B91ACA97C8006D3996 /* MAD Designer WatchKit App.app */,
+				4C8F99B91ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5144,10 +5144,10 @@
 		4C94ADED17C3514200037FCB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4C94ADEE17C3514200037FCB /* MAD Launch Images-Info.plist */,
+				4C94ADEE17C3514200037FCB /* MAD Designer Launch Images-Info.plist */,
 				4C94ADEF17C3514200037FCB /* InfoPlist.strings */,
 				4C94ADF217C3514200037FCB /* main.m */,
-				4C94ADF417C3514200037FCB /* MAD Launch Images-Prefix.pch */,
+				4C94ADF417C3514200037FCB /* MAD Designer Launch Images-Prefix.pch */,
 				4C94ADF817C3514200037FCB /* Default.png */,
 				4C94ADFA17C3514200037FCB /* Default@2x.png */,
 				4C94ADFC17C3514200037FCB /* Default-568h@2x.png */,
@@ -6095,9 +6095,9 @@
 			productReference = 4C49D9CC19DCE31400CB4DB8 /* MAD Designer X.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4C49D9E019DCE31400CB4DB8 /* MAD Designer XTests */ = {
+		4C49D9E019DCE31400CB4DB8 /* MAD Designer X Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */;
+			buildConfigurationList = 4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer X Tests" */;
 			buildPhases = (
 				4C49D9DD19DCE31400CB4DB8 /* Sources */,
 				4C49D9DE19DCE31400CB4DB8 /* Frameworks */,
@@ -6108,9 +6108,9 @@
 			dependencies = (
 				4C49D9E319DCE31400CB4DB8 /* PBXTargetDependency */,
 			);
-			name = "MAD Designer XTests";
+			name = "MAD Designer X Tests";
 			productName = "MAD Designer XTests";
-			productReference = 4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */;
+			productReference = 4C49D9E119DCE31400CB4DB8 /* MAD Designer X Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */ = {
@@ -6130,9 +6130,9 @@
 			productReference = 4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4C49DA0F19DCE32E00CB4DB8 /* MAD Viewer XTests */ = {
+		4C49DA0F19DCE32E00CB4DB8 /* MAD Viewer X Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer XTests" */;
+			buildConfigurationList = 4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer X Tests" */;
 			buildPhases = (
 				4C49DA0C19DCE32E00CB4DB8 /* Sources */,
 				4C49DA0D19DCE32E00CB4DB8 /* Frameworks */,
@@ -6143,9 +6143,9 @@
 			dependencies = (
 				4C49DA1219DCE32E00CB4DB8 /* PBXTargetDependency */,
 			);
-			name = "MAD Viewer XTests";
+			name = "MAD Viewer X Tests";
 			productName = "MAD Viewer XTests";
-			productReference = 4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */;
+			productReference = 4C49DA1019DCE32E00CB4DB8 /* MAD Viewer X Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */ = {
@@ -6178,12 +6178,12 @@
 			);
 			name = "MAD Designer WatchKit App";
 			productName = "MAD Designer WatchKit App";
-			productReference = 4C8F99B91ACA97C8006D3996 /* MAD Designer WatchKit App.app */;
+			productReference = 4C8F99B91ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app */;
 			productType = "com.apple.product-type.application.watchapp";
 		};
-		4C94ADE717C3514100037FCB /* MAD Launch Images */ = {
+		4C94ADE717C3514100037FCB /* MAD Designer Launch Images */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Launch Images" */;
+			buildConfigurationList = 4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Designer Launch Images" */;
 			buildPhases = (
 				4C94ADE417C3514100037FCB /* Sources */,
 				4C94ADE517C3514100037FCB /* Frameworks */,
@@ -6193,9 +6193,9 @@
 			);
 			dependencies = (
 			);
-			name = "MAD Launch Images";
+			name = "MAD Designer Launch Images";
 			productName = "MAD Launch Images";
-			productReference = 4C94ADE817C3514100037FCB /* MAD Launch Images.app */;
+			productReference = 4C94ADE817C3514100037FCB /* MAD Designer Launch Images.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -6265,7 +6265,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD" */;
+			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD Designer" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -6339,12 +6339,12 @@
 				4C0E771F163B5AEC003B951E /* MAD Viewer */,
 				4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
 				4C8F99B81ACA97C8006D3996 /* MAD Designer WatchKit App */,
-				4C94ADE717C3514100037FCB /* MAD Launch Images */,
+				4C94ADE717C3514100037FCB /* MAD Designer Launch Images */,
 				4C25803C192D090F00BE74EB /* Caching Array Tests */,
 				4C49D9CB19DCE31400CB4DB8 /* MAD Designer X */,
-				4C49D9E019DCE31400CB4DB8 /* MAD Designer XTests */,
+				4C49D9E019DCE31400CB4DB8 /* MAD Designer X Tests */,
 				4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */,
-				4C49DA0F19DCE32E00CB4DB8 /* MAD Viewer XTests */,
+				4C49DA0F19DCE32E00CB4DB8 /* MAD Viewer X Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -7147,7 +7147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C8F99B61ACA97C8006D3996 /* Images.xcassets in Resources */,
-				4C8F99BA1ACA97C8006D3996 /* MAD Designer WatchKit App.app in Resources */,
+				4C8F99BA1ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8551,14 +8551,14 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MAD Designer Tests/MAD Designer Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "MAD Designer Tests/MAD Designer Designer Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MAD Designer Tests/MAD Designer Tests-Info.plist";
+				INFOPLIST_FILE = "MAD Designer Tests/MAD Designer Designer Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -8586,10 +8586,10 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MAD Designer Tests/MAD Designer Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "MAD Designer Tests/MAD Designer Designer Tests-Prefix.pch";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MAD Designer Tests/MAD Designer Tests-Info.plist";
+				INFOPLIST_FILE = "MAD Designer Tests/MAD Designer Designer Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -8722,7 +8722,7 @@
 					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -8773,7 +8773,7 @@
 					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -8804,7 +8804,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer X";
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -8830,7 +8830,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer X";
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -8860,7 +8860,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer X Tests";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer X.app/Contents/MacOS/MAD Designer X";
 				VALID_ARCHS = x86_64;
@@ -8889,7 +8889,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer X Tests";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer X.app/Contents/MacOS/MAD Designer X";
 				VALID_ARCHS = x86_64;
@@ -8917,7 +8917,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Viewer X";
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -8942,7 +8942,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Viewer X";
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -8972,7 +8972,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Viewer X Tests";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Viewer X.app/Contents/MacOS/MAD Viewer X";
 				VALID_ARCHS = x86_64;
@@ -9001,7 +9001,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Viewer X Tests";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Viewer X.app/Contents/MacOS/MAD Viewer X";
 				VALID_ARCHS = x86_64;
@@ -9027,7 +9027,7 @@
 				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer Designer WatchKit App";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -9051,7 +9051,7 @@
 				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer Designer WatchKit App";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -9087,7 +9087,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PRODUCT_NAME = "${TARGET_NAME}";
+				PRODUCT_NAME = "MAD Designer WatchKit Extension";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
@@ -9120,7 +9120,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-all_load";
-				PRODUCT_NAME = "${TARGET_NAME}";
+				PRODUCT_NAME = "MAD Designer WatchKit Extension";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
@@ -9134,8 +9134,8 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MAD Launch Images/MAD Launch Images-Prefix.pch";
-				INFOPLIST_FILE = "MAD Launch Images/MAD Launch Images-Info.plist";
+				GCC_PREFIX_HEADER = "MAD Launch Images/MAD Designer Launch Images-Prefix.pch";
+				INFOPLIST_FILE = "MAD Launch Images/MAD Designer Launch Images-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9145,7 +9145,7 @@
 					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer Launch Images";
 				PROVISIONING_PROFILE = "FC1D91C8-9209-4FC4-9DD5-A39B8D5F553A";
 				WRAPPER_EXTENSION = app;
 			};
@@ -9159,8 +9159,8 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MAD Launch Images/MAD Launch Images-Prefix.pch";
-				INFOPLIST_FILE = "MAD Launch Images/MAD Launch Images-Info.plist";
+				GCC_PREFIX_HEADER = "MAD Launch Images/MAD Designer Launch Images-Prefix.pch";
+				INFOPLIST_FILE = "MAD Launch Images/MAD Designer Launch Images-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9169,7 +9169,7 @@
 					/Users/mthomason/Desktop/Reports/Compressor/library/libsybdb,
 					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MAD Designer Launch Images";
 				PROVISIONING_PROFILE = "FC1D91C8-9209-4FC4-9DD5-A39B8D5F553A";
 				WRAPPER_EXTENSION = app;
 			};
@@ -9196,7 +9196,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD" */ = {
+		4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD Designer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C384E4614B29789007B4F48 /* Debug */,
@@ -9223,7 +9223,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */ = {
+		4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer X Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C49D9EB19DCE31400CB4DB8 /* Debug */,
@@ -9241,7 +9241,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer XTests" */ = {
+		4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer X Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C49DA1C19DCE32E00CB4DB8 /* Debug */,
@@ -9268,7 +9268,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Launch Images" */ = {
+		4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Designer Launch Images" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C94AE0817C3514200037FCB /* Debug */,

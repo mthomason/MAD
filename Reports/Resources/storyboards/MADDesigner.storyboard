@@ -2089,7 +2089,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Vs-vH-WcZ">
-                                                    <rect key="frame" x="170" y="7" width="340" height="30"/>
+                                                    <rect key="frame" x="170" y="7" width="340" height="29"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="k9z-Tz-PUK"/>
                                                     </constraints>
