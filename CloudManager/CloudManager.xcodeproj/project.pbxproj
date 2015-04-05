@@ -10,13 +10,13 @@
 		4C37E0FE1ACC83A500B4BC0D /* MADMetaData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46FAE1AC65024007C0A82 /* MADMetaData.h */; };
 		4C37E0FF1ACC83AD00B4BC0D /* MACloudManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46FA81AC64F94007C0A82 /* MACloudManager.h */; };
 		4C37E1001ACC83B400B4BC0D /* MADMetadataQueryManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46FAB1AC64FD3007C0A82 /* MADMetadataQueryManager.h */; };
-		4CA27EE31ACCECC400697AB6 /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */; };
 		4CF46F681AC64BA5007C0A82 /* CloudManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF46F671AC64BA5007C0A82 /* CloudManager.h */; };
 		4CF46F701AC64BA5007C0A82 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F641AC64BA5007C0A82 /* libCloudManager.a */; };
 		4CF46FAA1AC64F94007C0A82 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FA91AC64F94007C0A82 /* MACloudManager.m */; };
 		4CF46FAD1AC64FD3007C0A82 /* MADMetadataQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FAC1AC64FD3007C0A82 /* MADMetadataQueryManager.m */; };
 		4CF46FB01AC65024007C0A82 /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FAF1AC65024007C0A82 /* MADMetaData.m */; };
 		4CF46FB61AC65520007C0A82 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FB51AC65520007C0A82 /* Test_Cloud.m */; };
+		4CF8892E1AD1C22600ED21FC /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,9 +59,10 @@
 		4CF46FAE1AC65024007C0A82 /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaData.h; sourceTree = "<group>"; };
 		4CF46FAF1AC65024007C0A82 /* MADMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaData.m; sourceTree = "<group>"; };
 		4CF46FB51AC65520007C0A82 /* Test_Cloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
-		4CF889211AD1BEA300ED21FC /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../CocoaExtensions/CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
-		4CF889221AD1BEA300ED21FC /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../CocoaExtensions/CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
-		4CF889231AD1BEA300ED21FC /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../CocoaExtensions/CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
+		4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
+		4CF8892F1AD1C26400ED21FC /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
+		4CF889301AD1C26400ED21FC /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4CF889311AD1C26400ED21FC /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CA27EE31ACCECC400697AB6 /* libCocoaExtensions.a in Frameworks */,
+				4CF8892E1AD1C22600ED21FC /* libCocoaExtensions.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,9 +96,9 @@
 		4C37E0F31ACB286300B4BC0D /* libCocoaExtentions */ = {
 			isa = PBXGroup;
 			children = (
-				4CF889211AD1BEA300ED21FC /* CGGeometry+Extras.h */,
-				4CF889221AD1BEA300ED21FC /* NSFileManager+Common.h */,
-				4CF889231AD1BEA300ED21FC /* NSURL+Document.h */,
+				4CF8892F1AD1C26400ED21FC /* CGGeometry+Extras.h */,
+				4CF889301AD1C26400ED21FC /* NSFileManager+Common.h */,
+				4CF889311AD1C26400ED21FC /* NSURL+Document.h */,
 				4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */,
 			);
 			name = libCocoaExtentions;
@@ -106,6 +107,7 @@
 		4CF46F5B1AC64BA5007C0A82 = {
 			isa = PBXGroup;
 			children = (
+				4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */,
 				4C37E0F21ACB285800B4BC0D /* Resources */,
 				4CF46F661AC64BA5007C0A82 /* CloudManager */,
 				4CF46F731AC64BA5007C0A82 /* CloudManagerTests */,
@@ -348,6 +350,7 @@
 					"$(inherited)",
 					"/Users/mthomason/Desktop/Reports/Reports/libCocoaExtension/CocoaExtentions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -362,6 +365,7 @@
 					"$(inherited)",
 					"/Users/mthomason/Desktop/Reports/Reports/libCocoaExtension/CocoaExtentions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
