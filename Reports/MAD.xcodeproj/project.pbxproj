@@ -436,7 +436,6 @@
 		4C3727DC168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C3727DD168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C37E0F81ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */; };
-		4C37E1021ACC83C800B4BC0D /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C37E1011ACC83C800B4BC0D /* libCloudManager.a */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -510,7 +509,6 @@
 		4C4AC1B51AD1104F00D4C461 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C4AC1C81AD1146200D4C461 /* MTNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA60E12197044CD00714AFF /* MTNotificationDidFormatPage.m */; };
-		4C4AC1CA1AD1148200D4C461 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4AC1C91AD1148200D4C461 /* libCloudManager.a */; };
 		4C4AC1CB1AD114B100D4C461 /* MADReportDesignerSectionElementLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA056331A1EF82C002A8313 /* MADReportDesignerSectionElementLayoutManager.m */; };
 		4C4AC1CD1AD1161300D4C461 /* MADocumentState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40EC0719349A7A00F12AAC /* MADocumentState.m */; };
 		4C4AC1CE1AD1163D00D4C461 /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD718FADA40009F234F /* MTDataTable.m */; };
@@ -1797,6 +1795,9 @@
 		4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
 		4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
 		4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
+		4CF889251AD1BED800ED21FC /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF889241AD1BED800ED21FC /* libCloudManager.a */; };
+		4CF889271AD1BEE300ED21FC /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF889261AD1BEE300ED21FC /* libCloudManager.a */; };
+		4CF889291AD1BEED00ED21FC /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF889281AD1BEED00ED21FC /* libCloudManager.a */; };
 		4CF8D4191685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
 		4CF8D41A1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
 		4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2293,7 +2294,6 @@
 		4C37E0F41ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeDocumentsLocal.h; sourceTree = "<group>"; };
 		4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeDocumentsLocal.m; sourceTree = "<group>"; };
 		4C37E0F91ACC791600B4BC0D /* MAD Designer WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Designer WatchKit Extension.entitlements"; sourceTree = "<group>"; };
-		4C37E1011ACC83C800B4BC0D /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "libCloudManager/CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
 		4C384E2414B29789007B4F48 /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2462,7 +2462,6 @@
 		4C4A7089197CC21100AF98EC /* MTActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTActivityIndicator.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C4A708C197D5F0D00AF98EC /* MADActivityProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityProtocol.h; sourceTree = "<group>"; };
 		4C4AC1C61AD112CD00D4C461 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../CocoaExtensions/CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
-		4C4AC1C91AD1148200D4C461 /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "libCloudManager/CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
 		4C4C78BE16960C23000ADD1D /* UIColor+Gradients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Gradients.h"; sourceTree = "<group>"; };
 		4C4C78BF16960C23000ADD1D /* UIColor+Gradients.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Gradients.m"; sourceTree = "<group>"; };
 		4C4C78D2169624A3000ADD1D /* UIImage+Resizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resizable.h"; sourceTree = "<group>"; };
@@ -3353,9 +3352,6 @@
 		4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Scrimpter.xcodeproj; path = Scrimpter/Scrimpter/Scrimpter.xcodeproj; sourceTree = "<group>"; };
 		4CF3E77819F04D2D0064DA5F /* MADSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSearchBar.h; sourceTree = "<group>"; };
 		4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSearchBar.m; sourceTree = "<group>"; };
-		4CF46FB21AC652E3007C0A82 /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetaData.h; path = libCloudManager/CloudManager/CloudManager/MADMetaData.h; sourceTree = "<group>"; };
-		4CF46FB31AC652E3007C0A82 /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = libCloudManager/CloudManager/CloudManager/MACloudManager.h; sourceTree = "<group>"; };
-		4CF46FB41AC652E3007C0A82 /* MADMetadataQueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetadataQueryManager.h; path = libCloudManager/CloudManager/CloudManager/MADMetadataQueryManager.h; sourceTree = "<group>"; };
 		4CF531971A08092F00511BEF /* MADToolboxPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxPresentationController.h; sourceTree = "<group>"; };
 		4CF531981A08092F00511BEF /* MADToolboxTransitioner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxTransitioner.h; sourceTree = "<group>"; };
 		4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxPresentationController.m; sourceTree = "<group>"; };
@@ -3367,6 +3363,12 @@
 		4CF8671316D8259300F716A8 /* MTTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTitleView.h; sourceTree = "<group>"; };
 		4CF8671416D8259400F716A8 /* MTTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTTitleView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CF889201AD1BBE600ED21FC /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hack.h"; path = "../CocoaExtensions/CocoaExtensions/CocoaExtensions/UIDevice+Hack.h"; sourceTree = "<group>"; };
+		4CF889241AD1BED800ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
+		4CF889261AD1BEE300ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
+		4CF889281AD1BEED00ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
+		4CF8892A1AD1BFDB00ED21FC /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetaData.h; path = ../CloudManager/CloudManager/MADMetaData.h; sourceTree = "<group>"; };
+		4CF8892B1AD1BFDB00ED21FC /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = ../CloudManager/CloudManager/MACloudManager.h; sourceTree = "<group>"; };
+		4CF8892C1AD1BFDB00ED21FC /* MADMetadataQueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetadataQueryManager.h; path = ../CloudManager/CloudManager/MADMetadataQueryManager.h; sourceTree = "<group>"; };
 		4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCollectionViewCellElement.xib; sourceTree = "<group>"; };
 		4CF8D41E168502D700357B1E /* MTCollectionViewCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellElement.h; sourceTree = "<group>"; };
 		4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellElement.m; sourceTree = "<group>"; };
@@ -3388,6 +3390,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF889271AD1BEE300ED21FC /* libCloudManager.a in Frameworks */,
 				4C83948B1AC886FF0055EDE9 /* libMysqlClientObjC.a in Frameworks */,
 				4CC7F6B31962A2F500A84FC0 /* libScrimpter.a in Frameworks */,
 				4CDA77691825FFCD00E462F6 /* libBarcodes.a in Frameworks */,
@@ -3426,7 +3429,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C37E1021ACC83C800B4BC0D /* libCloudManager.a in Frameworks */,
+				4CF889251AD1BED800ED21FC /* libCloudManager.a in Frameworks */,
 				4C8F998A1AC9E1FF006D3996 /* libSqlite.a in Frameworks */,
 				4CC7F6A91962A2EF00A84FC0 /* libScrimpter.a in Frameworks */,
 				4CB56EE31AC686CB00756775 /* libMysqlClientObjC.a in Frameworks */,
@@ -3490,11 +3493,11 @@
 				4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */,
 				4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */,
 				4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */,
+				4CF889291AD1BEED00ED21FC /* libCloudManager.a in Frameworks */,
 				4C4AC2681AD11DF900D4C461 /* libMysqlClientObjC.a in Frameworks */,
 				4C4AC2341AD11D4600D4C461 /* liblibTdsClient.a in Frameworks */,
 				4C4AC22D1AD11C7600D4C461 /* libSqlite.a in Frameworks */,
 				4C4AC1E31AD118C100D4C461 /* libMTDataStrutures.a in Frameworks */,
-				4C4AC1CA1AD1148200D4C461 /* libCloudManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3997,17 +4000,9 @@
 			name = "Database Driver Setup";
 			sourceTree = "<group>";
 		};
-		4C37E0B51ACB259500B4BC0D /* libCommon */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = libCommon;
-			sourceTree = "<group>";
-		};
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */,
 				4C7AC2A51ACD01870022C0AD /* MADConstants.h */,
 				4C7AC2A61ACD01870022C0AD /* MADConstants.m */,
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
@@ -4049,9 +4044,10 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C4AC1C91AD1148200D4C461 /* libCloudManager.a */,
+				4CF889281AD1BEED00ED21FC /* libCloudManager.a */,
+				4CF889261AD1BEE300ED21FC /* libCloudManager.a */,
+				4CF889241AD1BED800ED21FC /* libCloudManager.a */,
 				4CA27EE71ACCEDAF00697AB6 /* libCocoaExtensions.a */,
-				4C37E1011ACC83C800B4BC0D /* libCloudManager.a */,
 				4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
 				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
@@ -5281,13 +5277,6 @@
 			name = "Document Icons";
 			sourceTree = "<group>";
 		};
-		4CB5680A1AC662B700756775 /* libRptq */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = libRptq;
-			sourceTree = "<group>";
-		};
 		4CB56DC71AC6835000756775 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -5865,13 +5854,6 @@
 			name = "Table View Cells";
 			sourceTree = "<group>";
 		};
-		4CE19B9B1AC9C58800200578 /* libSqlite */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = libSqlite;
-			sourceTree = "<group>";
-		};
 		4CEBFA331760EF8B00FFA4F4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -6003,9 +5985,7 @@
 		4CF46F5A1AC64A2F007C0A82 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4C37E0B51ACB259500B4BC0D /* libCommon */,
-				4CE19B9B1AC9C58800200578 /* libSqlite */,
-				4CB5680A1AC662B700756775 /* libRptq */,
+				4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */,
 				4CF46F871AC64BBE007C0A82 /* libCloudManager */,
 				4CC7F6B51962A44000A84FC0 /* libScrimpter */,
 				4C3A969E189F7DFC007AF476 /* libSqlite3 */,
@@ -6021,9 +6001,9 @@
 		4CF46F871AC64BBE007C0A82 /* libCloudManager */ = {
 			isa = PBXGroup;
 			children = (
-				4CF46FB21AC652E3007C0A82 /* MADMetaData.h */,
-				4CF46FB31AC652E3007C0A82 /* MACloudManager.h */,
-				4CF46FB41AC652E3007C0A82 /* MADMetadataQueryManager.h */,
+				4CF8892A1AD1BFDB00ED21FC /* MADMetaData.h */,
+				4CF8892B1AD1BFDB00ED21FC /* MACloudManager.h */,
+				4CF8892C1AD1BFDB00ED21FC /* MADMetadataQueryManager.h */,
 			);
 			name = libCloudManager;
 			sourceTree = "<group>";
@@ -8488,6 +8468,7 @@
 					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/libMysqlClient/MysqlClient",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -8537,6 +8518,7 @@
 					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/libMysqlClient/MysqlClient",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -8737,6 +8719,7 @@
 					"$(PROJECT_DIR)/libCocoaExtension/CocoaExtentions",
 					"$(PROJECT_DIR)/libCloudManager/CloudManager",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8787,6 +8770,7 @@
 					"$(PROJECT_DIR)/libCocoaExtension/CocoaExtentions",
 					"$(PROJECT_DIR)/libCloudManager/CloudManager",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -9099,6 +9083,7 @@
 					"$(inherited)",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/libCloudManager/CloudManager/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "-all_load";
@@ -9131,6 +9116,7 @@
 					"$(inherited)",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/libCloudManager/CloudManager/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-all_load";

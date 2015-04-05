@@ -6,8 +6,3 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "CloudManager.h"
-
-@implementation CloudManager
-
-@end
