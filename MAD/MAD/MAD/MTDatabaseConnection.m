@@ -20,6 +20,10 @@
 #import "MTQuery.h"
 #import "NSString+Extras.h"
 
+NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
+NSString * const MADIdentifierDatabaseTDS       = @"TDS";
+NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
+
 @interface MTDatabaseConnection ()
 
 @end

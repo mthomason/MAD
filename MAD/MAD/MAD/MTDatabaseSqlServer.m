@@ -1561,11 +1561,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseSqlServer identifier];
+    return MADIdentifierDatabaseTDS;
 }
 
 + (NSString *)identifier {
-    return @"TDS";
+    return MADIdentifierDatabaseTDS;
 }
 
 - (id)connectionSettings {

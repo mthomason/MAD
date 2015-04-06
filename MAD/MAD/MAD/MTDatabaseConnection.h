@@ -11,6 +11,10 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MADIdentifierDatabaseMySQL;
+extern NSString * const MADIdentifierDatabaseTDS;
+extern NSString * const MADIdentifierDatabaseSqlite3;
+
 @interface MTDatabaseConnection : NSObject
 
 @property (nonatomic, strong) NSString  *databaseTypeIdentifier;

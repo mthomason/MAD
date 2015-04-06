@@ -17,7 +17,7 @@
     NSString *identifier = [connection databaseTypeIdentifier];
     
     id result = nil;
-    if ([[MTDatabaseSqlite3 identifier] isEqualToString:identifier]) {
+    if ([MADIdentifierDatabaseSqlite3 isEqualToString:identifier]) {
         
         result = [[MTDatabaseSqlite3 alloc] init];
     }

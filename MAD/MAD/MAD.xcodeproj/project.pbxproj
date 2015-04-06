@@ -196,6 +196,10 @@
 		4C8CDC971AD26EEB00B7B9EA /* MTActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */; };
 		4C8CDCF91AD27D8A00B7B9EA /* MTCachingArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */; };
 		4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */; };
+		4C8CDD061AD2F43600B7B9EA /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDCFF1AD2F43600B7B9EA /* RptqFieldSelectorManager.m */; };
+		4C8CDD071AD2F43600B7B9EA /* RptqQueryCache+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD011AD2F43600B7B9EA /* RptqQueryCache+Extras.m */; };
+		4C8CDD081AD2F43600B7B9EA /* RptqQuerySort+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */; };
+		4C8CDD091AD2F43600B7B9EA /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -749,6 +753,14 @@
 		4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActivityIndicator.m; sourceTree = "<group>"; };
 		4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCachingArrayTest.m; sourceTree = "<group>"; };
 		4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSqlite.a; path = "../../Reports/libSqlite/Sqlite/build/Debug-iphoneos/libSqlite.a"; sourceTree = "<group>"; };
+		4C8CDCFE1AD2F43600B7B9EA /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqFieldSelectorManager.h; path = rptq/RptqFieldSelectorManager.h; sourceTree = "<group>"; };
+		4C8CDCFF1AD2F43600B7B9EA /* RptqFieldSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqFieldSelectorManager.m; path = rptq/RptqFieldSelectorManager.m; sourceTree = "<group>"; };
+		4C8CDD001AD2F43600B7B9EA /* RptqQueryCache+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryCache+Extras.h"; path = "rptq/RptqQueryCache+Extras.h"; sourceTree = "<group>"; };
+		4C8CDD011AD2F43600B7B9EA /* RptqQueryCache+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryCache+Extras.m"; path = "rptq/RptqQueryCache+Extras.m"; sourceTree = "<group>"; };
+		4C8CDD021AD2F43600B7B9EA /* RptqQuerySort+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQuerySort+Extras.h"; path = "rptq/RptqQuerySort+Extras.h"; sourceTree = "<group>"; };
+		4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuerySort+Extras.m"; path = "rptq/RptqQuerySort+Extras.m"; sourceTree = "<group>"; };
+		4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqRelationship+Extras.h"; path = "rptq/RptqRelationship+Extras.h"; sourceTree = "<group>"; };
+		4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -799,6 +811,7 @@
 		4C8CD9601AD1CDC800B7B9EA /* MAD */ = {
 			isa = PBXGroup;
 			children = (
+				4C8CDCFD1AD2866000B7B9EA /* Formatters */,
 				4C8CDCA51AD276DA00B7B9EA /* Database */,
 				4C8CDCA41AD276C200B7B9EA /* DataTable */,
 				4C8CDBD91AD2647400B7B9EA /* MySQL */,
@@ -808,12 +821,14 @@
 				4C8CD9B81AD1D70600B7B9EA /* Rptq */,
 				4C8CD9851AD1CE4200B7B9EA /* MAD.h */,
 				4C8CDBC31AD254D600B7B9EA /* MTAlignment.h */,
+				4C8CDBBF1AD253C500B7B9EA /* MTAggregateFunctionInputType.h */,
 				4C8CDADA1AD2454100B7B9EA /* MTAggregateFunctionType.h */,
 				4C8CDADB1AD2458800B7B9EA /* MADAggregateGroupByType.h */,
 				4C8CDB2B1AD24ED500B7B9EA /* MADDocumentObjectType.h */,
+				4C8CD9891AD1CEAF00B7B9EA /* MADocument.h */,
+				4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */,
 				4C8CDBAF1AD2514700B7B9EA /* MADArrayCaching.h */,
 				4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */,
-				4C8CDBBF1AD253C500B7B9EA /* MTAggregateFunctionInputType.h */,
 				4C8CDBB51AD252B400B7B9EA /* MTErrorContainer.h */,
 				4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */,
 				4C8CDC921AD26DC700B7B9EA /* MTActivityItemProviderPdf.h */,
@@ -828,14 +843,6 @@
 				4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */,
 				4C8CDBC41AD2552C00B7B9EA /* MTFont.h */,
 				4C8CDBC51AD2552C00B7B9EA /* MTFont.m */,
-				4C8CDBA91AD250AE00B7B9EA /* MTTableFormatter.h */,
-				4C8CDBAA1AD250AE00B7B9EA /* MTTableFormatter.m */,
-				4C8CDBA01AD2507200B7B9EA /* MTReportFormatter.h */,
-				4C8CDBA11AD2507200B7B9EA /* MTReportFormatter.m */,
-				4C8CDBA21AD2507200B7B9EA /* MTReportFormatterCache.h */,
-				4C8CDBA31AD2507200B7B9EA /* MTReportFormatterCache.m */,
-				4C8CDBA41AD2507200B7B9EA /* MTReportFormatterPageDefinition.h */,
-				4C8CDBA51AD2507200B7B9EA /* MTReportFormatterPageDefinition.m */,
 				4C8CDC871AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.h */,
 				4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */,
 				4C8CDB021AD24D7A00B7B9EA /* MADLinkType.h */,
@@ -857,16 +864,10 @@
 				4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */,
 				4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */,
 				4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */,
-				4C8CDA9E1AD1DF3E00B7B9EA /* MTDatabaseField.h */,
-				4C8CDA9F1AD1DF3E00B7B9EA /* MTDatabaseField.m */,
-				4C8CDAA01AD1DF3E00B7B9EA /* MTDatabaseTable.h */,
-				4C8CDAA11AD1DF3E00B7B9EA /* MTDatabaseTable.m */,
 				4C8CD9961AD1D1AD00B7B9EA /* MADConstants.h */,
 				4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */,
 				4C8CD9921AD1D10C00B7B9EA /* MADSortOrder.h */,
 				4C8CD9901AD1D08500B7B9EA /* MADDataProtocol.h */,
-				4C8CD9891AD1CEAF00B7B9EA /* MADocument.h */,
-				4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */,
 				4C8CD98F1AD1D03000B7B9EA /* MTCacheProtocol.h */,
 				4C8CD98E1AD1D03000B7B9EA /* MTReportFormatterDataSource.h */,
 				4C8CD9911AD1D0E000B7B9EA /* MADActivityProtocol.h */,
@@ -951,6 +952,14 @@
 				4C8CDAE91AD24BD000B7B9EA /* RptqDocument+Extras.m */,
 				4C8CDAED1AD24C5100B7B9EA /* RptqDocumentSection+Extras.h */,
 				4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */,
+				4C8CDCFE1AD2F43600B7B9EA /* RptqFieldSelectorManager.h */,
+				4C8CDCFF1AD2F43600B7B9EA /* RptqFieldSelectorManager.m */,
+				4C8CDD001AD2F43600B7B9EA /* RptqQueryCache+Extras.h */,
+				4C8CDD011AD2F43600B7B9EA /* RptqQueryCache+Extras.m */,
+				4C8CDD021AD2F43600B7B9EA /* RptqQuerySort+Extras.h */,
+				4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */,
+				4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */,
+				4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */,
 				4C8CDAF31AD24CBF00B7B9EA /* RptqQuery+Extras.h */,
 				4C8CDAF41AD24CBF00B7B9EA /* RptqQuery+Extras.m */,
 				4C8CDAF61AD24D2A00B7B9EA /* RptqQueryField+Extras.h */,
@@ -1508,6 +1517,10 @@
 		4C8CDCA51AD276DA00B7B9EA /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				4C8CDAA01AD1DF3E00B7B9EA /* MTDatabaseTable.h */,
+				4C8CDAA11AD1DF3E00B7B9EA /* MTDatabaseTable.m */,
+				4C8CDA9E1AD1DF3E00B7B9EA /* MTDatabaseField.h */,
+				4C8CDA9F1AD1DF3E00B7B9EA /* MTDatabaseField.m */,
 				4C8CDA921AD1DED600B7B9EA /* MTDatabase.h */,
 				4C8CDA931AD1DED600B7B9EA /* MTDatabase.m */,
 				4C8CDA951AD1DF1400B7B9EA /* MTDatabaseMySql.h */,
@@ -1536,6 +1549,21 @@
 				4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */,
 			);
 			name = libSqlite;
+			sourceTree = "<group>";
+		};
+		4C8CDCFD1AD2866000B7B9EA /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDBA91AD250AE00B7B9EA /* MTTableFormatter.h */,
+				4C8CDBAA1AD250AE00B7B9EA /* MTTableFormatter.m */,
+				4C8CDBA01AD2507200B7B9EA /* MTReportFormatter.h */,
+				4C8CDBA11AD2507200B7B9EA /* MTReportFormatter.m */,
+				4C8CDBA21AD2507200B7B9EA /* MTReportFormatterCache.h */,
+				4C8CDBA31AD2507200B7B9EA /* MTReportFormatterCache.m */,
+				4C8CDBA41AD2507200B7B9EA /* MTReportFormatterPageDefinition.h */,
+				4C8CDBA51AD2507200B7B9EA /* MTReportFormatterPageDefinition.m */,
+			);
+			name = Formatters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1631,6 +1659,7 @@
 				4C8CDBFC1AD2648700B7B9EA /* MysqlLiteral.m in Sources */,
 				4C8CDA7E1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.m in Sources */,
 				4C8CD9EE1AD1D72E00B7B9EA /* RptqDatabase.m in Sources */,
+				4C8CDD071AD2F43600B7B9EA /* RptqQueryCache+Extras.m in Sources */,
 				4C8CDA7C1AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.m in Sources */,
 				4C8CDBB91AD252B400B7B9EA /* MTErrorContainer.m in Sources */,
 				4C8CDBA61AD2507200B7B9EA /* MTReportFormatter.m in Sources */,
@@ -1638,6 +1667,7 @@
 				4C8CDA941AD1DED600B7B9EA /* MTDatabase.m in Sources */,
 				4C8CDBD81AD2567400B7B9EA /* NSManagedObjectID+Extras.m in Sources */,
 				4C8CDAE71AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m in Sources */,
+				4C8CDD081AD2F43600B7B9EA /* RptqQuerySort+Extras.m in Sources */,
 				4C8CDB811AD2500800B7B9EA /* MTPaperA6.m in Sources */,
 				4C8CD9FC1AD1D72E00B7B9EA /* RptqDocumentSection.m in Sources */,
 				4C8CDB891AD2500800B7B9EA /* MTPaperB3.m in Sources */,
@@ -1735,8 +1765,10 @@
 				4C8CDBA81AD2507200B7B9EA /* MTReportFormatterPageDefinition.m in Sources */,
 				4C8CDAAA1AD1E04700B7B9EA /* NSData+Comparson.m in Sources */,
 				4C8CDB7B1AD2500800B7B9EA /* MTPaperA0.m in Sources */,
+				4C8CDD091AD2F43600B7B9EA /* RptqRelationship+Extras.m in Sources */,
 				4C8CDA721AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.m in Sources */,
 				4C8CD9F21AD1D72E00B7B9EA /* RptqDocumentObject.m in Sources */,
+				4C8CDD061AD2F43600B7B9EA /* RptqFieldSelectorManager.m in Sources */,
 				4C8CDA011AD1D72E00B7B9EA /* RptqQueryGroup.m in Sources */,
 				4C8CDAFE1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m in Sources */,
 				4C8CDA761AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.m in Sources */,

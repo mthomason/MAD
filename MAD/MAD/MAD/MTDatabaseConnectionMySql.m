@@ -26,11 +26,11 @@
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseConnectionMySql identifier];
+    return MADIdentifierDatabaseMySQL;
 }
 
 + (NSString *)identifier {
-    return @"MySQL";
+    return MADIdentifierDatabaseMySQL;
 }
 
 @end

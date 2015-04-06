@@ -35,15 +35,15 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     NSString *identifier = [connection databaseTypeIdentifier];
     
     id result = nil;
-    if ([[MTDatabaseMySql identifier] isEqualToString:identifier]) {
+    if ([MADIdentifierDatabaseMySQL isEqualToString:identifier]) {
         
         result = [[MTDatabaseMySql alloc] init];
         
-    } else if ([[MTDatabaseSqlServer identifier] isEqualToString:identifier]) {
+    } else if ([MADIdentifierDatabaseTDS isEqualToString:identifier]) {
         
         result = [[MTDatabaseSqlServer alloc] init];
         
-    } else if ([[MTDatabaseSqlite3 identifier] isEqualToString:identifier]) {
+    } else if ([MADIdentifierDatabaseSqlite3 isEqualToString:identifier]) {
         
         result = [[MTDatabaseSqlite3 alloc] init];
     }

@@ -22,14 +22,13 @@
 	if (self) {
 
         NSMutableArray *rh = [[NSMutableArray alloc] init];
-		[self setRowHeights: rh];
-        
-        [self setTable: sectionTable];
+		self.rowHeights = rh;
+        self.table = sectionTable;
 
-        NSSet *fieldsSet = [[self table] hasQueryFields];
-        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
-        NSArray *fieldsArray = [fieldsSet sortedArrayUsingDescriptors:@[namesAccending]];
-
+        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name"
+                                                                       ascending:YES];
+        NSArray *sortDescriptors = @[namesAccending];
+        NSArray *fieldsArray = [self.table.hasQueryFields sortedArrayUsingDescriptors:sortDescriptors];
         NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];
         [self setFields: sectionFields];
 	}
@@ -38,35 +37,35 @@
 
 
 - (NSUInteger)countOfRowHeights {
-	return [_rowHeights count];
+	return [self.rowHeights count];
 }
 
 - (id)objectInRowHeightsAtIndex:(NSUInteger)idx {
-	return _rowHeights[idx];
+	return self.rowHeights[idx];
 }
 
 - (void)insertObject:(id)anObject inRowHeightsAtIndex:(NSUInteger)idx {
-	[_rowHeights insertObject:anObject atIndex:idx];
+	[self.rowHeights insertObject:anObject atIndex:idx];
 }
 
 - (void)insertRowHeights:(NSArray *)rowHeightArray atIndexes:(NSIndexSet *)indexes {
-	[_rowHeights insertObjects:rowHeightArray atIndexes:indexes];
+	[self.rowHeights insertObjects:rowHeightArray atIndexes:indexes];
 }
 
 - (void)removeObjectFromRowHeightsAtIndex:(NSUInteger)idx {
-	[_rowHeights removeObjectAtIndex:idx];
+	[self.rowHeights removeObjectAtIndex:idx];
 }
 
 - (void)removeRowHeightsAtIndexes:(NSIndexSet *)indexes {
-	[_rowHeights removeObjectsAtIndexes:indexes];
+	[self.rowHeights removeObjectsAtIndexes:indexes];
 }
 
 - (void)replaceObjectInRowHeightsAtIndex:(NSUInteger)idx withObject:(id)anObject {
-	_rowHeights[idx] = anObject;
+	self.rowHeights[idx] = anObject;
 }
 
 - (void)replaceRowHeightsAtIndexes:(NSIndexSet *)indexes withRowHeights:(NSArray *)rowHeightArray {
-	[_rowHeights replaceObjectsAtIndexes:indexes withObjects:rowHeightArray];
+	[self.rowHeights replaceObjectsAtIndexes:indexes withObjects:rowHeightArray];
 }
 
 @end

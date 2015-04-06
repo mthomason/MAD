@@ -15,6 +15,7 @@
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
+#import "MTDatabaseConnection.h"
 
 @implementation RptqUserCredentals (Extras)
 
@@ -80,15 +81,15 @@
 
         case MNSDatabaseTypeUnknown: {
             
-            if ([[self database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
+            if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseMySQL]) {
                 result = [self mysql_database];
                 [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
                 
-            } else if ([[self database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+            } else if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseTDS]) {
                 result = [self tds_database];
                 [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
                 
-            } else if ([[self database_driver_type] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+            } else if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseSqlite3]) {
                 result = [self mysql_database];
                 [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
             }

@@ -31,11 +31,11 @@
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseConnectionSqlServer identifier];
+    return MADIdentifierDatabaseTDS;
 }
 
 + (NSString *)identifier {
-    return @"TDS";
+    return MADIdentifierDatabaseTDS;
 }
 
 @end

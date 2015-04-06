@@ -18,8 +18,7 @@
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
+#import "MTDatabaseConnection.h"
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 
@@ -45,7 +44,7 @@
     RptqUserCredentals *userCredentals = connections[0];
     NSString *databaseDriverType = [userCredentals database_driver_type];
 
-    if ([databaseDriverType isEqualToString:[MTDatabaseMySql identifier]]) {
+    if ([databaseDriverType isEqualToString:MADIdentifierDatabaseMySQL]) {
 
         [[self tableViewCellEquiJoin] setUserInteractionEnabled:YES];
         [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
@@ -59,7 +58,7 @@
 
 
         
-    } else if ([databaseDriverType isEqualToString:[MTDatabaseSqlServer identifier]]) {
+    } else if ([databaseDriverType isEqualToString:MADIdentifierDatabaseTDS]) {
         
         [[self tableViewCellEquiJoin] setUserInteractionEnabled:YES];
         [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];

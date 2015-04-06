@@ -29,11 +29,11 @@
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseConnectionSqlite3 identifier];
+    return MADIdentifierDatabaseSqlite3;
 }
 
 + (NSString *)identifier {
-    return @"Sqlite 3";
+    return MADIdentifierDatabaseSqlite3;
 }
 
 @end

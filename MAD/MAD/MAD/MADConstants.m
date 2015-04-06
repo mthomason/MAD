@@ -12,4 +12,3 @@ NSString * const MADIdentifierGroup                                 = @"group.ev
 NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
 NSString * const MADTrademark                                       = @"MAD";
-

@@ -10,14 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import <CoreData/CoreData.h>
-#import "MTDatabaseConnection.h"
 #import "RptqDocument+Extras.h"
+#import "MTDatabaseConnection.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTBarcode.h"
-//#import "Constants.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqDocumentSection.h"
@@ -52,10 +50,6 @@
 #import "RptqDocumentObjectLabel.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectLabelLink.h"
-
-#import "SectionEnumerator.h"
-
-//#import "UIApplication+Extras.h"
 
 #import "MTErrorContainer.h"
 #import "MTDatabaseTable.h"
@@ -332,7 +326,7 @@
     __weak RptqUserCredentals *userCredentals = [RptqUserCredentals userCredentalsFactory: managedObjectContext];
     [userCredentals setDatabase_driver_type: [database identifier]];
     
-    if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
+    if ([[database identifier] isEqualToString:MADIdentifierDatabaseMySQL]) {
         
         MTDatabaseConnection *connectionSettings = [database databaseConnection];
 
@@ -346,7 +340,7 @@
             [userCredentals setMysql_password:  [connectionSettings password]];
         }
 
-    } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+    } else if ([[database identifier] isEqualToString:MADIdentifierDatabaseTDS]) {
         MTDatabaseConnection *connectionSettings = [database databaseConnection];
 
         if (connectionSettings != nil) {
@@ -360,7 +354,7 @@
             [userCredentals setTds_port:        port];
         }
 
-    } else if ([[database identifier] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+    } else if ([[database identifier] isEqualToString:MADIdentifierDatabaseSqlite3]) {
 
         MTDatabaseConnection *connectionSettings = [database databaseConnection];
         if (connectionSettings != nil) {

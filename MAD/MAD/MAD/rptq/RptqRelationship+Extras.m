@@ -23,16 +23,16 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqRelationship class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    request.sortDescriptors = @[sortDescriptor];
+    request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqRelationship *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = ((RptqRelationship *)fetchResults.lastObject).identifier.integerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
+    NSNumber *identifierWrapper = @(identifier);
+    self.identifier = identifierWrapper;
     
 }
 

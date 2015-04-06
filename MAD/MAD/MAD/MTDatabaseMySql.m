@@ -434,11 +434,11 @@
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseConnectionMySql identifier];
+    return MADIdentifierDatabaseMySQL;
 }
 
 + (NSString *)identifier {
-    return [MTDatabaseConnectionMySql identifier];
+    return MADIdentifierDatabaseMySQL;
 }
 
 + (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {

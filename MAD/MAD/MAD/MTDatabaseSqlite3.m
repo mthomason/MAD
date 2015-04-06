@@ -689,11 +689,11 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 
 
 - (NSString *)identifier {
-    return [MTDatabaseConnectionSqlite3 identifier];
+    return MADIdentifierDatabaseSqlite3;
 }
 
 + (NSString *)identifier {
-    return [MTDatabaseConnectionSqlite3 identifier];
+    return MADIdentifierDatabaseSqlite3;
 }
 
 + (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {

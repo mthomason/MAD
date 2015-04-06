@@ -14,9 +14,7 @@
 #import "MADVibrantTableViewCellImage.h"
 #import "MTConnectionViewController.h"
 #import "UIDevice+Hack.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
-#import "MTDatabaseSqlite3.h"
+#import "MTDatabaseConnection.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
@@ -97,8 +95,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
             break;
     }
     [UITableViewCell appearance].textLabel.highlightedTextColor = [UIColor tintColorBlue];
-//    cell.textLabel.highlightedTextColor = ;
-
     return cell;
 }
 
@@ -138,17 +134,17 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
-        dbId = [MTDatabaseMySql identifier];
+        dbId = MADIdentifierDatabaseMySQL;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
-        dbId = [MTDatabaseSqlServer identifier];
+        dbId = MADIdentifierDatabaseTDS;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
-        dbId = [MTDatabaseSqlite3 identifier];
+        dbId = MADIdentifierDatabaseSqlite3;
 
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {

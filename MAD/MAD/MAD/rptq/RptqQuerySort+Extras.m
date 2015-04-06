@@ -32,8 +32,7 @@
         RptqQuerySort *lastObject = [fetchResults lastObject];
         identifier = [[lastObject identifier] integerValue] + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
+    self.identifier = @(identifier);
 }
 
 - (void)awakeFromFetch {
@@ -67,8 +66,7 @@
     if ([self isEqual:sender]) {
         result = YES;
     } else {
-        RptqQuerySort *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:((RptqQuerySort *)sender).identifier];
     }
     return result;
 }
