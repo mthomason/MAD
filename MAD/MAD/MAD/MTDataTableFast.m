@@ -61,8 +61,8 @@
         NSString *keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
         plist[keyGroupTableNames] = [self groupTableNames];
     }
-    if ([self groupKeys] != nil) {
-        plist[keyGroupKeys] = [self groupKeys];
+    if (self.groupKeys != nil) {
+        plist[keyGroupKeys] = self.groupKeys;
     }
     plist[keySortDescriptorsSet] = @([self sortDescriptorsSet]);
     
@@ -228,12 +228,12 @@
 
 - (void)addColumn:(MTDataColumn *)column {
     NSUInteger columnId = [[column identifier] hash];
-    BOOL createTable = [[self columnKeys] count] == 0;
+    BOOL createTable = [self.columnKeys count] == 0;
     char buf[19];
     snprintf(buf, 19, "c%lu", (unsigned long)columnId);
     NSString *columnName = @(buf);
-    [self columns][columnName] = column;
-    [[self columnKeys] addObject:columnName];
+    self.columns[columnName] = column;
+    [self.columnKeys addObject:columnName];
     
     [self addColumn:column toTable:[self tableName] columnName:columnName createTable:createTable unique:NO];
 }
@@ -241,7 +241,7 @@
 - (void)initalizeGroupKeys {
         NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:[[self sortDescriptors] count]];
         for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
-            NSUInteger index = [[self columnKeys] indexOfObject: [sortDescriptor key]];
+            NSUInteger index = [self.columnKeys indexOfObject: [sortDescriptor key]];
             if (index != NSNotFound) {
                 NSNumber *columnIndex = @(index);
                 [groupKeys addObject:columnIndex];
@@ -253,26 +253,26 @@
 
 - (NSString *)idColumnKeyForGroupLocation:(NSInteger)groupLevel {
     NSString *result = nil;
-    if ([[self groupKeys] count] > groupLevel) {
-        NSInteger loc = [[self groupKeys][groupLevel] integerValue];
-        result = [self columnKeys][loc];
+    if ([self.groupKeys count] > groupLevel) {
+        NSInteger loc = [self.groupKeys[groupLevel] integerValue];
+        result = self.columnKeys[loc];
     }
     return result;
 }
 
 - (MTDataColumn *)idDataColumnForGroupLevel:(NSInteger)groupLevel {
     NSString *key = [self idColumnKeyForGroupLocation:groupLevel];
-    return [self columns][key];
+    return self.columns[key];
 }
 
 - (void)addRow:(NSArray *)row {
     self.rowCounter++;
-    if ([self groupKeys] == nil) {
-        [[self groupKeys] removeAllObjects];
+    if (self.groupKeys == nil) {
+        [self.groupKeys removeAllObjects];
         [self initalizeGroupKeys];
     }
 
-    [self addRow:row toTable:[self tableName] withColumns:[self columns] andColumnKeys:[self columnKeys]];
+    [self addRow:row toTable:[self tableName] withColumns:self.columns andColumnKeys:self.columnKeys];
 }
 
 - (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table
@@ -321,8 +321,8 @@
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
     NSMutableArray *rowData = [[NSMutableArray alloc] init];
-    for (id columnDefKey in [self columnKeys]) {
-        MTDataColumn *columnDef = [self columns][columnDefKey];
+    for (id columnDefKey in self.columnKeys) {
+        MTDataColumn *columnDef = self.columns[columnDefKey];
         id obj = row[[columnDef fieldName]];
         if (obj == nil) obj = [NSNull null];
         [rowData addObject:obj];
@@ -332,29 +332,38 @@
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
 
-    [[self groupKeys] removeAllObjects];
-    if ([[self columnKeys] count] > 0 && [[self columns] count] > 0) {
+    [self.groupKeys removeAllObjects];
+    if ([self.columnKeys count] > 0 && [self.columns count] > 0) {
         
         if ([sortDescriptors count] > 0 /*&& self.sortDescriptorsSet == NO*/) {
-            NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
             
-            for (NSSortDescriptor *sort in sortDescriptors) {
-                NSInteger i = 0;
-                for (NSString *columnKey in [self columnKeys]) {
-                    MTDataColumn *column = [self columns][columnKey];
-                    if ([[column fieldName] isEqualToString:[sort key]]) {
-                        NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey
-                                                                                ascending:[sort ascending]
-                                                                                 selector:[MTDataTypeObject selectorForSorting:[[column columnType] integerValue]]];
-                        [newSorts addObject:sortn];
-                        [[self groupKeys] addObject:@(i)];
+            NSMutableArray *newSortDescriptors = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count];
+            NSSortDescriptor *sortDescriptor, *newSortDescriptor;
+            NSInteger i;
+            SEL sortAlgo;
+            NSString *columnKey;
+            MTDataColumn *column;
+            NSNumber *groupKey;
+            
+            for (sortDescriptor in sortDescriptors) {
+                i = 0;
+                for (columnKey in self.columnKeys) {
+                    column = self.columns[columnKey];
+                    if ([column.fieldName isEqualToString:sortDescriptor.key]) {
+                        sortAlgo = [MTDataTypeObject selectorForSorting:column.columnType.integerValue];
+                        newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
+                                                                          ascending:sortDescriptor.ascending
+                                                                           selector:sortAlgo];
+                        [newSortDescriptors addObject:newSortDescriptor];
+                        groupKey = @(i);
+                        [self.groupKeys addObject:groupKey];
                         break;
                     }
                     i++;
                 }
-                if ([newSorts count] == [sortDescriptors count]) {
-                    [self setSortDescriptorsSet:YES];
-                    [self setSortDescriptors:newSorts];
+                if (newSortDescriptors.count == sortDescriptors.count) {
+                    self.sortDescriptorsSet = YES;
+                    self.sortDescriptors = newSortDescriptors;
                 }
             }
         }
@@ -373,10 +382,10 @@
     [self dropTable];
     [self vacuumCacheDb];
     
-    [self setLastDataForCacheId:nil];
-    [[self columnKeys] removeAllObjects];
-    [[self columns] removeAllObjects];
-    [self setRowCounter:0];
+    self.lastDataForCacheId = nil;
+    [self.columnKeys removeAllObjects];
+    [self.columns removeAllObjects];
+    self.rowCounter = 0;
     
 }
 
@@ -408,7 +417,7 @@
              @(MTQueryCacheIndexCreateIndexName)         : indexName,
              @(MTQueryCacheIndexCreateTableName)         : tableName,
              @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors,
-             @(MTQueryCacheIndexCreateColumns)           : [self columns]
+             @(MTQueryCacheIndexCreateColumns)           : self.columns
              };
 }
 
@@ -511,8 +520,8 @@
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
     // FIXME: Query just this field.
     NSDictionary *objForRow = [self objectAtRow:row];
-    NSString *key = [self columnKeys][0];
-    MTDataColumn *columnMetaData = [self columns][key];
+    NSString *key = self.columnKeys[0];
+    MTDataColumn *columnMetaData = self.columns[key];
     NSString *fieldName = [columnMetaData fieldName];
     return objForRow[fieldName];
 }
@@ -522,7 +531,7 @@
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return [MTQuery queryDefinitionSelect:[self columnKeys] tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
+    return [MTQuery queryDefinitionSelect:self.columnKeys tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSInteger)limit andOffset:(NSInteger)offset {
@@ -545,9 +554,9 @@
         NSNumber *keyFieldDef = @(MTQuerySelectFieldDescriptors);
         NSDictionary *options = @{
                                   keyRowId : cacheId,
-                                  keyFieldKey : [self columnKeys],
+                                  keyFieldKey : self.columnKeys,
                                   keyTableNmae : [self tableName],
-                                  keyFieldDef : [self columns]
+                                  keyFieldDef : self.columns
                                   };
         MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
         sqlite3_stmt *statement = NULL;
@@ -591,11 +600,11 @@
     NSMutableArray *results = [[NSMutableArray alloc] init];
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSDictionary *querySelect = @{
-                                  @(MTQuerySelectFieldKeys) : [self columnKeys],
+                                  @(MTQuerySelectFieldKeys) : self.columnKeys,
                                   @(MTQuerySelectTableName) : [self tableName],
                                   @(MTQuerySelectPredicates) : whereClause,
                                   @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
-                                  @(MTQuerySelectFieldDescriptors) : [self columns]
+                                  @(MTQuerySelectFieldDescriptors) : self.columns
                                   
                                   };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
@@ -660,19 +669,19 @@
 
 - (NSEnumerator *)columnsEnumerator {
     // FIXME: Implement this.
-    return [[self columns] keyEnumerator];
+    return [self.columns keyEnumerator];
 }
 
 - (NSEnumerator *)objectEnumerator {
     NSEnumerator *objectEnumerator = nil;
-    if ([[self columns] count] > 0) {
+    if ([self.columns count] > 0) {
         NSDictionary *queryDefination = [self queryDefinationSelect];
         MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefination];
 
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
         objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
-                                                                                       columns:[self columns]
-                                                                                    columnKeys:[self columnKeys]
+                                                                                       columns:self.columns
+                                                                                    columnKeys:self.columnKeys
                                                                                            query:query];
     }
     return objectEnumerator;
@@ -696,12 +705,12 @@
                                   @(MTQuerySelectTableName) : [self tableName],
                                   @(MTQuerySelectSortAccending) : @(accending),
                                   @(MTQuerySelectPredicates) : whereClause,
-                                  @(MTQuerySelectColumns) : [self columns]
+                                  @(MTQuerySelectColumns) : self.columns
                                   };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectGroupKeys object: querySelect];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                             columns: [self columns]
+                                                                             columns: self.columns
                                                                           columnKeys: columnKeys
                                                                                query: query];
     [enumerator setAddRowId:NO];
@@ -711,7 +720,7 @@
 
 - (MTQuery *)queryForAllItemsAllRows {
     NSDictionary *options = @{
-                              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
+                              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : self.columnKeys,
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
                               @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
                               };
@@ -723,7 +732,7 @@
 - (MTQuery *)queryForAllRowsWithKeys:(NSArray *)columnKeys {
     
     NSDictionary *options = @{
-                              @(MTQueryCacheSelectLimitOffsetParamatersColumns) : [self columns],
+                              @(MTQueryCacheSelectLimitOffsetParamatersColumns) : self.columns,
                               @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : columnKeys,
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
                               @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
@@ -768,7 +777,7 @@
 }
 
 - (NSEnumerator *)enumeratorForKeyObjectsSorted {
-    [[self groupKeys] removeAllObjects];
+    [self.groupKeys removeAllObjects];
     [self initalizeGroupKeys];
     
     NSEnumerator *enumerator;
@@ -781,7 +790,7 @@
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
         
         enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                                 columns: [self columns]
+                                                                                 columns: self.columns
                                                                               columnKeys: columnKeys
                                                                                    query: query];
         [(MTDataTableFastObjectEnumerator *)enumerator setAddRowId:YES];
@@ -792,15 +801,15 @@
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
-    //[[self groupKeys] removeAllObjects];
+    //[self.groupKeys removeAllObjects];
     //[self initalizeGroupKeys];
     
     MTQuery *query = [self queryForAllItemsAllRows];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
     
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                                                              columns: [self columns]
-                                                                                                           columnKeys: [self columnKeys]
+                                                                                                              columns: self.columns
+                                                                                                           columnKeys: self.columnKeys
                                                                                                                 query: query];
     [enumerator setAddRowId:YES];
     [enumerator setSingleColumnNoWrapper:NO];
@@ -817,7 +826,7 @@
 }
 
 - (NSUInteger)numberOfColumns {
-    return  [[self columnKeys] count];
+    return  [self.columnKeys count];
 }
 
 - (NSUInteger)numberOfRows {
@@ -834,7 +843,7 @@
     return @{
              keyTableName : [self tableName],
              keyFieldKey : fieldKey,
-             keyFieldDescriptors : [self columns],
+             keyFieldDescriptors : self.columns,
              keyAggregateFunctionType: objFunctionType
              };
 }
@@ -921,8 +930,8 @@
 
 - (NSString *)columnKeyForColumnName:(NSString *)columnName {
     NSString *key;
-    for (NSString *columnKey in [self columnKeys]) {
-        MTDataColumn *column = [self columns][columnKey];
+    for (NSString *columnKey in self.columnKeys) {
+        MTDataColumn *column = self.columns[columnKey];
         if ([[column fieldName] isEqualToString:columnName]) {
             key = [NSString stringWithString: columnKey];
             break;
@@ -956,7 +965,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSUInteger)columnIndexForKey:(NSString *)key {
-    return [[self columnKeys] indexOfObject:key];
+    return [self.columnKeys indexOfObject:key];
 }
 
 - (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
@@ -965,10 +974,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (id)currentObject:(sqlite3_stmt *)statement {
-    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
+    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[self.columns count]];
     int columnCounter = 0;
-    for (NSString *key in [self columnKeys]) {
-        MTDataColumn *dataColumn = [self columns][key];
+    for (NSString *key in self.columnKeys) {
+        MTDataColumn *dataColumn = self.columns[key];
         id columnValue = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:columnCounter];
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];
@@ -1014,7 +1023,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     NSString *tableName = [NSString stringWithString:[self tableName]];
     NSArray *sortDescs = [NSArray arrayWithArray:[self sortDescriptors]];
-    NSDictionary *columns = [NSDictionary dictionaryWithDictionary:[self columns]];
+    NSDictionary *columns = [NSDictionary dictionaryWithDictionary:self.columns];
     
     NSDictionary *options = @{
                               keyRowIds : cacheIds,
@@ -1024,7 +1033,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
     
-    NSArray *columnKeys = [NSArray arrayWithArray:[self columnKeys]];
+    NSArray *columnKeys = [NSArray arrayWithArray:self.columnKeys];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
     NSEnumerator *data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
                                                                                      columns:columns

@@ -15,8 +15,6 @@
 #import "MTLinkedList.h"
 #import "MTPair.h"
 
-//#import "NSNumber+MTProtocol.h"
-
 @interface MTGraph : MTObject <MTProtocolLog>
 
 - (instancetype)init;

@@ -1484,7 +1484,10 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     if (dbinit() == FAIL) {
         NSString *message = @"Could not init db.";
         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-        *error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
+        NSError *e = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
+        if (e != nil) {
+            *error = e;
+        }
     }
     dberrhandle(err_handler);
     

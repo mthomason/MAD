@@ -1369,8 +1369,8 @@
 		4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesigner.m; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
-		4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBarButtonItem.h; sourceTree = "<group>"; };
-		4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBarButtonItem.m; sourceTree = "<group>"; };
+		4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarButtonItem.h; path = Reports/MADBarButtonItem.h; sourceTree = "<group>"; };
+		4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBarButtonItem.m; path = Reports/MADBarButtonItem.m; sourceTree = "<group>"; };
 		4C08B2E51AB6791F00B54D3A /* MADImageToolbarCloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageToolbarCloud.png; path = Resources/Images/MADImageToolbarCloud.png; sourceTree = "<group>"; };
 		4C08B2E61AB6791F00B54D3A /* MADImageToolbarCloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarCloud@2x.png"; path = "Resources/Images/MADImageToolbarCloud@2x.png"; sourceTree = "<group>"; };
 		4C08B2E71AB6791F00B54D3A /* MADImageToolbarCloudDownloadSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageToolbarCloudDownloadSelected.png; path = Resources/Images/MADImageToolbarCloudDownloadSelected.png; sourceTree = "<group>"; };
@@ -3300,6 +3300,8 @@
 			children = (
 				4CD0B3ED1AC90B52005CA75C /* MADNavigationBarTitleView.h */,
 				4CD0B3EC1AC90B52005CA75C /* MADNavigationBarTitleView.m */,
+				4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */,
+				4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */,
 				4C08B3131AB67FD500B54D3A /* Document Information */,
 				4C6268FB19F6008700DCCC2E /* Vibrant */,
 				4C62692719F6313000DCCC2E /* Information */,
@@ -4382,8 +4384,6 @@
 				4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */,
 				4C8BAFE019AB113600A55780 /* UIView+Extras.h */,
 				4C8BAFE119AB113600A55780 /* UIView+Extras.m */,
-				4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */,
-				4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */,
 				4C712E6619E068EC00808779 /* UIAlertController+CommonAlerts.h */,
 				4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */,
 				4CDB48851ABFBA9E00E76879 /* NSMetadataItem+Description.h */,

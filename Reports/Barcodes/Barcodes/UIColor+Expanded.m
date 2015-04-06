@@ -900,14 +900,15 @@ void YUV2RGB_f(CGFloat y, CGFloat u, CGFloat v, CGFloat *r, CGFloat *g, CGFloat 
 
 // Pick two colors more colors such that all three are equidistant on the color wheel
 // (120 degrees and 240 degress difference in hue from self)
-- (NSArray *) triadicColors
-{
-    return [self analogousColorsWithStepAngle:120.0f pairCount:1];
+- (NSArray *) triadicColors {
+    NSArray *analogousColorsWithStepAngle = [self analogousColorsWithStepAngle:120.0f pairCount:1];
+    NSArray *triaicColors = [NSArray arrayWithArray:analogousColorsWithStepAngle];
+    return triaicColors;
 }
 
 // Pick n pairs of colors, stepping in increasing steps away from this color around the wheel
-- (NSArray *) analogousColorsWithStepAngle: (CGFloat) stepAngle pairCount: (NSInteger) pairs
-{
+- (NSArray *) analogousColorsWithStepAngle: (CGFloat) stepAngle pairCount: (NSInteger) pairs {
+    
     // Convert to HSB
     CGFloat h = self.hue * 360.0f;
     CGFloat s = self.saturation;
@@ -918,18 +919,22 @@ void YUV2RGB_f(CGFloat y, CGFloat u, CGFloat v, CGFloat *r, CGFloat *g, CGFloat 
     if (stepAngle < 0.0f)
         stepAngle *= -1.0f;
     
-    for (int i = 1; i <= pairs; ++i)
-    {
-        CGFloat a = fmodf(stepAngle * i, 360.0f);
+    CGFloat a, h1, h2;
+    UIColor *color1, *color2;
+    for (int i = 1; i <= pairs; ++i) {
+
+        a = fmodf(stepAngle * i, 360.0f);
         
-        CGFloat h1 = fmodf(h + a, 360.0f);
-        CGFloat h2 = fmodf(h + 360.0f - a, 360.0f);
+        h1 = fmodf(h + a, 360.0f);
+        h2 = fmodf(h + 360.0f - a, 360.0f);
         
-        [colors addObject:[UIColor colorWithHue:h1 / 360.0f saturation:s brightness:v alpha:a]];
-        [colors addObject:[UIColor colorWithHue:h2 / 360.0f saturation:s brightness:v alpha:a]];
+        color1 = [UIColor colorWithHue:h1 / 360.0f saturation:s brightness:v alpha:a];
+        color2 = [UIColor colorWithHue:h2 / 360.0f saturation:s brightness:v alpha:a];
+        [colors addObject:color1];
+        [colors addObject:color2];
     }
     
-    return [colors copy];
+    return colors;
 }
 
 //  - Eridius - UIColor needs a method that takes 2 colors and gives a third complementary one

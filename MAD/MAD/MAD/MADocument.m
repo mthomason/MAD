@@ -37,8 +37,6 @@
 
 #import "MTNotificationDidFormatPage.h"
 
-//#import "MTActivityIndicator.h"
-
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
