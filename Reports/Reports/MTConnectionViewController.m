@@ -18,7 +18,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
 #import "NSError+Constructors.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 #import "MTActivityIndicator.h"
 #import "UIColor+EverydayApps.h"
 #import "UIApplication+Extras.h"

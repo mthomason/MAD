@@ -11,7 +11,6 @@
 #endif
 
 #import "MTDatabaseConnection.h"
-#import "MTApplicationInstance.h"
 #import "RptqUserCredentals.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
@@ -109,7 +108,7 @@
 }
 
 - (NSString *)appname {
-    return [MTApplicationInstance bundleDisplayName];
+    return @"mad";
 }
 
 - (void)nullValues {

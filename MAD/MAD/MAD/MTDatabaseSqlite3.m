@@ -62,8 +62,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
     NSError *error = nil;
     //Open conneciton... closed in dealloc.
     if (self.isOpen == NO) {
-        NSString *filepath = [[[self databaseConnection] databaseUrl] path];
-        const char *path = [filepath UTF8String];
+       const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
         BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);

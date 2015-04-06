@@ -1,8 +1,8 @@
 //
-//  NSError+UserInterface.m
-//  Reports
+//  NSError+Constructors.m
+//  MAD
 //
-//  Created by Michael Thomason on 12/4/12.
+//  Created by Michael Thomason on 4/1/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
@@ -10,12 +10,25 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "NSError+UserInterface.h"
-#import "UIApplication+Extras.h"
+#import "NSError+Constructors.h"
+#import <UIKit/UIKit.h>
+#import "UIApplication+Helpers.h"
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
-@implementation NSError (UserInterface)
+@implementation NSError (Constructors)
+
++ (instancetype)errorWithDomain:(NSString *)domain code:(NSInteger)code title:(NSString *)title andMessage:(NSString *)message {
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : message,
+                                NSLocalizedFailureReasonErrorKey : title};
+    return [NSError errorWithDomain:domain code:code userInfo:userInfo];
+}
+
++ (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message {
+    return @{NSLocalizedDescriptionKey :         title,
+             NSLocalizedFailureReasonErrorKey :  message};
+    
+}
 
 - (void)presentErrorOnViewController:(UIViewController *)viewController {
     
@@ -44,12 +57,6 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     [alert addAction:ok];
     
     
-
-}
-
-+ (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message {
-    return @{NSLocalizedDescriptionKey :         title,
-             NSLocalizedFailureReasonErrorKey :  message};
     
 }
 

@@ -20,7 +20,7 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "MTQuery.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDataTable.h"
 #import "UIDevice+Hack.h"

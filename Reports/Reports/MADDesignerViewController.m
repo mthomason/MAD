@@ -14,13 +14,12 @@
 #import "MADConstants.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
-#import "MADocument.h"
+#import "MAD.h"
 #import "AppDelegate.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDesignerElementView.h"
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
-#import "NSManagedObject+Extras.h"
 #import "MTReportDesigner.h"
 #import "MTSettingsViewController.h"
 #import "MADDesignerElementPIckerViewController.h"

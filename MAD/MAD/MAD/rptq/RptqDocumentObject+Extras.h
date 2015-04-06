@@ -10,6 +10,7 @@
 #define Reports_RptqDocumentObject_Extras_h
 
 #import "RptqDocumentObject.h"
+#import <UIKit/UIKit.h>
 #import "RptqDocumentObjectFactory.h"
 #import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"

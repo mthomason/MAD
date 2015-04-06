@@ -15,6 +15,11 @@
 		4C37E12D1ACC87DB00B4BC0D /* NSFileManager+Common.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */; };
 		4C37E12E1ACC87DB00B4BC0D /* NSURL+Document.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */; };
 		4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */; };
+		4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */; };
+		4C8CDADE1AD246A700B7B9EA /* UIApplication+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDADD1AD246A700B7B9EA /* UIApplication+Helpers.m */; };
+		4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBBC1AD2532600B7B9EA /* UIImage+Border.m */; };
+		4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */; };
+		4C8CDC851AD2687800B7B9EA /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */; };
 		4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +61,17 @@
 		4C4AC1C21AD1125000D4C461 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
 		4C4AC1C51AD1128600D4C461 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
+		4C8CDAC51AD2433D00B7B9EA /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+Constructors.h"; sourceTree = "<group>"; };
+		4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+Constructors.m"; sourceTree = "<group>"; };
+		4C8CDAC91AD243B500B7B9EA /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLog.h; sourceTree = "<group>"; };
+		4C8CDADC1AD246A700B7B9EA /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Helpers.h"; sourceTree = "<group>"; };
+		4C8CDADD1AD246A700B7B9EA /* UIApplication+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Helpers.m"; sourceTree = "<group>"; };
+		4C8CDBBB1AD2532600B7B9EA /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Border.h"; sourceTree = "<group>"; };
+		4C8CDBBC1AD2532600B7B9EA /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Border.m"; sourceTree = "<group>"; };
+		4C8CDC7F1AD2667000B7B9EA /* NSThread+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSThread+Extras.h"; sourceTree = "<group>"; };
+		4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Extras.m"; sourceTree = "<group>"; };
+		4C8CDC831AD2687800B7B9EA /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EverydayApps.h"; sourceTree = "<group>"; };
+		4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EverydayApps.m"; sourceTree = "<group>"; };
 		4CF8891C1AD1BBA700ED21FC /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
 		4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hack.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,6 +116,13 @@
 		4C37E10F1ACC864500B4BC0D /* CocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4C8CDAC91AD243B500B7B9EA /* MTLog.h */,
+				4C8CDAC51AD2433D00B7B9EA /* NSError+Constructors.h */,
+				4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */,
+				4C8CDC831AD2687800B7B9EA /* UIColor+EverydayApps.h */,
+				4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */,
+				4C8CDC7F1AD2667000B7B9EA /* NSThread+Extras.h */,
+				4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */,
 				4C4AC1C51AD1128600D4C461 /* MADCocoaExtensions.h */,
 				4CF8891C1AD1BBA700ED21FC /* UIDevice+Hack.h */,
 				4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */,
@@ -111,6 +134,10 @@
 				4C37E12A1ACC87C600B4BC0D /* NSURL+Document.m */,
 				4C37E1101ACC864500B4BC0D /* CocoaExtensions.h */,
 				4C37E1121ACC864500B4BC0D /* CocoaExtensions.m */,
+				4C8CDADC1AD246A700B7B9EA /* UIApplication+Helpers.h */,
+				4C8CDADD1AD246A700B7B9EA /* UIApplication+Helpers.m */,
+				4C8CDBBB1AD2532600B7B9EA /* UIImage+Border.h */,
+				4C8CDBBC1AD2532600B7B9EA /* UIImage+Border.m */,
 			);
 			path = CocoaExtensions;
 			sourceTree = "<group>";
@@ -219,10 +246,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8CDC851AD2687800B7B9EA /* UIColor+EverydayApps.m in Sources */,
 				4C37E12C1ACC87C600B4BC0D /* NSURL+Document.m in Sources */,
 				4C37E1131ACC864500B4BC0D /* CocoaExtensions.m in Sources */,
 				4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */,
 				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
+				4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */,
+				4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */,
+				4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */,
+				4C8CDADE1AD246A700B7B9EA /* UIApplication+Helpers.m in Sources */,
 				4C37E12B1ACC87C600B4BC0D /* NSFileManager+Common.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

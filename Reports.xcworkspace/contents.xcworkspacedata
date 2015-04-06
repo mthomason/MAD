@@ -2,10 +2,13 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:CloudManager/CloudManager.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:CocoaExtensions/CocoaExtensions.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:CloudManager/CloudManager.xcodeproj">
+      location = "group:MAD/MAD/MAD.xcodeproj">
    </FileRef>
    <FileRef
       location = "container:Reports/MAD Designer.xcodeproj">

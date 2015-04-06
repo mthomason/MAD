@@ -70,6 +70,7 @@
     [self disableUserInteraction:window.view];
     
     MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f)];
+    
     activityView.center = window.view.center;
     
     [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activityView waitUntilDone:YES];

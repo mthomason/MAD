@@ -1,0 +1,2006 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C8CD96A1AD1CDC800B7B9EA /* libMAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */; };
+		4C8CD98A1AD1CEAF00B7B9EA /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */; };
+		4C8CD9981AD1D1AD00B7B9EA /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */; };
+		4C8CD9A01AD1D28B00B7B9EA /* MADocumentState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */; };
+		4C8CD9A21AD1D2ED00B7B9EA /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */; };
+		4C8CD9A71AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */; };
+		4C8CD9AE1AD1D4EA00B7B9EA /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9AD1AD1D4EA00B7B9EA /* MTDatabaseConnection.m */; };
+		4C8CD9B51AD1D53300B7B9EA /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9B01AD1D53300B7B9EA /* MTDatabaseConnectionMySql.m */; };
+		4C8CD9B61AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9B21AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.m */; };
+		4C8CD9B71AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9B41AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m */; };
+		4C8CD9EE1AD1D72E00B7B9EA /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9BB1AD1D72E00B7B9EA /* RptqDatabase.m */; };
+		4C8CD9EF1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9BD1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.m */; };
+		4C8CD9F01AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9BF1AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.m */; };
+		4C8CD9F11AD1D72E00B7B9EA /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9C11AD1D72E00B7B9EA /* RptqDocument.m */; };
+		4C8CD9F21AD1D72E00B7B9EA /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9C31AD1D72E00B7B9EA /* RptqDocumentObject.m */; };
+		4C8CD9F31AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9C51AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.m */; };
+		4C8CD9F41AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9C71AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.m */; };
+		4C8CD9F51AD1D72E00B7B9EA /* RptqDocumentObjectChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9C91AD1D72E00B7B9EA /* RptqDocumentObjectChart.m */; };
+		4C8CD9F61AD1D72E00B7B9EA /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9CB1AD1D72E00B7B9EA /* RptqDocumentObjectFormula.m */; };
+		4C8CD9F71AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9CD1AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.m */; };
+		4C8CD9F81AD1D72E00B7B9EA /* RptqDocumentObjectImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9CF1AD1D72E00B7B9EA /* RptqDocumentObjectImage.m */; };
+		4C8CD9F91AD1D72E00B7B9EA /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9D11AD1D72E00B7B9EA /* RptqDocumentObjectLabel.m */; };
+		4C8CD9FA1AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9D31AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.m */; };
+		4C8CD9FB1AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9D51AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.m */; };
+		4C8CD9FC1AD1D72E00B7B9EA /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9D71AD1D72E00B7B9EA /* RptqDocumentSection.m */; };
+		4C8CD9FD1AD1D72E00B7B9EA /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9D91AD1D72E00B7B9EA /* RptqDocumentSectionRows.m */; };
+		4C8CD9FE1AD1D72E00B7B9EA /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9DB1AD1D72E00B7B9EA /* RptqQuery.m */; };
+		4C8CD9FF1AD1D72E00B7B9EA /* RptqQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9DD1AD1D72E00B7B9EA /* RptqQueryCache.m */; };
+		4C8CDA001AD1D72E00B7B9EA /* RptqQueryField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9DF1AD1D72E00B7B9EA /* RptqQueryField.m */; };
+		4C8CDA011AD1D72E00B7B9EA /* RptqQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9E11AD1D72E00B7B9EA /* RptqQueryGroup.m */; };
+		4C8CDA021AD1D72E00B7B9EA /* RptqQueryLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9E31AD1D72E00B7B9EA /* RptqQueryLinks.m */; };
+		4C8CDA031AD1D72E00B7B9EA /* RptqQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9E51AD1D72E00B7B9EA /* RptqQueryPredicate.m */; };
+		4C8CDA041AD1D72E00B7B9EA /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9E71AD1D72E00B7B9EA /* RptqQuerySort.m */; };
+		4C8CDA051AD1D72E00B7B9EA /* RptqQueryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9E91AD1D72E00B7B9EA /* RptqQueryTable.m */; };
+		4C8CDA061AD1D72E00B7B9EA /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9EB1AD1D72E00B7B9EA /* RptqRelationship.m */; };
+		4C8CDA071AD1D72E00B7B9EA /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */; };
+		4C8CDA0A1AD1D9CD00B7B9EA /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDA091AD1D9CD00B7B9EA /* liblibTdsClient.a */; };
+		4C8CDA6D1AD1DCC100B7B9EA /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA2A1AD1DCC100B7B9EA /* MTQuery.m */; };
+		4C8CDA6E1AD1DCC100B7B9EA /* MTQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA2C1AD1DCC100B7B9EA /* MTQueryCache.m */; };
+		4C8CDA6F1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA2E1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m */; };
+		4C8CDA701AD1DCC100B7B9EA /* MTQueryCacheAddRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA301AD1DCC100B7B9EA /* MTQueryCacheAddRow.m */; };
+		4C8CDA711AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA321AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.m */; };
+		4C8CDA721AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA341AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.m */; };
+		4C8CDA731AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA361AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.m */; };
+		4C8CDA741AD1DCC100B7B9EA /* MTQueryCacheDropTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA381AD1DCC100B7B9EA /* MTQueryCacheDropTable.m */; };
+		4C8CDA751AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA3A1AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.m */; };
+		4C8CDA761AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA3C1AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.m */; };
+		4C8CDA771AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA3E1AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.m */; };
+		4C8CDA781AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA401AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.m */; };
+		4C8CDA791AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA421AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.m */; };
+		4C8CDA7A1AD1DCC100B7B9EA /* MTQueryCacheSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA441AD1DCC100B7B9EA /* MTQueryCacheSelect.m */; };
+		4C8CDA7B1AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA461AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.m */; };
+		4C8CDA7C1AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA481AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.m */; };
+		4C8CDA7D1AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA4A1AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.m */; };
+		4C8CDA7E1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA4C1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.m */; };
+		4C8CDA7F1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA4E1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.m */; };
+		4C8CDA801AD1DCC100B7B9EA /* MTQueryCacheSyncOff.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA501AD1DCC100B7B9EA /* MTQueryCacheSyncOff.m */; };
+		4C8CDA811AD1DCC100B7B9EA /* MTQueryCacheVacuum.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA521AD1DCC100B7B9EA /* MTQueryCacheVacuum.m */; };
+		4C8CDA821AD1DCC100B7B9EA /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA541AD1DCC100B7B9EA /* MTQueryCustomNoResults.m */; };
+		4C8CDA831AD1DCC100B7B9EA /* MTQueryDefinitionField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA561AD1DCC100B7B9EA /* MTQueryDefinitionField.m */; };
+		4C8CDA841AD1DCC100B7B9EA /* MTQueryDefinitionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA581AD1DCC100B7B9EA /* MTQueryDefinitionGroup.m */; };
+		4C8CDA851AD1DCC100B7B9EA /* MTQueryDefinitionLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA5A1AD1DCC100B7B9EA /* MTQueryDefinitionLinks.m */; };
+		4C8CDA861AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA5C1AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.m */; };
+		4C8CDA871AD1DCC100B7B9EA /* MTQueryDefinitionSort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA5E1AD1DCC100B7B9EA /* MTQueryDefinitionSort.m */; };
+		4C8CDA881AD1DCC100B7B9EA /* MTQueryDefinitionTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA601AD1DCC100B7B9EA /* MTQueryDefinitionTable.m */; };
+		4C8CDA891AD1DCC100B7B9EA /* MTQueryFull.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA621AD1DCC100B7B9EA /* MTQueryFull.m */; };
+		4C8CDA8A1AD1DCC100B7B9EA /* MTQueryMaxFieldLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA641AD1DCC100B7B9EA /* MTQueryMaxFieldLength.m */; };
+		4C8CDA8B1AD1DCC100B7B9EA /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA661AD1DCC100B7B9EA /* MTQuerySampleDataField.m */; };
+		4C8CDA8C1AD1DCC100B7B9EA /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA681AD1DCC100B7B9EA /* MTQuerySampleDataTable.m */; };
+		4C8CDA8D1AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA6A1AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.m */; };
+		4C8CDA8E1AD1DCC100B7B9EA /* MTQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA6C1AD1DCC100B7B9EA /* MTQueryTest.m */; };
+		4C8CDA911AD1DE7700B7B9EA /* MTDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA901AD1DE7700B7B9EA /* MTDatabaseCache.m */; };
+		4C8CDA941AD1DED600B7B9EA /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA931AD1DED600B7B9EA /* MTDatabase.m */; };
+		4C8CDA9B1AD1DF1400B7B9EA /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA961AD1DF1400B7B9EA /* MTDatabaseMySql.m */; };
+		4C8CDA9C1AD1DF1400B7B9EA /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA981AD1DF1400B7B9EA /* MTDatabaseSqlite3.m */; };
+		4C8CDA9D1AD1DF1400B7B9EA /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA9A1AD1DF1400B7B9EA /* MTDatabaseSqlServer.m */; };
+		4C8CDAA21AD1DF3E00B7B9EA /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA9F1AD1DF3E00B7B9EA /* MTDatabaseField.m */; };
+		4C8CDAA31AD1DF3E00B7B9EA /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAA11AD1DF3E00B7B9EA /* MTDatabaseTable.m */; };
+		4C8CDAA61AD1DF9800B7B9EA /* MTDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAA51AD1DF9800B7B9EA /* MTDataType.m */; };
+		4C8CDAAA1AD1E04700B7B9EA /* NSData+Comparson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAA91AD1E04700B7B9EA /* NSData+Comparson.m */; };
+		4C8CDAAD1AD1E06A00B7B9EA /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDAAC1AD1E06A00B7B9EA /* libMTDataStrutures.a */; };
+		4C8CDABB1AD1E14000B7B9EA /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */; };
+		4C8CDABE1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDABD1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m */; };
+		4C8CDAC11AD1E32C00B7B9EA /* MTDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */; };
+		4C8CDAC41AD1E37800B7B9EA /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAC31AD1E37800B7B9EA /* NSString+Extras.m */; };
+		4C8CDAD51AD244D000B7B9EA /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDACC1AD244D000B7B9EA /* MTDataTable.m */; };
+		4C8CDAD61AD244D000B7B9EA /* MTDataTableFast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDACE1AD244D000B7B9EA /* MTDataTableFast.m */; };
+		4C8CDAD71AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAD01AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.m */; };
+		4C8CDAD81AD244D000B7B9EA /* MTDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAD21AD244D000B7B9EA /* MTDataTableLocation.m */; };
+		4C8CDAD91AD244D000B7B9EA /* MTDataTableVirtual.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAD41AD244D000B7B9EA /* MTDataTableVirtual.m */; };
+		4C8CDAE11AD247F900B7B9EA /* MTDatabaseDataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */; };
+		4C8CDAE61AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAE31AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.m */; };
+		4C8CDAE71AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAE51AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m */; };
+		4C8CDAEA1AD24BD000B7B9EA /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAE91AD24BD000B7B9EA /* RptqDocument+Extras.m */; };
+		4C8CDAEF1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */; };
+		4C8CDAF21AD24C9000B7B9EA /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */; };
+		4C8CDAF51AD24CBF00B7B9EA /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF41AD24CBF00B7B9EA /* RptqQuery+Extras.m */; };
+		4C8CDAFC1AD24D2A00B7B9EA /* RptqQueryField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF71AD24D2A00B7B9EA /* RptqQueryField+Extras.m */; };
+		4C8CDAFD1AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF91AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m */; };
+		4C8CDAFE1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAFB1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m */; };
+		4C8CDB011AD24D3E00B7B9EA /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB001AD24D3E00B7B9EA /* RptqDatabase+Extras.m */; };
+		4C8CDB041AD24DC300B7B9EA /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */; };
+		4C8CDB0B1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB0A1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m */; };
+		4C8CDB211AD24E8400B7B9EA /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB0D1AD24E8400B7B9EA /* RptqDocumentObject+Extras.m */; };
+		4C8CDB221AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB0F1AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m */; };
+		4C8CDB231AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB111AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.m */; };
+		4C8CDB241AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB131AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.m */; };
+		4C8CDB251AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB161AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.m */; };
+		4C8CDB261AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB181AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.m */; };
+		4C8CDB271AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB1A1AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.m */; };
+		4C8CDB281AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB1C1AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.m */; };
+		4C8CDB291AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB1E1AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.m */; };
+		4C8CDB2A1AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB201AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.m */; };
+		4C8CDB7A1AD2500800B7B9EA /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB2F1AD2500800B7B9EA /* MTPaper.m */; };
+		4C8CDB7B1AD2500800B7B9EA /* MTPaperA0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB311AD2500800B7B9EA /* MTPaperA0.m */; };
+		4C8CDB7C1AD2500800B7B9EA /* MTPaperA1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB331AD2500800B7B9EA /* MTPaperA1.m */; };
+		4C8CDB7D1AD2500800B7B9EA /* MTPaperA2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB351AD2500800B7B9EA /* MTPaperA2.m */; };
+		4C8CDB7E1AD2500800B7B9EA /* MTPaperA3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB371AD2500800B7B9EA /* MTPaperA3.m */; };
+		4C8CDB7F1AD2500800B7B9EA /* MTPaperA4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB391AD2500800B7B9EA /* MTPaperA4.m */; };
+		4C8CDB801AD2500800B7B9EA /* MTPaperA5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB3B1AD2500800B7B9EA /* MTPaperA5.m */; };
+		4C8CDB811AD2500800B7B9EA /* MTPaperA6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB3D1AD2500800B7B9EA /* MTPaperA6.m */; };
+		4C8CDB821AD2500800B7B9EA /* MTPaperA7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB3F1AD2500800B7B9EA /* MTPaperA7.m */; };
+		4C8CDB831AD2500800B7B9EA /* MTPaperA8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB411AD2500800B7B9EA /* MTPaperA8.m */; };
+		4C8CDB841AD2500800B7B9EA /* MTPaperA9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB431AD2500800B7B9EA /* MTPaperA9.m */; };
+		4C8CDB851AD2500800B7B9EA /* MTPaperA10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB451AD2500800B7B9EA /* MTPaperA10.m */; };
+		4C8CDB861AD2500800B7B9EA /* MTPaperB0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB471AD2500800B7B9EA /* MTPaperB0.m */; };
+		4C8CDB871AD2500800B7B9EA /* MTPaperB1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB491AD2500800B7B9EA /* MTPaperB1.m */; };
+		4C8CDB881AD2500800B7B9EA /* MTPaperB2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB4B1AD2500800B7B9EA /* MTPaperB2.m */; };
+		4C8CDB891AD2500800B7B9EA /* MTPaperB3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB4D1AD2500800B7B9EA /* MTPaperB3.m */; };
+		4C8CDB8A1AD2500800B7B9EA /* MTPaperB4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB4F1AD2500800B7B9EA /* MTPaperB4.m */; };
+		4C8CDB8B1AD2500800B7B9EA /* MTPaperB5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB511AD2500800B7B9EA /* MTPaperB5.m */; };
+		4C8CDB8C1AD2500800B7B9EA /* MTPaperB6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB531AD2500800B7B9EA /* MTPaperB6.m */; };
+		4C8CDB8D1AD2500800B7B9EA /* MTPaperB7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB551AD2500800B7B9EA /* MTPaperB7.m */; };
+		4C8CDB8E1AD2500800B7B9EA /* MTPaperB8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB571AD2500800B7B9EA /* MTPaperB8.m */; };
+		4C8CDB8F1AD2500800B7B9EA /* MTPaperB9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB591AD2500800B7B9EA /* MTPaperB9.m */; };
+		4C8CDB901AD2500800B7B9EA /* MTPaperB10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB5B1AD2500800B7B9EA /* MTPaperB10.m */; };
+		4C8CDB911AD2500800B7B9EA /* MTPaperC0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB5D1AD2500800B7B9EA /* MTPaperC0.m */; };
+		4C8CDB921AD2500800B7B9EA /* MTPaperC1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB5F1AD2500800B7B9EA /* MTPaperC1.m */; };
+		4C8CDB931AD2500800B7B9EA /* MTPaperC2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB611AD2500800B7B9EA /* MTPaperC2.m */; };
+		4C8CDB941AD2500800B7B9EA /* MTPaperC3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB631AD2500800B7B9EA /* MTPaperC3.m */; };
+		4C8CDB951AD2500800B7B9EA /* MTPaperC4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB651AD2500800B7B9EA /* MTPaperC4.m */; };
+		4C8CDB961AD2500800B7B9EA /* MTPaperC5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB671AD2500800B7B9EA /* MTPaperC5.m */; };
+		4C8CDB971AD2500800B7B9EA /* MTPaperC6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB691AD2500800B7B9EA /* MTPaperC6.m */; };
+		4C8CDB981AD2500800B7B9EA /* MTPaperC7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB6B1AD2500800B7B9EA /* MTPaperC7.m */; };
+		4C8CDB991AD2500800B7B9EA /* MTPaperC8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB6D1AD2500800B7B9EA /* MTPaperC8.m */; };
+		4C8CDB9A1AD2500800B7B9EA /* MTPaperC9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB6F1AD2500800B7B9EA /* MTPaperC9.m */; };
+		4C8CDB9B1AD2500800B7B9EA /* MTPaperC10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB711AD2500800B7B9EA /* MTPaperC10.m */; };
+		4C8CDB9C1AD2500800B7B9EA /* MTPaperGovernmentLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB731AD2500800B7B9EA /* MTPaperGovernmentLegal.m */; };
+		4C8CDB9D1AD2500800B7B9EA /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB751AD2500800B7B9EA /* MTPaperGovernmentLetter.m */; };
+		4C8CDB9E1AD2500800B7B9EA /* MTPaperLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB771AD2500800B7B9EA /* MTPaperLegal.m */; };
+		4C8CDB9F1AD2500800B7B9EA /* MTPaperLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB791AD2500800B7B9EA /* MTPaperLetter.m */; };
+		4C8CDBA61AD2507200B7B9EA /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBA11AD2507200B7B9EA /* MTReportFormatter.m */; };
+		4C8CDBA71AD2507200B7B9EA /* MTReportFormatterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBA31AD2507200B7B9EA /* MTReportFormatterCache.m */; };
+		4C8CDBA81AD2507200B7B9EA /* MTReportFormatterPageDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBA51AD2507200B7B9EA /* MTReportFormatterPageDefinition.m */; };
+		4C8CDBAB1AD250AE00B7B9EA /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBAA1AD250AE00B7B9EA /* MTTableFormatter.m */; };
+		4C8CDBAE1AD250E600B7B9EA /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBAD1AD250E600B7B9EA /* MTDataFormatter.m */; };
+		4C8CDBB11AD2514700B7B9EA /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */; };
+		4C8CDBB41AD2519300B7B9EA /* MTNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */; };
+		4C8CDBB91AD252B400B7B9EA /* MTErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */; };
+		4C8CDBBA1AD252B400B7B9EA /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB81AD252B400B7B9EA /* MTMath.m */; };
+		4C8CDBC21AD2546300B7B9EA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBC11AD2546300B7B9EA /* RptqQueryGroup+Extras.m */; };
+		4C8CDBC61AD2552C00B7B9EA /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBC51AD2552C00B7B9EA /* MTFont.m */; };
+		4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */; };
+		4C8CDBCC1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBCB1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.m */; };
+		4C8CDBD71AD2567400B7B9EA /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBD41AD2567400B7B9EA /* NSManagedObject+Extras.m */; };
+		4C8CDBD81AD2567400B7B9EA /* NSManagedObjectID+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBD61AD2567400B7B9EA /* NSManagedObjectID+Extras.m */; };
+		4C8CDBF41AD2648700B7B9EA /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBDB1AD2648700B7B9EA /* MysqlCommitException.m */; };
+		4C8CDBF51AD2648700B7B9EA /* MysqlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBDD1AD2648700B7B9EA /* MysqlConnection.m */; };
+		4C8CDBF61AD2648700B7B9EA /* MysqlDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBDF1AD2648700B7B9EA /* MysqlDelete.m */; };
+		4C8CDBF71AD2648700B7B9EA /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBE11AD2648700B7B9EA /* MysqlException.m */; };
+		4C8CDBF81AD2648700B7B9EA /* MysqlFetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBE31AD2648700B7B9EA /* MysqlFetch.m */; };
+		4C8CDBF91AD2648700B7B9EA /* MysqlFetchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBE51AD2648700B7B9EA /* MysqlFetchField.m */; };
+		4C8CDBFA1AD2648700B7B9EA /* MysqlIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBE71AD2648700B7B9EA /* MysqlIndex.m */; };
+		4C8CDBFB1AD2648700B7B9EA /* MysqlInsert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBE91AD2648700B7B9EA /* MysqlInsert.m */; };
+		4C8CDBFC1AD2648700B7B9EA /* MysqlLiteral.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBEB1AD2648700B7B9EA /* MysqlLiteral.m */; };
+		4C8CDBFD1AD2648700B7B9EA /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBED1AD2648700B7B9EA /* MysqlRollbackException.m */; };
+		4C8CDBFE1AD2648700B7B9EA /* MysqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBEF1AD2648700B7B9EA /* MysqlServer.m */; };
+		4C8CDBFF1AD2648700B7B9EA /* MysqlTruncate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBF11AD2648700B7B9EA /* MysqlTruncate.m */; };
+		4C8CDC001AD2648700B7B9EA /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBF31AD2648700B7B9EA /* MysqlUpdate.m */; };
+		4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDC021AD264B300B7B9EA /* libMysqlClientObjC.a */; };
+		4C8CDC7B1AD264EF00B7B9EA /* probes_mysql.d in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC641AD264EF00B7B9EA /* probes_mysql.d */; };
+		4C8CDC7E1AD2657000B7B9EA /* NSString+MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC7D1AD2657000B7B9EA /* NSString+MysqlEscape.m */; };
+		4C8CDC891AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */; };
+		4C8CDC8E1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC8D1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.m */; };
+		4C8CDC911AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC901AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.m */; };
+		4C8CDC941AD26DC700B7B9EA /* MTActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */; };
+		4C8CDC971AD26EEB00B7B9EA /* MTActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */; };
+		4C8CDCF91AD27D8A00B7B9EA /* MTCachingArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */; };
+		4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C8CD96B1AD1CDC800B7B9EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C8CD9561AD1CDC800B7B9EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C8CD95D1AD1CDC800B7B9EA;
+			remoteInfo = MAD;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4C8CD95C1AD1CDC800B7B9EA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8CD96F1AD1CDC800B7B9EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C8CD9851AD1CE4200B7B9EA /* MAD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
+		4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADocument.m; sourceTree = "<group>"; };
+		4C8CD9891AD1CEAF00B7B9EA /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADocument.h; sourceTree = "<group>"; };
+		4C8CD98E1AD1D03000B7B9EA /* MTReportFormatterDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatterDataSource.h; sourceTree = "<group>"; };
+		4C8CD98F1AD1D03000B7B9EA /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCacheProtocol.h; sourceTree = "<group>"; };
+		4C8CD9901AD1D08500B7B9EA /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
+		4C8CD9911AD1D0E000B7B9EA /* MADActivityProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityProtocol.h; sourceTree = "<group>"; };
+		4C8CD9921AD1D10C00B7B9EA /* MADSortOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSortOrder.h; sourceTree = "<group>"; };
+		4C8CD9961AD1D1AD00B7B9EA /* MADConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConstants.h; sourceTree = "<group>"; };
+		4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConstants.m; sourceTree = "<group>"; };
+		4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../../CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
+		4C8CD99E1AD1D28B00B7B9EA /* MADocumentState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADocumentState.h; sourceTree = "<group>"; };
+		4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADocumentState.m; sourceTree = "<group>"; };
+		4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
+		4C8CD9A41AD1D33400B7B9EA /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = ../../CloudManager/CloudManager/MACloudManager.h; sourceTree = "<group>"; };
+		4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
+		4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
+		4C8CD9AC1AD1D4EA00B7B9EA /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnection.h; sourceTree = "<group>"; };
+		4C8CD9AD1AD1D4EA00B7B9EA /* MTDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnection.m; sourceTree = "<group>"; };
+		4C8CD9AF1AD1D53300B7B9EA /* MTDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnectionMySql.h; sourceTree = "<group>"; };
+		4C8CD9B01AD1D53300B7B9EA /* MTDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnectionMySql.m; sourceTree = "<group>"; };
+		4C8CD9B11AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnectionSqlite3.h; sourceTree = "<group>"; };
+		4C8CD9B21AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnectionSqlite3.m; sourceTree = "<group>"; };
+		4C8CD9B31AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnectionSqlServer.h; sourceTree = "<group>"; };
+		4C8CD9B41AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnectionSqlServer.m; sourceTree = "<group>"; };
+		4C8CD9BA1AD1D72E00B7B9EA /* RptqDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDatabase.h; path = rptq/autogen/RptqDatabase.h; sourceTree = "<group>"; };
+		4C8CD9BB1AD1D72E00B7B9EA /* RptqDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDatabase.m; path = rptq/autogen/RptqDatabase.m; sourceTree = "<group>"; };
+		4C8CD9BC1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDatabaseSchemaField.h; path = rptq/autogen/RptqDatabaseSchemaField.h; sourceTree = "<group>"; };
+		4C8CD9BD1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDatabaseSchemaField.m; path = rptq/autogen/RptqDatabaseSchemaField.m; sourceTree = "<group>"; };
+		4C8CD9BE1AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDatabaseSchemaTable.h; path = rptq/autogen/RptqDatabaseSchemaTable.h; sourceTree = "<group>"; };
+		4C8CD9BF1AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDatabaseSchemaTable.m; path = rptq/autogen/RptqDatabaseSchemaTable.m; sourceTree = "<group>"; };
+		4C8CD9C01AD1D72E00B7B9EA /* RptqDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocument.h; path = rptq/autogen/RptqDocument.h; sourceTree = "<group>"; };
+		4C8CD9C11AD1D72E00B7B9EA /* RptqDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocument.m; path = rptq/autogen/RptqDocument.m; sourceTree = "<group>"; };
+		4C8CD9C21AD1D72E00B7B9EA /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObject.h; path = rptq/autogen/RptqDocumentObject.h; sourceTree = "<group>"; };
+		4C8CD9C31AD1D72E00B7B9EA /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObject.m; path = rptq/autogen/RptqDocumentObject.m; sourceTree = "<group>"; };
+		4C8CD9C41AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectAggregate.h; path = rptq/autogen/RptqDocumentObjectAggregate.h; sourceTree = "<group>"; };
+		4C8CD9C51AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectAggregate.m; path = rptq/autogen/RptqDocumentObjectAggregate.m; sourceTree = "<group>"; };
+		4C8CD9C61AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectBarcode.h; path = rptq/autogen/RptqDocumentObjectBarcode.h; sourceTree = "<group>"; };
+		4C8CD9C71AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectBarcode.m; path = rptq/autogen/RptqDocumentObjectBarcode.m; sourceTree = "<group>"; };
+		4C8CD9C81AD1D72E00B7B9EA /* RptqDocumentObjectChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectChart.h; path = rptq/autogen/RptqDocumentObjectChart.h; sourceTree = "<group>"; };
+		4C8CD9C91AD1D72E00B7B9EA /* RptqDocumentObjectChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectChart.m; path = rptq/autogen/RptqDocumentObjectChart.m; sourceTree = "<group>"; };
+		4C8CD9CA1AD1D72E00B7B9EA /* RptqDocumentObjectFormula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectFormula.h; path = rptq/autogen/RptqDocumentObjectFormula.h; sourceTree = "<group>"; };
+		4C8CD9CB1AD1D72E00B7B9EA /* RptqDocumentObjectFormula.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectFormula.m; path = rptq/autogen/RptqDocumentObjectFormula.m; sourceTree = "<group>"; };
+		4C8CD9CC1AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectGroupKey.h; path = rptq/autogen/RptqDocumentObjectGroupKey.h; sourceTree = "<group>"; };
+		4C8CD9CD1AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectGroupKey.m; path = rptq/autogen/RptqDocumentObjectGroupKey.m; sourceTree = "<group>"; };
+		4C8CD9CE1AD1D72E00B7B9EA /* RptqDocumentObjectImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectImage.h; path = rptq/autogen/RptqDocumentObjectImage.h; sourceTree = "<group>"; };
+		4C8CD9CF1AD1D72E00B7B9EA /* RptqDocumentObjectImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectImage.m; path = rptq/autogen/RptqDocumentObjectImage.m; sourceTree = "<group>"; };
+		4C8CD9D01AD1D72E00B7B9EA /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectLabel.h; path = rptq/autogen/RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
+		4C8CD9D11AD1D72E00B7B9EA /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectLabel.m; path = rptq/autogen/RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
+		4C8CD9D21AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectLabelDataField.h; path = rptq/autogen/RptqDocumentObjectLabelDataField.h; sourceTree = "<group>"; };
+		4C8CD9D31AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectLabelDataField.m; path = rptq/autogen/RptqDocumentObjectLabelDataField.m; sourceTree = "<group>"; };
+		4C8CD9D41AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectLabelLink.h; path = rptq/autogen/RptqDocumentObjectLabelLink.h; sourceTree = "<group>"; };
+		4C8CD9D51AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentObjectLabelLink.m; path = rptq/autogen/RptqDocumentObjectLabelLink.m; sourceTree = "<group>"; };
+		4C8CD9D61AD1D72E00B7B9EA /* RptqDocumentSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentSection.h; path = rptq/autogen/RptqDocumentSection.h; sourceTree = "<group>"; };
+		4C8CD9D71AD1D72E00B7B9EA /* RptqDocumentSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentSection.m; path = rptq/autogen/RptqDocumentSection.m; sourceTree = "<group>"; };
+		4C8CD9D81AD1D72E00B7B9EA /* RptqDocumentSectionRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentSectionRows.h; path = rptq/autogen/RptqDocumentSectionRows.h; sourceTree = "<group>"; };
+		4C8CD9D91AD1D72E00B7B9EA /* RptqDocumentSectionRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDocumentSectionRows.m; path = rptq/autogen/RptqDocumentSectionRows.m; sourceTree = "<group>"; };
+		4C8CD9DA1AD1D72E00B7B9EA /* RptqQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQuery.h; path = rptq/autogen/RptqQuery.h; sourceTree = "<group>"; };
+		4C8CD9DB1AD1D72E00B7B9EA /* RptqQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQuery.m; path = rptq/autogen/RptqQuery.m; sourceTree = "<group>"; };
+		4C8CD9DC1AD1D72E00B7B9EA /* RptqQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQueryCache.h; path = rptq/autogen/RptqQueryCache.h; sourceTree = "<group>"; };
+		4C8CD9DD1AD1D72E00B7B9EA /* RptqQueryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQueryCache.m; path = rptq/autogen/RptqQueryCache.m; sourceTree = "<group>"; };
+		4C8CD9DE1AD1D72E00B7B9EA /* RptqQueryField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQueryField.h; path = rptq/autogen/RptqQueryField.h; sourceTree = "<group>"; };
+		4C8CD9DF1AD1D72E00B7B9EA /* RptqQueryField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQueryField.m; path = rptq/autogen/RptqQueryField.m; sourceTree = "<group>"; };
+		4C8CD9E01AD1D72E00B7B9EA /* RptqQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQueryGroup.h; path = rptq/autogen/RptqQueryGroup.h; sourceTree = "<group>"; };
+		4C8CD9E11AD1D72E00B7B9EA /* RptqQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQueryGroup.m; path = rptq/autogen/RptqQueryGroup.m; sourceTree = "<group>"; };
+		4C8CD9E21AD1D72E00B7B9EA /* RptqQueryLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQueryLinks.h; path = rptq/autogen/RptqQueryLinks.h; sourceTree = "<group>"; };
+		4C8CD9E31AD1D72E00B7B9EA /* RptqQueryLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQueryLinks.m; path = rptq/autogen/RptqQueryLinks.m; sourceTree = "<group>"; };
+		4C8CD9E41AD1D72E00B7B9EA /* RptqQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQueryPredicate.h; path = rptq/autogen/RptqQueryPredicate.h; sourceTree = "<group>"; };
+		4C8CD9E51AD1D72E00B7B9EA /* RptqQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQueryPredicate.m; path = rptq/autogen/RptqQueryPredicate.m; sourceTree = "<group>"; };
+		4C8CD9E61AD1D72E00B7B9EA /* RptqQuerySort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQuerySort.h; path = rptq/autogen/RptqQuerySort.h; sourceTree = "<group>"; };
+		4C8CD9E71AD1D72E00B7B9EA /* RptqQuerySort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQuerySort.m; path = rptq/autogen/RptqQuerySort.m; sourceTree = "<group>"; };
+		4C8CD9E81AD1D72E00B7B9EA /* RptqQueryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqQueryTable.h; path = rptq/autogen/RptqQueryTable.h; sourceTree = "<group>"; };
+		4C8CD9E91AD1D72E00B7B9EA /* RptqQueryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqQueryTable.m; path = rptq/autogen/RptqQueryTable.m; sourceTree = "<group>"; };
+		4C8CD9EA1AD1D72E00B7B9EA /* RptqRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqRelationship.h; path = rptq/autogen/RptqRelationship.h; sourceTree = "<group>"; };
+		4C8CD9EB1AD1D72E00B7B9EA /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqRelationship.m; path = rptq/autogen/RptqRelationship.m; sourceTree = "<group>"; };
+		4C8CD9EC1AD1D72E00B7B9EA /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqUserCredentals.h; path = rptq/autogen/RptqUserCredentals.h; sourceTree = "<group>"; };
+		4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqUserCredentals.m; path = rptq/autogen/RptqUserCredentals.m; sourceTree = "<group>"; };
+		4C8CDA081AD1D75500B7B9EA /* rptq.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rptq.h; path = rptq/rptq.h; sourceTree = "<group>"; };
+		4C8CDA091AD1D9CD00B7B9EA /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../../Reports/libTdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
+		4C8CDA0C1AD1DA5E00B7B9EA /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
+		4C8CDA0D1AD1DA5E00B7B9EA /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
+		4C8CDA0E1AD1DA5E00B7B9EA /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
+		4C8CDA0F1AD1DA5E00B7B9EA /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpublic.h; sourceTree = "<group>"; };
+		4C8CDA101AD1DA5E00B7B9EA /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
+		4C8CDA111AD1DA5E00B7B9EA /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqldb.h; sourceTree = "<group>"; };
+		4C8CDA121AD1DA5E00B7B9EA /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlfront.h; sourceTree = "<group>"; };
+		4C8CDA131AD1DA5E00B7B9EA /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
+		4C8CDA141AD1DA5E00B7B9EA /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
+		4C8CDA151AD1DA5E00B7B9EA /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
+		4C8CDA161AD1DA5E00B7B9EA /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
+		4C8CDA271AD1DAF000B7B9EA /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4C8CDA291AD1DCC100B7B9EA /* MTQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuery.h; sourceTree = "<group>"; };
+		4C8CDA2A1AD1DCC100B7B9EA /* MTQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuery.m; sourceTree = "<group>"; };
+		4C8CDA2B1AD1DCC100B7B9EA /* MTQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCache.h; sourceTree = "<group>"; };
+		4C8CDA2C1AD1DCC100B7B9EA /* MTQueryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCache.m; sourceTree = "<group>"; };
+		4C8CDA2D1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheAddColumn.h; sourceTree = "<group>"; };
+		4C8CDA2E1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheAddColumn.m; sourceTree = "<group>"; };
+		4C8CDA2F1AD1DCC100B7B9EA /* MTQueryCacheAddRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheAddRow.h; sourceTree = "<group>"; };
+		4C8CDA301AD1DCC100B7B9EA /* MTQueryCacheAddRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheAddRow.m; sourceTree = "<group>"; };
+		4C8CDA311AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheAggregateFunction.h; sourceTree = "<group>"; };
+		4C8CDA321AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheAggregateFunction.m; sourceTree = "<group>"; };
+		4C8CDA331AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheBeginTransaction.h; sourceTree = "<group>"; };
+		4C8CDA341AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheBeginTransaction.m; sourceTree = "<group>"; };
+		4C8CDA351AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheDeleteAllFromTable.h; sourceTree = "<group>"; };
+		4C8CDA361AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheDeleteAllFromTable.m; sourceTree = "<group>"; };
+		4C8CDA371AD1DCC100B7B9EA /* MTQueryCacheDropTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheDropTable.h; sourceTree = "<group>"; };
+		4C8CDA381AD1DCC100B7B9EA /* MTQueryCacheDropTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheDropTable.m; sourceTree = "<group>"; };
+		4C8CDA391AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheEndTransaction.h; sourceTree = "<group>"; };
+		4C8CDA3A1AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheEndTransaction.m; sourceTree = "<group>"; };
+		4C8CDA3B1AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexCreate.h; sourceTree = "<group>"; };
+		4C8CDA3C1AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
+		4C8CDA3D1AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
+		4C8CDA3E1AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexDrop.m; sourceTree = "<group>"; };
+		4C8CDA3F1AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheJournalModeDefault.h; sourceTree = "<group>"; };
+		4C8CDA401AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheJournalModeDefault.m; sourceTree = "<group>"; };
+		4C8CDA411AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheJournalModeOverride.h; sourceTree = "<group>"; };
+		4C8CDA421AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheJournalModeOverride.m; sourceTree = "<group>"; };
+		4C8CDA431AD1DCC100B7B9EA /* MTQueryCacheSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelect.h; sourceTree = "<group>"; };
+		4C8CDA441AD1DCC100B7B9EA /* MTQueryCacheSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelect.m; sourceTree = "<group>"; };
+		4C8CDA451AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectGroupKeys.h; sourceTree = "<group>"; };
+		4C8CDA461AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectGroupKeys.m; sourceTree = "<group>"; };
+		4C8CDA471AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectLimitOffset.h; sourceTree = "<group>"; };
+		4C8CDA481AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectLimitOffset.m; sourceTree = "<group>"; };
+		4C8CDA491AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectRowId.h; sourceTree = "<group>"; };
+		4C8CDA4A1AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectRowId.m; sourceTree = "<group>"; };
+		4C8CDA4B1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectRowIds.h; sourceTree = "<group>"; };
+		4C8CDA4C1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectRowIds.m; sourceTree = "<group>"; };
+		4C8CDA4D1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSyncDefault.h; sourceTree = "<group>"; };
+		4C8CDA4E1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSyncDefault.m; sourceTree = "<group>"; };
+		4C8CDA4F1AD1DCC100B7B9EA /* MTQueryCacheSyncOff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSyncOff.h; sourceTree = "<group>"; };
+		4C8CDA501AD1DCC100B7B9EA /* MTQueryCacheSyncOff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSyncOff.m; sourceTree = "<group>"; };
+		4C8CDA511AD1DCC100B7B9EA /* MTQueryCacheVacuum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheVacuum.h; sourceTree = "<group>"; };
+		4C8CDA521AD1DCC100B7B9EA /* MTQueryCacheVacuum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheVacuum.m; sourceTree = "<group>"; };
+		4C8CDA531AD1DCC100B7B9EA /* MTQueryCustomNoResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCustomNoResults.h; sourceTree = "<group>"; };
+		4C8CDA541AD1DCC100B7B9EA /* MTQueryCustomNoResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCustomNoResults.m; sourceTree = "<group>"; };
+		4C8CDA551AD1DCC100B7B9EA /* MTQueryDefinitionField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDefinitionField.h; sourceTree = "<group>"; };
+		4C8CDA561AD1DCC100B7B9EA /* MTQueryDefinitionField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDefinitionField.m; sourceTree = "<group>"; };
+		4C8CDA571AD1DCC100B7B9EA /* MTQueryDefinitionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDefinitionGroup.h; sourceTree = "<group>"; };
+		4C8CDA581AD1DCC100B7B9EA /* MTQueryDefinitionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDefinitionGroup.m; sourceTree = "<group>"; };
+		4C8CDA591AD1DCC100B7B9EA /* MTQueryDefinitionLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDefinitionLinks.h; sourceTree = "<group>"; };
+		4C8CDA5A1AD1DCC100B7B9EA /* MTQueryDefinitionLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDefinitionLinks.m; sourceTree = "<group>"; };
+		4C8CDA5B1AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDefinitionPredicate.h; sourceTree = "<group>"; };
+		4C8CDA5C1AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDefinitionPredicate.m; sourceTree = "<group>"; };
+		4C8CDA5D1AD1DCC100B7B9EA /* MTQueryDefinitionSort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDefinitionSort.h; sourceTree = "<group>"; };
+		4C8CDA5E1AD1DCC100B7B9EA /* MTQueryDefinitionSort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDefinitionSort.m; sourceTree = "<group>"; };
+		4C8CDA5F1AD1DCC100B7B9EA /* MTQueryDefinitionTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDefinitionTable.h; sourceTree = "<group>"; };
+		4C8CDA601AD1DCC100B7B9EA /* MTQueryDefinitionTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDefinitionTable.m; sourceTree = "<group>"; };
+		4C8CDA611AD1DCC100B7B9EA /* MTQueryFull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryFull.h; sourceTree = "<group>"; };
+		4C8CDA621AD1DCC100B7B9EA /* MTQueryFull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryFull.m; sourceTree = "<group>"; };
+		4C8CDA631AD1DCC100B7B9EA /* MTQueryMaxFieldLength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryMaxFieldLength.h; sourceTree = "<group>"; };
+		4C8CDA641AD1DCC100B7B9EA /* MTQueryMaxFieldLength.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryMaxFieldLength.m; sourceTree = "<group>"; };
+		4C8CDA651AD1DCC100B7B9EA /* MTQuerySampleDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySampleDataField.h; sourceTree = "<group>"; };
+		4C8CDA661AD1DCC100B7B9EA /* MTQuerySampleDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySampleDataField.m; sourceTree = "<group>"; };
+		4C8CDA671AD1DCC100B7B9EA /* MTQuerySampleDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySampleDataTable.h; sourceTree = "<group>"; };
+		4C8CDA681AD1DCC100B7B9EA /* MTQuerySampleDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySampleDataTable.m; sourceTree = "<group>"; };
+		4C8CDA691AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySelectItemsForGroup.h; sourceTree = "<group>"; };
+		4C8CDA6A1AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySelectItemsForGroup.m; sourceTree = "<group>"; };
+		4C8CDA6B1AD1DCC100B7B9EA /* MTQueryTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryTest.h; sourceTree = "<group>"; };
+		4C8CDA6C1AD1DCC100B7B9EA /* MTQueryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryTest.m; sourceTree = "<group>"; };
+		4C8CDA8F1AD1DE7700B7B9EA /* MTDatabaseCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseCache.h; sourceTree = "<group>"; };
+		4C8CDA901AD1DE7700B7B9EA /* MTDatabaseCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseCache.m; sourceTree = "<group>"; };
+		4C8CDA921AD1DED600B7B9EA /* MTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabase.h; sourceTree = "<group>"; };
+		4C8CDA931AD1DED600B7B9EA /* MTDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabase.m; sourceTree = "<group>"; };
+		4C8CDA951AD1DF1400B7B9EA /* MTDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseMySql.h; sourceTree = "<group>"; };
+		4C8CDA961AD1DF1400B7B9EA /* MTDatabaseMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseMySql.m; sourceTree = "<group>"; };
+		4C8CDA971AD1DF1400B7B9EA /* MTDatabaseSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseSqlite3.h; sourceTree = "<group>"; };
+		4C8CDA981AD1DF1400B7B9EA /* MTDatabaseSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseSqlite3.m; sourceTree = "<group>"; };
+		4C8CDA991AD1DF1400B7B9EA /* MTDatabaseSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseSqlServer.h; sourceTree = "<group>"; };
+		4C8CDA9A1AD1DF1400B7B9EA /* MTDatabaseSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseSqlServer.m; sourceTree = "<group>"; };
+		4C8CDA9E1AD1DF3E00B7B9EA /* MTDatabaseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseField.h; sourceTree = "<group>"; };
+		4C8CDA9F1AD1DF3E00B7B9EA /* MTDatabaseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseField.m; sourceTree = "<group>"; };
+		4C8CDAA01AD1DF3E00B7B9EA /* MTDatabaseTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseTable.h; sourceTree = "<group>"; };
+		4C8CDAA11AD1DF3E00B7B9EA /* MTDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseTable.m; sourceTree = "<group>"; };
+		4C8CDAA41AD1DF9800B7B9EA /* MTDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataType.h; sourceTree = "<group>"; };
+		4C8CDAA51AD1DF9800B7B9EA /* MTDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataType.m; sourceTree = "<group>"; };
+		4C8CDAA81AD1E04700B7B9EA /* NSData+Comparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Comparson.h"; sourceTree = "<group>"; };
+		4C8CDAA91AD1E04700B7B9EA /* NSData+Comparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Comparson.m"; sourceTree = "<group>"; };
+		4C8CDAAC1AD1E06A00B7B9EA /* libMTDataStrutures.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMTDataStrutures.a; path = "../../Reports/libMTDataStrutures/build/Debug-iphoneos/libMTDataStrutures.a"; sourceTree = "<group>"; };
+		4C8CDAB01AD1E0E900B7B9EA /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
+		4C8CDAB11AD1E0E900B7B9EA /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
+		4C8CDAB21AD1E0E900B7B9EA /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
+		4C8CDAB31AD1E0E900B7B9EA /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
+		4C8CDAB41AD1E0E900B7B9EA /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
+		4C8CDAB51AD1E0E900B7B9EA /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
+		4C8CDAB61AD1E0E900B7B9EA /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
+		4C8CDAB71AD1E0E900B7B9EA /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
+		4C8CDAB81AD1E0E900B7B9EA /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
+		4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTKeyChain.h; sourceTree = "<group>"; };
+		4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTKeyChain.m; sourceTree = "<group>"; };
+		4C8CDABC1AD1E1A300B7B9EA /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationDidReadRows.h; sourceTree = "<group>"; };
+		4C8CDABD1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNotificationDidReadRows.m; sourceTree = "<group>"; };
+		4C8CDABF1AD1E32C00B7B9EA /* MTDataColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataColumn.h; sourceTree = "<group>"; };
+		4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataColumn.m; sourceTree = "<group>"; };
+		4C8CDAC21AD1E37800B7B9EA /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAC31AD1E37800B7B9EA /* NSString+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
+		4C8CDACA1AD243C300B7B9EA /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLog.h; path = ../../CocoaExtensions/CocoaExtensions/MTLog.h; sourceTree = "<group>"; };
+		4C8CDACB1AD244D000B7B9EA /* MTDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTable.h; sourceTree = "<group>"; };
+		4C8CDACC1AD244D000B7B9EA /* MTDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTable.m; sourceTree = "<group>"; };
+		4C8CDACD1AD244D000B7B9EA /* MTDataTableFast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableFast.h; sourceTree = "<group>"; };
+		4C8CDACE1AD244D000B7B9EA /* MTDataTableFast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableFast.m; sourceTree = "<group>"; };
+		4C8CDACF1AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableFastObjectEnumerator.h; sourceTree = "<group>"; };
+		4C8CDAD01AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableFastObjectEnumerator.m; sourceTree = "<group>"; };
+		4C8CDAD11AD244D000B7B9EA /* MTDataTableLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableLocation.h; sourceTree = "<group>"; };
+		4C8CDAD21AD244D000B7B9EA /* MTDataTableLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableLocation.m; sourceTree = "<group>"; };
+		4C8CDAD31AD244D000B7B9EA /* MTDataTableVirtual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableVirtual.h; sourceTree = "<group>"; };
+		4C8CDAD41AD244D000B7B9EA /* MTDataTableVirtual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableVirtual.m; sourceTree = "<group>"; };
+		4C8CDADA1AD2454100B7B9EA /* MTAggregateFunctionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionType.h; sourceTree = "<group>"; };
+		4C8CDADB1AD2458800B7B9EA /* MADAggregateGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAggregateGroupByType.h; sourceTree = "<group>"; };
+		4C8CDADF1AD247F900B7B9EA /* MTDatabaseDataBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDataBinding.h; sourceTree = "<group>"; };
+		4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDataBinding.m; sourceTree = "<group>"; };
+		4C8CDAE21AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDatabaseSchemaField+Extras.h"; path = "rptq/RptqDatabaseSchemaField+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAE31AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDatabaseSchemaField+Extras.m"; path = "rptq/RptqDatabaseSchemaField+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAE41AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDatabaseSchemaTable+Extras.h"; path = "rptq/RptqDatabaseSchemaTable+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAE51AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDatabaseSchemaTable+Extras.m"; path = "rptq/RptqDatabaseSchemaTable+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAE81AD24BD000B7B9EA /* RptqDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocument+Extras.h"; path = "rptq/RptqDocument+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAE91AD24BD000B7B9EA /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocument+Extras.m"; path = "rptq/RptqDocument+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAEB1AD24C1300B7B9EA /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
+		4C8CDAEC1AD24C2300B7B9EA /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
+		4C8CDAED1AD24C5100B7B9EA /* RptqDocumentSection+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentSection+Extras.h"; path = "rptq/RptqDocumentSection+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSection+Extras.m"; path = "rptq/RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAF01AD24C9000B7B9EA /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEnumerator.h; sourceTree = "<group>"; };
+		4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionEnumerator.m; sourceTree = "<group>"; };
+		4C8CDAF31AD24CBF00B7B9EA /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQuery+Extras.h"; path = "rptq/RptqQuery+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAF41AD24CBF00B7B9EA /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuery+Extras.m"; path = "rptq/RptqQuery+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAF61AD24D2A00B7B9EA /* RptqQueryField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryField+Extras.h"; path = "rptq/RptqQueryField+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAF71AD24D2A00B7B9EA /* RptqQueryField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryField+Extras.m"; path = "rptq/RptqQueryField+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAF81AD24D2A00B7B9EA /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryLinks+Extras.h"; path = "rptq/RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAF91AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryLinks+Extras.m"; path = "rptq/RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAFA1AD24D2A00B7B9EA /* RptqQueryTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryTable+Extras.h"; path = "rptq/RptqQueryTable+Extras.h"; sourceTree = "<group>"; };
+		4C8CDAFB1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryTable+Extras.m"; path = "rptq/RptqQueryTable+Extras.m"; sourceTree = "<group>"; };
+		4C8CDAFF1AD24D3E00B7B9EA /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDatabase+Extras.h"; path = "rptq/RptqDatabase+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB001AD24D3E00B7B9EA /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDatabase+Extras.m"; path = "rptq/RptqDatabase+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB021AD24D7A00B7B9EA /* MADLinkType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLinkType.h; sourceTree = "<group>"; };
+		4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBarcodes.a; path = "../../Reports/Barcodes/build/Debug-iphoneos/libBarcodes.a"; sourceTree = "<group>"; };
+		4C8CDB061AD24DEA00B7B9EA /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = ../../Reports/Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
+		4C8CDB091AD24E7100B7B9EA /* RptqUserCredentals+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqUserCredentals+Extras.h"; path = "rptq/RptqUserCredentals+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB0A1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqUserCredentals+Extras.m"; path = "rptq/RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB0C1AD24E8400B7B9EA /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObject+Extras.h"; path = "rptq/RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB0D1AD24E8400B7B9EA /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObject+Extras.m"; path = "rptq/RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB0E1AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectAggregate+Extras.h"; path = "rptq/RptqDocumentObjectAggregate+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB0F1AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectAggregate+Extras.m"; path = "rptq/RptqDocumentObjectAggregate+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB101AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectBarcode+Extras.h"; path = "rptq/RptqDocumentObjectBarcode+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB111AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectBarcode+Extras.m"; path = "rptq/RptqDocumentObjectBarcode+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB121AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectChart+Extras.h"; path = "rptq/RptqDocumentObjectChart+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB131AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectChart+Extras.m"; path = "rptq/RptqDocumentObjectChart+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB141AD24E8400B7B9EA /* RptqDocumentObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentObjectFactory.h; path = rptq/RptqDocumentObjectFactory.h; sourceTree = "<group>"; };
+		4C8CDB151AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectFormula+Extras.h"; path = "rptq/RptqDocumentObjectFormula+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB161AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectFormula+Extras.m"; path = "rptq/RptqDocumentObjectFormula+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB171AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectGroupKey+Extras.h"; path = "rptq/RptqDocumentObjectGroupKey+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB181AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectGroupKey+Extras.m"; path = "rptq/RptqDocumentObjectGroupKey+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB191AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectImage+Extras.h"; path = "rptq/RptqDocumentObjectImage+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB1A1AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectImage+Extras.m"; path = "rptq/RptqDocumentObjectImage+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB1B1AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectLabel+Extras.h"; path = "rptq/RptqDocumentObjectLabel+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB1C1AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectLabel+Extras.m"; path = "rptq/RptqDocumentObjectLabel+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB1D1AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectLabelDataField+Extras.h"; path = "rptq/RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB1E1AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectLabelDataField+Extras.m"; path = "rptq/RptqDocumentObjectLabelDataField+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB1F1AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectLabelLink+Extras.h"; path = "rptq/RptqDocumentObjectLabelLink+Extras.h"; sourceTree = "<group>"; };
+		4C8CDB201AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentObjectLabelLink+Extras.m"; path = "rptq/RptqDocumentObjectLabelLink+Extras.m"; sourceTree = "<group>"; };
+		4C8CDB2B1AD24ED500B7B9EA /* MADDocumentObjectType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentObjectType.h; sourceTree = "<group>"; };
+		4C8CDB2C1AD24F3400B7B9EA /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hack.h"; path = "../../CocoaExtensions/CocoaExtensions/UIDevice+Hack.h"; sourceTree = "<group>"; };
+		4C8CDB2E1AD2500800B7B9EA /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaper.h; sourceTree = "<group>"; };
+		4C8CDB2F1AD2500800B7B9EA /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaper.m; sourceTree = "<group>"; };
+		4C8CDB301AD2500800B7B9EA /* MTPaperA0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA0.h; sourceTree = "<group>"; };
+		4C8CDB311AD2500800B7B9EA /* MTPaperA0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA0.m; sourceTree = "<group>"; };
+		4C8CDB321AD2500800B7B9EA /* MTPaperA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA1.h; sourceTree = "<group>"; };
+		4C8CDB331AD2500800B7B9EA /* MTPaperA1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA1.m; sourceTree = "<group>"; };
+		4C8CDB341AD2500800B7B9EA /* MTPaperA2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA2.h; sourceTree = "<group>"; };
+		4C8CDB351AD2500800B7B9EA /* MTPaperA2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA2.m; sourceTree = "<group>"; };
+		4C8CDB361AD2500800B7B9EA /* MTPaperA3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA3.h; sourceTree = "<group>"; };
+		4C8CDB371AD2500800B7B9EA /* MTPaperA3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA3.m; sourceTree = "<group>"; };
+		4C8CDB381AD2500800B7B9EA /* MTPaperA4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA4.h; sourceTree = "<group>"; };
+		4C8CDB391AD2500800B7B9EA /* MTPaperA4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA4.m; sourceTree = "<group>"; };
+		4C8CDB3A1AD2500800B7B9EA /* MTPaperA5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA5.h; sourceTree = "<group>"; };
+		4C8CDB3B1AD2500800B7B9EA /* MTPaperA5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA5.m; sourceTree = "<group>"; };
+		4C8CDB3C1AD2500800B7B9EA /* MTPaperA6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA6.h; sourceTree = "<group>"; };
+		4C8CDB3D1AD2500800B7B9EA /* MTPaperA6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA6.m; sourceTree = "<group>"; };
+		4C8CDB3E1AD2500800B7B9EA /* MTPaperA7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA7.h; sourceTree = "<group>"; };
+		4C8CDB3F1AD2500800B7B9EA /* MTPaperA7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA7.m; sourceTree = "<group>"; };
+		4C8CDB401AD2500800B7B9EA /* MTPaperA8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA8.h; sourceTree = "<group>"; };
+		4C8CDB411AD2500800B7B9EA /* MTPaperA8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA8.m; sourceTree = "<group>"; };
+		4C8CDB421AD2500800B7B9EA /* MTPaperA9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA9.h; sourceTree = "<group>"; };
+		4C8CDB431AD2500800B7B9EA /* MTPaperA9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA9.m; sourceTree = "<group>"; };
+		4C8CDB441AD2500800B7B9EA /* MTPaperA10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperA10.h; sourceTree = "<group>"; };
+		4C8CDB451AD2500800B7B9EA /* MTPaperA10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperA10.m; sourceTree = "<group>"; };
+		4C8CDB461AD2500800B7B9EA /* MTPaperB0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB0.h; sourceTree = "<group>"; };
+		4C8CDB471AD2500800B7B9EA /* MTPaperB0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB0.m; sourceTree = "<group>"; };
+		4C8CDB481AD2500800B7B9EA /* MTPaperB1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB1.h; sourceTree = "<group>"; };
+		4C8CDB491AD2500800B7B9EA /* MTPaperB1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB1.m; sourceTree = "<group>"; };
+		4C8CDB4A1AD2500800B7B9EA /* MTPaperB2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB2.h; sourceTree = "<group>"; };
+		4C8CDB4B1AD2500800B7B9EA /* MTPaperB2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB2.m; sourceTree = "<group>"; };
+		4C8CDB4C1AD2500800B7B9EA /* MTPaperB3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB3.h; sourceTree = "<group>"; };
+		4C8CDB4D1AD2500800B7B9EA /* MTPaperB3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB3.m; sourceTree = "<group>"; };
+		4C8CDB4E1AD2500800B7B9EA /* MTPaperB4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB4.h; sourceTree = "<group>"; };
+		4C8CDB4F1AD2500800B7B9EA /* MTPaperB4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB4.m; sourceTree = "<group>"; };
+		4C8CDB501AD2500800B7B9EA /* MTPaperB5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB5.h; sourceTree = "<group>"; };
+		4C8CDB511AD2500800B7B9EA /* MTPaperB5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB5.m; sourceTree = "<group>"; };
+		4C8CDB521AD2500800B7B9EA /* MTPaperB6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB6.h; sourceTree = "<group>"; };
+		4C8CDB531AD2500800B7B9EA /* MTPaperB6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB6.m; sourceTree = "<group>"; };
+		4C8CDB541AD2500800B7B9EA /* MTPaperB7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB7.h; sourceTree = "<group>"; };
+		4C8CDB551AD2500800B7B9EA /* MTPaperB7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB7.m; sourceTree = "<group>"; };
+		4C8CDB561AD2500800B7B9EA /* MTPaperB8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB8.h; sourceTree = "<group>"; };
+		4C8CDB571AD2500800B7B9EA /* MTPaperB8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB8.m; sourceTree = "<group>"; };
+		4C8CDB581AD2500800B7B9EA /* MTPaperB9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB9.h; sourceTree = "<group>"; };
+		4C8CDB591AD2500800B7B9EA /* MTPaperB9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB9.m; sourceTree = "<group>"; };
+		4C8CDB5A1AD2500800B7B9EA /* MTPaperB10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperB10.h; sourceTree = "<group>"; };
+		4C8CDB5B1AD2500800B7B9EA /* MTPaperB10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperB10.m; sourceTree = "<group>"; };
+		4C8CDB5C1AD2500800B7B9EA /* MTPaperC0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC0.h; sourceTree = "<group>"; };
+		4C8CDB5D1AD2500800B7B9EA /* MTPaperC0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC0.m; sourceTree = "<group>"; };
+		4C8CDB5E1AD2500800B7B9EA /* MTPaperC1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC1.h; sourceTree = "<group>"; };
+		4C8CDB5F1AD2500800B7B9EA /* MTPaperC1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC1.m; sourceTree = "<group>"; };
+		4C8CDB601AD2500800B7B9EA /* MTPaperC2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC2.h; sourceTree = "<group>"; };
+		4C8CDB611AD2500800B7B9EA /* MTPaperC2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC2.m; sourceTree = "<group>"; };
+		4C8CDB621AD2500800B7B9EA /* MTPaperC3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC3.h; sourceTree = "<group>"; };
+		4C8CDB631AD2500800B7B9EA /* MTPaperC3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC3.m; sourceTree = "<group>"; };
+		4C8CDB641AD2500800B7B9EA /* MTPaperC4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC4.h; sourceTree = "<group>"; };
+		4C8CDB651AD2500800B7B9EA /* MTPaperC4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC4.m; sourceTree = "<group>"; };
+		4C8CDB661AD2500800B7B9EA /* MTPaperC5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC5.h; sourceTree = "<group>"; };
+		4C8CDB671AD2500800B7B9EA /* MTPaperC5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC5.m; sourceTree = "<group>"; };
+		4C8CDB681AD2500800B7B9EA /* MTPaperC6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC6.h; sourceTree = "<group>"; };
+		4C8CDB691AD2500800B7B9EA /* MTPaperC6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC6.m; sourceTree = "<group>"; };
+		4C8CDB6A1AD2500800B7B9EA /* MTPaperC7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC7.h; sourceTree = "<group>"; };
+		4C8CDB6B1AD2500800B7B9EA /* MTPaperC7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC7.m; sourceTree = "<group>"; };
+		4C8CDB6C1AD2500800B7B9EA /* MTPaperC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC8.h; sourceTree = "<group>"; };
+		4C8CDB6D1AD2500800B7B9EA /* MTPaperC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC8.m; sourceTree = "<group>"; };
+		4C8CDB6E1AD2500800B7B9EA /* MTPaperC9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC9.h; sourceTree = "<group>"; };
+		4C8CDB6F1AD2500800B7B9EA /* MTPaperC9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC9.m; sourceTree = "<group>"; };
+		4C8CDB701AD2500800B7B9EA /* MTPaperC10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperC10.h; sourceTree = "<group>"; };
+		4C8CDB711AD2500800B7B9EA /* MTPaperC10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperC10.m; sourceTree = "<group>"; };
+		4C8CDB721AD2500800B7B9EA /* MTPaperGovernmentLegal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperGovernmentLegal.h; sourceTree = "<group>"; };
+		4C8CDB731AD2500800B7B9EA /* MTPaperGovernmentLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperGovernmentLegal.m; sourceTree = "<group>"; };
+		4C8CDB741AD2500800B7B9EA /* MTPaperGovernmentLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperGovernmentLetter.h; sourceTree = "<group>"; };
+		4C8CDB751AD2500800B7B9EA /* MTPaperGovernmentLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperGovernmentLetter.m; sourceTree = "<group>"; };
+		4C8CDB761AD2500800B7B9EA /* MTPaperLegal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperLegal.h; sourceTree = "<group>"; };
+		4C8CDB771AD2500800B7B9EA /* MTPaperLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperLegal.m; sourceTree = "<group>"; };
+		4C8CDB781AD2500800B7B9EA /* MTPaperLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperLetter.h; sourceTree = "<group>"; };
+		4C8CDB791AD2500800B7B9EA /* MTPaperLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperLetter.m; sourceTree = "<group>"; };
+		4C8CDBA01AD2507200B7B9EA /* MTReportFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatter.h; sourceTree = "<group>"; };
+		4C8CDBA11AD2507200B7B9EA /* MTReportFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatter.m; sourceTree = "<group>"; };
+		4C8CDBA21AD2507200B7B9EA /* MTReportFormatterCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatterCache.h; sourceTree = "<group>"; };
+		4C8CDBA31AD2507200B7B9EA /* MTReportFormatterCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatterCache.m; sourceTree = "<group>"; };
+		4C8CDBA41AD2507200B7B9EA /* MTReportFormatterPageDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatterPageDefinition.h; sourceTree = "<group>"; };
+		4C8CDBA51AD2507200B7B9EA /* MTReportFormatterPageDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatterPageDefinition.m; sourceTree = "<group>"; };
+		4C8CDBA91AD250AE00B7B9EA /* MTTableFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableFormatter.h; sourceTree = "<group>"; };
+		4C8CDBAA1AD250AE00B7B9EA /* MTTableFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableFormatter.m; sourceTree = "<group>"; };
+		4C8CDBAC1AD250E600B7B9EA /* MTDataFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataFormatter.h; sourceTree = "<group>"; };
+		4C8CDBAD1AD250E600B7B9EA /* MTDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataFormatter.m; sourceTree = "<group>"; };
+		4C8CDBAF1AD2514700B7B9EA /* MADArrayCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADArrayCaching.h; sourceTree = "<group>"; };
+		4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADArrayCaching.m; sourceTree = "<group>"; };
+		4C8CDBB21AD2519300B7B9EA /* MTNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationDidFormatPage.h; sourceTree = "<group>"; };
+		4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNotificationDidFormatPage.m; sourceTree = "<group>"; };
+		4C8CDBB51AD252B400B7B9EA /* MTErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTErrorContainer.h; sourceTree = "<group>"; };
+		4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTErrorContainer.m; sourceTree = "<group>"; };
+		4C8CDBB71AD252B400B7B9EA /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMath.h; sourceTree = "<group>"; };
+		4C8CDBB81AD252B400B7B9EA /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMath.m; sourceTree = "<group>"; };
+		4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Border.h"; path = "../../CocoaExtensions/CocoaExtensions/UIImage+Border.h"; sourceTree = "<group>"; };
+		4C8CDBBF1AD253C500B7B9EA /* MTAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionInputType.h; sourceTree = "<group>"; };
+		4C8CDBC01AD2546300B7B9EA /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryGroup+Extras.h"; path = "rptq/RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
+		4C8CDBC11AD2546300B7B9EA /* RptqQueryGroup+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryGroup+Extras.m"; path = "rptq/RptqQueryGroup+Extras.m"; sourceTree = "<group>"; };
+		4C8CDBC31AD254D600B7B9EA /* MTAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAlignment.h; sourceTree = "<group>"; };
+		4C8CDBC41AD2552C00B7B9EA /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
+		4C8CDBC51AD2552C00B7B9EA /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
+		4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4C8CDBC91AD2557800B7B9EA /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
+		4C8CDBCA1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentSectionRows+Extras.h"; path = "rptq/RptqDocumentSectionRows+Extras.h"; sourceTree = "<group>"; };
+		4C8CDBCB1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSectionRows+Extras.m"; path = "rptq/RptqDocumentSectionRows+Extras.m"; sourceTree = "<group>"; };
+		4C8CDBD31AD2567400B7B9EA /* NSManagedObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Extras.h"; sourceTree = "<group>"; };
+		4C8CDBD41AD2567400B7B9EA /* NSManagedObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Extras.m"; sourceTree = "<group>"; };
+		4C8CDBD51AD2567400B7B9EA /* NSManagedObjectID+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectID+Extras.h"; sourceTree = "<group>"; };
+		4C8CDBD61AD2567400B7B9EA /* NSManagedObjectID+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectID+Extras.m"; sourceTree = "<group>"; };
+		4C8CDBDA1AD2648700B7B9EA /* MysqlCommitException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlCommitException.h; path = MySQL/MysqlCommitException.h; sourceTree = "<group>"; };
+		4C8CDBDB1AD2648700B7B9EA /* MysqlCommitException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlCommitException.m; path = MySQL/MysqlCommitException.m; sourceTree = "<group>"; };
+		4C8CDBDC1AD2648700B7B9EA /* MysqlConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlConnection.h; path = MySQL/MysqlConnection.h; sourceTree = "<group>"; };
+		4C8CDBDD1AD2648700B7B9EA /* MysqlConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlConnection.m; path = MySQL/MysqlConnection.m; sourceTree = "<group>"; };
+		4C8CDBDE1AD2648700B7B9EA /* MysqlDelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlDelete.h; path = MySQL/MysqlDelete.h; sourceTree = "<group>"; };
+		4C8CDBDF1AD2648700B7B9EA /* MysqlDelete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlDelete.m; path = MySQL/MysqlDelete.m; sourceTree = "<group>"; };
+		4C8CDBE01AD2648700B7B9EA /* MysqlException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlException.h; path = MySQL/MysqlException.h; sourceTree = "<group>"; };
+		4C8CDBE11AD2648700B7B9EA /* MysqlException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlException.m; path = MySQL/MysqlException.m; sourceTree = "<group>"; };
+		4C8CDBE21AD2648700B7B9EA /* MysqlFetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlFetch.h; path = MySQL/MysqlFetch.h; sourceTree = "<group>"; };
+		4C8CDBE31AD2648700B7B9EA /* MysqlFetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlFetch.m; path = MySQL/MysqlFetch.m; sourceTree = "<group>"; };
+		4C8CDBE41AD2648700B7B9EA /* MysqlFetchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlFetchField.h; path = MySQL/MysqlFetchField.h; sourceTree = "<group>"; };
+		4C8CDBE51AD2648700B7B9EA /* MysqlFetchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlFetchField.m; path = MySQL/MysqlFetchField.m; sourceTree = "<group>"; };
+		4C8CDBE61AD2648700B7B9EA /* MysqlIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlIndex.h; path = MySQL/MysqlIndex.h; sourceTree = "<group>"; };
+		4C8CDBE71AD2648700B7B9EA /* MysqlIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlIndex.m; path = MySQL/MysqlIndex.m; sourceTree = "<group>"; };
+		4C8CDBE81AD2648700B7B9EA /* MysqlInsert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlInsert.h; path = MySQL/MysqlInsert.h; sourceTree = "<group>"; };
+		4C8CDBE91AD2648700B7B9EA /* MysqlInsert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlInsert.m; path = MySQL/MysqlInsert.m; sourceTree = "<group>"; };
+		4C8CDBEA1AD2648700B7B9EA /* MysqlLiteral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlLiteral.h; path = MySQL/MysqlLiteral.h; sourceTree = "<group>"; };
+		4C8CDBEB1AD2648700B7B9EA /* MysqlLiteral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlLiteral.m; path = MySQL/MysqlLiteral.m; sourceTree = "<group>"; };
+		4C8CDBEC1AD2648700B7B9EA /* MysqlRollbackException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlRollbackException.h; path = MySQL/MysqlRollbackException.h; sourceTree = "<group>"; };
+		4C8CDBED1AD2648700B7B9EA /* MysqlRollbackException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlRollbackException.m; path = MySQL/MysqlRollbackException.m; sourceTree = "<group>"; };
+		4C8CDBEE1AD2648700B7B9EA /* MysqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlServer.h; path = MySQL/MysqlServer.h; sourceTree = "<group>"; };
+		4C8CDBEF1AD2648700B7B9EA /* MysqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlServer.m; path = MySQL/MysqlServer.m; sourceTree = "<group>"; };
+		4C8CDBF01AD2648700B7B9EA /* MysqlTruncate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlTruncate.h; path = MySQL/MysqlTruncate.h; sourceTree = "<group>"; };
+		4C8CDBF11AD2648700B7B9EA /* MysqlTruncate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlTruncate.m; path = MySQL/MysqlTruncate.m; sourceTree = "<group>"; };
+		4C8CDBF21AD2648700B7B9EA /* MysqlUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MysqlUpdate.h; path = MySQL/MysqlUpdate.h; sourceTree = "<group>"; };
+		4C8CDBF31AD2648700B7B9EA /* MysqlUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlUpdate.m; path = MySQL/MysqlUpdate.m; sourceTree = "<group>"; };
+		4C8CDC021AD264B300B7B9EA /* libMysqlClientObjC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMysqlClientObjC.a; path = "../../Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos/libMysqlClientObjC.a"; sourceTree = "<group>"; };
+		4C8CDC041AD264EF00B7B9EA /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
+		4C8CDC051AD264EF00B7B9EA /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
+		4C8CDC061AD264EF00B7B9EA /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
+		4C8CDC071AD264EF00B7B9EA /* rwlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwlock.h; sourceTree = "<group>"; };
+		4C8CDC081AD264EF00B7B9EA /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
+		4C8CDC0A1AD264EF00B7B9EA /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		4C8CDC0B1AD264EF00B7B9EA /* big_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = big_endian.h; sourceTree = "<group>"; };
+		4C8CDC0C1AD264EF00B7B9EA /* byte_order_generic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = byte_order_generic.h; sourceTree = "<group>"; };
+		4C8CDC0D1AD264EF00B7B9EA /* byte_order_generic_x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = byte_order_generic_x86.h; sourceTree = "<group>"; };
+		4C8CDC0E1AD264EF00B7B9EA /* cmake_install.cmake */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cmake_install.cmake; sourceTree = "<group>"; };
+		4C8CDC0F1AD264EF00B7B9EA /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		4C8CDC101AD264EF00B7B9EA /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		4C8CDC111AD264EF00B7B9EA /* crypt_genhash_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt_genhash_impl.h; sourceTree = "<group>"; };
+		4C8CDC121AD264EF00B7B9EA /* decimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decimal.h; sourceTree = "<group>"; };
+		4C8CDC131AD264EF00B7B9EA /* dur_prop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dur_prop.h; sourceTree = "<group>"; };
+		4C8CDC141AD264EF00B7B9EA /* errmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errmsg.h; sourceTree = "<group>"; };
+		4C8CDC151AD264EF00B7B9EA /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
+		4C8CDC161AD264EF00B7B9EA /* heap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heap.h; sourceTree = "<group>"; };
+		4C8CDC171AD264EF00B7B9EA /* keycache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keycache.h; sourceTree = "<group>"; };
+		4C8CDC181AD264EF00B7B9EA /* lf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lf.h; sourceTree = "<group>"; };
+		4C8CDC191AD264EF00B7B9EA /* little_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = little_endian.h; sourceTree = "<group>"; };
+		4C8CDC1A1AD264EF00B7B9EA /* m_ctype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_ctype.h; sourceTree = "<group>"; };
+		4C8CDC1B1AD264EF00B7B9EA /* m_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_string.h; sourceTree = "<group>"; };
+		4C8CDC1C1AD264EF00B7B9EA /* my_aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_aes.h; sourceTree = "<group>"; };
+		4C8CDC1D1AD264EF00B7B9EA /* my_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_alloc.h; sourceTree = "<group>"; };
+		4C8CDC1E1AD264EF00B7B9EA /* my_atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_atomic.h; sourceTree = "<group>"; };
+		4C8CDC1F1AD264EF00B7B9EA /* my_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_base.h; sourceTree = "<group>"; };
+		4C8CDC201AD264EF00B7B9EA /* my_bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_bit.h; sourceTree = "<group>"; };
+		4C8CDC211AD264EF00B7B9EA /* my_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_bitmap.h; sourceTree = "<group>"; };
+		4C8CDC221AD264EF00B7B9EA /* my_byteorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_byteorder.h; sourceTree = "<group>"; };
+		4C8CDC231AD264EF00B7B9EA /* my_check_opt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_check_opt.h; sourceTree = "<group>"; };
+		4C8CDC241AD264EF00B7B9EA /* my_compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_compare.h; sourceTree = "<group>"; };
+		4C8CDC251AD264EF00B7B9EA /* my_compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_compiler.h; sourceTree = "<group>"; };
+		4C8CDC261AD264EF00B7B9EA /* my_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_config.h; sourceTree = "<group>"; };
+		4C8CDC271AD264EF00B7B9EA /* my_config.he */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = my_config.he; sourceTree = "<group>"; };
+		4C8CDC281AD264EF00B7B9EA /* my_dbug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_dbug.h; sourceTree = "<group>"; };
+		4C8CDC291AD264EF00B7B9EA /* my_default.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_default.h; sourceTree = "<group>"; };
+		4C8CDC2A1AD264EF00B7B9EA /* my_dir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_dir.h; sourceTree = "<group>"; };
+		4C8CDC2B1AD264EF00B7B9EA /* my_getopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_getopt.h; sourceTree = "<group>"; };
+		4C8CDC2C1AD264EF00B7B9EA /* my_global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_global.h; sourceTree = "<group>"; };
+		4C8CDC2D1AD264EF00B7B9EA /* my_icp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_icp.h; sourceTree = "<group>"; };
+		4C8CDC2E1AD264EF00B7B9EA /* my_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_list.h; sourceTree = "<group>"; };
+		4C8CDC2F1AD264EF00B7B9EA /* my_md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_md5.h; sourceTree = "<group>"; };
+		4C8CDC301AD264EF00B7B9EA /* my_murmur3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_murmur3.h; sourceTree = "<group>"; };
+		4C8CDC311AD264EF00B7B9EA /* my_pthread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_pthread.h; sourceTree = "<group>"; };
+		4C8CDC321AD264EF00B7B9EA /* my_rdtsc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_rdtsc.h; sourceTree = "<group>"; };
+		4C8CDC331AD264EF00B7B9EA /* my_rnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_rnd.h; sourceTree = "<group>"; };
+		4C8CDC341AD264EF00B7B9EA /* my_stacktrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_stacktrace.h; sourceTree = "<group>"; };
+		4C8CDC351AD264EF00B7B9EA /* my_sys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_sys.h; sourceTree = "<group>"; };
+		4C8CDC361AD264EF00B7B9EA /* my_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_time.h; sourceTree = "<group>"; };
+		4C8CDC371AD264EF00B7B9EA /* my_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_tree.h; sourceTree = "<group>"; };
+		4C8CDC381AD264EF00B7B9EA /* my_uctype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_uctype.h; sourceTree = "<group>"; };
+		4C8CDC391AD264EF00B7B9EA /* my_xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_xml.h; sourceTree = "<group>"; };
+		4C8CDC3A1AD264EF00B7B9EA /* myisampack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myisampack.h; sourceTree = "<group>"; };
+		4C8CDC3B1AD264EF00B7B9EA /* client_authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_authentication.h; sourceTree = "<group>"; };
+		4C8CDC3C1AD264EF00B7B9EA /* client_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_plugin.h; sourceTree = "<group>"; };
+		4C8CDC3D1AD264EF00B7B9EA /* client_plugin.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = client_plugin.h.pp; sourceTree = "<group>"; };
+		4C8CDC3E1AD264EF00B7B9EA /* get_password.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = get_password.h; sourceTree = "<group>"; };
+		4C8CDC3F1AD264EF00B7B9EA /* plugin_auth_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin_auth_common.h; sourceTree = "<group>"; };
+		4C8CDC401AD264EF00B7B9EA /* plugin_trace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin_trace.h; sourceTree = "<group>"; };
+		4C8CDC411AD264EF00B7B9EA /* mysql_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_file.h; sourceTree = "<group>"; };
+		4C8CDC421AD264EF00B7B9EA /* mysql_idle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_idle.h; sourceTree = "<group>"; };
+		4C8CDC431AD264EF00B7B9EA /* mysql_mdl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_mdl.h; sourceTree = "<group>"; };
+		4C8CDC441AD264EF00B7B9EA /* mysql_memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_memory.h; sourceTree = "<group>"; };
+		4C8CDC451AD264EF00B7B9EA /* mysql_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_socket.h; sourceTree = "<group>"; };
+		4C8CDC461AD264EF00B7B9EA /* mysql_sp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_sp.h; sourceTree = "<group>"; };
+		4C8CDC471AD264EF00B7B9EA /* mysql_stage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_stage.h; sourceTree = "<group>"; };
+		4C8CDC481AD264EF00B7B9EA /* mysql_statement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_statement.h; sourceTree = "<group>"; };
+		4C8CDC491AD264EF00B7B9EA /* mysql_table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_table.h; sourceTree = "<group>"; };
+		4C8CDC4A1AD264EF00B7B9EA /* mysql_thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_thread.h; sourceTree = "<group>"; };
+		4C8CDC4B1AD264EF00B7B9EA /* mysql_transaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_transaction.h; sourceTree = "<group>"; };
+		4C8CDC4C1AD264EF00B7B9EA /* psi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psi.h; sourceTree = "<group>"; };
+		4C8CDC4D1AD264EF00B7B9EA /* psi_abi_v0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psi_abi_v0.h; sourceTree = "<group>"; };
+		4C8CDC4E1AD264EF00B7B9EA /* psi_abi_v0.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = psi_abi_v0.h.pp; sourceTree = "<group>"; };
+		4C8CDC4F1AD264EF00B7B9EA /* psi_abi_v1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psi_abi_v1.h; sourceTree = "<group>"; };
+		4C8CDC501AD264EF00B7B9EA /* psi_abi_v1.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = psi_abi_v1.h.pp; sourceTree = "<group>"; };
+		4C8CDC511AD264EF00B7B9EA /* psi_abi_v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psi_abi_v2.h; sourceTree = "<group>"; };
+		4C8CDC521AD264EF00B7B9EA /* psi_abi_v2.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = psi_abi_v2.h.pp; sourceTree = "<group>"; };
+		4C8CDC531AD264EF00B7B9EA /* psi_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psi_base.h; sourceTree = "<group>"; };
+		4C8CDC541AD264EF00B7B9EA /* psi_memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psi_memory.h; sourceTree = "<group>"; };
+		4C8CDC561AD264EF00B7B9EA /* service_mysql_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = service_mysql_alloc.h; sourceTree = "<group>"; };
+		4C8CDC581AD264EF00B7B9EA /* mysql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql.h; sourceTree = "<group>"; };
+		4C8CDC591AD264EF00B7B9EA /* mysql.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = mysql.h.pp; sourceTree = "<group>"; };
+		4C8CDC5A1AD264EF00B7B9EA /* mysql_com.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_com.h; sourceTree = "<group>"; };
+		4C8CDC5B1AD264EF00B7B9EA /* mysql_com_server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_com_server.h; sourceTree = "<group>"; };
+		4C8CDC5C1AD264EF00B7B9EA /* mysql_embed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_embed.h; sourceTree = "<group>"; };
+		4C8CDC5D1AD264EF00B7B9EA /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_time.h; sourceTree = "<group>"; };
+		4C8CDC5E1AD264EF00B7B9EA /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_version.h; sourceTree = "<group>"; };
+		4C8CDC5F1AD264EF00B7B9EA /* mysql_version.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mysql_version.h.in; sourceTree = "<group>"; };
+		4C8CDC601AD264EF00B7B9EA /* mysqld_ername.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysqld_ername.h; sourceTree = "<group>"; };
+		4C8CDC611AD264EF00B7B9EA /* mysqld_error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysqld_error.h; sourceTree = "<group>"; };
+		4C8CDC621AD264EF00B7B9EA /* mysys_err.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysys_err.h; sourceTree = "<group>"; };
+		4C8CDC631AD264EF00B7B9EA /* password.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = password.h; sourceTree = "<group>"; };
+		4C8CDC641AD264EF00B7B9EA /* probes_mysql.d */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.dtrace; path = probes_mysql.d; sourceTree = "<group>"; };
+		4C8CDC651AD264EF00B7B9EA /* probes_mysql.d.base */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = probes_mysql.d.base; sourceTree = "<group>"; };
+		4C8CDC661AD264EF00B7B9EA /* probes_mysql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = probes_mysql.h; sourceTree = "<group>"; };
+		4C8CDC671AD264EF00B7B9EA /* probes_mysql_dtrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = probes_mysql_dtrace.h; sourceTree = "<group>"; };
+		4C8CDC681AD264EF00B7B9EA /* probes_mysql_nodtrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = probes_mysql_nodtrace.h; sourceTree = "<group>"; };
+		4C8CDC691AD264EF00B7B9EA /* queues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queues.h; sourceTree = "<group>"; };
+		4C8CDC6A1AD264EF00B7B9EA /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		4C8CDC6B1AD264EF00B7B9EA /* sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha2.h; sourceTree = "<group>"; };
+		4C8CDC6C1AD264EF00B7B9EA /* sql_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sql_common.h; sourceTree = "<group>"; };
+		4C8CDC6D1AD264EF00B7B9EA /* sql_state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sql_state.h; sourceTree = "<group>"; };
+		4C8CDC6E1AD264EF00B7B9EA /* sslopt-case.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sslopt-case.h"; sourceTree = "<group>"; };
+		4C8CDC6F1AD264EF00B7B9EA /* sslopt-longopts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sslopt-longopts.h"; sourceTree = "<group>"; };
+		4C8CDC701AD264EF00B7B9EA /* sslopt-vars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sslopt-vars.h"; sourceTree = "<group>"; };
+		4C8CDC711AD264EF00B7B9EA /* thr_lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thr_lock.h; sourceTree = "<group>"; };
+		4C8CDC721AD264EF00B7B9EA /* typelib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typelib.h; sourceTree = "<group>"; };
+		4C8CDC731AD264EF00B7B9EA /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
+		4C8CDC741AD264EF00B7B9EA /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
+		4C8CDC7C1AD2657000B7B9EA /* NSString+MysqlEscape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MysqlEscape.h"; path = "MySQL/NSString+MysqlEscape.h"; sourceTree = "<group>"; };
+		4C8CDC7D1AD2657000B7B9EA /* NSString+MysqlEscape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MysqlEscape.m"; path = "MySQL/NSString+MysqlEscape.m"; sourceTree = "<group>"; };
+		4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSThread+Extras.h"; path = "../../CocoaExtensions/CocoaExtensions/NSThread+Extras.h"; sourceTree = "<group>"; };
+		4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+EverydayApps.h"; path = "../../CocoaExtensions/CocoaExtensions/UIColor+EverydayApps.h"; sourceTree = "<group>"; };
+		4C8CDC871AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseProcessSqlServer.h; sourceTree = "<group>"; };
+		4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseProcessSqlServer.m; sourceTree = "<group>"; };
+		4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "../../CocoaExtensions/CocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
+		4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../../CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
+		4C8CDC8C1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryPredicate+Extras.h"; path = "rptq/RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
+		4C8CDC8D1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQueryPredicate+Extras.m"; path = "rptq/RptqQueryPredicate+Extras.m"; sourceTree = "<group>"; };
+		4C8CDC8F1AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportDesignerSectionElementLayoutManager.h; sourceTree = "<group>"; };
+		4C8CDC901AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportDesignerSectionElementLayoutManager.m; sourceTree = "<group>"; };
+		4C8CDC921AD26DC700B7B9EA /* MTActivityItemProviderPdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTActivityItemProviderPdf.h; sourceTree = "<group>"; };
+		4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActivityItemProviderPdf.m; sourceTree = "<group>"; };
+		4C8CDC951AD26EEB00B7B9EA /* MTActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTActivityIndicator.h; sourceTree = "<group>"; };
+		4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActivityIndicator.m; sourceTree = "<group>"; };
+		4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCachingArrayTest.m; sourceTree = "<group>"; };
+		4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSqlite.a; path = "../../Reports/libSqlite/Sqlite/build/Debug-iphoneos/libSqlite.a"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C8CD95B1AD1CDC800B7B9EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */,
+				4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */,
+				4C8CDB041AD24DC300B7B9EA /* libBarcodes.a in Frameworks */,
+				4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */,
+				4C8CDAAD1AD1E06A00B7B9EA /* libMTDataStrutures.a in Frameworks */,
+				4C8CDA0A1AD1D9CD00B7B9EA /* liblibTdsClient.a in Frameworks */,
+				4C8CD9A21AD1D2ED00B7B9EA /* libCloudManager.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C8CD9661AD1CDC800B7B9EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C8CD96A1AD1CDC800B7B9EA /* libMAD.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C8CD9551AD1CDC800B7B9EA = {
+			isa = PBXGroup;
+			children = (
+				4C8CD99B1AD1D1EB00B7B9EA /* libraries */,
+				4C8CD9601AD1CDC800B7B9EA /* MAD */,
+				4C8CD96D1AD1CDC800B7B9EA /* MADTests */,
+				4C8CD95F1AD1CDC800B7B9EA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C8CD95F1AD1CDC800B7B9EA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */,
+				4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C8CD9601AD1CDC800B7B9EA /* MAD */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDCA51AD276DA00B7B9EA /* Database */,
+				4C8CDCA41AD276C200B7B9EA /* DataTable */,
+				4C8CDBD91AD2647400B7B9EA /* MySQL */,
+				4C8CDB2D1AD24FEE00B7B9EA /* Paper */,
+				4C8CDAA71AD1E03700B7B9EA /* Categories */,
+				4C8CDA281AD1DCAD00B7B9EA /* Query */,
+				4C8CD9B81AD1D70600B7B9EA /* Rptq */,
+				4C8CD9851AD1CE4200B7B9EA /* MAD.h */,
+				4C8CDBC31AD254D600B7B9EA /* MTAlignment.h */,
+				4C8CDADA1AD2454100B7B9EA /* MTAggregateFunctionType.h */,
+				4C8CDADB1AD2458800B7B9EA /* MADAggregateGroupByType.h */,
+				4C8CDB2B1AD24ED500B7B9EA /* MADDocumentObjectType.h */,
+				4C8CDBAF1AD2514700B7B9EA /* MADArrayCaching.h */,
+				4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */,
+				4C8CDBBF1AD253C500B7B9EA /* MTAggregateFunctionInputType.h */,
+				4C8CDBB51AD252B400B7B9EA /* MTErrorContainer.h */,
+				4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */,
+				4C8CDC921AD26DC700B7B9EA /* MTActivityItemProviderPdf.h */,
+				4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */,
+				4C8CDC951AD26EEB00B7B9EA /* MTActivityIndicator.h */,
+				4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */,
+				4C8CDBB71AD252B400B7B9EA /* MTMath.h */,
+				4C8CDBB81AD252B400B7B9EA /* MTMath.m */,
+				4C8CDC8F1AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.h */,
+				4C8CDC901AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.m */,
+				4C8CDADF1AD247F900B7B9EA /* MTDatabaseDataBinding.h */,
+				4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */,
+				4C8CDBC41AD2552C00B7B9EA /* MTFont.h */,
+				4C8CDBC51AD2552C00B7B9EA /* MTFont.m */,
+				4C8CDBA91AD250AE00B7B9EA /* MTTableFormatter.h */,
+				4C8CDBAA1AD250AE00B7B9EA /* MTTableFormatter.m */,
+				4C8CDBA01AD2507200B7B9EA /* MTReportFormatter.h */,
+				4C8CDBA11AD2507200B7B9EA /* MTReportFormatter.m */,
+				4C8CDBA21AD2507200B7B9EA /* MTReportFormatterCache.h */,
+				4C8CDBA31AD2507200B7B9EA /* MTReportFormatterCache.m */,
+				4C8CDBA41AD2507200B7B9EA /* MTReportFormatterPageDefinition.h */,
+				4C8CDBA51AD2507200B7B9EA /* MTReportFormatterPageDefinition.m */,
+				4C8CDC871AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.h */,
+				4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */,
+				4C8CDB021AD24D7A00B7B9EA /* MADLinkType.h */,
+				4C8CDAF01AD24C9000B7B9EA /* SectionEnumerator.h */,
+				4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */,
+				4C8CDABF1AD1E32C00B7B9EA /* MTDataColumn.h */,
+				4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */,
+				4C8CDBAC1AD250E600B7B9EA /* MTDataFormatter.h */,
+				4C8CDBAD1AD250E600B7B9EA /* MTDataFormatter.m */,
+				4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */,
+				4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */,
+				4C8CDAA41AD1DF9800B7B9EA /* MTDataType.h */,
+				4C8CDAA51AD1DF9800B7B9EA /* MTDataType.m */,
+				4C8CDBB21AD2519300B7B9EA /* MTNotificationDidFormatPage.h */,
+				4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */,
+				4C8CDABC1AD1E1A300B7B9EA /* MTNotificationDidReadRows.h */,
+				4C8CDABD1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m */,
+				4C8CD99E1AD1D28B00B7B9EA /* MADocumentState.h */,
+				4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */,
+				4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */,
+				4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */,
+				4C8CDA9E1AD1DF3E00B7B9EA /* MTDatabaseField.h */,
+				4C8CDA9F1AD1DF3E00B7B9EA /* MTDatabaseField.m */,
+				4C8CDAA01AD1DF3E00B7B9EA /* MTDatabaseTable.h */,
+				4C8CDAA11AD1DF3E00B7B9EA /* MTDatabaseTable.m */,
+				4C8CD9961AD1D1AD00B7B9EA /* MADConstants.h */,
+				4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */,
+				4C8CD9921AD1D10C00B7B9EA /* MADSortOrder.h */,
+				4C8CD9901AD1D08500B7B9EA /* MADDataProtocol.h */,
+				4C8CD9891AD1CEAF00B7B9EA /* MADocument.h */,
+				4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */,
+				4C8CD98F1AD1D03000B7B9EA /* MTCacheProtocol.h */,
+				4C8CD98E1AD1D03000B7B9EA /* MTReportFormatterDataSource.h */,
+				4C8CD9911AD1D0E000B7B9EA /* MADActivityProtocol.h */,
+			);
+			path = MAD;
+			sourceTree = "<group>";
+		};
+		4C8CD96D1AD1CDC800B7B9EA /* MADTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */,
+				4C8CD96E1AD1CDC800B7B9EA /* Supporting Files */,
+			);
+			path = MADTests;
+			sourceTree = "<group>";
+		};
+		4C8CD96E1AD1CDC800B7B9EA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CD96F1AD1CDC800B7B9EA /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C8CD99B1AD1D1EB00B7B9EA /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDCFC1AD2805600B7B9EA /* libSqlite */,
+				4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */,
+				4C8CDC011AD2649C00B7B9EA /* libMySQL */,
+				4C8CDB051AD24DCE00B7B9EA /* libBarcodes */,
+				4C8CDAAB1AD1E05D00B7B9EA /* libDataStructures */,
+				4C8CDA0B1AD1D9D800B7B9EA /* libTDS */,
+				4C8CD9A31AD1D2F700B7B9EA /* libCloudManager */,
+				4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */,
+			);
+			name = libraries;
+			sourceTree = "<group>";
+		};
+		4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
+				4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */,
+				4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */,
+				4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */,
+				4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */,
+				4C8CDB2C1AD24F3400B7B9EA /* UIDevice+Hack.h */,
+				4C8CDACA1AD243C300B7B9EA /* MTLog.h */,
+				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
+				4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */,
+				4C8CDA271AD1DAF000B7B9EA /* NSFileManager+Common.h */,
+			);
+			name = libCocoaExtensions;
+			sourceTree = "<group>";
+		};
+		4C8CD9A31AD1D2F700B7B9EA /* libCloudManager */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CD9A41AD1D33400B7B9EA /* MACloudManager.h */,
+				4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */,
+			);
+			name = libCloudManager;
+			sourceTree = "<group>";
+		};
+		4C8CD9B81AD1D70600B7B9EA /* Rptq */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CD9B91AD1D70E00B7B9EA /* Auto Generated */,
+				4C8CDA081AD1D75500B7B9EA /* rptq.h */,
+				4C8CDBC01AD2546300B7B9EA /* RptqQueryGroup+Extras.h */,
+				4C8CDBC11AD2546300B7B9EA /* RptqQueryGroup+Extras.m */,
+				4C8CDC8C1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.h */,
+				4C8CDC8D1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.m */,
+				4C8CDAFF1AD24D3E00B7B9EA /* RptqDatabase+Extras.h */,
+				4C8CDB001AD24D3E00B7B9EA /* RptqDatabase+Extras.m */,
+				4C8CDAE21AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.h */,
+				4C8CDAE31AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.m */,
+				4C8CDAE41AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.h */,
+				4C8CDAE51AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m */,
+				4C8CDAE81AD24BD000B7B9EA /* RptqDocument+Extras.h */,
+				4C8CDAE91AD24BD000B7B9EA /* RptqDocument+Extras.m */,
+				4C8CDAED1AD24C5100B7B9EA /* RptqDocumentSection+Extras.h */,
+				4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */,
+				4C8CDAF31AD24CBF00B7B9EA /* RptqQuery+Extras.h */,
+				4C8CDAF41AD24CBF00B7B9EA /* RptqQuery+Extras.m */,
+				4C8CDAF61AD24D2A00B7B9EA /* RptqQueryField+Extras.h */,
+				4C8CDAF71AD24D2A00B7B9EA /* RptqQueryField+Extras.m */,
+				4C8CDAF81AD24D2A00B7B9EA /* RptqQueryLinks+Extras.h */,
+				4C8CDAF91AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m */,
+				4C8CDAFA1AD24D2A00B7B9EA /* RptqQueryTable+Extras.h */,
+				4C8CDAFB1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m */,
+				4C8CDB091AD24E7100B7B9EA /* RptqUserCredentals+Extras.h */,
+				4C8CDB0A1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m */,
+				4C8CDBCA1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.h */,
+				4C8CDBCB1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.m */,
+				4C8CDB0C1AD24E8400B7B9EA /* RptqDocumentObject+Extras.h */,
+				4C8CDB0D1AD24E8400B7B9EA /* RptqDocumentObject+Extras.m */,
+				4C8CDB0E1AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.h */,
+				4C8CDB0F1AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m */,
+				4C8CDB101AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.h */,
+				4C8CDB111AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.m */,
+				4C8CDB121AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.h */,
+				4C8CDB131AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.m */,
+				4C8CDB141AD24E8400B7B9EA /* RptqDocumentObjectFactory.h */,
+				4C8CDB151AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.h */,
+				4C8CDB161AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.m */,
+				4C8CDB171AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.h */,
+				4C8CDB181AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.m */,
+				4C8CDB191AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.h */,
+				4C8CDB1A1AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.m */,
+				4C8CDB1B1AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.h */,
+				4C8CDB1C1AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.m */,
+				4C8CDB1D1AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.h */,
+				4C8CDB1E1AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.m */,
+				4C8CDB1F1AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.h */,
+				4C8CDB201AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.m */,
+			);
+			name = Rptq;
+			sourceTree = "<group>";
+		};
+		4C8CD9B91AD1D70E00B7B9EA /* Auto Generated */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CD9BA1AD1D72E00B7B9EA /* RptqDatabase.h */,
+				4C8CD9BB1AD1D72E00B7B9EA /* RptqDatabase.m */,
+				4C8CD9BC1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.h */,
+				4C8CD9BD1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.m */,
+				4C8CD9BE1AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.h */,
+				4C8CD9BF1AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.m */,
+				4C8CD9C01AD1D72E00B7B9EA /* RptqDocument.h */,
+				4C8CD9C11AD1D72E00B7B9EA /* RptqDocument.m */,
+				4C8CD9C21AD1D72E00B7B9EA /* RptqDocumentObject.h */,
+				4C8CD9C31AD1D72E00B7B9EA /* RptqDocumentObject.m */,
+				4C8CD9C41AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.h */,
+				4C8CD9C51AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.m */,
+				4C8CD9C61AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.h */,
+				4C8CD9C71AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.m */,
+				4C8CD9C81AD1D72E00B7B9EA /* RptqDocumentObjectChart.h */,
+				4C8CD9C91AD1D72E00B7B9EA /* RptqDocumentObjectChart.m */,
+				4C8CD9CA1AD1D72E00B7B9EA /* RptqDocumentObjectFormula.h */,
+				4C8CD9CB1AD1D72E00B7B9EA /* RptqDocumentObjectFormula.m */,
+				4C8CD9CC1AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.h */,
+				4C8CD9CD1AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.m */,
+				4C8CD9CE1AD1D72E00B7B9EA /* RptqDocumentObjectImage.h */,
+				4C8CD9CF1AD1D72E00B7B9EA /* RptqDocumentObjectImage.m */,
+				4C8CD9D01AD1D72E00B7B9EA /* RptqDocumentObjectLabel.h */,
+				4C8CD9D11AD1D72E00B7B9EA /* RptqDocumentObjectLabel.m */,
+				4C8CD9D21AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.h */,
+				4C8CD9D31AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.m */,
+				4C8CD9D41AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.h */,
+				4C8CD9D51AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.m */,
+				4C8CD9D61AD1D72E00B7B9EA /* RptqDocumentSection.h */,
+				4C8CD9D71AD1D72E00B7B9EA /* RptqDocumentSection.m */,
+				4C8CD9D81AD1D72E00B7B9EA /* RptqDocumentSectionRows.h */,
+				4C8CD9D91AD1D72E00B7B9EA /* RptqDocumentSectionRows.m */,
+				4C8CD9DA1AD1D72E00B7B9EA /* RptqQuery.h */,
+				4C8CD9DB1AD1D72E00B7B9EA /* RptqQuery.m */,
+				4C8CD9DC1AD1D72E00B7B9EA /* RptqQueryCache.h */,
+				4C8CD9DD1AD1D72E00B7B9EA /* RptqQueryCache.m */,
+				4C8CD9DE1AD1D72E00B7B9EA /* RptqQueryField.h */,
+				4C8CD9DF1AD1D72E00B7B9EA /* RptqQueryField.m */,
+				4C8CD9E01AD1D72E00B7B9EA /* RptqQueryGroup.h */,
+				4C8CD9E11AD1D72E00B7B9EA /* RptqQueryGroup.m */,
+				4C8CD9E21AD1D72E00B7B9EA /* RptqQueryLinks.h */,
+				4C8CD9E31AD1D72E00B7B9EA /* RptqQueryLinks.m */,
+				4C8CD9E41AD1D72E00B7B9EA /* RptqQueryPredicate.h */,
+				4C8CD9E51AD1D72E00B7B9EA /* RptqQueryPredicate.m */,
+				4C8CD9E61AD1D72E00B7B9EA /* RptqQuerySort.h */,
+				4C8CD9E71AD1D72E00B7B9EA /* RptqQuerySort.m */,
+				4C8CD9E81AD1D72E00B7B9EA /* RptqQueryTable.h */,
+				4C8CD9E91AD1D72E00B7B9EA /* RptqQueryTable.m */,
+				4C8CD9EA1AD1D72E00B7B9EA /* RptqRelationship.h */,
+				4C8CD9EB1AD1D72E00B7B9EA /* RptqRelationship.m */,
+				4C8CD9EC1AD1D72E00B7B9EA /* RptqUserCredentals.h */,
+				4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */,
+			);
+			name = "Auto Generated";
+			sourceTree = "<group>";
+		};
+		4C8CDA0B1AD1D9D800B7B9EA /* libTDS */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDA191AD1DA5E00B7B9EA /* freetds */,
+				4C8CDA091AD1D9CD00B7B9EA /* liblibTdsClient.a */,
+			);
+			name = libTDS;
+			sourceTree = "<group>";
+		};
+		4C8CDA171AD1DA5E00B7B9EA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDA0C1AD1DA5E00B7B9EA /* bkpublic.h */,
+				4C8CDA0D1AD1DA5E00B7B9EA /* cspublic.h */,
+				4C8CDA0E1AD1DA5E00B7B9EA /* cstypes.h */,
+				4C8CDA0F1AD1DA5E00B7B9EA /* ctpublic.h */,
+				4C8CDA101AD1DA5E00B7B9EA /* odbcss.h */,
+				4C8CDA111AD1DA5E00B7B9EA /* sqldb.h */,
+				4C8CDA121AD1DA5E00B7B9EA /* sqlfront.h */,
+				4C8CDA131AD1DA5E00B7B9EA /* sybdb.h */,
+				4C8CDA141AD1DA5E00B7B9EA /* syberror.h */,
+				4C8CDA151AD1DA5E00B7B9EA /* sybfront.h */,
+				4C8CDA161AD1DA5E00B7B9EA /* tds_sysdep_public.h */,
+			);
+			name = include;
+			path = ../../Compressor/library/libsybdb/include;
+			sourceTree = "<group>";
+		};
+		4C8CDA191AD1DA5E00B7B9EA /* freetds */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDA171AD1DA5E00B7B9EA /* include */,
+			);
+			name = freetds;
+			path = ../../Reports/libTdsClient;
+			sourceTree = "<group>";
+		};
+		4C8CDA281AD1DCAD00B7B9EA /* Query */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDA291AD1DCC100B7B9EA /* MTQuery.h */,
+				4C8CDA2A1AD1DCC100B7B9EA /* MTQuery.m */,
+				4C8CDA2B1AD1DCC100B7B9EA /* MTQueryCache.h */,
+				4C8CDA2C1AD1DCC100B7B9EA /* MTQueryCache.m */,
+				4C8CDA2D1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.h */,
+				4C8CDA2E1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m */,
+				4C8CDA2F1AD1DCC100B7B9EA /* MTQueryCacheAddRow.h */,
+				4C8CDA301AD1DCC100B7B9EA /* MTQueryCacheAddRow.m */,
+				4C8CDA311AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.h */,
+				4C8CDA321AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.m */,
+				4C8CDA331AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.h */,
+				4C8CDA341AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.m */,
+				4C8CDA351AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.h */,
+				4C8CDA361AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.m */,
+				4C8CDA371AD1DCC100B7B9EA /* MTQueryCacheDropTable.h */,
+				4C8CDA381AD1DCC100B7B9EA /* MTQueryCacheDropTable.m */,
+				4C8CDA391AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.h */,
+				4C8CDA3A1AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.m */,
+				4C8CDA3B1AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.h */,
+				4C8CDA3C1AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.m */,
+				4C8CDA3D1AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.h */,
+				4C8CDA3E1AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.m */,
+				4C8CDA3F1AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.h */,
+				4C8CDA401AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.m */,
+				4C8CDA411AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.h */,
+				4C8CDA421AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.m */,
+				4C8CDA431AD1DCC100B7B9EA /* MTQueryCacheSelect.h */,
+				4C8CDA441AD1DCC100B7B9EA /* MTQueryCacheSelect.m */,
+				4C8CDA451AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.h */,
+				4C8CDA461AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.m */,
+				4C8CDA471AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.h */,
+				4C8CDA481AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.m */,
+				4C8CDA491AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.h */,
+				4C8CDA4A1AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.m */,
+				4C8CDA4B1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.h */,
+				4C8CDA4C1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.m */,
+				4C8CDA4D1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.h */,
+				4C8CDA4E1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.m */,
+				4C8CDA4F1AD1DCC100B7B9EA /* MTQueryCacheSyncOff.h */,
+				4C8CDA501AD1DCC100B7B9EA /* MTQueryCacheSyncOff.m */,
+				4C8CDA511AD1DCC100B7B9EA /* MTQueryCacheVacuum.h */,
+				4C8CDA521AD1DCC100B7B9EA /* MTQueryCacheVacuum.m */,
+				4C8CDA531AD1DCC100B7B9EA /* MTQueryCustomNoResults.h */,
+				4C8CDA541AD1DCC100B7B9EA /* MTQueryCustomNoResults.m */,
+				4C8CDA551AD1DCC100B7B9EA /* MTQueryDefinitionField.h */,
+				4C8CDA561AD1DCC100B7B9EA /* MTQueryDefinitionField.m */,
+				4C8CDA571AD1DCC100B7B9EA /* MTQueryDefinitionGroup.h */,
+				4C8CDA581AD1DCC100B7B9EA /* MTQueryDefinitionGroup.m */,
+				4C8CDA591AD1DCC100B7B9EA /* MTQueryDefinitionLinks.h */,
+				4C8CDA5A1AD1DCC100B7B9EA /* MTQueryDefinitionLinks.m */,
+				4C8CDA5B1AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.h */,
+				4C8CDA5C1AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.m */,
+				4C8CDA5D1AD1DCC100B7B9EA /* MTQueryDefinitionSort.h */,
+				4C8CDA5E1AD1DCC100B7B9EA /* MTQueryDefinitionSort.m */,
+				4C8CDA5F1AD1DCC100B7B9EA /* MTQueryDefinitionTable.h */,
+				4C8CDA601AD1DCC100B7B9EA /* MTQueryDefinitionTable.m */,
+				4C8CDA611AD1DCC100B7B9EA /* MTQueryFull.h */,
+				4C8CDA621AD1DCC100B7B9EA /* MTQueryFull.m */,
+				4C8CDA631AD1DCC100B7B9EA /* MTQueryMaxFieldLength.h */,
+				4C8CDA641AD1DCC100B7B9EA /* MTQueryMaxFieldLength.m */,
+				4C8CDA651AD1DCC100B7B9EA /* MTQuerySampleDataField.h */,
+				4C8CDA661AD1DCC100B7B9EA /* MTQuerySampleDataField.m */,
+				4C8CDA671AD1DCC100B7B9EA /* MTQuerySampleDataTable.h */,
+				4C8CDA681AD1DCC100B7B9EA /* MTQuerySampleDataTable.m */,
+				4C8CDA691AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.h */,
+				4C8CDA6A1AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.m */,
+				4C8CDA6B1AD1DCC100B7B9EA /* MTQueryTest.h */,
+				4C8CDA6C1AD1DCC100B7B9EA /* MTQueryTest.m */,
+			);
+			name = Query;
+			sourceTree = "<group>";
+		};
+		4C8CDAA71AD1E03700B7B9EA /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDBD31AD2567400B7B9EA /* NSManagedObject+Extras.h */,
+				4C8CDBD41AD2567400B7B9EA /* NSManagedObject+Extras.m */,
+				4C8CDBD51AD2567400B7B9EA /* NSManagedObjectID+Extras.h */,
+				4C8CDBD61AD2567400B7B9EA /* NSManagedObjectID+Extras.m */,
+				4C8CDAC21AD1E37800B7B9EA /* NSString+Extras.h */,
+				4C8CDAC31AD1E37800B7B9EA /* NSString+Extras.m */,
+				4C8CDAA81AD1E04700B7B9EA /* NSData+Comparson.h */,
+				4C8CDAA91AD1E04700B7B9EA /* NSData+Comparson.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		4C8CDAAB1AD1E05D00B7B9EA /* libDataStructures */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDB081AD24DFB00B7B9EA /* headers */,
+				4C8CDAAC1AD1E06A00B7B9EA /* libMTDataStrutures.a */,
+			);
+			name = libDataStructures;
+			sourceTree = "<group>";
+		};
+		4C8CDB051AD24DCE00B7B9EA /* libBarcodes */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDB071AD24DEE00B7B9EA /* headers */,
+				4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */,
+			);
+			name = libBarcodes;
+			sourceTree = "<group>";
+		};
+		4C8CDB071AD24DEE00B7B9EA /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDB061AD24DEA00B7B9EA /* MTBarcode.h */,
+			);
+			name = headers;
+			sourceTree = "<group>";
+		};
+		4C8CDB081AD24DFB00B7B9EA /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDBC91AD2557800B7B9EA /* MTProtocolEnumerator.h */,
+				4C8CDAEC1AD24C2300B7B9EA /* MTProtocolLog.h */,
+				4C8CDAEB1AD24C1300B7B9EA /* MTProtocolCompare.h */,
+				4C8CDAB01AD1E0E900B7B9EA /* MTTree.h */,
+				4C8CDAB11AD1E0E900B7B9EA /* MTEdge.h */,
+				4C8CDAB21AD1E0E900B7B9EA /* MTGraph.h */,
+				4C8CDAB31AD1E0E900B7B9EA /* MTLinkedList.h */,
+				4C8CDAB41AD1E0E900B7B9EA /* MTObject.h */,
+				4C8CDAB51AD1E0E900B7B9EA /* MTPair.h */,
+				4C8CDAB61AD1E0E900B7B9EA /* MTQueue.h */,
+				4C8CDAB71AD1E0E900B7B9EA /* MTStack.h */,
+				4C8CDAB81AD1E0E900B7B9EA /* MTVertex.h */,
+			);
+			name = headers;
+			sourceTree = "<group>";
+		};
+		4C8CDB2D1AD24FEE00B7B9EA /* Paper */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDB2E1AD2500800B7B9EA /* MTPaper.h */,
+				4C8CDB2F1AD2500800B7B9EA /* MTPaper.m */,
+				4C8CDB301AD2500800B7B9EA /* MTPaperA0.h */,
+				4C8CDB311AD2500800B7B9EA /* MTPaperA0.m */,
+				4C8CDB321AD2500800B7B9EA /* MTPaperA1.h */,
+				4C8CDB331AD2500800B7B9EA /* MTPaperA1.m */,
+				4C8CDB341AD2500800B7B9EA /* MTPaperA2.h */,
+				4C8CDB351AD2500800B7B9EA /* MTPaperA2.m */,
+				4C8CDB361AD2500800B7B9EA /* MTPaperA3.h */,
+				4C8CDB371AD2500800B7B9EA /* MTPaperA3.m */,
+				4C8CDB381AD2500800B7B9EA /* MTPaperA4.h */,
+				4C8CDB391AD2500800B7B9EA /* MTPaperA4.m */,
+				4C8CDB3A1AD2500800B7B9EA /* MTPaperA5.h */,
+				4C8CDB3B1AD2500800B7B9EA /* MTPaperA5.m */,
+				4C8CDB3C1AD2500800B7B9EA /* MTPaperA6.h */,
+				4C8CDB3D1AD2500800B7B9EA /* MTPaperA6.m */,
+				4C8CDB3E1AD2500800B7B9EA /* MTPaperA7.h */,
+				4C8CDB3F1AD2500800B7B9EA /* MTPaperA7.m */,
+				4C8CDB401AD2500800B7B9EA /* MTPaperA8.h */,
+				4C8CDB411AD2500800B7B9EA /* MTPaperA8.m */,
+				4C8CDB421AD2500800B7B9EA /* MTPaperA9.h */,
+				4C8CDB431AD2500800B7B9EA /* MTPaperA9.m */,
+				4C8CDB441AD2500800B7B9EA /* MTPaperA10.h */,
+				4C8CDB451AD2500800B7B9EA /* MTPaperA10.m */,
+				4C8CDB461AD2500800B7B9EA /* MTPaperB0.h */,
+				4C8CDB471AD2500800B7B9EA /* MTPaperB0.m */,
+				4C8CDB481AD2500800B7B9EA /* MTPaperB1.h */,
+				4C8CDB491AD2500800B7B9EA /* MTPaperB1.m */,
+				4C8CDB4A1AD2500800B7B9EA /* MTPaperB2.h */,
+				4C8CDB4B1AD2500800B7B9EA /* MTPaperB2.m */,
+				4C8CDB4C1AD2500800B7B9EA /* MTPaperB3.h */,
+				4C8CDB4D1AD2500800B7B9EA /* MTPaperB3.m */,
+				4C8CDB4E1AD2500800B7B9EA /* MTPaperB4.h */,
+				4C8CDB4F1AD2500800B7B9EA /* MTPaperB4.m */,
+				4C8CDB501AD2500800B7B9EA /* MTPaperB5.h */,
+				4C8CDB511AD2500800B7B9EA /* MTPaperB5.m */,
+				4C8CDB521AD2500800B7B9EA /* MTPaperB6.h */,
+				4C8CDB531AD2500800B7B9EA /* MTPaperB6.m */,
+				4C8CDB541AD2500800B7B9EA /* MTPaperB7.h */,
+				4C8CDB551AD2500800B7B9EA /* MTPaperB7.m */,
+				4C8CDB561AD2500800B7B9EA /* MTPaperB8.h */,
+				4C8CDB571AD2500800B7B9EA /* MTPaperB8.m */,
+				4C8CDB581AD2500800B7B9EA /* MTPaperB9.h */,
+				4C8CDB591AD2500800B7B9EA /* MTPaperB9.m */,
+				4C8CDB5A1AD2500800B7B9EA /* MTPaperB10.h */,
+				4C8CDB5B1AD2500800B7B9EA /* MTPaperB10.m */,
+				4C8CDB5C1AD2500800B7B9EA /* MTPaperC0.h */,
+				4C8CDB5D1AD2500800B7B9EA /* MTPaperC0.m */,
+				4C8CDB5E1AD2500800B7B9EA /* MTPaperC1.h */,
+				4C8CDB5F1AD2500800B7B9EA /* MTPaperC1.m */,
+				4C8CDB601AD2500800B7B9EA /* MTPaperC2.h */,
+				4C8CDB611AD2500800B7B9EA /* MTPaperC2.m */,
+				4C8CDB621AD2500800B7B9EA /* MTPaperC3.h */,
+				4C8CDB631AD2500800B7B9EA /* MTPaperC3.m */,
+				4C8CDB641AD2500800B7B9EA /* MTPaperC4.h */,
+				4C8CDB651AD2500800B7B9EA /* MTPaperC4.m */,
+				4C8CDB661AD2500800B7B9EA /* MTPaperC5.h */,
+				4C8CDB671AD2500800B7B9EA /* MTPaperC5.m */,
+				4C8CDB681AD2500800B7B9EA /* MTPaperC6.h */,
+				4C8CDB691AD2500800B7B9EA /* MTPaperC6.m */,
+				4C8CDB6A1AD2500800B7B9EA /* MTPaperC7.h */,
+				4C8CDB6B1AD2500800B7B9EA /* MTPaperC7.m */,
+				4C8CDB6C1AD2500800B7B9EA /* MTPaperC8.h */,
+				4C8CDB6D1AD2500800B7B9EA /* MTPaperC8.m */,
+				4C8CDB6E1AD2500800B7B9EA /* MTPaperC9.h */,
+				4C8CDB6F1AD2500800B7B9EA /* MTPaperC9.m */,
+				4C8CDB701AD2500800B7B9EA /* MTPaperC10.h */,
+				4C8CDB711AD2500800B7B9EA /* MTPaperC10.m */,
+				4C8CDB721AD2500800B7B9EA /* MTPaperGovernmentLegal.h */,
+				4C8CDB731AD2500800B7B9EA /* MTPaperGovernmentLegal.m */,
+				4C8CDB741AD2500800B7B9EA /* MTPaperGovernmentLetter.h */,
+				4C8CDB751AD2500800B7B9EA /* MTPaperGovernmentLetter.m */,
+				4C8CDB761AD2500800B7B9EA /* MTPaperLegal.h */,
+				4C8CDB771AD2500800B7B9EA /* MTPaperLegal.m */,
+				4C8CDB781AD2500800B7B9EA /* MTPaperLetter.h */,
+				4C8CDB791AD2500800B7B9EA /* MTPaperLetter.m */,
+			);
+			name = Paper;
+			sourceTree = "<group>";
+		};
+		4C8CDBD91AD2647400B7B9EA /* MySQL */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC7C1AD2657000B7B9EA /* NSString+MysqlEscape.h */,
+				4C8CDC7D1AD2657000B7B9EA /* NSString+MysqlEscape.m */,
+				4C8CDBDA1AD2648700B7B9EA /* MysqlCommitException.h */,
+				4C8CDBDB1AD2648700B7B9EA /* MysqlCommitException.m */,
+				4C8CDBDC1AD2648700B7B9EA /* MysqlConnection.h */,
+				4C8CDBDD1AD2648700B7B9EA /* MysqlConnection.m */,
+				4C8CDBDE1AD2648700B7B9EA /* MysqlDelete.h */,
+				4C8CDBDF1AD2648700B7B9EA /* MysqlDelete.m */,
+				4C8CDBE01AD2648700B7B9EA /* MysqlException.h */,
+				4C8CDBE11AD2648700B7B9EA /* MysqlException.m */,
+				4C8CDBE21AD2648700B7B9EA /* MysqlFetch.h */,
+				4C8CDBE31AD2648700B7B9EA /* MysqlFetch.m */,
+				4C8CDBE41AD2648700B7B9EA /* MysqlFetchField.h */,
+				4C8CDBE51AD2648700B7B9EA /* MysqlFetchField.m */,
+				4C8CDBE61AD2648700B7B9EA /* MysqlIndex.h */,
+				4C8CDBE71AD2648700B7B9EA /* MysqlIndex.m */,
+				4C8CDBE81AD2648700B7B9EA /* MysqlInsert.h */,
+				4C8CDBE91AD2648700B7B9EA /* MysqlInsert.m */,
+				4C8CDBEA1AD2648700B7B9EA /* MysqlLiteral.h */,
+				4C8CDBEB1AD2648700B7B9EA /* MysqlLiteral.m */,
+				4C8CDBEC1AD2648700B7B9EA /* MysqlRollbackException.h */,
+				4C8CDBED1AD2648700B7B9EA /* MysqlRollbackException.m */,
+				4C8CDBEE1AD2648700B7B9EA /* MysqlServer.h */,
+				4C8CDBEF1AD2648700B7B9EA /* MysqlServer.m */,
+				4C8CDBF01AD2648700B7B9EA /* MysqlTruncate.h */,
+				4C8CDBF11AD2648700B7B9EA /* MysqlTruncate.m */,
+				4C8CDBF21AD2648700B7B9EA /* MysqlUpdate.h */,
+				4C8CDBF31AD2648700B7B9EA /* MysqlUpdate.m */,
+			);
+			name = MySQL;
+			sourceTree = "<group>";
+		};
+		4C8CDC011AD2649C00B7B9EA /* libMySQL */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC751AD264EF00B7B9EA /* include */,
+				4C8CDC021AD264B300B7B9EA /* libMysqlClientObjC.a */,
+			);
+			name = libMySQL;
+			sourceTree = "<group>";
+		};
+		4C8CDC091AD264EF00B7B9EA /* atomic */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC041AD264EF00B7B9EA /* gcc_builtins.h */,
+				4C8CDC051AD264EF00B7B9EA /* generic-msvc.h */,
+				4C8CDC061AD264EF00B7B9EA /* nolock.h */,
+				4C8CDC071AD264EF00B7B9EA /* rwlock.h */,
+				4C8CDC081AD264EF00B7B9EA /* solaris.h */,
+			);
+			path = atomic;
+			sourceTree = "<group>";
+		};
+		4C8CDC551AD264EF00B7B9EA /* psi */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC411AD264EF00B7B9EA /* mysql_file.h */,
+				4C8CDC421AD264EF00B7B9EA /* mysql_idle.h */,
+				4C8CDC431AD264EF00B7B9EA /* mysql_mdl.h */,
+				4C8CDC441AD264EF00B7B9EA /* mysql_memory.h */,
+				4C8CDC451AD264EF00B7B9EA /* mysql_socket.h */,
+				4C8CDC461AD264EF00B7B9EA /* mysql_sp.h */,
+				4C8CDC471AD264EF00B7B9EA /* mysql_stage.h */,
+				4C8CDC481AD264EF00B7B9EA /* mysql_statement.h */,
+				4C8CDC491AD264EF00B7B9EA /* mysql_table.h */,
+				4C8CDC4A1AD264EF00B7B9EA /* mysql_thread.h */,
+				4C8CDC4B1AD264EF00B7B9EA /* mysql_transaction.h */,
+				4C8CDC4C1AD264EF00B7B9EA /* psi.h */,
+				4C8CDC4D1AD264EF00B7B9EA /* psi_abi_v0.h */,
+				4C8CDC4E1AD264EF00B7B9EA /* psi_abi_v0.h.pp */,
+				4C8CDC4F1AD264EF00B7B9EA /* psi_abi_v1.h */,
+				4C8CDC501AD264EF00B7B9EA /* psi_abi_v1.h.pp */,
+				4C8CDC511AD264EF00B7B9EA /* psi_abi_v2.h */,
+				4C8CDC521AD264EF00B7B9EA /* psi_abi_v2.h.pp */,
+				4C8CDC531AD264EF00B7B9EA /* psi_base.h */,
+				4C8CDC541AD264EF00B7B9EA /* psi_memory.h */,
+			);
+			path = psi;
+			sourceTree = "<group>";
+		};
+		4C8CDC571AD264EF00B7B9EA /* mysql */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC3B1AD264EF00B7B9EA /* client_authentication.h */,
+				4C8CDC3C1AD264EF00B7B9EA /* client_plugin.h */,
+				4C8CDC3D1AD264EF00B7B9EA /* client_plugin.h.pp */,
+				4C8CDC3E1AD264EF00B7B9EA /* get_password.h */,
+				4C8CDC3F1AD264EF00B7B9EA /* plugin_auth_common.h */,
+				4C8CDC401AD264EF00B7B9EA /* plugin_trace.h */,
+				4C8CDC551AD264EF00B7B9EA /* psi */,
+				4C8CDC561AD264EF00B7B9EA /* service_mysql_alloc.h */,
+			);
+			path = mysql;
+			sourceTree = "<group>";
+		};
+		4C8CDC751AD264EF00B7B9EA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDC091AD264EF00B7B9EA /* atomic */,
+				4C8CDC0A1AD264EF00B7B9EA /* base64.h */,
+				4C8CDC0B1AD264EF00B7B9EA /* big_endian.h */,
+				4C8CDC0C1AD264EF00B7B9EA /* byte_order_generic.h */,
+				4C8CDC0D1AD264EF00B7B9EA /* byte_order_generic_x86.h */,
+				4C8CDC0E1AD264EF00B7B9EA /* cmake_install.cmake */,
+				4C8CDC0F1AD264EF00B7B9EA /* CMakeLists.txt */,
+				4C8CDC101AD264EF00B7B9EA /* config.h */,
+				4C8CDC111AD264EF00B7B9EA /* crypt_genhash_impl.h */,
+				4C8CDC121AD264EF00B7B9EA /* decimal.h */,
+				4C8CDC131AD264EF00B7B9EA /* dur_prop.h */,
+				4C8CDC141AD264EF00B7B9EA /* errmsg.h */,
+				4C8CDC151AD264EF00B7B9EA /* hash.h */,
+				4C8CDC161AD264EF00B7B9EA /* heap.h */,
+				4C8CDC171AD264EF00B7B9EA /* keycache.h */,
+				4C8CDC181AD264EF00B7B9EA /* lf.h */,
+				4C8CDC191AD264EF00B7B9EA /* little_endian.h */,
+				4C8CDC1A1AD264EF00B7B9EA /* m_ctype.h */,
+				4C8CDC1B1AD264EF00B7B9EA /* m_string.h */,
+				4C8CDC1C1AD264EF00B7B9EA /* my_aes.h */,
+				4C8CDC1D1AD264EF00B7B9EA /* my_alloc.h */,
+				4C8CDC1E1AD264EF00B7B9EA /* my_atomic.h */,
+				4C8CDC1F1AD264EF00B7B9EA /* my_base.h */,
+				4C8CDC201AD264EF00B7B9EA /* my_bit.h */,
+				4C8CDC211AD264EF00B7B9EA /* my_bitmap.h */,
+				4C8CDC221AD264EF00B7B9EA /* my_byteorder.h */,
+				4C8CDC231AD264EF00B7B9EA /* my_check_opt.h */,
+				4C8CDC241AD264EF00B7B9EA /* my_compare.h */,
+				4C8CDC251AD264EF00B7B9EA /* my_compiler.h */,
+				4C8CDC261AD264EF00B7B9EA /* my_config.h */,
+				4C8CDC271AD264EF00B7B9EA /* my_config.he */,
+				4C8CDC281AD264EF00B7B9EA /* my_dbug.h */,
+				4C8CDC291AD264EF00B7B9EA /* my_default.h */,
+				4C8CDC2A1AD264EF00B7B9EA /* my_dir.h */,
+				4C8CDC2B1AD264EF00B7B9EA /* my_getopt.h */,
+				4C8CDC2C1AD264EF00B7B9EA /* my_global.h */,
+				4C8CDC2D1AD264EF00B7B9EA /* my_icp.h */,
+				4C8CDC2E1AD264EF00B7B9EA /* my_list.h */,
+				4C8CDC2F1AD264EF00B7B9EA /* my_md5.h */,
+				4C8CDC301AD264EF00B7B9EA /* my_murmur3.h */,
+				4C8CDC311AD264EF00B7B9EA /* my_pthread.h */,
+				4C8CDC321AD264EF00B7B9EA /* my_rdtsc.h */,
+				4C8CDC331AD264EF00B7B9EA /* my_rnd.h */,
+				4C8CDC341AD264EF00B7B9EA /* my_stacktrace.h */,
+				4C8CDC351AD264EF00B7B9EA /* my_sys.h */,
+				4C8CDC361AD264EF00B7B9EA /* my_time.h */,
+				4C8CDC371AD264EF00B7B9EA /* my_tree.h */,
+				4C8CDC381AD264EF00B7B9EA /* my_uctype.h */,
+				4C8CDC391AD264EF00B7B9EA /* my_xml.h */,
+				4C8CDC3A1AD264EF00B7B9EA /* myisampack.h */,
+				4C8CDC571AD264EF00B7B9EA /* mysql */,
+				4C8CDC581AD264EF00B7B9EA /* mysql.h */,
+				4C8CDC591AD264EF00B7B9EA /* mysql.h.pp */,
+				4C8CDC5A1AD264EF00B7B9EA /* mysql_com.h */,
+				4C8CDC5B1AD264EF00B7B9EA /* mysql_com_server.h */,
+				4C8CDC5C1AD264EF00B7B9EA /* mysql_embed.h */,
+				4C8CDC5D1AD264EF00B7B9EA /* mysql_time.h */,
+				4C8CDC5E1AD264EF00B7B9EA /* mysql_version.h */,
+				4C8CDC5F1AD264EF00B7B9EA /* mysql_version.h.in */,
+				4C8CDC601AD264EF00B7B9EA /* mysqld_ername.h */,
+				4C8CDC611AD264EF00B7B9EA /* mysqld_error.h */,
+				4C8CDC621AD264EF00B7B9EA /* mysys_err.h */,
+				4C8CDC631AD264EF00B7B9EA /* password.h */,
+				4C8CDC641AD264EF00B7B9EA /* probes_mysql.d */,
+				4C8CDC651AD264EF00B7B9EA /* probes_mysql.d.base */,
+				4C8CDC661AD264EF00B7B9EA /* probes_mysql.h */,
+				4C8CDC671AD264EF00B7B9EA /* probes_mysql_dtrace.h */,
+				4C8CDC681AD264EF00B7B9EA /* probes_mysql_nodtrace.h */,
+				4C8CDC691AD264EF00B7B9EA /* queues.h */,
+				4C8CDC6A1AD264EF00B7B9EA /* sha1.h */,
+				4C8CDC6B1AD264EF00B7B9EA /* sha2.h */,
+				4C8CDC6C1AD264EF00B7B9EA /* sql_common.h */,
+				4C8CDC6D1AD264EF00B7B9EA /* sql_state.h */,
+				4C8CDC6E1AD264EF00B7B9EA /* sslopt-case.h */,
+				4C8CDC6F1AD264EF00B7B9EA /* sslopt-longopts.h */,
+				4C8CDC701AD264EF00B7B9EA /* sslopt-vars.h */,
+				4C8CDC711AD264EF00B7B9EA /* thr_lock.h */,
+				4C8CDC721AD264EF00B7B9EA /* typelib.h */,
+				4C8CDC731AD264EF00B7B9EA /* violite.h */,
+				4C8CDC741AD264EF00B7B9EA /* welcome_copyright_notice.h */,
+			);
+			name = include;
+			path = /Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/../../../Compressor/library/libmysqlclient/include;
+			sourceTree = "<absolute>";
+		};
+		4C8CDCA41AD276C200B7B9EA /* DataTable */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDACB1AD244D000B7B9EA /* MTDataTable.h */,
+				4C8CDACC1AD244D000B7B9EA /* MTDataTable.m */,
+				4C8CDACD1AD244D000B7B9EA /* MTDataTableFast.h */,
+				4C8CDACE1AD244D000B7B9EA /* MTDataTableFast.m */,
+				4C8CDACF1AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.h */,
+				4C8CDAD01AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.m */,
+				4C8CDAD11AD244D000B7B9EA /* MTDataTableLocation.h */,
+				4C8CDAD21AD244D000B7B9EA /* MTDataTableLocation.m */,
+				4C8CDAD31AD244D000B7B9EA /* MTDataTableVirtual.h */,
+				4C8CDAD41AD244D000B7B9EA /* MTDataTableVirtual.m */,
+			);
+			name = DataTable;
+			sourceTree = "<group>";
+		};
+		4C8CDCA51AD276DA00B7B9EA /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDA921AD1DED600B7B9EA /* MTDatabase.h */,
+				4C8CDA931AD1DED600B7B9EA /* MTDatabase.m */,
+				4C8CDA951AD1DF1400B7B9EA /* MTDatabaseMySql.h */,
+				4C8CDA961AD1DF1400B7B9EA /* MTDatabaseMySql.m */,
+				4C8CDA971AD1DF1400B7B9EA /* MTDatabaseSqlite3.h */,
+				4C8CDA981AD1DF1400B7B9EA /* MTDatabaseSqlite3.m */,
+				4C8CDA991AD1DF1400B7B9EA /* MTDatabaseSqlServer.h */,
+				4C8CDA9A1AD1DF1400B7B9EA /* MTDatabaseSqlServer.m */,
+				4C8CDA8F1AD1DE7700B7B9EA /* MTDatabaseCache.h */,
+				4C8CDA901AD1DE7700B7B9EA /* MTDatabaseCache.m */,
+				4C8CD9AC1AD1D4EA00B7B9EA /* MTDatabaseConnection.h */,
+				4C8CD9AD1AD1D4EA00B7B9EA /* MTDatabaseConnection.m */,
+				4C8CD9AF1AD1D53300B7B9EA /* MTDatabaseConnectionMySql.h */,
+				4C8CD9B01AD1D53300B7B9EA /* MTDatabaseConnectionMySql.m */,
+				4C8CD9B11AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.h */,
+				4C8CD9B21AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.m */,
+				4C8CD9B31AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.h */,
+				4C8CD9B41AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		4C8CDCFC1AD2805600B7B9EA /* libSqlite */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */,
+			);
+			name = libSqlite;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C8CD95D1AD1CDC800B7B9EA /* MAD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C8CD9721AD1CDC800B7B9EA /* Build configuration list for PBXNativeTarget "MAD" */;
+			buildPhases = (
+				4C8CD95A1AD1CDC800B7B9EA /* Sources */,
+				4C8CD95B1AD1CDC800B7B9EA /* Frameworks */,
+				4C8CD95C1AD1CDC800B7B9EA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MAD;
+			productName = MAD;
+			productReference = 4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4C8CD9681AD1CDC800B7B9EA /* MADTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C8CD9751AD1CDC800B7B9EA /* Build configuration list for PBXNativeTarget "MADTests" */;
+			buildPhases = (
+				4C8CD9651AD1CDC800B7B9EA /* Sources */,
+				4C8CD9661AD1CDC800B7B9EA /* Frameworks */,
+				4C8CD9671AD1CDC800B7B9EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C8CD96C1AD1CDC800B7B9EA /* PBXTargetDependency */,
+			);
+			name = MADTests;
+			productName = MADTests;
+			productReference = 4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C8CD9561AD1CDC800B7B9EA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+				TargetAttributes = {
+					4C8CD95D1AD1CDC800B7B9EA = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					4C8CD9681AD1CDC800B7B9EA = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
+			};
+			buildConfigurationList = 4C8CD9591AD1CDC800B7B9EA /* Build configuration list for PBXProject "MAD" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4C8CD9551AD1CDC800B7B9EA;
+			productRefGroup = 4C8CD95F1AD1CDC800B7B9EA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C8CD95D1AD1CDC800B7B9EA /* MAD */,
+				4C8CD9681AD1CDC800B7B9EA /* MADTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C8CD9671AD1CDC800B7B9EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C8CD95A1AD1CDC800B7B9EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C8CDB291AD24E8400B7B9EA /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
+				4C8CDB9A1AD2500800B7B9EA /* MTPaperC9.m in Sources */,
+				4C8CDBFC1AD2648700B7B9EA /* MysqlLiteral.m in Sources */,
+				4C8CDA7E1AD1DCC100B7B9EA /* MTQueryCacheSelectRowIds.m in Sources */,
+				4C8CD9EE1AD1D72E00B7B9EA /* RptqDatabase.m in Sources */,
+				4C8CDA7C1AD1DCC100B7B9EA /* MTQueryCacheSelectLimitOffset.m in Sources */,
+				4C8CDBB91AD252B400B7B9EA /* MTErrorContainer.m in Sources */,
+				4C8CDBA61AD2507200B7B9EA /* MTReportFormatter.m in Sources */,
+				4C8CDB8B1AD2500800B7B9EA /* MTPaperB5.m in Sources */,
+				4C8CDA941AD1DED600B7B9EA /* MTDatabase.m in Sources */,
+				4C8CDBD81AD2567400B7B9EA /* NSManagedObjectID+Extras.m in Sources */,
+				4C8CDAE71AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m in Sources */,
+				4C8CDB811AD2500800B7B9EA /* MTPaperA6.m in Sources */,
+				4C8CD9FC1AD1D72E00B7B9EA /* RptqDocumentSection.m in Sources */,
+				4C8CDB891AD2500800B7B9EA /* MTPaperB3.m in Sources */,
+				4C8CDBF41AD2648700B7B9EA /* MysqlCommitException.m in Sources */,
+				4C8CDB991AD2500800B7B9EA /* MTPaperC8.m in Sources */,
+				4C8CDAD91AD244D000B7B9EA /* MTDataTableVirtual.m in Sources */,
+				4C8CDA071AD1D72E00B7B9EA /* RptqUserCredentals.m in Sources */,
+				4C8CDB9B1AD2500800B7B9EA /* MTPaperC10.m in Sources */,
+				4C8CDAA21AD1DF3E00B7B9EA /* MTDatabaseField.m in Sources */,
+				4C8CDB7F1AD2500800B7B9EA /* MTPaperA4.m in Sources */,
+				4C8CDC7E1AD2657000B7B9EA /* NSString+MysqlEscape.m in Sources */,
+				4C8CDBBA1AD252B400B7B9EA /* MTMath.m in Sources */,
+				4C8CD9FA1AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C8CDABE1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m in Sources */,
+				4C8CDBF91AD2648700B7B9EA /* MysqlFetchField.m in Sources */,
+				4C8CDB931AD2500800B7B9EA /* MTPaperC2.m in Sources */,
+				4C8CDC891AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m in Sources */,
+				4C8CD9AE1AD1D4EA00B7B9EA /* MTDatabaseConnection.m in Sources */,
+				4C8CD9A71AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m in Sources */,
+				4C8CDAE61AD24B8700B7B9EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
+				4C8CDBFD1AD2648700B7B9EA /* MysqlRollbackException.m in Sources */,
+				4C8CDA9C1AD1DF1400B7B9EA /* MTDatabaseSqlite3.m in Sources */,
+				4C8CDB851AD2500800B7B9EA /* MTPaperA10.m in Sources */,
+				4C8CDA851AD1DCC100B7B9EA /* MTQueryDefinitionLinks.m in Sources */,
+				4C8CD9F51AD1D72E00B7B9EA /* RptqDocumentObjectChart.m in Sources */,
+				4C8CDA701AD1DCC100B7B9EA /* MTQueryCacheAddRow.m in Sources */,
+				4C8CD9A01AD1D28B00B7B9EA /* MADocumentState.m in Sources */,
+				4C8CDA031AD1D72E00B7B9EA /* RptqQueryPredicate.m in Sources */,
+				4C8CDB9E1AD2500800B7B9EA /* MTPaperLegal.m in Sources */,
+				4C8CDA7A1AD1DCC100B7B9EA /* MTQueryCacheSelect.m in Sources */,
+				4C8CDAFC1AD24D2A00B7B9EA /* RptqQueryField+Extras.m in Sources */,
+				4C8CDAF21AD24C9000B7B9EA /* SectionEnumerator.m in Sources */,
+				4C8CDB841AD2500800B7B9EA /* MTPaperA9.m in Sources */,
+				4C8CDA801AD1DCC100B7B9EA /* MTQueryCacheSyncOff.m in Sources */,
+				4C8CDC001AD2648700B7B9EA /* MysqlUpdate.m in Sources */,
+				4C8CDB8E1AD2500800B7B9EA /* MTPaperB8.m in Sources */,
+				4C8CD9981AD1D1AD00B7B9EA /* MADConstants.m in Sources */,
+				4C8CDA021AD1D72E00B7B9EA /* RptqQueryLinks.m in Sources */,
+				4C8CDBF71AD2648700B7B9EA /* MysqlException.m in Sources */,
+				4C8CDBA71AD2507200B7B9EA /* MTReportFormatterCache.m in Sources */,
+				4C8CDB8F1AD2500800B7B9EA /* MTPaperB9.m in Sources */,
+				4C8CDAA61AD1DF9800B7B9EA /* MTDataType.m in Sources */,
+				4C8CDC971AD26EEB00B7B9EA /* MTActivityIndicator.m in Sources */,
+				4C8CDBAE1AD250E600B7B9EA /* MTDataFormatter.m in Sources */,
+				4C8CDA841AD1DCC100B7B9EA /* MTQueryDefinitionGroup.m in Sources */,
+				4C8CD9FF1AD1D72E00B7B9EA /* RptqQueryCache.m in Sources */,
+				4C8CDAF51AD24CBF00B7B9EA /* RptqQuery+Extras.m in Sources */,
+				4C8CDB941AD2500800B7B9EA /* MTPaperC3.m in Sources */,
+				4C8CD9EF1AD1D72E00B7B9EA /* RptqDatabaseSchemaField.m in Sources */,
+				4C8CDBAB1AD250AE00B7B9EA /* MTTableFormatter.m in Sources */,
+				4C8CDBFA1AD2648700B7B9EA /* MysqlIndex.m in Sources */,
+				4C8CDA041AD1D72E00B7B9EA /* RptqQuerySort.m in Sources */,
+				4C8CDA8A1AD1DCC100B7B9EA /* MTQueryMaxFieldLength.m in Sources */,
+				4C8CD9F01AD1D72E00B7B9EA /* RptqDatabaseSchemaTable.m in Sources */,
+				4C8CDA8D1AD1DCC100B7B9EA /* MTQuerySelectItemsForGroup.m in Sources */,
+				4C8CD9FD1AD1D72E00B7B9EA /* RptqDocumentSectionRows.m in Sources */,
+				4C8CDC8E1AD26A6000B7B9EA /* RptqQueryPredicate+Extras.m in Sources */,
+				4C8CDB9D1AD2500800B7B9EA /* MTPaperGovernmentLetter.m in Sources */,
+				4C8CD9FB1AD1D72E00B7B9EA /* RptqDocumentObjectLabelLink.m in Sources */,
+				4C8CDB911AD2500800B7B9EA /* MTPaperC0.m in Sources */,
+				4C8CDB7E1AD2500800B7B9EA /* MTPaperA3.m in Sources */,
+				4C8CDA861AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.m in Sources */,
+				4C8CDA781AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.m in Sources */,
+				4C8CDB011AD24D3E00B7B9EA /* RptqDatabase+Extras.m in Sources */,
+				4C8CDB961AD2500800B7B9EA /* MTPaperC5.m in Sources */,
+				4C8CDB8C1AD2500800B7B9EA /* MTPaperB6.m in Sources */,
+				4C8CDAE11AD247F900B7B9EA /* MTDatabaseDataBinding.m in Sources */,
+				4C8CDAD61AD244D000B7B9EA /* MTDataTableFast.m in Sources */,
+				4C8CDBB11AD2514700B7B9EA /* MADArrayCaching.m in Sources */,
+				4C8CDB981AD2500800B7B9EA /* MTPaperC7.m in Sources */,
+				4C8CDAEA1AD24BD000B7B9EA /* RptqDocument+Extras.m in Sources */,
+				4C8CDBFF1AD2648700B7B9EA /* MysqlTruncate.m in Sources */,
+				4C8CDA741AD1DCC100B7B9EA /* MTQueryCacheDropTable.m in Sources */,
+				4C8CDC7B1AD264EF00B7B9EA /* probes_mysql.d in Sources */,
+				4C8CDA7B1AD1DCC100B7B9EA /* MTQueryCacheSelectGroupKeys.m in Sources */,
+				4C8CDA711AD1DCC100B7B9EA /* MTQueryCacheAggregateFunction.m in Sources */,
+				4C8CDA051AD1D72E00B7B9EA /* RptqQueryTable.m in Sources */,
+				4C8CDBF61AD2648700B7B9EA /* MysqlDelete.m in Sources */,
+				4C8CDB921AD2500800B7B9EA /* MTPaperC1.m in Sources */,
+				4C8CDB8D1AD2500800B7B9EA /* MTPaperB7.m in Sources */,
+				4C8CDBB41AD2519300B7B9EA /* MTNotificationDidFormatPage.m in Sources */,
+				4C8CDA911AD1DE7700B7B9EA /* MTDatabaseCache.m in Sources */,
+				4C8CDBF81AD2648700B7B9EA /* MysqlFetch.m in Sources */,
+				4C8CD9F41AD1D72E00B7B9EA /* RptqDocumentObjectBarcode.m in Sources */,
+				4C8CDAFD1AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m in Sources */,
+				4C8CD9B51AD1D53300B7B9EA /* MTDatabaseConnectionMySql.m in Sources */,
+				4C8CDA791AD1DCC100B7B9EA /* MTQueryCacheJournalModeOverride.m in Sources */,
+				4C8CDB9F1AD2500800B7B9EA /* MTPaperLetter.m in Sources */,
+				4C8CDBFB1AD2648700B7B9EA /* MysqlInsert.m in Sources */,
+				4C8CDB251AD24E8400B7B9EA /* RptqDocumentObjectFormula+Extras.m in Sources */,
+				4C8CDAC41AD1E37800B7B9EA /* NSString+Extras.m in Sources */,
+				4C8CDBC21AD2546300B7B9EA /* RptqQueryGroup+Extras.m in Sources */,
+				4C8CD98A1AD1CEAF00B7B9EA /* MADocument.m in Sources */,
+				4C8CDB7A1AD2500800B7B9EA /* MTPaper.m in Sources */,
+				4C8CDBA81AD2507200B7B9EA /* MTReportFormatterPageDefinition.m in Sources */,
+				4C8CDAAA1AD1E04700B7B9EA /* NSData+Comparson.m in Sources */,
+				4C8CDB7B1AD2500800B7B9EA /* MTPaperA0.m in Sources */,
+				4C8CDA721AD1DCC100B7B9EA /* MTQueryCacheBeginTransaction.m in Sources */,
+				4C8CD9F21AD1D72E00B7B9EA /* RptqDocumentObject.m in Sources */,
+				4C8CDA011AD1D72E00B7B9EA /* RptqQueryGroup.m in Sources */,
+				4C8CDAFE1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m in Sources */,
+				4C8CDA761AD1DCC100B7B9EA /* MTQueryCacheIndexCreate.m in Sources */,
+				4C8CDBFE1AD2648700B7B9EA /* MysqlServer.m in Sources */,
+				4C8CDB821AD2500800B7B9EA /* MTPaperA7.m in Sources */,
+				4C8CDB7C1AD2500800B7B9EA /* MTPaperA1.m in Sources */,
+				4C8CD9F31AD1D72E00B7B9EA /* RptqDocumentObjectAggregate.m in Sources */,
+				4C8CDB211AD24E8400B7B9EA /* RptqDocumentObject+Extras.m in Sources */,
+				4C8CDB8A1AD2500800B7B9EA /* MTPaperB4.m in Sources */,
+				4C8CDA881AD1DCC100B7B9EA /* MTQueryDefinitionTable.m in Sources */,
+				4C8CD9F91AD1D72E00B7B9EA /* RptqDocumentObjectLabel.m in Sources */,
+				4C8CDAEF1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m in Sources */,
+				4C8CDAC11AD1E32C00B7B9EA /* MTDataColumn.m in Sources */,
+				4C8CD9B61AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.m in Sources */,
+				4C8CD9B71AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m in Sources */,
+				4C8CDA831AD1DCC100B7B9EA /* MTQueryDefinitionField.m in Sources */,
+				4C8CDA771AD1DCC100B7B9EA /* MTQueryCacheIndexDrop.m in Sources */,
+				4C8CD9F81AD1D72E00B7B9EA /* RptqDocumentObjectImage.m in Sources */,
+				4C8CDA7F1AD1DCC100B7B9EA /* MTQueryCacheSyncDefault.m in Sources */,
+				4C8CDA9B1AD1DF1400B7B9EA /* MTDatabaseMySql.m in Sources */,
+				4C8CDB831AD2500800B7B9EA /* MTPaperA8.m in Sources */,
+				4C8CDA871AD1DCC100B7B9EA /* MTQueryDefinitionSort.m in Sources */,
+				4C8CDB271AD24E8400B7B9EA /* RptqDocumentObjectImage+Extras.m in Sources */,
+				4C8CDA6E1AD1DCC100B7B9EA /* MTQueryCache.m in Sources */,
+				4C8CDB971AD2500800B7B9EA /* MTPaperC6.m in Sources */,
+				4C8CDAD71AD244D000B7B9EA /* MTDataTableFastObjectEnumerator.m in Sources */,
+				4C8CDB7D1AD2500800B7B9EA /* MTPaperA2.m in Sources */,
+				4C8CDABB1AD1E14000B7B9EA /* MTKeyChain.m in Sources */,
+				4C8CDA9D1AD1DF1400B7B9EA /* MTDatabaseSqlServer.m in Sources */,
+				4C8CDB241AD24E8400B7B9EA /* RptqDocumentObjectChart+Extras.m in Sources */,
+				4C8CDB801AD2500800B7B9EA /* MTPaperA5.m in Sources */,
+				4C8CDBCC1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.m in Sources */,
+				4C8CD9F11AD1D72E00B7B9EA /* RptqDocument.m in Sources */,
+				4C8CDBF51AD2648700B7B9EA /* MysqlConnection.m in Sources */,
+				4C8CDA821AD1DCC100B7B9EA /* MTQueryCustomNoResults.m in Sources */,
+				4C8CDB9C1AD2500800B7B9EA /* MTPaperGovernmentLegal.m in Sources */,
+				4C8CDB861AD2500800B7B9EA /* MTPaperB0.m in Sources */,
+				4C8CDAD51AD244D000B7B9EA /* MTDataTable.m in Sources */,
+				4C8CDB281AD24E8400B7B9EA /* RptqDocumentObjectLabel+Extras.m in Sources */,
+				4C8CDA001AD1D72E00B7B9EA /* RptqQueryField.m in Sources */,
+				4C8CDB871AD2500800B7B9EA /* MTPaperB1.m in Sources */,
+				4C8CDA7D1AD1DCC100B7B9EA /* MTQueryCacheSelectRowId.m in Sources */,
+				4C8CDA8E1AD1DCC100B7B9EA /* MTQueryTest.m in Sources */,
+				4C8CDA6F1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m in Sources */,
+				4C8CD9FE1AD1D72E00B7B9EA /* RptqQuery.m in Sources */,
+				4C8CDC941AD26DC700B7B9EA /* MTActivityItemProviderPdf.m in Sources */,
+				4C8CDA8C1AD1DCC100B7B9EA /* MTQuerySampleDataTable.m in Sources */,
+				4C8CDB2A1AD24E8400B7B9EA /* RptqDocumentObjectLabelLink+Extras.m in Sources */,
+				4C8CDA891AD1DCC100B7B9EA /* MTQueryFull.m in Sources */,
+				4C8CDA751AD1DCC100B7B9EA /* MTQueryCacheEndTransaction.m in Sources */,
+				4C8CDB261AD24E8400B7B9EA /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
+				4C8CDB221AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m in Sources */,
+				4C8CDAD81AD244D000B7B9EA /* MTDataTableLocation.m in Sources */,
+				4C8CDC911AD26AE100B7B9EA /* MADReportDesignerSectionElementLayoutManager.m in Sources */,
+				4C8CDB881AD2500800B7B9EA /* MTPaperB2.m in Sources */,
+				4C8CDBD71AD2567400B7B9EA /* NSManagedObject+Extras.m in Sources */,
+				4C8CDA061AD1D72E00B7B9EA /* RptqRelationship.m in Sources */,
+				4C8CD9F71AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.m in Sources */,
+				4C8CDBC61AD2552C00B7B9EA /* MTFont.m in Sources */,
+				4C8CDB951AD2500800B7B9EA /* MTPaperC4.m in Sources */,
+				4C8CDA6D1AD1DCC100B7B9EA /* MTQuery.m in Sources */,
+				4C8CDB231AD24E8400B7B9EA /* RptqDocumentObjectBarcode+Extras.m in Sources */,
+				4C8CDAA31AD1DF3E00B7B9EA /* MTDatabaseTable.m in Sources */,
+				4C8CDA811AD1DCC100B7B9EA /* MTQueryCacheVacuum.m in Sources */,
+				4C8CD9F61AD1D72E00B7B9EA /* RptqDocumentObjectFormula.m in Sources */,
+				4C8CDA8B1AD1DCC100B7B9EA /* MTQuerySampleDataField.m in Sources */,
+				4C8CDA731AD1DCC100B7B9EA /* MTQueryCacheDeleteAllFromTable.m in Sources */,
+				4C8CDB0B1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m in Sources */,
+				4C8CDB901AD2500800B7B9EA /* MTPaperB10.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C8CD9651AD1CDC800B7B9EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C8CDCF91AD27D8A00B7B9EA /* MTCachingArrayTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C8CD96C1AD1CDC800B7B9EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C8CD95D1AD1CDC800B7B9EA /* MAD */;
+			targetProxy = 4C8CD96B1AD1CDC800B7B9EA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4C8CD9701AD1CDC800B7B9EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4C8CD9711AD1CDC800B7B9EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C8CD9731AD1CDC800B7B9EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/libTdsClient/build/Debug-iphoneos",
+					/Users/mthomason/Desktop/Reports/Compressor/library/libsybdb,
+					"/Users/mthomason/Desktop/Reports/Reports/libMTDataStrutures/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/Barcodes/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4C8CD9741AD1CDC800B7B9EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/libTdsClient/build/Debug-iphoneos",
+					/Users/mthomason/Desktop/Reports/Compressor/library/libsybdb,
+					"/Users/mthomason/Desktop/Reports/Reports/libMTDataStrutures/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/Barcodes/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
+					"/Users/mthomason/Desktop/Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4C8CD9761AD1CDC800B7B9EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MADTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4C8CD9771AD1CDC800B7B9EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MADTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C8CD9591AD1CDC800B7B9EA /* Build configuration list for PBXProject "MAD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C8CD9701AD1CDC800B7B9EA /* Debug */,
+				4C8CD9711AD1CDC800B7B9EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C8CD9721AD1CDC800B7B9EA /* Build configuration list for PBXNativeTarget "MAD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C8CD9731AD1CDC800B7B9EA /* Debug */,
+				4C8CD9741AD1CDC800B7B9EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C8CD9751AD1CDC800B7B9EA /* Build configuration list for PBXNativeTarget "MADTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C8CD9761AD1CDC800B7B9EA /* Debug */,
+				4C8CD9771AD1CDC800B7B9EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C8CD9561AD1CDC800B7B9EA /* Project object */;
+}

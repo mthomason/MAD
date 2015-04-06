@@ -12,6 +12,7 @@
 
 #import "MADocument.h"
 #import "MADConstants.h"
+#import "MTActivityIndicator.h"
 
 #import <CoreData/CoreData.h>
 
@@ -36,7 +37,7 @@
 
 #import "MTNotificationDidFormatPage.h"
 
-#import "MTActivityIndicator.h"
+//#import "MTActivityIndicator.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -72,7 +73,6 @@
 
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
-#import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
 #import "NSFileManager+Common.h"
 #import "NSThread+Extras.h"

@@ -32,7 +32,7 @@
 #import "MTLog.h"
 
 #import "UIDevice+Hack.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
 NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";

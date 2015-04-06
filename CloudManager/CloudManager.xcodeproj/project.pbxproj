@@ -99,6 +99,7 @@
 				4CF8892F1AD1C26400ED21FC /* CGGeometry+Extras.h */,
 				4CF889301AD1C26400ED21FC /* NSFileManager+Common.h */,
 				4CF889311AD1C26400ED21FC /* NSURL+Document.h */,
+				4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */,
 				4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */,
 			);
 			name = libCocoaExtentions;
@@ -107,7 +108,6 @@
 		4CF46F5B1AC64BA5007C0A82 = {
 			isa = PBXGroup;
 			children = (
-				4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */,
 				4C37E0F21ACB285800B4BC0D /* Resources */,
 				4CF46F661AC64BA5007C0A82 /* CloudManager */,
 				4CF46F731AC64BA5007C0A82 /* CloudManagerTests */,

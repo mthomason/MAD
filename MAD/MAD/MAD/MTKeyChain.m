@@ -11,7 +11,7 @@
 #endif
 
 #import "MTKeyChain.h"
-#import "UIApplication+Extras.h"
+#import "UIApplication+Helpers.h"
 #import "NSThread+Extras.h"
 #import "UIColor+EverydayApps.h"
 #import "NSError+Constructors.h"

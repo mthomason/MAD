@@ -12,6 +12,7 @@
 
 #import "MADQueryVisualizationViewController.h"
 #import "AppDelegate.h"
+#import "MADocument.h"
 #import "MTApplicationInstance.h"
 #import "MTShowSqlViewController.h"
 
@@ -42,7 +43,7 @@
 #import "MTGraph.h"
 
 #import "MTQueryTest.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

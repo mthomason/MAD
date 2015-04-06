@@ -17,7 +17,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTBarcode.h"
-#import "Constants.h"
+//#import "Constants.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqDocumentSection.h"
@@ -55,7 +55,7 @@
 
 #import "SectionEnumerator.h"
 
-#import "UIApplication+Extras.h"
+//#import "UIApplication+Extras.h"
 
 #import "MTErrorContainer.h"
 #import "MTDatabaseTable.h"

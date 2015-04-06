@@ -52,7 +52,7 @@
 #import "UIView+Animations.h"
 #import "UIDevice+Hack.h"
 #import "NSFileManager+Common.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 #import "NSURL+Document.h"
 #import "UIAlertController+CommonAlerts.h"
 #import "MTNavigationController.h"

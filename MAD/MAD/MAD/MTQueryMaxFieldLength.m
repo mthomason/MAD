@@ -43,7 +43,7 @@
         RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-        [self setDatabase:db];
+        self.database = db;
     }
     
     return self;
@@ -67,17 +67,17 @@
             RptqDatabaseSchemaTable *table = [field inTable];
             [tables addObject:table];
 
-            NSString *fieldAliasSafe = [[self database] fieldAliasForField:field.name
+            NSString *fieldAliasSafe = [self.database fieldAliasForField:field.name
                                                               andTableName:field.inTable.name];
-            NSString *safeFieldName = [[self database] safeQueryField:field.name
+            NSString *safeFieldName = [self.database safeQueryField:field.name
                                                              andTable:field.inTable.name];
             [self fields][fieldAliasSafe] = dbField;
             [[self fieldKeys] addObject:fieldAliasSafe];
             
             [selectFields appendFormat: @" %@( %@(%@) ) %@ %@,",
-                    [[self database] sqlAggregateFunctionMax],
-                    [[self database] sqlAggregateFunctionLength], safeFieldName,
-                    [[self database] tableAliasConnector], fieldAliasSafe];
+                    [self.database sqlAggregateFunctionMax],
+                    [self.database sqlAggregateFunctionLength], safeFieldName,
+                    [self.database tableAliasConnector], fieldAliasSafe];
             
         }
         
@@ -94,12 +94,12 @@
             if (counter > 0) {
                 [tableNamePart appendString:@", "];
             }
-            NSString *safeTableName = [[self database] tableAliasForTable:table.toString];
+            NSString *safeTableName = [self.database tableAliasForTable:table.toString];
             [tableNamePart appendString:safeTableName];
             counter++;
         }
         
-        NSString *selectPart = [[self database] selectPart];
+        NSString *selectPart = [self.database selectPart];
         
         sql = [NSString stringWithFormat:@"%@ %@ %@ %@;", selectPart, fieldsPart, MTSqlFrom, tableNamePart];
 

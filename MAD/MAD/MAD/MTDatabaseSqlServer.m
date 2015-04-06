@@ -31,8 +31,7 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
-#import "UIApplication+Extras.h"
-#import "NSError+UserInterface.h"
+#import "UIApplication+Helpers.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
@@ -1501,8 +1500,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             /* Initialize the login params in the structure */
             const char *u = [username cStringUsingEncoding:NSUTF8StringEncoding];
             const char *p = [password cStringUsingEncoding:NSUTF8StringEncoding];
-            const char *a = [[[self databaseConnection] appname] cStringUsingEncoding:NSUTF8StringEncoding];
-            const char *n = [[[self databaseConnection] database] cStringUsingEncoding:NSUTF8StringEncoding];
+            const char *a = [[self.databaseConnection appname] cStringUsingEncoding:NSUTF8StringEncoding];
+            const char *n = [[self.databaseConnection database] cStringUsingEncoding:NSUTF8StringEncoding];
             DBSETLUSER(login, u);
             DBSETLPWD(login, p);
             DBSETLAPP(login, a);

@@ -9,7 +9,7 @@
 #ifndef Reports_UIColor_EverydayApps_h
 #define Reports_UIColor_EverydayApps_h
 
-@class UIColor;
+#import <UIKit/UIKit.h>
 
 @interface UIColor(EverydayApps)
 

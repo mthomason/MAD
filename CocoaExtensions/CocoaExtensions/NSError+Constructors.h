@@ -11,9 +11,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class UIViewController;
+
 @interface NSError (Constructors)
 
-+ (instancetype)errorWithDomain:(NSString *)domain code:(NSInteger)code title:(NSString *)title andMessage:(NSString *)message;
+- (void)presentErrorOnViewController:(UIViewController *)viewController;
+
++ (instancetype)errorWithDomain:(NSString *)domain
+                           code:(NSInteger)code
+                          title:(NSString *)title
+                     andMessage:(NSString *)message;
 
 @end
 

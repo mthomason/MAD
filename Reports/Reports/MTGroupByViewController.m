@@ -15,7 +15,7 @@
 #import "MADNavigationBarTitleView.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 

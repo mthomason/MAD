@@ -7,7 +7,7 @@
 //
 
 #import "MADInterfaceControllerKPI.h"
-#import "MADocument.h"
+#import "MAD.h"
 
 @interface MADInterfaceControllerKPI()
 

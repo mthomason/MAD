@@ -10,8 +10,7 @@
 #define Reports_MTDataTable_h
 
 #import <Foundation/Foundation.h>
-#import "MTCacheProtocol.h"
-#import "MADDataProtocol.h"
+#import "MAD.h"
 #import "MTAggregateFunctionType.h"
 #import "MADAggregateGroupByType.h"
 

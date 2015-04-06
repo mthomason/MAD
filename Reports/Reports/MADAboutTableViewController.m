@@ -16,7 +16,7 @@
 #import "UIApplication+Extras.h"
 #import "MADOpenFileViewController.h"
 #import "UIDevice+Hack.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 #import "UIAlertController+CommonAlerts.h"
 #import "UIColor+EverydayApps.h"
 #import "MADVibrantTableViewCell.h"
@@ -130,9 +130,12 @@
 }
 
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+
     [self dismissViewControllerAnimated:YES completion:nil];
     [error presentErrorOnViewController:self];
+
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

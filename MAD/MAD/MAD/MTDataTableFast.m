@@ -558,8 +558,7 @@
         char *queryString = sqlite3_mprintf((char *) sqlc);
         BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
 
-        NSAssert(success, @"%s", sqlite3_errmsg([[self databaseForSelects] databaseHandle]));
-        if (success) {
+        if (success) {  //Expect success to == NO in normal working conditions.
             success = sqlite3_step(statement) == SQLITE_ROW;
             result = [self currentObject:statement];
             self.lastDataForCacheId = [MTPair pairWithFormer:cacheId andLatter:result];

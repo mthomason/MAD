@@ -32,8 +32,6 @@
 #import "RptqQueryField+Extras.h"
 
 #import "MTKeyChain.h"
-#import "NSError+UserInterface.h"
-#import "NSError+Constructors.h"
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"

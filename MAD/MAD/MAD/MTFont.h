@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
+#import <UIKit/UIKit.h>
 
 extern NSString * const MTFontFamilyAmericanTypewriter;
 extern NSString * const MTFontFamilyArial;

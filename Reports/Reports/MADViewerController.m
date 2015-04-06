@@ -25,7 +25,7 @@
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
 #import "MTPaper.h"
@@ -774,7 +774,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [weakself.document refresh:^(BOOL success, NSError *error) {
 
             if (!success) {
-                [error performSelectorOnMainThread:@selector(presentErrorOnViewController:) withObject:weakself waitUntilDone:NO];
+                [error performSelectorOnMainThread:@selector(presentErrorOnViewController:)
+                                        withObject:weakself
+                                     waitUntilDone:NO];
             } else {
                 NSDate *lastD = [NSDate date];
                 [weakself setLastCacheDate:lastD];

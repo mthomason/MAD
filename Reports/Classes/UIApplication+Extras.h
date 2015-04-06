@@ -13,7 +13,6 @@
 
 @interface UIApplication (Extras)
 
-+ (id)topViewController;
 + (NSString *)version;
 + (BOOL)isMadDesigner;
 + (BOOL)isMadViewer;

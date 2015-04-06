@@ -24,7 +24,7 @@
 #import "MTDataTable.h"
 #import "MTDatabaseField.h"
 
-#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 #import "UIColor+EverydayApps.h"
 
 @interface MTTableController ()

@@ -13,7 +13,7 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MTApplicationInstance.h"
+
 #import "MADocument.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseField.h"
@@ -59,7 +59,7 @@
 #import "MTDataTable.h"
 
 #import "MTBarcode.h"
-#import "MTFont.h"
+//#import "MTFont.h"
 #import "MTMath.h"
 
 #import "MTReportFormatter.h"
