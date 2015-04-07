@@ -17,9 +17,9 @@
 
 @property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, assign) BOOL didRefresh;
+@property (nonatomic, assign, readonly) BOOL needsFormat;
 
 - (instancetype)initWithQuery:(MTQuery *)query;
-- (BOOL)format;
 
 @end
 

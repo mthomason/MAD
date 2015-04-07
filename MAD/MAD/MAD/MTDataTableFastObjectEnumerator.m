@@ -167,7 +167,7 @@ void sqliteCallback(void *foo, const char* statement) {
     }
     if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
         NSNumber *rowid = @(sqlite3_column_int(_statement, columnCounter));
-        [currentObject setValue:rowid forKey:@"ROWID"];
+        [currentObject setValue:rowid forKey:MADIdentifierROWID];
     }
     return self.singleColumnNoWrapper ? columnValue : currentObject;
 }

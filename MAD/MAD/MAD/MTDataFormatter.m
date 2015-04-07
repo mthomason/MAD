@@ -18,24 +18,23 @@
 
 @implementation MTDataFormatter
 
-- (instancetype)initWithQuery:(MTQuery *)query {
-    self = [super init];
-    if (self) {
-        [self setQuery:query];
-        [self setDidRefresh:NO];
-    }
-    return self;
-}
-
-
 + (instancetype)reportFormatterWithQuery:(MTQuery *)query {
     MTDataFormatter *result = [[MTDataFormatter alloc] initWithQuery:query];
     return result;
 }
 
+- (instancetype)initWithQuery:(MTQuery *)query {
+    self = [super init];
+    if (self) {
+        self.query = query;
+        self.didRefresh = NO;
+    }
+    return self;
+}
+
 #pragma mark - Reading cached data
 
-- (BOOL)format {
+- (BOOL)needsFormat {
     return YES;
 }
 

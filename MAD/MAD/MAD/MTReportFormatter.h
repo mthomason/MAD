@@ -61,13 +61,21 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 
 @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
-@property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
+
 @property (nonatomic, weak, readonly) MADocument *layout;
 
+
+//  These are the rowids by page.  These point to data in the cache.
+//      Once these arrays are populated, they are used by the print page render to
+//      draw the report.
 @property (nonatomic, strong, readonly) MADArrayCaching *reportIndexes;
+
+//  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
+//      which represents a page.  The array contains dictionaries for each object on that page.
 @property (nonatomic, strong, readonly) MADArrayCaching *reportLayout;
 
-@property (nonatomic, strong) NSString *overrideIdentifier; //Use this to cache in location other than default.
+//  Use this to cache in location other than default.
+@property (nonatomic, strong) NSString *overrideIdentifier;
 
 @end
 

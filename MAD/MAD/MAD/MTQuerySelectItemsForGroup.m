@@ -35,16 +35,16 @@
         [self setSortDescriptors:sortDescriptors];
         
         NSMutableArray *columnKeys = [NSMutableArray arrayWithArray:object[@(MTQuerySelectFieldKeys)]];
-        [columnKeys addObject:@"ROWID"];
+        [columnKeys addObject:MADIdentifierROWID];
         [self setColumnKeys:columnKeys];
         
         NSArray *whereClause = [NSArray arrayWithArray:object[@(MTQuerySelectPredicates)]];
         [self setWhereClause:whereClause];
         
         NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
-        MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:@"ROWID"];
+        MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
         [rowid setColumnType:@(MTDataTypeInteger)];
-        columns[@"ROWID"] = rowid;
+        columns[MADIdentifierROWID] = rowid;
         [self setColumns:columns];
   
     }

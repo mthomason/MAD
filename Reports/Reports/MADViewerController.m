@@ -43,6 +43,7 @@
 #import "MTNotificationDidFormatPage.h"
 #import "MTNotificationDidReadRows.h"
 #import "UIColor+EverydayApps.h"
+#import "NSDate+Extras.h"
 
 #import "MACloudManager.h"
 
@@ -93,7 +94,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 @property (nonatomic, assign) CGRect frameAfterRotation;
 
 @property (nonatomic, strong) MTSliderPageVertical *pageSlider;
-@property (nonatomic, strong) IBOutlet UISlider *sliderPagination; // FIXME: Remvoe this slider, sometime EVER!!!WTFFF
 
 @property (nonatomic, strong) UIToolbar *toolbarSideRight;
 
@@ -219,23 +219,25 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)initializeVerticalSlider {
     MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
-    [vertSlider setMaximumValue:0.0000f];
-    [vertSlider setMinimumValue:0.0000f];
-    [vertSlider setContinuous:YES];
-    [vertSlider setTintColor:[UIColor tintColorRed]];
-    [vertSlider setValue:0.0000f];
+    vertSlider.maximumValue = 0.0000f;
+    vertSlider.minimumValue = 0.0000f;
+    vertSlider.continuous = YES;
+    vertSlider.tintColor = [UIColor tintColorRed];
+    vertSlider.value = 0.0000f;
+    
     [vertSlider addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
     [vertSlider addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     
     UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapped:)];
     [vertSlider addGestureRecognizer:sliderTapped];
-    
-    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * M_PI);
-    [self setPageSlider:vertSlider];
-    
+
     UIToolbar *vertToolbar = [[UIToolbar alloc] init];
+
+    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * M_PI);
     vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * M_PI);
-    [self setToolbarSideRight:vertToolbar];
+    
+    self.pageSlider = vertSlider;
+    self.toolbarSideRight = vertToolbar;
 
 }
 
@@ -245,17 +247,17 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     labelStatus.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
-    [self setBarButtonLabelStatus:barButtonLabelStatus];
-    [self setLabelStatus:labelStatus];
+    self.barButtonLabelStatus = barButtonLabelStatus;
+    self.labelStatus = labelStatus;
 }
 
 - (void)initalizeStatusMessages {
     NSAttributedString *statusMessage1 = [NSAttributedString new];
     NSAttributedString *statusMessage2 = [NSAttributedString new];
     NSAttributedString *statusMessage3 = [NSAttributedString new];
-    [self setStatusMessage1:statusMessage1];
-    [self setStatusMessage2:statusMessage2];
-    [self setStatusMessage3:statusMessage3];
+    self.statusMessage1 = statusMessage1;
+    self.statusMessage2 = statusMessage2;
+    self.statusMessage3 = statusMessage3;
 }
 
 #pragma mark - UIViewController Standard Callbacks
@@ -292,7 +294,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     self.dataSource = self;
     self.delegate = self;
     
-    [self setCurrentPageIndex:0];
+    self.currentPageIndex = 0;
     [self updatePageStatus];
     
     UIViewController *blankPage = [[UIViewController alloc] init];
@@ -319,15 +321,11 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
         self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-        for (UIView *view in self.navigationItem.titleView.subviews) {
-            NSLog(@"%@", view);
-        }
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;
     }
 }
-
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -341,13 +339,13 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
     [self.document initalizeMainQuery];
     [self reload];
-    [self addSliderPagination];
+    [self layoutSubviewSliderPagination];
     [self updateLateRefreshedLabel:self];
     
     if ([self printPageRendererReport] == nil) {
         [self.document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [self.document reportFormatter]
-                                                                                                                           dataTable: [self.document mainDataTable]];
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
+                                                                                                                           dataTable: self.document.mainDataTable];
         [self setPrintPageRendererReport: prtingPageRendererReport];
     }
 }
@@ -361,6 +359,32 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self setPrintPageRendererReport:nil];
     [self timerDealloc];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    CGFloat nonSliderButtonsWidth = CGSizeZero.width;
+    CGFloat itemsMargin = 8.0000f;
+    NSUInteger counter = 0;
+    for (UIBarButtonItem *barButtonItem in [[self.navigationController toolbar] items]) {
+        if (barButtonItem != [self barButtonItemSliderView]) {
+            NSString *viewSelector = NSStringFromSelector(@selector(view));
+            UIView *view = [barButtonItem valueForKey:viewSelector];
+            if (view != nil) {
+                CGFloat width = view? [view frame].size.width : (CGFloat)0.0;
+                nonSliderButtonsWidth += width + itemsMargin;
+            } else {
+                nonSliderButtonsWidth += [barButtonItem width];
+            }
+        }
+        counter++;
+    }
+    self.barButtonItemSliderView.width = self.navigationController.toolbar.frame.size.width - nonSliderButtonsWidth - (itemsMargin * counter + 1);
+    [self.sliderView setFrame:CGRectMake(self.sliderView.frame.origin.x, self.sliderView.frame.origin.y, self.barButtonItemSliderView.width, self.sliderView.frame.size.height)];
+    [self.navigationController.toolbar setNeedsLayout];
+    [self.view bringSubviewToFront:self.toolbarSideRight];
+    [self layoutSubviewSliderPagination];
+    self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
@@ -485,7 +509,10 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (NSShadow *)statusLabelShadow {
     NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowColor = [UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f];
+    shadow.shadowColor = [UIColor colorWithRed:0.0000f
+                                         green:0.00000f
+                                          blue:0.0000f
+                                         alpha:0.8000f];
     shadow.shadowOffset = CGSizeMake(0.0000f, 1.0000f);
     shadow.shadowBlurRadius = 5.0000f;
     return shadow;
@@ -523,33 +550,38 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     toolbar.backgroundColor = [UIColor tintColorWhiteAlpha];
 }
 
-- (void)addSliderPagination {
-    CGFloat w = 40.0000f;
-    CGFloat x = self.view.frame.size.width - w;
-    CGFloat y = 0.0000f;
-    CGFloat h = self.view.frame.size.height;
-    CGRect frame = CGRectMake(x, y, w, h);
-    CGRect framePageSlider = CGRectMake(CGPointZero.x, CGPointZero.y, w, h);
-    self.toolbarSideRight.frame = frame;
-    self.pageSlider.frame = framePageSlider;
+const CGFloat MADSliderPaginationWidth = 40.0000f;
+
+- (void)layoutSubviewSliderPagination {
+    self.toolbarSideRight.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth,
+                                             CGPointZero.y,
+                                             MADSliderPaginationWidth,
+                                             self.view.frame.size.height);
+    self.pageSlider.frame = CGRectMake(CGPointZero.x,
+                                       CGPointZero.y,
+                                       MADSliderPaginationWidth,
+                                       self.view.frame.size.height);
 }
 
 - (void)sliderChangedPage:(id)sender {
 
     UISlider *slider = (UISlider *)sender;
     float sliderIndex = lroundf([slider value]);
-    if ((int)sliderIndex != [self currentPageIndex]) {
-        [self setCurrentPageIndex:sliderIndex];
+    if ((int)sliderIndex != self.currentPageIndex) {
+        self.currentPageIndex = sliderIndex;
         [self updatePageStatus];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                                                                 pageNumber: self.currentPageIndex + 1
                                                                                                                    ofPages: self.numberOfPages];
-        [[pageOne view] setFrame:self.view.bounds];
+        pageOne.view.frame = self.view.bounds;
         pageOne.delegate = self;
         
         __block MADViewerController *reportViewer = self;
         [self.view bringSubviewToFront:self.toolbarSideRight];
-        [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+        NSArray *viewControllers = @[pageOne];
+        [self setViewControllers: viewControllers
+                       direction: UIPageViewControllerNavigationDirectionForward
+                        animated: NO completion:^(BOOL finished) {
             if (finished) {
                 [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
                 [pageOne.view setNeedsDisplay];
@@ -562,46 +594,18 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     }
 }
 
-
 - (IBAction)sliderPageDidFinishDrag:(id)sender {
     ((UISlider *)sender).value = lroundf(((UISlider *)sender).value);               // Sets your slider to this value
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    CGFloat nonSliderButtonsWidth = CGSizeZero.width;
-    CGFloat itemsMargin = 8.0000f;
-    NSUInteger counter = 0;
-    for (UIBarButtonItem *barButtonItem in [[[self navigationController] toolbar] items]) {
-        if (barButtonItem != [self barButtonItemSliderView]) {
-            NSString *viewSelector = NSStringFromSelector(@selector(view));
-            UIView *view = [barButtonItem valueForKey:viewSelector];
-            if (view != nil) {
-                CGFloat width = view? [view frame].size.width : (CGFloat)0.0;
-                nonSliderButtonsWidth += width + itemsMargin;
-            } else {
-                nonSliderButtonsWidth += [barButtonItem width];
-            }
-        }
-        counter++;
-    }
-    CGFloat width = [[[self navigationController] toolbar] frame].size.width - nonSliderButtonsWidth - (itemsMargin * counter + 1);
-    [self.barButtonItemSliderView setWidth:width];
-    [self.sliderView setFrame:CGRectMake(self.sliderView.frame.origin.x, self.sliderView.frame.origin.y, width, self.sliderView.frame.size.height)];
-    [self.navigationController.toolbar setNeedsLayout];
-    [self.view bringSubviewToFront:self.toolbarSideRight];
-    [self addSliderPagination];
-    self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    [[self.document managedObjectContext] save:&error];
+    [self.document.managedObjectContext save:&error];
     if (error != nil) {
-        [[self.document managedObjectContext] save:&error];
+        [self.document.managedObjectContext save:&error];
     }
-    [[self viewControllerDelegate] viewControllerDidFinish: self];
+    [self.viewControllerDelegate viewControllerDidFinish: self];
 }
 
 static UIImageView *captureSnapshotOfView (UIView *targetView) {
@@ -663,13 +667,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
-    [[self printPageRendererReport] drawPageAtIndex:pageIndex inRect:printableRect];
+    [self.printPageRendererReport drawPageAtIndex: pageIndex
+                                           inRect: printableRect];
 }
 
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? [self navigationController] : self;
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? self.navigationController : self;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
@@ -691,22 +696,23 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self.pageSlider setEnabled:YES];
     [self.pageSlider setTintColor:[UIColor tintColorRed]];
 
-    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
-    for (UITabBarItem *item in tabBarItems) {
-        [item setEnabled:YES];
+    NSArray *tabBarItems = self.tabBarController.tabBar.items;
+    UITabBarItem *item;
+    for (item in tabBarItems) {
+        item.enabled = YES;
     }
     
-    [self.barButtonItemRefresh setEnabled:YES];
-    [self.barButtonItemDone setEnabled:YES];
-    [self.barButtonItemPrint setEnabled:YES];
-    [self.barButtonItemSendToPdf setEnabled:YES];
-    [self.barButtonItemActivity setEnabled:YES];
+    self.barButtonItemRefresh.enabled = YES;
+    self.barButtonItemDone.enabled = YES;
+    self.barButtonItemPrint.enabled = YES;
+    self.barButtonItemSendToPdf.enabled = YES;
+    self.barButtonItemActivity.enabled = YES;
     
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
-    [self.barButtonItemRefresh setEnabled:YES];
-    [self.labelDateLastRefreshed setHidden:NO];
-    [self.labelDateLastRefreshed setText:@""];
+    self.barButtonItemRefresh.enabled = YES;
+    self.labelDateLastRefreshed.hidden = NO;
+    self.labelDateLastRefreshed.text = @"";
     [self.labelDateLastRefreshed setNeedsDisplay];
 
     [self.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
@@ -929,7 +935,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
-    return [self navigationController];
+    return self.navigationController;
 }
 
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
@@ -1046,21 +1052,21 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 #pragma mark - UIPageViewControllerDataSrouce
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
+- (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
+       viewControllerAfterViewController:(MTReportViewerReportPageViewController *)pageViewControllerLast {
     
     MTReportViewerReportPageViewController *result = nil;
-    if ([(MADViewerController *)pageViewController pageIsAnimating] == NO) {
+    if (viewerViewController.pageIsAnimating == NO) {
         NSUInteger visablePageNumber = 0;
-        MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
-        [lastPage view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [lastPage view].translatesAutoresizingMaskIntoConstraints = YES;
-        if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
-            visablePageNumber = [lastPage pageNumber];
+        pageViewControllerLast.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        pageViewControllerLast.view.translatesAutoresizingMaskIntoConstraints = YES;
+        if (pageViewControllerLast != nil && [pageViewControllerLast respondsToSelector:@selector(pageNumber)]) {
+            visablePageNumber = pageViewControllerLast.pageNumber;
         }
-        if (visablePageNumber + 1 <= [self numberOfPages]) {
+        if (visablePageNumber + 1 <= self.numberOfPages) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                            pageNumber: visablePageNumber + 1
-                                                                              ofPages: [self numberOfPages]];
+                                                                              ofPages: self.numberOfPages];
             result.delegate =  self;
             result.view.frame = self.view.bounds;
             result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -1071,19 +1077,19 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
+- (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
+      viewControllerBeforeViewController:(MTReportViewerReportPageViewController *)pageViewControllerPrevious {
     
     MTReportViewerReportPageViewController *result = nil;
-    if ([(MADViewerController *)pageViewController pageIsAnimating] == NO) {
+    if (viewerViewController.pageIsAnimating == NO) {
         NSUInteger visablePageNumber = 0;
-        MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
-        if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
-            visablePageNumber = [lastPage pageNumber];
+        if (pageViewControllerPrevious != nil && [pageViewControllerPrevious respondsToSelector:@selector(pageNumber)]) {
+            visablePageNumber = pageViewControllerPrevious.pageNumber;
         }
         if (visablePageNumber - 1 > 0) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                            pageNumber: visablePageNumber - 1
-                                                                              ofPages: [self numberOfPages]];
+                                                                              ofPages: self.numberOfPages];
             result.delegate =  self;
             result.view.frame = self.view.bounds;
             result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -1093,38 +1099,43 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return result;
 }
 
-- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
-    return [(MADViewerController *)pageViewController numberOfPages];
+- (NSInteger)presentationCountForPageViewController:(MADViewerController *)pageViewController {
+    return pageViewController.numberOfPages;
 }
 
-- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
-    return [(MADViewerController *)pageViewController currentPageIndex];
+- (NSInteger)presentationIndexForPageViewController:(MADViewerController *)pageViewController {
+    return pageViewController.currentPageIndex;
 }
 
 #pragma mark - UIPageViewControllerDelegate
 
-- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+- (void)pageViewController:(MADViewerController *)pageViewController
+        didFinishAnimating:(BOOL)finished
+   previousViewControllers:(NSArray *)previousViewControllers
+       transitionCompleted:(BOOL)completed {
     
     if (completed || finished) {
-        [(MADViewerController *)pageViewController setPageIsAnimating:NO];
-        if ([[(MADViewerController *)pageViewController viewControllers] count] > 0) {
-            MTReportViewerReportPageViewController *viewController = [pageViewController viewControllers][0];
-            [(MADViewerController *)pageViewController setCurrentPageIndex:[viewController pageNumber] - 1];
-            [(MADViewerController *)pageViewController updatePageStatus];
-            [[(MADViewerController *)pageViewController sliderPagination] setValue:[(MADViewerController *)pageViewController currentPageIndex] animated:YES];
-            [[(MADViewerController *)pageViewController pageSlider] setValue:[(MADViewerController *)pageViewController currentPageIndex] animated:YES];
+        [pageViewController setPageIsAnimating:NO];
+        if (pageViewController.viewControllers.count > 0) {
+            MTReportViewerReportPageViewController *viewController = pageViewController.viewControllers[0];
+            [pageViewController setCurrentPageIndex: viewController.pageNumber - 1];
+            [pageViewController updatePageStatus];
+            [pageViewController.pageSlider setValue: pageViewController.currentPageIndex
+                                           animated: YES];
         }
     }
     
 }
 
-- (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
-    [(MADViewerController *)pageViewController setPageIsAnimating:NO];
+- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController
+                   spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+    pageViewController.pageIsAnimating = NO;
     return UIPageViewControllerSpineLocationMin;
 }
 
-- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
-    [(MADViewerController *)pageViewController setPageIsAnimating:YES];
+- (void)pageViewController:(MADViewerController *)pageViewController
+    willTransitionToViewControllers:(NSArray *)pendingViewControllers {
+    pageViewController.pageIsAnimating = YES;
     
 }
 
@@ -1138,9 +1149,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:[self attributesStatusLabelBold]];
-        [self setStatusMessage1:attributedString];
-        [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
+        self.statusMessage1 = attributedString;
+        [self updateStatusLabel: self.statusMessage1
+             recordsReadMessage: self.statusMessage2
+        andNumberOfPagesMessage: self.statusMessage3];
     }
 }
 
@@ -1153,9 +1166,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesStatusLabelLight]];
-        [self setStatusMessage2:attributedString];
-        [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message
+                                                                               attributes:self.attributesStatusLabelLight];
+        self.statusMessage2 = attributedString;
+        [self updateStatusLabel: self.statusMessage1
+             recordsReadMessage: self.statusMessage2
+        andNumberOfPagesMessage: self.statusMessage3];
     }
 }
 
@@ -1168,8 +1184,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     } else {
         
         NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesStatusLabelLight]];
-        [self setStatusMessage3:attributedString];
-        [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
+        self.statusMessage3 = attributedString;
+        [self updateStatusLabel: self.statusMessage1
+             recordsReadMessage: self.statusMessage2
+        andNumberOfPagesMessage: self.statusMessage3];
     }
 }
 
@@ -1190,13 +1208,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
     
     NSRange range = NSMakeRange(0, [status length]);
-    [status addAttributes:[self attributesStatusLabelCentered] range:range];
+    NSDictionary *attributes = [NSDictionary dictionaryWithDictionary:[self attributesStatusLabelCentered]];
+    [status addAttributes:attributes range:range];
     
-    [[self labelStatus] setAttributedText:status];
+    [self.labelStatus setAttributedText:status];
 }
 
 - (void)updateLateRefreshedLabel:(id)sender {
-    if ([self lastCacheDate] == nil) {
+    if (self.lastCacheDate == nil) {
         
         NSURL *cachedDataUrl = [self.document cachedDataUrl];
         NSString *cachedDataPath = [cachedDataUrl path];
@@ -1208,10 +1227,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
     }
     
-    if ([self lastCacheDate] == nil) {
+    if (self.lastCacheDate == nil) {
         [self updateStatusWithTime:@"No Cache"];
     } else {
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
+        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
         NSString *display = [dateStringAndInterval former];
         [self updateStatusWithTime:display];
         
@@ -1301,7 +1320,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         if (round([self.pageSlider maximumValue]) != round(numberOfPages)) {
-            [[self sliderPagination] setMaximumValue:numberOfPages];
             [self.pageSlider setMaximumValue:numberOfPages];
         }
     }

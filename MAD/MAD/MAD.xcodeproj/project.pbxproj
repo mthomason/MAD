@@ -850,8 +850,6 @@
 				4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */,
 				4C8CDABF1AD1E32C00B7B9EA /* MTDataColumn.h */,
 				4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */,
-				4C8CDBAC1AD250E600B7B9EA /* MTDataFormatter.h */,
-				4C8CDBAD1AD250E600B7B9EA /* MTDataFormatter.m */,
 				4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */,
 				4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */,
 				4C8CDAA41AD1DF9800B7B9EA /* MTDataType.h */,
@@ -1554,6 +1552,8 @@
 		4C8CDCFD1AD2866000B7B9EA /* Formatters */ = {
 			isa = PBXGroup;
 			children = (
+				4C8CDBAC1AD250E600B7B9EA /* MTDataFormatter.h */,
+				4C8CDBAD1AD250E600B7B9EA /* MTDataFormatter.m */,
 				4C8CDBA91AD250AE00B7B9EA /* MTTableFormatter.h */,
 				4C8CDBAA1AD250AE00B7B9EA /* MTTableFormatter.m */,
 				4C8CDBA01AD2507200B7B9EA /* MTReportFormatter.h */,

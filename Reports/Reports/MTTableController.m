@@ -180,7 +180,6 @@
 #pragma mark - Helpers
 
 - (void)invalidateLayout {
-    [[self tableFormatter] format];
     UICollectionView *collectionView = self.collectionView;
     [collectionView reloadData];
     [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount

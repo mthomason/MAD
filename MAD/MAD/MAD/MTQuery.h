@@ -136,6 +136,7 @@ extern NSString * const MTQueryKeyObject;
 
 extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
+extern NSString * const MADIdentifierROWID;
 
 @class MTDatabase, MTDataTable, RptqQuery;
 

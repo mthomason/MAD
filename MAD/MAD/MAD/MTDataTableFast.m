@@ -751,13 +751,11 @@
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
     
-    NSString *columnKey = @"ROWID";
-
-    MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:columnKey];
+    MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
     [rowid setColumnType:@(MTDataTypeInteger)];
     
-    NSDictionary *columns = @{columnKey : rowid};
-    NSArray *columnKeys = @[columnKey];
+    NSDictionary *columns = @{MADIdentifierROWID : rowid};
+    NSArray *columnKeys = @[MADIdentifierROWID];
     
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                                               columns: columns
@@ -986,7 +984,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     }
     if (sqlite3_column_count(statement) >= columnCounter) {
         NSNumber *rowid = @(sqlite3_column_int(statement, columnCounter));
-        [currentObject setValue:rowid forKey:@"ROWID"];
+        [currentObject setValue:rowid forKey:MADIdentifierROWID];
     }
     return currentObject;
 }

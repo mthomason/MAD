@@ -1,4 +1,12 @@
 
+New “show SQL” button on MAD Query.
+Use hover effect on paging slider
+Add Table cancel button on left
+Animation to Add Table, Add Join, Add Grouped By, add Having Specified Criteria
+About popover should not have transparent background… or it should have a tint… currently unreadable on simulator.
+Information should maybe popover instead of modular show
+Work to the SQL Server Database Connection Creation
+Cloud opperations
 
 MTDataTable
     Make the cache (data store) based on SQLite3.
@@ -50,5 +58,3 @@ Future
     Expand report elements to add a chart type.
     Expand data model to hold a dashboad type as it now holds a report type.
     Add the ability to save queries for KPI's.
-
-

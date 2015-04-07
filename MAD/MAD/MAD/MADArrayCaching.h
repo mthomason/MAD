@@ -16,13 +16,13 @@
 
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 @property (nonatomic, strong, readonly) NSString *identifier;
+@property (nonatomic, assign, readonly) NSUInteger count;
 
 - (instancetype)initWithIdentifier:(NSString *)identifier;
 - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;
 
 - (NSURL *)url;
 - (id)objectAtIndex:(NSUInteger)index;
-- (NSUInteger)count;
 - (void)addObject:(id)object;
 - (void)removeAllObjects;
 

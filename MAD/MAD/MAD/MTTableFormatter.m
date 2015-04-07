@@ -28,8 +28,8 @@
 
 #pragma mark - Reading cached data
 
-- (BOOL)format {
-    return [super format];
+- (BOOL)needsFormat {
+    return [super needsFormat];
 }
 
 @end

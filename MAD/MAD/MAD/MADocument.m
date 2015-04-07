@@ -277,9 +277,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [super closeWithCompletionHandler:^(BOOL success) {
         if (success) {
             [weakself removeGuts];
-            completionHandler(YES);
+            if (completionHandler != nil) {
+                completionHandler(YES);
+            }
         } else {
-            completionHandler(NO);
+            if (completionHandler != nil) {
+                completionHandler(NO);
+            }
         }
     }];
 }
@@ -959,13 +963,18 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [fullQuery database].delegate = weakself;
 
         @autoreleasepool {
+            
             [self.database executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
+                
                 [weakself.mainDataTable cache];
                 weakself.didRefresh = success;
+                
                 [NSThread completeOnMainThread:^(BOOL success, id error) {
                     completion(success, error);
                 } withObject:error andSuccess:success];
+                
             }];
+            
         }
     });
     
@@ -1152,7 +1161,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         completion(YES);
     };
     
-    NSAssert([self documentState] == UIDocumentStateClosed, @"Document must be closed to call this!");
+    NSAssert(self.documentState == UIDocumentStateClosed, @"Document must be closed to call this!");
     
     // retrieve the store URL
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;

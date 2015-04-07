@@ -10,7 +10,6 @@
 #define Reports_MTReportViewerController_h
 
 #import <UIKit/UIKit.h>
-#import "NSDate+Extras.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADActivityProtocol.h"
 
