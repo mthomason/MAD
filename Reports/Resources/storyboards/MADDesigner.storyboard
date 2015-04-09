@@ -9,7 +9,7 @@
         <!--Generated Query-->
         <scene sceneID="RZZ-HD-foi">
             <objects>
-                <viewController id="fBG-n5-WzK" customClass="MTShowSqlViewController" sceneMemberID="viewController">
+                <viewController id="fBG-n5-WzK" customClass="MADViewControllerSQL" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dWa-kE-hHF"/>
                         <viewControllerLayoutGuide type="bottom" id="yvq-YF-d1q"/>
@@ -476,25 +476,13 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="bJ8-D0-Lxh"/>
-                        <barButtonItem title="Info" id="uzi-TN-7de"/>
                         <barButtonItem title="SQL" id="2BA-o0-AgC"/>
-                        <barButtonItem systemItem="edit" id="psX-vP-QZq">
-                            <connections>
-                                <action selector="edit:" destination="joU-Nk-1nv" id="aAW-3G-GY8"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem systemItem="done" id="si3-ds-dUn">
-                            <connections>
-                                <action selector="edit:" destination="joU-Nk-1nv" id="8Tx-FW-heS"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem systemItem="edit" id="psX-vP-QZq"/>
+                        <barButtonItem systemItem="done" id="si3-ds-dUn"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="p3l-dB-Y3B"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="barButtonItemDone" destination="si3-ds-dUn" id="SAe-5S-xNU"/>
-                        <outlet property="barButtonItemEdit" destination="psX-vP-QZq" id="Jft-oE-re6"/>
-                        <outlet property="barButtonItemShowSQL" destination="2BA-o0-AgC" id="7Nv-9B-57p"/>
                         <outlet property="navigationItem" destination="p3l-dB-Y3B" id="dZC-x8-vN8"/>
                         <segue destination="2dC-f6-Bo7" kind="modal" identifier="showAddLinkViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="lYd-HE-Uoz"/>
                         <segue destination="Lsp-Qu-tcg" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" id="n84-Cc-Wr0"/>

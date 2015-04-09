@@ -811,15 +811,17 @@
 		4C8CD9601AD1CDC800B7B9EA /* MAD */ = {
 			isa = PBXGroup;
 			children = (
+				4C8CD9851AD1CE4200B7B9EA /* MAD.h */,
+				4C8CD9961AD1D1AD00B7B9EA /* MADConstants.h */,
+				4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */,
+				4C8CDA281AD1DCAD00B7B9EA /* Query */,
 				4C8CDCFD1AD2866000B7B9EA /* Formatters */,
 				4C8CDCA51AD276DA00B7B9EA /* Database */,
 				4C8CDCA41AD276C200B7B9EA /* DataTable */,
 				4C8CDBD91AD2647400B7B9EA /* MySQL */,
 				4C8CDB2D1AD24FEE00B7B9EA /* Paper */,
 				4C8CDAA71AD1E03700B7B9EA /* Categories */,
-				4C8CDA281AD1DCAD00B7B9EA /* Query */,
 				4C8CD9B81AD1D70600B7B9EA /* Rptq */,
-				4C8CD9851AD1CE4200B7B9EA /* MAD.h */,
 				4C8CDBC31AD254D600B7B9EA /* MTAlignment.h */,
 				4C8CDBBF1AD253C500B7B9EA /* MTAggregateFunctionInputType.h */,
 				4C8CDADA1AD2454100B7B9EA /* MTAggregateFunctionType.h */,
@@ -862,8 +864,6 @@
 				4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */,
 				4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */,
 				4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */,
-				4C8CD9961AD1D1AD00B7B9EA /* MADConstants.h */,
-				4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */,
 				4C8CD9921AD1D10C00B7B9EA /* MADSortOrder.h */,
 				4C8CD9901AD1D08500B7B9EA /* MADDataProtocol.h */,
 				4C8CD98F1AD1D03000B7B9EA /* MTCacheProtocol.h */,
@@ -2023,6 +2023,7 @@
 				4C8CD9741AD1CDC800B7B9EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C8CD9751AD1CDC800B7B9EA /* Build configuration list for PBXNativeTarget "MADTests" */ = {
 			isa = XCConfigurationList;
@@ -2031,6 +2032,7 @@
 				4C8CD9771AD1CDC800B7B9EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

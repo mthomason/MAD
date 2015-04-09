@@ -21,7 +21,7 @@
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
 #import "MADQueryVisualizationViewController.h"
-#import "MTShowSqlViewController.h"
+#import "MADViewControllerSQL.h"
 
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
@@ -181,9 +181,9 @@
 
     if ([segue.identifier isEqualToString:MADSegueShowSql]) {
         
-        MTShowSqlViewController *viewController;
+        MADViewControllerSQL *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTShowSqlViewController *)((UINavigationController *)segue.destinationViewController).topViewController;
+            viewController = (MADViewControllerSQL *)((UINavigationController *)segue.destinationViewController).topViewController;
         } else {
             viewController = segue.destinationViewController;
         }

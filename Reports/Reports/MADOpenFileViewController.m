@@ -116,6 +116,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
+@property (atomic, assign) BOOL aboutViewControllerOnScreen;
 
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readwrite) BOOL savingActivityIndicatorVisible;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readwrite) BOOL rightBarButtonItemActivityIndicatorVisible;
@@ -281,6 +282,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.aboutViewControllerOnScreen = NO;
     
     NSString *keyResults = [MADMetadataQueryManager keyResults];
     [[MACloudManager sharedManager].fileLocationManager.metadataQuery addObserver:self
@@ -695,6 +697,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
     }
     
+    self.aboutViewControllerOnScreen = NO;
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -863,7 +867,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 }
 
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
-    
+    self.aboutViewControllerOnScreen = NO;
 }
 
 - (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController
@@ -1951,21 +1955,30 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 - (IBAction)about:(id)sender {
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardAboutTable" bundle:[NSBundle mainBundle]];
-    UITableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierAboutViewController"];
-    
-    aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
-    UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-    
-    [self addStandardPassthoughViewsToController:ppc];
+    if (self.aboutViewControllerOnScreen) {
+        self.aboutViewControllerOnScreen = NO;
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    } else {
+        self.aboutViewControllerOnScreen = YES;
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardAboutTable" bundle:[NSBundle mainBundle]];
+        UITableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierAboutViewController"];
+        
+        aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
+        UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+        
+        [self addStandardPassthoughViewsToController:ppc];
+        
+        ppc.backgroundColor = [UIColor clearColor];
+        ppc.delegate = self;
+        ppc.barButtonItem = sender;
+        self.aboutPopoverPresentationController = ppc;
+        
+        
+        [self showViewController:aboutViewController sender:self];
 
-    ppc.backgroundColor = [UIColor clearColor];
-    ppc.delegate = self;
-    ppc.barButtonItem = sender;
-    self.aboutPopoverPresentationController = ppc;
-    
-    
-    [self showViewController:aboutViewController sender:self];
+    }
 }
 
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {

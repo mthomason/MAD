@@ -14,7 +14,7 @@
 #import "AppDelegate.h"
 #import "MADocument.h"
 #import "MTApplicationInstance.h"
-#import "MTShowSqlViewController.h"
+#import "MADViewControllerSQL.h"
 
 #import "RptqDocument.h"
 #import "RptqDatabase.h"

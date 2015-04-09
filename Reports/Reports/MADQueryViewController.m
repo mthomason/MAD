@@ -46,7 +46,7 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTNavigationController.h"
-#import "MTShowSqlViewController.h"
+#import "MADViewControllerSQL.h"
 
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
@@ -136,7 +136,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
+//@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
 
@@ -295,10 +295,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
-    [toolbarButtons removeObjectsInArray:@[self.barButtonItemShowSQL, self.barButtonItemDone]];
-    [self setToolbarItems:toolbarButtons animated:NO];
-    
     [self reloadDocument:self.document animated:YES];
     
     self.navigationItem.prompt = nil;
@@ -316,32 +312,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                  selector: @selector(documentStateChanged)
                                                      name: UIDocumentStateChangedNotification
                                                    object: self.document];
-    }
-
-    if (self.toolbarIconShown == NO && self.barButtonItemShowSQL != nil) {   //i.e. iPad version
-        
-        __weak MADQueryViewController *blockSelf = self;
-        [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-            if (isLicensedUser) {
-                
-                [blockSelf setToolbarIconShown:YES];
-                
-                NSMutableArray *toolbarButtons = [[blockSelf toolbarItems] mutableCopy];
-                NSInteger index = [toolbarButtons count] - 1;
-                UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace
-                                                                                                         target: self
-                                                                                                         action: nil];
-                barButtonItemFixedSpace.width = 20.0000f;
-                [toolbarButtons insertObject: blockSelf.barButtonItemShowSQL
-                                     atIndex: index + 1];
-                [toolbarButtons insertObject: barButtonItemFixedSpace
-                                     atIndex: index + 1];
-                
-                
-                [blockSelf setToolbarItems: toolbarButtons
-                                  animated: animated];
-            }
-        }];
     }
 
     UIColor *barTintColor = [UIColor tintColorBlue];
@@ -402,9 +372,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString: MADSegueShowSql]) {
-        MTShowSqlViewController *viewController;
+        MADViewControllerSQL *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
+            viewController = (MADViewControllerSQL *)[segue.destinationViewController topViewController];
         } else {
             viewController = segue.destinationViewController;
         }
@@ -1199,7 +1169,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         
         
         [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-        [self setBarButtonItemEdit:barButtonItem];
+        //[self setBarButtonItemEdit:barButtonItem];
     }
     
     [self.tableView setEditing: editing];
