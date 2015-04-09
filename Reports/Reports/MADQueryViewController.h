@@ -22,7 +22,7 @@ extern NSString * const NSFetchedResultsCacheTables;
 extern NSString * const NSFetchedResultsCacheLinks;
 extern NSString * const NSFetchedResultsCacheGroups;
 extern NSString * const NSFetchedResultsCachePredicates;
-extern NSString * const MNSSegueShowSql;
+extern NSString * const MADSegueShowSql;
 
 @interface MADQueryViewController : MADTableViewController
 
@@ -35,6 +35,8 @@ extern NSString * const MNSSegueShowSql;
 
 - (IBAction)edit:(id)sender;
 - (IBAction)done:(id)sender;
+
+- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action;
 
 @end
 

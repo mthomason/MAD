@@ -15,6 +15,8 @@
     <UINavigationControllerDelegate,
         UIViewControllerTransitioningDelegate>
 
+- (IBAction)done:(id)sender;
+
 @end
 
 #endif

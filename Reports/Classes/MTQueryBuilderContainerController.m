@@ -46,7 +46,37 @@
 @end
 
 @implementation MTQueryBuilderContainerController
+/*
+- (IBAction)unwindToQueryBuilderContainerController:(UIStoryboardSegue *)action { }
 
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+    return action == @selector(unwindToQueryBuilderContainerController:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    UIViewController *result;
+    if (action == @selector(unwindToQueryBuilderContainerController:)) {
+        result = self;
+    } else if (action == @selector(unwindToQueryBuilder:)) {
+        result = self.queryBuilderController;
+    } else {
+        result = [super viewControllerForUnwindSegueAction: action
+                                        fromViewController: fromViewController
+                                                withSender: sender];
+    }
+    return result;
+}
+
+- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+    UIStoryboardSegue *segue = [UIStoryboardSegue segueWithIdentifier:@"asdf" source:fromViewController destination:toViewController performHandler:^{
+        
+    }];
+    return segue;
+}
+*/
 - (NSString *)title {
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
@@ -149,16 +179,16 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([segue.identifier isEqualToString:MNSSegueShowSql]) {
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) { //iPhone version handled in MADQueryViewController
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [popoverController setDelegate:self];
-            self.popover = popoverController;
-            UINavigationController *navController = (UINavigationController *)popoverController.contentViewController;
-            MTShowSqlViewController *showSqlViewController = (MTShowSqlViewController *)navController.topViewController;
-            showSqlViewController.query = self.document.mainQuery;
-            [self disableTabBarItems];
+    if ([segue.identifier isEqualToString:MADSegueShowSql]) {
+        
+        MTShowSqlViewController *viewController;
+        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+            viewController = (MTShowSqlViewController *)((UINavigationController *)segue.destinationViewController).topViewController;
+        } else {
+            viewController = segue.destinationViewController;
         }
+        viewController.delegate = self;
+        viewController.query = self.queryBuilderController.document.mainQuery;
         
     } else if (sender == self) {
         [segue.destinationViewController setDocument:self.document];
@@ -360,5 +390,12 @@
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
 }
+
+#pragma mark - Actions
+
+//- (IBAction)showSQL:(id)sender {
+//    [self.queryBuilderController performSegueWithIdentifier:self sender:];
+//}
+
 
 @end

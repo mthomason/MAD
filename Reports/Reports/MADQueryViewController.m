@@ -107,7 +107,7 @@ NSString * const NSFetchedResultsCacheTables                        = @"NSFetche
 NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
 NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
 NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
-NSString * const MNSSegueShowSql                                    = @"MNSSegueShowSql";
+NSString * const MADSegueShowSql                                    = @"MADSegueShowSql";
 NSString * const MTTableHeaderSectionKey                            = @"MTTableHeaderSectionKey";
 NSString * const MTTableSectionRowKey                               = @"MTTableSectionRowKey";
 NSString * const MTTableSectionRowHeightKey                         = @"MTTableSectionRowHeightKey";
@@ -401,14 +401,13 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([segue.identifier isEqualToString: MNSSegueShowSql]) {
+    if ([segue.identifier isEqualToString: MADSegueShowSql]) {
         MTShowSqlViewController *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
             viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
         } else {
             viewController = segue.destinationViewController;
         }
-        viewController.delegate = self;
         viewController.query = self.document.mainQuery;
         [self disableTabBarItems];
         

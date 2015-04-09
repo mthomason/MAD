@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -15,11 +15,11 @@
                         <viewControllerLayoutGuide type="bottom" id="yvq-YF-d1q"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ldg-aU-cmB">
-                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="576"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eq8-Co-ofV">
-                                <rect key="frame" x="0.0" y="0.0" width="540" height="556"/>
+                                <rect key="frame" x="0.0" y="0.0" width="540" height="576"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -40,14 +40,28 @@
                             <constraint firstItem="eq8-Co-ofV" firstAttribute="leading" secondItem="ldg-aU-cmB" secondAttribute="leading" id="Q1h-gz-rHE"/>
                             <constraint firstAttribute="bottom" secondItem="eq8-Co-ofV" secondAttribute="bottom" id="RQ3-Ya-pOC"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="xUI-bI-uvV" appends="YES" id="r6D-9M-BLN"/>
+                        </connections>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Generated Query" id="pAq-dE-kx0"/>
+                    <navigationItem key="navigationItem" title="Generated Query" id="pAq-dE-kx0">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="hlK-uU-iCr">
+                            <connections>
+                                <action selector="done:" destination="fBG-n5-WzK" id="cRn-Ne-l4g"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="textView" destination="eq8-Co-ofV" id="zl5-y4-uBh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ysn-d8-7e3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="down" id="xUI-bI-uvV">
+                    <connections>
+                        <action selector="done:" destination="fBG-n5-WzK" id="wYX-9f-OqC"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2687" y="-1335"/>
         </scene>
@@ -63,12 +77,20 @@
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Yxo-mc-Rjm" appends="YES" id="xHX-Z0-RaW"/>
+                        </connections>
                     </navigationBar>
                     <connections>
                         <segue destination="fBG-n5-WzK" kind="relationship" relationship="rootViewController" id="ITp-Gv-fs1"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8xg-t3-MTN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="down" id="Yxo-mc-Rjm">
+                    <connections>
+                        <action selector="done:" destination="KDn-h6-IuZ" id="pQt-8v-oQ1"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2064" y="-1335"/>
         </scene>
@@ -2558,6 +2580,14 @@
         <scene sceneID="H8u-lx-f3W">
             <objects>
                 <splitViewController id="Hcs-Qh-Ddc" customClass="MTQueryBuilderContainerController" sceneMemberID="viewController">
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="EIU-KQ-pJF"/>
+                        <barButtonItem title="SQL" id="bhA-2Z-ta5">
+                            <connections>
+                                <segue destination="KDn-h6-IuZ" kind="modal" identifier="MADSegueShowSql" modalPresentationStyle="formSheet" id="maJ-0z-eyj"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="6F6-TI-jLR">
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="fJC-AW-SSJ">
                             <connections>
@@ -2565,6 +2595,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemEdit" destination="fJC-AW-SSJ" id="XjC-pN-w14"/>
                         <segue destination="SDg-oh-2Va" kind="relationship" relationship="masterViewController" id="WRD-aY-rG1"/>

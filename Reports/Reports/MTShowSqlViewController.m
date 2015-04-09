@@ -11,12 +11,6 @@
 #endif
 
 #import "MTShowSqlViewController.h"
-#import "AppDelegate.h"
-#import "MTApplicationInstance.h"
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqQuery.h"
-#import "MTDatabase.h"
 #import "MTQuery.h"
 
 @implementation MTShowSqlViewController
@@ -61,17 +55,6 @@
         
 
     }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    return (UIViewController *)self.delegate;
 }
 
 - (IBAction)done:(id)sender {
