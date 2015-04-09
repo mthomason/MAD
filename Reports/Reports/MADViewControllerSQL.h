@@ -13,7 +13,7 @@
 
 @class  MTQuery;
 
-@interface MTShowSqlViewController : UIViewController
+@interface MADViewControllerSQL : UIViewController
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MTQuery *query;

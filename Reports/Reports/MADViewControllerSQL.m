@@ -10,10 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTShowSqlViewController.h"
+#import "MADViewControllerSQL.h"
 #import "MTQuery.h"
 
-@implementation MTShowSqlViewController
+@implementation MADViewControllerSQL
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,10 +26,10 @@
     NSString *sqlStatement = [self.query getSqlOnlyActiveFields:NO error:&error];
     
     if (error) {
-        sqlStatement = [error localizedDescription];
+        sqlStatement = error.localizedDescription;
     }
 
-    if ([sqlStatement length] > 0) {
+    if (sqlStatement.length > 0) {
 
         self.textView.text = sqlStatement;
 
