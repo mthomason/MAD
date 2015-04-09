@@ -10,6 +10,8 @@
 
 echo "Updating version/build number from git..."
 plist=${PROJECT_DIR}/${INFOPLIST_FILE}
+plistwatchkitext=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ Extension/Info.plist
+plistwatchkitapp=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ App/Info.plist
 
 versionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1]}' )
 versionnum=${versionnum#"v"}
@@ -27,9 +29,13 @@ echo "No build number from git"
 exit 2
 fi
 
+/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitext}"
+/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitapp}"
 /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plist}"
 echo "Updated version number to $versionnum"
 
+/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitext}"
+/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitapp}"
 /usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plist}"
 echo "Updated build number to $currentvnum"
 
