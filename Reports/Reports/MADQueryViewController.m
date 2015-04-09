@@ -217,33 +217,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return self;
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                            CGSizeZero.width,
-                                                            self.bottomLayoutGuide.length,
-                                                            CGSizeZero.width);
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                   CGSizeZero.width,
-                                                   self.bottomLayoutGuide.length,
-                                                   CGSizeZero.width);
-}
-
-- (void)viewDidLayoutSubviews {
-    if (self.firstTimeTablePosition == NO) {
-        self.firstTimeTablePosition = YES;
-        CGRect r = CGRectMake(CGPointZero.x,
-                              CGPointZero.y,
-                              self.tableView.frame.size.width,
-                              1.0000f);
-        [self.tableView scrollRectToVisible: r
-                                   animated: NO];
-
-    }
-    [super viewDidLayoutSubviews];
-}
-
 #pragma mark - NSNotificationCenter
 
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
@@ -329,6 +302,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [self reloadDocument:self.document animated:YES];
     
     self.navigationItem.prompt = nil;
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -341,7 +315,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                    object: self.document];
     }
 
-    if ([self toolbarIconShown] == NO && [self barButtonItemShowSQL] != nil) {   //i.e. iPad version
+    if (self.toolbarIconShown == NO && self.barButtonItemShowSQL != nil) {   //i.e. iPad version
+        
         __weak MADQueryViewController *blockSelf = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser) {
@@ -353,11 +328,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace
                                                                                                          target: self
                                                                                                          action: nil];
-                [barButtonItemFixedSpace setWidth:20.0000f];
-                [toolbarButtons insertObject: [blockSelf barButtonItemShowSQL]
-                                     atIndex: index+1];
+                barButtonItemFixedSpace.width = 20.0000f;
+                [toolbarButtons insertObject: blockSelf.barButtonItemShowSQL
+                                     atIndex: index + 1];
                 [toolbarButtons insertObject: barButtonItemFixedSpace
-                                     atIndex: index+1];
+                                     atIndex: index + 1];
                 
                 
                 [blockSelf setToolbarItems: toolbarButtons
@@ -388,6 +363,46 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                   object: self.document];
 }
 
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
+              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+        [self.navigationController setNavigationBarHidden: NO
+                                                 animated: YES];
+    } else {
+        [self.navigationController setNavigationBarHidden: YES
+                                                 animated: YES];
+    }
+}
+
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                            CGSizeZero.width,
+                                                            self.bottomLayoutGuide.length,
+                                                            CGSizeZero.width);
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                   CGSizeZero.width,
+                                                   self.bottomLayoutGuide.length,
+                                                   CGSizeZero.width);
+}
+
+- (void)viewDidLayoutSubviews {
+    if (self.firstTimeTablePosition == NO) {
+        self.firstTimeTablePosition = YES;
+        CGRect r = CGRectMake(CGPointZero.x,
+                              CGPointZero.y,
+                              self.tableView.frame.size.width,
+                              1.0000f);
+        [self.tableView scrollRectToVisible: r
+                                   animated: NO];
+        
+    }
+    [super viewDidLayoutSubviews];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString: MNSSegueShowSql]) {
@@ -414,7 +429,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                     }
 
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
                     request.sortDescriptors = @[sortDescriptor];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -1568,6 +1583,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
     RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: indexPathUpdate];
     MTTableController *tableController = [self tableControllerForTable:table];
+
+    [self.navigationController setNavigationBarHidden: NO
+                                             animated: YES];
     [self.navigationController pushViewController: tableController
                                          animated: YES];
 
