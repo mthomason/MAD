@@ -22,7 +22,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self setNavigationBarHidden:NO];
     UISplitViewController *splitViewController = (UISplitViewController *)self.topViewController;
     self.splitViewController = splitViewController;
     

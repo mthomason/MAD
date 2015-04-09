@@ -35,7 +35,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    //self.tableView.opaque = NO;
     self.firstTimeLayout = YES;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
     self.navigationController.navigationBar.alpha = 1.0000f;

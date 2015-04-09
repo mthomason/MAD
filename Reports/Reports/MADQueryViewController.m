@@ -302,12 +302,15 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [self reloadDocument:self.document animated:YES];
     
     self.navigationItem.prompt = nil;
-    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-    
+
+    self.navigationController.hidesBarsWhenVerticallyCompact = NO;
+    if (self.navigationController.navigationController == NO) {
+        [self.navigationController setNavigationBarHidden:YES animated:animated];
+    }
     if (self.document) {
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(documentStateChanged)
@@ -366,13 +369,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
               withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-    if (newCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-        [self.navigationController setNavigationBarHidden: NO
-                                                 animated: YES];
-    } else {
-        [self.navigationController setNavigationBarHidden: YES
-                                                 animated: YES];
-    }
 }
 
 
@@ -1584,8 +1580,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: indexPathUpdate];
     MTTableController *tableController = [self tableControllerForTable:table];
 
-    [self.navigationController setNavigationBarHidden: NO
-                                             animated: YES];
     [self.navigationController pushViewController: tableController
                                          animated: YES];
 

@@ -21,8 +21,6 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    //UIViewController *vc = self.navigationController.parentViewController.navigationController;
-    //vc.preferredContentSize = CGSizeMake(320.0000f, 280.0000f);
 }
 
 @end

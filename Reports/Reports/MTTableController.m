@@ -128,12 +128,18 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
     self.navigationController.navigationBar.backgroundColor = [UIColor tintColorBlue];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -153,7 +159,6 @@
                                                         self.navigationController.bottomLayoutGuide.length,
                                                         CGSizeZero.width);
 }
-
 
 - (void)viewDidLayoutSubviews {
     if (self.firstTimeTablePosition == NO) {

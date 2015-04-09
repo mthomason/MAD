@@ -19,7 +19,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationBar.hidden = YES;
-//    [self setNavigationBarHidden:YES animated:NO];
     self.hidesBarsWhenVerticallyCompact = YES;
 }
 
@@ -40,10 +39,6 @@
     [super pushViewController: viewController
                      animated: animated];
     self.navigationBar.hidden = NO;
-    //[self setNavigationBarHidden: NO
-    //                    animated: animated];
-
-
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -51,19 +46,6 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    /*
-    if ([self.visibleViewController isKindOfClass:[MADQueryViewController class]]) {
-        if (self.navigationBarHidden != NO) {
-            [self setNavigationBarHidden: YES
-                                animated: YES];
-        }
-    } else {
-        if (self.navigationBarHidden) {
-            [self setNavigationBarHidden: NO
-                                animated: YES];
-        }
-    }
-     */
 }
 
 - (void)viewDidLayoutSubviews {
