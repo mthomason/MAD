@@ -63,7 +63,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2687" y="-1335"/>
+            <point key="canvasLocation" x="2673" y="-1335"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0jz-2x-7ar">
@@ -92,7 +92,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2064" y="-1335"/>
+            <point key="canvasLocation" x="1734" y="-1335"/>
         </scene>
         <!--MAD Designer-->
         <scene sceneID="yOK-hf-Fsm">
@@ -479,10 +479,10 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="navigationItem" destination="p3l-dB-Y3B" id="dZC-x8-vN8"/>
-                        <segue destination="2dC-f6-Bo7" kind="modal" identifier="showAddLinkViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="lYd-HE-Uoz"/>
+                        <segue destination="2dC-f6-Bo7" kind="modal" identifier="showAddLinkViewController" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="lYd-HE-Uoz"/>
                         <segue destination="Lsp-Qu-tcg" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" id="n84-Cc-Wr0"/>
-                        <segue destination="1S4-ip-3dw" kind="modal" identifier="showAddPredicateViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="MH3-rF-td0"/>
-                        <segue destination="vFe-wK-P1j" kind="modal" identifier="showAddTableViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="fL8-Tz-HBd"/>
+                        <segue destination="1S4-ip-3dw" kind="modal" identifier="showAddPredicateViewController" modalPresentationStyle="formSheet" id="MH3-rF-td0"/>
+                        <segue destination="vFe-wK-P1j" kind="modal" identifier="showAddTableViewController" modalPresentationStyle="formSheet" id="fL8-Tz-HBd"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nfM-mZ-Ry6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -815,7 +815,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pfC-Zn-3ch" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4496" y="-5029"/>
+            <point key="canvasLocation" x="4620" y="-4863"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nBI-KK-h2i">
@@ -837,7 +837,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gvk-rx-AxT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4496" y="-3578"/>
+            <point key="canvasLocation" x="4620" y="-3412"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="xxn-aH-pNP">
@@ -858,7 +858,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kx4-eR-8WG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4496" y="-4303"/>
+            <point key="canvasLocation" x="4620" y="-4137"/>
         </scene>
         <!--Layout Settings-->
         <scene sceneID="qFs-uN-Jcs">
@@ -1080,7 +1080,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GqK-99-oYv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5443" y="-3578"/>
+            <point key="canvasLocation" x="5567" y="-3412"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UUd-TH-Ea7">
@@ -1146,7 +1146,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1xZ-rM-7kW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5443" y="-4303"/>
+            <point key="canvasLocation" x="5567" y="-4137"/>
         </scene>
         <!--Choose an Operator-->
         <scene sceneID="iyd-Xz-IXz">
@@ -1372,7 +1372,7 @@
             <objects>
                 <tableViewController id="ET2-nF-Om5" customClass="MTQueryBuilderSortTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NHP-qU-Y9W">
-                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="576"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1441,7 +1441,7 @@
             <objects>
                 <tableViewController id="SD8-hm-piH" customClass="MTQueryBuilderAddGroupViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="8oe-gB-LjW">
-                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="576"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1605,7 +1605,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CKI-qK-rDJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5443" y="-5029"/>
+            <point key="canvasLocation" x="5567" y="-4863"/>
         </scene>
         <!--Add Predicate-->
         <scene sceneID="uFS-C0-l7l">
@@ -2502,7 +2502,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAddGroup" id="bce-zh-8oY" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="23a-tz-EMC">
-                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="576"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -2697,7 +2697,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="T0e-pi-cpg"/>
-        <segue reference="aFd-qe-sMU"/>
+        <segue reference="GHV-ru-Qf2"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>
