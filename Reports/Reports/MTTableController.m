@@ -74,7 +74,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //self.navigationController.navigationBar.bounds = CGRectMake(CGPointZero.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationController.navigationBar.bounds.size.width, self.navigationController.navigationBar.bounds.size.height);
     self.firstTimeTablePosition = NO;
     [self initalize];
     self.collectionView.backgroundColor = [UIColor tintColorBlue];
@@ -114,32 +113,37 @@
 }
 
 + (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
-    NSUInteger hash = [[[objectID URIRepresentation] absoluteString] hash];
-    
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(hash);
+    NSNumber *objectIdV =  @(objectID.URIRepresentation.absoluteString.hash);
     NSDictionary *parameters = @{
                                  typeKey : type,
-                                 objectIdKey : objectIdV};
+                                 objectIdKey : objectIdV
+                                 };
     return [MTDataTable dataTableFactory:parameters];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
-    self.navigationController.navigationBar.backgroundColor = [UIColor tintColorBlue];
+    if (self.firstTimeTablePosition == NO) {
+        self.firstTimeTablePosition = YES;
+        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f);
+        [self.collectionView scrollRectToVisible: r
+                                        animated: NO];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -149,6 +153,12 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
+    self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x,
+                                                               (self.navigationController.parentViewController.navigationController.navigationBar.frame.origin.y +
+                                                                    self.navigationController.parentViewController.navigationController.navigationBar.frame.size.height),
+                                                               self.navigationController.navigationBar.frame.size.width,
+                                                               self.navigationController.navigationBar.frame.size.height);
+    
     self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                                                  CGSizeZero.width,
                                                                  self.navigationController.bottomLayoutGuide.length,
@@ -158,26 +168,19 @@
                                                         CGSizeZero.width,
                                                         self.navigationController.bottomLayoutGuide.length,
                                                         CGSizeZero.width);
+    [self.navigationItem.titleView setNeedsLayout];
 }
 
 - (void)viewDidLayoutSubviews {
-    if (self.firstTimeTablePosition == NO) {
-        self.firstTimeTablePosition = YES;
-        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f);
-        [self.collectionView scrollRectToVisible:r
-                                   animated:NO];
-        
-        self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                                CGSizeZero.width,
-                                                                self.navigationController.bottomLayoutGuide.length,
-                                                                CGSizeZero.width);
-        
-        self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                       CGSizeZero.width,
-                                                       self.navigationController.bottomLayoutGuide.length,
-                                                       CGSizeZero.width);
-
-    }
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                                 CGSizeZero.width,
+                                                                 self.navigationController.bottomLayoutGuide.length,
+                                                                 CGSizeZero.width);
+    
+    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                        CGSizeZero.width,
+                                                        self.navigationController.bottomLayoutGuide.length,
+                                                        CGSizeZero.width);
     [super viewDidLayoutSubviews];
 }
 

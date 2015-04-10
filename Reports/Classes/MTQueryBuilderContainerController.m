@@ -28,10 +28,14 @@
 #import "UIViewController+UI.h"
 #import "MACloudManager.h"
 
+#import "MADQueryNavigationController.h"
+
 @interface MTQueryBuilderContainerController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
+
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemEditDone;
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemRevealQuery;
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemDone;
@@ -43,40 +47,11 @@
 
 @property (nonatomic, strong) UIPopoverController *popover;
 @property (nonatomic, assign) BOOL localEditing;
+
 @end
 
 @implementation MTQueryBuilderContainerController
-/*
-- (IBAction)unwindToQueryBuilderContainerController:(UIStoryboardSegue *)action { }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
-    return action == @selector(unwindToQueryBuilderContainerController:);
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    UIViewController *result;
-    if (action == @selector(unwindToQueryBuilderContainerController:)) {
-        result = self;
-    } else if (action == @selector(unwindToQueryBuilder:)) {
-        result = self.queryBuilderController;
-    } else {
-        result = [super viewControllerForUnwindSegueAction: action
-                                        fromViewController: fromViewController
-                                                withSender: sender];
-    }
-    return result;
-}
-
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
-    UIStoryboardSegue *segue = [UIStoryboardSegue segueWithIdentifier:@"asdf" source:fromViewController destination:toViewController performHandler:^{
-        
-    }];
-    return segue;
-}
-*/
 - (NSString *)title {
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
@@ -111,28 +86,20 @@
         
         self.barButtonItemRevealQuery = barButtonItemRevealQuery;
         
-        
-        MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [MTApplicationInstance madQuery];
-        self.navigationItem.titleView = titleView;
-        
-        
         self.editButtonItem.target = self;
         self.editButtonItem.action = @selector(edit:);
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
+        
     }
     return self;
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
-              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection:newCollection
-                 withTransitionCoordinator:coordinator];
-    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance madQuery];
+    self.navigationItem.titleView = titleView;
     
     self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
 
@@ -154,7 +121,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [self.queryBuilderController reloadDocument: self.document
                                        animated: YES];
     [self.queryBuilderControllerAdvanced reloadDocument:self.document animated:YES];
@@ -169,7 +136,6 @@
             blockSelf = nil;
         }
     }];
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -241,6 +207,11 @@
         }
     }*/
 }
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
 
 - (id)leftViewController {
     return self.queryBuilderController;

@@ -212,7 +212,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     if (self) {
         
         [self setToolbarIconShown:NO];
-        
     }
     return self;
 }
@@ -298,15 +297,15 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [self reloadDocument:self.document animated:YES];
     
     self.navigationItem.prompt = nil;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
 
     self.navigationController.hidesBarsWhenVerticallyCompact = NO;
-    if (self.navigationController.navigationController == NO) {
-        [self.navigationController setNavigationBarHidden:YES animated:animated];
-    }
+
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
     if (self.document) {
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(documentStateChanged)
@@ -319,11 +318,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     self.navigationController.toolbar.barTintColor = barTintColor;
     self.navigationController.toolbar.tintColor = tintColor;
 
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MTApplicationInstance madQuery];
-    
-    self.navigationItem.titleView = titleView;
-    
     [self enableTabBarItems];
 
 }
@@ -460,6 +454,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                         tvc.initalNumberOfRows = section.numberOfRows.integerValue;
                     }
                 }
+    }
+    else {
+        NSLog(@"%@", segue.identifier);
     }
 }
 
@@ -1548,7 +1545,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
     RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: indexPathUpdate];
     MTTableController *tableController = [self tableControllerForTable:table];
-
     [self.navigationController pushViewController: tableController
                                          animated: YES];
 

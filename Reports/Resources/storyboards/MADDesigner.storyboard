@@ -474,12 +474,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="bJ8-D0-Lxh"/>
-                        <barButtonItem title="SQL" id="2BA-o0-AgC"/>
-                        <barButtonItem systemItem="edit" id="psX-vP-QZq"/>
-                        <barButtonItem systemItem="done" id="si3-ds-dUn"/>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="p3l-dB-Y3B"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
@@ -1106,7 +1101,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSI-k2-yBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5220" y="-7619"/>
+            <point key="canvasLocation" x="5220" y="-6499"/>
         </scene>
         <!--Add Table-->
         <scene sceneID="FiN-8R-Kst">
@@ -1324,7 +1319,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XFD-Wd-taR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7737" y="-6378"/>
+            <point key="canvasLocation" x="7737" y="-5258"/>
         </scene>
         <!--Select Field-->
         <scene sceneID="UO8-xl-8Vz">
@@ -1439,7 +1434,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wss-p5-6BA" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="QdA-p2-qra" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6678" y="-8014"/>
+            <point key="canvasLocation" x="6678" y="-6894"/>
         </scene>
         <!--Add Group-->
         <scene sceneID="UXY-9Y-l1m">
@@ -1536,7 +1531,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fbo-Im-5yU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5912" y="-7619"/>
+            <point key="canvasLocation" x="5912" y="-6499"/>
         </scene>
         <!--Predicate Format-->
         <scene sceneID="Kjj-zr-QtN">
@@ -2546,7 +2541,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Fr-ey-ffQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6678" y="-7290"/>
+            <point key="canvasLocation" x="6678" y="-6170"/>
         </scene>
         <!--Navigation Controller Split Parent View Controller-->
         <scene sceneID="CAc-4x-SdN">
@@ -2586,6 +2581,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemEdit" destination="fJC-AW-SSJ" id="XjC-pN-w14"/>
+                        <outlet property="barButtonItemSQL" destination="bhA-2Z-ta5" id="Ba0-y9-IIc"/>
                         <segue destination="SDg-oh-2Va" kind="relationship" relationship="masterViewController" id="WRD-aY-rG1"/>
                         <segue destination="RJA-Vn-l2B" kind="relationship" relationship="detailViewController" id="r2f-YQ-kBg"/>
                     </connections>
