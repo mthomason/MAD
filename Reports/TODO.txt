@@ -1,5 +1,5 @@
 
-Print Preview Fails
+Print preview view controller needs a tint color, background color, alignment to the activity indicator, and more.
 Need the ability to edit database informaiton.
 Use hover effect on paging slider
 Add Table cancel button on left
