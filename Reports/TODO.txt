@@ -1,4 +1,8 @@
 
+Adding whitespace fails...
+Adding barcode fails...
+Print Preview Fails
+Need the ability to edit database informaiton.
 Use hover effect on paging slider
 Add Table cancel button on left
 Animation to Add Table, Add Join, Add Grouped By, add Having Specified Criteria
