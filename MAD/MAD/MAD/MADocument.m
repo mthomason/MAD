@@ -787,35 +787,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (NSManagedObjectID *)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination
-                                          toSectionWithID:(NSManagedObjectID *)objectID {
-    
-    __weak MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[objectID];
-    
-    
-    RptqDocumentObject *documentObject = [self.document addDocumentObject:documentObjectDefination];
-    [documentObject obtainPermanentID];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: layoutManager.items.count
-                                                 inSection: 0];
-    MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    la.objectID = documentObject.objectID;
-    la.frame = CGRectMake(documentObject.originx.floatValue,
-                          documentObject.originy.floatValue,
-                          documentObject.size.width,
-                          documentObject.size.height);
-    [layoutManager addItem:la];
-    [layoutManager layout];
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectID
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    documentSection.height = @(layoutManager.size.height);
-    
-    [self saveContext];
-    
-    return documentObject.objectID;
-}
-
 - (void)removeDocumentObject:(NSManagedObjectID *)objectID
                  fromSection:(NSManagedObjectID *)sectionID {
     

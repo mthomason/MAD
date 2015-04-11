@@ -102,6 +102,8 @@
 #import "MADReportDesignerSectionElementLayoutManager.h"
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 
+#import "NSManagedObject+Extras.h"
+
 const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
@@ -253,8 +255,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) NSSet *visibleElementViews;
 
-//@property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
-
 @end
 
 @implementation MADDesignerViewController
@@ -351,8 +351,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.hidesStatusBar = NO;
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-    self.ruler.layer.borderWidth = [UIView borderWidthThin];
-    self.ruler.layer.borderColor = [UIColor blackColor].CGColor;
+    viewRuler.layer.borderWidth = [UIView borderWidthThin];
+    viewRuler.layer.borderColor = [UIColor blackColor].CGColor;
     self.ruler = viewRuler;
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
@@ -2535,23 +2535,35 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
  
     RptqDocument *document = [self.document activeDocumentModel];
     
-    RptqDocumentSection *section = [document hasDetailSection];
+    __weak RptqDocumentSection *section = document.hasDetailSection;
     
     __weak MADDesignerViewController *reportDesigner = self;
-    __weak UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
+    __weak UICollectionView *detailSection = [self getSectionViewForDocumentSection:document.hasDetailSection];
     
     __weak MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[detailSection.objectIdTag];
 
     [detailSection performBatchUpdates:^{
 
-        reportDesigner.objectIdJustDisplayed = [reportDesigner.document insertDocumentObjectWithDefination: documentObjectDefination
-                                                                                           toSectionWithID: detailSection.objectIdTag];
+    
+        RptqDocumentObject *documentObject = [reportDesigner.document.document addDocumentObject:documentObjectDefination];
+        [documentObject obtainPermanentID];
 
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: layoutManager.items.count
-                                                inSection: 0];
-
-        NSArray *indexPaths = @[indexPath];
-        [detailSection insertItemsAtIndexPaths:indexPaths];
+        NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
+        MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+        la.objectID = documentObject.objectID;
+        la.frame = CGRectMake(documentObject.originx.floatValue,
+                              documentObject.originy.floatValue,
+                              documentObject.size.width,
+                              documentObject.size.height);
+        [layoutManager addItem:la];
+        [layoutManager layout];
+        
+        NSArray *indexPathsInserted = @[path];
+        [section addDocumentObject: documentObject
+                     withDropPoint: la.frame.origin];
+        
+        [detailSection insertItemsAtIndexPaths: indexPathsInserted];
+        [section.managedObjectContext save:nil];
         
     } completion:^(BOOL finished) {
         
@@ -2563,10 +2575,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
                                     completion:(void (^)(BOOL finished))completion {
     
-    
-    
-    
-
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
                                                                   managedObjectContext: self.document.managedObjectContext];
     
@@ -2577,14 +2585,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     __weak MADDesignerViewController *weakself = self;
 
     [sectionCollectionView performBatchUpdates:^{
+        
         __strong MADDesignerViewController *strongself = weakself;
         
         MADReportDesignerSectionElementLayoutManager *layoutManager = strongself.document.sectionLayoutManagers[sectionCollectionView.objectIdTag];
         MADReportDesignerSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:elementViewId];
-        NSIndexPath *deletePath = itemToRemove.indexPath.copy;
 
-        [strongself.document removeDocumentObject:elementViewId
-                                    fromSection:sectionCollectionView.objectIdTag];
+        NSIndexPath *deletePath = itemToRemove.indexPath.copy;
+        [strongself.document removeDocumentObject: elementViewId
+                                      fromSection: sectionCollectionView.objectIdTag];
 
         NSArray *indexPaths = @[deletePath];
         [weakSectionCollectionView deleteItemsAtIndexPaths: indexPaths];

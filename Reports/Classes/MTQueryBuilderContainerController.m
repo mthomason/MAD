@@ -178,10 +178,10 @@
     BOOL leftIsGo = YES, rightIsGo = YES;
     NSString *segueCloseDesignerId = @"MTSegueCloseDesigner";
     if ([identifier isEqualToString:segueCloseDesignerId]) {
-        leftIsGo = [self leftViewController] == nil ? YES :
-                        [[self leftViewController] shouldPerformSegueWithIdentifier:identifier sender:sender];
-        rightIsGo = [self rightViewController] == nil ? YES :
-                        [[self rightViewController] shouldPerformSegueWithIdentifier:identifier sender:sender];
+        leftIsGo = self.leftViewController == nil ? YES :
+                        [self.leftViewController shouldPerformSegueWithIdentifier:identifier sender:sender];
+        rightIsGo = self.rightViewController == nil ? YES :
+                        [self.rightViewController shouldPerformSegueWithIdentifier:identifier sender:sender];
     }
     return leftIsGo && rightIsGo;
 }
