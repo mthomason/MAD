@@ -480,7 +480,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (lastVersion == nil) lastVersion = @(1.0);
     
     self.extraInformation[MTDocumentInfoKeyGenerator] = lastGenerator;
-    
     self.extraInformation[MTDocumentInfoKeyVersion] = lastVersion;
     
     return YES;

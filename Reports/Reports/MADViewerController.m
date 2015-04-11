@@ -935,18 +935,16 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
-    return self.navigationController;
+    return self;
 }
 
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
                   withCompletionHandler:(void (^)(BOOL))completionHandler {
     
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            completionHandler(YES);
-        }];
+        completionHandler(YES);
     } else {
-        [[self popoverControllerActivity] dismissPopoverAnimated:YES];
+        [self.popoverControllerActivity dismissPopoverAnimated:YES];
         completionHandler(YES);
     }
 
