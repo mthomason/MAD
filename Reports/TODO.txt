@@ -1,12 +1,12 @@
 
 Cloud opperations
+Need the ability to edit database informaiton.
+Work to the SQL Server Database Connection Creation
 Error messages
 Get permission for notifications
 Use hover effect on paging slider
-Need the ability to edit database informaiton.
-Add Table cancel button on left
+
 About popover should not have transparent background… or it should have a tint… currently unreadable on simulator.
-Work to the SQL Server Database Connection Creation
 
 Can press buttons behind cloud activity indicator.
     This needs to be refactored, use standard activity indicator, etc.
