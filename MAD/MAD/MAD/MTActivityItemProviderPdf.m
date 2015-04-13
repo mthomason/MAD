@@ -30,22 +30,22 @@
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
     id result = [super activityViewController:activityViewController itemForActivityType:activityType];
-    [self setActivityViewController:activityViewController];
+    self.activityViewController = activityViewController;
     return result;
 }
 
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController dataTypeIdentifierForActivityType:(NSString *)activityType {
-    [self setActivityViewController:activityViewController];
+    self.activityViewController = activityViewController;
     return activityType == nil ? @"" : [super activityViewController:activityViewController dataTypeIdentifierForActivityType:activityType];
 }
 
 - (UIImage *)activityViewController:(UIActivityViewController *)activityViewController thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size {
-    [self setActivityViewController:activityViewController];
+    self.activityViewController = activityViewController;
     return [super activityViewController:activityViewController thumbnailImageForActivityType:activityType suggestedSize:size];
 }
 
 - (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
-    [self setActivityViewController:activityViewController];
+    self.activityViewController = activityViewController;
     return [super activityViewControllerPlaceholderItem:activityViewController];
 }
 
@@ -67,13 +67,15 @@
 }
 
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
+
     [self disableUserInteraction:window.view];
-    
+    UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForBaselineLayout;
     MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f)];
+    activityView.center = mainWindow.center;
     
-    activityView.center = window.view.center;
-    
-    [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activityView waitUntilDone:YES];
+    [mainWindow performSelectorOnMainThread: @selector(addSubview:)
+                                 withObject: activityView
+                              waitUntilDone: YES];
     [self.document setStatusLabel:activityView];
     
     __weak MADocument *weakdoc = self.document;
@@ -86,14 +88,16 @@
         
         NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
         CGRect letterRect = [MTPaper rectLetter];
-        [[weakdoc mainDataTable] sortUsingDescriptors:[weakdoc sortDescriptors]];
-        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakdoc.mainQuery
-                                                                     layout:weakdoc
-                                                                    options:MTReportFormatterOptionsMargin];
-        [rf setCachedDelegate:weakdoc];
-        [rf setDataDelegate:weakdoc];
-        [rf setOverrideIdentifier:@"madpreview"];
-        [rf setDidRefresh:YES];
+        NSArray *sortDescriptors = weakdoc.sortDescriptors;
+        
+        [weakdoc.mainDataTable sortUsingDescriptors:sortDescriptors];
+        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery: weakdoc.mainQuery
+                                                                     layout: weakdoc
+                                                                    options: MTReportFormatterOptionsMargin];
+        rf.cachedDelegate = weakdoc;
+        rf.dataDelegate = weakdoc;
+        rf.overrideIdentifier = @"madpreview";
+        rf.didRefresh = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver: weakdoc
                                                  selector: @selector(reportFormatterDidFormatPage:)
@@ -101,12 +105,11 @@
                                                    object: rf];
         
         
-        [rf setLayoutSize:letterRect.size];
-        CGFloat halfInch = 72.0000f / 2.0000f;
-        UIEdgeInsets border = UIEdgeInsetsMake(halfInch, halfInch, halfInch, halfInch);
+        rf.layoutSize = letterRect.size;
+        UIEdgeInsets border = UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch());
         CGRect trimBoxRect = UIEdgeInsetsInsetRect(letterRect, border);
         [rf setMarginUsingPrintableRect:trimBoxRect];
-        [rf setDatasource:weakdoc];
+        rf.datasource = weakdoc;
         [rf formatForSize:letterRect.size contentChanged:NO];
         
         
@@ -114,14 +117,15 @@
                                                         name: MTNotificationDidFormatPagesName
                                                       object: rf];
         
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:rf
-                                                                                                                  dataTable:[weakdoc mainDataTable]];
-        NSUInteger numberOfPages = [rf numberOfPages];
-        UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: rf
+                                                                                                                  dataTable: weakdoc.mainDataTable];
+        NSUInteger numberOfPages = rf.numberOfPages;
+        UIGraphicsBeginPDFContextToFile(filepath.path, letterRect, options);
         
         NSValue *trimBox = [NSValue valueWithCGRect:trimBoxRect];
         NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: trimBox};
-        NSString *numberOfPagesString = [NSNumberFormatter localizedStringFromNumber:@(numberOfPages) numberStyle:NSNumberFormatterDecimalStyle];
+        NSString *numberOfPagesString = [NSNumberFormatter localizedStringFromNumber:@(numberOfPages)
+                                                                         numberStyle:NSNumberFormatterDecimalStyle];
         for (NSUInteger i=0; i<numberOfPages; i++) {
             @autoreleasepool {
                 UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
@@ -138,7 +142,12 @@
     });
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
     [activityView removeFromSuperview];
+    window.view.userInteractionEnabled = YES;
     
+}
+
+static inline CGFloat halfinch() {
+    return 72.0000 / 72.0000;
 }
 
 - (void)disableUserInteraction:(UIView *)view {

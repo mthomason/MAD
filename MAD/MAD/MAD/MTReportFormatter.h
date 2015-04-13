@@ -51,9 +51,6 @@ extern NSString * const MTNullIdentifier;
 - (NSArray *)rowidsForPage:(NSInteger)pageIndex;
 - (NSArray *)keysForCachedID:(NSNumber *)rowid;
 
-- (NSUInteger)numberOfPages;
-- (NSUInteger)numberOfGroups;
-
 - (void)setLayoutSize:(CGSize)layoutSize;
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect;
 
@@ -63,7 +60,8 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
 
 @property (nonatomic, weak, readonly) MADocument *layout;
-
+@property (nonatomic, assign, readonly) NSUInteger numberOfPages;
+@property (nonatomic, assign, readonly) NSUInteger numberOfGroups;
 
 //  These are the rowids by page.  These point to data in the cache.
 //      Once these arrays are populated, they are used by the print page render to

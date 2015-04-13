@@ -1,4 +1,5 @@
 
+Cloud opperations
 Print preview view controller needs a tint color, background color, alignment to the activity indicator, and more.
 Need the ability to edit database informaiton.
 Use hover effect on paging slider
@@ -6,7 +7,9 @@ Add Table cancel button on left
 About popover should not have transparent background… or it should have a tint… currently unreadable on simulator.
 Information should maybe popover instead of modular show
 Work to the SQL Server Database Connection Creation
-Cloud opperations
+
+Can press buttons behind cloud activity indicator.
+    This needs to be refactored, use standard activity indicator, etc.
 
 MTDataTable
     Make the cache (data store) based on SQLite3.

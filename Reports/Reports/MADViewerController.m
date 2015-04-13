@@ -879,12 +879,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIActivityViewControllerCompletionWithItemsHandler activityViewControllerCompletionWithItemsHandler =
                 ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
-        if (completed) {
+        if (completed || (completed == NO && activityType == nil)) {
             weakself.pageSlider.enabled = YES;
             weakself.activityExporting = NO;
             [weakself enableTabBarItems];
         } else {
-            if ([activityType length] > 0) {
+            if (activityType.length > 0) {  // Long running activity
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
                     if (sharedController) {
@@ -894,18 +894,25 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         sharedController.delegate = self.document;
                         __weak MADViewerController *weakself = self;
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorRed];
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorBlue];
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
+                                [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor        = [UIColor tintColorWhite];
                                 weakself.pageSlider.enabled = YES;
                                 weakself.activityExporting = NO;
+                                [weakself enableTabBarItems];
                             }];
                         }
                     }
                 }
                 weakself.pageSlider.enabled = YES;
                 weakself.activityExporting = NO;
-            } else {
+            } else {    // Cancel button
                 weakself.pageSlider.enabled = YES;
                 weakself.activityExporting = NO;
+                [weakself enableTabBarItems];
             }
         }
     };
@@ -920,23 +927,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
     }];
     [self disableTabBarItems];
-/*
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        if ([self popoverControllerActivity] == nil || [self popoverControllerActivity].isPopoverVisible == NO) {
-            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-            popoverController.delegate = self;
-            [popoverController presentPopoverFromBarButtonItem: self.barButtonItemActivity
-                                      permittedArrowDirections: UIPopoverArrowDirectionAny
-                                                      animated: YES];
-            self.popoverControllerActivity = popoverController;
-        }
-    } else {
-
-        __weak MADViewerController *weakSelf = self;
-        [self presentViewController:activityViewController animated:YES completion:^{
-            weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
-        }];
-    }*/
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
