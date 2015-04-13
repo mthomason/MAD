@@ -47,6 +47,8 @@
 
 #import "MACloudManager.h"
 
+#import "MADModelNavigationController.h"
+
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
@@ -317,9 +319,12 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [self updateNavigationPrompt:previousTraitCollection != nil];
+}
+
+- (void)updateNavigationPrompt:(BOOL)animated {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-        BOOL animate = previousTraitCollection != nil;
-        [UIView setAnimationsEnabled:animate];
+        [UIView setAnimationsEnabled:animated];
         self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
         [UIView setAnimationsEnabled:YES];
     } else {
@@ -329,7 +334,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self updateNavigationPrompt:animated];
     
     [self.navigationController.toolbar setNeedsLayout];
 }
@@ -936,6 +941,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
     return self;
+}
+
+- (void)doneButton {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
