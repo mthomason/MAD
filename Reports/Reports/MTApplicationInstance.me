@@ -12,6 +12,8 @@
 
 #import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>
+#import <QuickLook/QuickLook.h>
+#import <MessageUI/MessageUI.h>
 #import "MAD.h"
 
 #import "MADQueryViewController.h"
@@ -38,9 +40,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.366";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.366";
-NSString * const MTGlobalBundleRev                                  = @"1741";
+NSString * const MTGlobalBundleVersion                              = @"7.0.368";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.368";
+NSString * const MTGlobalBundleRev                                  = @"1743";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -265,41 +267,26 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 
 - (void)initalizeAppearance {
     UIColor *tintColorWhite = [UIColor tintColorWhite];
-    //UIColor *edaGreen = [UIColor tintColorAnalogous4];
-    //UIColor *tintColor = [UIColor tintColorBlue];
     
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
-    [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
-    [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
+    //[[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
+    //[[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
+    
+    [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor   = tintColorWhite;
+    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                = tintColorWhite;
     [UIToolbar appearance].barTintColor = [UIColor tintColorBlue];
-    [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor = [UIColor edaOrange];
-    [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor = [UIColor edaOrange];
+    
+    [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor       = [UIColor edaOrange];
+    [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor  = [UIColor edaOrange];
     
     [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor = tintColorWhite;
-/*
-    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
-    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]                   setTintColor: tintColorWhite];
-    [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
-    [[UINavigationBar appearanceWhenContainedIn:[UITabBarController class], nil]            setTintColor: tintColorWhite];
-    [[UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil]            setTintColor: tintColorWhite];
-    [[UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil]            setTintColor: tintColorWhite];
-    [[UINavigationBar appearanceWhenContainedIn:[MADNavigationControllerSplitParentViewController class], nil]            setTintColor: tintColorWhite];
+    
+    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor   = [UIColor tintColorAnalogous4];
+    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor      = [UIColor tintColorRed];
+    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor   = [UIColor tintColorAnalogous4];
+    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor      = [UIColor tintColorRed];
 
-    //[[UINavigationBar appearance] setTitleTextAttributes:
-    // @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    
-    
-    [[UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil]                  setBarTintColor: tintColor];
-    [[UIToolbar appearanceWhenContainedIn:[UINavigationBar class], nil]                         setBarTintColor: tintColor];
-    [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setBarTintColor: tintColor];
-    
-    [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil]                 setColor: edaGreen];
-    [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil]    setColor: edaGreen];
-      
-    [[UINavigationBar appearance] setTitleTextAttributes: titleTextAttributes             ];*/
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
 
 }
 
