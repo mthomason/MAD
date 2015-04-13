@@ -38,6 +38,7 @@
     #import "MADToolboxNavigationController.h"
     #import "MTNavigationController.h"
     #import "MADTransparentPresentationController.h"
+    #import "MADNavigationBarFixedSize.h"
 #endif
 
 NSString * const MTApplicationIdMadDesigner                          = @"666001433";
@@ -46,9 +47,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.373";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.373";
-NSString * const MTGlobalBundleRev                                  = @"1748";
+NSString * const MTGlobalBundleVersion                              = @"7.0.374";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.374";
+NSString * const MTGlobalBundleRev                                  = @"1749";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -280,10 +281,11 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes
                                              forState: UIControlStateNormal];    //Make tab bar buttons white
     #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor    = [UIColor clearColor];
-        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor = [UIColor clearColor];
-        [UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil].barTintColor        = [UIColor tintColorBlue];
+        [UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil].barTintColor                = [UIColor tintColorBlue];
+        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
+        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
     #endif
+
     [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
     [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor   = [UIColor tintColorAnalogous4];
     

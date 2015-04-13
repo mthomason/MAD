@@ -38,9 +38,12 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackOpaque];
-    UIColor *tintColor = [UIColor tintColorRed];
-    [[[[[self navigationController] navigationBar] topItem] rightBarButtonItem] setTintColor:tintColor];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    self.navigationController.navigationBar.topItem.rightBarButtonItem.tintColor = [UIColor tintColorRed];
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
+                                                            self.tableView.scrollIndicatorInsets.left,
+                                                            CGSizeZero.height,
+                                                            self.tableView.scrollIndicatorInsets.right);
     [self updateDisplay];
 }
 
@@ -58,28 +61,29 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 }
 
 - (void)updateDisplay {
-    [self.switchFormFeed setOn:self.initalFormFeedEnabled];
-    [self.switchVisibility setOn:self.initalVisibility];
-    [self.heightStepper setValue:self.initalHeightValue * 2];
-    [self.rowsStepper setValue:self.initalNumberOfRows];
+    self.switchFormFeed.on = self.initalFormFeedEnabled;
+    self.switchVisibility.on = self.initalVisibility;
+    self.heightStepper.value = self.initalHeightValue * 2;
+    self.rowsStepper.value = self.initalNumberOfRows;
     
-    [self setNumberOfRowsLabel:[self initalNumberOfRows]];
-    [self setHeighLabel:[self initalHeightValue]];
+    [self setNumberOfRowsLabel: self.initalNumberOfRows];
+    [self setHeighLabel: self.initalHeightValue];
     
 }
 
 - (void)setHeighLabel:(double)height {
     NSString *localizedFormatString = NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts");
     NSString *localizedHeight = [NSString stringWithFormat:localizedFormatString, height];
-    [[self labelHeight] setText:localizedHeight];
+    self.labelHeight.text = localizedHeight;
 }
 
 - (void)setNumberOfRowsLabel:(NSUInteger)numberOfRows {
-    NSString *localizedNumberOfRows = [NSNumberFormatter localizedStringFromNumber: @(numberOfRows)
-                                                                                  numberStyle: NSNumberFormatterSpellOutStyle];
+    NSNumber *numberOfRowsWrapper = @(numberOfRows);
+    NSString *localizedNumberOfRows = [NSNumberFormatter localizedStringFromNumber: numberOfRowsWrapper
+                                                                       numberStyle: NSNumberFormatterSpellOutStyle];
     NSString *localizedFormatString = NSLocalizedString(@"Rows: %@", @"Something like - Rows: two");
     NSString *localizedHeight = [NSString stringWithFormat:localizedFormatString, localizedNumberOfRows];
-    [[self labelNumberOfRows] setText:localizedHeight];
+    self.labelNumberOfRows.text = localizedHeight;
 }
 
 - (IBAction)heightChanged:(id)sender {
@@ -88,11 +92,9 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
     [self.delegate sectionLayoutDidUpdateHeight: stepperValue];
 }
 
-- (IBAction)numberOfRowsChanged:(id)sender {
-    UIStepper *rowStepper = sender;
-    NSUInteger numberOfRows = [rowStepper value];
-    [self setNumberOfRowsLabel:numberOfRows];
-    [self.delegate sectionLayoutDidUpdateNumberOfRows:numberOfRows];
+- (IBAction)numberOfRowsChanged:(UIStepper *)sender {
+    [self setNumberOfRowsLabel:sender.value];
+    [self.delegate sectionLayoutDidUpdateNumberOfRows:sender.value];
 }
 
 - (IBAction)valueChangedVisibility:(id)sender {
@@ -107,7 +109,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 #pragma mark - Helpers
 
 - (double)stepperValueNormalized {
-    return [[self heightStepper] value] / 2;
+    return self.heightStepper.value / 2;
 }
 
 #pragma mark - Table view delegate
@@ -115,5 +117,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (IBAction)switchNewPageAfter:(id)sender {
+
 }
+
 @end

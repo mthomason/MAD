@@ -293,6 +293,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MADIdentifierStoryboardToolboxInital" automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="overCurrentContext" id="7L5-RQ-3Zg" customClass="MADToolboxNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleAspectFit" id="LtZ-CW-Izw" customClass="MADNavigationBarFixedSize">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
