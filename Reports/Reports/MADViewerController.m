@@ -897,9 +897,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
                             [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorRed];
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
-                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorBlue];
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
-                                [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor        = [UIColor tintColorWhite];
                                 weakself.pageSlider.enabled = YES;
                                 weakself.activityExporting = NO;
                                 [weakself enableTabBarItems];

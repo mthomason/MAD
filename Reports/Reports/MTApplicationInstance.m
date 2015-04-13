@@ -34,15 +34,21 @@
 #import "MADNavigationControllerSplitParentViewController.h"
 #import "MACloudManager.h"
 
+#ifndef MADWATCHKIT
+    #import "MADToolboxNavigationController.h"
+    #import "MTNavigationController.h"
+    #import "MADTransparentPresentationController.h"
+#endif
+
 NSString * const MTApplicationIdMadDesigner                          = @"666001433";
 NSString * const MTApplicationIdMadViewer                            = @"666003759";
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.370";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.370";
-NSString * const MTGlobalBundleRev                                  = @"1745";
+NSString * const MTGlobalBundleVersion                              = @"7.0.371";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.371";
+NSString * const MTGlobalBundleRev                                  = @"1746";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -251,7 +257,9 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
                                         value: foregroundColor
                                         range: range];
     
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
+    [attributedStringMadDesigner addAttribute:NSKernAttributeName
+                                        value:[NSNull null]
+                                        range:range];
     return attributedStringMadDesigner;
 }
 
@@ -269,23 +277,32 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     UIColor *tintColorWhite = [UIColor tintColorWhite];
     
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
-
-    [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor           = [UIColor tintColorWhite];
-    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                        = [UIColor tintColorWhite];
-    [UIToolbar appearance].barTintColor                                                                 = [UIColor tintColorBlue];
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor              = [UIColor tintColorBlue];
+    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes
+                                             forState: UIControlStateNormal];    //Make tab bar buttons white
+    #ifndef MADWATCHKIT
+        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor    = [UIColor clearColor];
+        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor = [UIColor clearColor];
+        [UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil].barTintColor        = [UIColor tintColorBlue];
+    #endif
+    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
+    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor   = [UIColor tintColorAnalogous4];
+    
+    #ifndef MADWATCHKIT
+        [UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil].tintColor       = [UIColor tintColorWhite];
+    #endif
     [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                 = [UIColor tintColorWhite];
     [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor           = [UIColor tintColorWhite];
+    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor              = [UIColor tintColorRed];
+    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor      = [UIColor tintColorRed];
+
+    
+    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                        = [UIColor tintColorWhite];
+    [UIToolbar appearance].barTintColor                                                                 = [UIColor tintColorBlue];
     [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor               = [UIColor edaOrange];
     [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor          = [UIColor edaOrange];
     
     [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor               = [UIColor tintColorWhite];
     
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor              = [UIColor tintColorRed];
-    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor   = [UIColor tintColorAnalogous4];
-    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor      = [UIColor tintColorRed];
 
 
 }

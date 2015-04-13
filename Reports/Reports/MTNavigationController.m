@@ -12,20 +12,18 @@
 
 @implementation MTNavigationController
 
-- (void)viewDidLoad {
-
-    [super viewDidLoad];
-
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     self.toolbar.barTintColor = [UIColor tintColorBlue];
     self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
-//    self.navigationController.view.backgroundColor = nil;
     self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
- 
+    
 }
 
 - (UITabBarItem *)tabBarItem {
@@ -67,7 +65,8 @@
     
     UIPresentationController *result = nil;
     if (presented == self || presenting == self) {
-        result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented presentingViewController:presenting];
+        result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented
+                                                                      presentingViewController:presenting];
     }
     return result;
 }
@@ -81,6 +80,5 @@
         }
     }
 }
-
 
 @end

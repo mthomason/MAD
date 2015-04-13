@@ -1,18 +1,15 @@
 
 Cloud opperations
-Print preview view controller needs a tint color, background color, alignment to the activity indicator, and more.
-Need the ability to edit database informaiton.
+Error messages
+Get permission for notifications
 Use hover effect on paging slider
+Need the ability to edit database informaiton.
 Add Table cancel button on left
 About popover should not have transparent background… or it should have a tint… currently unreadable on simulator.
-Information should maybe popover instead of modular show
 Work to the SQL Server Database Connection Creation
 
 Can press buttons behind cloud activity indicator.
     This needs to be refactored, use standard activity indicator, etc.
-
-MTDataTable
-    Make the cache (data store) based on SQLite3.
 
 How To
     Document Interaction
@@ -46,12 +43,9 @@ Show SQL
     This should display static text on scroll view, to allow for horizontal scrolling.
 
 Query Builder
-    Make sure the links are added correctly to the table view, because in some cases they can't be deleted.
-    Make sure the predicates are added correctly to the table view, because in some cases they can't be deleted.
     Add support for ORDER BY, but suppress it in reporting app.
 
 File Type
-    Implement the UIManagedDocument iCloud features.
     Add encryption while writing to the file.
 
 Export
