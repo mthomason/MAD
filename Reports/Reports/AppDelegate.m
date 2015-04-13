@@ -177,6 +177,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                           name: MADNotificationUbiquitousContainerFetchingDidEnd
                         object: nil];
     
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
+                                                                                             categories: nil];
+        [application registerUserNotificationSettings:notificationSettings];
+    }
+    
     if (MADStateRestorationSupportEnabled == NO) {
         [self loadAndDisplayWindow];
     }
