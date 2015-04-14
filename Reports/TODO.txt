@@ -1,9 +1,8 @@
 
-Cloud opperations
-Need the ability to edit database informaiton.
 Work to the SQL Server Database Connection Creation
 Error messages
-Get permission for notifications
+Cloud opperations
+Need the ability to edit database informaiton.
 Use hover effect on paging slider
 
 About popover should not have transparent background… or it should have a tint… currently unreadable on simulator.

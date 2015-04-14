@@ -1714,6 +1714,7 @@
 		4C6362BD14E6278D005DBBFF /* MTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationController.m; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
+		4C65D47B1ADCC67C00279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C67B75119475A88006B4D5B /* UIPageViewController+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPageViewController+Extras.h"; sourceTree = "<group>"; };
 		4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIPageViewController+Extras.m"; sourceTree = "<group>"; };
 		4C6A17CC19B193610098717E /* MADImageToolbarCloudDownload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarCloudDownload@2x.png"; path = "Resources/Images/MADImageToolbarCloudDownload@2x.png"; sourceTree = "<group>"; };
@@ -2857,8 +2858,8 @@
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4CF46F5A1AC64A2F007C0A82 /* libraries */,
-				4C49DA5319DCE77700CB4DB8 /* MAD iOS */,
-				4C49DA5919DCE99F00CB4DB8 /* MAD OS X */,
+				4C49DA5319DCE77700CB4DB8 /* iOS */,
+				4C49DA5919DCE99F00CB4DB8 /* OS X */,
 				4C00818414B738E9003DF437 /* Model */,
 				4C00815914B6BDB6003DF437 /* Views */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
@@ -3303,7 +3304,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4C49DA5319DCE77700CB4DB8 /* MAD iOS */ = {
+		4C49DA5319DCE77700CB4DB8 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
 				4CD0B3ED1AC90B52005CA75C /* MADNavigationBarTitleView.h */,
@@ -3322,7 +3323,7 @@
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
 			);
-			name = "MAD iOS";
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		4C49DA5619DCE82200CB4DB8 /* Resources */ = {
@@ -3355,7 +3356,7 @@
 			name = Designer;
 			sourceTree = "<group>";
 		};
-		4C49DA5919DCE99F00CB4DB8 /* MAD OS X */ = {
+		4C49DA5919DCE99F00CB4DB8 /* OS X */ = {
 			isa = PBXGroup;
 			children = (
 				4C49D9CD19DCE31400CB4DB8 /* MAD Designer X */,
@@ -3363,7 +3364,7 @@
 				4C49D9FC19DCE32E00CB4DB8 /* MAD Viewer X */,
 				4C49DA1319DCE32E00CB4DB8 /* MAD Viewer XTests */,
 			);
-			name = "MAD OS X";
+			name = "OS X";
 			sourceTree = "<group>";
 		};
 		4C4C6F1C1676424C004A3B04 /* MTDataStructures */ = {
@@ -4584,6 +4585,7 @@
 		4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4C65D47B1ADCC67C00279B4D /* BDHost.h */,
 				4C8CDC9E1AD2751200B7B9EA /* NSError+Constructors.h */,
 				4C8CDC9D1AD274F800B7B9EA /* MTLog.h */,
 				4C8CDC981AD2710D00B7B9EA /* UIColor+EverydayApps.h */,

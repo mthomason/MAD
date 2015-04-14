@@ -225,6 +225,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CD96F1AD1CDC800B7B9EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -908,6 +909,7 @@
 		4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4C65D4781ADCC4F100279B4D /* BDHost.h */,
 				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
 				4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */,
 				4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */,

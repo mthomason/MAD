@@ -15,6 +15,8 @@
 		4C37E12D1ACC87DB00B4BC0D /* NSFileManager+Common.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */; };
 		4C37E12E1ACC87DB00B4BC0D /* NSURL+Document.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */; };
 		4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */; };
+		4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C65D4761ADCC3F100279B4D /* BDHost.m */; };
+		4C65D47A1ADCC54E00279B4D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C65D4791ADCC54E00279B4D /* CFNetwork.framework */; };
 		4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */; };
 		4C8CDADE1AD246A700B7B9EA /* UIApplication+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDADD1AD246A700B7B9EA /* UIApplication+Helpers.m */; };
 		4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBBC1AD2532600B7B9EA /* UIImage+Border.m */; };
@@ -61,6 +63,9 @@
 		4C4AC1C21AD1125000D4C461 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
 		4C4AC1C51AD1128600D4C461 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
+		4C65D4751ADCC3F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDHost.h; sourceTree = "<group>"; };
+		4C65D4761ADCC3F100279B4D /* BDHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDHost.m; sourceTree = "<group>"; };
+		4C65D4791ADCC54E00279B4D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4C8CDAC51AD2433D00B7B9EA /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+Constructors.h"; sourceTree = "<group>"; };
 		4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+Constructors.m"; sourceTree = "<group>"; };
 		4C8CDAC91AD243B500B7B9EA /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLog.h; sourceTree = "<group>"; };
@@ -81,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C65D47A1ADCC54E00279B4D /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +104,7 @@
 		4C37E1041ACC864500B4BC0D = {
 			isa = PBXGroup;
 			children = (
+				4C65D47C1ADCC6A800279B4D /* libraries */,
 				4C37E10F1ACC864500B4BC0D /* CocoaExtensions */,
 				4C37E11C1ACC864500B4BC0D /* CocoaExtensionsTests */,
 				4C37E10E1ACC864500B4BC0D /* Products */,
@@ -138,6 +145,8 @@
 				4C8CDADD1AD246A700B7B9EA /* UIApplication+Helpers.m */,
 				4C8CDBBB1AD2532600B7B9EA /* UIImage+Border.h */,
 				4C8CDBBC1AD2532600B7B9EA /* UIImage+Border.m */,
+				4C65D4751ADCC3F100279B4D /* BDHost.h */,
+				4C65D4761ADCC3F100279B4D /* BDHost.m */,
 			);
 			path = CocoaExtensions;
 			sourceTree = "<group>";
@@ -156,6 +165,14 @@
 				4C37E11E1ACC864500B4BC0D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C65D47C1ADCC6A800279B4D /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4C65D4791ADCC54E00279B4D /* CFNetwork.framework */,
+			);
+			name = libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,6 +269,7 @@
 				4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */,
 				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
 				4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */,
+				4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */,
 				4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */,
 				4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */,
 				4C8CDADE1AD246A700B7B9EA /* UIApplication+Helpers.m in Sources */,
