@@ -20,6 +20,8 @@
 #import "MTQuery.h"
 #import "NSString+Extras.h"
 
+#import "BDHost.h"
+
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
 NSString * const MADIdentifierDatabaseTDS       = @"TDS";
 NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
@@ -29,6 +31,13 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
 @end
 
 @implementation MTDatabaseConnection
+
+- (NSString *)IPAddressOrServer {
+    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *rawServer = [self.server stringByTrimmingCharactersInSet: whitespace];
+    NSString *address = [BDHost addressForHostname:rawServer];
+    return address == nil ? rawServer : [NSString stringWithString:address];
+}
 
 - (instancetype)init {
     self = [super init];

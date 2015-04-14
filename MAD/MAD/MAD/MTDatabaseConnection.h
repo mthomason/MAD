@@ -25,6 +25,7 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
 @property (nonatomic, strong) NSString  *database;
 @property (nonatomic, strong) NSString  *host;
 @property (nonatomic, assign) NSInteger port;
+@property (nonatomic, strong, readonly) NSString *IPAddressOrServer;
 
 - (NSString *)appname;
 
