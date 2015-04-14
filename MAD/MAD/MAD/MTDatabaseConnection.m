@@ -28,15 +28,26 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
 
 @interface MTDatabaseConnection ()
 
+@property (nonatomic, strong) NSString *internalServer;
+
 @end
 
 @implementation MTDatabaseConnection
 
-- (NSString *)IPAddressOrServer {
+
+- (void)setServer:(NSString *)server {
     NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *rawServer = [self.server stringByTrimmingCharactersInSet: whitespace];
-    NSString *address = [BDHost addressForHostname:rawServer];
-    return address == nil ? rawServer : [NSString stringWithString:address];
+    NSString *internalServer = [server stringByTrimmingCharactersInSet: whitespace];
+    self.internalServer = internalServer;
+}
+
+- (NSString *)server {
+    return self.internalServer;
+}
+
+- (NSString *)IPAddressOrServer {
+    NSString *address = [BDHost addressForHostname:self.server];
+    return address == nil ? self.server : [NSString stringWithString:address];
 }
 
 - (instancetype)init {
