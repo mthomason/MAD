@@ -320,49 +320,43 @@
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
     __weak RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: managedObjectContext
-                                                                                  driverType: [database identifier]
+                                                                                  driverType: database.identifier
                                                                                 connectionId: connectionId];
     
     __weak RptqUserCredentals *userCredentals = [RptqUserCredentals userCredentalsFactory: managedObjectContext];
-    [userCredentals setDatabase_driver_type: [database identifier]];
+    [userCredentals setDatabase_driver_type: database.identifier];
     
-    if ([[database identifier] isEqualToString:MADIdentifierDatabaseMySQL]) {
+    if ([database.identifier isEqualToString:MADIdentifierDatabaseMySQL]) {
         
-        MTDatabaseConnection *connectionSettings = [database databaseConnection];
-
-        if (connectionSettings != nil) {
-            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
-            [userCredentals setMysql_host:      [connectionSettings server]];
-            [userCredentals setMysql_database:  [connectionSettings database]];
-            NSNumber *port = @([connectionSettings port]);
-            [userCredentals setMysql_port:      port];
-            [userCredentals setMysql_username:  [connectionSettings username]];
-            [userCredentals setMysql_password:  [connectionSettings password]];
+        if (database.databaseConnection != nil) {
+            NSNumber *port = @(database.databaseConnection.port);
+            userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMySQL);
+            userCredentals.mysql_host = database.databaseConnection.server;
+            userCredentals.mysql_database = database.databaseConnection.database;
+            userCredentals.mysql_port = port;
+            userCredentals.mysql_username = database.databaseConnection.username;
+            userCredentals.mysql_password = database.databaseConnection.password;
         }
 
-    } else if ([[database identifier] isEqualToString:MADIdentifierDatabaseTDS]) {
-        MTDatabaseConnection *connectionSettings = [database databaseConnection];
+    } else if ([database.identifier isEqualToString:MADIdentifierDatabaseTDS]) {
 
-        if (connectionSettings != nil) {
-            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
-            [userCredentals setTds_server:      [connectionSettings server]];
-            [userCredentals setTds_host:        [connectionSettings server]];
-            [userCredentals setTds_username:    [connectionSettings username]];
-            [userCredentals setTds_password:    [connectionSettings password]];
-            [userCredentals setTds_database:    [connectionSettings database]];
-            NSNumber *port = @([connectionSettings port]);
-            [userCredentals setTds_port:        port];
+        if (database.databaseConnection != nil) {
+            NSNumber *port = @(database.databaseConnection.port);
+            userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMicrosoftSqlServer);
+            userCredentals.tds_server = database.databaseConnection.server;
+            userCredentals.tds_host = database.databaseConnection.server;
+            userCredentals.tds_username = database.databaseConnection.username;
+            userCredentals.tds_password = database.databaseConnection.password;
+            userCredentals.tds_database = database.databaseConnection.database;
+            userCredentals.tds_port = port;
         }
 
-    } else if ([[database identifier] isEqualToString:MADIdentifierDatabaseSqlite3]) {
+    } else if ([database.identifier isEqualToString:MADIdentifierDatabaseSqlite3]) {
 
-        MTDatabaseConnection *connectionSettings = [database databaseConnection];
-        if (connectionSettings != nil) {
+        if (database.databaseConnection != nil) {
             // FIXME: Storing Sqlite3 database url in mysql holder.
-            NSString *path = [[connectionSettings databaseUrl] path];
-            NSString *filename = [path lastPathComponent];
-            [userCredentals setMysql_database:      filename];
-            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
+            userCredentals.mysql_database = database.databaseConnection.databaseUrl.path.lastPathComponent;
+            userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeSqlite3);
         }
         
     }
@@ -370,15 +364,16 @@
     [rptqDatabase setOwnedByUser: userCredentals];
 
     NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
-    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: managedObjectContext];
+    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId
+                                                        inManagedObjectContext: managedObjectContext];
     [rptqDatabase addHasQueriesObject:newQuery];
     
-    NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
+    NSSet *databaseSchemas = [rptqDocument.hasDatabaseSchemas setByAddingObject: rptqDatabase];
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
     
-    [database connectWithCredentals:[database databaseConnection] completion:^(id dbconnection, BOOL success, NSError *connectionError) {
+    [database connectWithCredentals:database.databaseConnection completion:^(id dbconnection, BOOL success, NSError *connectionError) {
         
         __weak id weakdbconnection = dbconnection;
         __weak MTDatabase *weakDatabase2 = weakDatabase;
@@ -486,12 +481,12 @@
 
 - (void)addQueryLink:(RptqQueryLinks *)queryLink {
     NSSet *linkSet = [NSSet setWithObject: queryLink];
-    [[[self defaultDatabase] defaultQuery] addHasQueryLinks: linkSet];
+    [self.defaultDatabase.defaultQuery addHasQueryLinks: linkSet];
 }
 
 - (void)addPredicate:(RptqQueryPredicate *)predicate {
     
-    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqQuery *query = self.defaultDatabase.defaultQuery;
     NSSet *predicates = [NSSet setWithObject: predicate];
     [query addHasQueryPredicate:predicates];
     
@@ -502,21 +497,23 @@
     
     MTDocumentObjectType objectType = [defination[MTDocumentObjectDefinationType] integerValue];
     
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: entityName
                                                                        inManagedObjectContext: mangedObjectContext];
     
     RptqDocumentObject *documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                                      insertIntoManagedObjectContext: mangedObjectContext];
-    [documentObject setOrigin:CGPointZero];
-    [documentObject setSizewidth: @(75.0000f)];
-    [documentObject setSizeheight: @(22.0000f)];
+    documentObject.origin = CGPointZero;
+    documentObject.sizewidth = @(75.0000f);
+    documentObject.sizeheight = @(22.0000f);
     
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
     
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
             
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+            NSString *entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: mangedObjectContext];
             
             NSManagedObjectID *fieldObjectId = defination[MTDocumentObjectDefinationObject];
@@ -527,12 +524,12 @@
             RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                                        insertIntoManagedObjectContext: mangedObjectContext];
             
-            [documentObject setIsLabelDataField: reportObject];
-            [[documentObject isLabelDataField] setReferencesQueryField: field];
+            documentObject.isLabelDataField = reportObject;
+            documentObject.isLabelDataField.referencesQueryField = field;
+
+            reportObject.referencesQueryField = field;
             
-            [reportObject setReferencesQueryField: field];
-            
-            [documentObject setType: @(MTDocumentObjectTypeLabelDynamic)];
+            documentObject.type = @(MTDocumentObjectTypeLabelDynamic);
             
             break;
         }
@@ -546,10 +543,9 @@
             RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                      insertIntoManagedObjectContext: mangedObjectContext];
             
-            [documentObject setIsLabel: reportObject];
-            [[documentObject isLabel] setText: labelText];
-            
-            [documentObject setType: @(MTDocumentObjectTypeLabelStatic)];
+            documentObject.isLabel = reportObject;
+            documentObject.isLabel.text = labelText;
+            documentObject.type = @(MTDocumentObjectTypeLabelStatic);
             
             break;
         }
@@ -559,21 +555,17 @@
                                                                  inManagedObjectContext: mangedObjectContext];
             
             NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
-            
             RptqDocumentObjectAggregate *reportObject = [[RptqDocumentObjectAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                             insertIntoManagedObjectContext: [self managedObjectContext]];
+                                                                             insertIntoManagedObjectContext: self.managedObjectContext];
             
-            NSNumber *groupTypeContainer = aggregateOptions[MTDocumentObjectDefinationAggregatePivotType];
             NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
-            
-            MTAggregateFunctionInputType functionType = [functionInputType integerValue];
-            [reportObject setGroupNumber:   aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber]];
-            [reportObject setGroupType:     groupTypeContainer];
-            [reportObject setFunction:      aggregateOptions[MTDocumentObjectDefinationAggregateType]];
+            reportObject.groupNumber = aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber];
+            reportObject.groupType = aggregateOptions[MTDocumentObjectDefinationAggregatePivotType];
+            reportObject.function = aggregateOptions[MTDocumentObjectDefinationAggregateType];
             
             NSManagedObjectID *objectId = aggregateOptions[MTDocumentObjectDefinationAggregateObjectId];
             
-            switch (functionType) {
+            switch ((MTAggregateFunctionInputType)functionInputType.integerValue) {
                 case MTAggregateFunctionInputTypeField: {
                     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: objectId
                                                              managedObjectContext: mangedObjectContext];
@@ -606,11 +598,11 @@
             
             RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                      insertIntoManagedObjectContext: mangedObjectContext];
-            [reportObject setImage:image];
-            [documentObject setIsImage: reportObject];
-            [documentObject setSizeheight:@([image size].height)];
-            [documentObject setSizewidth:@([image size].width)];
-            [documentObject setType: @(MTDocumentObjectTypeImage)];
+            reportObject.image = image;
+            documentObject.isImage = reportObject;
+            documentObject.sizeheight = @(image.size.height);
+            documentObject.sizewidth = @(image.size.width);
+            documentObject.type = @(MTDocumentObjectTypeImage);
             
             break;
         }
@@ -625,12 +617,15 @@
             MTBarcode *barcode = defination[MTDocumentObjectDefinationObject];
             NSManagedObjectID *field1ObjectId = defination[MTDocumentObjectDefinationField1];
             NSManagedObjectID *field2ObjectId = defination[MTDocumentObjectDefinationField2];
-            RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID:field1ObjectId managedObjectContext:mangedObjectContext];
-            RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID:field2ObjectId managedObjectContext:mangedObjectContext];
-            RptqDocumentObjectBarcode *reportObject = [RptqDocumentObjectBarcode barcodeWithMtBarcode:barcode queryFieldOne:field1 queryFieldTwo:field2];
-            
-            [documentObject setIsBarcode: reportObject];
-            [documentObject setType: @(MTDocumentObjectTypeBarcode)];
+            RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID: field1ObjectId
+                                                      managedObjectContext: mangedObjectContext];
+            RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID: field2ObjectId
+                                                      managedObjectContext: mangedObjectContext];
+            RptqDocumentObjectBarcode *reportObject = [RptqDocumentObjectBarcode barcodeWithMtBarcode:barcode
+                                                                                        queryFieldOne:field1
+                                                                                        queryFieldTwo:field2];
+            documentObject.isBarcode = reportObject;
+            documentObject.type = @(MTDocumentObjectTypeBarcode);
             
             break;
         }
@@ -690,13 +685,12 @@
 
 #pragma mark - MTProtocolCompare
 
-- (BOOL)isEqualTo:(id)sender {
+- (BOOL)isEqualTo:(RptqDocument *)sender {
     BOOL result;
     if ([self isEqual:sender]) {
         result = YES;
     } else {
-        RptqDocument *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:sender.identifier];
     }
     return result;
 }
