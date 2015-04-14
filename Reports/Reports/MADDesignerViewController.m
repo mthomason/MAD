@@ -103,6 +103,13 @@
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 
 #import "NSManagedObject+Extras.h"
+#import "MADToolboxViewController.h"
+
+typedef NS_ENUM(NSUInteger, MTToolboxType) {
+    MTToolboxTypeElement = 2,
+    MTToolboxTypeSection = 3,
+    MTToolboxTypeNone = 4,
+};
 
 const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
@@ -113,6 +120,7 @@ NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueN
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
 NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
 NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
+NSString * const MADStoryboardObjectSelector = @"MADStoryboardObjectSelector";
 
 const CGFloat MNSAnimationDurationShowFromBottomHalf = 0.3500f;
 
@@ -342,9 +350,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
-    //self.sectionLayoutManagers = sectionLayoutManagers;
-    
     NSSet *emptySet = [NSSet set];
     self.visibleElementViews = emptySet;
     
@@ -390,7 +395,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     MADToolboxTransitioningDelegate *settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     
-    UIStoryboard *storyboardToolbox = [UIStoryboard storyboardWithName: @"MADToolbox"
+    UIStoryboard *storyboardToolbox = [UIStoryboard storyboardWithName: MADToolbox
                                                                 bundle: [NSBundle mainBundle]];
     UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
@@ -522,7 +527,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [self.view addConstraints:constraints];
 
-    self.scroller.container.backgroundColor = [UIColor greenColor];
+    self.scroller.container.backgroundColor = [UIColor clearColor];
     
 }
 
@@ -533,7 +538,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
  
-    //[self.sectionLayoutManagers removeAllObjects];
     NSMutableArray *constraintsScroller = [NSMutableArray new];
     NSMutableArray *constraintsContainer = [NSMutableArray new];
     
@@ -827,9 +831,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     UIEdgeInsets insets;
 
-    if (self.presentedViewController.childViewControllers.count > 0 &&
+    // FIXME: This is not choosing the correct scroll inset...
+    
+    if (self.toolboxTransitioningDelegate.presentationController.presentedView.superview != nil &&
+        self.presentedViewController.childViewControllers.count > 0 &&
         self.toolboxTransitioningDelegate.presentationController != nil &&
-        [self.toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] &&
         [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
@@ -837,9 +843,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                   self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
                                   CGSizeZero.width);
         
-    } else if (self.presentedViewController.childViewControllers.count > 0 &&
+    } else if (self.settingsTransitioningDelegate.presentationController.presentedView.superview != nil &&
+               self.presentedViewController.childViewControllers.count > 0 &&
                self.settingsTransitioningDelegate.presentationController != nil &&
-               [self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]] &&
                [((MADToolboxPresentationController *)self.settingsTransitioningDelegate.presentationController) showOnSide] == NO) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
@@ -1128,7 +1134,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
     
     RptqDocument *document = [self.document activeDocumentModel];
-    [document setNewPageAfter:newPageAfter forSectionAtRow:selectedSectionNumber];
+    [document setNewPageAfter: newPageAfter
+              forSectionAtRow: selectedSectionNumber];
 
     /*
     RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
@@ -1400,7 +1407,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (IBAction)add:(id)sender {
 
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
                                                          bundle: [NSBundle mainBundle]];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierNavigationControllerDocumentObjectSelector"];
     MADDesignerElementPIckerViewController *pickerController = (MADDesignerElementPIckerViewController *)navigationController.topViewController;
@@ -1577,12 +1584,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark MTCollectionViewCellElement Delegate
 
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    NSManagedObjectID *objectId = [cell objectIdTag];
-    NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
-    [[documentObject type] integerValue];
-    MTDocumentObjectType objectType = [[documentObject type] integerValue];
-    return objectType;
+    NSManagedObjectContext *managedObjectContext = self.document.activeDocumentModel.managedObjectContext;
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: cell.objectIdTag
+                                                                  managedObjectContext: managedObjectContext];
+    return documentObject.type.integerValue;
 }
 
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
@@ -1591,9 +1596,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
         if (finished) {
             __strong MADDesignerViewController *strongself = weakself;
-            NSManagedObjectContext *managedObjectContext = [strongself.document managedObjectContext];
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
-            [[strongself.document activeDocumentModel] removeDocumentObject:documentObject];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: strongself.document.managedObjectContext];
+            [strongself.document.activeDocumentModel removeDocumentObject:documentObject];
         }
     }];
 }
@@ -1675,7 +1680,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID: object.objectID];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
                                                          bundle: [NSBundle mainBundle]];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier];
 
@@ -1707,7 +1712,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
                                                          bundle: [NSBundle mainBundle]];
 
     MTViewControllerBarcode *barcodeViewController = [storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier];
@@ -1742,7 +1747,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
                                                          bundle: [NSBundle mainBundle]];
     MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [storyboard instantiateViewControllerWithIdentifier: @"UITableViewControllerChooseFieldDataObject"];
     chooseFieldViewController.document = self.document;
@@ -2260,11 +2265,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
-    /*
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [documentSection.hasRows[section] hasObjects];
-    return objects.count;*/
 }
 
 - (NSArray *)collectionView: (UICollectionView *)collectionView
@@ -2310,10 +2310,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)adjustContextOffsetForToolboxWithToolboxType:(MTToolboxType)toolboxType {
-    if (toolboxType == MTToolboxTypeSection) {
-        [self adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:self];
-    } else if (toolboxType == MTToolboxTypeElement) {
-        [self adjustContentOffsetForSelectedElements];
+    switch (toolboxType) {
+        case MTToolboxTypeSection:
+            [self adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:self];
+            break;
+        case MTToolboxTypeElement:
+            [self adjustContentOffsetForSelectedElements];
+            break;
+        default:
+            break;
     }
 }
 
@@ -2912,12 +2917,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 [self.viewControllerSectionLayoutSettings updateDisplay];
                 
                 UIEdgeInsets ei = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
+                self.viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top,
+                                                                                                   ei.left,
+                                                                                                   CGSizeZero.height,
+                                                                                                   ei.right);
+
                 self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top,
                                                                                                             ei.left,
-                                                                                                            CGSizeZero.height + self.tabBarController.tabBar.bounds.size.height,
+                                                                                                            CGSizeZero.height,
                                                                                                             ei.right);
-                self.viewControllerSectionLayoutSettings.tableView.contentInset = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
-                
                 [self showSectionSettingsFromLabel:label];
                 
             }

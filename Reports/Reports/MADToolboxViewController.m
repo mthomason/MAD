@@ -11,10 +11,11 @@
 
 #import "UIColor+EverydayApps.h"
 
-NSString * const MADToolbox                     = @"MADToolbox";
-NSString * const MADIdentifierStoryboardLayout  = @"MADIdentifierStoryboardLayout";
-NSString * const MADIdentifierStoryboardFormat  = @"MADIdentifierStoryboardFormat";
-NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle";
+NSString * const MADToolbox                         = @"MADToolbox";
+NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
+NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
+NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardStyle";
+NSString * const MADIdentifierStoryboardFontPicker  = @"MADIdentifierStoryboardFontPicker";
 
 CGFloat const MADNavigationBarSizeHeightNormal = 44.0000f;
 CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
@@ -64,16 +65,16 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     if (self = [super initWithCoder:aDecoder]) {
         
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADToolbox"
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADToolbox
                                                              bundle: [NSBundle mainBundle]];
 
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
-        self.layout = layout;
-        
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
+        UINavigationController *styleNavigationController =                                     [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFontPicker];
+        
+        self.layout = layout;
         self.format = format;
         
-        UINavigationController *styleNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardFontPicker"];
         self.styleNavigationController = styleNavigationController;
         self.currentViewController = self.styleNavigationController;
 
@@ -104,10 +105,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     self.modalTransitionStyle = self.segmentedControlActionStyle;
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
     self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
 }
@@ -196,15 +194,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
         delegate = (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)controller;
     }
     return delegate;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 - (void)showStyle {

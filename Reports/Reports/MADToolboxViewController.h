@@ -11,6 +11,8 @@
 
 @class MADocument;
 
+extern NSString * const MADToolbox;
+
 @interface MADToolboxViewController : UIViewController
     <MADToolboxDisplayProtocol>
 

@@ -59,6 +59,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
+@property (nonatomic, weak, readonly) RptqDocument *activeDocumentModel;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 
@@ -76,7 +77,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
-- (RptqDocument *)activeDocumentModel;
 
 - (NSURL *)cachedDataUrl;
 

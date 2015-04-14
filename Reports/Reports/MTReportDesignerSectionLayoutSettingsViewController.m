@@ -38,8 +38,9 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    self.navigationController.navigationBar.topItem.rightBarButtonItem.tintColor = [UIColor tintColorRed];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.opaque = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor tintColorBlue];
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
                                                             self.tableView.scrollIndicatorInsets.left,
                                                             CGSizeZero.height,
