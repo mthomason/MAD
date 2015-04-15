@@ -14,14 +14,22 @@
 @interface NSFileManager (Common)
 
 + (NSURL *)localTemporaryDirectory;
-+ (NSURL *)localDocumentsDirectory;
-+ (NSURL *)localCacheDirectory;
-+ (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl;
+
+- (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+
+- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+                                         fileURL:(NSURL *)fileURL;
+
+- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+
 - (NSArray *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
                                                 andExtention: (NSString *)extenstion;
-- (NSURL *)localApplicationSupportDirectory;
+
 - (NSURL *)localCacheDirectoryNamed:(NSString *)handle;
+- (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl
+                       groupIdentifier:(NSString *)groupIdentifier;
+
 - (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion;
 
 @end

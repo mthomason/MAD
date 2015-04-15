@@ -34,12 +34,9 @@ NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     
 
 @property (nonatomic, strong, readwrite) NSURL *ubiquityContainer;
 
-@property (nonatomic, strong, readwrite) NSURL *localDataDirectory;
 @property (nonatomic, strong, readwrite) NSURL *localDocumentDirectory;
 @property (nonatomic, strong, readwrite) NSURL *localHomeDirectory;
-@property (nonatomic, strong, readwrite) NSURL *localTemporaryDirectory;
 @property (nonatomic, strong, readwrite) NSURL *localCachesDirectory;
-@property (nonatomic, strong, readwrite) NSURL *localApplicationSupportDirectory;
 
 @property (nonatomic, strong, readwrite) id <NSObject, NSCopying, NSCoding> ubiquityIdentityToken;
 
@@ -71,12 +68,9 @@ static MACloudManager *sharedSingleton;
     
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquitousDocumentsDirectory)), self.ubiquitousDocumentsDirectory.path];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityContainer)), self.ubiquityContainer.path];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localDataDirectory)), self.localDataDirectory.path];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localDocumentDirectory)), self.localDocumentDirectory.path];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localHomeDirectory)), self.localHomeDirectory.path];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localTemporaryDirectory)), self.localTemporaryDirectory.path];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localCachesDirectory)), self.localCachesDirectory.path];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(localApplicationSupportDirectory)), self.localApplicationSupportDirectory.path];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityIdentityToken)), self.ubiquityIdentityToken];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileLocationManager)), self.fileLocationManager];
 
@@ -171,13 +165,9 @@ static MACloudManager *sharedSingleton;
     if (self.fileLocationManager == nil) {
         
         NSString *homeDirectory = NSHomeDirectory();
-        NSString *pathTemporaryDirectory = NSTemporaryDirectory();
         
         NSURL *homeDirectoryUrl = [NSURL fileURLWithPath: homeDirectory
                                              isDirectory: YES];
-        
-        NSURL *urlTemporaryDirectory = [NSURL fileURLWithPath: pathTemporaryDirectory
-                                                  isDirectory: YES];
         
         NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         
@@ -187,7 +177,6 @@ static MACloudManager *sharedSingleton;
         MADMetadataQueryManager *fileLocationManager = [[MADMetadataQueryManager alloc] initWithPathExtension: self.fileExtention];
         self.fileLocationManager = fileLocationManager;
         self.localHomeDirectory = homeDirectoryUrl;
-        self.localTemporaryDirectory = urlTemporaryDirectory;
         self.localCachesDirectory = cacheUrl;
         
         NSURL *documentDirectory = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupId];
@@ -225,7 +214,6 @@ static MACloudManager *sharedSingleton;
     
     @synchronized (self) {
         
-        self.localDataDirectory = nil;
         if (self.cloudAvailble) {
             
             [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationUbiquitousContainerFetchingWillBegin
@@ -551,22 +539,30 @@ static MACloudManager *sharedSingleton;
 - (BOOL)deleteDocument:(NSURL *)fileUrl {
     __block BOOL success = NO;
     dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
-        NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-        [fileCoordinator coordinateWritingItemAtURL: fileUrl
-                                            options: NSFileCoordinatorWritingForDeleting
-                                              error: nil
-                                         byAccessor: ^(NSURL* writingURL) {
-                                             NSError *error = nil;
-                                             NSFileManager* fileManager = [NSFileManager defaultManager];
-                                             if ([fileManager fileExistsAtPath:writingURL.path]) {
-                                                 [fileManager removeItemAtURL:writingURL error:&error];
-                                                 success = error ? NO : YES;
-                                             }
-                                             dispatch_semaphore_signal(semaphoreDelete);
-                                         }];
-    });
+    [[NSFileManager defaultManager] removeCachedFileForDocumentUrl: fileUrl
+                                                   groupIdentifier: self.groupId];
+
+    NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+    [fileCoordinator coordinateWritingItemAtURL: fileUrl
+                                        options: NSFileCoordinatorWritingForDeleting
+                                          error: nil
+                                     byAccessor: ^(NSURL* writingURL) {
+                                         NSError *error = nil;
+                                         
+                                         NSFileManager* fileManager = [NSFileManager defaultManager];
+                                         
+                                         if ([fileManager fileExistsAtPath:writingURL.path]) {
+                                             [fileManager removeItemAtURL:writingURL error:&error];
+                                             success = error ? NO : YES;
+                                         }
+                                         
+                                         dispatch_semaphore_signal(semaphoreDelete);
+                                     }];
+
+    // FIXME: Delete doucment cache.
+    //});
     dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
     return success;
 }
@@ -640,7 +636,6 @@ static MACloudManager *sharedSingleton;
 - (void)setDataAndDocumentUrlsWithBaseUrl:(NSURL *)url {
     self.ubiquityContainer = url;
 
-    self.localDataDirectory = self.localTemporaryDirectory;
     
     NSURL *documentDirectory = [url URLByAppendingPathComponent:@"Documents"];
     [self createDirectoryIfDoesNotExist:documentDirectory];
@@ -687,7 +682,6 @@ static MACloudManager *sharedSingleton;
 - (void)reloadCacheLocal:(NSString *)searchString {
     // Setup local cache
     NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier:self.groupId andExtention:self.fileExtention];
-    //NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentOfLocalDocumentsDirectoryWithExtention: self.fileExtention];;
     
     NSArray *filteredDocumentCacheLocalUrls;
     

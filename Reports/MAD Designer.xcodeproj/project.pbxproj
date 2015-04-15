@@ -1757,8 +1757,6 @@
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageArrowDown@2x.png"; path = "Reports/UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Reports/Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = SOURCE_ROOT; };
-		4C77326A190FFD6A005AE7C2 /* GC_MYSQL_BIND.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GC_MYSQL_BIND.h; path = MySQL/GC_MYSQL_BIND.h; sourceTree = SOURCE_ROOT; };
-		4C77326B190FFD6A005AE7C2 /* libMySqlClientObjectiveC-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "libMySqlClientObjectiveC-Prefix.pch"; path = "MySQL/libMySqlClientObjectiveC-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
 		4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
 		4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
@@ -2952,7 +2950,6 @@
 			isa = PBXGroup;
 			children = (
 				4CB56EC91AC683CC00756775 /* include */,
-				4C77324B190FFC51005AE7C2 /* libMySqlClientObjectiveC */,
 				4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */,
 			);
 			name = libMySqlClient;
@@ -3656,16 +3653,6 @@
 				4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */,
 			);
 			name = "Open Document";
-			sourceTree = "<group>";
-		};
-		4C77324B190FFC51005AE7C2 /* libMySqlClientObjectiveC */ = {
-			isa = PBXGroup;
-			children = (
-				4C77326A190FFD6A005AE7C2 /* GC_MYSQL_BIND.h */,
-				4C77326B190FFD6A005AE7C2 /* libMySqlClientObjectiveC-Prefix.pch */,
-			);
-			name = libMySqlClientObjectiveC;
-			path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC;
 			sourceTree = "<group>";
 		};
 		4C8394E21AC8F0220055EDE9 /* Products */ = {

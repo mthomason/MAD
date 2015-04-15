@@ -86,7 +86,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
-+ (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl;
 
 - (void)initalizeMainQuery;
 - (void)prepareForQuery;

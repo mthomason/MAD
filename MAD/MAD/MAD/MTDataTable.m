@@ -223,7 +223,8 @@
 
 - (NSURL *)url {
     NSString *filename = [self filenameMDCache];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager localCacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
+    NSURL *cacheDirectory = self.cacheDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
+    [self.cacheDelegate cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename
                                            isDirectory:NO];
 }

@@ -136,15 +136,21 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             
             while (dbresults(dbconn) != NO_MORE_RESULTS) {
                 
-                //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+                DBINT columnNumberBytes = dbdatlen(dbconn, 1);
                 DBINT nameLenght            = dbcollen(dbconn, 1);
-                //DBINT typeLenght            = dbcollen(dbconn, 2);
-                //DBINT lengthLenght          = dbcollen(dbconn, 3);
-                //DBINT percisionLenght       = dbcollen(dbconn, 4);
-                //DBINT scaleLenght           = dbcollen(dbconn, 5);
+                DBINT typeLenght            = dbcollen(dbconn, 2);
+                DBINT lengthLenght          = dbcollen(dbconn, 3);
+                DBINT percisionLenght       = dbcollen(dbconn, 4);
+                DBINT scaleLenght           = dbcollen(dbconn, 5);
+                
+                int columnType1 = dbcoltype(dbconn, 1);
+                int columnType2 = dbcoltype(dbconn, 2);
+                int columnType3 = dbcoltype(dbconn, 3);
+                int columnType4 = dbcoltype(dbconn, 4);
+                int columnType5 = dbcoltype(dbconn, 5);
                 
                 char *nameBind;
-                NSInteger typeBind, lengthBind, percisionBind, scaleBind;
+                int typeBind, lengthBind, percisionBind, scaleBind;
                 
                 DBINT nameBindNull, typeBindNull, lengthBindNull, percisionBindNull, scaleBindNull;
                 NSInteger nameSize = ( nameLenght + 1 );
@@ -152,16 +158,16 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 dbbind(dbconn, 1, NTBSTRINGBIND, ( nameLenght + 1 ), (BYTE *)nameBind);
                 dbnullbind(dbconn, 1, &nameBindNull);
                 
-                dbbind(dbconn, 2, INTBIND, sizeof(NSInteger), (BYTE *)&typeBind);
+                dbbind(dbconn, 2, INTBIND, sizeof(int), (BYTE *)&typeBind);
                 dbnullbind(dbconn, 2, &typeBindNull);
                 
-                dbbind(dbconn, 3, INTBIND, sizeof(NSInteger), (BYTE *)&lengthBind);
+                dbbind(dbconn, 3, INTBIND, sizeof(int), (BYTE *)&lengthBind);
                 dbnullbind(dbconn, 3, &lengthBindNull);
                 
-                dbbind(dbconn, 4, INTBIND, sizeof(NSInteger), (BYTE *)&percisionBind);
+                dbbind(dbconn, 4, INTBIND, sizeof(int), (BYTE *)&percisionBind);
                 dbnullbind(dbconn, 4, &percisionBindNull);
                 
-                dbbind(dbconn, 5, INTBIND, sizeof(NSInteger), (BYTE *)&scaleBind);
+                dbbind(dbconn, 5, INTBIND, sizeof(int), (BYTE *)&scaleBind);
                 dbnullbind(dbconn, 5, &scaleBindNull);
                 
                 while (dbnextrow(dbconn) != NO_MORE_ROWS) {

@@ -223,7 +223,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         [self setPersistentStoreOptions: options];
         
-        NSURL *urlGuts = [self archiveUrlForMadUrl:url];
+        NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         self.urlMetaPlaylist = urlMetaPlaylist;
         self.urlGuts = urlGuts;
@@ -988,18 +988,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [self thumbnailUrlForMadUrl:madUrl];
 }
 
-+ (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
-    NSError *error = nil;
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [NSFileManager localCachedDirectoryForFileUrl:documentUrl];
-    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory
-                                                                     includingPropertiesForKeys:nil options:0 error:&error];
-    for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
-        [defaultManager removeItemAtURL:cachedFile error:&error];
-    }
-    [defaultManager removeItemAtURL:cachedDirectory error:&error];
-}
-
 // FIXME: Only ever called when creating of report failes
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
@@ -1193,12 +1181,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
- - (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
++ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
     NSString *filename = [madUrl.lastPathComponent stringByDeletingPathExtension];
     NSString *destinationName = [filename stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
     NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
-    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
-    [directories lastObject];
     return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
                                                     isDirectory: YES];
 }

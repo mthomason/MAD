@@ -46,11 +46,8 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 @property (nonatomic, weak) id <MADCloudManagerProtocolCallbacks> delegate;
 @property (nonatomic, weak) id <MADCloudManagerProtocolAppDetails> delegateApplication;
 
-@property (nonatomic, strong, readonly) NSURL *localTemporaryDirectory;
 @property (nonatomic, strong, readonly) NSURL *localCachesDirectory;
-@property (nonatomic, strong, readonly) NSURL *localApplicationSupportDirectory;
 
-@property (nonatomic, strong, readonly) NSURL *localDataDirectory;
 @property (nonatomic, strong, readonly) NSURL *localDocumentDirectory;
 
 @property (nonatomic, strong, readonly) NSURL *ubiquitousDocumentsDirectory;

@@ -7,9 +7,9 @@
 //
 
 #import "MADUpgradeManager.h"
+#import "MADConstants.h"
 #import "MACloudManager.h"
 #import "MTApplicationInstance.h"
-#import "MADConstants.h"
 #import "NSFileManager+Common.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
@@ -183,15 +183,18 @@ const NSInteger currentMajorVersion = 8;
 }
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSURL *appSupportDirectory = [fileManager localApplicationSupportDirectory];
+    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
+/*
+ * Location of the sample database inside the application bundle.
+ */
+
 + (NSURL *)applicationBundleSampleDatabaseChinook {
-    NSBundle *mainBundle = [NSBundle mainBundle];
-    return [mainBundle URLForResource:MTSampleDatabaseChinook withExtension:MTDocumentExtentionSqlite3];
+    return [[NSBundle mainBundle] URLForResource:MTSampleDatabaseChinook
+                                   withExtension:MTDocumentExtentionSqlite3];
 }
 
 @end

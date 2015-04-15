@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDatabaseConnection.h"
+#import "MADConstants.h"
 #import "RptqUserCredentals.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
@@ -113,8 +114,8 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
             // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
             //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
             //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSURL *appSupportDirectory = [fileManager localApplicationSupportDirectory];
+            
+            NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
             NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent:databaseFilename isDirectory:NO];
             NSString *databasePath = [dbUrl path];
             NSURL *databaseUrl = [NSURL fileURLWithPath:databasePath];

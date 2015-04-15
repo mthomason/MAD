@@ -2458,7 +2458,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                                                             
                                                                                                         }];
                                                                       
-                                                                      [MADocument removeCachedFileForDocumentUrl:urlToRename];
+                                                                      [[NSFileManager defaultManager] removeCachedFileForDocumentUrl:urlToRename
+                                                                                                                     groupIdentifier:MADIdentifierGroup];
                                                                   }
                                                                   
                                                               } else {

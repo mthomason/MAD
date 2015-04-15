@@ -11,6 +11,7 @@
 //#endif
 
 #import "MADArrayCaching.h"
+#import "MADConstants.h"
 #import "NSFileManager+Common.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
@@ -198,7 +199,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (NSURL *)urlForIdentifier:(NSString *)identifer {
     
-    NSURL *cachedArrayDirectories = [NSFileManager localCacheDirectory];
+    NSURL *cachedArrayDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup];
     NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
     return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -206,7 +207,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (NSURL *)url {
     NSURL *result = nil;
     NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
-                                        [NSFileManager localCacheDirectory] :
+                                        [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
                                         [self.cachedDelegate cachedFilesDirectory];
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];

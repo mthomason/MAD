@@ -192,7 +192,7 @@
 - (NSURL *)urlFastCache {
     NSString *filename = [self filenameCacheMadDB];
     NSURL *cacheDirectory = self.cacheDelegate == nil ?
-                            [NSFileManager localCacheDirectory] :
+                            [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
                                 [[self cacheDelegate] cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
