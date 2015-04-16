@@ -1,5 +1,4 @@
 
-Work to the SQL Server Database Connection Creation
 Error messages
 Cloud opperations
 Need the ability to edit database informaiton.
