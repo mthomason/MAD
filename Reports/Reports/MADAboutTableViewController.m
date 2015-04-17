@@ -131,10 +131,15 @@
 
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
-          didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error {
 
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [error presentErrorOnViewController:self];
+    __weak MADAboutTableViewController *weakself = self;
+    [error presentErrorOnViewController:self completion:^(BOOL success) {
+        if (success) {
+            [weakself dismissViewControllerAnimated:YES completion:nil];
+        }
+    }];
 
 }
 

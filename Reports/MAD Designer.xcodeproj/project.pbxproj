@@ -2697,8 +2697,8 @@
 		4C0EF6C5178A9681007BF2AE /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				4CD0B2A31AC908E9005CA75C /* Licensing.storyboard */,
 				4CD0B2A41AC908E9005CA75C /* MADDesigner.storyboard */,
+				4CD0B2A31AC908E9005CA75C /* Licensing.storyboard */,
 				4CD0B2A51AC908E9005CA75C /* MADStoryboardNewDocument.storyboard */,
 				4CD0B2A61AC908E9005CA75C /* MADStoryboardObjectSelector.storyboard */,
 				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,

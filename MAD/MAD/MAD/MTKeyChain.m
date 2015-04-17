@@ -126,9 +126,11 @@ static MTKeyChain *sharedSingleton = nil;
             [alertController addAction:actionCancel];
             
             [NSThread safeSwitchToMainThread:^{
-                [[UIApplication topViewController]  presentViewController: alertController
-                                                                 animated: YES
-                                                               completion: nil];
+                UIViewController *topViewController = [UIApplication topViewController];
+                topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                [topViewController  presentViewController: alertController
+                                                 animated: YES
+                                               completion: nil];
             }];
         }
         
@@ -170,9 +172,11 @@ static MTKeyChain *sharedSingleton = nil;
     [alertController addAction:actionCancel];
 
     [NSThread safeSwitchToMainThread:^{
-        [[UIApplication topViewController]  presentViewController: alertController
-                                                         animated: YES
-                                                       completion: nil];
+        UIViewController *topViewController = [UIApplication topViewController];
+        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [topViewController  presentViewController: alertController
+                                         animated: YES
+                                       completion: nil];
     }];
 
 
@@ -180,7 +184,7 @@ static MTKeyChain *sharedSingleton = nil;
 
 - (void)deleteSavedPassword {
     
-    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: [self credentialsKey]];
+    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: self.credentialsKey];
     NSDictionary *queryUsername = @{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
                                     (__bridge id)kSecAttrService : keyUsername,
                                     (__bridge id)kSecAttrAccount : MTKeyChainUsernameAccountDesc,
@@ -195,7 +199,7 @@ static MTKeyChain *sharedSingleton = nil;
     }
     
     CFDataRef queryPasswordData = NULL;
-    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: [self credentialsKey]];
+    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: self.credentialsKey];
     NSDictionary *queryPassword = @{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
                                     (__bridge id)kSecAttrService : keyPassword,
                                     (__bridge id)kSecAttrAccount : MTKeyChainPasswordAccountDesc,
@@ -339,12 +343,16 @@ static MTKeyChain *sharedSingleton = nil;
             NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
                                                         encoding:NSUTF8StringEncoding];
             SEL promptForPasswordGivenUsername = @selector(promptForPasswordGivenUsername:);
-            [self performSelectorOnMainThread:promptForPasswordGivenUsername withObject:username waitUntilDone:NO];
+            [self performSelectorOnMainThread: promptForPasswordGivenUsername
+                                   withObject: username
+                                waitUntilDone: NO];
             break;
         }
         case stateGetUsernameAndPassword: {
             SEL promptForUsernameAndPassword = @selector(promptForUsernameAndPassword);
-            [self performSelectorOnMainThread:promptForUsernameAndPassword withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread: promptForUsernameAndPassword
+                                   withObject: nil
+                                waitUntilDone: NO];
             break;
         }
         default:
@@ -392,9 +400,11 @@ static MTKeyChain *sharedSingleton = nil;
     }];
     
     [NSThread safeSwitchToMainThread:^{
-        [[UIApplication topViewController]  presentViewController: alertController
-                                                         animated: YES
-                                                       completion: nil];
+        UIViewController *topViewController = [UIApplication topViewController];
+        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [topViewController  presentViewController: alertController
+                                         animated: YES
+                                       completion: nil];
     }];
     
 }
@@ -442,9 +452,11 @@ static MTKeyChain *sharedSingleton = nil;
     }];
     
     [NSThread safeSwitchToMainThread:^{
-        [[UIApplication topViewController]  presentViewController: alertController
-                                                         animated: YES
-                                                       completion: nil];
+        UIViewController *topViewController = [UIApplication topViewController];
+        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [topViewController  presentViewController: alertController
+                                         animated: YES
+                                       completion: nil];
     }];
     
 }

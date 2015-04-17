@@ -195,7 +195,7 @@
         [weakViewController enableUserInterface];
         [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
         if (success == NO) {
-            [error presentErrorOnViewController: self];
+            [error presentErrorOnViewController: self completion: NULL];
         }
     };
     [self setStandardCompletion:completion];

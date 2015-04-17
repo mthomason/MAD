@@ -369,10 +369,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
-            [err presentErrorOnViewController:nil];
+            [err presentErrorOnViewController:nil completion:NULL];
         } else {
             NSLog(@"Error: %@", error);
-            [error presentErrorOnViewController:nil];
+            [error presentErrorOnViewController:nil completion:NULL];
         }
     }
 }
@@ -414,7 +414,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return @{
              NSURLThumbnailDictionaryKey : thumbnails
              };
-    
 }
 
 

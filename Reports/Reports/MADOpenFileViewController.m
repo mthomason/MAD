@@ -1139,9 +1139,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)mailComposeController:(MFMailComposeViewController *)controller
           didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
 
-    [self dismissViewControllerAnimated: YES
-                             completion: nil];
-    [error presentErrorOnViewController: self];
+    __weak MADOpenFileViewController *weakself = self;
+    [error presentErrorOnViewController:self completion:^(BOOL success) {
+        [weakself dismissViewControllerAnimated:YES completion:nil];
+    }];
 
 }
 

@@ -11,12 +11,21 @@
 @implementation UIApplication (Helpers)
 
 + (id)topViewController {
-    id viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return [[UIApplication sharedApplication] topViewController];
+}
+
+- (id)topViewController {
+    UIViewController *viewController = self.keyWindow.rootViewController;
     if ([viewController isKindOfClass:([UINavigationController  class])]) {
-        id vvc = ((UINavigationController *)viewController).visibleViewController;
-        if (vvc != nil) {
-            viewController = vvc;
+        if (((UINavigationController *)viewController).visibleViewController != nil) {
+            viewController = ((UINavigationController *)viewController).visibleViewController;
         }
+        //if ([viewController isKindOfClass:[UIAlertController class]]) {
+        //    viewController = viewController.parentViewController;
+        //}
+        //if (viewController == nil) {
+        //    viewController = self.keyWindow.rootViewController;
+        //}
     }
     return viewController;
 }

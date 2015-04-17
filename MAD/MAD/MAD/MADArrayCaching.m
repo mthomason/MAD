@@ -90,8 +90,8 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
         _statementSelect = NULL;
         
         NSString *i = [NSString stringWithString:identifier];
-        [self setIdentifier:i];
-        [self setCachedDelegate:cachedDelegate];
+        self.identifier = i;
+        self.cachedDelegate = cachedDelegate;
         [self initalizeDatabase];
     }
     return self;
@@ -459,7 +459,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     
     if (state->state != 2) {
         state->itemsPtr = stackbuf;
-        [[self fastEnumerationObjects] removeAllObjects];
+        [self.fastEnumerationObjects removeAllObjects];
         
         for (i = 0; i<len; i++) {
             @autoreleasepool {

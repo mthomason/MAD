@@ -341,7 +341,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     } else {
 
         result = NO;
-        [error presentErrorOnViewController:self.openFileViewController];
+        [error presentErrorOnViewController:self.openFileViewController completion:NULL];
 
     }
     return result;

@@ -11,5 +11,6 @@
 @interface UIApplication (Helpers)
 
 + (id)topViewController;
+- (id)topViewController;
 
 @end

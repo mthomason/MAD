@@ -80,33 +80,7 @@
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.alwaysBounceVertical = YES;
     
-    UINavigationItem *navitagionItem = self.navigationItem;
-    UIBarButtonItem *barButtonItemDone = [navitagionItem rightBarButtonItem];
-    barButtonItemDone.tintColor = [UIColor tintColorWhite];
-    
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [activityIndicator startAnimating];
-    activityIndicator.hidden = NO;
-    activityIndicator.hidesWhenStopped = NO;
-
-    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [navitagionItem setRightBarButtonItem: barButtonItemActive animated: NO];
-    
-    __weak MTTableController *weakSelf = self;
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-
-        __weak MTTableController *weakSelf2 = weakSelf;
-        [[[weakSelf tableFormatter] query] performQuery:^(BOOL success, NSError *error) {
-            
-            [navitagionItem performSelectorOnMainThread:@selector(setRightBarButtonItem:) withObject:barButtonItemDone waitUntilDone:NO];
-            [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
-            [error performSelectorOnMainThread:@selector(presentErrorOnViewController:) withObject:self waitUntilDone:NO];
-            [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
-
-        }];
-
-    });
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor tintColorWhite];
     
     self.toolbarItems = nil;
     self.navigationController.toolbarHidden = YES;
@@ -129,6 +103,32 @@
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator startAnimating];
+    activityIndicator.hidden = NO;
+    activityIndicator.hidesWhenStopped = YES;
+    
+    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
+    
+    __weak MTTableController *weakSelf = self;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        
+        __weak MTTableController *weakSelf2 = weakSelf;
+        [weakSelf.tableFormatter.query performQuery:^(BOOL success, NSError *error) {
+            
+            [weakSelf2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
+                                                       withObject: weakSelf2.navigationItem.rightBarButtonItem
+                                                    waitUntilDone: NO];
+            [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
+            [error presentErrorOnViewController:weakSelf2 completion:NULL];
+            [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
+            
+        }];
+        
+    });
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -292,7 +292,7 @@
     NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
     
     MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
-    [[view label] setText:fieldName];
+    view.label.text = fieldName;
     return view;
 }
 

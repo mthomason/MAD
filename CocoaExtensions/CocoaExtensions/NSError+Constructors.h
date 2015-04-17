@@ -10,12 +10,12 @@
 #define Reports_NSError_Constructors_h
 
 #import <Foundation/Foundation.h>
-
-@class UIViewController;
+#import <UIKit/UIKit.h>
 
 @interface NSError (Constructors)
 
-- (void)presentErrorOnViewController:(UIViewController *)viewController;
+- (void)presentErrorOnViewController:(UIViewController *)viewController
+                          completion:(void (^)(BOOL success))completion;
 
 + (instancetype)errorWithDomain:(NSString *)domain
                            code:(NSInteger)code

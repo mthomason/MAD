@@ -34,21 +34,26 @@
         
         
         [self addSubview:activityIndicator];
-        CGPoint indicatorCenter = CGPointMake(self.bounds.size.width / 2.0000f, self.bounds.size.height / 2.0000f);
+        CGPoint indicatorCenter = CGPointMake(self.bounds.size.width / 2.0000f,
+                                              self.bounds.size.height / 2.0000f);
         activityIndicator.center = indicatorCenter;
         [activityIndicator startAnimating];
         
-        CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f);
+        CGRect labelFrame = CGRectMake(CGPointZero.x,
+                                       frame.size.height - 44.0000f,
+                                       frame.size.width,
+                                       44.0000f);
         UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
         [status setTextColor:[UIColor lightTextColor]];
-        UIFont *font = [UIFont fontWithName:@"Helvetica-Light" size:11.0000f];
+        UIFont *font = [UIFont fontWithName: @"Helvetica-Light"
+                                       size: 11.0000f];
         
-        [status setFont:font];
-        [status setText:@"Formatting report."];
+        status.font = font;
+        status.text = @"Formatting report.";
         status.autoresizingMask = maskLabelView;
-        [status setTextAlignment:NSTextAlignmentCenter];
+        status.textAlignment = NSTextAlignmentCenter;
         [self addSubview:status];
-        [self setStatus:status];
+        self.status = status;
         
     }
     return self;

@@ -1426,52 +1426,52 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
-
-    
-    if (severity >= 5) {
-        NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
-        char *osstr = (oserrstr != NULL ? oserrstr : "");
-        char *dbstr = (dberrstr != NULL ? dberrstr : "");
         
-        NSString *systemMessage = @(osstr);
-        NSString *dbMessage = @(dbstr);
-        NSString *errorMessage = [NSString stringWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
         
-        //Don't want to lookup
-        //NSString *sqlForErrorMessages = [NSString stringWithFormat:@"select * from sys.messages where message_id = %@", dberr];
-        
-        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
-        NSError *error = [NSError errorWithDomain:@"MTDatabaseTds" code:dberr userInfo:errorInfo];
-        
-        __block BOOL continueToGo = YES;
-        dispatch_semaphore_t showError = dispatch_semaphore_create(0);
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        if (severity >= 5) {
+            NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
+            char *osstr = (oserrstr != NULL ? oserrstr : "");
+            char *dbstr = (dberrstr != NULL ? dberrstr : "");
             
+            NSString *systemMessage = @(osstr);
+            NSString *dbMessage = @(dbstr);
+            NSString *errorMessage = [NSString stringWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
             
+            //Don't want to lookup
+            //NSString *sqlForErrorMessages = [NSString stringWithFormat:@"select * from sys.messages where message_id = %@", dberr];
+            
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
+            NSError *error = [NSError errorWithDomain:@"MTDatabaseTds" code:dberr userInfo:errorInfo];
+            
+            __block BOOL continueToGo = YES;
+            dispatch_semaphore_t showError = dispatch_semaphore_create(0);
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                
                 NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
-
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle: error.localizedDescription
-                                                                           message: error.localizedFailureReason
-                                                                    preferredStyle: UIAlertControllerStyleAlert];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle: error.localizedDescription
+                                                                               message: error.localizedFailureReason
+                                                                        preferredStyle: UIAlertControllerStyleAlert];
+                
+                UIAlertAction *ok = [UIAlertAction actionWithTitle: continueButtonTitle
+                                                             style: UIAlertActionStyleDefault
+                                                           handler: nil];
+                [alert addAction:ok];
+                [[UIApplication topViewController] presentViewController:alert animated:YES completion:^{
+                    continueToGo = YES;
+                    dispatch_semaphore_signal(showError);
+                }];
+            });
+            dispatch_semaphore_wait(showError, DISPATCH_TIME_FOREVER);
             
-            UIAlertAction *ok = [UIAlertAction actionWithTitle: continueButtonTitle
-                                                         style: UIAlertActionStyleDefault
-                                                       handler: nil];
-            [alert addAction:ok];
-            [[UIApplication topViewController] presentViewController:alert animated:YES completion:^{
-                continueToGo = YES;
-                dispatch_semaphore_signal(showError);
-            }];
-        });
-        dispatch_semaphore_wait(showError, DISPATCH_TIME_FOREVER);
-        
-        if (continueToGo) {
-            result = INT_CONTINUE;
-        } else {
-            result = INT_CANCEL;
+            if (continueToGo) {
+                result = INT_CONTINUE;
+            } else {
+                result = INT_CANCEL;
+            }
         }
-    }
-    
+        
     });
     return result;
 }

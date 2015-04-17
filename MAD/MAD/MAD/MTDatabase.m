@@ -159,14 +159,20 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 }
 
 - (NSString *)sqlLimitClause:(NSInteger)limit {
-    return (limit > 0 && limit != NSNotFound) ? [NSString stringWithFormat: @"\nLIMIT %ld", (long)limit] : @"";
+    return (limit > 0 && limit != NSNotFound) ?
+                [NSString stringWithFormat: @"\nLIMIT %ld", (long)limit] : @"";
 }
 
 // FIXME: Please make this MVC... shouldn't have view controller here
 - (void)removeCredentalsBecauseOfError:(NSError *)error {
-    NSString *key = [[self databaseConnection] connectionString];
-    [[MTKeyChain sharedObject] deleteKey:key];
-    [error presentErrorOnViewController:nil];
+
+    NSString *key = [NSString stringWithString:self.databaseConnection.connectionString];
+    [error presentErrorOnViewController:nil completion:^(BOOL success) {
+        if (success) {
+            [[MTKeyChain sharedObject] deleteKey:key];
+        }
+    }];
+    
 }
 
 - (NSString *)sqlAggregateFunctionLength {

@@ -158,17 +158,27 @@
                     [weakself2 setDataTable: dt];
                     NSArray *allObjects = [[weakself2 dataTable] allObjects];
                     [weakself2 setPickerData:allObjects];
-                    [[weakself2 pickerView] reloadAllComponents];
+                    [weakself2.pickerView reloadAllComponents];
                     
-                    [[weakself2 pickerView] setNeedsDisplay];
+                    [weakself2.pickerView setNeedsDisplay];
                     
-                    [[weakself2 pickerView] selectRow:0 inComponent:0 animated:NO];
-                    [weakself2 pickerView:[weakself2 pickerView] didSelectRow:0 inComponent:0];
+                    [weakself2.pickerView selectRow: 0
+                                        inComponent: 0
+                                           animated: NO];
+                    [weakself2 pickerView: weakself2.pickerView
+                             didSelectRow: 0
+                              inComponent: 0];
                 });
                 
                 
             } else {
-                [error presentErrorOnViewController:self];
+                if ([NSThread isMainThread]) {
+                    [error presentErrorOnViewController:weakself2 completion:NULL];
+                } else {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [error presentErrorOnViewController:weakself2 completion:NULL];
+                    });
+                }
             }
         }];
     });
@@ -185,8 +195,8 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     NSUInteger result = 0;
-    if ([self pickerData] != nil) {
-        result = [[self pickerData] count];
+    if (self.pickerData != nil) {
+        result = self.pickerData.count;
     }
     return result;
 }
@@ -238,10 +248,10 @@
     
     MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
     
-    [[result textField] setReturnKeyType:UIReturnKeyDone];
-    [result textField].delegate = self;
+    [result.textField setReturnKeyType:UIReturnKeyDone];
+    result.textField.delegate = self;
     
-    [self setTextField:[result textField]];
+    self.textField = result.textField;
     return result;
 }
 

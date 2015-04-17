@@ -11,14 +11,18 @@
 #endif
 
 #import "NSError+Constructors.h"
-#import <UIKit/UIKit.h>
 #import "UIApplication+Helpers.h"
+#import "NSThread+Extras.h"
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
 @implementation NSError (Constructors)
 
-+ (instancetype)errorWithDomain:(NSString *)domain code:(NSInteger)code title:(NSString *)title andMessage:(NSString *)message {
++ (instancetype)errorWithDomain: (NSString *)domain
+                           code: (NSInteger)code
+                          title: (NSString *)title
+                     andMessage: (NSString *)message {
+    
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey : message,
                                 NSLocalizedFailureReasonErrorKey : title};
     return [NSError errorWithDomain:domain code:code userInfo:userInfo];
@@ -30,21 +34,25 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     
 }
 
-- (void)presentErrorOnViewController:(UIViewController *)viewController {
-    
+- (void)presentErrorOnViewController:(UIViewController *)viewController
+                          completion:(void (^)(BOOL success))completion {
+
+    UIViewController *displayController;
     if (viewController == nil) {
-        viewController = [UIApplication topViewController];
+        displayController = [[UIApplication sharedApplication] topViewController];
+    } else {
+        displayController = viewController;
     }
     
     NSString *dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
-    NSString *localizedDescription = [self localizedDescription];
-    NSString *localizedFailureReason = [self localizedFailureReason];
-    NSError *underlyingError = [self userInfo][NSUnderlyingErrorKey];
-    NSString *underlyingLocalizedDescription = [underlyingError localizedDescription];
-    NSString *underlyingLocalizedFailureReason = [underlyingError localizedFailureReason];
-    if (underlyingLocalizedDescription != nil) {
-        localizedDescription = underlyingLocalizedDescription;
-        localizedFailureReason = underlyingLocalizedFailureReason;
+    NSString *localizedDescription = self.localizedDescription;
+    NSString *localizedFailureReason = self.localizedFailureReason;
+    
+    NSError *underlyingError = self.userInfo[NSUnderlyingErrorKey];
+    
+    if (underlyingError.localizedDescription != nil) {
+        localizedDescription = underlyingError.localizedDescription;
+        localizedFailureReason = underlyingError.localizedFailureReason;
     }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
@@ -53,10 +61,14 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle: dismissButtonTitle
                                                  style: UIAlertActionStyleDefault
-                                               handler: nil];
+                                               handler:^(UIAlertAction *action) {
+                                                   if (completion) {
+                                                       completion(YES);
+                                                   }
+                                               }];
     [alert addAction:ok];
-    
-    
+    displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [displayController presentViewController:alert animated:YES completion:nil];
     
 }
 

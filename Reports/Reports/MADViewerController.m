@@ -785,9 +785,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [weakself.document refresh:^(BOOL success, NSError *error) {
 
             if (!success) {
-                [error performSelectorOnMainThread:@selector(presentErrorOnViewController:)
-                                        withObject:weakself
-                                     waitUntilDone:NO];
+                
+                [error presentErrorOnViewController:weakself completion:NULL];
+
             } else {
                 NSDate *lastD = [NSDate date];
                 [weakself setLastCacheDate:lastD];
