@@ -2368,12 +2368,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         rectOfInterest :
         CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
         
-        CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
+        CGRect visibleRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
                                                 visibleRect.origin.y + adjustment,
                                                 CGFLOAT_MAX,
                                                 visibleRect.size.height - adjustment);
         
-        if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
+        if (CGRectContainsRect(visibleRectAdjusted, rectOfInterestAdjusted) == NO) {
             
             CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest,
                                                                      visibleRect);

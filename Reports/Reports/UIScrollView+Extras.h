@@ -10,7 +10,7 @@
 
 @interface UIScrollView (Extras)
 
-- (CGRect)visableRect;
+- (CGRect)visibleRect;
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest withAdjustment:(CGFloat)adjustment;
 
 @end

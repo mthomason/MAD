@@ -48,7 +48,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setActivitySpinnerVisable:NO];
     self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
     self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];

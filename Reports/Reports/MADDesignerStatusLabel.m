@@ -12,7 +12,7 @@
 const CGFloat MADViewDetailSmallCornerRadius        =  3.0000f;
 const CGFloat MADViewDetailSmallAnimationDuration   =  0.3333f;
 const CGFloat MADAlphaHidden                        =  0.0000f;
-const CGFloat MADAlphaVisable                       =  1.0000f;
+const CGFloat MADAlphaVisible                       =  1.0000f;
 const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 
 @interface MADDesignerStatusLabel ()
@@ -50,7 +50,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 - (void)show {
     __weak MADDesignerStatusLabel *weakself = self;
     [UIView animateWithDuration:MADViewDetailSmallAnimationDuration animations:^{
-        weakself.alpha = MADAlphaVisable;
+        weakself.alpha = MADAlphaVisible;
     }];
 }
 
