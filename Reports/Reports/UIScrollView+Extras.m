@@ -21,7 +21,7 @@
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest withAdjustment:(CGFloat)adjustment {
     
     CGRect visibleRect = [self visibleRect];
-    CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
+    CGRect visibleRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
                                             visibleRect.origin.y + adjustment,
                                             CGFLOAT_MAX,
                                             visibleRect.size.height);
@@ -29,7 +29,7 @@
                                                rectOfInterest.origin.y + adjustment,
                                                rectOfInterest.size.width,
                                                rectOfInterest.size.height);
-    if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
+    if (CGRectContainsRect(visibleRectAdjusted, rectOfInterestAdjusted) == NO) {
         CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest, visibleRect);
         contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.zoomScale);
         [self setContentOffset:contentOffset animated:YES];
