@@ -22,16 +22,12 @@
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellUsername;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPassword;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
 
 @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 
-
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;

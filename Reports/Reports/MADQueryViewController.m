@@ -387,8 +387,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                         tvc.delegate = self;
                     }
 
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
+                    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name"
+                                                                                     ascending: YES];
                     request.sortDescriptors = @[sortDescriptor];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -605,29 +607,27 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSDictionary *rowsDict = [self datamodel][MTTableSectionRowKey];
     NSInteger numberOfRows = 0;
     numberOfRows = [rowsDict[[NSNumber numberWithInt: ts]] intValue];
+    id<NSFetchedResultsSectionInfo> sectionData;
     if (numberOfRows < 0) {
         switch (ts) {
             case MTQuerySectionsTables: {
-                numberOfRows = [[self.fetchedResultsControllerTables sections][0] numberOfObjects];
-                //NSLog(@"Table Rows:     %d", numberOfRows);
+                sectionData = self.fetchedResultsControllerTables.sections[0];
+                numberOfRows = sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsLinks: {
-                numberOfRows = [[self.fetchedResultsControllerLinks sections][0] numberOfObjects];
-                //NSLog(@"Link Rows:      %d", numberOfRows);
+                sectionData = self.fetchedResultsControllerLinks.sections[0];
+                numberOfRows = sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsPredicate: {
-                NSArray *sections = [[self fetchedResultsControllerPredicates] sections];
-                id sectionData = sections[0];
-                numberOfRows = [sectionData numberOfObjects];
-                //NSLog(@"Predicate Rows: %d", numberOfRows);
+                sectionData = self.fetchedResultsControllerPredicates.sections[0];
+                numberOfRows = sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsGroups: {
-                NSArray *sections = [[self fetchedResultsControllerGroups] sections];
-                id sectionData = sections[0];
-                numberOfRows = [sectionData numberOfObjects];
+                sectionData = self.fetchedResultsControllerGroups.sections[0];
+                numberOfRows = sectionData.numberOfObjects;
                 break;
             }
             default:
@@ -680,14 +680,14 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
             NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
             NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
-            RptqQueryGroup *fromGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: fromIndex];
-            RptqQueryGroup *toGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: toIndex];
+            RptqQueryGroup *fromGroup = [self.fetchedResultsControllerGroups objectAtIndexPath: fromIndex];
+            RptqQueryGroup *toGroup = [self.fetchedResultsControllerGroups objectAtIndexPath: toIndex];
             NSInteger fromWeight = [[toGroup weight] integerValue];
             NSInteger toWeight = [[fromGroup weight] integerValue];
             [toGroup setWeight:@(toWeight)];
             [fromGroup setWeight:@(fromWeight)];
             NSError *error = nil;
-            [[[self fetchedResultsControllerGroups] managedObjectContext] save:&error];
+            [[self.fetchedResultsControllerGroups managedObjectContext] save:&error];
             [self performFetchGroups];
             break;
         }
@@ -711,8 +711,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
         // MARK: Display and identify the data source and data sources
         case MTQuerySectionsDatasource: {
-            static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
-            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
+            static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
+            result = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
 
             RptqDocument *document = [self.document activeDocumentModel];
             RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
@@ -742,6 +742,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 result.textLabel.text = message;
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
+                result.accessoryType = UITableViewCellAccessoryDetailButton;
+                result.tintColor = [UIColor edaBlackTwentyFivePercent];
             }
             result.textLabel.numberOfLines = 0;
             break;
@@ -811,7 +813,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         case MTQuerySectionsGroups: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
+            RptqQueryGroup *group = [self.fetchedResultsControllerGroups objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             [result backgroundView].backgroundColor = [UIColor whiteColor];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
@@ -846,7 +848,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryPredicate *predicate = [[self fetchedResultsControllerPredicates] objectAtIndexPath: indexPath];
+            RptqQueryPredicate *predicate = [self.fetchedResultsControllerPredicates objectAtIndexPath: indexPath];
             
             NSString *leftFieldDisplay = nil, *rightFieldDisplay = nil;
             if ([predicate fieldleftpred] != nil) {
@@ -955,30 +957,30 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return self.headerSectionHeight;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([self tableSectionTypeForIndexPathSection: indexPath.section] == MTQuerySectionsTables) {
         [self displayTableSampleDataForIndexPath:indexPath];
     }
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-
-}
-
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
+
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return self.headerSectionHeight;
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
     return NSLocalizedString(@"Remove", @"Remove button title.");
  }
-
-- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath { }
 
@@ -995,26 +997,27 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
+    NSNumber *sectionNumber;
     if ([controller isEqual:self.fetchedResultsControllerTables]) {
         
-        NSNumber *n = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
-        [result addObject: n];
+        sectionNumber = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
+        [result addObject: sectionNumber];
 
     } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
 
-        NSNumber *n = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
-        [result addObject: n];
+        sectionNumber = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
+        [result addObject: sectionNumber];
 
-    } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
+    } else if ([controller isEqual:self.fetchedResultsControllerGroups]) {
 
         NSInteger sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
-        NSNumber *numberSectionGroup = @(sectionGroup);
-        [result addObject: numberSectionGroup];
+        sectionNumber = @(sectionGroup);
+        [result addObject: sectionNumber];
     
-    } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
+    } else if ([controller isEqual:self.fetchedResultsControllerPredicates]) {
     
         NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsPredicate];
-        NSNumber *sectionNumber = @(section);
+        sectionNumber = @(section);
         [result addObject: sectionNumber];
     }
     
@@ -1130,11 +1133,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (void)performFetchGroups {
-    [self performFetchWithController:[self fetchedResultsControllerGroups]];
+    [self performFetchWithController:self.fetchedResultsControllerGroups];
 }
 
 - (void)performFetchPredicate {
-    [self performFetchWithController:[self fetchedResultsControllerPredicates]];
+    [self performFetchWithController:self.fetchedResultsControllerPredicates];
 }
 
 - (void)performFetchWithController:(NSFetchedResultsController *)controller {
@@ -1677,7 +1680,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             object = [context existingObjectWithID:[tableViewCellPredicate tableID] error:&error];
         } else {
             NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            object = [[self fetchedResultsControllerPredicates] objectAtIndexPath: testPredicateIndexPath];
+            object = [self.fetchedResultsControllerPredicates objectAtIndexPath: testPredicateIndexPath];
         }
         if (!error && object && [object isKindOfClass:[RptqQueryPredicate class]]) {
             RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
