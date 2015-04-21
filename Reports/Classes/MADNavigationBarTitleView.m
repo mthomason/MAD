@@ -73,7 +73,10 @@
                                         value: foregroundColor
                                         range: range];
     
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
+    [attributedStringMadDesigner addAttribute: NSKernAttributeName
+                                        value: [NSNull null]
+                                        range: range];
+    
     return attributedStringMadDesigner;
 }
 

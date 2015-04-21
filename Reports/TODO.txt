@@ -1,5 +1,4 @@
 
-Error messages
 Cloud opperations
 Need the ability to edit database informaiton.
 Use hover effect on paging slider
@@ -29,7 +28,6 @@ Report Viewer
     Cache data in the background, use NSLocalNotification to notify when data is cached.
 
 Data Model
-    Allow multiple caches.    Do before first release to make updates easier.
     COMPLETE - Abstract table schema so that the same table may be included multiple times.
 
 Database Access

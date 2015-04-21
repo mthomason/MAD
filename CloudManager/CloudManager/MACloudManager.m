@@ -470,7 +470,7 @@ static MACloudManager *sharedSingleton;
     return success;
  }
 
-- (void)deleteDocument:(NSURL *)fileUrl completion:(void (^)(BOOL, NSError *))completion {
+/*+ (void)deleteDocument:(NSURL *)fileUrl completion:(void (^)(BOOL, NSError *))completion {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
@@ -496,7 +496,7 @@ static MACloudManager *sharedSingleton;
             }
         }];
     });
-}
+}*/
 
 - (BOOL)duplicateUrl:(NSURL *)urlToDupe {
     __block BOOL success = NO;
@@ -520,13 +520,11 @@ static MACloudManager *sharedSingleton;
                                  byAccessor: ^(NSURL *source, NSURL *destinaion) {
                                      
                                      NSError *errorCopy = nil;
-                                     [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
-                                     
                                      success = [[NSFileManager defaultManager] copyItemAtURL: source
                                                                                        toURL: destinaion
                                                                                        error: &errorCopy];
                                      
-                                     NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                     NSAssert(errorCopy == nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
                                      
                                      if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
@@ -535,7 +533,53 @@ static MACloudManager *sharedSingleton;
     return success;
 }
 
++ (void)deleteDocumentAtURL:(NSURL *)url
+      withCompletionHandler:(void (^)(BOOL success, NSError *error))completionHandler {
+    
+    NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+    
+    // `url` may be a security scoped resource.
+    BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
+    
+    NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL: url
+                                                                         options: NSFileCoordinatorWritingForDeleting];
+    [fileCoordinator coordinateAccessWithIntents:@[writingIntent] queue:[self queue] byAccessor:^(NSError *accessError) {
+        if (accessError) {
+            if (completionHandler) {
+                completionHandler(NO, accessError);
+            }
+            
+            return;
+        }
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        
+        NSError *error;
+        
+        BOOL success = [fileManager removeItemAtURL:writingIntent.URL error:&error];
+        
+        if (successfulSecurityScopedResourceAccess) {
+            [url stopAccessingSecurityScopedResource];
+        }
+        
+        if (completionHandler) {
+            completionHandler(success, error);
+        }
+    }];
+}
 
++ (NSOperationQueue *)queue {
+    static NSOperationQueue *queue;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = [[NSOperationQueue alloc] init];
+    });
+    
+    return queue;
+}
+
+/*
 - (BOOL)deleteDocument:(NSURL *)fileUrl {
     __block BOOL success = NO;
     dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
@@ -554,7 +598,10 @@ static MACloudManager *sharedSingleton;
                                          NSFileManager* fileManager = [NSFileManager defaultManager];
                                          
                                          if ([fileManager fileExistsAtPath:writingURL.path]) {
-                                             [fileManager removeItemAtURL:writingURL error:&error];
+                                             success = [fileManager removeItemAtURL:writingURL error:&error];
+                                             if (success) {
+                                                 [fileCoordinator itemAtURL:<#(NSURL *)#> didMoveToURL:nil]
+                                             }
                                              success = error ? NO : YES;
                                          }
                                          
@@ -566,7 +613,7 @@ static MACloudManager *sharedSingleton;
     dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
     return success;
 }
-
+*/
 
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
                           withExtension:(NSString *)extension

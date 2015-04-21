@@ -2660,6 +2660,7 @@
 				4C08B31C1AB680CC00B54D3A /* MADDocumentInformationTableViewController.m */,
 			);
 			name = "Document Information";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4C0E785F163B5C51003B951E /* Resources */ = {
@@ -2782,7 +2783,9 @@
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4CF46F5A1AC64A2F007C0A82 /* libraries */,
+				4C5BED4E18E897FE00BDDDB8 /* App */,
 				4C49DA5319DCE77700CB4DB8 /* iOS */,
+				4CDB624614E38B9600A5389E /* Controllers */,
 				4C00818414B738E9003DF437 /* Model */,
 				4C00815914B6BDB6003DF437 /* Views */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
@@ -2790,6 +2793,7 @@
 				4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */,
 				4C5BED6818E9081F00BDDDB8 /* Protocols */,
 				4C0E785F163B5C51003B951E /* Resources */,
+				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
 				4C8F99A81ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
 				4C8F99BD1ACA97C8006D3996 /* MAD Designer WatchKit App */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
@@ -3149,16 +3153,10 @@
 				4CD0B3EC1AC90B52005CA75C /* MADNavigationBarTitleView.m */,
 				4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */,
 				4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */,
-				4C08B3131AB67FD500B54D3A /* Document Information */,
 				4C6268FB19F6008700DCCC2E /* Vibrant */,
-				4C62692719F6313000DCCC2E /* Information */,
-				4C6268F219F5FFD200DCCC2E /* About */,
-				4C5BED4E18E897FE00BDDDB8 /* App */,
-				4CDB624614E38B9600A5389E /* Controllers */,
 				4C26F22B19D5D1DE00B7A417 /* Test */,
 				4C49DA5619DCE82200CB4DB8 /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
-				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -3418,6 +3416,7 @@
 				4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */,
 			);
 			name = About;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4C6268FB19F6008700DCCC2E /* Vibrant */ = {
@@ -3456,6 +3455,7 @@
 				4CD0B29A1AC90856005CA75C /* MADStoryboardInformationTable.storyboard */,
 			);
 			name = Information;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4C6DAA411761AEBA00FF770A /* TdsClient */ = {
@@ -4118,6 +4118,9 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C62692719F6313000DCCC2E /* Information */,
+				4C08B3131AB67FD500B54D3A /* Document Information */,
+				4C6268F219F5FFD200DCCC2E /* About */,
 				4C4740AA1A0026B200B11434 /* Toolbox */,
 				4C15669C19F5A83A00EE465D /* testimage.jpg */,
 				4C38E9C319F232FC000E0B2F /* MADQueryNavigationController.h */,
