@@ -2066,6 +2066,7 @@
 		4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageView.m; sourceTree = "<group>"; };
 		4CC24AA31503E3AB00C4EE98 /* MTGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGradientView.h; sourceTree = "<group>"; };
 		4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGradientView.m; sourceTree = "<group>"; };
+		4CC24FBE1AE8BE9F00C7BA38 /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKeyChain.h; path = ../MAD/MAD/MAD/MTKeyChain.h; sourceTree = "<group>"; };
 		4CC2BE7819D8EC7A006AAB24 /* MTQueryBuilderChooseFieldDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderChooseFieldDelegate.h; sourceTree = "<group>"; };
 		4CC2BE7C19D8F059006AAB24 /* MADBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeType.h; path = Barcodes/Barcodes/MADBarcodeType.h; sourceTree = "<group>"; };
 		4CC2BE8319D9078B006AAB24 /* MADControlState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADControlState.h; sourceTree = "<group>"; };
@@ -3503,6 +3504,7 @@
 				4C8CDCA31AD276A800B7B9EA /* rptq */,
 				4C8CD98C1AD1CF3700B7B9EA /* MAD.h */,
 				4C8CDCF51AD27B2500B7B9EA /* MTPaper.h */,
+				4CC24FBE1AE8BE9F00C7BA38 /* MTKeyChain.h */,
 				4C8CDCEA1AD2795E00B7B9EA /* MADSortOrder.h */,
 				4C8CDCED1AD279BB00B7B9EA /* MTQueryTest.h */,
 				4C8CDCF61AD27B3E00B7B9EA /* MTNotificationDidFormatPage.h */,

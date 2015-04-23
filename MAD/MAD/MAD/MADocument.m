@@ -369,10 +369,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
-            [err presentErrorOnViewController:nil completion:NULL];
+            [NSError presentError: err
+                 onViewController: nil
+                       completion: NULL];
         } else {
-            NSLog(@"Error: %@", error);
-            [error presentErrorOnViewController:nil completion:NULL];
+            [NSError presentError: error
+                 onViewController: nil
+                       completion: NULL];
         }
     }
 }

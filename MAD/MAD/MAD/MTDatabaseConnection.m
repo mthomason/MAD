@@ -13,6 +13,7 @@
 #import "MTDatabaseConnection.h"
 #import "MADConstants.h"
 #import "RptqUserCredentals.h"
+#import "MTDatabase.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
@@ -159,11 +160,11 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
     return [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
 }
 
-- (void)testConnection:(void(^)(BOOL success, NSError *error))completion {
+- (void)testConnection:(void(^)(BOOL success, NSError *error, NSArray *errors))completion {
     MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
                                                      object: self];
     [queryTest performQuery:^(BOOL success, NSError *error) {
-        completion(success, error);
+        completion(success, error, queryTest.database.errors);
     }];
 }
 

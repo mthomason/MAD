@@ -26,6 +26,7 @@
 #import "MACloudManager.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
+#import "MTKeyChain.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
@@ -195,7 +196,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     
     __weak MTConnectionViewController *weakself = self;
     
-    [dbDetails testConnection:^(BOOL success, NSError *error) {
+    [dbDetails testConnection:^(BOOL success, NSError *error, NSArray *errors) { //Not always removing credentsals when connection fails.
         
         __strong MTConnectionViewController *strongself = weakself;
         if (success) {
@@ -231,46 +232,21 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                   __strong MTConnectionViewController *strongself3 = weakself3;
                                   __weak MTConnectionViewController *weakself4 = strongself3;
                                   
-                                  [weakself4.docToSave saveToURL:weakself4.docToSave.fileURL
-                                                forSaveOperation: UIDocumentSaveForOverwriting
-                                               completionHandler:^(BOOL success) {
-                                                   
-                                                   __strong MTConnectionViewController *strongself4 = weakself4;
-                                                   __weak MTConnectionViewController *weakself5 = strongself4;
-                                                   
-                                                   if (success) {
-                                                       [weakself5.docToSave closeWithCompletionHandler:^(BOOL success) {
-                                                           
-                                                           __strong MTConnectionViewController *strongself5 = weakself5;
-                                                           
-                                                           blockSender.enabled = YES;
-                                                           [strongself5.delegate viewControllerDidFinish: strongself5];
-                                                           
-                                                           UILocalNotification *notification = [[UILocalNotification alloc] init];
-                                                           NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'", @"Created report '%@.'");
-                                                           NSString *body = [NSString stringWithFormat:reportIsReady, name];
-                                                           notification.alertBody = body;
-                                                           [[UIApplication sharedApplication] presentLocalNotificationNow: notification];
-                                                           
-                                                           strongself5.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
-                                                           [strongself5 enableTextFields];
-                                                           
-                                                           dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                                               
-                                                               UIApplication *app = [UIApplication sharedApplication];
-                                                               NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
-                                                               NSNumber *bgTaskWrapper = @(bgTask);
-                                                               [NSTimer scheduledTimerWithTimeInterval: time
-                                                                                                target: [UIApplication sharedApplication]
-                                                                                              selector: @selector(handoffBackground:)
-                                                                                              userInfo: bgTaskWrapper
-                                                                                               repeats: NO];
-                                                               
-                                                           });
-                                                           
-                                                       }];
-                                                   }
-                                               }];
+                                  [weakself4 saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
+                                      
+                                      blockSender.enabled = YES;
+                                      [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
+                                      
+                                      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                          
+                                          NSNumber *bgTaskWrapper = @(bgTask);
+                                          [[UIApplication sharedApplication] handoffBackground:bgTaskWrapper];
+                                          
+                                      });
+                                      
+                                  }];
+                                  
+
                               } else {
                                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                                       dispatch_sync(dispatch_get_main_queue(), ^{
@@ -293,14 +269,9 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                               
                                               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                                                   
-                                                  UIApplication *app = [UIApplication sharedApplication];
-                                                  NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
                                                   NSNumber *bgTaskWrapper = @(bgTask);
-                                                  [NSTimer scheduledTimerWithTimeInterval: time
-                                                                                   target: [UIApplication sharedApplication]
-                                                                                 selector: @selector(handoffBackground:)
-                                                                                 userInfo: bgTaskWrapper
-                                                                                  repeats: NO];
+                                                  [[UIApplication sharedApplication] handoffBackground:bgTaskWrapper];
+
                                               });
                                           }];
                                       });
@@ -327,11 +298,88 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                   
               }];
         } else {
+            
+            NSString *key = [NSString stringWithString: dbDetails.connectionString];
+            [MTConnectionViewController viewController: strongself
+                                         displayErrors: errors
+                                            completion: ^(BOOL success) {
+                [[MTKeyChain sharedObject] deleteKey:key];
+            }];
+            
             blockSender.enabled = YES;
             [strongself enableNavigation];
             [progressView removeFromSuperview];
         }
     }];
+}
+
++ (void)viewController:(id)viewController displayErrors:(NSArray *)errors completion:(void (^)(BOOL))completion {
+    
+    NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
+    NSError *error = errors.lastObject;
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: error.localizedDescription
+                                                                   message: error.localizedFailureReason
+                                                            preferredStyle: UIAlertControllerStyleAlert];
+    
+    NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
+    NSArray *remaningErrors = [errors subarrayWithRange:range];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle: continueButtonTitle
+                                                 style: UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction *action) {
+                                                   if (remaningErrors.count > 0) {
+                                                       [MTConnectionViewController viewController:viewController
+                                                                                    displayErrors:remaningErrors
+                                                                                       completion:^(BOOL success) {
+                                                                                           completion(YES);
+                                                                                       }];
+                                                   } else {
+                                                       completion(YES);
+                                                   }
+                                               }];
+    [alert addAction:ok];
+    [viewController presentViewController:alert animated:YES completion:^{
+        
+    }];
+
+}
+
+- (void)saveCloseAndExitWithCompletion:(void (^)(BOOL, NSError *))completion {
+    __weak MTConnectionViewController *weakself = self;
+    
+    [self.docToSave saveToURL: self.docToSave.fileURL
+             forSaveOperation: UIDocumentSaveForOverwriting
+            completionHandler: ^(BOOL success) {
+                
+                __strong MTConnectionViewController *strongself = weakself;
+                __weak MTConnectionViewController *weakself1 = strongself;
+                
+                if (success) {
+                    [weakself1.docToSave closeWithCompletionHandler:^(BOOL success) {
+                        
+                        __strong MTConnectionViewController *strongself1 = weakself1;
+                        
+                        [strongself1 finishDocument];
+                        completion(success, nil);
+                        
+                    }];
+                }
+            }];
+}
+
+- (void)finishDocument {
+    [self.delegate viewControllerDidFinish: self];
+    self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+    [self enableTextFields];
+}
+
++ (void)showLocalNotificationCreatedReportWithName:(NSString *)name {
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'", @"Created report '%@.'");
+    NSString *body = [NSString stringWithFormat:reportIsReady, name];
+    notification.alertBody = body;
+    [[UIApplication sharedApplication] presentLocalNotificationNow: notification];
+
 }
 
 - (void)showErrorLog:(MTErrorContainer *)errorContainer {

@@ -34,8 +34,14 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     
 }
 
-- (void)presentErrorOnViewController:(UIViewController *)viewController
-                          completion:(void (^)(BOOL success))completion {
++ (void)presentError:(NSError *)error
+    onViewController:(UIViewController *)viewController
+          completion:(void (^)(BOOL success))completion {
+    
+    if (error == nil) {
+        completion(YES);
+        return;
+    }
 
     UIViewController *displayController;
     if (viewController == nil) {
@@ -45,10 +51,10 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     }
     
     NSString *dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
-    NSString *localizedDescription = self.localizedDescription;
-    NSString *localizedFailureReason = self.localizedFailureReason;
+    NSString *localizedDescription = error.localizedDescription;
+    NSString *localizedFailureReason = error.localizedFailureReason;
     
-    NSError *underlyingError = self.userInfo[NSUnderlyingErrorKey];
+    NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
     
     if (underlyingError.localizedDescription != nil) {
         localizedDescription = underlyingError.localizedDescription;
@@ -68,7 +74,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                                                }];
     [alert addAction:ok];
     displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [displayController presentViewController:alert animated:YES completion:nil];
+    [displayController presentViewController:alert animated:YES completion:NULL];
     
 }
 

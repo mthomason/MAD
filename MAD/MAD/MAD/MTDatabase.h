@@ -31,11 +31,18 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query;
 @end
 
+@protocol MADErrorHandler <NSObject>
+@required
+- (void)displayError:(NSError *)error;
+@end
 
 @interface MTDatabase : NSObject
 
 @property (nonatomic, assign) id <MTDatabaseProtocol> delegate;
+@property (nonatomic, assign) id <MADErrorHandler> delegateError;
 @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+
+@property (nonatomic, strong) NSMutableArray *errors;
 
 + (instancetype)databaseFactory:(MTDatabaseConnection *)connection;
 

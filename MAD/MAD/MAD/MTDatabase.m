@@ -30,6 +30,14 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 @implementation MTDatabase
 
+- (id)init {
+    if (self = [super init]) {
+        NSMutableArray *errors = [[NSMutableArray alloc] init];
+        self.errors = errors;
+    }
+    return self;
+}
+
 + (instancetype)databaseFactory:(MTDatabaseConnection *)connection {
 
     NSString *identifier = [connection databaseTypeIdentifier];
@@ -165,14 +173,11 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 // FIXME: Please make this MVC... shouldn't have view controller here
 - (void)removeCredentalsBecauseOfError:(NSError *)error {
-
-    NSString *key = [NSString stringWithString:self.databaseConnection.connectionString];
-    [error presentErrorOnViewController:nil completion:^(BOOL success) {
-        if (success) {
-            [[MTKeyChain sharedObject] deleteKey:key];
-        }
-    }];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSError presentError: error onViewController: nil completion:^(BOOL success) {
+            [[MTKeyChain sharedObject] deleteKey:self.databaseConnection.connectionString];
+        }];
+    });
 }
 
 - (NSString *)sqlAggregateFunctionLength {

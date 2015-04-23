@@ -7,6 +7,7 @@
 //
 
 #import "MTErrorContainer.h"
+#import "NSError+Constructors.h"
 
 @interface MTErrorContainer ()
 
@@ -54,6 +55,22 @@
         [result appendString:errorString];
     }
     return result;
+}
+
+- (void)presentAllErrorsWithCompletion:(void (^)(BOOL success))completion {
+    if (self.errors.count > 0) {
+        NSError *errorToShow = self.errors.lastObject;
+        [self.errors removeObject:errorToShow];
+        [NSError presentError: errorToShow
+             onViewController: nil
+                   completion: ^(BOOL success) {
+                       if (success) {
+                           [self presentAllErrors];
+                       }
+                   }];
+    } else {
+        completion(YES);
+    }
 }
 
 @end

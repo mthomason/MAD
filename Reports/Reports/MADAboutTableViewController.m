@@ -135,7 +135,9 @@
                         error:(NSError*)error {
 
     __weak MADAboutTableViewController *weakself = self;
-    [error presentErrorOnViewController:self completion:^(BOOL success) {
+    [NSError presentError: error
+         onViewController: self
+               completion:^(BOOL success) {
         if (success) {
             [weakself dismissViewControllerAnimated:YES completion:nil];
         }

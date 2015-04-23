@@ -66,7 +66,18 @@
 }
 
 - (void)handoffBackground:(NSNumber *)bgTask {
-    [self endBackgroundTask:[bgTask unsignedIntegerValue]];
+    [self endBackgroundTask:bgTask.unsignedIntegerValue];
+}
+
+- (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask {
+    
+    NSTimeInterval time = self.backgroundTimeRemaining > 7.0 ? 5.0 : self.backgroundTimeRemaining - 0.1;
+    [NSTimer scheduledTimerWithTimeInterval: time
+                                     target: self
+                                   selector: @selector(handoffBackground:)
+                                   userInfo: bgTask
+                                    repeats: NO];
+    
 }
 
 @end

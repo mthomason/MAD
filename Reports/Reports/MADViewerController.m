@@ -786,7 +786,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
             if (!success) {
                 
-                [error presentErrorOnViewController:weakself completion:NULL];
+                [NSError presentError: error
+                     onViewController: weakself
+                           completion: NULL];
 
             } else {
                 NSDate *lastD = [NSDate date];

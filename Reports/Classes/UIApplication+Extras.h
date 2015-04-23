@@ -21,6 +21,7 @@
 
 - (UIBackgroundTaskIdentifier)requestBackgroundTask;
 - (void)handoffBackground:(NSNumber *)bgTask;
+- (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask;
 
 @end
 

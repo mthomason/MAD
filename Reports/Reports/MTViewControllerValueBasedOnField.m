@@ -173,10 +173,12 @@
                 
             } else {
                 if ([NSThread isMainThread]) {
-                    [error presentErrorOnViewController:weakself2 completion:NULL];
+                    [NSError presentError:error onViewController:weakself2 completion:NULL];
                 } else {
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [error presentErrorOnViewController:weakself2 completion:NULL];
+                        [NSError presentError: error
+                             onViewController: weakself2
+                                   completion: NULL];
                     });
                 }
             }

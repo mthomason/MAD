@@ -41,11 +41,36 @@ NSString * const MTDatabaseConnectionHost       = @"MTDatabaseConnectionHost";
 NSString * const MTDatabaseConnectionServer     = @"MTDatabaseConnectionServer";
 NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName";
 
+
+NSString * const MADNotificationError           = @"MADNotificationError";
+//NSString * const MADNotificationErrorObject     = @"MADNotificationErrorObject";
+//NSString * const MADNotificationErrorSeverty    = @"MADNotificationErrorSeverty";
+
+
 @interface MTDatabaseSqlServer ()
 
 @end
 
 @implementation MTDatabaseSqlServer
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (id)init {
+    if (self = [super init]) {
+        
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(handleError:)
+                                                     name: MADNotificationError
+                                                   object: nil];
+    }
+    return self;
+}
+
+- (void)handleError:(NSNotification *)notification {
+    [self.errors addObject:notification.object];
+}
 
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     
@@ -490,7 +515,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
-    [self connectWithCredentals:[self databaseConnection] completion:^(id dbconn, BOOL success, NSError *error) {
+    [self connectWithCredentals:self.databaseConnection
+                     completion:^(id dbconn, BOOL success, NSError *error) {
         
         if (success) {
             [self runQuery:query onProcess:dbconn];
@@ -1422,12 +1448,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr);
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
 
-    __block int result = INT_CANCEL;
+    int result = INT_CONTINUE;
 
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        
-        
+    
         if (severity >= 5) {
             NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
             char *osstr = (oserrstr != NULL ? oserrstr : "");
@@ -1437,42 +1460,13 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             NSString *dbMessage = @(dbstr);
             NSString *errorMessage = [NSString stringWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
             
-            //Don't want to lookup
-            //NSString *sqlForErrorMessages = [NSString stringWithFormat:@"select * from sys.messages where message_id = %@", dberr];
-            
             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
             NSError *error = [NSError errorWithDomain:@"MTDatabaseTds" code:dberr userInfo:errorInfo];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationError object:error];
             
-            __block BOOL continueToGo = YES;
-            dispatch_semaphore_t showError = dispatch_semaphore_create(0);
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
-                
-                NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
-                
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle: error.localizedDescription
-                                                                               message: error.localizedFailureReason
-                                                                        preferredStyle: UIAlertControllerStyleAlert];
-                
-                UIAlertAction *ok = [UIAlertAction actionWithTitle: continueButtonTitle
-                                                             style: UIAlertActionStyleDefault
-                                                           handler: nil];
-                [alert addAction:ok];
-                [[UIApplication topViewController] presentViewController:alert animated:YES completion:^{
-                    continueToGo = YES;
-                    dispatch_semaphore_signal(showError);
-                }];
-            });
-            dispatch_semaphore_wait(showError, DISPATCH_TIME_FOREVER);
-            
-            if (continueToGo) {
-                result = INT_CONTINUE;
-            } else {
                 result = INT_CANCEL;
-            }
         }
         
-    });
     return result;
 }
 
@@ -1552,8 +1546,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             MTDatabaseProcessSqlServer *dbwrap = nil;
             
             if (error) {
-                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
+                [self.errors insertObject:error atIndex:0];
+                //SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+                //[self performSelectorOnMainThread: removeCredentalsBecauseOfError
+                //                       withObject: error
+                //                    waitUntilDone: NO];
             } else {
                 dbwrap = [[MTDatabaseProcessSqlServer alloc] initWithProcess:dbconn];
             }

@@ -17,6 +17,7 @@
 - (NSString *)errorLog;
 - (NSString *)errorLogCompact;
 - (NSUInteger)count;
+- (void)presentAllErrors;
 
 @end
 

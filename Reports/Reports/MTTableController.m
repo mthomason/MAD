@@ -27,6 +27,9 @@
 #import "NSError+Constructors.h"
 #import "UIColor+EverydayApps.h"
 
+#import "MTKeyChain.h"
+#import "MTDatabaseConnection.h"
+
 @interface MTTableController ()
     <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol>
 
@@ -123,7 +126,14 @@
                                                        withObject: weakSelf2.navigationItem.rightBarButtonItem
                                                     waitUntilDone: NO];
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
-            [error presentErrorOnViewController:weakSelf2 completion:NULL];
+            if (error) {
+                NSString *key = [NSString stringWithString:weakSelf2.query.database.databaseConnection.connectionString];
+                [NSError presentError: error
+                     onViewController: weakSelf2
+                           completion:^(BOOL success) {
+                               [[MTKeyChain sharedObject] deleteKey:key];
+                           }];
+            }
             [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
             
         }];
