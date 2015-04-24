@@ -20,13 +20,6 @@
         if (((UINavigationController *)viewController).visibleViewController != nil) {
             viewController = ((UINavigationController *)viewController).visibleViewController;
         }
-        if ([viewController isKindOfClass:[UIAlertController class]]) {
-            //viewController.presentingViewController
-            //viewController = viewController.presentedViewController;
-        }
-        //if (viewController == nil) {
-        //    viewController = self.keyWindow.rootViewController;
-        //}
     }
     return viewController;
 }

@@ -119,20 +119,34 @@
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         
-        __weak MTTableController *weakSelf2 = weakSelf;
-        [weakSelf.tableFormatter.query performQuery:^(BOOL success, NSError *error) {
+        __strong MTTableController *strongself = weakSelf;
+        __weak MTTableController *weakSelf2 = strongself;
+        [strongself.tableFormatter.query performQuery:^(BOOL success, NSError *error) {
             
-            [weakSelf2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
-                                                       withObject: weakSelf2.navigationItem.rightBarButtonItem
+            __strong MTTableController *strongself2 = weakSelf2;
+            __weak MTTableController *weakSelf3 = strongself2;
+
+            
+            [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
+                                                       withObject: strongself2.navigationItem.rightBarButtonItem
                                                     waitUntilDone: NO];
+            
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
             if (error) {
-                NSString *key = [NSString stringWithString:weakSelf2.query.database.databaseConnection.connectionString];
-                [NSError presentError: error
-                     onViewController: weakSelf2
-                           completion:^(BOOL success) {
-                               [[MTKeyChain sharedObject] deleteKey:key];
-                           }];
+
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    __strong MTTableController *strongself3 = weakSelf3;
+                    __strong MTTableController *weakself4 = strongself3;
+                    
+                    [NSError presentError: error
+                         onViewController: strongself3
+                               completion:^(BOOL success) {
+                                   NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                                   [[MTKeyChain sharedObject] deleteKey:key];
+                               }];
+                    
+                });
             }
             [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
             
