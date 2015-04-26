@@ -18,6 +18,9 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "MTDataTable.h"
+#import "NSError+Constructors.h"
+#import "MTKeyChain.h"
+#import "MTDatabaseConnection.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
@@ -56,11 +59,19 @@
                                                                 object: schemaField];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
-            MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
+            MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
             [self setDataTableSampleData:dt];
-            NSArray *allObjects = [[self dataTableSampleData] allObjects];
+            NSArray *allObjects = [self.dataTableSampleData allObjects];
             [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
             [self.tableView reloadData];
+        } else {
+            [NSError presentError: error
+                 onViewController: self
+                       completion:^(BOOL success) {
+                           NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                           [[MTKeyChain sharedObject] deleteKey:key];
+                       }];
+
         }
     }];
 }

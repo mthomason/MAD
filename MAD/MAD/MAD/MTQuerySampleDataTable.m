@@ -86,6 +86,8 @@
                 MTDatabaseField *f = [self fields][okey];
                 f.calculatedWidth = maxSize;
             }];
+        } else {
+            *error = errorFl;
         }
     }];
     

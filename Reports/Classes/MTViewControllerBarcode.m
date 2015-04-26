@@ -29,8 +29,11 @@
 
 #import "MTDataTable.h"
 #import "MTDatabase.h"
+#import "MTDatabaseConnection.h"
 
 #import "MADNavigationBarTitleView.h"
+#import "NSError+Constructors.h"
+#import "MTKeyChain.h"
 
 NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
 
@@ -150,12 +153,22 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                                                                         object: schemaField];
             __weak MTViewControllerBarcode *weakself = self;
             [querySampleDataField database].delegate = self;
-            [self setQuery:querySampleDataField];
-            [[self query] performQuery:^(BOOL success, NSError *error) {
+            self.query = querySampleDataField;
+            [self.query performQuery:^(BOOL success, NSError *error) {
+                __strong MTViewControllerBarcode *strongself = weakself;
                 if (success) {
-                    NSArray *allObjects = [[weakself dataTableSampleData] allObjects];
+                    NSArray *allObjects = [[strongself dataTableSampleData] allObjects];
                     [optionsViewController setSampleBarcodeData:allObjects];
                     [[optionsViewController tableView] reloadData];
+                } else {
+                    __weak MTViewControllerBarcode *weakself2 = strongself;
+                    [NSError presentError: error
+                         onViewController: strongself
+                               completion:^(BOOL success) {
+                                   NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                                   [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself2];
+                               }];
+                    
                 }
             }];
         }
@@ -166,12 +179,23 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                                                                         object: schemaField];
             __weak MTViewControllerBarcode *weakself = self;
             [querySampleDataField database].delegate = self;
-            [self setQuery2:querySampleDataField];
-            [[self query2] performQuery:^(BOOL success, NSError *error) {
+            self.query2 = querySampleDataField;
+            [self.query2 performQuery:^(BOOL success, NSError *error) {
+                __strong MTViewControllerBarcode *strongself = weakself;
                 if (success) {
-                    NSArray *allObjects = [[weakself dataTableSampleData2] allObjects];
+                    NSArray *allObjects = [strongself.dataTableSampleData2 allObjects];
                     [optionsViewController setSampleBarcodeData2dComponent:allObjects];
                     [[optionsViewController tableView] reloadData];
+                } else {
+                    __weak MTViewControllerBarcode *weakself2 = strongself;
+                    [NSError presentError: error
+                         onViewController: strongself
+                               completion:^(BOOL success) {
+                                   __strong MTViewControllerBarcode *strongself2 = weakself2;
+                                   NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                                   [[MTKeyChain sharedObject] deleteKey:key usingViewController:strongself2];
+                               }];
+                    
                 }
             }];
         }

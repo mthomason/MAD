@@ -96,50 +96,11 @@
             }
             
         } else {
-            if (error.code != MTKeyErrorUserCanceled) {
-                [self performSelectorOnMainThread: @selector(removeCredentalsBecauseOfError:)
-                                       withObject: error waitUntilDone: NO];
-            }
             completion(NO, error);
             
         }
     }];
     
-    /*
-    
-    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        if (success) {
-            
-            [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-                MysqlConnection *conn = dbconn;
-                if (conn && error == nil) {
-                    @autoreleasepool {
-                        MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                        myFetch.delegate = self;
-                        [myFetch performQuery: query
-                                 onConnection: conn];
-                        completion(YES, nil);
-                    }
-                    
-                } else {
-
-                    [self performSelectorOnMainThread: @selector(removeCredentalsBecauseOfError:)
-                                           withObject: error waitUntilDone: NO];
-                    completion(NO, error);
-                    
-                }
-            }];
-
-        } else {
-            NSString *title = NSLocalizedString(@"Notice", @"Notice");
-            NSString *failureReason = NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.");
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title,
-                                        NSLocalizedFailureReasonErrorKey : failureReason};
-            NSError *error = [NSError errorWithDomain:@"MTDatabase" code:43421 userInfo:errorInfo];
-            completion(NO, error);
-            
-        }
-    }];*/
 }
 
 + (NSError *)errorCouldNotGetCredientals {
@@ -207,8 +168,6 @@
             }
             completion(successConnection, fetchError, results);
         } else {
-            SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-            [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
             completion(NO, error, nil);
         }
     }];
@@ -275,6 +234,7 @@
                 MysqlConnection *conn = dbconn;
                 BOOL successConnection = conn != nil;
                 NSMutableDictionary *resultsDictionary = nil;
+                NSError *resultError = nil;
                 if (successConnection) {
                     
                     
@@ -317,17 +277,14 @@
                         }
                     }
                 } else {
-                    SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                    NSError *resultError = nil;
                     if (error == nil) {
                         resultError = errorShowColumns == nil ? errorColumnMetaData : errorShowColumns;
                     } else {
                         resultError = error;
                     }
-                    [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:resultError waitUntilDone:NO];
                 }
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    completion(successConnection, error, [resultsDictionary allValues]);
+                    completion(successConnection, resultError, [resultsDictionary allValues]);
                 });
             });
             

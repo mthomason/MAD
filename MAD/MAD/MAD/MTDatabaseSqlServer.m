@@ -304,7 +304,9 @@ NSString * const MADNotificationError           = @"MADNotificationError";
                     } else {
                         NSString *message = @"No Connection";
                         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:24 userInfo:errorInfo];
+                        error = [NSError errorWithDomain: @"MTDatabaseTds"
+                                                    code: 24
+                                                userInfo: errorInfo];
                     }
                     
                     
@@ -519,8 +521,8 @@ NSString * const MADNotificationError           = @"MADNotificationError";
                      completion:^(id dbconn, BOOL success, NSError *error) {
         
         if (success) {
-            [self runQuery:query onProcess:dbconn];
-            completion(YES, nil);
+            NSError *error = [self runQuery:query onProcess:dbconn];
+            completion(error == nil, error);
             
         } else {
             completion(NO, error);
@@ -529,15 +531,15 @@ NSString * const MADNotificationError           = @"MADNotificationError";
     }];
 }
 
-- (void)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
+- (NSError *)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
     __block MTDataTable *datatable = [self.delegate dataTableForQuery:query];
+    __block NSError *error = nil;
     
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         
-        NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
         
         if ([sql length] > 0 && error == nil) {
@@ -1432,6 +1434,7 @@ NSString * const MADNotificationError           = @"MADNotificationError";
     
     dispatch_semaphore_wait(semaphoreRunQuery, DISPATCH_TIME_FOREVER);
     
+    return error;
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
@@ -1547,20 +1550,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             
             if (error) {
                 [self.errors insertObject:error atIndex:0];
-                //SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                //[self performSelectorOnMainThread: removeCredentalsBecauseOfError
-                //                       withObject: error
-                //                    waitUntilDone: NO];
             } else {
                 dbwrap = [[MTDatabaseProcessSqlServer alloc] initWithProcess:dbconn];
             }
             
-
             completion(dbwrap, error == nil, error);
-            
         } else {
-            SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-            [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
             completion(nil, NO, error);
         }
 

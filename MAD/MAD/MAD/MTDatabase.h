@@ -85,7 +85,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection
                          completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion;
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion;
-- (void)removeCredentalsBecauseOfError:(NSError *)error;
 
 - (BOOL)cleanupBulkInsert;
 

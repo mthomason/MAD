@@ -142,9 +142,10 @@ static MTKeyChain *sharedSingleton = nil;
     
 }
 
-- (void)deleteKey:(NSString *)key {
-    self.credentialsKey = key;
+- (void)deleteKey:(NSString *)key usingViewController:(UIViewController *)viewController {
 
+    self.credentialsKey = key;
+    
     NSString *title = NSLocalizedString(@"Remove Saved Password", @"Remove Saved Password");
     NSString *message = NSLocalizedString(@"Should we remove the password saved in your keychain?", @"Should we remove the password saved in your keychain?");
     
@@ -165,21 +166,25 @@ static MTKeyChain *sharedSingleton = nil;
                                                          handler: ^(UIAlertAction *action) {
                                                              
                                                              [weakself deleteSavedPassword];
-
+                                                             
                                                          }];
     
     [alertController addAction:actionKk];
     [alertController addAction:actionCancel];
-
+    
     [NSThread safeSwitchToMainThread:^{
-        UIViewController *topViewController = [UIApplication topViewController];
+        UIViewController *topViewController = viewController == nil ? [UIApplication topViewController] : viewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: alertController
                                          animated: YES
                                        completion: nil];
     }];
+    
+    
+}
 
-
+- (void)deleteKey:(NSString *)key {
+    [self deleteKey:key usingViewController:nil];
 }
 
 - (void)deleteSavedPassword {
@@ -194,7 +199,6 @@ static MTKeyChain *sharedSingleton = nil;
     if (deleteStatus == errSecSuccess) {
         
         deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
-        
         
     }
     

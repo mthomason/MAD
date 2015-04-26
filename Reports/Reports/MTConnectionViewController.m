@@ -251,6 +251,9 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                                       dispatch_sync(dispatch_get_main_queue(), ^{
                                           
+                                          NSString *key = [NSString stringWithString: dbDetails.connectionString];
+                                          [[MTKeyChain sharedObject] deleteKey:key];
+                                          
                                           [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
                                               
                                               blockSender.enabled = YES;
@@ -274,6 +277,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
                                               });
                                           }];
+                                          
                                       });
                                   });
                               }

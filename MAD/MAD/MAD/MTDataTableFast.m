@@ -538,6 +538,7 @@
     return [MTQuery queryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
 }
 
+// FIXME: Return error handler... remove credentals
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
 
     NSDictionary *result = nil;
@@ -593,6 +594,7 @@
     return whereClause;
 }
 
+// FIXME: Return error handler... remove credentals
 - (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
 
     [self initalizeGroupKeys];
@@ -637,6 +639,7 @@
     return results;
 }
 
+// FIXME: Return error handler... remove credentals
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
     
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
@@ -864,6 +867,7 @@
     return [self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType];
 }
 
+// FIXME: Return error handler... remove credentals
 - (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
                      function:(MTAggregateFunctionType)function
                      fieldKey:(NSString *)fieldKey

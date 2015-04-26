@@ -49,6 +49,9 @@
 
 #import "MADModelNavigationController.h"
 
+#import "MTKeyChain.h"
+#import "MTDatabaseConnection.h"
+
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
@@ -771,7 +774,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         self.isRefreshing = YES;
         [self setDisplayInactive];
         
-        MTDatabase *database = [self.document.mainQuery database];
+        MTDatabase *database = self.document.mainDatabase;
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         
@@ -780,19 +783,27 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
-        
         __weak __block MADViewerController *weakself = self;
         [weakself.document refresh:^(BOOL success, NSError *error) {
-
-            if (!success) {
+            __strong MADViewerController *strongself = weakself;
+            
+            if (success) {
                 
-                [NSError presentError: error
-                     onViewController: weakself
-                           completion: NULL];
-
-            } else {
                 NSDate *lastD = [NSDate date];
-                [weakself setLastCacheDate:lastD];
+                strongself.lastCacheDate = lastD;
+                
+            } else {
+                
+                __weak MADViewerController *weakself2 = strongself;
+                [NSError presentError: error
+                     onViewController: strongself
+                           completion:^(BOOL success) {
+                               __strong MADViewerController *strongself2 = weakself2;
+                               [[MTKeyChain sharedObject] deleteKey: strongself2.document.mainDatabase.databaseConnection.connectionString
+                                                usingViewController: strongself2];
+                           }];
+                
+
             }
             
             [notificationCenter removeObserver: weakself
@@ -807,14 +818,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
-    NSDictionary *parameters = [sender userInfo];
-    NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
+    NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
     [self updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
 }
 
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
-    NSDictionary *parameters = [sender userInfo];
-    NSNumber *rowNumber = parameters[MTDatabaseNumberOfRowsReadKey];
+    NSNumber *rowNumber = sender.userInfo[MTDatabaseNumberOfRowsReadKey];
     [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 

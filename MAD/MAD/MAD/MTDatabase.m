@@ -171,15 +171,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
                 [NSString stringWithFormat: @"\nLIMIT %ld", (long)limit] : @"";
 }
 
-// FIXME: Please make this MVC... shouldn't have view controller here
-- (void)removeCredentalsBecauseOfError:(NSError *)error {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [NSError presentError: error onViewController: nil completion:^(BOOL success) {
-            [[MTKeyChain sharedObject] deleteKey:self.databaseConnection.connectionString];
-        }];
-    });
-}
-
 - (NSString *)sqlAggregateFunctionLength {
     return @"LENGTH";
 }

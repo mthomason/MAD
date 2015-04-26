@@ -375,107 +375,120 @@
     
     [database connectWithCredentals:database.databaseConnection completion:^(id dbconnection, BOOL success, NSError *connectionError) {
         
-        __weak id weakdbconnection = dbconnection;
-        __weak MTDatabase *weakDatabase2 = weakDatabase;
-        
-        __block NSMutableDictionary *tablesAndFields = [[NSMutableDictionary alloc] init];
-        __block NSMutableArray *tables = [NSMutableArray array];
-        __block BOOL gotit = YES;
-        __block NSError *gotitError = nil;
-        
-        dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
-        dispatch_queue_t queueSave = dispatch_queue_create("com.everydayapps.mad.queue.save", DISPATCH_QUEUE_SERIAL);
-        dispatch_queue_t queueMain = dispatch_get_main_queue();
-        dispatch_set_target_queue(queueTables, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-        dispatch_set_target_queue(queueSave, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        
-        dispatch_async(queueTables, ^{
+        if (success) {
             
-            __weak MTDatabase *weakDatabase3 = weakDatabase2;
-            [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
+            __weak id weakdbconnection = dbconnection;
+            __weak MTDatabase *weakDatabase2 = weakDatabase;
+            
+            __block NSMutableDictionary *tablesAndFields = [[NSMutableDictionary alloc] init];
+            __block NSMutableArray *tables = [NSMutableArray array];
+            __block BOOL gotit = YES;
+            __block NSError *gotitError = nil;
+            
+            dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
+            dispatch_queue_t queueSave = dispatch_queue_create("com.everydayapps.mad.queue.save", DISPATCH_QUEUE_SERIAL);
+            dispatch_queue_t queueMain = dispatch_get_main_queue();
+            dispatch_set_target_queue(queueTables, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+            dispatch_set_target_queue(queueSave, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+            
+            dispatch_async(queueTables, ^{
                 
-                NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
-
-                if (success) {
-                    [tables setArray:resultTables];
-                    NSInteger counter = 0, numberOfTables = [tables count];
+                __weak MTDatabase *weakDatabase3 = weakDatabase2;
+                [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
                     
-                    for (MTDatabaseTable *databaseTable in tables) {
-                        @autoreleasepool {
-                            NSString *name = [databaseTable name];
-                            __weak NSString *weakname = name;
-                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                dispatch_sync(queueMain, ^{
-                                    status(weakname, (CGFloat)(counter + 1) / numberOfTables);
-                                });
-                            });
-                            __block NSMutableArray *fields = [[NSMutableArray alloc] init];
-                            [weakDatabase3 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
-                                if (success && error == nil) {
-                                    [fields setArray:results];
-                                    gotit = success; gotitError = error;
-                                } else {
-                                    if (error) {
-                                        [errorContainer addError:error];
-                                    }
-                                }
-                                
-                            }];
-                            tablesAndFields[[databaseTable name]] = fields;
-                        }
-                        counter++;
-                    }
+                    NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
                     
-                    gotit = success; gotitError = error;
-                    dispatch_sync(queueMain, ^{
+                    if (success) {
+                        [tables setArray:resultTables];
+                        NSInteger counter = 0, numberOfTables = [tables count];
                         
-                        for (MTDatabaseTable *table in tables) {
+                        for (MTDatabaseTable *databaseTable in tables) {
+                            @autoreleasepool {
+                                NSString *name = [databaseTable name];
+                                __weak NSString *weakname = name;
+                                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                                    dispatch_sync(queueMain, ^{
+                                        status(weakname, (CGFloat)(counter + 1) / numberOfTables);
+                                    });
+                                });
+                                __block NSMutableArray *fields = [[NSMutableArray alloc] init];
+                                [weakDatabase3 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
+                                    if (success && error == nil) {
+                                        [fields setArray:results];
+                                        gotit = success; gotitError = error;
+                                    } else {
+                                        if (error) {
+                                            [errorContainer addError:error];
+                                        }
+                                    }
+                                    
+                                }];
+                                tablesAndFields[[databaseTable name]] = fields;
+                            }
+                            counter++;
+                        }
+                        
+                        gotit = success; gotitError = error;
+                        dispatch_sync(queueMain, ^{
                             
-                            NSString *tableName = [table name];
-                            NSArray *fields = tablesAndFields[tableName];
-                            
-                            if ([fields count]) {
-                                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext
-                                                                                                                                       andTable: table];
-                                [[rptqDocument defaultDatabase] addHasTablesObject: rptqTable];
+                            for (MTDatabaseTable *table in tables) {
                                 
-                                NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:[fields count]];
-                                for (MTDatabaseField *field in fields) {
-                                    RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
-                                                                                                                                             andField: field];
-                                    [schemaFields addObject:schemaField];
+                                NSString *tableName = [table name];
+                                NSArray *fields = tablesAndFields[tableName];
+                                
+                                if ([fields count]) {
+                                    RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext
+                                                                                                                                           andTable: table];
+                                    [[rptqDocument defaultDatabase] addHasTablesObject: rptqTable];
+                                    
+                                    NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:[fields count]];
+                                    for (MTDatabaseField *field in fields) {
+                                        RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
+                                                                                                                                                 andField: field];
+                                        [schemaFields addObject:schemaField];
+                                    }
+                                    
+                                    NSOrderedSet *hasFields = [[NSOrderedSet alloc] initWithArray:schemaFields];
+                                    [rptqTable setHasFields:hasFields];
+                                    
+                                    NSError *saveError = nil;
+                                    [[rptqTable managedObjectContext] save:&saveError];
+                                } else {
+                                    NSString *failure = [NSString stringWithFormat:@"Table %@ not Added", tableName];
+                                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : @"Fields not found.",
+                                                               NSLocalizedFailureReasonErrorKey : failure};
+                                    NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:userInfo];
+                                    [errorContainer addError:error];
                                 }
                                 
-                                NSOrderedSet *hasFields = [[NSOrderedSet alloc] initWithArray:schemaFields];
-                                [rptqTable setHasFields:hasFields];
-                                
-                                NSError *saveError = nil;
-                                [[rptqTable managedObjectContext] save:&saveError];
-                            } else {
-                                NSString *failure = [NSString stringWithFormat:@"Table %@ not Added", tableName];
-                                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : @"Fields not found.",
-                                                           NSLocalizedFailureReasonErrorKey : failure};
-                                NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:userInfo];
-                                [errorContainer addError:error];
                             }
                             
-                        }
+                            
+                            NSError *saveError = nil;
+                            [managedObjectContext save:&saveError];
+                            NSAssert(saveError == nil, @"%@", saveError);
+                            [weakDatabase3 closeProcess:weakdbconnection];
+                            completion(gotit, errorContainer);
+                        });
                         
-                        
-                        NSError *saveError = nil;
-                        [managedObjectContext save:&saveError];
-                        NSAssert(saveError == nil, @"%@", saveError);
-                        [weakDatabase3 closeProcess:weakdbconnection];
-                        completion(gotit, errorContainer);
-                    });
-                    
-                    
-                }
-            }];
+                    } else {
+                        MTErrorContainer *errorContainer = [[MTErrorContainer alloc] init];
+                        [errorContainer addError:error];
+                        completion(NO, errorContainer);
+                    }
+                }];
+                
+            });
+
             
-        });
+        } else {
+            MTErrorContainer *errorContainer = [[MTErrorContainer alloc] init];
+            [errorContainer addError:connectionError];
+            completion(NO, errorContainer);
+        }
+        
     }];
 }
 
