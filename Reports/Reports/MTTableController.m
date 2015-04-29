@@ -132,10 +132,10 @@
                                                     waitUntilDone: NO];
             
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
-            if (error) {
 
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
+            if (error) {
+            
+                if ([NSThread isMainThread]) {
                     __strong MTTableController *strongself3 = weakSelf3;
                     __strong MTTableController *weakself4 = strongself3;
                     
@@ -146,7 +146,24 @@
                                    [[MTKeyChain sharedObject] deleteKey:key];
                                }];
                     
-                });
+                } else {
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        __strong MTTableController *strongself3 = weakSelf3;
+                        __strong MTTableController *weakself4 = strongself3;
+                        
+                        [NSError presentError: error
+                             onViewController: strongself3
+                                   completion:^(BOOL success) {
+                                       NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                                       [[MTKeyChain sharedObject] deleteKey:key];
+                                   }];
+                        
+                    });
+                    
+                }
+                
             }
             [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
             

@@ -2125,63 +2125,45 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                     forKey: selectedItem];
     }
     
-    __block NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
-
+    NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
+    
     [urlsToDeleteByIndexPath enumerateKeysAndObjectsUsingBlock:^(id indexPath, id url, BOOL *stop) {
-        
-        // Remove Cache
-        [[NSFileManager defaultManager] removeCachedFileForDocumentUrl: url
-                                                       groupIdentifier: MADIdentifierGroup];
-
-        // Remove file
-        __weak MADOpenFileViewController *weakself = self;
-        [MACloudManager deleteDocumentAtURL:url withCompletionHandler:^(BOOL success, NSError *error) {
-            __strong MADOpenFileViewController *strongself = weakself;
-            
-            if (success) {
-                // Remove from UI
-                [deletedUrlsAndKeys setObject:url forKey:indexPath];
-            }
-
-            NSMutableIndexSet *indexSetCloud = [[NSMutableIndexSet alloc] init];
-            NSMutableIndexSet *indexSetLocal = [[NSMutableIndexSet alloc] init];
-            for (NSIndexPath *path in deletedUrlsAndKeys.allKeys) {
-                switch (path.section) {
-                        
-                    case 0:
-                        [indexSetLocal addIndex:path.item];
-                        break;
-                        
-                    case 1:
-                        [indexSetCloud addIndex:path.item];
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-            
-
-            __weak MADOpenFileViewController *weakself2 = strongself;
-            [weakself2.collectionView performBatchUpdates:^{
-                [weakself2.documentsLocal removeObjectsAtIndexes:indexSetLocal];
-                [weakself2.documentsCloud removeObjectsAtIndexes:indexSetCloud];
-                [weakself2.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
-            } completion:^(BOOL finished) {
-                [[MACloudManager sharedManager] reloadCacheLocal:weakself2.searchBar.text];
-                [[MACloudManager sharedManager] reloadCacheCloud:weakself2.searchBar.text];
-                weakself2.updatingEnabled = YES;
-            }];
-            
-            [self selectionsUpdated];
-
-            
-
-        }];
-        
-        
-        
+        [MACloudManager deleteDocumentAtURL:url withCompletionHandler:^(BOOL success, NSError *error) { }];
+        [deletedUrlsAndKeys setObject:url forKey:indexPath];
     }];
+    
+    NSMutableIndexSet *indexSetCloud = [[NSMutableIndexSet alloc] init];
+    NSMutableIndexSet *indexSetLocal = [[NSMutableIndexSet alloc] init];
+    for (NSIndexPath *path in deletedUrlsAndKeys.allKeys) {
+        switch (path.section) {
+                
+            case 0:
+                [indexSetLocal addIndex:path.item];
+                break;
+                
+            case 1:
+                [indexSetCloud addIndex:path.item];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    __weak MADOpenFileViewController *weakself = self;
+    [self.collectionView performBatchUpdates:^{
+        __strong MADOpenFileViewController *strongself = weakself;
+        [strongself.documentsLocal removeObjectsAtIndexes:indexSetLocal];
+        [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
+        [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
+    } completion:^(BOOL finished) {
+        __strong MADOpenFileViewController *strongself2 = weakself;
+        [[MACloudManager sharedManager] reloadCacheLocal:strongself2.searchBar.text];
+        [[MACloudManager sharedManager] reloadCacheCloud:strongself2.searchBar.text];
+        strongself2.updatingEnabled = YES;
+    }];
+    
+    [self selectionsUpdated];
     
 }
 

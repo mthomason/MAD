@@ -35,7 +35,6 @@
     if (self) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddRow expects NSDictionary.");
-        
         NSNumber *keyMTQueryCacheAddRowUrl = @(MTQueryCacheAddRowUrl);
         NSNumber *keyMTQueryCacheAddRowData = @(MTQueryCacheAddRowData);
         NSNumber *keyMTQueryCacheAddRowColumns = @(MTQueryCacheAddRowColumns);

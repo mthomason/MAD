@@ -543,7 +543,9 @@ static MACloudManager *sharedSingleton;
     
     NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL: url
                                                                          options: NSFileCoordinatorWritingForDeleting];
-    [fileCoordinator coordinateAccessWithIntents:@[writingIntent] queue:[self queue] byAccessor:^(NSError *accessError) {
+    [fileCoordinator coordinateAccessWithIntents:@[writingIntent]
+                                           queue:[self queue]
+                                      byAccessor:^(NSError *accessError) {
         if (accessError) {
             if (completionHandler) {
                 completionHandler(NO, accessError);
