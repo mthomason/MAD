@@ -430,75 +430,7 @@ static MACloudManager *sharedSingleton;
     return success;
 }
 
-
-- (BOOL)duplicateUrl: (NSURL *)urlToDupe
-          completion: (void (^)(BOOL, NSURL *, NSError *))completion {
-
-    __block BOOL success = NO;
-    // FIXME: Make to work for ubiquity urls
-    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
-    NSString *lastPathComponent = [urlToDupe lastPathComponent];
-    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
-    NSString *extention = [lastPathComponent pathExtension];
-    NSURL *uniqueUrl = [MACloudManager uniqueUrlInDirectory:directory
-                                   withDesiredHandle:handle
-                                        andExtension:extention];
-    
-    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-
-    NSError *error = nil;
-    [coordinator coordinateReadingItemAtURL: urlToDupe
-                                    options: NSFileCoordinatorReadingForUploading
-                           writingItemAtURL: uniqueUrl
-                                    options: NSFileCoordinatorWritingForMoving
-                                      error: &error
-                                 byAccessor: ^(NSURL *source, NSURL *destinaion) {
-                                     
-                                     NSError *errorCopy = nil;
-                                     [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
-                                     
-                                     success = [[NSFileManager defaultManager] copyItemAtURL: source
-                                                                                            toURL: destinaion
-                                                                                            error: &errorCopy];
-                                     NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
-                                     
-                                     if (success) {
-                                         [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
-                                     }
-                                     completion(success, uniqueUrl, error);
-                                 }];
-    return success;
- }
-
-/*+ (void)deleteDocument:(NSURL *)fileUrl completion:(void (^)(BOOL, NSError *))completion {
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        
-        NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-        [fileCoordinator coordinateWritingItemAtURL: fileUrl
-                                            options: NSFileCoordinatorWritingForDeleting
-                                              error: nil
-                                         byAccessor: ^(NSURL* writingURL) {
-            NSError *error = nil;
-            NSFileManager* fileManager = [[NSFileManager alloc] init];
-            if ([fileManager fileExistsAtPath:writingURL.path]) {
-                [fileManager removeItemAtURL:writingURL error:&error];
-                BOOL success = error ? NO : YES;
-                if (completion) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        completion(success, error);
-                    });
-                }
-            } else if (completion) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    completion(YES, nil);
-                });
-            }
-        }];
-    });
-}*/
-
-- (BOOL)duplicateUrl:(NSURL *)urlToDupe {
++ (BOOL)duplicateUrl:(NSURL *)urlToDupe {
     __block BOOL success = NO;
     
     // FIXME: Make to work for ubiquity urls
@@ -511,9 +443,9 @@ static MACloudManager *sharedSingleton;
                                       andExtension:extention];
     
     NSError *error = nil;
-    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] init];
     [coordinator coordinateReadingItemAtURL: urlToDupe
-                                    options: NSFileCoordinatorReadingForUploading
+                                    options: NSFileCoordinatorReadingWithoutChanges
                            writingItemAtURL: uniqueUrl
                                     options: NSFileCoordinatorWritingForMoving
                                       error: &error
@@ -533,6 +465,50 @@ static MACloudManager *sharedSingleton;
     return success;
 }
 
+- (void)deleteCloudDocumentAtURL:(NSURL *)url {
+    NSUInteger index = [self.documentCacheCloudMetaDataItems indexOfObjectPassingTest:^BOOL(MADMetaData *metadata, NSUInteger idx, BOOL *stop) {
+        return [metadata.url isEqual:url];
+    }];
+    if (index < self.documentCacheCloudMetaDataItems.count) {
+        [self.documentCacheCloudMetaDataItems removeObjectAtIndex:index];
+    }
+    [MACloudManager deleteDocumentAtURL:url];
+}
+
+- (void)deleteLocalDocumentAtURL:(NSURL *)url {
+    [self.documentCacheLocalUrls removeObjectIdenticalTo:url];
+    [MACloudManager deleteDocumentAtURL:url];
+}
+
++ (BOOL)deleteDocumentAtURL:(NSURL *)url {
+    
+    __block BOOL success = NO;
+    NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+    
+    // `url` may be a security scoped resource.
+    BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
+    
+    NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL: url
+                                                                         options: NSFileCoordinatorWritingForDeleting];
+    
+    [fileCoordinator coordinateAccessWithIntents:@[writingIntent]
+                                           queue: [self queue]
+                                      byAccessor:^(NSError *accessError) {
+                                          if (!accessError) {
+                                              
+                                              NSError *error;
+                                              NSFileManager *fileManager = [[NSFileManager alloc] init];
+                                              success = [fileManager removeItemAtURL:writingIntent.URL error:&error];
+                                              
+                                              if (successfulSecurityScopedResourceAccess) {
+                                                  [url stopAccessingSecurityScopedResource];
+                                              }
+                                          }
+                                      }];
+    return success;
+}
+
+
 + (void)deleteDocumentAtURL:(NSURL *)url
       withCompletionHandler:(void (^)(BOOL success, NSError *error))completionHandler {
     
@@ -546,29 +522,31 @@ static MACloudManager *sharedSingleton;
     [fileCoordinator coordinateAccessWithIntents:@[writingIntent]
                                            queue:[self queue]
                                       byAccessor:^(NSError *accessError) {
-        if (accessError) {
-            if (completionHandler) {
-                completionHandler(NO, accessError);
-            }
-            
-            return;
-        }
-        
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        
-        NSError *error;
-        
-        BOOL success = [fileManager removeItemAtURL:writingIntent.URL error:&error];
-        
-        if (successfulSecurityScopedResourceAccess) {
-            [url stopAccessingSecurityScopedResource];
-        }
-        
-        if (completionHandler) {
-            completionHandler(success, error);
-        }
-    }];
+                                          
+                                          if (accessError) {
+                                              if (completionHandler) {
+                                                  completionHandler(NO, accessError);
+                                              }
+                                              
+                                              return;
+                                          }
+                                          
+                                          NSFileManager *fileManager = [[NSFileManager alloc] init];
+                                          
+                                          NSError *error;
+                                          
+                                          BOOL success = [fileManager removeItemAtURL:writingIntent.URL error:&error];
+                                          
+                                          if (successfulSecurityScopedResourceAccess) {
+                                              [url stopAccessingSecurityScopedResource];
+                                          }
+                                          
+                                          if (completionHandler) {
+                                              completionHandler(success, error);
+                                          }
+                                      }];
 }
+
 
 + (NSOperationQueue *)queue {
     static NSOperationQueue *queue;
@@ -580,42 +558,6 @@ static MACloudManager *sharedSingleton;
     
     return queue;
 }
-
-/*
-- (BOOL)deleteDocument:(NSURL *)fileUrl {
-    __block BOOL success = NO;
-    dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        
-    [[NSFileManager defaultManager] removeCachedFileForDocumentUrl: fileUrl
-                                                   groupIdentifier: self.groupId];
-
-    NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-    [fileCoordinator coordinateWritingItemAtURL: fileUrl
-                                        options: NSFileCoordinatorWritingForDeleting
-                                          error: nil
-                                     byAccessor: ^(NSURL* writingURL) {
-                                         NSError *error = nil;
-                                         
-                                         NSFileManager* fileManager = [NSFileManager defaultManager];
-                                         
-                                         if ([fileManager fileExistsAtPath:writingURL.path]) {
-                                             success = [fileManager removeItemAtURL:writingURL error:&error];
-                                             if (success) {
-                                                 [fileCoordinator itemAtURL:<#(NSURL *)#> didMoveToURL:nil]
-                                             }
-                                             success = error ? NO : YES;
-                                         }
-                                         
-                                         dispatch_semaphore_signal(semaphoreDelete);
-                                     }];
-
-    // FIXME: Delete doucment cache.
-    //});
-    dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
-    return success;
-}
-*/
 
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
                           withExtension:(NSString *)extension

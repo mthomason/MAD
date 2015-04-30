@@ -624,6 +624,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+
     [self animateUpdates];
 }
 
@@ -632,7 +635,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     if (self.searchBar.text.length > 0) {
         self.searchBar.text = @"";
-        
+        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+
         [self animateUpdates];
     }
     [searchBar resignFirstResponder];
@@ -1033,7 +1038,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                 [self.collectionView reloadItemsAtIndexPaths: indexPathsUpdated];
             }
         } completion:^(BOOL finished) {
-            
+            //if (finished) {
+            //    [self.collectionView.collectionViewLayout invalidateLayout];
+            //}
         }];
     }
     
@@ -1809,6 +1816,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     } else {
         if (self.searchBar.text.length > 0) {
             self.searchBar.text = @"";
+            
+            [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+            [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+
             [self animateUpdates];
             //[self reloadData];
         }
@@ -2096,12 +2107,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                          handler:^(UIAlertAction *action) {
                                                              
                                                          }];
-    __weak MADOpenFileViewController *weakself = self;
     UIAlertAction *actionDestructive = [UIAlertAction actionWithTitle:titleDestructive
                                                                 style:UIAlertActionStyleDestructive
                                                               handler:^(UIAlertAction *action) {
-                                                                  __strong MADOpenFileViewController *strongself = weakself;
-                                                                  [strongself deleteAction:selectedItems];
+                                                                  [self deleteAction:selectedItems];
                                                               }];
     [alertController addAction:actionCancel];
     [alertController addAction:actionDestructive];
@@ -2115,56 +2124,49 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)deleteAction:(NSArray *)selectedItems {
     self.updatingEnabled = NO;
     
-    NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
+    NSMutableArray *urlsToDeleteLocal = [[NSMutableArray alloc] init];
+    NSMutableArray *urlsToDeleteCloud = [[NSMutableArray alloc] init];
     NSMutableDictionary *urlsToDeleteByIndexPath = [[NSMutableDictionary alloc] init];
     
     for (NSIndexPath *selectedItem in selectedItems) {
         NSURL *documentUrl = [self documentForIndexPath:selectedItem];
-        [urlsToDelete addObject:documentUrl];
-        [urlsToDeleteByIndexPath setObject: documentUrl
-                                    forKey: selectedItem];
-    }
-    
-    NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
-    
-    [urlsToDeleteByIndexPath enumerateKeysAndObjectsUsingBlock:^(id indexPath, id url, BOOL *stop) {
-        [MACloudManager deleteDocumentAtURL:url withCompletionHandler:^(BOOL success, NSError *error) { }];
-        [deletedUrlsAndKeys setObject:url forKey:indexPath];
-    }];
-    
-    NSMutableIndexSet *indexSetCloud = [[NSMutableIndexSet alloc] init];
-    NSMutableIndexSet *indexSetLocal = [[NSMutableIndexSet alloc] init];
-    for (NSIndexPath *path in deletedUrlsAndKeys.allKeys) {
-        switch (path.section) {
-                
+        switch (selectedItem.section) {
             case 0:
-                [indexSetLocal addIndex:path.item];
+                [urlsToDeleteLocal addObject:documentUrl];
                 break;
-                
             case 1:
-                [indexSetCloud addIndex:path.item];
+                [urlsToDeleteCloud addObject:documentUrl];
                 break;
                 
             default:
                 break;
         }
+        [urlsToDeleteByIndexPath setObject: documentUrl
+                                    forKey: selectedItem];
     }
     
-    __weak MADOpenFileViewController *weakself = self;
-    [self.collectionView performBatchUpdates:^{
-        __strong MADOpenFileViewController *strongself = weakself;
-        [strongself.documentsLocal removeObjectsAtIndexes:indexSetLocal];
-        [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
-        [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
-    } completion:^(BOOL finished) {
-        __strong MADOpenFileViewController *strongself2 = weakself;
-        [[MACloudManager sharedManager] reloadCacheLocal:strongself2.searchBar.text];
-        [[MACloudManager sharedManager] reloadCacheCloud:strongself2.searchBar.text];
-        strongself2.updatingEnabled = YES;
-    }];
-    
+    for (NSURL *url in urlsToDeleteLocal) {
+        //[self.documentsLocal removeObjectIdenticalTo:url];
+        [[MACloudManager sharedManager] deleteLocalDocumentAtURL:url];
+    }
+
+    for (NSURL *url in urlsToDeleteCloud) {
+        //[self.documentsCloud removeObjectIdenticalTo:url];
+        [[MACloudManager sharedManager] deleteCloudDocumentAtURL:url];
+    }
+
+    if (urlsToDeleteLocal.count > 0 || urlsToDeleteCloud.count > 0) {
+        
+        [self animateUpdates];
+        
+    } else {
+        
+        self.updatingEnabled = YES;
+        
+    }
+
     [self selectionsUpdated];
-    
+
 }
 
 
@@ -2186,42 +2188,48 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)duplicate:(id)sender {
     self.updatingEnabled = NO;
     
-    NSMutableArray *urls = [NSMutableArray new];
+    NSMutableArray *urlsLocal = [NSMutableArray new];
+    NSMutableArray *urlsCloud = [NSMutableArray new];
     NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
     for (NSIndexPath *path in selectedItems) {
         NSURL *url = [self documentForIndexPath:path];
-        [urls addObject:url];
-        
         switch (path.section) {
-
             case 0:
-                [[MACloudManager sharedManager] duplicateUrl: url];
+                [urlsLocal addObject:url];
                 break;
-
-            case 1: {
-                
-                //Unique Cloud name
-                NSString *maybe = [self uniquieCloudNameForHandle: url.lastPathComponent.stringByDeletingPathExtension];
-                NSURL *toDirectory = [url URLByDeletingLastPathComponent];
-                NSURL *toUrl = [toDirectory URLByAppendingPathComponent:maybe];
-                NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-                [[MACloudManager sharedManager] copyUrl:url toUrl:toUrlWithExtention completion:^(BOOL success, NSURL *url , NSError *error) {
-                    
-                }];
+            case 1:
+                [urlsCloud addObject:url];
                 break;
-            }
-                
             default:
                 break;
         }
     }
     
-    if (urls.count > 0) {
+    for (NSURL *url in urlsCloud) {
+        
+        //Unique Cloud name
+        NSString *maybe = [self uniquieCloudNameForHandle: url.lastPathComponent.stringByDeletingPathExtension];
+        NSURL *toDirectory = [url URLByDeletingLastPathComponent];
+        NSURL *toUrl = [toDirectory URLByAppendingPathComponent:maybe];
+        NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+        [[MACloudManager sharedManager] copyUrl:url toUrl:toUrlWithExtention completion:^(BOOL success, NSURL *url , NSError *error) {
+            
+        }];
+    }
+    
+    for (NSURL *url in urlsLocal) {
+        [MACloudManager duplicateUrl: url];
+    }
+    
+    if (urlsCloud.count > 0 || urlsLocal.count > 0) {
+        
+        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
 
         [self animateUpdates];
         
     } else {
-    
+
         self.updatingEnabled = YES;
 
     }
@@ -2232,10 +2240,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)animateUpdates {
     
     self.updatingEnabled = NO;
-    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-    
-    //NSMutableArray *insertedIndexPaths = [[NSMutableArray alloc] init];
     
     NSArray *updatedLocalUrlsOrdered = [MACloudManager sharedManager].documentCacheLocalUrls;
     NSArray *updatedCloudUrlsOrdered = [MACloudManager sharedManager].documentCacheCloudMetaDataItems;
@@ -2369,19 +2373,20 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
     NSArray *insertedIndexPathsCumulative = [insertedIndexPathsCloud arrayByAddingObjectsFromArray:insertedIndexPathsLocal];
     NSArray *deletedIndexPathsCumulative = [deletedIndexPathsCloud arrayByAddingObjectsFromArray:deletedIndexPathsLocal];
-    
-    __weak MADOpenFileViewController *weakself = self;
-    [self.collectionView performBatchUpdates:^{
-        __strong MADOpenFileViewController *strongself = weakself;
-        [strongself.documentsLocal setArray:updatedLocalUrlsOrdered];
-        [strongself.documentsCloud setArray:updatedCloudUrlsOrdered];
 
-        [strongself.collectionView insertItemsAtIndexPaths:insertedIndexPathsCumulative];
-        [strongself.collectionView deleteItemsAtIndexPaths:deletedIndexPathsCumulative];
+    [self.collectionView performBatchUpdates:^{
+
+        [self.documentsLocal setArray:updatedLocalUrlsOrdered];
+        [self.documentsCloud setArray:updatedCloudUrlsOrdered];
+
+        [self.collectionView insertItemsAtIndexPaths:insertedIndexPathsCumulative];
+        [self.collectionView deleteItemsAtIndexPaths:deletedIndexPathsCumulative];
         
     } completion:^(BOOL finished) {
-        __strong MADOpenFileViewController *strongself = weakself;
-        strongself.updatingEnabled = YES;
+        if (finished) {
+            [self.collectionView.collectionViewLayout invalidateLayout];
+            self.updatingEnabled = YES;
+        }
     }];
 
 }
