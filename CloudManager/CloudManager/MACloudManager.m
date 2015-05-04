@@ -392,7 +392,7 @@ static MACloudManager *sharedSingleton;
                                                                                     attributes: nil
                                                                                          error: &errorCreateNew];
                                          
-                                         NSAssert(errorCreateNew != nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
+                                         NSAssert(errorCreateNew == nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
                                      }];
         NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
@@ -408,7 +408,7 @@ static MACloudManager *sharedSingleton;
     NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
     
     [coordinator coordinateReadingItemAtURL: urlToCopy
-                                    options: NSFileCoordinatorReadingForUploading
+                                    options: NSFileCoordinatorReadingWithoutChanges
                            writingItemAtURL: uniqueUrl
                                     options: NSFileCoordinatorWritingForMoving
                                       error: &error
@@ -420,7 +420,7 @@ static MACloudManager *sharedSingleton;
                                      success = [[NSFileManager defaultManager] copyItemAtURL: source
                                                                                        toURL: destinaion
                                                                                        error: &errorCopy];
-                                     NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                     NSAssert(errorCopy == nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
                                      
                                      if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:destinaion];
@@ -466,7 +466,8 @@ static MACloudManager *sharedSingleton;
 }
 
 - (void)deleteCloudDocumentAtURL:(NSURL *)url {
-    NSUInteger index = [self.documentCacheCloudMetaDataItems indexOfObjectPassingTest:^BOOL(MADMetaData *metadata, NSUInteger idx, BOOL *stop) {
+    NSUInteger index = [self.documentCacheCloudMetaDataItems indexOfObjectPassingTest:^BOOL(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+        MADMetaData *metadata = obj[MADKeyMetadataShort];
         return [metadata.url isEqual:url];
     }];
     if (index < self.documentCacheCloudMetaDataItems.count) {
@@ -480,9 +481,9 @@ static MACloudManager *sharedSingleton;
     [MACloudManager deleteDocumentAtURL:url];
 }
 
-+ (BOOL)deleteDocumentAtURL:(NSURL *)url {
++ (void)deleteDocumentAtURL:(NSURL *)url {
     
-    __block BOOL success = NO;
+//    __block BOOL success = NO;
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     // `url` may be a security scoped resource.
@@ -498,14 +499,13 @@ static MACloudManager *sharedSingleton;
                                               
                                               NSError *error;
                                               NSFileManager *fileManager = [[NSFileManager alloc] init];
-                                              success = [fileManager removeItemAtURL:writingIntent.URL error:&error];
+                                              [fileManager removeItemAtURL:writingIntent.URL error:&error];
                                               
                                               if (successfulSecurityScopedResourceAccess) {
                                                   [url stopAccessingSecurityScopedResource];
                                               }
                                           }
                                       }];
-    return success;
 }
 
 
@@ -740,7 +740,7 @@ static MACloudManager *sharedSingleton;
             break;
         
         default:
-            metatdata = nil;
+            metatdata = nil;    //  This will crash...
             break;
 
     }

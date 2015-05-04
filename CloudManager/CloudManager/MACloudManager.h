@@ -79,7 +79,7 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
           completion: (void (^)(BOOL, NSError *))completion;
 
 + (BOOL)duplicateUrl:(NSURL *)urlToDupe;
-- (BOOL)deleteDocumentAtURL:(NSURL *)url;
+- (void)deleteDocumentAtURL:(NSURL *)url;
 + (void)deleteDocumentAtURL:(NSURL *)url
       withCompletionHandler:(void (^)(BOOL success, NSError *error))completionHandler;
 
