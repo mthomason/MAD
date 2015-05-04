@@ -67,7 +67,6 @@ NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpen
 NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
-NSString * const MADNotificationReloadSectionLocal              = @"MADNotificationReloadSectionLocal";
 
 NSString * const MADPredicateFormatDuplcate                     = @"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@";
 
@@ -192,10 +191,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                     name: MADNotificationCloudActivityCompleted
                                                   object: nil];
     
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationReloadSectionLocal
-                                                  object: nil];
-    
     NSString *keyResults = [MADMetadataQueryManager keyResults];
     [[MACloudManager sharedManager].fileLocationManager.metadataQuery removeObserver: self
                                                                           forKeyPath: keyResults];
@@ -309,10 +304,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reloadSectionLocal)
-                                                 name: MADNotificationReloadSectionLocal
-                                               object: nil];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleContentSizeCategoryDidChangeNotification:)
@@ -977,12 +968,12 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 #pragma mark - Custom Initalization
 
 - (void)addActionItemToToolbar:(BOOL)animated {
-    if ([self.toolbarItems containsObject:[self barButtonItemAction]] == NO) {
-        NSMutableArray *toolbarButtons = [self.toolbarItems mutableCopy];
-        [toolbarButtons insertObject:[self barButtonItemAction] atIndex:1];
+    if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
+        NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
+        [toolbarButtons insertObject: self.barButtonItemAction
+                             atIndex: 1];
         [self setToolbarItems:toolbarButtons animated:animated];
     }
-
 }
 
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
@@ -990,17 +981,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
     return [self documentForIndexPath:indexPath];
 
-}
-
-
-- (void)reloadSectionLocal {
-    if (self.isUpdatingEnabled) {
-        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-        [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
-        
-        NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
-        [self.collectionView reloadSections:local];
-    }
 }
 
 - (void)reloadSectionCloud {
@@ -1019,9 +999,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSArray *indexPathsInserted = [self indexSetToIndexPaths:inserts section:1];
     NSArray *indexPathsUpdated = [self indexSetToIndexPaths:updates section:1];
     NSArray *indexPathsRemoved = [self indexSetToIndexPaths:deletes section:1];
-    if (indexPathsUpdated.count > 0 ||
-        indexPathsInserted.count > 0 ||
-        indexPathsRemoved.count > 0) {
+    if (self.updatingEnabled && (indexPathsUpdated.count > 0 ||
+                                 indexPathsInserted.count > 0 ||
+                                 indexPathsRemoved.count > 0)) {
+        
         [self.collectionView performBatchUpdates:^{
 
             [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
@@ -1037,6 +1018,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             if (indexPathsUpdated.count > 0) {
                 [self.collectionView reloadItemsAtIndexPaths: indexPathsUpdated];
             }
+            
         } completion:^(BOOL finished) {
             //if (finished) {
             //    [self.collectionView.collectionViewLayout invalidateLayout];
@@ -1575,6 +1557,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 #pragma mark - Misc
 
+- (NSArray *)defaultPassthoughViews {
+    return @[self.navigationController.navigationBar, self.navigationController.toolbar];
+}
+
 #pragma mark Edit Mode
 
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
@@ -1942,13 +1928,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self selectionsUpdated];
 }
 
-- (void)addStandardPassthoughViewsToController:(UIPopoverPresentationController *)controller {
-    NSMutableSet *passthrough = [NSMutableSet setWithArray: controller.passthroughViews];
-    [passthrough addObject:self.navigationController.navigationBar];
-    [passthrough addObject:self.navigationController.toolbar];
-    controller.passthroughViews = passthrough.allObjects;
-}
-
 - (IBAction)info:(id)sender {
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardInformationTable" bundle:[NSBundle mainBundle]];
@@ -1956,7 +1935,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     infoViewController.modalPresentationStyle = UIModalPresentationPageSheet;
     infoViewController.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-    [self addStandardPassthoughViewsToController:ppc];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
     
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
@@ -1981,8 +1960,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         
         aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-        
-        [self addStandardPassthoughViewsToController:ppc];
+        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
         
         ppc.backgroundColor = [UIColor clearColor];
         ppc.delegate = self;
@@ -2069,8 +2047,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-    
-    [self addStandardPassthoughViewsToController:ppc];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
     
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
@@ -2146,43 +2123,53 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
     
     for (NSURL *url in urlsToDeleteLocal) {
-        //[self.documentsLocal removeObjectIdenticalTo:url];
         [[MACloudManager sharedManager] deleteLocalDocumentAtURL:url];
     }
 
     for (NSURL *url in urlsToDeleteCloud) {
-        //[self.documentsCloud removeObjectIdenticalTo:url];
         [[MACloudManager sharedManager] deleteCloudDocumentAtURL:url];
     }
 
     if (urlsToDeleteLocal.count > 0 || urlsToDeleteCloud.count > 0) {
         
+        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
         [self animateUpdates];
         
     } else {
         
-        self.updatingEnabled = YES;
+        //self.updatingEnabled = YES;
         
     }
 
-    [self selectionsUpdated];
+   // [self selectionsUpdated];
 
 }
 
+- (BOOL)doesNameExistInCloud:(NSString *)name {
+    BOOL nameExist = NO;
+    for (NSDictionary *data in self.documentsCloud) {
+        MADMetaData *metaData = data[MADKeyMetadataShort];
+        if ((nameExist = [metaData.url.lastPathComponent.stringByDeletingPathExtension isEqualToString:name])) {
+            break;
+        }
+    }
+    return nameExist;
+}
 
 - (NSString *)uniquieCloudNameForHandle:(NSString *)handle {
-    NSString *maybe = handle;
-    NSPredicate *predicateMatchesName = [NSPredicate predicateWithFormat:MADPredicateFormatDuplcate, maybe];
-    NSArray *filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
-    
-    NSUInteger ctr = 0;
-    while (filteredArray.count > 0) {
-        maybe = [maybe stringByAppendingFormat:@" %ld", (long)ctr];
-        predicateMatchesName = [NSPredicate predicateWithFormat:MADPredicateFormatDuplcate, maybe];
-        filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
-        ctr++;
+    NSString *uniqueName = nil;
+    BOOL nameExistInCloud = [self doesNameExistInCloud:handle];
+    if (nameExistInCloud) {
+        int ctr = 0;
+        while (nameExistInCloud) {
+            handle = [handle stringByAppendingFormat:@" %d", ctr];
+            nameExistInCloud = [self doesNameExistInCloud:handle];
+            ctr++;
+        }
+    } else {
+        uniqueName = handle;
     }
-    return maybe;
+    return handle;
 }
 
 - (void)duplicate:(id)sender {
@@ -2371,23 +2358,29 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         }
     }
 
+
+    // only animate updates on local... cloud is hanlded elsewhere
     NSArray *insertedIndexPathsCumulative = [insertedIndexPathsCloud arrayByAddingObjectsFromArray:insertedIndexPathsLocal];
     NSArray *deletedIndexPathsCumulative = [deletedIndexPathsCloud arrayByAddingObjectsFromArray:deletedIndexPathsLocal];
-
-    [self.collectionView performBatchUpdates:^{
-
-        [self.documentsLocal setArray:updatedLocalUrlsOrdered];
-        [self.documentsCloud setArray:updatedCloudUrlsOrdered];
-
-        [self.collectionView insertItemsAtIndexPaths:insertedIndexPathsCumulative];
-        [self.collectionView deleteItemsAtIndexPaths:deletedIndexPathsCumulative];
+//    NSArray *insertedIndexPathsCumulative = insertedIndexPathsLocal;
+//    NSArray *deletedIndexPathsCumulative = deletedIndexPathsLocal;
+//    if (updatedLocalUrlsOrdered.count > 0) {
+        [self.collectionView performBatchUpdates:^{
+            
+            [self.documentsLocal setArray:updatedLocalUrlsOrdered];
+                    [self.documentsCloud setArray:updatedCloudUrlsOrdered];
+            
+            [self.collectionView insertItemsAtIndexPaths:insertedIndexPathsCumulative];
+            [self.collectionView deleteItemsAtIndexPaths:deletedIndexPathsCumulative];
+            
+        } completion:^(BOOL finished) {
+            if (finished) {
+                [self.collectionView.collectionViewLayout invalidateLayout];
+                self.updatingEnabled = YES;
+            }
+        }];
         
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [self.collectionView.collectionViewLayout invalidateLayout];
-            self.updatingEnabled = YES;
-        }
-    }];
+//    }
 
 }
 
@@ -2442,17 +2435,23 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                       NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: maybe
                                                                                                                                      withExtension: MADFileExtentionMobleApplicationDocument
                                                                                                                                        inContainer: indexPath.section == 0 ? MACloudManagerSectionLocal : MACloudManagerSectionCloud];
-                                                                      __weak MADOpenFileViewController *weakself2 = strongself;
+                                                                      //__weak MADOpenFileViewController *weakself2 = strongself;
                                                                       [[MACloudManager sharedManager] moveDocument: urlToRename
                                                                                                         toLocation: newUrl
                                                                                                         completion: ^(BOOL success, NSError *error) {
                                                                                                             
-                                                                                                            [weakself2 setRightBarButtonItemActivityIndicatorVisible: NO];
+                                                                                                            [strongself setRightBarButtonItemActivityIndicatorVisible: NO];
                                                                                                             
                                                                                                             switch (indexPath.section) {
                                                                                                                     
                                                                                                                 case 0:
-                                                                                                                    [[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationReloadSectionLocal object:nil];
+                                                                                                                    if (strongself.isUpdatingEnabled) {
+                                                                                                                        [[MACloudManager sharedManager] reloadCacheLocal:strongself.searchBar.text];
+                                                                                                                        [strongself.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
+                                                                                                                        
+                                                                                                                        NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
+                                                                                                                        [strongself.collectionView reloadSections:local];
+                                                                                                                    }
                                                                                                                     break;
                                                                                                                     
                                                                                                                 case 1:

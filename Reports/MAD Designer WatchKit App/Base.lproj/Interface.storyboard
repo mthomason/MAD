@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <scenes>
@@ -35,13 +35,13 @@
                         <separator alignment="left" verticalAlignment="bottom" id="P1T-xb-zkW"/>
                         <group width="1" alignment="left" verticalAlignment="bottom" id="hoK-8Y-zHp">
                             <items>
-                                <button width="44" alignment="left" title="Button" id="Fhm-UU-0Cs">
+                                <button width="44" alignment="left" title="FW" id="Fhm-UU-0Cs">
                                     <color key="titleColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                                 </button>
-                                <button width="44" alignment="left" title="Button" id="EVR-hT-abi">
+                                <button width="44" alignment="left" title="Del" id="EVR-hT-abi">
                                     <color key="titleColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                                 </button>
-                                <button width="44" alignment="left" title="Button" id="q3Z-ua-uUb">
+                                <button width="44" alignment="left" title="Act" id="q3Z-ua-uUb">
                                     <color key="titleColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                                 </button>
                             </items>

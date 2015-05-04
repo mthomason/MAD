@@ -269,12 +269,14 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     for (NSUInteger i=0; i<self.metadataQuery.resultCount; i++) {
         metadataItem = [self.metadataQuery resultAtIndex:i];
         metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
-        NSDictionary *newItem = @{
-                                  MADKeyDisplayNameShort : metaData.displayName,
-                                  MADKeyMetadataShort : metaData,
-                                  MADKeyPathShort : metaData.path
-                                  };
-        [metadataResults addObject:newItem];
+        if (metaData) {
+            NSDictionary *newItem = @{
+                                      MADKeyDisplayNameShort : metaData.displayName,
+                                      MADKeyMetadataShort : metaData,
+                                      MADKeyPathShort : metaData.path
+                                      };
+            [metadataResults addObject:newItem];
+        }
     }
     NSSortDescriptor *sortFileName = [MADMetadataQueryManager sortDisplayName];
     NSArray *sortDescriptors = @[sortFileName];
@@ -295,18 +297,20 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     for (NSMetadataItem *metadataItem in updatedMetadataItemsOrNil) {
 
         metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
-        findObjectByPath = [NSPredicate predicateWithFormat:@"(%@ == %@)", MADKeyPathShort, metaData.path];
-
-        indexOfMetadata = [resultsSorted indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            return [obj[MADKeyPathShort] isEqualToString:metaData.path];
-        }];
-        
-        if (indexOfMetadata != NSNotFound) {
-            [updatedItems addIndex:indexOfMetadata];
+        if (metaData) {
+            findObjectByPath = [NSPredicate predicateWithFormat:@"(%@ == %@)", MADKeyPathShort, metaData.path];
+            
+            indexOfMetadata = [resultsSorted indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                return [obj[MADKeyPathShort] isEqualToString:metaData.path];
+            }];
+            
+            if (indexOfMetadata != NSNotFound) {
+                [updatedItems addIndex:indexOfMetadata];
+            }
+            
+            NSNumber *key = @(metadataItem.hash);
+            [self.results setObject:metaData forKey:key];
         }
-        
-        NSNumber *key = @(metadataItem.hash);
-        [self.results setObject:metaData forKey:key];
     }
     
     // Remove existing meta data
