@@ -153,7 +153,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    self.document = [AppDelegate app].openDocument;
+    self.document = [MTApplicationInstance mainInstance].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 

@@ -46,12 +46,10 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 @property (nonatomic, weak) id <MADCloudManagerProtocolCallbacks> delegate;
 @property (nonatomic, weak) id <MADCloudManagerProtocolAppDetails> delegateApplication;
 
-@property (nonatomic, strong, readonly) NSURL *localCachesDirectory;
-
-@property (nonatomic, strong, readonly) NSURL *localDocumentDirectory;
-
-@property (nonatomic, strong, readonly) NSURL *ubiquitousDocumentsDirectory;
-@property (nonatomic, strong, readonly) NSURL *ubiquityContainer;
+//@property (nonatomic, strong, readonly) NSURL *localCachesDirectory;
+//@property (nonatomic, strong, readonly) NSURL *localDocumentDirectory;
+//@property (nonatomic, strong, readonly) NSURL *ubiquitousDocumentsDirectory;
+//@property (nonatomic, strong, readonly) NSURL *ubiquityContainer;
 
 @property (nonatomic, assign, readonly) BOOL cloudAvailble;
 
@@ -79,9 +77,11 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
           completion: (void (^)(BOOL, NSError *))completion;
 
 + (BOOL)duplicateUrl:(NSURL *)urlToDupe;
-- (void)deleteDocumentAtURL:(NSURL *)url;
++ (void)deleteDocumentAtURL:(NSURL *)url;
 + (void)deleteDocumentAtURL:(NSURL *)url
       withCompletionHandler:(void (^)(BOOL success, NSError *error))completionHandler;
+- (void)deleteCloudDocumentAtURL:(NSURL *)url;
+- (void)deleteLocalDocumentAtURL:(NSURL *)url;
 
 - (BOOL)copyUrl: (NSURL *)urlToCopy
           toUrl: (NSURL *)uniqueUrl
@@ -96,15 +96,11 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 + (NSString *)filenameId:(NSUInteger)tag;
 
 // Managing the cache
-- (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;
 - (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location
                                  inSection:(MACloudManagerSection)section;
 
 - (void)reloadCacheCloud:(NSString *)searchString;
 - (void)reloadCacheLocal:(NSString *)searchString;
-
-- (void)deleteCloudDocumentAtURL:(NSURL *)url;
-- (void)deleteLocalDocumentAtURL:(NSURL *)url;
 
 @end
 

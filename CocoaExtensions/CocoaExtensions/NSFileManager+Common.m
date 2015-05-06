@@ -276,4 +276,29 @@
     return YES;
 }
 
++ (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {
+    
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO) {
+        
+        NSError *error = nil;
+        NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        [coordinator coordinateWritingItemAtURL: url
+                                        options: 0
+                                          error: &error
+                                     byAccessor: ^(NSURL *newURL) {
+                                         
+                                         NSError *errorCreateNew = nil;
+                                         [[NSFileManager defaultManager] createDirectoryAtPath: newURL.path
+                                                                   withIntermediateDirectories: YES
+                                                                                    attributes: nil
+                                                                                         error: &errorCreateNew];
+                                         
+                                         NSAssert(errorCreateNew == nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
+                                     }];
+        NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
+    }
+}
+
+
 @end

@@ -31,13 +31,10 @@ NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     
     <MADFileLocationManagerDelegate>
 
 @property (nonatomic, strong, readwrite) NSURL *ubiquitousDocumentsDirectory;
-
 @property (nonatomic, strong, readwrite) NSURL *ubiquityContainer;
-
 @property (nonatomic, strong, readwrite) NSURL *localDocumentDirectory;
 @property (nonatomic, strong, readwrite) NSURL *localHomeDirectory;
 @property (nonatomic, strong, readwrite) NSURL *localCachesDirectory;
-
 @property (nonatomic, strong, readwrite) id <NSObject, NSCopying, NSCoding> ubiquityIdentityToken;
 
 @property (nonatomic, strong, readwrite) MADMetadataQueryManager *fileLocationManager;
@@ -50,10 +47,6 @@ NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     
 
 @property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheCloudMetaDataItems;
 @property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheLocalUrls;
-
-@property (nonatomic, strong) NSArray       *fileNamesSortedLocal;
-@property (nonatomic, strong) NSArray       *fileNamesSortedCloud;
-@property (nonatomic, strong) NSArray       *fileNamesSortedCombined;
 
 @property (nonatomic, strong, readwrite) NSString *groupId;
 
@@ -79,10 +72,6 @@ static MACloudManager *sharedSingleton;
     
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(documentCacheCloudMetaDataItems)), self.documentCacheCloudMetaDataItems];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(documentCacheLocalUrls)), self.documentCacheLocalUrls];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileNamesSortedLocal)), self.fileNamesSortedLocal];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileNamesSortedCloud)), self.fileNamesSortedCloud];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileNamesSortedCombined)), self.fileNamesSortedCombined];
-    
     
     return debuggingString;
 }
@@ -332,7 +321,7 @@ static MACloudManager *sharedSingleton;
 
 /* Only called on iCloud items. */
 
-- (void)listCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
+- (void)fileCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
                                              removedItems:(NSIndexSet *)removedItems
                                              updatedItems:(NSIndexSet *)updatedItems {
     
@@ -347,9 +336,9 @@ static MACloudManager *sharedSingleton;
         
 }
 
-- (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error { }
+- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error { }
 
-- (void)listCoordinatorDidFailCreatingListAtURL:(NSURL *)URL withError:(NSError *)error { }
+- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error { }
 
 #pragma mark Prompts
 
@@ -392,9 +381,9 @@ static MACloudManager *sharedSingleton;
                                                                                     attributes: nil
                                                                                          error: &errorCreateNew];
                                          
-                                         NSAssert(errorCreateNew == nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
+                                         NSAssert(errorCreateNew, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
                                      }];
-        NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
+        NSAssert(error, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 
@@ -639,15 +628,6 @@ static MACloudManager *sharedSingleton;
 
 }
 
-- (void)reloadDocumentCacheWithSearchString:(NSString *)searchString {
-
-    [self reloadCacheCloud: searchString];
-    [self reloadCacheLocal: searchString];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
-                                                        object: nil];
-}
-
 - (void)reloadCacheCloud:(NSString *)searchString {
     self.documentCacheCloudMetaDataItems.array = [self documentsFilteredBySearchString:searchString];
 }
@@ -655,7 +635,7 @@ static MACloudManager *sharedSingleton;
 - (NSArray *)documentsFilteredBySearchString:(NSString *)searchString {
     NSArray *result;
     if (searchString.length > 0) {
-
+        
         NSPredicate *predicateMetadata = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *metadataWrapper, NSDictionary *bindings) {
             MADMetaData *metadata = metadataWrapper[MADKeyMetadataShort];
             NSRange range = NSMakeRange(0, MIN(searchString.length, metadata.displayName.length));
@@ -672,10 +652,9 @@ static MACloudManager *sharedSingleton;
 
 - (void)reloadCacheLocal:(NSString *)searchString {
     // Setup local cache
-    NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier:self.groupId andExtention:self.fileExtention];
-    
+    NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier: self.groupId
+                                                                                                         andExtention: self.fileExtention];
     NSArray *filteredDocumentCacheLocalUrls;
-    
     if (searchString.length > 0) {
         
         NSPredicate *predicateUrlSearch = [NSPredicate predicateWithBlock:^BOOL(NSURL *url, NSDictionary *bindings) {
@@ -730,11 +709,13 @@ static MACloudManager *sharedSingleton;
     switch (section) {
     
         case MACloudManagerSectionCloud:
+            //NSAssert(self.documentCacheCloudMetaDataItems.count < location, @"Cloud items not loaded.");
             metadataDictionary = self.documentCacheCloudMetaDataItems[location];
             metatdata = metadataDictionary[MADKeyMetadataShort];
             break;
             
         case MACloudManagerSectionLocal:
+            //NSAssert(self.documentCacheLocalUrls.count < location, @"Local items not loaded.");
             item = self.documentCacheLocalUrls[location];
             metatdata = [[MADMetaData alloc] initWithLocalUrl:item];
             break;

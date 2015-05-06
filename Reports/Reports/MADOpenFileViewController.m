@@ -67,6 +67,7 @@ NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpen
 NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
+NSString * const MADNotificationReloadSectionLocal              = @"MADNotificationReloadSectionLocal";
 
 NSString * const MADPredicateFormatDuplcate                     = @"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@";
 
@@ -191,6 +192,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                     name: MADNotificationCloudActivityCompleted
                                                   object: nil];
     
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationReloadSectionLocal
+                                                  object: nil];
+    
     NSString *keyResults = [MADMetadataQueryManager keyResults];
     [[MACloudManager sharedManager].fileLocationManager.metadataQuery removeObserver: self
                                                                           forKeyPath: keyResults];
@@ -304,6 +309,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     [self setNeedsStatusBarAppearanceUpdate];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(reloadSectionLocal)
+                                                 name: MADNotificationReloadSectionLocal
+                                               object: nil];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleContentSizeCategoryDidChangeNotification:)
@@ -474,10 +483,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 #pragma mark - Exit
 
 - (void)closeAndSave {
-    MTApplicationInstance *app = [AppDelegate app];
     __weak MADOpenFileViewController *weakself = self;
-    [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
-    [app closeReportWithCompletionHandler:^(BOOL success) {
+    [[[MTApplicationInstance mainInstance] openDocument] regenThumbnailWithTraits:self.traitCollection];
+    [[MTApplicationInstance mainInstance] closeReportWithCompletionHandler:^(BOOL success) {
         [weakself reenable];
     }];
 }
@@ -729,8 +737,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
     MADViewerController *viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
-    MTApplicationInstance *app = [AppDelegate app];
-    viewControllerReportViewer.document = [app openDocument];
+    viewControllerReportViewer.document = [[MTApplicationInstance mainInstance] openDocument];
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -753,8 +760,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self ;
             
-            MTApplicationInstance *app = [AppDelegate app];
-            MADocument *document = [app openDocument];
+            MADocument *document = [[MTApplicationInstance mainInstance] openDocument];
             queryBuilderContainerController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
@@ -775,8 +781,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
             MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self;
-            MTApplicationInstance *app = [AppDelegate app];
-            MADocument *document = [app openDocument];
+            MADocument *document = [[MTApplicationInstance mainInstance] openDocument];
             queryBuilderViewController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
@@ -787,8 +792,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
         MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
-        MTApplicationInstance *app = [AppDelegate app];
-        MADocument *document = [app openDocument];
+        MADocument *document = [[MTApplicationInstance mainInstance] openDocument];
         queryBuilderViewController.document = document;
         [queryBuilderViewController reloadDocument:document animated:YES];
     }
@@ -921,10 +925,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         [sender isKindOfClass: queryBuilderContainerClass] ||
         [sender isKindOfClass: reportDesignerClass] ||
         [sender isKindOfClass: reportViewerClass]) {
-        MTApplicationInstance *app = [AppDelegate app];
         __weak MADOpenFileViewController *weakself = self;
-        [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
-        [app closeReportWithCompletionHandler:^(BOOL success) {
+        [[[MTApplicationInstance mainInstance] openDocument] regenThumbnailWithTraits:self.traitCollection];
+        [[MTApplicationInstance mainInstance] closeReportWithCompletionHandler:^(BOOL success) {
             [weakself reenable];
         }];
     }
@@ -981,6 +984,16 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
     return [self documentForIndexPath:indexPath];
 
+}
+
+- (void)reloadSectionLocal {
+    if (self.isUpdatingEnabled) {
+        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
+        
+        NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
+        [self.collectionView reloadSections:local];
+    }
 }
 
 - (void)reloadSectionCloud {
@@ -1336,30 +1349,26 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 - (void)openFileWithUrl:(NSURL *)url {
     __weak MADOpenFileViewController *weakself = self;
-    MTApplicationInstance *app = [AppDelegate app];
     
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    app.fileManager.openDocument = document;
-    __weak MTApplicationInstance *weakapp = app;
+    [MTApplicationInstance mainInstance].fileManager.openDocument = document;
     [self displaySavingReportActivityIndicator];
     
     [document openWithCompletionHandler:^(BOOL success) {
         
         if (success) {
             
-            weakapp.reportState = MTReportStateOpen;
+            [MTApplicationInstance mainInstance].reportState = MTReportStateOpen;
             
             if ([MTApplicationInstance isMadViewer]) {
                 
-                MTApplicationInstance *app = [AppDelegate app];
-                [[app openDocument] activeDocumentModel];
+                [[[MTApplicationInstance mainInstance] openDocument] activeDocumentModel];
                 [weakself performSegueWithIdentifier: MTSegueOpenInViewer
                                               sender: weakself];
                 
             } else if ([MTApplicationInstance isMadDesigner]) {
                 
-                MTApplicationInstance *app = [AppDelegate app];
-                [[app openDocument] activeDocumentModel];
+                [[[MTApplicationInstance mainInstance] openDocument] activeDocumentModel];
                 NSString *storyboardName = [MTApplicationInstance storyboardName];
                 UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
                 UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
@@ -1394,8 +1403,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                 MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
                 reportViewerViewController.viewControllerDelegate = self ;
                 
-//                MTApplicationInstance *app = [AppDelegate app];
-                MADocument *document = [app openDocument];
+                MADocument *document = [[MTApplicationInstance mainInstance] openDocument];
                 reportDesignerViewController.document = document;
                 reportViewerViewController.document = document;
 
@@ -1419,27 +1427,34 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
                                                                             inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
-    NSURL *url = metadata.url;
-    NSString *filename = [MADocument fileNameForMadUrl:url];
-    
-    NSString *size = [metadata fileSystemSizeMB];
-    
-    NSDictionary *attributesCaption = [MTCollectionViewCellDocument attributesCaption];
-    NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument attributesCaption];
-
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
-                                                                           attributes: attributesCaption];
-
-    CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
-                                           contentScaleFactor: self.collectionView.contentScaleFactor
-                                                         font: [MTCollectionViewCellDocument CaptionFont]];
-    
-    NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
-                                                                              attributes: attributesCaption2];
-    CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub
-                                              contentScaleFactor: self.collectionView.contentScaleFactor
-                                                            font: [MTCollectionViewCellDocument CaptionFont2]];
-    return CGSizeMake(140.0000f, 128.0000f /*+ ceil(self.testLabel.frame.size.height)*/ + ceilf(sizeLabelHeight) + ceilf(sizeLabelSubHeight) + 20.0000f);
+    CGSize cellSize;
+    if (metadata) {
+        NSURL *url = metadata.url;
+        NSString *filename = [MADocument fileNameForMadUrl:url];
+        
+        NSString *size = [metadata fileSystemSizeMB];
+        
+        NSDictionary *attributesCaption = [MTCollectionViewCellDocument attributesCaption];
+        NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument attributesCaption];
+        
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
+                                                                               attributes: attributesCaption];
+        
+        CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
+                                               contentScaleFactor: self.collectionView.contentScaleFactor
+                                                             font: [MTCollectionViewCellDocument CaptionFont]];
+        
+        NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
+                                                                                  attributes: attributesCaption2];
+        CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub
+                                                  contentScaleFactor: self.collectionView.contentScaleFactor
+                                                                font: [MTCollectionViewCellDocument CaptionFont2]];
+        cellSize = CGSizeMake(140.0000f, 128.0000f /*+ ceil(self.testLabel.frame.size.height)*/ + ceilf(sizeLabelHeight) + ceilf(sizeLabelSubHeight) + 20.0000f);
+        
+    } else {
+        cellSize = CGSizeMake(140.0000f, 128.0000f + 24.0000f + 24.0000f);
+    }
+    return cellSize;
 }
 
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
@@ -1491,65 +1506,56 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
                                                                             inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
-    NSURL *url = metadata.url;
-    
-    if (cell.delegate == nil) {
-        cell.delegate =  self;
-                
-    }
-    
-    NSString *filename = [MADocument fileNameForMadUrl:url];
-    cell.text = filename;
-    cell.labelTitle.text = filename;
-    
-    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
-    cell.progressViewUpload.hidden = YES;//!metadata.ubiquitousItemIsUploading;
-    
-    cell.labelTitleSub.text = (notDownloaded ? NSLocalizedString(@"Not Downloaded", @"Not Downloaded") : [metadata fileSystemSizeMB]);
-
-    if (metadata.ubiquitousItemIsUploading) {
-        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded
-                              animated:YES];
-    } else {
-        [cell.progressViewUpload setProgress:0.0000f animated:YES];
-    }
+    if (metadata) {
         
-    if (metadata.ubiquitousItemIsDownloading) {
-        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded
-                              animated:YES];
-    } else {
-        [cell.progressViewDownload setProgress:0.0000f animated:YES];
-    }
-    
-    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
-                                                [UIImage imageNamed:@"MADImageToolbarCloudDownload"] :
-                                                nil;
-    
-    [cell.labelTitle layoutIfNeeded];
-    [cell loadPreviewImageForUrl:url];
-    
-    if (self.isEditing) {
-        [cell startWobble];
-    }
-    
-    if (self.isSavingActivityIndicatorVisible == NO) {
-
-        [cell.activityIndicator stopAnimating];
-
-    } else {
+        BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+        cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
+        cell.progressViewUpload.hidden = YES;//!metadata.ubiquitousItemIsUploading;
+        cell.labelTitleSub.text = notDownloaded ?
+                                    NSLocalizedString(@"Not Downloaded", @"Not Downloaded") :
+                                    [metadata fileSystemSizeMB];
+        cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ?
+                                            [UIImage imageNamed:@"MADImageToolbarCloudDownload"] :
+                                                    nil;
         
-        MTApplicationInstance *app = [AppDelegate app];
-        NSComparisonResult comparionResult = [app.fileManager.openUrl.lastPathComponent caseInsensitiveCompare: url.lastPathComponent];
+        NSString *filename = [MADocument fileNameForMadUrl:metadata.url];
+        cell.text = filename;
+        cell.labelTitle.text = filename;
+        [cell.progressViewUpload setProgress: metadata.ubiquitousItemIsUploading ?
+                                                    metadata.ubiquitousItemPercentUploaded : 0.0000f
+                                    animated: YES];
         
-        if (comparionResult == NSOrderedSame) {
-            [cell.activityIndicator startAnimating];
-        } else {
-            [cell.activityIndicator stopAnimating];
+        [cell.progressViewDownload setProgress: metadata.ubiquitousItemIsDownloading ?
+                                                    metadata.ubiquitousItemPercentDownloaded : 0.0000f
+                                      animated: YES];
+        if (self.isEditing) {
+            [cell startWobble];
         }
-    
-    }
+        
+        if (self.isSavingActivityIndicatorVisible == NO) {
+            [cell.activityIndicator stopAnimating];
+        } else {
+            NSComparisonResult comparionResult = [[MTApplicationInstance mainInstance].fileManager.openUrl.lastPathComponent caseInsensitiveCompare: metadata.url.lastPathComponent];
+            if (comparionResult == NSOrderedSame) {
+                [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator stopAnimating];
+            }
+        }
+        
+        [cell loadPreviewImageForUrl:metadata.url];
+        [cell.labelTitle layoutIfNeeded];
 
+    } else {
+        cell.progressViewDownload.hidden = YES;
+        cell.progressViewUpload.hidden = YES;
+        cell.labelTitle.text = @"";
+        cell.labelTitleSub.text = @"";
+        cell.imageCloudIndicator.image = nil;
+        cell.text = @"";
+    }
+    
+    cell.delegate =  self;
     [cell normalizeTint];
     
     return cell;
@@ -1632,8 +1638,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self setSavingActivityIndicatorVisible:YES];
     for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
         NSURL *visibleUrl = [self documentForIndexPath:path];
-        MTApplicationInstance *app = [AppDelegate app];
-        BOOL animate = [app.fileManager.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
+        BOOL animate = [[MTApplicationInstance mainInstance].fileManager.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
         if (animate) {
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
             if (cell != nil) {
@@ -2098,53 +2103,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
 }
 
-- (void)deleteAction:(NSArray *)selectedItems {
-    self.updatingEnabled = NO;
-    
-    NSMutableArray *urlsToDeleteLocal = [[NSMutableArray alloc] init];
-    NSMutableArray *urlsToDeleteCloud = [[NSMutableArray alloc] init];
-    NSMutableDictionary *urlsToDeleteByIndexPath = [[NSMutableDictionary alloc] init];
-    
-    for (NSIndexPath *selectedItem in selectedItems) {
-        NSURL *documentUrl = [self documentForIndexPath:selectedItem];
-        switch (selectedItem.section) {
-            case 0:
-                [urlsToDeleteLocal addObject:documentUrl];
-                break;
-            case 1:
-                [urlsToDeleteCloud addObject:documentUrl];
-                break;
-                
-            default:
-                break;
-        }
-        [urlsToDeleteByIndexPath setObject: documentUrl
-                                    forKey: selectedItem];
-    }
-    
-    for (NSURL *url in urlsToDeleteLocal) {
-        [[MACloudManager sharedManager] deleteLocalDocumentAtURL:url];
-    }
-
-    for (NSURL *url in urlsToDeleteCloud) {
-        [[MACloudManager sharedManager] deleteCloudDocumentAtURL:url];
-    }
-
-    if (urlsToDeleteLocal.count > 0 || urlsToDeleteCloud.count > 0) {
-        
-        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-        [self animateUpdates];
-        
-    } else {
-        
-        //self.updatingEnabled = YES;
-        
-    }
-
-   // [self selectionsUpdated];
-
-}
-
 - (BOOL)doesNameExistInCloud:(NSString *)name {
     BOOL nameExist = NO;
     for (NSDictionary *data in self.documentsCloud) {
@@ -2224,6 +2182,53 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self selectionsUpdated];
 }
 
+- (void)deleteAction:(NSArray *)selectedItems {
+    self.updatingEnabled = NO;
+    
+    NSMutableArray *urlsToDeleteLocal = [[NSMutableArray alloc] init];
+    NSMutableArray *urlsToDeleteCloud = [[NSMutableArray alloc] init];
+    NSMutableDictionary *urlsToDeleteByIndexPath = [[NSMutableDictionary alloc] init];
+    
+    for (NSIndexPath *selectedItem in selectedItems) {
+        NSURL *documentUrl = [self documentForIndexPath:selectedItem];
+        switch (selectedItem.section) {
+            case 0:
+                [urlsToDeleteLocal addObject:documentUrl];
+                break;
+            case 1:
+                [urlsToDeleteCloud addObject:documentUrl];
+                break;
+                
+            default:
+                break;
+        }
+        [urlsToDeleteByIndexPath setObject: documentUrl
+                                    forKey: selectedItem];
+    }
+    
+    for (NSURL *url in urlsToDeleteLocal) {
+        [[MACloudManager sharedManager] deleteLocalDocumentAtURL:url];
+    }
+    
+    for (NSURL *url in urlsToDeleteCloud) {
+        [[MACloudManager sharedManager] deleteCloudDocumentAtURL:url];
+    }
+    
+    if (urlsToDeleteLocal.count > 0 || urlsToDeleteCloud.count > 0) {
+        
+        //[[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        //[[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+//        [self animateUpdates];
+        
+    } else {
+        
+        self.updatingEnabled = YES;
+        
+    }
+    
+    [self selectionsUpdated];
+    
+}
 - (void)animateUpdates {
     
     self.updatingEnabled = NO;

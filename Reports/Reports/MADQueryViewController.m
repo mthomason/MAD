@@ -14,11 +14,10 @@
 
 #import "MADNavigationBarTitleView.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 #import "MADocument.h"
 
 #import "MADWatermarkView.h"
-
-#import "MTApplicationInstance.h"
 
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
@@ -164,7 +163,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    self.document = [AppDelegate app].openDocument;
+    self.document = [MTApplicationInstance mainInstance].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 

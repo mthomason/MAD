@@ -15,6 +15,10 @@
 
 + (NSURL *)localTemporaryDirectory;
 
++ (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
+
+- (NSArray *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension;
+
 - (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 
@@ -31,6 +35,7 @@
                        groupIdentifier:(NSString *)groupIdentifier;
 
 - (NSArray *)contentOfLocalDocumentsDirectoryWithExtention:(NSString *)extenstion;
+
 
 @end
 

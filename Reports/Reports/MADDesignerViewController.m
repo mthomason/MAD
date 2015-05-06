@@ -315,7 +315,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    self.document = [AppDelegate app].openDocument;
+    self.document = [MTApplicationInstance mainInstance].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -822,7 +822,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.layoutConstraintsSectionsSidesBorder removeAllObjects];
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
 
-    [[AppDelegate app] reportDesigner].shownAndHidden = YES;
+    [[MTApplicationInstance mainInstance] reportDesigner].shownAndHidden = YES;
     [self.document saveContext];
 }
 

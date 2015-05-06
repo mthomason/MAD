@@ -17,7 +17,6 @@
 @interface AppDelegate : UIResponder
 <UIApplicationDelegate>
 
-+ (MTApplicationInstance *)app;
 + (UIWindow *)window;
 
 @property (nonatomic, strong) UIWindow *window;

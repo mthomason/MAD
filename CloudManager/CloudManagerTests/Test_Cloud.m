@@ -74,7 +74,7 @@
 }
 
 - (void)testExample {
-    NSLog(@"%@", [MACloudManager sharedManager].ubiquitousDocumentsDirectory);
+    //NSLog(@"%@", [MACloudManager sharedManager].ubiquitousDocumentsDirectory);
     //NSLog(@"%@", [MACloudManager sharedManager].isCloudEnabled ? @"YES" : @"NO");
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");

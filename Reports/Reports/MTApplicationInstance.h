@@ -16,6 +16,18 @@ typedef NS_ENUM(NSUInteger, MTReportState) {
 	MTReportStateClosed
 };
 
+typedef NS_ENUM(NSUInteger, MADAppStorage) {
+    MADAppStorageNotSet = 0,
+    MADAppStorageCloud,
+    MADAppStorageLocal
+};
+
+typedef struct MADAppStorageState {
+    MADAppStorage storageOption;
+    BOOL accountDidChange;
+    BOOL cloudAvailable;
+} MADAppStorageState;
+
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 
@@ -24,6 +36,11 @@ extern NSString * const MTGlobalBundleShortVersion;
 extern NSString * const MTGlobalBundleRev;
 
 @class MADocument, MTReportDesigner, MTReportViewer, MTQueryDesigner, MTUser, MADFileManager;
+
+#if TARGET_OS_IPHONE
+@protocol MADListCoordinator;
+@class MADFilesController;
+#endif
 
 @interface MTApplicationInstance : NSObject
 
@@ -36,6 +53,11 @@ extern NSString * const MTGlobalBundleRev;
 @property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
 
 @property (nonatomic, strong, readonly) MADFileManager *fileManager;
+
+@property (nonatomic, readonly) MADAppStorageState storageState;
+@property (nonatomic) MADAppStorage storageOption;
+
++ (MTApplicationInstance *)mainInstance;
 
 - (void)initalizeAppearance;
 - (void)registerDefaultsFromSettingsBundle;
@@ -64,6 +86,40 @@ extern NSString * const MTGlobalBundleRev;
 
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
 - (MADocument *)openDocument;
+
+#if TARGET_OS_IPHONE
+
+/*!
+ * Returns an \c AAPLListCoordinator based on the current configuration that queries based on \c pathExtension.
+ * For example, if the user has chosen local storage, a local \c AAPLListCoordinator object will be returned.
+ */
+- (id<MADListCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension
+                                                                 firstQueryHandler:(void (^)(void))firstQueryHandler;
+
+/*!
+ * Returns an \c AAPLListCoordinator based on the current configuration that queries based on \c lastPathComponent.
+ * For example, if the user has chosen local storage, a local \c AAPLListCoordinator object will be returned.
+ */
+- (id<MADListCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent
+                                                                     firstQueryHandler:(void (^)(void))firstQueryHandler;
+
+/*!
+ * Returns an \c AAPLListsController instance based on the current configuration. For example, if the user has
+ * chosen local storage, an \c AAPLListsController object will be returned that uses a local list coordinator.
+ * \c pathExtension is passed down to the list coordinator to filter results.
+ */
+- (MADFilesController *)listsControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension
+                                                              firstQueryHandler:(void (^)(void))firstQueryHandler;
+
+/*!
+ * Returns an \c AAPLListsController instance based on the current configuration. For example, if the user has
+ * chosen local storage, an \c AAPLListsController object will be returned that uses a local list coordinator.
+ * \c lastPathComponent is passed down to the list coordinator to filter results.
+ */
+- (MADFilesController *)listsControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent
+                                                                  firstQueryHandler:(void (^)(void))firstQueryHandler;
+
+#endif
 
 @end
 

@@ -251,7 +251,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSIndexSet *inserted = [NSIndexSet indexSetWithIndexesInRange:range],
                *removed  = [NSIndexSet indexSet],
                *updated  = [NSIndexSet indexSet];
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems: inserted
+    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedItems: inserted
                                                         removedItems: removed
                                                         updatedItems: updated];
     
@@ -344,7 +344,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     self.metadata = resultsSorted;
     
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
+    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
                                                         removedItems:removedItems
                                                         updatedItems:updatedItems];
     
