@@ -14,11 +14,6 @@
 #import <CoreData/CoreData.h>
 #import "MADConstants.h"
 
-#import "MADFilesController.h"
-#import "MADListCoordinator.h"
-
-#import "MADFileUtilities.h"
-
 #import "MTApplicationInstance.h"
 #import "MTNavigationController.h"
 #import "MADQueryViewController.h"
@@ -49,17 +44,17 @@ const NSInteger MADTagAlertViewNewDocument = 3838;
 const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it will be enabled,
                                                     //  load window in willFinishLaunchingWithOptions
                                                     //  otherwise load window in didFinishLaunchingWithOptions
+
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate,
         MADCloudManagerProtocolAppDetails>
 
+@property (nonatomic, strong) MTApplicationInstance *applicationInstance;
 @property (nonatomic, strong) UIStoryboard *storyboard;
 @property (nonatomic, strong) UIApplication *application;
 
 @property (nonatomic, strong) MTNavigationController *navigationController;
 @property (nonatomic, strong) MADOpenFileViewController *openFileViewController;
-
-@property (nonatomic, strong) MADFilesController *listsController;
 
 @end
 
@@ -73,6 +68,11 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 //}
 
 #endif
+
++ (MTApplicationInstance *)app {
+    UIApplication *sharedApplication = [UIApplication sharedApplication];
+    return [(AppDelegate *)sharedApplication.delegate applicationInstance];
+}
 
 + (UIWindow *)window {
     return [UIApplication sharedApplication].keyWindow;
@@ -111,7 +111,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)loadAndDisplayWindow {
     
-    [MTApplicationInstance mainInstance];
+    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
+    self.applicationInstance = appInstance;
 
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     NSString *storyboardName = [MTApplicationInstance storyboardName];
@@ -192,7 +193,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 
-    [[MTApplicationInstance mainInstance] initalizeAppearance];
+    [self.applicationInstance initalizeAppearance];
 
     //[MTStoreKitController sharedObject];
     [MACloudManager sharedManager].delegateApplication = self;
@@ -306,7 +307,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MADocument *documentReport = [[MTApplicationInstance mainInstance] openDocument];
+    MADocument *documentReport = [self.applicationInstance openDocument];
     if (documentReport != nil) {
         [documentReport saveToURL: documentReport.fileURL
                  forSaveOperation: UIDocumentSaveForOverwriting
@@ -319,7 +320,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
     BOOL result;
     NSError *error = nil;
-    if ([[MTApplicationInstance mainInstance].user addDocument:url error:&error]) {
+    if ([self.applicationInstance.user addDocument:url error:&error]) {
         
         result = YES;
         
@@ -428,7 +429,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
     BOOL save = MADStateRestorationSupportEnabled;
     if (save) {
-        save = [MTApplicationInstance mainInstance].reportState != UIDocumentStateClosed;
+        save = self.applicationInstance.reportState != UIDocumentStateClosed;
         if (save == NO) {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setObject: nil
@@ -444,7 +445,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:[MTApplicationInstance mainInstance].fileManager.openUrl.path.lastPathComponent
+    [userDefaults setObject:self.applicationInstance.fileManager.openUrl.path.lastPathComponent
                      forKey:@"MADStateRestorationOpenFileWithExtension"];
     [userDefaults synchronize];
     
@@ -468,127 +469,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
-}
-
-#pragma mark - User Storage Preferences
-
-- (void)setupUserStoragePreferences {
-    MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
-    
-    /*
-     Check to see if the account has changed since the last time the method was called. If it has, let the
-     user know that their documents have changed. If they've already chosen local storage (i.e. not iCloud),
-     don't notify them since there's no impact.
-     */
-    if (storageState.accountDidChange) {
-        [self notifyUserOfAccountChange:storageState];
-        
-        // Return early. State resolution will take place after the user acknowledges the change.
-        return;
-    }
-    
-    [self resolveStateForUserStorageState:storageState];
-}
-
-- (void)resolveStateForUserStorageState:(MADAppStorageState)storageState {
-    if (storageState.cloudAvailable) {
-        if (storageState.storageOption == MADAppStorageNotSet || (storageState.storageOption == MADAppStorageLocal && storageState.accountDidChange)) {
-            // iCloud is available, but we need to ask the user what they prefer.
-            [self promptUserForStorageOption];
-        }
-        else {
-            /*
-             The user has already selected a specific storage option. Set up the lists controller to use that
-             storage option.
-             */
-            [self configureFilesViewController: storageState.accountDidChange
-                    storageOptionChangeHandler: nil];
-        }
-    }
-    else {
-        /*
-         iCloud is not available, so we'll reset the storage option and configure the lists controller. The
-         next time that the user signs in with an iCloud account, he or she can change provide their desired
-         storage option.
-         */
-        if (storageState.storageOption != MADAppStorageNotSet) {
-            [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
-        }
-        
-        [self configureFilesViewController: storageState.accountDidChange
-                storageOptionChangeHandler: nil];
-    }
-}
-
-#pragma mark - Convenience
-
-- (void)configureFilesViewController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
-    if (self.listsController != nil && !accountChanged) {
-        // The current controller is correct. There is no need to reconfigure it.
-        return;
-    }
-    
-    if (!self.listsController) {
-        // There is currently no lists controller. Configure an appropriate one for the current configuration.
-        self.listsController = [[MTApplicationInstance mainInstance] listsControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                           firstQueryHandler:storageOptionChangeHandler];
-        
-        // Ensure that this controller is passed along to the `AAPLListDocumentsViewController`.
-#warning Do this by delegate....
-//        self.openFileViewController.listsController = self.listsController;
-        
-        [self.listsController startSearching];
-    }
-    else if (accountChanged) {
-        // A lists controller is configured; however, it needs to have its coordinator updated based on the account change.
-        self.listsController.listCoordinator = [[MTApplicationInstance mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                                            firstQueryHandler:storageOptionChangeHandler];
-    }
-}
-
-#pragma mark - Alerts
-
-- (void)notifyUserOfAccountChange:(MADAppStorageState)storageState {
-    
-    NSString *title = NSLocalizedString(@"iCloud Sign Out", nil);
-    NSString *message = NSLocalizedString(@"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents.", nil);
-    NSString *okActionTitle = NSLocalizedString(@"OK", nil);
-    
-    UIAlertController *signedOutController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *action = [UIAlertAction actionWithTitle:okActionTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        [self resolveStateForUserStorageState:storageState];
-    }];
-    [signedOutController addAction:action];
-    
-    [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
-}
-
-- (void)promptUserForStorageOption {
-    NSString *title = NSLocalizedString(@"Choose Storage Option", nil);
-    NSString *message = NSLocalizedString(@"Do you want to store documents in iCloud or only on this device?", nil);
-    NSString *localOnlyActionTitle = NSLocalizedString(@"Local Only", nil);
-    NSString *cloudActionTitle = NSLocalizedString(@"iCloud", nil);
-    
-    UIAlertController *storageController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
-        
-        [self configureFilesViewController:YES storageOptionChangeHandler:nil];
-    }];
-    [storageController addAction:localOption];
-    
-    UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:cloudActionTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
-        
-        [self configureFilesViewController:YES storageOptionChangeHandler:^{
-            [MADFileUtilities migrateLocalListsToCloud:MADIdentifierGroup];
-        }];
-    }];
-    [storageController addAction:cloudOption];
-    
-    [self.openFileViewController presentViewController:storageController animated:YES completion:nil];
 }
 
 @end
