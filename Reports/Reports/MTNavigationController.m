@@ -14,11 +14,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    self.toolbar.tintColor = [UIColor tintColorWhite];
     self.toolbar.barTintColor = [UIColor tintColorBlue];
     self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
-    self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
