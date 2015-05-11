@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class MADFilesController, MADFileInfo;
-@protocol MADListCoordinator;
+@protocol MADFileCoordinator;
 
 /*!
  * The \c AAPLListsControllerDelegate protocol enables an \c AAPLListsController object to notify other
@@ -112,7 +112,7 @@
  * @param sortComparator The predicate that determines the strict sort ordering of the \c AAPLlistInfos
  *                       array.
  */
-- (instancetype)initWithListCoordinator:(id<MADListCoordinator>)listCoordinator delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADFileInfo *lhs, MADFileInfo *rhs))sortComparator;
+- (instancetype)initWithListCoordinator:(id<MADFileCoordinator>)listCoordinator delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADFileInfo *lhs, MADFileInfo *rhs))sortComparator;
 
 /*!
  * The \c AAPLListsController object's delegate who is responsible for responding to \c AAPLListsController
@@ -128,7 +128,7 @@
 /*!
  * The current \c AAPLListCoordinator that the lists controller manages.
  */
-@property (nonatomic, strong) id<MADListCoordinator> listCoordinator;
+@property (nonatomic, strong) id<MADFileCoordinator> listCoordinator;
 
 /*!
  * Begin listening for changes to the tracked \c MADFileInfo objects. This is managed by the \c listCoordinator
@@ -152,20 +152,20 @@
  * Removes \c listInfo from the tracked \c ListInfo instances. This method forwards the remove operation
  * directly to the list coordinator. The operation can be performed asynchronously so long as the
  * underlying \c AAPLListCoordinator instance sends the \c AAPLListsController the correct delegate
- * messages: either a \c -listCoordinatorDidUpdateContentsWithInsertedURLs:removedURLs:updatedURLs:
+ * messages: either a \c -fileCoordinatorDidUpdateContentsWithInsertedURLs:removedURLs:updatedURLs:
  * call with the removed \c MADFileInfo object, or with an error callback.
  *
  * @param listInfo The \c MADFileInfo object to remove from the list of tracked \c MADFileInfo
  *                 instances.
  */
-- (void)removeListInfo:(MADFileInfo *)listInfo;
+- (void)removeFileInfo:(MADFileInfo *)listInfo;
 
 /*!
  * Attempts to create \c MADFileInfo representing \c list with the given name. If the method is succesful,
  * the lists controller adds it to the list of tracked \c MADFileInfo instances. This method forwards
  * the create operation directly to the list coordinator. The operation can be performed asynchronously
  * so long as the underlying \c AAPLListCoordinator instance sends the \c AAPLListsController the correct
- * delegate messages: either a \c -listCoordinatorDidUpdateContentsWithInsertedURLs:removedURLs:updatedURLs:
+ * delegate messages: either a \c -fileCoordinatorDidUpdateContentsWithInsertedURLs:removedURLs:updatedURLs:
  * call with the newly inserted \c MADFileInfo, or with an error callback.
  *
  * Note: it's important that before calling this method, a call to \c -canCreateListWithName: is
@@ -175,7 +175,7 @@
  * @param list The \c AAPLList object that should be used to save the initial list.
  * @param name The name of the new list.
  */
-- (void)createListInfoForList:(MADFileInfo *)list withName:(NSString *)name;
+- (void)createFileInfoForFile:(MADFileInfo *)list withName:(NSString *)name;
 
 /*!
  * Determines whether or not a list can be created with a given name. This method delegates to
@@ -187,7 +187,7 @@
  *
  * @return \c YES if the list can be created with the given name, \c NO otherwise.
  */
-- (BOOL)canCreateListInfoWithName:(NSString *)name;
+- (BOOL)canCreateFileInfoWithName:(NSString *)name;
 
 /*!
  * Lets the \c AAPLListsController know that \c listInfo has been udpdated. Once the change is reflected
@@ -195,6 +195,6 @@
  *
  * @param listInfo The \c MADFileInfo instance that has new content.
  */
-- (void)setListInfoHasNewContents:(MADFileInfo *)listInfo;
+- (void)setFileInfoHasNewContents:(MADFileInfo *)listInfo;
 
 @end

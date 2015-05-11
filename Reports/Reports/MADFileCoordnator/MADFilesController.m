@@ -7,10 +7,10 @@
 //
 
 #import "MADFilesController.h"
-#import "MADListCoordinator.h"
+#import "MADFileCoordinator.h"
 #import "MADFileInfo.h"
 
-@interface MADFilesController () <MADListCoordinatorDelegate>
+@interface MADFilesController () <MADFileCoordinatorDelegate>
 
 /*!
  * The \c MADFileInfo objects that are cached by the \c AAPLListsController to allow for users of the
@@ -43,7 +43,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithListCoordinator:(id<MADListCoordinator>)listCoordinator
+- (instancetype)initWithListCoordinator:(id<MADFileCoordinator>)listCoordinator
                           delegateQueue:(NSOperationQueue *)delegateQueue
                          sortComparator:(NSComparisonResult (^)(MADFileInfo *lhs, MADFileInfo *rhs))sortComparator {
     self = [super init];
@@ -77,9 +77,9 @@
     return self.listInfos.count;
 }
 
-- (void)setListCoordinator:(id<MADListCoordinator>)listCoordinator {
+- (void)setListCoordinator:(id<MADFileCoordinator>)listCoordinator {
     if (![_listCoordinator isEqual:listCoordinator]) {
-        id<MADListCoordinator> oldListCoordinator = _listCoordinator;
+        id<MADFileCoordinator> oldListCoordinator = _listCoordinator;
         _listCoordinator = listCoordinator;
         
         [oldListCoordinator stopQuery];
@@ -113,19 +113,19 @@
 
 #pragma mark - Inserting / Removing / Managing / Updating MADFileInfo Objects
 
-- (void)removeListInfo:(MADFileInfo *)listInfo {
-    [self.listCoordinator removeListAtURL: listInfo.URL];
+- (void)removeFileInfo:(MADFileInfo *)listInfo {
+    [self.listCoordinator removeFileAtURL: listInfo.URL];
 }
 
-- (void)createListInfoForList:(MADList *)list withName:(NSString *)name {
-    [self.listCoordinator createURLForList:list withName:name];
+- (void)createFileInfoForFile:(MADList *)list withName:(NSString *)name {
+    [self.listCoordinator createURLForFile:list withName:name];
 }
 
-- (BOOL)canCreateListInfoWithName:(NSString *)name {
-    return [self.listCoordinator canCreateListWithName:name];
+- (BOOL)canCreateFileInfoWithName:(NSString *)name {
+    return [self.listCoordinator canCreateFileWithName:name];
 }
 
-- (void)setListInfoHasNewContents:(MADFileInfo *)listInfo {
+- (void)setFileInfoHasNewContents:(MADFileInfo *)listInfo {
     dispatch_async(self.listInfoQueue, ^{
         // Remove the old list info and replace it with the new one.
         NSInteger indexOfListInfo = [self.listInfos indexOfObject:listInfo];
@@ -147,11 +147,11 @@
     });
 }
 
-- (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs removedURLs:(NSArray *)removedURLs updatedURLs:(NSArray *)updatedURLs {
+- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs removedURLs:(NSArray *)removedURLs updatedURLs:(NSArray *)updatedURLs {
     [self processContentChangesWithInsertedURLs:insertedURLs removedURLs:removedURLs updatedURLs:updatedURLs];
 }
 
-- (void)listCoordinatorDidFailCreatingListAtURL:(NSURL *)URL withError:(NSError *)error {
+- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     MADFileInfo *listInfo = [[MADFileInfo alloc] initWithURL:URL];
     
     [self.delegateQueue addOperationWithBlock:^{
@@ -161,7 +161,7 @@
     }];
 }
 
-- (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error {
+- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     MADFileInfo *listInfo = [[MADFileInfo alloc] initWithURL:URL];
     
     [self.delegateQueue addOperationWithBlock:^{

@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MADListCoordinator.h"
+#import "MADFileCoordinator.h"
 
-@interface MADCloudListCoordinator : NSObject <MADListCoordinator>
+@interface MADCloudFileCoordinator : NSObject <MADFileCoordinator>
 
 - (instancetype)initWithPathExtension: (NSString *)pathExtension
               firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;

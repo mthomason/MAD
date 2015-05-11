@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCloudListCoordinator.h"
+#import "MADCloudFileCoordinator.h"
 #import "MADFileUtilities.h"
 #import "MADConstants.h"
 
-@interface MADCloudListCoordinator ()
+@interface MADCloudFileCoordinator ()
 
 @property (nonatomic, strong) NSMetadataQuery *metadataQuery;
 @property (nonatomic, strong) dispatch_queue_t documentsDirectoryQueue;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation MADCloudListCoordinator
+@implementation MADCloudFileCoordinator
 @synthesize delegate = _delegate;
 @synthesize documentsDirectory = _documentsDirectory;
 
@@ -108,7 +108,7 @@
     return documentsDirectory;
 }
 
-#pragma mark - MADListCoordinator
+#pragma mark - MADFileCoordinator
 
 - (void)startQuery {
     // \c NSMetadataQuery should always be started on the main thread.
@@ -124,28 +124,28 @@
     });
 }
 
-- (void)createURLForList:(MADList *)list withName:(NSString *)name {
+- (void)createURLForFile:(MADList *)list withName:(NSString *)name {
     NSURL *documentURL = [self documentURLForName:name];
     
     [MADFileUtilities createList:list atURL:documentURL withCompletionHandler:^(NSError *error) {
         if (error) {
-            [self.delegate listCoordinatorDidFailCreatingListAtURL:documentURL withError:error];
+            [self.delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
         }
         else {
-            [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:@[documentURL]
+            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[documentURL]
                                                                 removedURLs:@[]
                                                                 updatedURLs:@[]];
         }
     }];
 }
 
-- (void)removeListAtURL:(NSURL *)URL {
+- (void)removeFileAtURL:(NSURL *)URL {
     [MADFileUtilities removeListAtURL:URL withCompletionHandler:^(NSError *error) {
         if (error) {
-            [self.delegate listCoordinatorDidFailRemovingListAtURL:URL withError:error];
+            [self.delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
         }
         else {
-            [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:@[]
+            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[]
                                                                 removedURLs:@[URL]
                                                                 updatedURLs:@[]];
         }
@@ -164,7 +164,7 @@
         [insertedURLs addObject:insertedURL];
     }
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs removedURLs:@[] updatedURLs:@[]];
+    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs removedURLs:@[] updatedURLs:@[]];
     
     [self.metadataQuery enableUpdates];
     
@@ -212,7 +212,7 @@
     removedURLs = removedURLs ?: @[];
     updatedURLs = updatedURLs ?: @[];
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
+    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
                                                         removedURLs: removedURLs
                                                         updatedURLs: updatedURLs];
     
@@ -221,7 +221,7 @@
 
 #pragma mark - Convenience
 
-- (BOOL)canCreateListWithName:(NSString *)name {
+- (BOOL)canCreateFileWithName:(NSString *)name {
     if (name.length <= 0) {
         return NO;
     }

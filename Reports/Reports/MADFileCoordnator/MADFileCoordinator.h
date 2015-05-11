@@ -1,5 +1,5 @@
 //
-//  MADListCoordinator.h
+//  MADFileCoordinator.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/5/15.
@@ -21,7 +21,7 @@
 
 @class MADList;
 
-@protocol MADListCoordinatorDelegate;
+@protocol MADFileCoordinatorDelegate;
 
 /*!
  * An instance that conforms to the \c AAPLListCoordinator protocol is responsible for implementing
@@ -44,13 +44,13 @@
  * it must make its delegate aware by calling one of the appropriate error methods defined in the
  * \c AAPLListCoordinatorDelegate protocol.
  */
-@protocol MADListCoordinator <NSObject>
+@protocol MADFileCoordinator <NSObject>
 
 /*!
  * The delegate responsible for handling inserts, removes, updates, and errors when the \c AAPLListCoordinator
  * instance determines such events occured.
  */
-@property (nonatomic, weak) id<MADListCoordinatorDelegate> delegate;
+@property (nonatomic, weak) id<MADFileCoordinatorDelegate> delegate;
 
 /*!
  * Starts observing changes to the important \c NSURL instances. For example, if an \c AAPLListCoordinator
@@ -72,16 +72,16 @@
  * Removes \c URL from the list of tracked \c NSURL instances. For example, an iCloud-specific
  * \c AAPLListCoordinator would implement this method by deleting the underlying document that \c URL
  * represents. When \c URL is removed, the coordinator object is responsible for informing the delegate
- * by calling \c -listCoordinatorDidUpdateContentsWithInsertedURLs:removedURLs:updatedURLs: with the
+ * by calling \c -fileCoordinatorDidUpdateContentsWithInsertedURLs:removedURLs:updatedURLs: with the
  * removed \c NSURL. If a failure occurs when removing \c URL, the coordinator object is responsible
- * for informing the delegate by calling the \c -listCoordinatorDidFailRemovingListAtURL:withError:
+ * for informing the delegate by calling the \c -fileCoordinatorDidFailRemovingFileAtURL:withError:
  * method. The \c AAPLListsController is the only object that should be calling this method directly.
  * The "remove" is intended to be called on the \c AAPLListsController instance with an \c MADListInfo
  * object whose URL would be forwarded down to the coordinator through this method.
  *
  * @param URL The \c NSURL instance to remove from the list of important instances.
  */
-- (void)removeListAtURL:(NSURL *)URL;
+- (void)removeFileAtURL:(NSURL *)URL;
 
 /*!
  * Creates an \c NSURL object representing \c list with the provided name. Callers of this method
@@ -89,14 +89,14 @@
  * created with the provided name via the \c -canCreateListWithName: method. If the creation was
  * successful, then this method should call the delegate's update method that passes the newly tracked
  * \c NSURL as an inserted URL. If the creation was not successful, this method should inform the delegate
- * of the failure by calling its \c -listCoordinatorDidFailCreatingListAtURL:withError: method. The
+ * of the failure by calling its \c -fileCoordinatorDidFailCreatingFileAtURL:withError: method. The
  * "create" is intended to be called on the \c AAPLListsController instance with an \c MADListInfo
  * object whose URL would be forwarded down to the coordinator through this method.
  *
  * @param list The list to create a backing \c NSURL for.
  * @param name The new name for the list.
  */
-- (void)createURLForList:(MADList *)list withName:(NSString *)name;
+- (void)createURLForFile:(MADList *)list withName:(NSString *)name;
 
 /*!
  * Checks to see if a list can be created with a given name. As an example, if an \c AAPLListCoordinator
@@ -111,7 +111,7 @@
  *
  * @return \c YES if the list can be created with the given name, \c NO otherwise.
  */
-- (BOOL)canCreateListWithName:(NSString *)name;
+- (BOOL)canCreateFileWithName:(NSString *)name;
 
 @end
 
@@ -122,7 +122,7 @@
  * tracked \c NSURL instances. The \c AAPLListCoordinatorDelegate also allows a \c AAPLListCoordinator
  * to notify its delegate of any errors that occured when removing or creating a list for a given URL.
  */
-@protocol MADListCoordinatorDelegate <NSObject>
+@protocol MADFileCoordinatorDelegate <NSObject>
 
 /*!
  * Notifies the \c AAPLListCoordinatorDelegate instance of any changes to the tracked URLs of the
@@ -134,7 +134,7 @@
  * @param removedURLs The \c NSURL instances that have just been untracked.
  * @param updatedURLs The \c NSURL instances that have had their underlying model updated.
  */
-- (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
+- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
                                              removedURLs:(NSArray *)removedURLs
                                              updatedURLs:(NSArray *)updatedURLs;
 
@@ -146,7 +146,7 @@
  * @param URL The \c NSURL instance that failed to be removed.
  * @param error The error that describes why the remove failed.
  */
-- (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
 
 /*!
  * Notifies a \c AAPLListCoordinatorDelegate instance of an error that occured when a coordinator tried
@@ -156,7 +156,7 @@
  * @param URL The \c NSURL instance that couldn't be created for a list.
  * @param error The error the describes why the create failed.
  */
-- (void)listCoordinatorDidFailCreatingListAtURL:(NSURL *)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
 
 @end
 
