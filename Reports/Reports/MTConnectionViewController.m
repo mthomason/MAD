@@ -18,7 +18,6 @@
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
 #import "NSError+Constructors.h"
-#import "NSError+Constructors.h"
 #import "MTActivityIndicator.h"
 #import "UIColor+EverydayApps.h"
 #import "UIApplication+Extras.h"
@@ -304,12 +303,17 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
         } else {
             
             NSString *key = [NSString stringWithString: dbDetails.connectionString];
+            NSArray *displayErrors;
+            if (error != nil) {
+                displayErrors = [errors arrayByAddingObject:error];
+            } else {
+                displayErrors = errors;
+            }
             [MTConnectionViewController viewController: strongself
-                                         displayErrors: errors
+                                         displayErrors: displayErrors
                                             completion: ^(BOOL success) {
-                [[MTKeyChain sharedObject] deleteKey:key];
-            }];
-            
+                                                [[MTKeyChain sharedObject] deleteKey:key];
+                                            }];
             blockSender.enabled = YES;
             [strongself enableNavigation];
             [progressView removeFromSuperview];

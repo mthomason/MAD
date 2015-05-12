@@ -83,7 +83,7 @@
 }
 
 - (void)removeFileAtURL:(NSURL *)URL {
-    [MADFileUtilities removeListAtURL:URL withCompletionHandler:^(NSError *error) {
+    [MADFileUtilities removeFileAtURL:URL withCompletionHandler:^(NSError *error) {
         if (error) {
             [self.delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
         }
@@ -96,7 +96,7 @@
 - (void)createURLForFile:(MADList *)list withName:(NSString *)name {
     NSURL *documentURL = [self documentURLForName:name];
     
-    [MADFileUtilities createList:list atURL:documentURL withCompletionHandler:^(NSError *error) {
+    [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
         if (error) {
             [self.delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
         }

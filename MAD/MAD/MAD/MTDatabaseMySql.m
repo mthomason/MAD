@@ -90,9 +90,9 @@
             @autoreleasepool {
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                 myFetch.delegate = self;
-                [myFetch performQuery: query
-                         onConnection: conn];
-                completion(YES, nil);
+                NSError *error = [myFetch performQuery: query
+                                          onConnection: conn];
+                completion(error == nil, error);
             }
             
         } else {

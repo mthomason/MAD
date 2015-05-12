@@ -54,9 +54,9 @@
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     
-    NSString *key = [[self database] safeIdentifier:@"f1"];
+    NSString *key = [self.database safeIdentifier:@"f1"];
     [[self fieldKeys] addObject:key];
-    NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [[self database] selectPart], key];
+    NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [self.database selectPart], key];
     return sql;
 }
 

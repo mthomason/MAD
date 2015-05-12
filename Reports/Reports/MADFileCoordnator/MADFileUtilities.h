@@ -15,13 +15,12 @@
 
 + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId;
 
-+ (void)migrateLocalListsToCloud:(NSString *)groupIdentifier;
++ (void)migrateLocalFilesToCloud:(NSString *)groupIdentifier;
 
-+ (void)readListAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADList *list, NSError *error))completionHandler;
++ (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADList *list, NSError *error))completionHandler;
 
-+ (void)createList:(MADList *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
++ (void)createFile:(MADList *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
 
-+ (void)removeListAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
-
++ (void)removeFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler;
 
 @end

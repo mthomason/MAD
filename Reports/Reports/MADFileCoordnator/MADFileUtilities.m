@@ -78,7 +78,7 @@
     if ([fileManager isUbiquitousItemAtURL:destinationURL] ||
         [fileManager fileExistsAtPath:destinationURL.path]) {
         // If the file already exists in the cloud, remove the local version and return.
-        [self removeListAtURL:sourceURL withCompletionHandler:nil];
+        [self removeFileAtURL:sourceURL withCompletionHandler:nil];
         return;
     }
     
@@ -88,7 +88,7 @@
     });
 }
 
-+ (void)readListAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADList *list, NSError *error))completionHandler {
++ (void)readFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(MADList *list, NSError *error))completionHandler {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     // `url` may be a security scoped resource.
@@ -130,7 +130,7 @@
     }];
 }
 
-+ (void)createList:(MADList *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *))completionHandler {
++ (void)createFile:(MADList *)list atURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *))completionHandler {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL:url options:NSFileCoordinatorWritingForReplacing];
@@ -161,7 +161,7 @@
     }];
 }
 
-+ (void)removeListAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler {
++ (void)removeFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSError *error))completionHandler {
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
     
     // `url` may be a security scoped resource.
