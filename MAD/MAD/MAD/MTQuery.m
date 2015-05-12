@@ -217,16 +217,23 @@ NSString * const MADIdentifierROWID = @"ROWID";
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     @autoreleasepool {
         [self.database executeQuery:self completion:^(BOOL success, NSError *error) {
-            completion(success, error);
+            NSError *resultError = error ? [NSError errorWithDomain:error.domain
+                                                               code:error.code
+                                                           userInfo:error.userInfo] : nil;
+            completion(success, resultError);
         }];
     }
 }
 
-- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion {
+- (void)performQueryWithDatabase:(MTDatabase *)database
+                      completion:(void (^)(BOOL success, NSError *error))completion {
     [self setDatabase:database];
     @autoreleasepool {
         [self.database executeQuery:self completion:^(BOOL success, NSError *error) {
-            completion(success, error);
+            NSError *resultError = error ? [NSError errorWithDomain:error.domain
+                                                               code:error.code
+                                                           userInfo:error.userInfo] : nil;
+            completion(success, resultError);
         }];
     }
 }

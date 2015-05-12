@@ -50,7 +50,9 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    [super getSqlWithError:error];
+    NSError *sqlError = nil;
+    [super getSqlWithError:&sqlError];
+    *error = sqlError;
     
     NSString *sql = nil;
     NSArray *fields = [[NSArray alloc] initWithArray:[self queryObject]];

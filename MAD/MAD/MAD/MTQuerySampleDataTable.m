@@ -50,7 +50,9 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    [super getSqlWithError:error];
+    NSError *sqlError = nil;
+    [super getSqlWithError:&sqlError];
+    *error = sqlError;
 
     NSMutableString *sql = [[NSMutableString alloc] initWithString:[self.database selectPartWithLimitedResults:255]];
     RptqDatabaseSchemaTable *table = [self queryObject];
@@ -72,6 +74,8 @@
     NSOrderedSet *fields = [[self queryObject] hasFields];
     MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType:MTQueryTypeMaxFieldLength object:fields];
     [queryMaxFieldLenght database].delegate = self;
+
+    __block NSError *blockError;
     [[queryMaxFieldLenght database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
         if (success && [[self dataTableMaxFieldLength] numberOfRows] > 0) {
             
@@ -87,9 +91,10 @@
                 f.calculatedWidth = maxSize;
             }];
         } else {
-            *error = errorFl;
+            blockError = errorFl;
         }
     }];
+    *error = blockError;
     
     [sql appendString:MTSqlFrom];
     [sql appendString:safeTableName];

@@ -35,7 +35,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
 @property (nonatomic, strong) MADocument *docToSave;
-
+@property (nonatomic, strong) UIProgressView *progressView;
 @end
 
 @implementation MTConnectionViewController
@@ -48,6 +48,11 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIProgressView *progressView = [MTConnectionViewController progressViewWithWidth:self.tableView.frame.size.width];
+    [self.tableView addSubview:progressView];
+    self.progressView = progressView;
+    
     self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
     self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];
@@ -120,6 +125,13 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     return nil;
 }
 
+- (void)removeKeyboard {
+    [self.textFieldHost resignFirstResponder];
+    [self.textFieldPort resignFirstResponder];
+    [self.textFieldDatabase resignFirstResponder];
+    [self.textFieldReportName resignFirstResponder];
+}
+
 - (void)disableTextFields {
     self.textFieldHost.enabled = NO;
     self.textFieldPort.enabled = NO;
@@ -145,15 +157,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 - (IBAction)save:(id)sender {
     
-    [self.textFieldHost resignFirstResponder];
-    [self.textFieldPort resignFirstResponder];
-    [self.textFieldDatabase resignFirstResponder];
-    [self.textFieldReportName resignFirstResponder];
-
+    [self removeKeyboard];
     [self disableTextFields];
-    
-    UIProgressView *progressView = [MTConnectionViewController progressViewWithWidth:self.tableView.frame.size.width];
-    [self.tableView addSubview:progressView];
     
     self.navigationItem.prompt = @"Importing schema.";
     
@@ -222,16 +227,15 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                           [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
                               
                               weakself3.navigationItem.prompt = readStatus;
-                              progressView.progress = progress;
+                              weakself3.progressView.progress = progress;
                               
                           } completion:^(BOOL success, MTErrorContainer *errorContainer) {
                               
                               if (success) {
                                   
                                   __strong MTConnectionViewController *strongself3 = weakself3;
-                                  __weak MTConnectionViewController *weakself4 = strongself3;
                                   
-                                  [weakself4 saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
+                                  [strongself3 saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
                                       
                                       blockSender.enabled = YES;
                                       [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
@@ -251,6 +255,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                       dispatch_sync(dispatch_get_main_queue(), ^{
                                           
                                           NSString *key = [NSString stringWithString: dbDetails.connectionString];
+                                          [self showErrorLog:errorContainer];
+                                          [self resetForm];
                                           [[MTKeyChain sharedObject] deleteKey:key];
                                           
                                           [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
@@ -281,22 +287,15 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                   });
                               }
                               
-                              [self showErrorLog:errorContainer];
-                              
-                              [progressView removeFromSuperview];
-                              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                               
                           }];
                       }
                   } else {
-                      
                       dispatch_async(dispatch_get_main_queue(), ^{
                           blockSender.enabled = YES;
-                          [weakself3 enableNavigation];
+                          [weakself3 resetForm];
                           [weakself3.delegate viewControllerDidFinish: weakself3];
-                          [progressView removeFromSuperview];
                       });
-                      
                   }
                   
               }];
@@ -315,10 +314,16 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                                 [[MTKeyChain sharedObject] deleteKey:key];
                                             }];
             blockSender.enabled = YES;
-            [strongself enableNavigation];
-            [progressView removeFromSuperview];
+            [strongself resetForm];
         }
     }];
+}
+
+- (void)resetForm {
+    [self enableNavigation];
+    [self enableTextFields];
+    self.progressView.progress = 0.0000f;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 + (void)viewController:(id)viewController displayErrors:(NSArray *)errors completion:(void (^)(BOOL))completion {
