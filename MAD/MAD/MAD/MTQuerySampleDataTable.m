@@ -37,8 +37,7 @@
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
-        RptqUserCredentals *userCredentals = ((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser;
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;
@@ -54,40 +53,45 @@
     [super getSqlWithError:&sqlError];
     *error = sqlError;
 
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:[self.database selectPartWithLimitedResults:255]];
-    RptqDatabaseSchemaTable *table = [self queryObject];
+    NSString *selectPart = [self.database selectPartWithLimitedResults:255];
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:selectPart];
+    RptqDatabaseSchemaTable *table = self.queryObject;
     
     [sql appendString:[MTQuerySampleDataTable sqlAllFieldsInTable: table
                                                     usingDatabase: self.database]];
     
     NSString *safeTableName = [self.database tableAliasForTable:table.toString];
 
-    if ([[self fieldKeys] count] <= 0) {
-        for (RptqDatabaseSchemaField *field in [table hasFields]) {
+    if (self.fieldKeys.count <= 0) {
+        for (RptqDatabaseSchemaField *field in table.hasFields) {
             MTDatabaseField *dbField = [field databaseFieldWrapper];
-            NSString *fieldAlias = [self.database fieldAliasForField:field.name withSafeTableName:safeTableName];
-            [self fields][fieldAlias] = dbField;
-            [[self fieldKeys] addObject:fieldAlias];
+            NSString *fieldAlias = [self.database fieldAliasForField:field.name
+                                                   withSafeTableName:safeTableName];
+            self.fields[fieldAlias] = dbField;
+            [self.fieldKeys addObject:fieldAlias];
         }
     }
     
-    NSOrderedSet *fields = [[self queryObject] hasFields];
-    MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType:MTQueryTypeMaxFieldLength object:fields];
-    [queryMaxFieldLenght database].delegate = self;
+    NSOrderedSet *fields = table.hasFields;
+    MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType: MTQueryTypeMaxFieldLength
+                                                               object: fields];
+    queryMaxFieldLenght.database.delegate = self;
 
     __block NSError *blockError;
-    [[queryMaxFieldLenght database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
-        if (success && [[self dataTableMaxFieldLength] numberOfRows] > 0) {
+    [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
+        if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
             
             [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
                 
                 NSString *safeTableName = [queryMaxFieldLenght.database tableAliasForTable:field.inTable.toString];
-                NSString *okey = [queryMaxFieldLenght.database fieldAliasForField:field.name withSafeTableName:safeTableName];
-                NSString *ckey = [queryMaxFieldLenght.database fieldAliasForField:field.name andTableName:field.inTable.name];
-                NSDictionary *widthsByField = [[self dataTableMaxFieldLength] objectAtRow:0];
+                NSString *okey = [queryMaxFieldLenght.database fieldAliasForField: field.name
+                                                                withSafeTableName: safeTableName];
+                NSString *ckey = [queryMaxFieldLenght.database fieldAliasForField: field.name
+                                                                     andTableName: field.inTable.name];
+                NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
                 NSNumber *widthByField = widthsByField[ckey];
                 NSInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : [widthByField integerValue];
-                MTDatabaseField *f = [self fields][okey];
+                MTDatabaseField *f = self.fields[okey];
                 f.calculatedWidth = maxSize;
             }];
         } else {
