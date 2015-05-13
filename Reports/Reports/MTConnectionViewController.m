@@ -235,19 +235,23 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                   
                                   __strong MTConnectionViewController *strongself3 = weakself3;
                                   
-                                  [strongself3 saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
-                                      
-                                      blockSender.enabled = YES;
-                                      [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
-                                      
-                                      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                          
-                                          NSNumber *bgTaskWrapper = @(bgTask);
-                                          [[UIApplication sharedApplication] handoffBackground:bgTaskWrapper];
-                                          
+                                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                      dispatch_sync(dispatch_get_main_queue(), ^{
+                                          [strongself3 saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
+                                              
+                                              blockSender.enabled = YES;
+                                              [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
+                                              
+                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                                  
+                                                  NSNumber *bgTaskWrapper = @(bgTask);
+                                                  [[UIApplication sharedApplication] handoffBackground:bgTaskWrapper];
+                                                  
+                                              });
+                                              
+                                          }];
                                       });
-                                      
-                                  }];
+                                  });
                                   
 
                               } else {
