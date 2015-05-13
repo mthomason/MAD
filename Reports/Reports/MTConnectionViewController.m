@@ -36,6 +36,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
 @property (nonatomic, strong) MADocument *docToSave;
 @property (nonatomic, strong) UIProgressView *progressView;
+@property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+
 @end
 
 @implementation MTConnectionViewController
@@ -161,8 +163,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     [self disableTextFields];
     
     self.navigationItem.prompt = @"Importing schema.";
-    
-    [sender setEnabled:NO];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [self disableNavigation];
     
@@ -171,161 +172,128 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                                                                      action: nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
-    UITextField *textFieldServer    = self.textFieldHost;
-    UITextField *textFieldDatabae   = self.textFieldDatabase;
-    UITextField *textFieldPort      = self.textFieldPort;
-    
-    NSString *blockServer   = [[NSString alloc] initWithString: textFieldServer.text];
-    NSString *blockDatabase = [[NSString alloc] initWithString: textFieldDatabae.text];
-    
-    NSString *textPortText  = textFieldPort.text;
-    NSString *textPort      = textPortText.length > 0 ? textPortText : @"0";   // FIXME: A very poor guess.
-    NSInteger blockPort     = textPort.integerValue;
-    
-    __weak UIBarButtonItem *blockSender = sender;
     NSAssert(blockSender == nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSURL *applicationFileUrlWithExtention = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: self.textFieldReportName.text
                                                                                             withExtension: MADFileExtentionMobleApplicationDocument
                                                                                               inContainer: MACloudManagerSectionLocal];
     
-    MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:self.databaseType];
-    dbDetails.server = blockServer;
-    dbDetails.database = blockDatabase;
-    dbDetails.port = blockPort;
+    MADocument *doc = [[MADocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+    self.docToSave = doc;
+    
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactoryWithType:self.databaseType
+                                                                                                  host:self.textFieldHost.text
+                                                                                              database:self.textFieldDatabase.text
+                                                                                                  port:self.textFieldPort.text.integerValue];
+    self.databaseConnection = databaseConnection;
     
     
     __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    __weak MTConnectionViewController *weakself = self;
-    
-    [dbDetails testConnection:^(BOOL success, NSError *error, NSArray *errors) { //Not always removing credentsals when connection fails.
+    [self.databaseConnection testConnection:^(BOOL success, NSArray *errors) { //Not always removing credentsals when connection fails.
         
-        __strong MTConnectionViewController *strongself = weakself;
         if (success) {
             
-            MADocument *doc = [[MADocument alloc] initWithFileURL:applicationFileUrlWithExtention];
-            strongself.docToSave = doc;
             
-            __weak __block MADocument *weakdoc1 = doc;
-            __weak MTDatabaseConnection *weakConnection = dbDetails;
-            __weak MTConnectionViewController *weakself2 = strongself;
+            __weak MTConnectionViewController *weakself = self;
+            [self.docToSave addConnection:self.databaseConnection status:^(NSString *readStatus, CGFloat progress) {
+                
+                weakself.navigationItem.prompt = readStatus;
+                weakself.progressView.progress = progress;
+                
+            } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+
+                __strong MTConnectionViewController *strongself = weakself;
+                NSNumber *backgroundTask = @(bgTask);
+                if (success) {
+                    [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileName
+                                              andBackgroundTask: backgroundTask];
+                    
+                } else {
+                    [strongself closeAndDeleteWithErrors:errorContainer
+                                        connectionString:strongself.databaseConnection.connectionString
+                                       andBackgroundTask:backgroundTask];
+                }
+                
+                
+            }];
             
-            [weakdoc1 saveToURL: weakdoc1.fileURL
-               forSaveOperation: UIDocumentSaveForCreating
-              completionHandler:^(BOOL success) {
-                  
-                  __strong MTConnectionViewController *strongself2 = weakself2;
-                  __weak MTConnectionViewController *weakself3 = strongself2;
-                  
-                  if (success) {
-                      
-                      NSString *name = [NSString stringWithString:doc.fileName];
-                      __weak __block MADocument *weakdoc = weakdoc1;
-                      @synchronized(weakself) {
-                          [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
-                              
-                              weakself3.navigationItem.prompt = readStatus;
-                              weakself3.progressView.progress = progress;
-                              
-                          } completion:^(BOOL success, MTErrorContainer *errorContainer) {
-                              
-                              if (success) {
-                                  
-                                  __strong MTConnectionViewController *strongself3 = weakself3;
-                                  
-                                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                      dispatch_sync(dispatch_get_main_queue(), ^{
-                                          [strongself3 saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
-                                              
-                                              blockSender.enabled = YES;
-                                              [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
-                                              
-                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                                  
-                                                  NSNumber *bgTaskWrapper = @(bgTask);
-                                                  [[UIApplication sharedApplication] handoffBackground:bgTaskWrapper];
-                                                  
-                                              });
-                                              
-                                          }];
-                                      });
-                                  });
-                                  
-
-                              } else {
-                                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                      dispatch_sync(dispatch_get_main_queue(), ^{
-                                          
-                                          NSString *key = [NSString stringWithString: dbDetails.connectionString];
-                                          [self showErrorLog:errorContainer];
-                                          [self resetForm];
-                                          [[MTKeyChain sharedObject] deleteKey:key];
-                                          
-                                          [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
-                                              
-                                              blockSender.enabled = YES;
-                                              
-                                              [self enableNavigation];
-                                              
-                                              if (error != nil) {
-                                                  UILocalNotification *notification = [[UILocalNotification alloc] init];
-                                                  NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
-                                                  notification.alertBody = [NSString stringWithFormat:localizedErrorString, error.localizedDescription];
-                                                  [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                                              }
-                                              
-                                              [self enableTextFields];
-                                              self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
-                                              
-                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                                  
-                                                  NSNumber *bgTaskWrapper = @(bgTask);
-                                                  [[UIApplication sharedApplication] handoffBackground:bgTaskWrapper];
-
-                                              });
-                                          }];
-                                          
-                                      });
-                                  });
-                              }
-                              
-                              
-                          }];
-                      }
-                  } else {
-                      dispatch_async(dispatch_get_main_queue(), ^{
-                          blockSender.enabled = YES;
-                          [weakself3 resetForm];
-                          [weakself3.delegate viewControllerDidFinish: weakself3];
-                      });
-                  }
-                  
-              }];
         } else {
-            
-            NSString *key = [NSString stringWithString: dbDetails.connectionString];
-            NSArray *displayErrors;
-            if (error != nil) {
-                displayErrors = [errors arrayByAddingObject:error];
-            } else {
-                displayErrors = errors;
-            }
-            [MTConnectionViewController viewController: strongself
-                                         displayErrors: displayErrors
-                                            completion: ^(BOOL success) {
-                                                [[MTKeyChain sharedObject] deleteKey:key];
-                                            }];
-            blockSender.enabled = YES;
-            [strongself resetForm];
+            [self resetAfterConnectionString: self.databaseConnection.connectionString
+                                  failedTest: errors];
         }
+        
+    }];
+}
+
+- (void)resetAfterConnectionString:(NSString *)connectionString
+                        failedTest:(NSArray *)errors {
+    [self resetForm];
+    [self displayErrors:errors forConnectionString:connectionString];
+
+}
+
+- (void)displayErrors:(NSArray *)errors
+  forConnectionString:(NSString *)connectionString {
+    [MTConnectionViewController viewController: self
+                                 displayErrors: errors
+                                    completion: ^(BOOL success) {
+                                        [[MTKeyChain sharedObject] deleteKey:connectionString];
+                                    }];
+}
+
+- (void)closeAndDeleteWithErrors:(MTErrorContainer *)errorContainer
+                connectionString:(NSString *)connectionString
+               andBackgroundTask:(NSNumber *)backgroundTask {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            
+            [self showErrorLog:errorContainer];
+            [self resetForm];
+            [[MTKeyChain sharedObject] deleteKey:connectionString];
+            
+            [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
+                
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+                [self enableNavigation];
+                
+                if (error != nil) {
+                    UILocalNotification *notification = [[UILocalNotification alloc] init];
+                    NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
+                    notification.alertBody = [NSString stringWithFormat:localizedErrorString, error.localizedDescription];
+                    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                }
+                
+                [self enableTextFields];
+                self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                    
+                    [[UIApplication sharedApplication] handoffBackground:backgroundTask];
+                    
+                });
+            }];
+            
+        });
+    });
+}
+
+- (void)saveAndCloseNewDocumentWithName:(NSString *)name
+                      andBackgroundTask:(NSNumber *)backgroundTask {
+    [self saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
+        [self resetForm];
+        [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [[UIApplication sharedApplication] handoffBackground:backgroundTask];
+        });
     }];
 }
 
 - (void)resetForm {
     [self enableNavigation];
     [self enableTextFields];
+    self.navigationItem.rightBarButtonItem.enabled = YES;
     self.progressView.progress = 0.0000f;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
@@ -365,7 +333,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     __weak MTConnectionViewController *weakself = self;
     
     [self.docToSave saveToURL: self.docToSave.fileURL
-             forSaveOperation: UIDocumentSaveForOverwriting
+             forSaveOperation: UIDocumentSaveForCreating
             completionHandler: ^(BOOL success) {
                 
                 __strong MTConnectionViewController *strongself = weakself;

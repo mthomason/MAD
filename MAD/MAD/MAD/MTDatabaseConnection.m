@@ -60,6 +60,24 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
     return self;
 }
 
++ (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
+                                             host:(NSString *)host
+                                         database:(NSString *)database
+                                             port:(NSInteger)port {
+    
+    id result = [self databaseConnectionFactoryEmpty:typeIdentifier];
+    
+    NSString *h   = [NSString stringWithString: host];
+    ((MTDatabaseConnection *) result).server = h;
+    
+    NSString *d = [NSString stringWithString: database];
+    ((MTDatabaseConnection *) result).database = d;
+    
+    ((MTDatabaseConnection *) result).port = port;
+    
+    return result;
+}
+
 + (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier {
     
     id resultCredentals = nil;
@@ -160,11 +178,13 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
     return [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
 }
 
-- (void)testConnection:(void(^)(BOOL success, NSError *error, NSArray *errors))completion {
+- (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion {
     MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
                                                      object: self];
     [queryTest performQuery:^(BOOL success, NSError *error) {
-        completion(success, error, queryTest.database.errors);
+        NSArray *displayErrors = error ? [queryTest.database.errors arrayByAddingObject:error] :
+                                         [NSArray arrayWithArray:queryTest.database.errors];
+        completion(success, displayErrors);
     }];
 }
 

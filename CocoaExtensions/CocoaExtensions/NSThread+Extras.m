@@ -14,7 +14,7 @@
     if ([NSThread isMainThread]) {
         completion();
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             completion();
         });
     }
@@ -26,7 +26,7 @@
     if ([NSThread isMainThread]) {
         completion(success, obj);
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             completion(success, obj);
         });
     }

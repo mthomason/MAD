@@ -22,15 +22,18 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                            code: (NSInteger)code
                           title: (NSString *)title
                      andMessage: (NSString *)message {
-    
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : message,
-                                NSLocalizedFailureReasonErrorKey : title};
+    NSDictionary *userInfo = [self userInfoWithTitle:title andMessage:message];
     return [NSError errorWithDomain:domain code:code userInfo:userInfo];
 }
 
-+ (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message {
-    return @{NSLocalizedDescriptionKey :         title,
-             NSLocalizedFailureReasonErrorKey :  message};
++ (NSDictionary *)userInfoWithTitle:(NSString *)title
+                         andMessage:(NSString *)message {
+    
+    NSString *m = message == nil ? @"" : [NSString stringWithString:message];
+    NSString *t = title == nil ? @"" : [NSString stringWithString:title];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : m,
+                               NSLocalizedFailureReasonErrorKey : t};
+    return userInfo;
     
 }
 

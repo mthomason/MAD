@@ -30,13 +30,17 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
 - (NSString *)appname;
 
 + (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier;
++ (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
+                                             host:(NSString *)host
+                                         database:(NSString *)database
+                                             port:(NSInteger)port;
 + (instancetype)databaseConnectionFactory:(id)credentals;
 
 - (NSString *)identifier;
 + (NSString *)identifier;
 
 - (NSString *)connectionString;
-- (void)testConnection:(void(^)(BOOL success, NSError *error, NSArray *errors))completion;
+- (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion;
 
 @end
 
