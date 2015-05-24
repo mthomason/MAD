@@ -9,7 +9,7 @@
 #ifndef Reports_MTRulerView_h
 #define Reports_MTRulerView_h
 
-const CGFloat MTReportDesignerRulerHeight;
+extern const CGFloat MTReportDesignerRulerHeight;
 
 #import <UIKit/UIKit.h>
 

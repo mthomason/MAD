@@ -54,7 +54,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
-@property (nonatomic, strong, readonly) NSURL *urlGuts;
 @property (nonatomic, strong, readonly) NSString *fileName;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
@@ -100,6 +99,8 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 
 - (NSDictionary *)layoutHeightsBySectionKey;
+
+- (void)removeGuts; //Cleans any cache that may exist.
 
 @end
 

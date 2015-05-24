@@ -12,18 +12,19 @@
 #import <Foundation/Foundation.h>
 
 extern NSString * const MADUtiType;
-extern NSString * const MADNotificationCloudActivityStarted;
-extern NSString * const MADNotificationCloudActivityCompleted;
+//extern NSString * const MADNotificationCloudActivityStarted;
+//extern NSString * const MADNotificationCloudActivityCompleted;
 extern NSString * const MADKeyMetadataShort;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 
-- (void)fileCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
+- (void)listCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
                                              removedItems:(NSIndexSet *)removedItems
                                              updatedItems:(NSIndexSet *)updatedItems;
-- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-
+- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL    withError:(NSError *)error;
+- (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL    withError:(NSError *)error;
+- (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL    withError:(NSError *)error;
 @end
 
 @interface MADMetadataQueryManager : NSObject

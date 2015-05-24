@@ -19,14 +19,13 @@
 
 - (NSArray *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension;
 
+- (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
 - (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 
 - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
                                          fileURL:(NSURL *)fileURL;
-
-- (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-
 - (NSArray *)contentsOfDocumentsDirectoryWithGroupIdentifier: (NSString *)groupIdentifier
                                                 andExtention: (NSString *)extenstion;
 

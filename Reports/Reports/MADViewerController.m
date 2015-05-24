@@ -153,7 +153,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    self.document = [MTApplicationInstance mainInstance].openDocument;
+    self.document = [AppDelegate app].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -547,7 +547,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 - (void)setTintColorForToolbar:(UIToolbar *)toolbar {
-    toolbar.barTintColor = [UIColor tintColorBlue];
+    //toolbar.barTintColor = [UIColor tintColorBlue];
     toolbar.tintColor = [UIColor tintColorWhite];
 }
 

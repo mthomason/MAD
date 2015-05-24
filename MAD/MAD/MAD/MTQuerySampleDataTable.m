@@ -90,7 +90,7 @@
                                                                      andTableName: field.inTable.name];
                 NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
                 NSNumber *widthByField = widthsByField[ckey];
-                NSInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : [widthByField integerValue];
+                NSInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.integerValue;
                 MTDatabaseField *f = self.fields[okey];
                 f.calculatedWidth = maxSize;
             }];

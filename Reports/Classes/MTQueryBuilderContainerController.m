@@ -29,6 +29,7 @@
 #import "MACloudManager.h"
 
 #import "MADQueryNavigationController.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTQueryBuilderContainerController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
@@ -94,6 +95,12 @@
     return self;
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -116,7 +123,10 @@
     MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
     queryVisualizationViewController.document = self.document;
     self.queryBuilderControllerAdvanced = queryVisualizationViewController;
-    
+
+    self.barButtonItemSQL.tintColor = [UIColor whiteColor];
+    [UIBarButtonItem appearanceWhenContainedIn:[MTQueryBuilderContainerController class], nil].tintColor                        = [UIColor tintColorWhite];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -184,10 +194,6 @@
                         [self.rightViewController shouldPerformSegueWithIdentifier:identifier sender:sender];
     }
     return leftIsGo && rightIsGo;
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
 }
 
 - (void)viewWillLayoutSubviews {

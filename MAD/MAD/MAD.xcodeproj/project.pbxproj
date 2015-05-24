@@ -628,8 +628,6 @@
 		4C8CDC021AD264B300B7B9EA /* libMysqlClientObjC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMysqlClientObjC.a; path = "../../Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos/libMysqlClientObjC.a"; sourceTree = "<group>"; };
 		4C8CDC041AD264EF00B7B9EA /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4C8CDC051AD264EF00B7B9EA /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
-		4C8CDC061AD264EF00B7B9EA /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
-		4C8CDC071AD264EF00B7B9EA /* rwlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwlock.h; sourceTree = "<group>"; };
 		4C8CDC081AD264EF00B7B9EA /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
 		4C8CDC0A1AD264EF00B7B9EA /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		4C8CDC0B1AD264EF00B7B9EA /* big_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = big_endian.h; sourceTree = "<group>"; };
@@ -1377,8 +1375,6 @@
 			children = (
 				4C8CDC041AD264EF00B7B9EA /* gcc_builtins.h */,
 				4C8CDC051AD264EF00B7B9EA /* generic-msvc.h */,
-				4C8CDC061AD264EF00B7B9EA /* nolock.h */,
-				4C8CDC071AD264EF00B7B9EA /* rwlock.h */,
 				4C8CDC081AD264EF00B7B9EA /* solaris.h */,
 			);
 			path = atomic;
@@ -1940,6 +1936,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1956,6 +1953,10 @@
 		4C8CD9731AD1CDC800B7B9EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
@@ -1966,6 +1967,7 @@
 					"/Users/mthomason/Desktop/Reports/Reports/Barcodes/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
+					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1986,6 +1988,7 @@
 					"/Users/mthomason/Desktop/Reports/Reports/Barcodes/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
+					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

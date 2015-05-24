@@ -85,22 +85,7 @@ const NSInteger currentMajorVersion = 8;
     
     
     if (installChinook || installSamples) {
-        
-        __weak MADUpgradeManager *weakself = self;
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        dispatch_async(queue, ^{
-            NSError *error = nil;
-            if (installChinook) {
-                [weakself installSampleDatabase:&error];
-            }
-            if (installSamples) {
-                [self installSamplesDocuments:&error];
-            }
-            BOOL upgradePerformed = installSamples || installChinook;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                completion (error == nil, error, upgradePerformed);
-            });
-        });
+        completion (YES, nil, YES);
     } else {
         completion (YES, nil, NO);
     }
@@ -136,7 +121,7 @@ const NSInteger currentMajorVersion = 8;
     }
 }
 
-- (void)installSampleDatabase:(NSError **)error {
++ (void)installSampleDatabase:(NSError **)error {
     NSURL *fileUrl = [MADUpgradeManager applicationBundleSampleDatabaseChinook];
     NSURL *chinookAppSupportUrl = [MADUpgradeManager applicationSupportSampleDatabaseChinook];
     NSFileManager *defaultManager = [NSFileManager defaultManager];
@@ -152,7 +137,7 @@ const NSInteger currentMajorVersion = 8;
     }
 }
 
-- (void)installSamplesDocuments:(NSError **)error {
++ (void)installSamplesDocuments:(NSError **)error {
     NSBundle *mainBundle = [NSBundle mainBundle];
     NSURL *sampleUrl1 = [mainBundle URLForResource: MADIdentifierFileLondon
                                      withExtension: MADFileExtentionMobleApplicationDocument];

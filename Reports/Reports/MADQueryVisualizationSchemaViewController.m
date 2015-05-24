@@ -16,6 +16,7 @@
 #import "MADocument.h"
 
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
 

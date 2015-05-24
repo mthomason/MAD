@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MADViewController.h"
 
-@class MTCollectionViewCellDocument;
+@class MTCollectionViewCellDocument, MADFilesController;
 
 @interface MADOpenFileViewController : MADCollectionViewController
 
@@ -21,13 +21,11 @@
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readonly) BOOL savingActivityIndicatorVisible;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
 
+@property (nonatomic, strong) MADFilesController *filesController;
+
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;
 
-- (void)reloadData;
-- (void)reloadDataCloudWithInserts:(NSIndexSet *)inserts
-                           updates:(NSIndexSet *)updates
-                           deletes:(NSIndexSet *)deletes;
 
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;

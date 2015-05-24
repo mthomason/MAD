@@ -17,8 +17,8 @@ NSString * const MADUtiType                             = @"com.everydayapps.pro
 NSString * const MADUtiPublicData                       = @"public.data";
 NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == %@ && %K == %@";
 
-NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
-NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
+//NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
+//NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
 
 @interface MADMetadataQueryManager ()
 
@@ -86,7 +86,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         
         NSArray *metadata = @[];
         self.metadata = metadata;
-        
+        /*
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: @"kMDItemDisplayName"//NSMetadataItemFSNameKey
                                                                ascending: NO];
@@ -127,6 +127,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                  object: metadataQuery];
 
         self.metadataQuery = metadataQuery;
+        
         NSString *keyResults = [MADMetadataQueryManager keyResults];
         [self.metadataQuery addObserver:self
                              forKeyPath:keyResults
@@ -134,7 +135,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                          NSKeyValueObservingOptionOld |
                                          NSKeyValueObservingOptionPrior)
                                 context:NULL];
-
+*/
     }
 
     return self;
@@ -196,8 +197,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSArray *metadata = @[];
     self.metadata = metadata;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
-                                                        object: nil];
+    //[[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
+    //                                                    object: nil];
 
 
 }
@@ -209,8 +210,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (void)handleMetadataQueryDidFinishGatheringNotification:(NSNotification *)notification {
     
-    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
-                                                        object: nil];
+    //[[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
+    //                                                    object: nil];
     
     [self.metadataQuery disableUpdates];
     [self.results removeAllObjects];
@@ -235,7 +236,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         metadataItem = [self.metadataQuery resultAtIndex:i];
         metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
         metaDataDictionary = @{
-                               MADKeyDisplayNameShort : metaData.displayName,
+                               MADKeyDisplayNameShort : metaData.name,
                                MADKeyMetadataShort : metaData,
                                MADKeyPathShort : metaData.path
                                };
@@ -251,7 +252,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSIndexSet *inserted = [NSIndexSet indexSetWithIndexesInRange:range],
                *removed  = [NSIndexSet indexSet],
                *updated  = [NSIndexSet indexSet];
-    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedItems: inserted
+    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems: inserted
                                                         removedItems: removed
                                                         updatedItems: updated];
     
@@ -271,7 +272,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
         if (metaData) {
             NSDictionary *newItem = @{
-                                      MADKeyDisplayNameShort : metaData.displayName,
+                                      MADKeyDisplayNameShort : metaData.name,
                                       MADKeyMetadataShort : metaData,
                                       MADKeyPathShort : metaData.path
                                       };
@@ -344,11 +345,13 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     self.metadata = resultsSorted;
     
     
-    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
+    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
                                                         removedItems:removedItems
                                                         updatedItems:updatedItems];
     
     [self.metadataQuery enableUpdates];
 }
+
+
 
 @end

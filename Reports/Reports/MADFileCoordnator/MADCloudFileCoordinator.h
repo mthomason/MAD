@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "MADFileCoordinator.h"
 
+extern NSString * const MADNotificationCloudActivityStarted;
+extern NSString * const MADNotificationCloudActivityCompleted;
+
 @interface MADCloudFileCoordinator : NSObject <MADFileCoordinator>
 
 - (instancetype)initWithPathExtension: (NSString *)pathExtension

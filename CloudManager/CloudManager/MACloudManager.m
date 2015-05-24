@@ -12,23 +12,14 @@
 #import "MADMetaData.h"
 #import "NSFileManager+Common.h"
 
-//NSString * const MTDocumentExtentionMobleApplicationDocumentArchive     = @"mada";
-//NSString * const MTDocumentExtentionMobleApplicationDocument            = @"mad";
-
 NSString * const MTICloudUbiquityToken                                  = @"com.everydayapps.mad.designer.cloud.ubiquityIdentityToken";
 NSString * const MADPreferencesCloudOptionsSelected                     = @"com.everydayapps.mad.designer.cloud.options.selected";
 
-NSString * const MADNotificationFileManagerDidUpdateFileLocations       = @"MADNotificationFileManagerDidUpdateFileLocations";
 NSString * const MADNotificationCloudStateUpdated                       = @"MADNotificationCloudStateUpdated";
 NSString * const MADNotificationUbiquitousContainerFetchingWillBegin    = @"MADNotificationUbiquitousContainerFetchingWillBegin";
 NSString * const MADNotificationUbiquitousContainerFetchingDidEnd       = @"MADNotificationUbiquitousContainerFetchingDidEnd";
 
-NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyInserted    =   @"i";
-NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated     =   @"u";
-NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     =   @"d";
-
 @interface MACloudManager ()
-    <MADFileLocationManagerDelegate>
 
 @property (nonatomic, strong, readwrite) NSURL *ubiquitousDocumentsDirectory;
 @property (nonatomic, strong, readwrite) NSURL *ubiquityContainer;
@@ -41,14 +32,8 @@ NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved     
 
 @property (atomic, assign) BOOL checkingCloudPreferencesLock;
 
-@property (nonatomic, assign, readwrite) BOOL cloudAvailble;
-
-@property (nonatomic, strong) NSFileManager *fileManager;
-
 @property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheCloudMetaDataItems;
 @property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheLocalUrls;
-
-@property (nonatomic, strong, readwrite) NSString *groupId;
 
 @end
 
@@ -68,7 +53,7 @@ static MACloudManager *sharedSingleton;
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileLocationManager)), self.fileLocationManager];
 
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(checkingCloudPreferencesLock)), self.checkingCloudPreferencesLock ? @"YES" : @"NO"];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudAvailble)), self.cloudAvailble ? @"YES" : @"NO"];
+    [debuggingString appendFormat:@"%@:\t%@\n", @"isCloudAvailable", [MACloudManager isCloudAvailable] ? @"YES" : @"NO"];
     
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(documentCacheCloudMetaDataItems)), self.documentCacheCloudMetaDataItems];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(documentCacheLocalUrls)), self.documentCacheLocalUrls];
@@ -85,21 +70,7 @@ static MACloudManager *sharedSingleton;
         NSMutableArray *documentCacheCloudMetaDataItems = [NSMutableArray new];
         self.documentCacheCloudMetaDataItems = documentCacheCloudMetaDataItems;
         
-        //static dispatch_once_t onceToken;
-        //dispatch_once(&onceToken, ^{
-        //    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudOptionsSelected];
-        //    [self resetForDebugging];
-        //});
-        
         self.searchString = @"";
-        
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        
-        
-        self.fileManager = fileManager;
-        
-        
-        
     }
     return self;
 }
@@ -125,11 +96,11 @@ static MACloudManager *sharedSingleton;
     return sharedSingleton;
 }
 
-#pragma mark - NSNotification Handlers
+/*#pragma mark - NSNotification Handlers
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
-    id <NSObject, NSCopying, NSCoding> token = self.fileManager.ubiquityIdentityToken;
+    id <NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
     if (token != nil) {
         
         NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:token];
@@ -145,57 +116,7 @@ static MACloudManager *sharedSingleton;
         
     }
     
-}
-
-#pragma mark - Exposed Methods
-
-- (void)activateWithGroupID:(NSString *)groupId {
-    
-    if (self.fileLocationManager == nil) {
-        
-        NSString *homeDirectory = NSHomeDirectory();
-        
-        NSURL *homeDirectoryUrl = [NSURL fileURLWithPath: homeDirectory
-                                             isDirectory: YES];
-        
-        NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        
-        NSURL *cacheUrl = [NSURL fileURLWithPath: cachePaths.firstObject
-                                     isDirectory: YES];
-        
-        MADMetadataQueryManager *fileLocationManager = [[MADMetadataQueryManager alloc] initWithPathExtension: self.fileExtention];
-        self.fileLocationManager = fileLocationManager;
-        self.localHomeDirectory = homeDirectoryUrl;
-        self.localCachesDirectory = cacheUrl;
-        
-        NSURL *documentDirectory = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupId];
-        self.localDocumentDirectory = documentDirectory;
-        self.groupId = groupId;
-        self.checkingCloudPreferencesLock = NO;
-        self.fileLocationManager.delegate = self;
-    }
-    self.groupId = groupId;
-    
-    [self reloadCacheLocal: @""];
-
-    if (self.cloudAvailble) {
-    
-        [self reloadCacheCloud: @""];
-
-        __weak MACloudManager *weakself = self;
-        [self updateFileStorageContainerURL:^(void) {
-
-            [weakself.fileLocationManager.metadataQuery startQuery];
-
-        }];
-        
-    }
-
-    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
-                                                        object: nil];
-}
-
-
+}*/
 
 #pragma mark - Internal Methods
 
@@ -203,7 +124,7 @@ static MACloudManager *sharedSingleton;
     
     @synchronized (self) {
         
-        if (self.cloudAvailble) {
+        if ([MACloudManager isCloudAvailable]) {
             
             [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationUbiquitousContainerFetchingWillBegin
                                                                 object: nil];
@@ -234,107 +155,13 @@ static MACloudManager *sharedSingleton;
     }
 }
 
-- (void)setCloudEnabled: (BOOL)isCloudEnabled
-             completion: (void (^)(void))completion {
-    
-    // Asynchronously update our data directory URL and documents directory URL
-    // If we're enabling cloud storage, we move any local documents into the cloud container after the URLs are updated.
-    
-    if (isCloudEnabled != self.cloudAvailble) {    //if changed
-        
-        if (isCloudEnabled) {
-
-            NSURL *oldDocumentsDirectoryURL = self.ubiquitousDocumentsDirectory != nil ?
-                                                self.ubiquitousDocumentsDirectory : self.localDocumentDirectory;
-            
-            __weak MACloudManager *weakself = self;
-            [self updateFileStorageContainerURL:^(void) {
-                
-                if (isCloudEnabled) {
-                    
-                    [weakself migrateFilesFromLocalDirectory: oldDocumentsDirectoryURL
-                                           toRemoteDirectory: weakself.ubiquitousDocumentsDirectory
-                                                  completion: ^{
-                        if (completion) completion();
-                    }];
-                    
-                } else {
-                    if (completion) completion();
-                }
-            }];
-            [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudStateUpdated
-                                                                object: nil];
-        } else {
-            if (completion) completion();
-        }
-    } else {
-        if (completion) completion();
-    }
-}
-
-- (void)migrateFilesFromLocalDirectory: (NSURL *)localDirectory
-                     toRemoteDirectory: (NSURL *)remoteDirectory
-                            completion: (void (^)(void))completion {
-    
-    if (localDirectory && remoteDirectory) {
-
-        NSDirectoryEnumerationOptions enumerationOptions = NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                                                            NSDirectoryEnumerationSkipsPackageDescendants |
-                                                            NSDirectoryEnumerationSkipsHiddenFiles;
-        
-        NSError *readDocumentsError = nil;
-        
-        NSArray *localDocuments = [self.fileManager contentsOfDirectoryAtURL: localDirectory
-                                                    includingPropertiesForKeys: nil
-                                                                       options: enumerationOptions
-                                                                         error: &readDocumentsError];
-        
-        MACloudManager *weakself = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            
-            for (NSURL *documentURL in localDocuments) {
-                if ([documentURL.pathExtension isEqualToString: self.fileExtention]) { // ???: MAD Files only
-                    NSURL *destinationURL = [remoteDirectory URLByAppendingPathComponent:documentURL.lastPathComponent];
-                    NSError *errorUpload = nil;
-                    [weakself.fileManager setUbiquitous: YES
-                                              itemAtURL: documentURL
-                                         destinationURL: destinationURL
-                                                  error: &errorUpload];
-                    NSAssert(errorUpload != nil, @"%s %@", __PRETTY_FUNCTION__, errorUpload);
-                }
-            }
-            if (completion) completion();
-        });
-
-    } else {
-        if (completion) completion();
-    }
-}
-
 #pragma Cloud
 
-- (BOOL)cloudAvailble {
-    return [self.fileManager ubiquityIdentityToken] != nil;
++ (BOOL)isCloudAvailable {
+    return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 
 #pragma mark - MADFileLocationManagerDelegate
-
-/* Only called on iCloud items. */
-
-- (void)fileCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
-                                             removedItems:(NSIndexSet *)removedItems
-                                             updatedItems:(NSIndexSet *)updatedItems {
-    
-    [self reloadCacheCloud:self.searchString];
-    NSDictionary *updates = @{
-                              MADNotificationFileManagerDidUpdateFileLocationsKeyInserted : insertedItems,
-                              MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated : updatedItems,
-                              MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved : removedItems
-                              };
-    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
-                                                        object: updates];
-        
-}
 
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error { }
 
@@ -342,7 +169,7 @@ static MACloudManager *sharedSingleton;
 
 #pragma mark Prompts
 
-- (void)promptCloudSignOut:(void (^)(void))completion {
++ (UIAlertController *)alertControllerPromotCloudSignOut:(void (^)(UIAlertAction *action))handler {
     NSString *title = @"iCloud Sign-Out";
     NSString *message = @"You have signed out of the iCloud account previously used to store documents.  Sign back in to access those documents.";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
@@ -351,12 +178,18 @@ static MACloudManager *sharedSingleton;
     NSString *ok = @"Dismiss";
     UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
-                                                     handler: ^(UIAlertAction *action) {
-                                                         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                                                         [userDefaults setBool:NO forKey:MADPreferencesCloudOptionsSelected];
-                                                         if (completion) completion();
-                                                     }];
+                                                     handler: handler];
     [alertController addAction:actionKk];
+    return alertController;
+}
+
+- (void)promptCloudSignOut:(void (^)(void))completion {
+
+    UIAlertController *alertController = [MACloudManager alertControllerPromotCloudSignOut: ^(UIAlertAction *action) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:NO forKey:MADPreferencesCloudOptionsSelected];
+        if (completion) completion();
+    }];
     [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController presentViewController: alertController
                                                                                                                                    animated: YES
                                                                                                                                  completion: nil];
@@ -366,7 +199,7 @@ static MACloudManager *sharedSingleton;
 
 - (void)createDirectoryIfDoesNotExist:(NSURL *)url {
 
-    if ([self.fileManager fileExistsAtPath:url.path] == NO) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO) {
 
         NSError *error = nil;
         NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
@@ -381,9 +214,9 @@ static MACloudManager *sharedSingleton;
                                                                                     attributes: nil
                                                                                          error: &errorCreateNew];
                                          
-                                         NSAssert(errorCreateNew, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
+                                         NSAssert(errorCreateNew == nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
                                      }];
-        NSAssert(error, @"%s %@", __PRETTY_FUNCTION__, error);
+        NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 
@@ -454,89 +287,6 @@ static MACloudManager *sharedSingleton;
     return success;
 }
 
-- (void)deleteCloudDocumentAtURL:(NSURL *)url {
-    NSUInteger index = [self.documentCacheCloudMetaDataItems indexOfObjectPassingTest:^BOOL(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-        MADMetaData *metadata = obj[MADKeyMetadataShort];
-        return [metadata.url isEqual:url];
-    }];
-    if (index < self.documentCacheCloudMetaDataItems.count) {
-        [self.documentCacheCloudMetaDataItems removeObjectAtIndex:index];
-    }
-    [MACloudManager deleteDocumentAtURL:url];
-}
-
-- (void)deleteLocalDocumentAtURL:(NSURL *)url {
-    [self.documentCacheLocalUrls removeObjectIdenticalTo:url];
-    [MACloudManager deleteDocumentAtURL:url];
-}
-
-+ (void)deleteDocumentAtURL:(NSURL *)url {
-    
-//    __block BOOL success = NO;
-    NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
-    
-    // `url` may be a security scoped resource.
-    BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
-    
-    NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL: url
-                                                                         options: NSFileCoordinatorWritingForDeleting];
-    
-    [fileCoordinator coordinateAccessWithIntents:@[writingIntent]
-                                           queue: [self queue]
-                                      byAccessor:^(NSError *accessError) {
-                                          if (!accessError) {
-                                              
-                                              NSError *error;
-                                              NSFileManager *fileManager = [[NSFileManager alloc] init];
-                                              [fileManager removeItemAtURL:writingIntent.URL error:&error];
-                                              
-                                              if (successfulSecurityScopedResourceAccess) {
-                                                  [url stopAccessingSecurityScopedResource];
-                                              }
-                                          }
-                                      }];
-}
-
-
-+ (void)deleteDocumentAtURL:(NSURL *)url
-      withCompletionHandler:(void (^)(BOOL success, NSError *error))completionHandler {
-    
-    NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
-    
-    // `url` may be a security scoped resource.
-    BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
-    
-    NSFileAccessIntent *writingIntent = [NSFileAccessIntent writingIntentWithURL: url
-                                                                         options: NSFileCoordinatorWritingForDeleting];
-    [fileCoordinator coordinateAccessWithIntents:@[writingIntent]
-                                           queue:[self queue]
-                                      byAccessor:^(NSError *accessError) {
-                                          
-                                          if (accessError) {
-                                              if (completionHandler) {
-                                                  completionHandler(NO, accessError);
-                                              }
-                                              
-                                              return;
-                                          }
-                                          
-                                          NSFileManager *fileManager = [[NSFileManager alloc] init];
-                                          
-                                          NSError *error;
-                                          
-                                          BOOL success = [fileManager removeItemAtURL:writingIntent.URL error:&error];
-                                          
-                                          if (successfulSecurityScopedResourceAccess) {
-                                              [url stopAccessingSecurityScopedResource];
-                                          }
-                                          
-                                          if (completionHandler) {
-                                              completionHandler(success, error);
-                                          }
-                                      }];
-}
-
-
 + (NSOperationQueue *)queue {
     static NSOperationQueue *queue;
     
@@ -551,35 +301,30 @@ static MACloudManager *sharedSingleton;
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
                           withExtension:(NSString *)extension
                             inContainer:(MACloudManagerSection)container {
-    if (container == MACloudManagerSectionCloud) {
-        return [MACloudManager uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
-                         withDesiredHandle: name
-                              andExtension: extension];
-    } else {
-        return [MACloudManager uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
-                         withDesiredHandle: name
-                              andExtension: extension];
-    }
-    
+    return [MACloudManager uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
+                              withDesiredHandle: name
+                                   andExtension: extension];
 }
 
-+ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
++ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory
+              withDesiredHandle:(NSString *)desiredFileHandle
+                   andExtension:(NSString *)extension {
     
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
     NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
-    NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
-    [baseUrl URLByAppendingPathExtension: extension] :
-    baseUrl;
+    NSURL *fileUrl = extension.length > 0 ?
+                        [baseUrl URLByAppendingPathExtension: extension] :
+                        baseUrl;
     NSInteger ctr = 0;
     BOOL isDir1;
-    while ([defaultFileManager fileExistsAtPath:applicationFileUrlWithExtention.path isDirectory:&isDir1]) {
+    while ([defaultFileManager fileExistsAtPath:fileUrl.path isDirectory:&isDir1] || [defaultFileManager isUbiquitousItemAtURL:fileUrl]) {
         
         NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
         NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
-        applicationFileUrlWithExtention = [baseUrlFormatted URLByAppendingPathExtension: extension];
+        fileUrl = [baseUrlFormatted URLByAppendingPathExtension: extension];
         ctr++;
     }
-    return applicationFileUrlWithExtention;
+    return fileUrl;
     
 }
 
@@ -598,17 +343,14 @@ static MACloudManager *sharedSingleton;
                                       error: &coordinatorError
                                  byAccessor: ^(NSURL *newUrl1, NSURL *newUrl2) {
                                      
-                                     [coordinator itemAtURL:source didMoveToURL:destination];
-                                     
                                      NSError *fileManagerError = nil;
                                      success = [[NSFileManager defaultManager] moveItemAtURL: newUrl1
                                                                                        toURL: newUrl2
                                                                                        error: &fileManagerError];
                                      if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:destination];
-                                     } else {
-                                         NSLog(@"%@", fileManagerError);
                                      }
+                                     
                                      completion(success, fileManagerError);
                                  }];
 }
@@ -621,7 +363,7 @@ static MACloudManager *sharedSingleton;
     [self createDirectoryIfDoesNotExist:documentDirectory];
     self.ubiquitousDocumentsDirectory = documentDirectory;
     
-    if (self.cloudAvailble) {
+    if ([MACloudManager isCloudAvailable]) {
         NSURL *dataDirectory = [url URLByAppendingPathComponent:@"Data"];
         [self createDirectoryIfDoesNotExist:dataDirectory];
     }
@@ -635,11 +377,11 @@ static MACloudManager *sharedSingleton;
 - (NSArray *)documentsFilteredBySearchString:(NSString *)searchString {
     NSArray *result;
     if (searchString.length > 0) {
-        
+
         NSPredicate *predicateMetadata = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *metadataWrapper, NSDictionary *bindings) {
             MADMetaData *metadata = metadataWrapper[MADKeyMetadataShort];
-            NSRange range = NSMakeRange(0, MIN(searchString.length, metadata.displayName.length));
-            return [metadata.displayName compare: searchString
+            NSRange range = NSMakeRange(0, MIN(searchString.length, metadata.name.length));
+            return [metadata.name compare: searchString
                                          options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
                                            range: range] == NSOrderedSame;
         }];
@@ -648,38 +390,6 @@ static MACloudManager *sharedSingleton;
         result = self.fileLocationManager.metadata;
     }
     return [NSArray arrayWithArray:result];
-}
-
-- (void)reloadCacheLocal:(NSString *)searchString {
-    // Setup local cache
-    NSArray *documentCacheLocalUrls = [[NSFileManager defaultManager] contentsOfDocumentsDirectoryWithGroupIdentifier: self.groupId
-                                                                                                         andExtention: self.fileExtention];
-    NSArray *filteredDocumentCacheLocalUrls;
-    if (searchString.length > 0) {
-        
-        NSPredicate *predicateUrlSearch = [NSPredicate predicateWithBlock:^BOOL(NSURL *url, NSDictionary *bindings) {
-            
-            NSRange range = NSMakeRange(0, MIN(searchString.length, url.lastPathComponent.length));
-            return [url.lastPathComponent compare: searchString
-                                          options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
-                                            range: range] == NSOrderedSame;
-        }];
-        
-        filteredDocumentCacheLocalUrls = [documentCacheLocalUrls filteredArrayUsingPredicate:predicateUrlSearch];
-        
-    } else {
-        
-        filteredDocumentCacheLocalUrls = documentCacheLocalUrls;
-    }
-    
-
-    NSString *lastPathComponent = NSStringFromSelector(@selector(lastPathComponent));
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: lastPathComponent
-                                                           ascending: YES
-                                                            selector: @selector(localizedCaseInsensitiveCompare:)];
-    NSArray *sorts = @[sort];
-    self.documentCacheLocalUrls.array = [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts];
-
 }
 
 - (NSUInteger)numberOfDocuments:(MACloudManagerSection)section {
@@ -709,15 +419,13 @@ static MACloudManager *sharedSingleton;
     switch (section) {
     
         case MACloudManagerSectionCloud:
-            //NSAssert(self.documentCacheCloudMetaDataItems.count < location, @"Cloud items not loaded.");
             metadataDictionary = self.documentCacheCloudMetaDataItems[location];
             metatdata = metadataDictionary[MADKeyMetadataShort];
             break;
             
         case MACloudManagerSectionLocal:
-            //NSAssert(self.documentCacheLocalUrls.count < location, @"Local items not loaded.");
             item = self.documentCacheLocalUrls[location];
-            metatdata = [[MADMetaData alloc] initWithLocalUrl:item];
+            metatdata = [[MADMetaData alloc] initWithURL:item];
             break;
         
         default:

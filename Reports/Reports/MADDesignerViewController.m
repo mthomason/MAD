@@ -14,6 +14,7 @@
 #import "MADConstants.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
+#import "MTRulerView.h"
 #import "MAD.h"
 #import "AppDelegate.h"
 #import "MADNavigationBarTitleView.h"
@@ -28,7 +29,6 @@
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
-#import "MTRulerView.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
 #import "MTViewControllerBarcode.h"

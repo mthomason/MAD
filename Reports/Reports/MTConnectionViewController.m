@@ -11,6 +11,8 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import "MTApplicationInstance.h"
+#import "MADFilesController.h"
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MADocument.h"
@@ -178,8 +180,14 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                                                                             withExtension: MADFileExtentionMobleApplicationDocument
                                                                                               inContainer: MACloudManagerSectionLocal];
     
+    ;
+    applicationFileUrlWithExtention = [MACloudManager uniqueUrlInDirectory: [MTApplicationInstance mainInstance].filesController.documentDirectory
+                                                         withDesiredHandle: self.textFieldReportName.text
+                                                              andExtension: MADFileExtentionMobleApplicationDocument];
+    
     MADocument *doc = [[MADocument alloc] initWithFileURL:applicationFileUrlWithExtention];
     self.docToSave = doc;
+    [self.docToSave removeGuts];
     
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactoryWithType:self.databaseType
                                                                                                   host:self.textFieldHost.text
@@ -195,7 +203,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
         
         if (success) {
             
-            
             __weak MTConnectionViewController *weakself = self;
             [self.docToSave addConnection:self.databaseConnection status:^(NSString *readStatus, CGFloat progress) {
                 
@@ -203,19 +210,31 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                 weakself.progressView.progress = progress;
                 
             } completion:^(BOOL success, MTErrorContainer *errorContainer) {
-
+                
                 __strong MTConnectionViewController *strongself = weakself;
                 NSNumber *backgroundTask = @(bgTask);
+                
                 if (success) {
-                    [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileName
-                                              andBackgroundTask: backgroundTask];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            
+                            [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileName
+                                                      andBackgroundTask: backgroundTask];
+                            
+                        });
+                    });
+                    
                     
                 } else {
-                    [strongself closeAndDeleteWithErrors:errorContainer
-                                        connectionString:strongself.databaseConnection.connectionString
-                                       andBackgroundTask:backgroundTask];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [strongself closeAndDeleteWithErrors:errorContainer
+                                                connectionString:strongself.databaseConnection.connectionString
+                                               andBackgroundTask:backgroundTask];
+                        });
+                    });
                 }
-                
                 
             }];
             

@@ -13,8 +13,8 @@
 @interface MADMetaData ()
 
 @property (nonatomic, strong, readwrite) NSString  *fileSystemName;
-@property (nonatomic, strong, readwrite) NSString  *displayName;
-@property (nonatomic, strong, readwrite) NSURL     *url;
+@property (nonatomic, strong, readwrite) NSString  *name;
+@property (nonatomic, strong, readwrite) NSURL     *URL;
 
 @property (nonatomic, assign, readwrite) unsigned long long fileSystemFileSize;
 
@@ -49,25 +49,25 @@
 
 @property (nonatomic, strong) NSString *path;
 
+@property (nonatomic, strong) NSMetadataItem *metadataItem;
+
 @end
 
 @implementation MADMetaData
 
-- (id)initWithLocalUrl:(NSURL *)url {
+- (id)initWithURL:(NSURL *)url {
     self = [super init];
     if (self) {
         
         NSError *__autoreleasing error = nil;
 
-        self.url = url;
+        self.URL = url;
         
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:&error];
 
         NSString *fileSystemName = url.path.lastPathComponent;
         self.fileSystemName = fileSystemName;
         
-        NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath:url.path];
-        self.displayName = displayName;
         self.path = url.path;
         
         NSNumber *filesize = [attributes objectForKey:NSFileSize];
@@ -79,7 +79,7 @@
         NSDate *lastChangeDate = [attributes objectForKey:NSFileModificationDate];
         self.fileSystemContentChangeDate = lastChangeDate;
         
-        NSString *uti = (__bridge NSString *)(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(url.pathExtension), NULL));
+        NSString *uti = CFBridgingRelease(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(url.pathExtension), NULL));
         self.contentType = uti;
         
         self.contentTypeTree = nil;
@@ -104,21 +104,30 @@
     return self;
 }
 
+- (NSString *)name {
+    NSString *displayName;
+    if (self.metadataItem) {
+        displayName = [self.metadataItem valueForAttribute: NSMetadataItemDisplayNameKey];
+    } else {
+        displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
+    }
+    return displayName;
+}
+
 - (id)initWithMetadataItem:(NSMetadataItem *)item {
     self = [super init];
     if (self) {
 
+        self.metadataItem = item;
+        
         NSString *itemFsName = [item valueForAttribute: NSMetadataItemFSNameKey];
         self.fileSystemName = itemFsName;
         
         NSString *path = [item valueForAttribute:NSMetadataItemPathKey];
         self.path = path;
-        
-        NSString *itemDisplayName = [item valueForAttribute: NSMetadataItemDisplayNameKey];
-        self.displayName = itemDisplayName;
-        
+                
         NSURL *url =            [item valueForAttribute: NSMetadataItemURLKey];
-        self.url = url;
+        self.URL = url;
         
         NSNumber *fileSize =    [item valueForAttribute: NSMetadataItemFSSizeKey];
         self.fileSystemFileSize = fileSize.unsignedLongLongValue;
@@ -189,8 +198,9 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %@, %@", self.fileSystemName,
+    return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %f, %@, %@", self.fileSystemName,
                                                                         self.fileSystemFileSize,
+                                                                        self.ubiquitousItemPercentDownloaded,
                                                                         self.fileSystemContentChangeDate,
                                                                         self.fileSystemFileCreationDate];
 }
@@ -205,6 +215,29 @@
 - (BOOL)isSyncing {
     return self.isUbiquitous && (self.ubiquitousItemIsDownloading ||
                                  self.ubiquitousItemIsUploading);
+}
+
++ (NSArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems {
+    NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
+    MADMetaData *metaData;
+    NSMetadataItem *metadataItem;
+    for (metadataItem in metadataItems) {
+        metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+        [madMetaDataItems addObject:metaData];
+    }
+    return madMetaDataItems;
+}
+
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    } else {
+        return [self.URL.absoluteString isEqual:((MADMetaData *)object).URL.absoluteString];
+    }
+}
+
+- (NSUInteger)hash {
+    return self.URL.absoluteString.hash;
 }
 
 @end

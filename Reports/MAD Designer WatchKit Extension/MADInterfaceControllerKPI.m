@@ -38,7 +38,7 @@
         NSLog(@"%@", success ? @"YES" : @"NO");
         
     }];
-    //MADListInfo *listInfo = context;
+    //AAPLListInfo *listInfo = context;
     //self.listDocument = [[AAPLListDocument alloc] initWithFileURL:listInfo.URL];
     
     //[self setTitle:listInfo.name];

@@ -1,3 +1,6 @@
+#include <CommonCrypto/CommonDigest.h>
+#include <Security/Security.h>
+#include <AssertMacros.h>
 
 #import "MTVerificationController.h"
 #import "ossl_typ.h"
@@ -175,9 +178,6 @@ static MTVerificationController *singleton;
 #pragma mark
 #pragma mark Check Receipt signature
 
-#include <CommonCrypto/CommonDigest.h>
-#include <Security/Security.h>
-#include <AssertMacros.h>
 unsigned int iTS_intermediate_der_len = 1039;
 
 unsigned char iTS_intermediate_der[] = {

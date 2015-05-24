@@ -19,7 +19,6 @@
 
 @interface MADDirectoryMonitor : NSObject
 
-/// The AAPLDirectoryMonitor's delegate who is responsible for responding to AAPLDirectoryMonitor updates.
 @property (nonatomic, weak) id<MADDirectoryMonitorDelegate> delegate;
 
 - (instancetype)initWithURL:(NSURL *)URL;

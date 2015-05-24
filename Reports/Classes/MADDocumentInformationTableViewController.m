@@ -45,7 +45,7 @@
     MADMetaData *metadata = self.metadataItems[indexPath.section];
     switch (indexPath.row) {
         case 0:
-            cell.label.text = metadata.displayName;
+            cell.label.text = metadata.name;
             cell.label.textAlignment = NSTextAlignmentCenter;
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             break;

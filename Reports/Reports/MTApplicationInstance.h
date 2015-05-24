@@ -11,6 +11,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class MADFilesController;
+@protocol MADFileCoordinator;
+
 typedef NS_ENUM(NSUInteger, MTReportState) {
 	MTReportStateOpen = 0,
 	MTReportStateClosed
@@ -28,6 +31,7 @@ typedef struct MADAppStorageState {
     BOOL cloudAvailable;
 } MADAppStorageState;
 
+extern NSString * const MADUbiquityIdentifier;
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 
@@ -37,14 +41,15 @@ extern NSString * const MTGlobalBundleRev;
 
 @class MADocument, MTReportDesigner, MTReportViewer, MTQueryDesigner, MTUser, MADFileManager;
 
-#if TARGET_OS_IPHONE
-@protocol MADListCoordinator;
-@class MADFilesController;
-#endif
-
 @interface MTApplicationInstance : NSObject
 
++ (MTApplicationInstance *)mainInstance;
+
+- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler;
+
 @property (nonatomic, assign) MTReportState reportState;
+
+@property (nonatomic, strong) MADFilesController *filesController;
 
 @property (nonatomic, strong, readonly) MTUser *user;
 
@@ -57,7 +62,7 @@ extern NSString * const MTGlobalBundleRev;
 @property (nonatomic, readonly) MADAppStorageState storageState;
 @property (nonatomic) MADAppStorage storageOption;
 
-+ (MTApplicationInstance *)mainInstance;
+@property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
 
 - (void)initalizeAppearance;
 - (void)registerDefaultsFromSettingsBundle;
@@ -74,7 +79,7 @@ extern NSString * const MTGlobalBundleRev;
 + (BOOL)isMadDesigner;
 + (NSString *)bundleId;
 + (NSString *)bundleVersion;
-
++ (void)deleteCoreDataCache;
 + (NSString *)storyboardName;
 //+ (UIStoryboard *)storyboard;
 
@@ -87,39 +92,10 @@ extern NSString * const MTGlobalBundleRev;
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
 - (MADocument *)openDocument;
 
-#if TARGET_OS_IPHONE
-
-/*!
- * Returns an \c AAPLListCoordinator based on the current configuration that queries based on \c pathExtension.
- * For example, if the user has chosen local storage, a local \c AAPLListCoordinator object will be returned.
- */
-- (id<MADListCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension
-                                                                 firstQueryHandler:(void (^)(void))firstQueryHandler;
-
-/*!
- * Returns an \c AAPLListCoordinator based on the current configuration that queries based on \c lastPathComponent.
- * For example, if the user has chosen local storage, a local \c AAPLListCoordinator object will be returned.
- */
-- (id<MADListCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent
-                                                                     firstQueryHandler:(void (^)(void))firstQueryHandler;
-
-/*!
- * Returns an \c AAPLListsController instance based on the current configuration. For example, if the user has
- * chosen local storage, an \c AAPLListsController object will be returned that uses a local list coordinator.
- * \c pathExtension is passed down to the list coordinator to filter results.
- */
-- (MADFilesController *)listsControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension
-                                                              firstQueryHandler:(void (^)(void))firstQueryHandler;
-
-/*!
- * Returns an \c AAPLListsController instance based on the current configuration. For example, if the user has
- * chosen local storage, an \c AAPLListsController object will be returned that uses a local list coordinator.
- * \c lastPathComponent is passed down to the list coordinator to filter results.
- */
-- (MADFilesController *)listsControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent
-                                                                  firstQueryHandler:(void (^)(void))firstQueryHandler;
-
-#endif
+- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
+- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
+- (MADFilesController *)listsControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
+- (MADFilesController *)listsControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
 
 @end
 

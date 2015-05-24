@@ -9,29 +9,40 @@
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 
+NSString * const MADPathComponentDocuments  = @"Documents";
+NSString * const MADPathComponentCache      = @"Cache";
+NSString * const MADPathComponentAppSupport = @"Application Support";
+NSString * const MADPathComponentTemporary  = @"Temporary";
+
 @implementation NSFileManager (Common)
+
+- (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID {
+    NSURL *cloudDirectoryURL = [self URLForUbiquityContainerIdentifier:ubiquityID];
+    NSURL *documentsDirectoryURL = [cloudDirectoryURL URLByAppendingPathComponent:MADPathComponentDocuments];
+    return documentsDirectoryURL;
+}
 
 - (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
     return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: @"Documents"
+                                    pathComponent: MADPathComponentDocuments
                               alternativeSelector: @selector(localDocumentsDirectory)];
 }
 
 - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
     return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: @"Cache"
+                                    pathComponent: MADPathComponentCache
                               alternativeSelector: @selector(localCacheDirectory)];
 }
 
 - (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
     return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: @"Application Support"
+                                    pathComponent: MADPathComponentAppSupport
                               alternativeSelector: @selector(localApplicationSupportDirectory)];
 }
 
 - (NSURL *)localTemporaryDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
     return [self localDirectoryForGroupIdentifier: groupIdentifier
-                                    pathComponent: @"Temporary"
+                                    pathComponent: MADPathComponentTemporary
                               alternativeSelector: @selector(localTemporaryDirectory)];
 }
 
@@ -87,7 +98,7 @@
                                       attributes: nil
                                            error: &error];
     }
-    return isDirectory ? cacheURL : [self localCacheDirectoryNamed:handle];
+    return cacheURL;
 }
 
 - (NSArray *)contentOfDirectory:(NSURL *)directory withExtention:(NSString *)extenstion {

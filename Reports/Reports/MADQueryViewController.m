@@ -14,10 +14,11 @@
 
 #import "MADNavigationBarTitleView.h"
 #import "AppDelegate.h"
-#import "MTApplicationInstance.h"
 #import "MADocument.h"
 
 #import "MADWatermarkView.h"
+
+#import "MTApplicationInstance.h"
 
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
@@ -101,11 +102,6 @@ NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddT
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
 NSString * const MTSegueCloseDesigner                               = @"MTSegueCloseDesigner";
-NSString * const NSFetchedResultsCacheName                          = @"NSFetchedResultsCacheName";
-NSString * const NSFetchedResultsCacheTables                        = @"NSFetchedResultsCacheTables";
-NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
-NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
-NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
 NSString * const MADSegueShowSql                                    = @"MADSegueShowSql";
 NSString * const MTTableHeaderSectionKey                            = @"MTTableHeaderSectionKey";
 NSString * const MTTableSectionRowKey                               = @"MTTableSectionRowKey";
@@ -135,7 +131,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
-//@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
 
@@ -163,7 +158,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    self.document = [MTApplicationInstance mainInstance].openDocument;
+    self.document = [AppDelegate app].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -195,11 +190,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - NSObject
 
 - (void)dealloc {
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    [MTApplicationInstance deleteCoreDataCache];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIContentSizeCategoryDidChangeNotification
@@ -312,10 +303,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                    object: self.document];
     }
 
-    UIColor *barTintColor = [UIColor tintColorBlue];
-    UIColor *tintColor = [UIColor tintColorWhite];
-    self.navigationController.toolbar.barTintColor = barTintColor;
-    self.navigationController.toolbar.tintColor = tintColor;
+    //UIColor *barTintColor = [UIColor tintColorBlue];
+    //UIColor *tintColor = [UIColor tintColorWhite];
+    //self.navigationController.toolbar.barTintColor = barTintColor;
+    //self.navigationController.toolbar.tintColor = tintColor;
 
     [self enableTabBarItems];
 

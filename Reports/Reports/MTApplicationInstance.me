@@ -11,6 +11,13 @@
 #endif
 
 #import "MTApplicationInstance.h"
+
+#if MAD_DESIGNER || MADWATCHKIT
+NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
+#elif MAD_VIEWER
+NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
+#endif
+
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 #import <MessageUI/MessageUI.h>
@@ -34,10 +41,12 @@
 #import "MADNavigationControllerSplitParentViewController.h"
 #import "MACloudManager.h"
 
-#import "MADLocalListCoordinator.h"
-#import "MADCloudListCoordinator.h"
+#import "MADFileCoordinator.h"
 #import "MADFilesController.h"
+#import "MADLocalFileCoordinator.h"
+#import "MADCloudFileCoordinator.h"
 #import "MADFileInfo.h"
+#import "MADMetaData.h"
 
 #ifndef MADWATCHKIT
     #import "MADToolboxNavigationController.h"
@@ -46,28 +55,34 @@
     #import "MADNavigationBarFixedSize.h"
 #endif
 
-NSString * const MTApplicationIdMadDesigner                          = @"666001433";
-NSString * const MTApplicationIdMadViewer                            = @"666003759";
+NSString * const MADAppConfigurationUserDefaultsFirstLaunch         = @"MADAppConfigurationUserDefaultsFirstLaunch";
+NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
+NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
+
+NSString * const MTApplicationIdMadDesigner                         = @"666001433";
+NSString * const MTApplicationIdMadViewer                           = @"666003759";
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.398";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.398";
-NSString * const MTGlobalBundleRev                                  = @"1773";
+
+NSString * const MTGlobalBundleVersion                              = @"7.0.408";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.408";
+NSString * const MTGlobalBundleRev                                  = @"1783";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
-NSString *const MADAppConfigurationStorageOptionUserDefaultsKey = @"MADAppConfigurationStorageOptionUserDefaultsKey";
-NSString *const MADAppConfigurationStoredUbiquityIdentityTokenKey = @"com.everydayapps..mad.designer.UbiquityIdentityToken";
+NSString * const NSFetchedResultsCacheName                          = @"NSFetchedResultsCacheName";
+NSString * const NSFetchedResultsCacheTables                        = @"NSFetchedResultsCacheTables";
+NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
+NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
+NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
 
 @interface MTApplicationInstance ()
     <NSCoding>
-
-@property (nonatomic, readonly) NSUserDefaults *applicationUserDefaults;
 
 @property (nonatomic, strong) NSURL *currentDocument;           //To support opening multiple documents
                                                                     //change this url to the url of the open
@@ -81,6 +96,9 @@ NSString *const MADAppConfigurationStoredUbiquityIdentityTokenKey = @"com.everyd
 //@property (nonatomic, strong) NSMutableDictionary *documents;   //MADocument stored by their NSURLS
 @property (nonatomic, strong, readwrite) MADFileManager *fileManager;
 
+@property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
+
+@property (nonatomic, readwrite, getter=isFirstLaunch) BOOL firstLaunch;
 
 @end
 
@@ -89,7 +107,7 @@ NSString *const MADAppConfigurationStoredUbiquityIdentityTokenKey = @"com.everyd
 static MTApplicationInstance *mainInstance;
 
 + (void)initialize {
-    if (self == [MACloudManager self]) {
+    if (self == [MTApplicationInstance self]) {
         MTApplicationInstance *instance = [[MTApplicationInstance alloc] init];
         mainInstance = instance;
     }
@@ -100,6 +118,7 @@ static MTApplicationInstance *mainInstance;
 + (instancetype)allocWithZone:(NSZone *)zone {
     return [super allocWithZone:zone];
 }
+
 
 - (id)copyWithZone:(NSZone *)zone {
     return self;
@@ -125,13 +144,16 @@ static MTApplicationInstance *mainInstance;
     //[aCoder encodeObject:self.openFiles forKey:@"openFiles"];
 }
 
-- (NSUserDefaults *)applicationUserDefaults {
-    return [[NSUserDefaults alloc] initWithSuiteName:MADIdentifierGroup];
-}
-
 - (instancetype)init {
     self = [super init];
     if (self) {
+        
+        NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
+        self.applicationUserDefaults = defaults;
+    
+        [self registerDefaults];
+        
+        NSLog(@"Cloud %@", MADUbiquityIdentifier);
         
         MADFileManager *openFiles = [MADFileManager new];
         self.fileManager = openFiles;
@@ -169,8 +191,7 @@ static MTApplicationInstance *mainInstance;
 }
 
 + (NSString *)applicationNameSufixPart {
-    return [MTApplicationInstance isMadDesigner] ?
-                                                    NSLocalizedString(@"Designer", @"Designer") :
+    return [MTApplicationInstance isMadDesigner] ?  NSLocalizedString(@"Designer", @"Designer") :
                                                     NSLocalizedString(@"Viewer", @"Viewer");
 }
 
@@ -314,6 +335,8 @@ static MTApplicationInstance *mainInstance;
 - (void)initalizeAppearance {
     UIColor *tintColorWhite = [UIColor tintColorWhite];
     
+    //[UIWindow appearance].tintColor = tintColorWhite;
+    
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes
                                              forState: UIControlStateNormal];    //Make tab bar buttons white
@@ -336,7 +359,8 @@ static MTApplicationInstance *mainInstance;
 
     
     [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                        = [UIColor tintColorWhite];
-    [UIToolbar appearance].barTintColor                                                                 = [UIColor tintColorBlue];
+//    [UIToolbar appearance].barTintColor                                                                 = [UIColor tintColorBlue];
+    [UIBarButtonItem appearance].tintColor                                                              = [UIColor tintColorWhite];
     [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor               = [UIColor edaOrange];
     [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor          = [UIColor edaOrange];
     
@@ -387,7 +411,145 @@ static MTApplicationInstance *mainInstance;
             });
         });
     });
+}
+
+#pragma mark - Property Overrides
+
+- (BOOL)isCloudAvailable {
+    return [MACloudManager isCloudAvailable];
+}
+
+- (MADAppStorageState)storageState {
+    return (MADAppStorageState) {
+        .storageOption = self.storageOption,
+        .accountDidChange = [self hasUbiquityIdentityChanged],
+        .cloudAvailable = [MACloudManager isCloudAvailable]
+    };
+}
+
+- (MADAppStorage)storageOption {
+    NSInteger value = [self.applicationUserDefaults integerForKey:MADAppConfigurationUserDefaultsStorageOption];
+    return (MADAppStorage)value;
+}
+
+- (void)setStorageOption:(MADAppStorage)storageOption {
+    [self.applicationUserDefaults setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
+}
+
+- (BOOL)isFirstLaunch {
+    return [self.applicationUserDefaults boolForKey:MADAppConfigurationUserDefaultsFirstLaunch];
+}
+
+- (void)setFirstLaunch:(BOOL)firstLaunch {
+    [self.applicationUserDefaults setBool:firstLaunch forKey:MADAppConfigurationUserDefaultsFirstLaunch];
+}
+
+- (void)registerDefaults {
+    NSUserDefaults *defaults = self.applicationUserDefaults;
     
+    [defaults registerDefaults:@{
+                                 MADAppConfigurationUserDefaultsFirstLaunch: @YES,
+                                 MADAppConfigurationUserDefaultsStorageOption: @(MADAppStorageNotSet)
+                                 }];
+}
+
+- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler {
+    if (self.isFirstLaunch) {
+        self.firstLaunch = NO;
+        firstLaunchHandler();
+    }
+}
+
+#pragma mark - Ubiquity Identity Token Handling (Account Change Info)
+
+- (BOOL)hasUbiquityIdentityChanged {
+    BOOL hasChanged = NO;
+    
+    id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
+    id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
+    
+    BOOL currentTokenNilStoredNonNil = !currentToken && storedToken;
+    BOOL storedTokenNilCurrentNonNil = !storedToken && currentToken;
+    BOOL currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
+    
+    if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
+        [self persistAccount];
+        
+        hasChanged = YES;
+    }
+    
+    return hasChanged;
+}
+
+- (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
+    id<NSObject, NSCopying, NSCoding> storedToken = nil;
+    
+    // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
+    NSData *ubiquityIdentityTokenArchive = [self.applicationUserDefaults objectForKey:MADUbiquityIdentifier];
+    
+    if (ubiquityIdentityTokenArchive) {
+        storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
+    }
+    
+    return storedToken;
+}
+
+- (void)persistAccount {
+    NSUserDefaults *defaults = self.applicationUserDefaults;
+    id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
+    
+    if (token) {
+        // The account has changed.
+        NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
+        
+        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADUbiquityIdentifier];
+    }
+    else {
+        // There is no signed-in account.
+        [defaults removeObjectForKey:MADUbiquityIdentifier];
+    }
+}
+
+#pragma mark - Document Operations
+
+- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+    if ([MTApplicationInstance mainInstance].storageOption != MADAppStorageCloud) {
+        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
+        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension firstQueryUpdateHandler:firstQueryHandler];
+    }  else {
+        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension firstQueryUpdateHandler:firstQueryHandler];
+    }
+}
+
+- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+    if ([MTApplicationInstance mainInstance].storageOption != MADAppStorageCloud) {
+        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
+        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent firstQueryUpdateHandler:firstQueryHandler];
+    } else {
+        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent firstQueryUpdateHandler:firstQueryHandler];
+    }
+}
+
+- (MADFilesController *)listsControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+
+    id<MADFileCoordinator> listCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
+    
+    return [[MADFilesController alloc] initWithListCoordinator:listCoordinator
+                                                 delegateQueue:[NSOperationQueue mainQueue]
+                                                sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+        return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+    }];
+}
+
+- (MADFilesController *)listsControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+
+    id<MADFileCoordinator> listCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
+    
+    return [[MADFilesController alloc] initWithListCoordinator:listCoordinator
+                                                 delegateQueue:[NSOperationQueue mainQueue]
+                                                sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+        return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+    }];
 }
 
 #pragma mark - Document Operations
@@ -423,123 +585,12 @@ static MTApplicationInstance *mainInstance;
     return result;
 }
 
-- (MADAppStorage)storageOption {
-    NSInteger value = [self.applicationUserDefaults integerForKey:MADAppConfigurationStorageOptionUserDefaultsKey];
-    
-    return (MADAppStorage)value;
++ (void)deleteCoreDataCache {
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
 }
-
-- (void)setStorageOption:(MADAppStorage)storageOption {
-    [self.applicationUserDefaults setInteger:storageOption forKey:MADAppConfigurationStorageOptionUserDefaultsKey];
-}
-
-- (BOOL)isCloudAvailable {
-    return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
-}
-
-- (MADAppStorageState)storageState {
-    return (MADAppStorageState) {
-        .storageOption = self.storageOption,
-        .accountDidChange = [self hasUbiquityIdentityChanged],
-        .cloudAvailable = self.isCloudAvailable
-    };
-}
-
-#pragma mark - Ubiquity Identity Token Handling (Account Change Info)
-
-- (BOOL)hasUbiquityIdentityChanged {
-    BOOL hasChanged = NO;
-    
-    id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
-    id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
-    
-    BOOL currentTokenNilStoredNonNil = !currentToken && storedToken;
-    BOOL storedTokenNilCurrentNonNil = !storedToken && currentToken;
-    BOOL currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
-    
-    if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
-        [self persistAccount];
-        
-        hasChanged = YES;
-    }
-    
-    return hasChanged;
-}
-
-- (void)persistAccount {
-    NSUserDefaults *defaults = self.applicationUserDefaults;
-    id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
-    
-    if (token) {
-        // The account has changed.
-        NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
-        
-        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationStoredUbiquityIdentityTokenKey];
-    }
-    else {
-        // There is no signed-in account.
-        [defaults removeObjectForKey:MADAppConfigurationStoredUbiquityIdentityTokenKey];
-    }
-}
-
-- (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
-    id<NSObject, NSCopying, NSCoding> storedToken = nil;
-    
-    // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
-    NSData *ubiquityIdentityTokenArchive = [self.applicationUserDefaults objectForKey:MADAppConfigurationStoredUbiquityIdentityTokenKey];
-    
-    if (ubiquityIdentityTokenArchive) {
-        storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
-    }
-    
-    return storedToken;
-}
-
-#pragma mark - Conveience Methods
-
-#if TARGET_OS_IPHONE
-
-- (id<MADListCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension
-                                                                 firstQueryHandler:(void (^)(void))firstQueryHandler; {
-    if ([MTApplicationInstance mainInstance].storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalListCoordinator alloc] initWithPathExtension:pathExtension firstQueryUpdateHandler:firstQueryHandler];
-    }
-    else {
-        return [[MADCloudListCoordinator alloc] initWithPathExtension:pathExtension firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (id<MADListCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent
-                                                                     firstQueryHandler:(void (^)(void))firstQueryHandler {
-    if ([MTApplicationInstance mainInstance].storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalListCoordinator alloc] initWithLastPathComponent:lastPathComponent firstQueryUpdateHandler:firstQueryHandler];
-    }
-    else {
-        return [[MADCloudListCoordinator alloc] initWithLastPathComponent:lastPathComponent firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (MADFilesController *)listsControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension
-                                                              firstQueryHandler:(void (^)(void))firstQueryHandler {
-    id<MADListCoordinator> listCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
-    
-    return [[MADFilesController alloc] initWithListCoordinator:listCoordinator delegateQueue:[NSOperationQueue mainQueue] sortComparator:^NSComparisonResult(MADFileInfo *lhs, MADFileInfo *rhs) {
-        return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-    }];
-}
-
-- (MADFilesController *)listsControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent
-                                                                  firstQueryHandler:(void (^)(void))firstQueryHandler {
-    id<MADListCoordinator> listCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
-    
-    return [[MADFilesController alloc] initWithListCoordinator:listCoordinator delegateQueue:[NSOperationQueue mainQueue] sortComparator:^NSComparisonResult(MADFileInfo *lhs, MADFileInfo *rhs) {
-        return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-    }];
-}
-
-#endif
-
 
 @end

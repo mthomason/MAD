@@ -10,17 +10,17 @@
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
 #import "MADConstants.h"
+#import "NSFileManager+Common.h"
+
+NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
+NSString * const MADPredicateFormatComparsonPathExtension       = @"(pathExtension = %@)";
+NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathComponent = %@)";
 
 @interface MADLocalFileCoordinator () <MADDirectoryMonitorDelegate>
 
 @property (nonatomic, strong) NSPredicate *predicate;
-
-/// Closure executed after the first update provided by the coordinator regarding tracked URLs.
 @property (nonatomic, strong) void (^firstQueryUpdateHandler)(void);
-
-/// A GCD based monitor used to observe changes to the local documents directory.
 @property (nonatomic, strong) MADDirectoryMonitor *directoryMonitor;
-
 @property (nonatomic, copy) NSArray *currentLocalContents;
 
 @end
@@ -31,41 +31,39 @@
 #pragma mark - Initialization
 
 - (instancetype)initWithPredicate:(NSPredicate *)predicate firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
-    self = [super init];
-    
-    if (self) {
-        _predicate = predicate;
-        _firstQueryUpdateHandler = firstQueryUpdateHandler;
+
+    if (self = [super init]) {
+        self.predicate = predicate;
+        self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
-        _directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:[MADFileUtilities localDocumentsDirectory:MADIdentifierGroup]];
-        _directoryMonitor.delegate = self;
+        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
         
-        _currentLocalContents = [NSArray array];
+        MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
+        self.directoryMonitor = directoryMonitor;
+        self.directoryMonitor.delegate = self;
+        
+        NSArray *currentLocalContents = [NSArray array];
+        self.currentLocalContents = currentLocalContents;
+
     }
     
     return self;
 }
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(pathExtension = %@)", pathExtension];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension, pathExtension];
     
-    self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler];
-    
-    if (self) {
-        // No need for additional initialization.
-    }
+    if (self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler]) { }
     
     return self;
 }
 
 - (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(lastPathComponent = %@)", lastPathComponent];
     
-    self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent, lastPathComponent];
     
-    if (self) {
-        // No need for additional initialization.
-    }
+    if (self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler]) { }
     
     return self;
 }
@@ -88,12 +86,38 @@
             [self.delegate fileCoordinatorDidFailRemovingFileAtURL:URL withError:error];
         }
         else {
-            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[] removedURLs:@[URL] updatedURLs:@[]];
+            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[]
+                                                                removedURLs:@[URL]
+                                                                updatedURLs:@[]];
         }
     }];
 }
 
-- (void)createURLForFile:(MADList *)list withName:(NSString *)name {
+- (void)duplicateFileAtURL:(NSURL *)URL {
+    [MADFileUtilities duplicateFileAtURL:URL withCompletionHandler:^(NSURL *newURL, NSError *error) {
+        if (error) {
+            [self.delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
+        } else {
+            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[newURL]
+                                                                removedURLs:@[]
+                                                                updatedURLs:@[]];
+        }
+    }];
+}
+
+- (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
+    [MADFileUtilities renameFileAtURL:URL toName:name withCompletionHandler:^(NSURL *sourceURL, NSURL *newURL, NSError *error) {
+        if (error) {
+            [self.delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
+        } else {
+            [self.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:@[newURL]
+                                                                removedURLs:@[sourceURL]
+                                                                updatedURLs:@[]];
+        }
+    }];
+}
+
+- (void)createURLForFile:(MADFile *)list withName:(NSString *)name {
     NSURL *documentURL = [self documentURLForName:name];
     
     [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
@@ -112,16 +136,20 @@
     if (name.length <= 0) {
         return NO;
     }
-    
     NSURL *documentURL = [self documentURLForName:name];
-    
     return ![[NSFileManager defaultManager] fileExistsAtPath:documentURL.path];
+
 }
 
 #pragma mark - MADDirectoryMonitorDelegate
 
 - (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor {
     [self processChangeToLocalDocumentsDirectory];
+}
+
+- (NSURL *)documentsDirectory {
+    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+    return url;
 }
 
 #pragma mark - Convenience
@@ -132,8 +160,8 @@
     dispatch_async(defaultQueue, ^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
-        // Fetch the list documents from container documents directory.
-        NSArray *localDocumentURLs = [fileManager contentsOfDirectoryAtURL: [MADFileUtilities localDocumentsDirectory:MADIdentifierGroup]
+        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+        NSArray *localDocumentURLs = [fileManager contentsOfDirectoryAtURL: url
                                                 includingPropertiesForKeys: nil
                                                                    options: NSDirectoryEnumerationSkipsPackageDescendants
                                                                      error: nil];
@@ -141,12 +169,12 @@
         NSArray *localListURLs = [localDocumentURLs filteredArrayUsingPredicate:self.predicate];
         
         if (localListURLs.count > 0) {
-            NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"self in %@", self.currentLocalContents];
+            NSPredicate *containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, self.currentLocalContents];
             NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             
             NSArray *insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
             
-            containPredicate = [NSPredicate predicateWithFormat:@"self in %@", localListURLs];
+            containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, localListURLs];
             doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             
             NSArray *removedURLs = [self.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
@@ -159,17 +187,15 @@
         }
         
         if (self.firstQueryUpdateHandler) {
-            // Execute the `firstQueryUpdateHandler`, it will contain the closure from initialization on first update.
             self.firstQueryUpdateHandler();
-            // Set `firstQueryUpdateHandler` to an empty closure so that the handler provided is only run on first update.
             self.firstQueryUpdateHandler = nil;
         }
     });
 }
 
 - (NSURL *)documentURLForName:(NSString *)name {
-    NSURL *documentURLWithoutExtension = [[MADFileUtilities localDocumentsDirectory:MADIdentifierGroup] URLByAppendingPathComponent:name];
-    
+    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSURL *documentURLWithoutExtension = [url URLByAppendingPathComponent:name];
     return [documentURLWithoutExtension URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
 }
 

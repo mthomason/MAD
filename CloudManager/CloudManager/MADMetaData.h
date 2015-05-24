@@ -13,12 +13,9 @@
 
 @interface MADMetaData : NSObject
 
-- (id)initWithLocalUrl:(NSURL *)url;
-- (id)initWithMetadataItem:(NSMetadataItem *)item;
-
 @property (nonatomic, strong, readonly) NSString  *fileSystemName;
-@property (nonatomic, strong, readonly) NSString  *displayName;
-@property (nonatomic, strong, readonly) NSURL     *url;
+@property (nonatomic, strong, readonly) NSString  *name;
+@property (nonatomic, strong, readonly) NSURL     *URL;
 @property (nonatomic, strong, readonly) NSString *path;
 
 @property (nonatomic, assign, readonly) unsigned long long fileSystemFileSize;
@@ -56,6 +53,11 @@
 
 @property (nonatomic, strong, readonly) NSString *ubiquitousItemContainerDisplayName;
 @property (nonatomic, strong, readonly) NSURL *ubiquitousItemURLInLocalContainer;
+
++ (NSArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
+
+- (id)initWithURL:(NSURL *)url;
+- (id)initWithMetadataItem:(NSMetadataItem *)item;
 
 - (NSString *)fileSystemSizeMB;
 - (BOOL)isSyncing;

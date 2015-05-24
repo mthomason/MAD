@@ -11,10 +11,10 @@
 #endif
 
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>
 #import "MADConstants.h"
 
-#import "MTApplicationInstance.h"
 #import "MTNavigationController.h"
 #import "MADQueryViewController.h"
 #import "MADDesignerViewController.h"
@@ -34,10 +34,18 @@
 #import "UIDevice+Hack.h"
 #import "NSError+Constructors.h"
 
-#if MAD_DESIGNER == 1 || MAD_TEST == 1
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
-#elif MAD_VIEWER == 1
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
+//#import "MADAppConfiguration.h"
+#import "MADFilesController.h"
+#import "MADFileUtilities.h"
+
+#import "NSString+Encryption.h"
+
+#import "MADUpgradeManager.h"
+
+#import "UIAlertController+Constructors.h"
+
+#if MAD_DESIGNER
+NSString *s = @"";
 #endif
 
 const NSInteger MADTagAlertViewNewDocument = 3838;
@@ -56,16 +64,22 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @property (nonatomic, strong) MTNavigationController *navigationController;
 @property (nonatomic, strong) MADOpenFileViewController *openFileViewController;
 
+/*!
+ * @return A private, local queue used to ensure serialized access to Cloud containers during application
+ * startup.
+ */
+@property (nonatomic, strong) dispatch_queue_t appDelegateQueue;
+
 @end
 
 @implementation AppDelegate
 
 #if DEBUG
 
-//static void uncaughtExceptionHandler(NSException *exception);
-//static void uncaughtExceptionHandler(NSException *exception) {
-//    MTLogStatic(@"%@", exception);
-//}
+    static void uncaughtExceptionHandler(NSException *exception);
+    static void uncaughtExceptionHandler(NSException *exception) {
+        MTLogStatic(@"%@", exception);
+    }
 
 #endif
 
@@ -78,105 +92,66 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return [UIApplication sharedApplication].keyWindow;
 }
 
+#pragma mark - Initialization
+
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        _appDelegateQueue = dispatch_queue_create("com.everydayapps.mad.designer.appdelegate", DISPATCH_QUEUE_SERIAL);
+    }
+    
+    return self;
+}
+
+/*static const unsigned char keyEncryption[] = {
+    0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,
+    0x06, 0x77, 0x6d, 0xd6, 0xbb, 0x5b, 0xd3, 0x21,
+    0xdb, 0x46, 0xa5, 0xfd, 0x1e, 0xbe, 0x91, 0x69,
+    0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
+};*/
+
 - (void)dealloc {
-    
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-
-    [defaultCenter removeObserver: [MACloudManager sharedManager]
-                             name: NSUbiquityIdentityDidChangeNotification
-                           object: nil];
-    
-    [defaultCenter removeObserver:self
-                             name:MADNotificationFileManagerDidUpdateFileLocations object:nil];
-    
-    [defaultCenter removeObserver: self
-                             name: MADNotificationCloudStateUpdated
-                           object: nil];
-    
-    [defaultCenter removeObserver: self
-                             name: MADNotificationUbiquitousContainerFetchingWillBegin
-                           object: nil];
-    
-    [defaultCenter removeObserver: self
-                             name: MADNotificationUbiquitousContainerFetchingDidEnd
-                           object: nil];
-    
-    [defaultCenter removeObserver: self
-                             name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                           object: nil];
-
+    [self removeObservers];
 }
 
 #pragma mark - Application Lifecycle
 
-- (void)loadAndDisplayWindow {
-    
-    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
-    self.applicationInstance = appInstance;
-
-    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    id initViewController = [storyboard instantiateInitialViewController];
-    
-    NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
-
-    window.rootViewController = initViewController;
-    self.navigationController = initViewController;
-    
-    NSAssert([self.navigationController.topViewController isKindOfClass:@class([MADOpenFileViewController class])] == NO, @"%s Can't find MADOpenFileViewController.", __PRETTY_FUNCTION__);
-
-    self.openFileViewController = (MADOpenFileViewController *)self.navigationController.topViewController;
-    [window makeKeyAndVisible];
-    
-
-    self.window = window;
-    self.storyboard = storyboard;
-}
-
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    if ([MACloudManager isCloudAvailable]) {
+        /*
+         Ensure the app sandbox is extended to include the default container. Perform this action on the
+         `AAPLAppDelegate`'s serial queue so that actions dependent on the extension always follow it.
+         */
+        dispatch_async(self.appDelegateQueue, ^{
+            // The initial call extends the sandbox. No need to capture the URL.
+            [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:MADUbiquityIdentifier];
+        });
+    }
+    
     if (MADStateRestorationSupportEnabled) {
         [self loadAndDisplayWindow];
     }
+    
     self.application = application;
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
- 
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
+        dispatch_async(self.appDelegateQueue, ^{
+            NSError *error = nil;
+            [MADUpgradeManager installSampleDatabase:&error];
+            [MADUpgradeManager installSamplesDocuments:&error];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+
+            });
+        });
+    }];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationFileManagerDidUpdateFileLocations:)
-                          name: MADNotificationFileManagerDidUpdateFileLocations
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(keyValueStoreDidChange:)
-                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                        object: nil];
-    
-    [defaultCenter addObserver: [MACloudManager sharedManager]
-                      selector: @selector(handleNotificationUbiquityIdentityDidChange:)
-                          name: NSUbiquityIdentityDidChangeNotification
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationUpdateCloudEnabled:)
-                          name: MADNotificationCloudStateUpdated
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
-                          name: MADNotificationUbiquitousContainerFetchingWillBegin
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
-                          name: MADNotificationUbiquitousContainerFetchingDidEnd
-                        object: nil];
-    
+    [self addObservers];
+
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
                                                                                              categories: nil];
@@ -187,115 +162,35 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         [self loadAndDisplayWindow];
     }
     
-#if DEBUG
-    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-#endif
+    #if DEBUG
+        NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    #endif
+    
+    MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];
+    dispatch_async(self.appDelegateQueue, ^{
+        [upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
+    });
     
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 
     [self.applicationInstance initalizeAppearance];
 
-    //[MTStoreKitController sharedObject];
     [MACloudManager sharedManager].delegateApplication = self;
     return YES;
 }
 
-- (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
-}
-
-+ (void)deleteCoreDataCache {
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(dipatchQueue, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            dispatch_async(dipatchQueueBg, ^{
-                
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
-            });
-        });
-    });
-}
-
-/*
- *  handles MADNotificationFileManagerDidUpdateFileLocations
- */
-
-- (void)handleNotificationFileManagerDidUpdateFileLocations:(NSNotification *)notification {
-    if (notification.object == nil) {
-        [self.openFileViewController reloadData];
-    } else {
-        
-        [self.openFileViewController reloadDataCloudWithInserts:notification.object[MADNotificationFileManagerDidUpdateFileLocationsKeyInserted]
-                                                        updates:notification.object[MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated]
-                                                        deletes:notification.object[MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved]];
-
-    }
-}
-
-/*
- *  handles MADNotificationUbiquitousContainerFetchingWillBegin
- */
-
-- (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
-    // FIXME: Start timer, and display activity indictor if it takes too long
-    //  to bring back a ubiquitous container.
-
-    [NSTimer timerWithTimeInterval: 0.5000f
-                            target: self
-                          selector: @selector(displayActivityIndictor:)
-                          userInfo: nil
-                           repeats: NO];
-}
-
-- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
-    // FIXME: Remove activity indictor for ubiquitous container.
-    [self hideActivityIndictor:nil];
-    [self.openFileViewController reloadData];
-}
-
-- (void)displayActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES
-                                                                      animated:YES];
-}
-
-- (void)hideActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO
-                                                                      animated:YES];
-}
-
-- (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
-
-    [self.openFileViewController reloadData];
-    
-    NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
-    
-}
-
-- (UIViewController *)viewControllerWithrestorationIdentifier:(NSString *)restorationIdentifier childViewControllers:(NSArray *)viewControllers {
-    id result = nil;
-    for (UIViewController *controller in viewControllers) {
-        if ([controller.restorationIdentifier isEqualToString:restorationIdentifier]) {
-            result = controller;
-        } else {
-            result = [self viewControllerWithrestorationIdentifier: restorationIdentifier
-                                              childViewControllers: controller.childViewControllers];
-        }
-        if (result != nil) {
-            break;
-        }
-    }
-    return result;
-}
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [AppDelegate deleteCoreDataCache];
-    [[MACloudManager sharedManager] setFileExtention:MADFileExtentionMobleApplicationDocument];
-    [[MACloudManager sharedManager] activateWithGroupID:MADIdentifierGroup];
+    
+    dispatch_async(self.appDelegateQueue, ^{
+        [MTApplicationInstance deleteCoreDataCache];
+    });
+    
+    [[MACloudManager sharedManager] setGroupId:MADIdentifierGroup];
+    
+    dispatch_async(self.appDelegateQueue, ^{
+        [self setupUserStoragePreferences];
+    });
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }
@@ -317,42 +212,60 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-
+    
     BOOL result;
     NSError *error = nil;
     if ([self.applicationInstance.user addDocument:url error:&error]) {
         
         result = YES;
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"New Document"
-                                                                       message: @"Added document."
-                                                                preferredStyle: UIAlertControllerStyleAlert];
-        
-        UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue"
-                                                     style: UIAlertActionStyleDefault
-                                                   handler: nil];
-        [alert addAction:ok];
-        
-        __weak AppDelegate *weakself = self;
+        UIAlertController *alert = [UIAlertController alertControllerAddedDocument];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
-                [weakself.openFileViewController reloadData];
+            [self.openFileViewController.collectionView reloadData];
         }];
         
     } else {
-
+        
         result = NO;
         [NSError presentError: error
              onViewController: self.openFileViewController
                    completion: NULL];
-
+        
     }
     return result;
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
-                                                            UIInterfaceOrientationMaskAllButUpsideDown :
-                                                            UIInterfaceOrientationMaskAll;
+    UIInterfaceOrientationMaskAllButUpsideDown :
+    UIInterfaceOrientationMaskAll;
+}
+
+- (void)displayActivityIndictor:(id)sender {
+    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES
+                                                                      animated:YES];
+}
+
+- (void)hideActivityIndictor:(id)sender {
+    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO
+                                                                      animated:YES];
+}
+
+- (UIViewController *)viewControllerWithrestorationIdentifier:(NSString *)restorationIdentifier
+                                         childViewControllers:(NSArray *)viewControllers {
+    id result = nil;
+    for (UIViewController *controller in viewControllers) {
+        if ([controller.restorationIdentifier isEqualToString:restorationIdentifier]) {
+            result = controller;
+        } else {
+            result = [self viewControllerWithrestorationIdentifier: restorationIdentifier
+                                              childViewControllers: controller.childViewControllers];
+        }
+        if (result != nil) {
+            break;
+        }
+    }
+    return result;
 }
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents
@@ -454,12 +367,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)application:(UIApplication *)application didDecodeRestorableStateWithCoder:(NSCoder *)coder { }
 
-#pragma mark - Key Value Store Notifications
-
-- (void)keyValueStoreDidChange:(NSNotification *)notification {
-    //MTLog(@"%@", notification);
-}
-
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
@@ -469,6 +376,232 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
+}
+
+#pragma mark - Notifications
+
+- (void)addObservers {
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationKeyValueStoreDidChange:)
+                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+                          name: NSUbiquityIdentityDidChangeNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
+                          name: MADNotificationUbiquitousContainerFetchingWillBegin
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
+                          name: MADNotificationUbiquitousContainerFetchingDidEnd
+                        object: nil];
+    
+}
+
+- (void)removeObservers {
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter removeObserver: self
+                             name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: NSUbiquityIdentityDidChangeNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: MADNotificationUbiquitousContainerFetchingWillBegin
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: MADNotificationUbiquitousContainerFetchingDidEnd
+                           object: nil];
+    
+}
+
+- (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Start timer, and display activity indictor if it takes too long
+    //  to bring back a ubiquitous container.
+    
+    [NSTimer timerWithTimeInterval: 0.5000f
+                            target: self
+                          selector: @selector(displayActivityIndictor:)
+                          userInfo: nil
+                           repeats: NO];
+}
+
+- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Remove activity indictor for ubiquitous container.
+    [self hideActivityIndictor:nil];
+    //[self.openFileViewController reloadData];
+}
+
+- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    [self setupUserStoragePreferences];
+}
+
+- (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
+
+}
+
+- (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
+    NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
+    
+}
+
+#pragma mark - User Storage Preferences
+
+- (void)setupUserStoragePreferences {
+
+    MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
+    /*
+     Check to see if the account has changed since the last time the method was called. If it has, let the
+     user know that their documents have changed. If they've already chosen local storage (i.e. not iCloud),
+     don't notify them since there's no impact.
+     */
+    if (storageState.accountDidChange) {
+        [self notifyUserOfAccountChange:storageState];
+    } else {
+        [self resolveStateForUserStorageState:storageState];
+    }
+}
+
+- (void)resolveStateForUserStorageState:(MADAppStorageState)storageState {
+    if (storageState.cloudAvailable) {
+        if (storageState.storageOption == MADAppStorageNotSet ||
+            (storageState.storageOption == MADAppStorageLocal && storageState.accountDidChange)) {
+            // iCloud is available, but we need to ask the user what they prefer.
+            if ([NSThread isMainThread]) {
+                [self promptUserForStorageOption];
+            } else {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [self promptUserForStorageOption];
+                });
+            }
+        }
+        else {
+            /*
+             The user has already selected a specific storage option. Set up the lists controller to use that
+             storage option.
+             */
+            [self configureListsController:storageState.accountDidChange storageOptionChangeHandler:nil];
+        }
+    } else {
+        /*
+         iCloud is not available, so we'll reset the storage option and configure the lists controller. The
+         next time that the user signs in with an iCloud account, he or she can change provide their desired
+         storage option.
+         */
+        if (storageState.storageOption != MADAppStorageNotSet) {
+            [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
+        }
+        
+        [self configureListsController:storageState.accountDidChange storageOptionChangeHandler:nil];
+    }
+}
+
+#pragma mark - Alerts
+
+- (void)notifyUserOfAccountChange:(MADAppStorageState)storageState {
+
+    UIAlertController *signedOutController = [UIAlertController alertControllerPromotCloudSignOut:^(UIAlertAction *action) {
+        [self resolveStateForUserStorageState:storageState];
+    }];
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
+    }];
+    
+}
+
+- (void)promptUserForStorageOption {
+
+    UIAlertController *storageController = [UIAlertController alertControllerPromotStorageOption:^(UIAlertAction *action) {
+        
+        [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
+        [self configureListsController:YES storageOptionChangeHandler:nil];
+        
+    } handlerCloud:^(UIAlertAction *action) {
+        
+        [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
+        
+        [self configureListsController:YES storageOptionChangeHandler:^{
+            [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
+                                        toCloud: MADUbiquityIdentifier
+                                      extension: MADFileExtentionMobleApplicationDocument];
+        }];
+        
+    }];
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self.openFileViewController presentViewController:storageController animated:YES completion:nil];
+    }];
+}
+
+#pragma mark - Convenience
+
+- (void)configureListsController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
+    if ([MTApplicationInstance mainInstance].filesController != nil && !accountChanged) {
+        // The current controller is correct. There is no need to reconfigure it.
+        return;
+    }
+    
+    if (![MTApplicationInstance mainInstance].filesController) {
+        // There is currently no lists controller. Configure an appropriate one for the current configuration.
+        MADFilesController *filesController = [[MTApplicationInstance mainInstance] listsControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                                          firstQueryHandler:storageOptionChangeHandler];
+        [MTApplicationInstance mainInstance].filesController = filesController;
+        
+        // Ensure that this controller is passed along to the `AAPLListDocumentsViewController`.
+        self.openFileViewController.filesController = [MTApplicationInstance mainInstance].filesController;
+        
+        [[MTApplicationInstance mainInstance].filesController startSearching];
+    }
+    else if (accountChanged) {
+        // A lists controller is configured; however, it needs to have its coordinator updated based on the account change.
+        [MTApplicationInstance mainInstance].filesController.listCoordinator = [[MTApplicationInstance mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                                            firstQueryHandler:storageOptionChangeHandler];
+    }
+}
+
+- (void)loadAndDisplayWindow {
+    
+    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
+    self.applicationInstance = appInstance;
+    
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
+    id initViewController = [storyboard instantiateInitialViewController];
+    
+    NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
+    
+    window.rootViewController = initViewController;
+    self.navigationController = initViewController;
+    
+    NSAssert([self.navigationController.topViewController isKindOfClass:@class([MADOpenFileViewController class])] == NO, @"%s Can't find MADOpenFileViewController.", __PRETTY_FUNCTION__);
+    
+    self.openFileViewController = (MADOpenFileViewController *)self.navigationController.topViewController;
+    [window makeKeyAndVisible];
+    
+    
+    self.window = window;
+    self.storyboard = storyboard;
+}
+
+- (NSString *)ubiquityIdentifier {
+    return MADUbiquityIdentifier;
 }
 
 @end

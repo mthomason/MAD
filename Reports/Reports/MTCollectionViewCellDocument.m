@@ -158,20 +158,20 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 }*/
 
 - (void)loadPreviewImageForUrl:(NSURL *)url {
-    __weak MTCollectionViewCellDocument *weakself = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+    NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
+    if ([NSThread isMainThread]) {
+        [self updatePreviewImageUIForImage:image];
+    } else {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
-            NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];
-
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-            if (image) {
-                weakself.imagePreview.image = image;
-            } else {
-                weakself.imagePreview.image = [UIImage imageNamed:MTImageBlank];
-            }
-            [weakself setNeedsLayout];
+            [self updatePreviewImageUIForImage:image];
         });
-    });
+    }
+}
+
+- (void)updatePreviewImageUIForImage:(UIImage *)image {
+    self.imagePreview.image = image ?: [UIImage imageNamed:MTImageBlank];
+    [self setNeedsLayout];
 }
 
 - (void)setNeedsLayout {

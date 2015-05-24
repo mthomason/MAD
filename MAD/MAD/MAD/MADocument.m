@@ -1162,24 +1162,20 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)removeGuts {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
     NSArray *propertyKeys = @[NSURLIsDirectoryKey];
-    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: self.urlGuts
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts
                                           includingPropertiesForKeys: propertyKeys
                                                              options: -1
                                                         errorHandler: ^BOOL(NSURL *url, NSError *error) {
-                                                            NSAssert(error == nil, @"%@", error);
                                                             return YES;
                                                         }];
+    NSError *error;
     for (NSURL *url in enumerator) {
-        NSError *error = nil;
-        [fileManager removeItemAtURL:url error:&error];
-        NSAssert(error == nil, @"%@", error);
+        error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
     }
-    NSError *deleteError = nil;
-    [fileManager removeItemAtURL:self.urlGuts error:&deleteError];
-    NSAssert(deleteError == nil, @"%@", deleteError);
+    error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:self.urlGuts error:&error];
     
 }
 

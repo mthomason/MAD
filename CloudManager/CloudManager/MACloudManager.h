@@ -16,16 +16,10 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
     MACloudManagerSectionCloud = 1,
 };
 
-
-extern NSString * const MADNotificationFileManagerDidUpdateFileLocations;
 extern NSString * const MADNotificationCloudStateUpdated;
 
 extern NSString * const MADNotificationUbiquitousContainerFetchingWillBegin;
 extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
-
-extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyInserted;
-extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyUpdated;
-extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemoved;
 
 @protocol MADCloudManagerProtocolAppDetails <NSObject>
 - (NSString *)ubiquityIdentifier;
@@ -41,17 +35,8 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 
 @interface MACloudManager : NSObject
 
-@property (nonatomic, strong) NSString *fileExtention;
-
 @property (nonatomic, weak) id <MADCloudManagerProtocolCallbacks> delegate;
 @property (nonatomic, weak) id <MADCloudManagerProtocolAppDetails> delegateApplication;
-
-//@property (nonatomic, strong, readonly) NSURL *localCachesDirectory;
-//@property (nonatomic, strong, readonly) NSURL *localDocumentDirectory;
-//@property (nonatomic, strong, readonly) NSURL *ubiquitousDocumentsDirectory;
-//@property (nonatomic, strong, readonly) NSURL *ubiquityContainer;
-
-@property (nonatomic, assign, readonly) BOOL cloudAvailble;
 
 @property (nonatomic, strong) NSString *searchString;
 
@@ -60,15 +45,10 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 @property (nonatomic, strong, readonly) NSMutableArray       *documentCacheCloudMetaDataItems;
 @property (nonatomic, strong, readonly) NSMutableArray       *documentCacheLocalUrls;
 
-@property (nonatomic, strong, readonly) NSString *groupId;
+@property (nonatomic, strong, readwrite) NSString *groupId;
 
 + (MACloudManager *)sharedManager;
-
-- (void)activateWithGroupID:(NSString *)groupId;
-
-// Notification hooks
-
-- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification;
++ (BOOL)isCloudAvailable;
 
 // File operations
 
@@ -77,11 +57,6 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
           completion: (void (^)(BOOL, NSError *))completion;
 
 + (BOOL)duplicateUrl:(NSURL *)urlToDupe;
-+ (void)deleteDocumentAtURL:(NSURL *)url;
-+ (void)deleteDocumentAtURL:(NSURL *)url
-      withCompletionHandler:(void (^)(BOOL success, NSError *error))completionHandler;
-- (void)deleteCloudDocumentAtURL:(NSURL *)url;
-- (void)deleteLocalDocumentAtURL:(NSURL *)url;
 
 - (BOOL)copyUrl: (NSURL *)urlToCopy
           toUrl: (NSURL *)uniqueUrl
@@ -90,17 +65,16 @@ extern NSString * const MADNotificationFileManagerDidUpdateFileLocationsKeyRemov
 - (NSURL *)uniqueUrlForDocumentWithName: (NSString *)name
                           withExtension: (NSString *)extension
                             inContainer: (MACloudManagerSection)container;
++ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory
+              withDesiredHandle:(NSString *)desiredFileHandle
+                   andExtension:(NSString *)extension;
 
 // File name helpers
 
 + (NSString *)filenameId:(NSUInteger)tag;
 
-// Managing the cache
 - (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location
                                  inSection:(MACloudManagerSection)section;
-
-- (void)reloadCacheCloud:(NSString *)searchString;
-- (void)reloadCacheLocal:(NSString *)searchString;
 
 @end
 
