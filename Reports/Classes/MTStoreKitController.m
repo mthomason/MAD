@@ -9,6 +9,8 @@
 #import "MTStoreKitController.h"
 #import "MTVerificationController.h"
 #import "UIApplication+Extras.h"
+#import "UIApplication+Helpers.h"
+#import "UIAlertController+Constructors.h"
 
 NSString * const MTStoreKitTransactionReceipt                           = @"MTStoreKitTransactionReceipt";
 NSString * const MTStoreKitTransactionDate                              = @"MTStoreKitTransactionDate";
@@ -205,19 +207,8 @@ static MTStoreKitController *sharedSingleton = nil;
                 MTVerificationController *verificationController = [MTVerificationController sharedInstance];
                 [verificationController iOS7VerifyReceipt];
                 
-                
-                NSString *title = NSLocalizedString(@"Transaction Complete", @"Title for a completed purchase.");
-                NSString *message = NSLocalizedString(@"Software activated.", @"Software activated.");
-                NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
-                
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                                         message: message
-                                                                                  preferredStyle: UIAlertControllerStyleAlert];
-                UIAlertAction *actionKk = [UIAlertAction actionWithTitle: buttonTitle
-                                                                   style: UIAlertActionStyleDefault
-                                                                 handler: nil];
-                [alertController addAction: actionKk];
-                [[UIApplication topViewController] presentViewController: alertController
+                UIAlertController *alert = [UIAlertController nofityTransactionComplete];
+                [[UIApplication topViewController] presentViewController: alert
                                                                 animated: YES
                                                               completion: nil];
                 

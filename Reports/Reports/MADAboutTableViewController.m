@@ -17,7 +17,6 @@
 #import "MADOpenFileViewController.h"
 #import "UIDevice+Hack.h"
 #import "NSError+Constructors.h"
-#import "UIAlertController+CommonAlerts.h"
 #import "UIColor+EverydayApps.h"
 #import "MADVibrantTableViewCell.h"
 #import "MADVibrantTableView.h"

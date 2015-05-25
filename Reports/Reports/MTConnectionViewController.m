@@ -28,6 +28,7 @@
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTKeyChain.h"
+#import "UIAlertController+Constructors.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
@@ -319,32 +320,29 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 + (void)viewController:(id)viewController displayErrors:(NSArray *)errors completion:(void (^)(BOOL))completion {
     
-    NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
     NSError *error = errors.lastObject;
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: error.localizedDescription
+    [UIAlertController alertControllerWithTitle: error.localizedDescription
                                                                    message: error.localizedFailureReason
                                                             preferredStyle: UIAlertControllerStyleAlert];
     
     NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
     NSArray *remaningErrors = [errors subarrayWithRange:range];
-    UIAlertAction *ok = [UIAlertAction actionWithTitle: continueButtonTitle
-                                                 style: UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction *action) {
-                                                   if (remaningErrors.count > 0) {
-                                                       [MTConnectionViewController viewController:viewController
-                                                                                    displayErrors:remaningErrors
-                                                                                       completion:^(BOOL success) {
-                                                                                           completion(YES);
-                                                                                       }];
-                                                   } else {
-                                                       completion(YES);
-                                                   }
-                                               }];
-    [alert addAction:ok];
-    [viewController presentViewController:alert animated:YES completion:^{
-        
-    }];
+    UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle:error.localizedDescription
+                                                                     message:error.localizedFailureReason
+                                                               andCompletion:^(UIAlertAction *action) {
+                                                                   if (remaningErrors.count > 0) {
+                                                                       [MTConnectionViewController viewController:viewController
+                                                                                                    displayErrors:remaningErrors
+                                                                                                       completion:^(BOOL success) {
+                                                                                                           completion(YES);
+                                                                                                       }];
+                                                                   } else {
+                                                                       completion(YES);
+                                                                   }
+                                                               }];
+
+    [viewController presentViewController:alert animated:YES completion:nil];
 
 }
 

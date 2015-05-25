@@ -12,6 +12,7 @@
 
 #import "MADViewControllerSQL.h"
 #import "MTQuery.h"
+#import "UIAlertController+Constructors.h"
 
 @implementation MADViewControllerSQL
 
@@ -37,18 +38,7 @@
 
         self.textView.text = @"";
         
-        NSString *title = NSLocalizedString(@"Empty Query", @"Empty Query");
-        NSString *message = NSLocalizedString(@"Add tables to the query and data fields to the designer to generate a query.",
-                                              @"Add tables to the query and data fields to the designer to generate a query.");
-        NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
-        
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                                 message: message
-                                                                          preferredStyle: UIAlertControllerStyleAlert];
-        UIAlertAction *actionKk = [UIAlertAction actionWithTitle: buttonTitle
-                                                           style: UIAlertActionStyleDefault
-                                                         handler: nil];
-        [alertController addAction: actionKk];
+        UIAlertController *alertController = [UIAlertController errorEmptyQuery];
         [self presentViewController: alertController
                            animated: YES
                          completion: nil];

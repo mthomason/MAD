@@ -105,6 +105,8 @@
 #import "NSManagedObject+Extras.h"
 #import "MADToolboxViewController.h"
 
+#import "UIAlertController+Constructors.h"
+
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
     MTToolboxTypeSection = 3,
@@ -1767,40 +1769,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)editDocumentObjectLabelStatic:(RptqDocumentObject *)object {
     
-    NSString *title = NSLocalizedString(@"Edit Label", @"Edit Label");
-    NSString *message = NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.");
-    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
-    NSString *change = NSLocalizedString(@"Change", @"Change");
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
-
-    __weak MADDesignerViewController *weakself = self;
-    NSManagedObjectID *objectId = object.objectID;
-    UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: change
-                                                            style: UIAlertActionStyleDefault
-                                                          handler: ^(UIAlertAction *action) {
-    
-                                                              RptqDocumentObject *documentObject = (RptqDocumentObject *)[weakself.document.managedObjectContext objectWithID:objectId];
-                                                              UITextField *textField = alert.textFields.firstObject;
-                                                              documentObject.isLabel.text = textField.text;
-                                                              [weakself.document.managedObjectContext save:nil];
-
-                                                          }];
-    
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
-                                                           style: UIAlertActionStyleCancel
-                                                         handler: nil];
-
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+    UIAlertController *alert = [UIAlertController editLabel:^(UITextField *textField) {
         textField.text = object.isLabel.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
+    } completion:^(UIAlertAction *action, NSString *text) {
+        
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
+        documentObject.isLabel.text = text;
+        [self.document.managedObjectContext save:nil];
     }];
-    
-    [alert addAction:actionDefault];
-    [alert addAction:actionCancel];
-    
+
     [self presentViewController:alert animated:YES completion:nil];
     
 }

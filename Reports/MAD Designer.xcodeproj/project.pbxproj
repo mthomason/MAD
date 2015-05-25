@@ -214,8 +214,6 @@
 		4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1AD3391B11BEAD00839504 /* MADProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD32F1B11BD5B00839504 /* MADProgressView.m */; };
 		4C1AD33A1B11BEAD00839504 /* MADProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD32F1B11BD5B00839504 /* MADProgressView.m */; };
-		4C1AD33D1B11CE3B00839504 /* UIAlertController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD33C1B11CE3B00839504 /* UIAlertController+Constructors.m */; };
-		4C1AD33E1B11CE3B00839504 /* UIAlertController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD33C1B11CE3B00839504 /* UIAlertController+Constructors.m */; };
 		4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AC17D7932B00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -444,8 +442,6 @@
 		4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C70C17519E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */; };
 		4C70C17619E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */; };
-		4C712E6819E068EC00808779 /* UIAlertController+CommonAlerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */; };
-		4C712E6919E068EC00808779 /* UIAlertController+CommonAlerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */; };
 		4C75C9F218E20306006E8526 /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C75C9F318E20306006E8526 /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C75C9FE18E272F6006E8526 /* MTTableCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9FD18E272F6006E8526 /* MTTableCellHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1494,8 +1490,8 @@
 		4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderChooseFieldViewController.m; sourceTree = "<group>"; };
 		4C1AD32E1B11BD5B00839504 /* MADProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADProgressView.h; sourceTree = "<group>"; };
 		4C1AD32F1B11BD5B00839504 /* MADProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADProgressView.m; sourceTree = "<group>"; };
-		4C1AD33B1B11CE3B00839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Constructors.h"; sourceTree = "<group>"; };
-		4C1AD33C1B11CE3B00839504 /* UIAlertController+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Constructors.m"; sourceTree = "<group>"; };
+		4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
+		4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "../CocoaExtensions/CocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C2213A317D746C200BD36F5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -1804,8 +1800,6 @@
 		4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGAffineTransform+Common.h"; sourceTree = "<group>"; };
 		4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGAffineTransform+Common.m"; sourceTree = "<group>"; };
 		4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTViewTableHeader.xib; sourceTree = "<group>"; };
-		4C712E6619E068EC00808779 /* UIAlertController+CommonAlerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+CommonAlerts.h"; sourceTree = "<group>"; };
-		4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+CommonAlerts.m"; sourceTree = "<group>"; };
 		4C752E0C16EA3A0C001FDAA3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		4C75C9F018E20306006E8526 /* MTTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableCell.h; sourceTree = "<group>"; };
 		4C75C9F118E20306006E8526 /* MTTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableCell.m; sourceTree = "<group>"; };
@@ -4373,8 +4367,6 @@
 				4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */,
 				4C8BAFE019AB113600A55780 /* UIView+Extras.h */,
 				4C8BAFE119AB113600A55780 /* UIView+Extras.m */,
-				4C712E6619E068EC00808779 /* UIAlertController+CommonAlerts.h */,
-				4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */,
 				4CDB48851ABFBA9E00E76879 /* NSMetadataItem+Description.h */,
 				4CDB48861ABFBA9E00E76879 /* NSMetadataItem+Description.m */,
 				4CDB48C01ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.h */,
@@ -4383,8 +4375,6 @@
 				4CDB48C51ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m */,
 				4C359D921B081EE300B3E9E0 /* NSString+Encryption.h */,
 				4C359D931B081EE300B3E9E0 /* NSString+Encryption.m */,
-				4C1AD33B1B11CE3B00839504 /* UIAlertController+Constructors.h */,
-				4C1AD33C1B11CE3B00839504 /* UIAlertController+Constructors.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -4569,13 +4559,15 @@
 			isa = PBXGroup;
 			children = (
 				4C65D47B1ADCC67C00279B4D /* BDHost.h */,
-				4C8CDC9E1AD2751200B7B9EA /* NSError+Constructors.h */,
-				4C8CDC9D1AD274F800B7B9EA /* MTLog.h */,
-				4C8CDC981AD2710D00B7B9EA /* UIColor+EverydayApps.h */,
-				4CF889321AD1C28E00ED21FC /* UIDevice+Hack.h */,
 				4CF889331AD1C28E00ED21FC /* CGGeometry+Extras.h */,
+				4C8CDC9D1AD274F800B7B9EA /* MTLog.h */,
+				4C8CDC9E1AD2751200B7B9EA /* NSError+Constructors.h */,
 				4CF889341AD1C28E00ED21FC /* NSFileManager+Common.h */,
 				4CF889351AD1C28E00ED21FC /* NSURL+Document.h */,
+				4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */,
+				4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */,
+				4C8CDC981AD2710D00B7B9EA /* UIColor+EverydayApps.h */,
+				4CF889321AD1C28E00ED21FC /* UIDevice+Hack.h */,
 			);
 			name = libCocoaExtensions;
 			sourceTree = "<group>";
@@ -5673,7 +5665,6 @@
 				4C0E775F163B5AEC003B951E /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4CF5319C1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
-				4C1AD33E1B11CE3B00839504 /* UIAlertController+Constructors.m in Sources */,
 				4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */,
 				4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4C23FB3A18FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */,
@@ -5815,7 +5806,6 @@
 				4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
 				4C38E0D119C203B400AB9789 /* MADFileManager.m in Sources */,
 				4CA57A5C179FD46300B58871 /* MADDesignerSectionLabel.m in Sources */,
-				4C712E6919E068EC00808779 /* UIAlertController+CommonAlerts.m in Sources */,
 				4CB46B6617C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6001,7 +5991,6 @@
 				4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C23FB3018FADE65009F234F /* MTCellEnterText.m in Sources */,
 				4CA19F821A15C197004DDA52 /* MADViewController.m in Sources */,
-				4C1AD33D1B11CE3B00839504 /* UIAlertController+Constructors.m in Sources */,
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
@@ -6011,7 +6000,6 @@
 				4C38E0D019C203B400AB9789 /* MADFileManager.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
-				4C712E6819E068EC00808779 /* UIAlertController+CommonAlerts.m in Sources */,
 				4CA57A5B179FD46300B58871 /* MADDesignerSectionLabel.m in Sources */,
 				4C30A7851B00FFCC00AD4423 /* MADDirectoryMonitor.m in Sources */,
 				4CB46B6517C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,

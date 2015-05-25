@@ -54,7 +54,7 @@
 #import "NSFileManager+Common.h"
 #import "NSError+Constructors.h"
 #import "NSURL+Document.h"
-#import "UIAlertController+CommonAlerts.h"
+#import "UIAlertController+Constructors.h"
 #import "MTNavigationController.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
@@ -1916,40 +1916,17 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 }
 
 - (IBAction)delete:(id)sender {
-
-    NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
-    NSNumber *selectedItemsCount = @(selectedItems.count);
-    NSString *numberOfItems = [NSNumberFormatter localizedStringFromNumber: selectedItemsCount
-                                                               numberStyle: NSNumberFormatterSpellOutStyle];
-    NSString *title = NSLocalizedString(@"Confirm", @"Confirm");
-    NSString *messageTemplate = selectedItems.count > 1 ?
-                                    NSLocalizedString(@"Are you sure you would like to delete %@ items?  This action is final.", @"Delete message template (plural)") :
-                                    NSLocalizedString(@"Are you sure you would like to delete %@ item?  This action is final.", @"Delete message template");
-    NSString *message = [NSString stringWithFormat:messageTemplate, numberOfItems];
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleActionSheet];
-    NSString *titleCancel = NSLocalizedString(@"Cancel", @"Cancel");
-    NSString *titleDestructiveTemplate = selectedItems.count > 1 ?
-                                                NSLocalizedString(@"Remove %@ items", @"Remove %@ items (plural)") :
-                                                NSLocalizedString(@"Remove %@ item", @"Remove %@ item");
-    NSString *titleDestructive = [NSString stringWithFormat:titleDestructiveTemplate, numberOfItems];
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:titleCancel
-                                                           style:UIAlertActionStyleCancel
-                                                         handler:^(UIAlertAction *action) {
-                                                             
-                                                         }];
-    UIAlertAction *actionDestructive = [UIAlertAction actionWithTitle:titleDestructive
-                                                                style:UIAlertActionStyleDestructive
-                                                              handler:^(UIAlertAction *action) {
-                                                                  
-                                                                  for (NSIndexPath *selectedItem in selectedItems) {
-                                                                      MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:selectedItem.item];
-                                                                      [self.filesController removeFileInfo:metaData];
-                                                                  }
-                                                              }];
-    [alertController addAction:actionCancel];
-    [alertController addAction:actionDestructive];
+    NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
+    UIAlertController *alertController = [UIAlertController deleteItems:selectedItems.count
+                                                                confirm:^(UIAlertAction *action) {
+                                                                    for (NSIndexPath *selectedItem in selectedItems) {
+                                                                        MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:selectedItem.item];
+                                                                        [self.filesController removeFileInfo:metaData];
+                                                                    }
+    } cancel:^(UIAlertAction *action) {
+        
+    }];
+    
     [self presentViewController:alertController animated:YES completion:NULL];
     
 }
@@ -1972,53 +1949,31 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     }
     
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
-    NSString *title = NSLocalizedString(@"Rename Document", @"Rename Document");
-    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
-    NSString *rename = NSLocalizedString(@"Rename", @"Rename");
-    NSString *message = NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.");
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
-    
+
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:indexPath.item];
-
-    UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: rename
-                                                            style: UIAlertActionStyleDefault
-                                                          handler: ^(UIAlertAction *action) {
-                                                              
-                                                              UITextField *textField = alert.textFields.firstObject;
-                                                              NSString *name = [self renameFilter:textField.text];
-                                                              
-                                                              
-                                                              if (name.length > 0) {
-                                                                  NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
-                                                                  if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
-                                                                      [self.filesController renameFileInfo:metaData toName:textField.text];
-                                                                  } else {
-                                                                      [self fileExistError];
-                                                                  }
-                                                              } else {
-                                                                  [self validationError];
-                                                              }
-                                                              
-                                                          }];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
-                                                           style: UIAlertActionStyleCancel
-                                                         handler: nil];
-    
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+    UIAlertController *alert = [UIAlertController renameDocument:^(UITextField *textField) {
         
         textField.text = cellDocument.labelTitle.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
         textField.delegate = self;
         
-    }];
-    
-    [alert addAction:actionDefault];
-    [alert addAction:actionCancel];
+    } confirm:^(UIAlertAction *action, NSString *text) {
+        
+        NSString *name = [self renameFilter:text];
+        if (name.length > 0) {
+            NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
+                [self.filesController renameFileInfo:metaData toName:text];
+            } else {
+                [self fileExistError];
+            }
+        } else {
+            [self validationError];
+        }
+        
+    } cancel:nil];
     
     [self showViewController:alert sender:self];
     
@@ -2085,31 +2040,13 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 }
 
 - (void)validationError {
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Validation Error"
-                                                                   message: @"Filename not valid."
-                                                            preferredStyle: UIAlertControllerStyleAlert];
-    
-    UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Dismiss"
-                                                 style: UIAlertActionStyleDefault
-                                               handler: nil];
-    [alert addAction:ok];
+    UIAlertController *alert = [UIAlertController errorValidationFilename];
     [self showViewController:alert sender:self];
-
 }
 
 - (void)fileExistError {
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"File Exist"
-                                                                   message: @"File already exist. Please choose a new name."
-                                                            preferredStyle: UIAlertControllerStyleAlert];
-    
-    UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Dismiss"
-                                                 style: UIAlertActionStyleDefault
-                                               handler: nil];
-    [alert addAction:ok];
+    UIAlertController *alert = [UIAlertController errorFileExist];
     [self showViewController:alert sender:self];
-    
 }
 
 - (void)email:(MTCollectionViewCellDocument *)cell {

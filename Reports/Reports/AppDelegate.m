@@ -48,6 +48,8 @@
 NSString *s = @"";
 #endif
 
+const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
+
 const NSInteger MADTagAlertViewNewDocument = 3838;
 const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it will be enabled,
                                                     //  load window in willFinishLaunchingWithOptions
@@ -74,6 +76,13 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 @implementation AppDelegate
 
+/*static const unsigned char keyEncryption[] = {
+    0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,
+    0x06, 0x77, 0x6d, 0xd6, 0xbb, 0x5b, 0xd3, 0x21,
+    0xdb, 0x46, 0xa5, 0xfd, 0x1e, 0xbe, 0x91, 0x69,
+    0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
+};*/
+
 #if DEBUG
 
     static void uncaughtExceptionHandler(NSException *exception);
@@ -84,8 +93,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #endif
 
 + (MTApplicationInstance *)app {
-    UIApplication *sharedApplication = [UIApplication sharedApplication];
-    return [(AppDelegate *)sharedApplication.delegate applicationInstance];
+    return ((AppDelegate *)[UIApplication sharedApplication].delegate).applicationInstance;
 }
 
 + (UIWindow *)window {
@@ -95,21 +103,14 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #pragma mark - Initialization
 
 - (instancetype)init {
-    self = [super init];
-    
-    if (self) {
-        _appDelegateQueue = dispatch_queue_create("com.everydayapps.mad.designer.appdelegate", DISPATCH_QUEUE_SERIAL);
+
+    if (self = [super init]) {
+        dispatch_queue_t appDelegateQueue = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
+        self.appDelegateQueue = appDelegateQueue;
     }
     
     return self;
 }
-
-/*static const unsigned char keyEncryption[] = {
-    0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,
-    0x06, 0x77, 0x6d, 0xd6, 0xbb, 0x5b, 0xd3, 0x21,
-    0xdb, 0x46, 0xa5, 0xfd, 0x1e, 0xbe, 0x91, 0x69,
-    0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
-};*/
 
 - (void)dealloc {
     [self removeObservers];
@@ -120,14 +121,11 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     if ([MACloudManager isCloudAvailable]) {
-        /*
-         Ensure the app sandbox is extended to include the default container. Perform this action on the
-         `AAPLAppDelegate`'s serial queue so that actions dependent on the extension always follow it.
-         */
+        
         dispatch_async(self.appDelegateQueue, ^{
-            // The initial call extends the sandbox. No need to capture the URL.
             [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:MADUbiquityIdentifier];
         });
+        
     }
     
     if (MADStateRestorationSupportEnabled) {
@@ -202,7 +200,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MADocument *documentReport = [self.applicationInstance openDocument];
+    MADocument *documentReport = self.applicationInstance.openDocument;
     if (documentReport != nil) {
         [documentReport saveToURL: documentReport.fileURL
                  forSaveOperation: UIDocumentSaveForOverwriting
@@ -219,7 +217,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         
         result = YES;
         
-        UIAlertController *alert = [UIAlertController alertControllerAddedDocument];
+        UIAlertController *alert = [UIAlertController addedDocument];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
@@ -363,7 +361,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [userDefaults synchronize];
     
 }
-
 
 - (void)application:(UIApplication *)application didDecodeRestorableStateWithCoder:(NSCoder *)coder { }
 
@@ -515,7 +512,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)notifyUserOfAccountChange:(MADAppStorageState)storageState {
 
-    UIAlertController *signedOutController = [UIAlertController alertControllerPromotCloudSignOut:^(UIAlertAction *action) {
+    UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
         [self resolveStateForUserStorageState:storageState];
     }];
     
@@ -527,12 +524,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)promptUserForStorageOption {
 
-    UIAlertController *storageController = [UIAlertController alertControllerPromotStorageOption:^(UIAlertAction *action) {
+    UIAlertController *storageController = [UIAlertController promotStorageOptionLocal:^(UIAlertAction *action) {
         
         [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
         [self configureListsController:YES storageOptionChangeHandler:nil];
         
-    } handlerCloud:^(UIAlertAction *action) {
+    } cloud:^(UIAlertAction *action) {
         
         [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
         

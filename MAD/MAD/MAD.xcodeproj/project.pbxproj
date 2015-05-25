@@ -225,6 +225,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -925,16 +926,17 @@
 			isa = PBXGroup;
 			children = (
 				4C65D4781ADCC4F100279B4D /* BDHost.h */,
-				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
-				4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */,
-				4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */,
-				4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */,
-				4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */,
-				4C8CDB2C1AD24F3400B7B9EA /* UIDevice+Hack.h */,
-				4C8CDACA1AD243C300B7B9EA /* MTLog.h */,
-				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
 				4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */,
+				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
 				4C8CDA271AD1DAF000B7B9EA /* NSFileManager+Common.h */,
+				4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */,
+				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
+				4C8CDACA1AD243C300B7B9EA /* MTLog.h */,
+				4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */,
+				4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */,
+				4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */,
+				4C8CDB2C1AD24F3400B7B9EA /* UIDevice+Hack.h */,
+				4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */,
 			);
 			name = libCocoaExtensions;
 			sourceTree = "<group>";

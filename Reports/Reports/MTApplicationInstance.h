@@ -63,6 +63,7 @@ extern NSString * const MTGlobalBundleRev;
 @property (nonatomic) MADAppStorage storageOption;
 
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
+@property (nonatomic, strong, readonly) MADocument *openDocument;
 
 - (void)initalizeAppearance;
 - (void)registerDefaultsFromSettingsBundle;
@@ -81,7 +82,6 @@ extern NSString * const MTGlobalBundleRev;
 + (NSString *)bundleVersion;
 + (void)deleteCoreDataCache;
 + (NSString *)storyboardName;
-//+ (UIStoryboard *)storyboard;
 
 + (NSString *)madDesigner;
 + (NSString *)madViewer;
@@ -90,7 +90,6 @@ extern NSString * const MTGlobalBundleRev;
 + (NSString *)bundleDisplayName;
 
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
-- (MADocument *)openDocument;
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;

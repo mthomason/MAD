@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD3401B126ABF00839504 /* UIAlertController+Constructors.m */; };
 		4C37E1111ACC864500B4BC0D /* CocoaExtensions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1101ACC864500B4BC0D /* CocoaExtensions.h */; };
 		4C37E1131ACC864500B4BC0D /* CocoaExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E1121ACC864500B4BC0D /* CocoaExtensions.m */; };
 		4C37E1191ACC864500B4BC0D /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C37E10D1ACC864500B4BC0D /* libCocoaExtensions.a */; };
@@ -51,6 +52,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C1AD33F1B126ABF00839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Constructors.h"; sourceTree = "<group>"; };
+		4C1AD3401B126ABF00839504 /* UIAlertController+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Constructors.m"; sourceTree = "<group>"; };
 		4C37E10D1ACC864500B4BC0D /* libCocoaExtensions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCocoaExtensions.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C37E1101ACC864500B4BC0D /* CocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CocoaExtensions.h; sourceTree = "<group>"; };
 		4C37E1121ACC864500B4BC0D /* CocoaExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CocoaExtensions.m; sourceTree = "<group>"; };
@@ -125,6 +128,8 @@
 			children = (
 				4C4AC1C51AD1128600D4C461 /* MADCocoaExtensions.h */,
 				4C8CDAC91AD243B500B7B9EA /* MTLog.h */,
+				4C1AD33F1B126ABF00839504 /* UIAlertController+Constructors.h */,
+				4C1AD3401B126ABF00839504 /* UIAlertController+Constructors.m */,
 				4C8CDAC51AD2433D00B7B9EA /* NSError+Constructors.h */,
 				4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */,
 				4C8CDC831AD2687800B7B9EA /* UIColor+EverydayApps.h */,
@@ -269,6 +274,7 @@
 				4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */,
 				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
 				4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */,
+				4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */,
 				4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */,
 				4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */,
 				4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */,
