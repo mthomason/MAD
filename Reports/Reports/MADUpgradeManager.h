@@ -14,8 +14,7 @@
 @interface MADUpgradeManager : NSObject
 
 - (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error, BOOL upgradePerformed))completion;
-+ (void)installSampleDatabase:(NSError **)error;
-+ (void)installSamplesDocuments:(NSError **)error;
++ (void)installSamples;
 
 @end
 

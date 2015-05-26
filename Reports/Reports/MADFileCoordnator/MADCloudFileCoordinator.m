@@ -201,7 +201,10 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
     [self.metadataQuery disableUpdates];
     
-    NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:self.metadataQuery.results];
+    NSArray *results = [NSArray arrayWithArray:self.metadataQuery.results];
+    NSArray *i = [MADMetaData madMetaDataItemsForNSMetadataItems:results];
+    
+    NSArray *inserted = [NSArray arrayWithArray:i];
     NSArray *removed = @[];
     NSArray *updated = @[];
 

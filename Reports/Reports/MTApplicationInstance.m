@@ -55,8 +55,14 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
     #import "MADNavigationBarFixedSize.h"
 #endif
 
-NSString * const MADAppConfigurationUserDefaultsFirstLaunch         = @"MADAppConfigurationUserDefaultsFirstLaunch";
+NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
+NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
+
 NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
+NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
+NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
+
+NSString * const MADIDUser                                          = @"MADIDUser";
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 
 NSString * const MTApplicationIdMadDesigner                         = @"666001433";
@@ -66,9 +72,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.409";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.409";
-NSString * const MTGlobalBundleRev                                  = @"1784";
+NSString * const MTGlobalBundleVersion                              = @"7.0.410";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.410";
+NSString * const MTGlobalBundleRev                                  = @"1785";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -80,6 +86,8 @@ NSString * const NSFetchedResultsCacheTables                        = @"NSFetche
 NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
 NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
 NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
+
+const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 
 @interface MTApplicationInstance ()
     <NSCoding>
@@ -98,7 +106,9 @@ NSString * const NSFetchedResultsCachePredicates                    = @"NSFetche
 
 @property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
 
-@property (nonatomic, readwrite, getter=isFirstLaunch) BOOL firstLaunch;
+@property (nonatomic, readonly, getter=isFirstLaunch) BOOL firstLaunch;
+
+@property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
 
 @end
 
@@ -147,6 +157,11 @@ static MTApplicationInstance *mainInstance;
 - (instancetype)init {
     self = [super init];
     if (self) {
+        
+        self.filesController = nil;
+        
+        dispatch_queue_t appInstaceQueue = dispatch_queue_create(MADQueueAppInstance, DISPATCH_QUEUE_SERIAL);
+        self.appInstaceQueue = appInstaceQueue;
         
         NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
         self.applicationUserDefaults = defaults;
@@ -427,6 +442,14 @@ static MTApplicationInstance *mainInstance;
     };
 }
 
+- (BOOL)sampleInstalled {
+    return [self.applicationUserDefaults boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+}
+
+- (void)installedSample {
+    [self.applicationUserDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+}
+
 - (MADAppStorage)storageOption {
     NSInteger value = [self.applicationUserDefaults integerForKey:MADAppConfigurationUserDefaultsStorageOption];
     return (MADAppStorage)value;
@@ -434,29 +457,40 @@ static MTApplicationInstance *mainInstance;
 
 - (void)setStorageOption:(MADAppStorage)storageOption {
     [self.applicationUserDefaults setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
+    [self.applicationUserDefaults synchronize];
 }
 
 - (BOOL)isFirstLaunch {
-    return [self.applicationUserDefaults boolForKey:MADAppConfigurationUserDefaultsFirstLaunch];
-}
-
-- (void)setFirstLaunch:(BOOL)firstLaunch {
-    [self.applicationUserDefaults setBool:firstLaunch forKey:MADAppConfigurationUserDefaultsFirstLaunch];
+    BOOL firstLaunch = [self.applicationUserDefaults stringForKey:MADIDUser] == nil;
+    if (firstLaunch) {
+        dispatch_async(self.appInstaceQueue, ^{
+            NSUUID *uuid = [NSUUID UUID];
+            [self.applicationUserDefaults setObject:uuid.UUIDString forKey:MADIDUser];
+            [self.applicationUserDefaults synchronize];
+        });
+    }
+    return firstLaunch;
 }
 
 - (void)registerDefaults {
     NSUserDefaults *defaults = self.applicationUserDefaults;
-    
-    [defaults registerDefaults:@{
-                                 MADAppConfigurationUserDefaultsFirstLaunch: @YES,
-                                 MADAppConfigurationUserDefaultsStorageOption: @(MADAppStorageNotSet)
+    NSNumber *defaultStorage = @(MADAppStorageNotSet);
+    NSNumber *defaultSamplesInstalled = @(NO);
+    NSNumber *defaultReportsInstalled = @(NO);
+    NSNumber *defaultChinookInstalled = @(NO);
+    [defaults registerDefaults:@{MADUpgradeInstalledChinook: defaultChinookInstalled,
+                                 MADUpgradeInstalledSamples : defaultReportsInstalled,
+                                 MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
+                                 MADAppConfigurationUserDefaultsStorageOption: defaultStorage
                                  }];
 }
 
-- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler {
+- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
+             subsquientLaunches:(void (^)(void))subsequentLaunch {
     if (self.isFirstLaunch) {
-        self.firstLaunch = NO;
         firstLaunchHandler();
+    } else {
+        subsequentLaunch();
     }
 }
 
@@ -485,7 +519,7 @@ static MTApplicationInstance *mainInstance;
     id<NSObject, NSCopying, NSCoding> storedToken = nil;
     
     // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
-    NSData *ubiquityIdentityTokenArchive = [self.applicationUserDefaults objectForKey:MADUbiquityIdentifier];
+    NSData *ubiquityIdentityTokenArchive = [self.applicationUserDefaults objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
     
     if (ubiquityIdentityTokenArchive) {
         storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
@@ -502,11 +536,11 @@ static MTApplicationInstance *mainInstance;
         // The account has changed.
         NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
         
-        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADUbiquityIdentifier];
+        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
     }
     else {
         // There is no signed-in account.
-        [defaults removeObjectForKey:MADUbiquityIdentifier];
+        [defaults removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
     }
 }
 

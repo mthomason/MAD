@@ -50,6 +50,11 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 + (MACloudManager *)sharedManager;
 + (BOOL)isCloudAvailable;
 
++ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+                                     groupIdentifier: (NSString *)groupIdentifier
+                                               delay: (void (^)())handleLongRunningCall
+                                          completion: (void (^)(BOOL cloudAvailble, NSURL *documents, NSURL *data))handleCompletion;
+
 // File operations
 
 - (void)moveDocument: (NSURL *)source
@@ -68,6 +73,7 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 + (NSURL *)uniqueUrlInDirectory:(NSURL *)directory
               withDesiredHandle:(NSString *)desiredFileHandle
                    andExtension:(NSString *)extension;
++ (NSURL *)uniqueURLForURL:(NSURL *)url;
 
 // File name helpers
 

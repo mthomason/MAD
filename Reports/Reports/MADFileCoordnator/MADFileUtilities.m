@@ -63,9 +63,9 @@
     
     if ([fileManager isUbiquitousItemAtURL:destinationURL] ||
         [fileManager fileExistsAtPath:destinationURL.path]) {
-        // If the file already exists in the cloud, remove the local version and return.
-        [self removeFileAtURL:sourceURL withCompletionHandler:nil];
-        return;
+
+        destinationURL = [MACloudManager uniqueURLForURL:destinationURL];
+        
     }
     
     dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);

@@ -120,6 +120,54 @@ static MACloudManager *sharedSingleton;
 
 #pragma mark - Internal Methods
 
++ (void)handleLongRunningCloudUrlLookup:(NSTimer *)timer {
+    if(timer.userInfo) {
+        void (^block)() = (void (^)())timer.userInfo;
+        block();
+    }
+}
+
++ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+                                     groupIdentifier: (NSString *)groupIdentifier
+                                               delay: (void (^)())handleLongRunningCall
+                                          completion: (void (^)(BOOL cloudAvailable, NSURL *documents, NSURL *data))handleCompletion {
+    
+        if ([MACloudManager isCloudAvailable]) {
+            void (^longRunningCallBlock)() = [handleLongRunningCall copy];
+            [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
+                                    target: self
+                                  selector: @selector(handleLongRunningCloudUrlLookup:)
+                                  userInfo: longRunningCallBlock
+                                   repeats: NO];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                
+                NSFileManager *fileManager = [[NSFileManager alloc] init];
+                //This call may be SLOW, so only do on BACKGROUND thread.
+                //NSString *ubiquityIdentifier = [self.delegateApplication ubiquityIdentifier];
+                
+                NSURL *ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
+                
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                    NSURL *documentDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Documents"];
+                    NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
+                    [fileManager coordinateCreateDirectoryIfDoesNotExist:documentDirectory];
+                    [fileManager coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
+
+                    if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
+                    
+                });
+            });
+        } else {
+            NSURL *documents = [[NSFileManager defaultManager] localDataDirectoryForGroupIdentifier:groupIdentifier];
+            NSURL *data = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
+            if (handleCompletion) handleCompletion(NO, documents, data);
+        }
+ 
+}
+
 - (void)updateFileStorageContainerURL:(void (^)(void))completion {
     
     @synchronized (self) {
@@ -136,6 +184,7 @@ static MACloudManager *sharedSingleton;
                 NSFileManager *fileManager = [NSFileManager defaultManager];
                 //This call may be SLOW, so only do on BACKGROUND thread.
                 NSString *ubiquityIdentifier = [self.delegateApplication ubiquityIdentifier];
+                
                 NSURL *url = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
                 [weakself setDataAndDocumentUrlsWithBaseUrl:url];
                 
@@ -261,8 +310,8 @@ static MACloudManager *sharedSingleton;
     NSString *handle = [lastPathComponent stringByDeletingPathExtension];
     NSString *extention = [lastPathComponent pathExtension];
     NSURL *uniqueUrl = [MACloudManager uniqueUrlInDirectory:directory
-                                 withDesiredHandle:handle
-                                      andExtension:extention];
+                                          withDesiredHandle:handle
+                                               andExtension:extention];
     
     NSError *error = nil;
     NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] init];
@@ -304,6 +353,12 @@ static MACloudManager *sharedSingleton;
     return [MACloudManager uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
                               withDesiredHandle: name
                                    andExtension: extension];
+}
+
++ (NSURL *)uniqueURLForURL:(NSURL *)url {
+    return [MACloudManager uniqueUrlInDirectory: url.URLByDeletingLastPathComponent
+                              withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
+                                   andExtension: url.lastPathComponent.pathExtension];
 }
 
 + (NSURL *)uniqueUrlInDirectory:(NSURL *)directory

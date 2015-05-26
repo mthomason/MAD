@@ -16,13 +16,15 @@
 + (NSURL *)localTemporaryDirectory;
 
 + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
+- (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
 
 - (NSArray *)contentsOfDirectory:(NSURL *)directory withPathExtension:(NSString *)extension;
 
 - (NSURL *)cloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
 - (NSURL *)localApplicationSupportDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-- (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+- (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+- (NSURL *)localDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 
 - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
                                          fileURL:(NSURL *)fileURL;

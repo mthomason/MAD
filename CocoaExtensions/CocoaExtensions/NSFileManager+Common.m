@@ -13,6 +13,7 @@ NSString * const MADPathComponentDocuments  = @"Documents";
 NSString * const MADPathComponentCache      = @"Cache";
 NSString * const MADPathComponentAppSupport = @"Application Support";
 NSString * const MADPathComponentTemporary  = @"Temporary";
+NSString * const MADPathComponentData       = @"Data";
 
 @implementation NSFileManager (Common)
 
@@ -26,6 +27,12 @@ NSString * const MADPathComponentTemporary  = @"Temporary";
     return [self localDirectoryForGroupIdentifier: groupIdentifier
                                     pathComponent: MADPathComponentDocuments
                               alternativeSelector: @selector(localDocumentsDirectory)];
+}
+
+- (NSURL *)localDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
+    return [self localDirectoryForGroupIdentifier: groupIdentifier
+                                    pathComponent: MADPathComponentData
+                              alternativeSelector: @selector(localDataDirectory)];
 }
 
 - (NSURL *)localCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
@@ -216,6 +223,12 @@ NSString * const MADPathComponentTemporary  = @"Temporary";
     return [NSURL fileURLWithPath:paths.firstObject isDirectory:YES];
 }
 
++ (NSURL *)localDataDirectory {
+    NSString *homeDirectory = NSHomeDirectory();
+    NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
+    return  [fileUrlWithPath URLByAppendingPathComponent:MADPathComponentData isDirectory:YES];
+}
+
 - (NSURL *)localApplicationSupportDirectory {
     NSBundle *mainBundle = [NSBundle mainBundle];
     NSArray *possibleUrls = [self URLsForDirectory: NSApplicationSupportDirectory
@@ -289,8 +302,13 @@ NSString * const MADPathComponentTemporary  = @"Temporary";
 
 + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {
     
+    [[NSFileManager defaultManager] coordinateCreateDirectoryIfDoesNotExist:url];
+}
+
+- (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO) {
+    
+    if ([self fileExistsAtPath:url.path] == NO) {
         
         NSError *error = nil;
         NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
@@ -300,14 +318,13 @@ NSString * const MADPathComponentTemporary  = @"Temporary";
                                      byAccessor: ^(NSURL *newURL) {
                                          
                                          NSError *errorCreateNew = nil;
-                                         [[NSFileManager defaultManager] createDirectoryAtPath: newURL.path
-                                                                   withIntermediateDirectories: YES
-                                                                                    attributes: nil
-                                                                                         error: &errorCreateNew];
-                                         
+                                         [self createDirectoryAtPath: newURL.path
+                                         withIntermediateDirectories: YES
+                                                          attributes: nil
+                                                               error: &errorCreateNew];
                                          NSAssert(errorCreateNew == nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
                                      }];
-        NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
+        NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 

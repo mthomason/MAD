@@ -78,6 +78,21 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 
 @implementation UIAlertController (Constructors)
 
++ (instancetype)addedDocument {
+    NSString *newdoc = NSLocalizedString(MADTitleNewDocument, MADTitleNewDocument);
+    NSString *addeddoc = NSLocalizedString(MADMessageNewDocument, MADMessageNewDocument);
+    NSString *continueb = NSLocalizedString(MADButtonContinue, MADButtonContinue);
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: newdoc
+                                                                   message: addeddoc
+                                                            preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle: continueb
+                                                 style: UIAlertActionStyleDefault
+                                               handler: nil];
+    [alert addAction:ok];
+    return alert;
+}
+
 + (instancetype)promptForPasswordGivenUsername:(NSString *)username
                                       password:(void (^)(UITextField *textField))passwordSetup
                                         submit:(void (^)(NSString *password))handlerContinue
