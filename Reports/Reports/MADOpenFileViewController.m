@@ -122,7 +122,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
-@property (nonatomic, assign) BOOL editModeEnabled;
 @property (atomic, assign) BOOL aboutViewControllerOnScreen;
 
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readwrite) BOOL savingActivityIndicatorVisible;
@@ -289,8 +288,6 @@ static inline CGRect rectCellLabel() {
                                                                                            target: self
                                                                                            action: @selector(edit:)];
     self.barButtonItemEditDone = barButtonItemEditDone;
-    self.editModeEnabled = NO;
-    
     [self setEditing:NO animated:NO];
     
     UIColor *barTintColor = [UIColor tintColorBlue];
@@ -319,7 +316,6 @@ static inline CGRect rectCellLabel() {
     self.labelMadDesigner = titleView;
     
     self.navigationItem.hidesBackButton = YES;
-    self.editModeEnabled = NO;
     
     UITapGestureRecognizer *tapGestureRecognizer = [self tapGestureRecognizer];
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
@@ -1406,7 +1402,7 @@ static inline CGRect rectCellLabel() {
 
     if ([sender state] == UIGestureRecognizerStateBegan) {
 
-        if ([self editModeEnabled] == NO) {
+        if (self.isEditing == NO) {
             [self edit:self];
         }
         
@@ -1425,7 +1421,7 @@ static inline CGRect rectCellLabel() {
 - (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
 
     [self.searchBar resignFirstResponder];
-    if ([self editModeEnabled]) {
+    if (self.isEditing) {
         [self edit:self];
     }
 }
@@ -1667,11 +1663,11 @@ static inline CGRect rectCellLabel() {
 
 - (IBAction)edit:(id)sender {
     
-    BOOL startEdit = ![self isEditing];
+    BOOL startEdit = !self.isEditing;
     [self setEditing:startEdit animated:YES];
     
     if (startEdit) {
-        self.editModeEnabled = YES;
+        self.editing = YES;
         self.barButtonItemLicensing.enabled = NO;
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
@@ -1696,7 +1692,7 @@ static inline CGRect rectCellLabel() {
 }
 
 - (void)done:(id)sender {
-    self.editModeEnabled = NO;
+    self.editing = NO;
     self.barButtonItemLicensing.enabled = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
     self.barButtonItemAbout.enabled = YES;
@@ -1877,8 +1873,6 @@ static inline CGRect rectCellLabel() {
     NSMutableArray *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
     for (indexPath in selectedItems) {
         metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
-        //[[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
-        //                                                           inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
         [metadataItems addObject:metadata];
     }
     
@@ -1952,10 +1946,12 @@ static inline CGRect rectCellLabel() {
             if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
                 [self.filesController renameFileInfo:metaData toName:text];
             } else {
-                [self fileExistError];
+                UIAlertController *alert = [UIAlertController errorFileExist];
+                [self showViewController:alert sender:self];
             }
         } else {
-            [self validationError];
+            UIAlertController *alert = [UIAlertController errorValidationFilename];
+            [self showViewController:alert sender:self];
         }
         
     } cancel:nil];
@@ -1995,11 +1991,6 @@ static inline CGRect rectCellLabel() {
     NSArray *components = [text componentsSeparatedByCharactersInSet:invertedSet];
     return [components componentsJoinedByString:@""];
     
-}
-
-- (void)validationError {
-    UIAlertController *alert = [UIAlertController errorValidationFilename];
-    [self showViewController:alert sender:self];
 }
 
 - (void)fileExistError {
@@ -2064,31 +2055,31 @@ static inline CGRect rectCellLabel() {
 
 #pragma mark - MADFilesControllerDelegate
 
-- (void)listsControllerWillChangeContent:(MADFilesController *)listsController {
+- (void)filesControllerWillChangeContent:(MADFilesController *)filesController {
     [self.batchInserts removeAllObjects];
     [self.batchRemoves removeAllObjects];
     [self.batchUpdates removeAllObjects];
 }
 
-- (void)listsController:(MADFilesController *)listsController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+- (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchInserts addObject:pair];
 }
 
-- (void)listsController:(MADFilesController *)listsController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+- (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchRemoves addObject:pair];
 }
 
-- (void)listsController:(MADFilesController *)listsController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+- (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchUpdates addObject:pair];
 }
 
-- (void)listsControllerDidChangeContent:(MADFilesController *)listsController completion:(void (^)(BOOL, NSError *))completion {
+- (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL, NSError *))completion {
     
     NSIndexPath *path;
     MTPair *pair;
@@ -2132,15 +2123,15 @@ static inline CGRect rectCellLabel() {
     }];
 }
 
-- (void)listsController:(MADFilesController *)listsController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
+- (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
     
 }
 
-- (void)listsController:(MADFilesController *)listsController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
+- (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
     
 }
 
-- (void)listsController:(MADFilesController *)listsController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
+- (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
     
 }
 

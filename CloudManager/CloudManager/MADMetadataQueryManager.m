@@ -252,7 +252,7 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
     NSIndexSet *inserted = [NSIndexSet indexSetWithIndexesInRange:range],
                *removed  = [NSIndexSet indexSet],
                *updated  = [NSIndexSet indexSet];
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems: inserted
+    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedItems: inserted
                                                         removedItems: removed
                                                         updatedItems: updated];
     
@@ -345,7 +345,7 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
     self.metadata = resultsSorted;
     
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
+    [self.delegate fileCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
                                                         removedItems:removedItems
                                                         updatedItems:updatedItems];
     

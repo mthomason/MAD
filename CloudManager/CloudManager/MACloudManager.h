@@ -18,8 +18,6 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
 
 typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL *documents, NSURL *data);
 
-extern NSString * const MADNotificationCloudStateUpdated;
-extern NSString * const MADNotificationUbiquitousContainerFetchingWillBegin;
 extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @protocol MADCloudManagerProtocolAppDetails <NSObject>
@@ -43,9 +41,6 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @property (nonatomic, strong, readonly) MADMetadataQueryManager *fileLocationManager;
 
-@property (nonatomic, strong, readonly) NSMutableArray       *documentCacheCloudMetaDataItems;
-@property (nonatomic, strong, readonly) NSMutableArray       *documentCacheLocalUrls;
-
 @property (nonatomic, strong, readwrite) NSString *groupId;
 
 + (MACloudManager *)sharedManager;
@@ -56,32 +51,13 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
                                                delay: (void (^)())handleLongRunningCall
                                           completion: (MADBlockCompletionFileStorageLocation)handleCompletion;
 
-// File operations
-
-- (void)moveDocument: (NSURL *)source
-          toLocation: (NSURL *)destination
-          completion: (void (^)(BOOL, NSError *))completion;
-
-+ (BOOL)duplicateUrl:(NSURL *)urlToDupe;
-
-- (BOOL)copyUrl: (NSURL *)urlToCopy
-          toUrl: (NSURL *)uniqueUrl
-     completion: (void (^)(BOOL, NSURL *, NSError *))completion;
-
-- (NSURL *)uniqueUrlForDocumentWithName: (NSString *)name
-                          withExtension: (NSString *)extension
-                            inContainer: (MACloudManagerSection)container;
 + (NSURL *)uniqueUrlInDirectory:(NSURL *)directory
               withDesiredHandle:(NSString *)desiredFileHandle
                    andExtension:(NSString *)extension;
+
 + (NSURL *)uniqueURLForURL:(NSURL *)url;
 
-// File name helpers
-
 + (NSString *)filenameId:(NSUInteger)tag;
-
-- (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location
-                                 inSection:(MACloudManagerSection)section;
 
 @end
 

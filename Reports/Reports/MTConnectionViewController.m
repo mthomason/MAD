@@ -177,16 +177,11 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     
     NSAssert(blockSender == nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
-    NSURL *applicationFileUrlWithExtention = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: self.textFieldReportName.text
-                                                                                            withExtension: MADFileExtentionMobleApplicationDocument
-                                                                                              inContainer: MACloudManagerSectionLocal];
+    NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+    NSURL *desiredUrl = [[MTApplicationInstance mainInstance].filesController.documentDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    NSURL *uniqueURL = [MACloudManager uniqueURLForURL:desiredUrl];
     
-    ;
-    applicationFileUrlWithExtention = [MACloudManager uniqueUrlInDirectory: [MTApplicationInstance mainInstance].filesController.documentDirectory
-                                                         withDesiredHandle: self.textFieldReportName.text
-                                                              andExtension: MADFileExtentionMobleApplicationDocument];
-    
-    MADocument *doc = [[MADocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+    MADocument *doc = [[MADocument alloc] initWithFileURL:uniqueURL];
     self.docToSave = doc;
     [self.docToSave removeGuts];
     

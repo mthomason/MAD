@@ -16,18 +16,18 @@
 
 @optional
 
-    - (void)listsControllerWillChangeContent:(MADFilesController *)listsController;
-    - (void)listsController:(MADFilesController *)listsController didInsertListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
-    - (void)listsController:(MADFilesController *)listsController didRemoveListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
-    - (void)listsController:(MADFilesController *)listsController didUpdateListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
-    - (void)listsControllerDidChangeContent:(MADFilesController *)listsController completion:(void (^)(BOOL success, NSError *error))completion;
-    - (void)listsController:(MADFilesController *)listsController didFailCreatingListInfo:(MADMetaData *)listInfo
+    - (void)filesControllerWillChangeContent:(MADFilesController *)filesController;
+    - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
+    - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
+    - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
+    - (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL success, NSError *error))completion;
+    - (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADMetaData *)listInfo
                   withError:(NSError *)error;
-    - (void)listsController:(MADFilesController *)listsController didFailRemovingListInfo:(MADMetaData *)listInfo
+    - (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADMetaData *)listInfo
                   withError:(NSError *)error;
-    - (void)listsController:(MADFilesController *)listsController didFailDuplicatingListInfo:(MADMetaData *)listInfo
+    - (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADMetaData *)listInfo
                   withError:(NSError *)error;
-    - (void)listsController:(MADFilesController *)listsController didFailRenamingListInfo:(MADMetaData *)listInfo
+    - (void)filesController:(MADFilesController *)filesController didFailRenamingListInfo:(MADMetaData *)listInfo
                   withError:(NSError *)error;
 
 @end
@@ -37,9 +37,9 @@
     @property (nonatomic, weak) id<MADFilesControllerDelegate> delegate;
     @property (nonatomic, readonly) NSURL *documentDirectory;
     @property (nonatomic, readonly) NSInteger count;
-    @property (nonatomic, strong) id<MADFileCoordinator> listCoordinator;
+    @property (nonatomic, strong) id<MADFileCoordinator> fileCoordinator;
 
-    - (instancetype)initWithListCoordinator:(id<MADFileCoordinator>)listCoordinator
+    - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
                               delegateQueue:(NSOperationQueue *)delegateQueue
                              sortComparator:(NSComparisonResult (^)(MADMetaData *lhs, MADMetaData *rhs))sortComparator;
 

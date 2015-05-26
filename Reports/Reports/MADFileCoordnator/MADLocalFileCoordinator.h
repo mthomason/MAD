@@ -1,5 +1,5 @@
 //
-//  MADLocalListCoordinator.h
+//  MADLocalFileCoordinator.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/5/15.

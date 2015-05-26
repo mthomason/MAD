@@ -6,16 +6,8 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADListCoordinator_h
-#define MAD_Designer_MADListCoordinator_h
-
-/*
- Copyright (C) 2015 Apple Inc. All Rights Reserved.
- See LICENSE.txt for this sample’s licensing information
- 
- Abstract:
- The \c AAPLListCoordinator and \c AAPLListCoordinatorDelegate protocols provide the infrastructure to send updates to an \c AAPLListsController object, abstracting away the need to worry about the underlying storage mechanism.
- */
+#ifndef MAD_Designer_MADFileCoordinator_h
+#define MAD_Designer_MADFileCoordinator_h
 
 #import <Foundation/Foundation.h>
 

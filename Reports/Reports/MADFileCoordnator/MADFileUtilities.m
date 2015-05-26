@@ -148,11 +148,10 @@
 }
 
 + (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completionHandler {
-    NSURL *desired = [source.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
-    desired = [desired URLByAppendingPathExtension:source.lastPathComponent.pathExtension];
-    NSURL *destination = [MACloudManager uniqueUrlInDirectory: desired.URLByDeletingLastPathComponent
-                                            withDesiredHandle: desired.lastPathComponent.stringByDeletingPathExtension
-                                                 andExtension: source.lastPathComponent.pathExtension];
+    NSString *filename = [name stringByAppendingPathExtension:source.lastPathComponent.pathExtension];
+    NSURL *desired = [source.URLByDeletingLastPathComponent URLByAppendingPathComponent:filename isDirectory:NO];
+    NSURL *destination = [MACloudManager uniqueURLForURL:desired];
+
     NSString *status;
     NSError *errorGettingAttributes = nil;
     if ([source getResourceValue:&status forKey:NSURLUbiquitousItemDownloadingStatusKey error:&errorGettingAttributes] &&

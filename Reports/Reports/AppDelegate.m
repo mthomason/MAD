@@ -372,17 +372,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                       selector: @selector(handleNotificationUbiquityIdentityDidChange:)
                           name: NSUbiquityIdentityDidChangeNotification
                         object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
-                          name: MADNotificationUbiquitousContainerFetchingWillBegin
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
-                          name: MADNotificationUbiquitousContainerFetchingDidEnd
-                        object: nil];
-    
+
 }
 
 - (void)removeObservers {
@@ -397,31 +387,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                              name: NSUbiquityIdentityDidChangeNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self
-                             name: MADNotificationUbiquitousContainerFetchingWillBegin
-                           object: nil];
-    
-    [defaultCenter removeObserver: self
-                             name: MADNotificationUbiquitousContainerFetchingDidEnd
-                           object: nil];
-    
-}
-
-- (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
-    // FIXME: Start timer, and display activity indictor if it takes too long
-    //  to bring back a ubiquitous container.
-    
-    [NSTimer timerWithTimeInterval: 0.5000f
-                            target: self
-                          selector: @selector(displayActivityIndictor:)
-                          userInfo: nil
-                           repeats: NO];
-}
-
-- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
-    // FIXME: Remove activity indictor for ubiquitous container.
-    [self hideActivityIndictor:nil];
-    //[self.openFileViewController reloadData];
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
@@ -440,10 +405,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
 
-}
-
-- (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
-    NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
 }
 
 #pragma mark - Convenience
@@ -471,7 +432,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                 MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
                     
                     [MTApplicationInstance mainInstance].storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-                    [self configureListsController: NO storageOptionChangeHandler: nil];
+                    [self configureFilesController: NO storageOptionChangeHandler: nil];
                     [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
                     
                 };
@@ -487,7 +448,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                 
                 void (^handleOptionCloud)() = ^ {
                     [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
-                    [self configureListsController: NO storageOptionChangeHandler:^{
+                    [self configureFilesController: NO storageOptionChangeHandler:^{
                         [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
                                                     toCloud: MADUbiquityIdentifier
                                                   extension: MADFileExtentionMobleApplicationDocument];
@@ -496,7 +457,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                 };
                 void (^handleOptionLocal)() = ^ {
                     [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
-                    [self configureListsController: NO storageOptionChangeHandler: nil];
+                    [self configureFilesController: NO storageOptionChangeHandler: nil];
                 };
                 UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:handleOptionLocal
                                                                                   cloud:handleOptionCloud];
@@ -508,7 +469,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
             if (storageState.storageOption == MADAppStorageCloud) {
                 [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
             }
-            [self configureListsController: NO storageOptionChangeHandler: nil];
+            [self configureFilesController: NO storageOptionChangeHandler: nil];
         }
     });
 }
@@ -543,34 +504,28 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         if (storageState.storageOption == MADAppStorageNotSet) {
             [self getUserCloudPrefs];
         } else {
-            [self configureListsController: NO storageOptionChangeHandler: nil];
+            [self configureFilesController: NO storageOptionChangeHandler: nil];
         }
     }
 
 }
 
-- (void)configureListsController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
-    if ([MTApplicationInstance mainInstance].filesController != nil && !accountChanged) {
-        // The current controller is correct. There is no need to reconfigure it.
-        return;
+- (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
+    
+    if (accountChanged || [MTApplicationInstance mainInstance].filesController == nil) {
+        if (![MTApplicationInstance mainInstance].filesController) {
+            MADFilesController *filesController = [[MTApplicationInstance mainInstance] filesControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                                              firstQueryHandler:storageOptionChangeHandler];
+            [MTApplicationInstance mainInstance].filesController = filesController;
+            self.openFileViewController.filesController = [MTApplicationInstance mainInstance].filesController;
+            [[MTApplicationInstance mainInstance].filesController startSearching];
+            
+        } else if (accountChanged) {
+            [MTApplicationInstance mainInstance].filesController.fileCoordinator = [[MTApplicationInstance mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                                                                                firstQueryHandler:storageOptionChangeHandler];
+        }
     }
     
-    if (![MTApplicationInstance mainInstance].filesController) {
-        // There is currently no lists controller. Configure an appropriate one for the current configuration.
-        MADFilesController *filesController = [[MTApplicationInstance mainInstance] listsControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                                          firstQueryHandler:storageOptionChangeHandler];
-        [MTApplicationInstance mainInstance].filesController = filesController;
-        
-        // Ensure that this controller is passed along to the `AAPLListDocumentsViewController`.
-        self.openFileViewController.filesController = [MTApplicationInstance mainInstance].filesController;
-        
-        [[MTApplicationInstance mainInstance].filesController startSearching];
-        
-    } else if (accountChanged) {
-        // A lists controller is configured; however, it needs to have its coordinator updated based on the account change.
-        [MTApplicationInstance mainInstance].filesController.listCoordinator = [[MTApplicationInstance mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                                                                            firstQueryHandler:storageOptionChangeHandler];
-    }
 }
 
 - (void)loadAndDisplayWindow {

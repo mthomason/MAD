@@ -12,45 +12,27 @@
 
 @interface MADFilesController () <MADFileCoordinatorDelegate>
 
-/*!
- * The \c MADMetaData objects that are cached by the \c AAPLListsController to allow for users of the
- * \c AAPLListsController class to easily subscript the controller.
- */
-@property (nonatomic, strong) NSMutableArray *fileMetaDatum;
-
-/*!
- * @return A private, local queue to the \c AAPLListsController that is used to perform updates on
- *         \c listInfos.
- */
-@property (nonatomic, strong) dispatch_queue_t fileMetaDataQueue;
-
-/*!
- * The sort comparator that's set in initialization. The sort predicate ensures a strict sort ordering
- * of the \c listInfos array. If \c sortComparator is nil, the sort order is ignored.
- */
-@property (nonatomic, copy) NSComparisonResult (^sortComparator)(MADMetaData *lhs, MADMetaData *rhs);
-
-/*!
- * The queue in which the \c AAPLListsController object invokes delegate messages.
- */
-@property (nonatomic, strong) NSOperationQueue *delegateQueue;
+@property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
+@property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;
+@property (nonatomic, copy)     NSComparisonResult (^sortComparator)(MADMetaData *lhs, MADMetaData *rhs);
+@property (nonatomic, strong)   NSOperationQueue *delegateQueue;
 
 @end
 
 @implementation MADFilesController
-@synthesize listCoordinator = _listCoordinator;
+@synthesize fileCoordinator = _fileCoordinator;
 @synthesize delegateQueue = _delegateQueue;
 
 #pragma mark - Initialization
 
-- (instancetype)initWithListCoordinator:(id<MADFileCoordinator>)listCoordinator
+- (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
                           delegateQueue:(NSOperationQueue *)delegateQueue
                          sortComparator:(NSComparisonResult (^)(MADMetaData *lhs, MADMetaData *rhs))sortComparator {
     self = [super init];
     
     if (self) {
         
-        _listCoordinator = listCoordinator;
+        _fileCoordinator = fileCoordinator;
         self.sortComparator = sortComparator;
         
         self.delegateQueue = delegateQueue ?: [NSOperationQueue mainQueue];
@@ -61,18 +43,18 @@
         NSMutableArray *fileMetaData = [[NSMutableArray alloc] init];
         self.fileMetaDatum = fileMetaData;
         
-        self.listCoordinator.delegate = self;
+        self.fileCoordinator.delegate = self;
     }
     
     return self;
 }
 
 - (void)startSearching {
-    [self.listCoordinator startQuery];
+    [self.fileCoordinator startQuery];
 }
 
 - (void)stopSearching {
-    [self.listCoordinator stopQuery];
+    [self.fileCoordinator stopQuery];
 }
 
 #pragma mark - Property Overrides
@@ -81,12 +63,12 @@
     return self.fileMetaDatum.count;
 }
 
-- (void)setListCoordinator:(id<MADFileCoordinator>)listCoordinator {
-    if (![_listCoordinator isEqual:listCoordinator]) {
-        id<MADFileCoordinator> oldListCoordinator = _listCoordinator;
-        _listCoordinator = listCoordinator;
+- (void)setFileCoordinator:(id<MADFileCoordinator>)fileCoordinator {
+    if (![_fileCoordinator isEqual:fileCoordinator]) {
+        id<MADFileCoordinator> oldFileCoordinator = _fileCoordinator;
+        _fileCoordinator = fileCoordinator;
         
-        [oldListCoordinator stopQuery];
+        [oldFileCoordinator stopQuery];
         
         // Map the listInfo objects protected by listInfoQueue.
         __block NSArray *allURLs;
@@ -98,10 +80,10 @@
                                                   
                                               }];
         
-        _listCoordinator.delegate = self;
-        oldListCoordinator.delegate = nil;
+        _fileCoordinator.delegate = self;
+        oldFileCoordinator.delegate = nil;
         
-        [_listCoordinator startQuery];
+        [_fileCoordinator startQuery];
     }
 }
 
@@ -121,28 +103,28 @@
 #pragma mark - Inserting / Removing / Managing / Updating MADMetaData Objects
 
 - (void)removeFileInfo:(MADMetaData *)listInfo {
-    [self.listCoordinator removeFileAtURL: listInfo.URL];
+    [self.fileCoordinator removeFileAtURL: listInfo.URL];
 }
 
 - (void)duplicateFileInfo:(MADMetaData *)listInfo {
-    [self.listCoordinator duplicateFileAtURL: listInfo.URL];
+    [self.fileCoordinator duplicateFileAtURL: listInfo.URL];
 }
 
 - (void)renameFileInfo:(MADMetaData *)listInfo toName:(NSString *)name {
     NSURL *url = listInfo.URL.copy;
-    [self.listCoordinator renameFileAtURL: url toName: name];
+    [self.fileCoordinator renameFileAtURL: url toName: name];
 }
 
 - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name {
-    [self.listCoordinator createURLForFile:list withName:name];
+    [self.fileCoordinator createURLForFile:list withName:name];
 }
 
 - (BOOL)canCreateFileInfoWithName:(NSString *)name {
-    return [self.listCoordinator canCreateFileWithName:name];
+    return [self.fileCoordinator canCreateFileWithName:name];
 }
 
 - (NSURL *)documentDirectory {
-    return [self.listCoordinator documentsDirectory];
+    return [self.fileCoordinator documentsDirectory];
 }
 
 - (void)setFileInfoHasNewContents:(MADMetaData *)listInfo {
@@ -152,16 +134,16 @@
         self.fileMetaDatum[indexOfListInfo] = listInfo;
         
         [self.delegateQueue addOperationWithBlock:^{
-            if ([self.delegate respondsToSelector:@selector(listsControllerWillChangeContent:)]) {
-                [self.delegate listsControllerWillChangeContent:self];
+            if ([self.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
+                [self.delegate filesControllerWillChangeContent:self];
             }
             
-            if ([self.delegate respondsToSelector:@selector(listsController:didUpdateListInfo:atIndex:)]) {
-                [self.delegate listsController:self didUpdateListInfo:listInfo atIndex:indexOfListInfo];
+            if ([self.delegate respondsToSelector:@selector(filesController:didUpdateListInfo:atIndex:)]) {
+                [self.delegate filesController:self didUpdateListInfo:listInfo atIndex:indexOfListInfo];
             }
             
-            if ([self.delegate respondsToSelector:@selector(listsControllerDidChangeContent:completion:)]) {
-                [self.delegate listsControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
+            if ([self.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
+                [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
                     
                 }];
             }
@@ -216,8 +198,8 @@
     MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     
     [self.delegateQueue addOperationWithBlock:^{
-        if ([self.delegate respondsToSelector:@selector(listsController:didFailCreatingListInfo:withError:)]) {
-            [self.delegate listsController:self didFailCreatingListInfo:listInfo withError:error];
+        if ([self.delegate respondsToSelector:@selector(filesController:didFailCreatingListInfo:withError:)]) {
+            [self.delegate filesController:self didFailCreatingListInfo:listInfo withError:error];
         }
     }];
 }
@@ -225,8 +207,8 @@
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     [self.delegateQueue addOperationWithBlock:^{
-        if ([self.delegate respondsToSelector:@selector(listsController:didFailDuplicatingListInfo:withError:)]) {
-            [self.delegate listsController:self didFailDuplicatingListInfo:listInfo withError:error];
+        if ([self.delegate respondsToSelector:@selector(filesController:didFailDuplicatingListInfo:withError:)]) {
+            [self.delegate filesController:self didFailDuplicatingListInfo:listInfo withError:error];
         }
     }];
 }
@@ -234,8 +216,8 @@
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     [self.delegateQueue addOperationWithBlock:^{
-        if ([self.delegate respondsToSelector:@selector(listsController:didFailRemovingListInfo:withError:)]) {
-            [self.delegate listsController:self didFailRenamingListInfo:listInfo withError:error];
+        if ([self.delegate respondsToSelector:@selector(filesController:didFailRemovingListInfo:withError:)]) {
+            [self.delegate filesController:self didFailRenamingListInfo:listInfo withError:error];
         }
     }];
 }
@@ -243,8 +225,8 @@
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
     MADMetaData *listInfo = [[MADMetaData alloc] initWithURL:URL];
     [self.delegateQueue addOperationWithBlock:^{
-        if ([self.delegate respondsToSelector:@selector(listsController:didFailRemovingListInfo:withError:)]) {
-            [self.delegate listsController:self didFailRemovingListInfo:listInfo withError:error];
+        if ([self.delegate respondsToSelector:@selector(filesController:didFailRemovingListInfo:withError:)]) {
+            [self.delegate filesController:self didFailRemovingListInfo:listInfo withError:error];
         }
     }];
 }
@@ -252,7 +234,7 @@
 #pragma mark - Change Processing
 
 /*!
- * Processes changes to the \c AAPLListsController object's \c MADMetaData collection. This
+ * Processes changes to the \c AAPLFilesController object's \c MADMetaData collection. This
  * implementation performs the updates and determines where each of these URLs were located so that
  * the controller can forward the new / removed / updated indexes as well.
  *
@@ -289,8 +271,8 @@
             return;
         }
         
-        if ([self.delegate respondsToSelector:@selector(listsControllerWillChangeContent:)]) {
-            [self.delegate listsControllerWillChangeContent:self];
+        if ([self.delegate respondsToSelector:@selector(filesControllerWillChangeContent:)]) {
+            [self.delegate filesControllerWillChangeContent:self];
         }
         
         // Remove
@@ -303,8 +285,8 @@
                 [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
             });
             
-            if ([self.delegate respondsToSelector:@selector(listsController:didRemoveListInfo:atIndex:)]) {
-                [self.delegate listsController: self
+            if ([self.delegate respondsToSelector:@selector(filesController:didRemoveListInfo:atIndex:)]) {
+                [self.delegate filesController: self
                              didRemoveListInfo: trackedRemovedListInfo
                                        atIndex: trackedRemovedListInfoIndex];
             }
@@ -329,8 +311,8 @@
                 untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
             });
             
-            if ([self.delegate respondsToSelector:@selector(listsController:didInsertListInfo:atIndex:)]) {
-                [self.delegate listsController: self
+            if ([self.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {
+                [self.delegate filesController: self
                              didInsertListInfo: untrackedInsertedListInfo
                                        atIndex: untrackedInsertedListInfoIndex];
             }
@@ -349,13 +331,13 @@
                 }
             });
             
-            if (updatedListInfoIndex != NSNotFound && [self.delegate respondsToSelector:@selector(listsController:didUpdateListInfo:atIndex:)]) {
-                [self.delegate listsController:self didUpdateListInfo:updatedListInfo atIndex:updatedListInfoIndex];
+            if (updatedListInfoIndex != NSNotFound && [self.delegate respondsToSelector:@selector(filesController:didUpdateListInfo:atIndex:)]) {
+                [self.delegate filesController:self didUpdateListInfo:updatedListInfo atIndex:updatedListInfoIndex];
             }
         }
         
-        if ([self.delegate respondsToSelector:@selector(listsControllerDidChangeContent:completion:)]) {
-            [self.delegate listsControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
+        if ([self.delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
+            [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
                 completion(success, error);
             }];
         }

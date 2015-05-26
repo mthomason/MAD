@@ -30,18 +30,7 @@
                           name: MADNotificationCloudStateUpdated
                         object: nil];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
-                          name: MADNotificationUbiquitousContainerFetchingWillBegin
-                        object: nil];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
-                          name: MADNotificationUbiquitousContainerFetchingDidEnd
-                        object: nil];
-    
-    //[[MACloudManager sharedManager] activate];
-
         [super setUp];
     
 }
@@ -57,14 +46,6 @@
     
     [defaultCenter removeObserver: self
                              name: MADNotificationCloudStateUpdated
-                           object: nil];
-    
-    [defaultCenter removeObserver: self
-                             name: MADNotificationUbiquitousContainerFetchingWillBegin
-                           object: nil];
-    
-    [defaultCenter removeObserver: self
-                             name: MADNotificationUbiquitousContainerFetchingDidEnd
                            object: nil];
     
     [defaultCenter removeObserver: self

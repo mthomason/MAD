@@ -72,9 +72,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.411";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.411";
-NSString * const MTGlobalBundleRev                                  = @"1786";
+NSString * const MTGlobalBundleVersion                              = @"7.0.412";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.412";
+NSString * const MTGlobalBundleRev                                  = @"1787";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -564,22 +564,22 @@ static MTApplicationInstance *mainInstance;
     }
 }
 
-- (MADFilesController *)listsControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+- (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
 
-    id<MADFileCoordinator> listCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
+    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
     
-    return [[MADFilesController alloc] initWithListCoordinator:listCoordinator
+    return [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
                                                  delegateQueue:[NSOperationQueue mainQueue]
                                                 sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
         return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
     }];
 }
 
-- (MADFilesController *)listsControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
 
-    id<MADFileCoordinator> listCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
+    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
     
-    return [[MADFilesController alloc] initWithListCoordinator:listCoordinator
+    return [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
                                                  delegateQueue:[NSOperationQueue mainQueue]
                                                 sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
         return [lhs.name localizedCaseInsensitiveCompare:rhs.name];

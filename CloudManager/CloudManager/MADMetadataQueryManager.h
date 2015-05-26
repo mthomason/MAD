@@ -18,7 +18,7 @@ extern NSString * const MADKeyMetadataShort;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 
-- (void)listCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
+- (void)fileCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
                                              removedItems:(NSIndexSet *)removedItems
                                              updatedItems:(NSIndexSet *)updatedItems;
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL    withError:(NSError *)error;
