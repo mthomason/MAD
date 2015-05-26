@@ -174,10 +174,6 @@ static inline CGRect rectCellLabel() {
     
     [self removeObservers];
     
-    NSString *keyResults = [MADMetadataQueryManager keyResults];
-    [[MACloudManager sharedManager].fileLocationManager.metadataQuery removeObserver: self
-                                                                          forKeyPath: keyResults];
-
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -229,14 +225,6 @@ static inline CGRect rectCellLabel() {
     [self addObservers];
     
     self.aboutViewControllerOnScreen = NO;
-    
-    NSString *keyResults = [MADMetadataQueryManager keyResults];
-    [[MACloudManager sharedManager].fileLocationManager.metadataQuery addObserver:self
-                                                                       forKeyPath:keyResults
-                                                                          options:(NSKeyValueObservingOptionNew |
-                                                                                   NSKeyValueObservingOptionOld |
-                                                                                   NSKeyValueObservingOptionPrior)
-                                                                          context:NULL];
     
     self.updatingEnabled = YES;
     self.cloudActivityRunning = NO;

@@ -18,7 +18,7 @@
 <UIApplicationDelegate>
 
 + (MTApplicationInstance *)app;
-+ (UIWindow *)window;
+//+ (UIWindow *)window;
 
 @property (nonatomic, strong) UIWindow *window;
 

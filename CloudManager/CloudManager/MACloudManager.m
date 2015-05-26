@@ -22,8 +22,6 @@ NSString * const MADNotificationUbiquitousContainerFetchingDidEnd       = @"MADN
 @property (nonatomic, strong, readwrite) NSURL *ubiquityContainer;
 @property (nonatomic, strong, readwrite) id <NSObject, NSCopying, NSCoding> ubiquityIdentityToken;
 
-@property (nonatomic, strong, readwrite) MADMetadataQueryManager *fileLocationManager;
-
 @property (atomic, assign) BOOL checkingCloudPreferencesLock;
 
 @end
@@ -37,7 +35,6 @@ static MACloudManager *sharedSingleton;
     
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityContainer)), self.ubiquityContainer.path];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityIdentityToken)), self.ubiquityIdentityToken];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(fileLocationManager)), self.fileLocationManager];
 
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(checkingCloudPreferencesLock)), self.checkingCloudPreferencesLock ? @"YES" : @"NO"];
     [debuggingString appendFormat:@"%@:\t%@\n", @"isCloudAvailable", [MACloudManager isCloudAvailable] ? @"YES" : @"NO"];

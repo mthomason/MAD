@@ -27,6 +27,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 @end
 
 @implementation MADCloudFileCoordinator
+
 @synthesize delegate = _delegate;
 @synthesize documentsDirectory = _documentsDirectory;
 
@@ -39,42 +40,63 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     
     if (self) {
         
-        _firstQueryUpdateHandler = firstQueryUpdateHandler;
-        _documentsDirectoryQueue = dispatch_queue_create("com.everydayapps.mad.cloudfilecoordinator.documentsDirectory", DISPATCH_QUEUE_SERIAL);
+        self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
-        _metadataQuery = [[NSMetadataQuery alloc] init];
-        _metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDataScope,
-                                        NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
-                                        NSMetadataQueryUbiquitousDocumentsScope/*NSMetadataQueryUbiquitousDocumentsScope,
-                                        NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope*/];
-        _metadataQuery.notificationBatchingInterval = 0.5000;
-        _metadataQuery.predicate = predicate;
-        _metadataQuery.operationQueue = [[NSOperationQueue alloc] init];
-        _metadataQuery.operationQueue.name = @"com.everydayapps.mad.cloudfilecoordinator.metadataQuery";
+        dispatch_queue_t documentsDirectoryQueue = dispatch_queue_create("com.everydayapps.mad.cloudfilecoordinator.documentsDirectory", DISPATCH_QUEUE_SERIAL);
+        self.documentsDirectoryQueue = documentsDirectoryQueue;
+        
+        NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
+        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDataScope,
+                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
+                                       NSMetadataQueryUbiquitousDocumentsScope];
+        metadataQuery.notificationBatchingInterval = 0.5000;
+        metadataQuery.predicate = predicate;
+        metadataQuery.operationQueue = [[NSOperationQueue alloc] init];
+        metadataQuery.operationQueue.name = @"com.everydayapps.mad.cloudfilecoordinator.metadataQuery";
+        self.metadataQuery = metadataQuery;
         
         dispatch_barrier_async(_documentsDirectoryQueue, ^{
             NSURL *cloudContainerURL = [[NSFileManager defaultManager] cloudDocumentsDirectoryForUbiquityID:MADUbiquityIdentifier];
             _documentsDirectory = cloudContainerURL;
         });
         
-        // Observe the query.
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver:self selector:@selector(metadataQueryDidFinishGathering:) name:NSMetadataQueryDidFinishGatheringNotification object:_metadataQuery];
-        [notificationCenter addObserver:self selector:@selector(metadataQueryDidUpdate:) name:NSMetadataQueryDidUpdateNotification object:_metadataQuery];
-        
-        [notificationCenter addObserver: self
-                               selector: @selector(handleMetadataQueryDidStartGatheringNotification:)
-                                   name: NSMetadataQueryDidStartGatheringNotification
-                                 object: _metadataQuery];
-        
-        [notificationCenter addObserver: self
-                               selector: @selector(handleMetadataQueryGatheringProgressNotification:)
-                                   name: NSMetadataQueryGatheringProgressNotification
-                                 object: _metadataQuery];
-        
+        [self addObservers];
     }
     
     return self;
+}
+
+- (void)addObservers {
+    
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver: self
+                           selector: @selector(metadataQueryDidFinishGathering:)
+                               name: NSMetadataQueryDidFinishGatheringNotification
+                             object: self.metadataQuery];
+    
+    [notificationCenter addObserver: self
+                           selector: @selector(metadataQueryDidUpdate:)
+                               name: NSMetadataQueryDidUpdateNotification
+                             object: self.metadataQuery];
+    
+    [notificationCenter addObserver: self
+                           selector: @selector(handleMetadataQueryDidStartGatheringNotification:)
+                               name: NSMetadataQueryDidStartGatheringNotification
+                             object: self.metadataQuery];
+    
+    [notificationCenter addObserver: self
+                           selector: @selector(handleMetadataQueryGatheringProgressNotification:)
+                               name: NSMetadataQueryGatheringProgressNotification
+                             object: self.metadataQuery];
+}
+
+- (void)removeObservers {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:NSMetadataQueryDidFinishGatheringNotification object:_metadataQuery];
+    [notificationCenter removeObserver:self name:NSMetadataQueryDidUpdateNotification object:_metadataQuery];
+    [notificationCenter removeObserver:self name:NSMetadataQueryDidStartGatheringNotification object:_metadataQuery];
+    [notificationCenter removeObserver:self name:NSMetadataQueryGatheringProgressNotification object:_metadataQuery];
+
 }
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension
@@ -83,22 +105,19 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     
     self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler];
     
-    if (self) {
-        // No need for additional initialization.
-    }
+    if (self) { }
     
     return self;
 }
 
 - (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.lastPathComponent = %@)", NSMetadataItemURLKey, lastPathComponent];
     
     self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler];
     
-    if (self) {
-        // No need for additional initialization.
-    }
+    if (self) { }
     
     return self;
 }
@@ -106,10 +125,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - Lifetime
 
 - (void)dealloc {
-    // Stop observing the query.
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidFinishGatheringNotification object:self.metadataQuery];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidUpdateNotification object:self.metadataQuery];
+    [self removeObservers];
 }
 
 #pragma mark - Property Overrides
@@ -217,14 +233,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     [self.metadataQuery enableUpdates];
     
     if (self.firstQueryUpdateHandler) {
-        // Execute the `firstQueryUpdateHandler`, it will contain the closure from initialization on first update.
         self.firstQueryUpdateHandler();
-        
-        // Set `firstQueryUpdateHandler` to an empty closure so that the handler provided is only run on first update.
         self.firstQueryUpdateHandler = nil;
     }
-
-
 }
 
 - (void)metadataQueryDidUpdate:(NSNotification *)notification {
@@ -234,7 +245,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSArray *removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey];
     NSArray *updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
     
-    // Make sure that the arrays are all initialized before calling the didUpdateContents method.
     NSArray *insertedMetadata = insertedMetadataItemsOrNil ?: @[];
     NSArray *removedMetadata = removedMetadataItemsOrNil ?: @[];
     NSArray *updatedMetadata = updatedMetadataItemsOrNil ?: @[];
@@ -242,15 +252,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata];
     NSArray *removed = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata];
     NSArray *updated = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
-    for (MADMetaData *insert in inserted) {
-        NSLog(@"Inserted %@", insert);
-    }
-    for (MADMetaData *r in removed) {
-        NSLog(@"Removed %@", r);
-    }
-    for (MADMetaData *u in updated) {
-        NSLog(@"Updated %@", u);
-    }
+
     [self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
                                                         removedMetaDatum: removed
                                                         updatedMetaDatum: updated completion:^(BOOL success, NSError *error) {
@@ -263,18 +265,11 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
-    //NSMetadataQuery *query = notification.object;
-    //NSLog(@"\n%@\n\t%@\nnumberResults%d", NSMetadataQueryDidStartGatheringNotification, query, query.resultCount);
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
                                                         object: nil];
-    
-    
 }
 
-- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
-    //NSMetadataQuery *query = notification.object;
-    //NSLog(@"\n%@\n\t%@\nnumberResults%d", NSMetadataQueryGatheringProgressNotification, query, query.resultCount);
-}
+- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification { }
 
 #pragma mark - Convenience
 

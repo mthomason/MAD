@@ -39,8 +39,6 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @property (nonatomic, strong) NSString *searchString;
 
-@property (nonatomic, strong, readonly) MADMetadataQueryManager *fileLocationManager;
-
 @property (nonatomic, strong, readwrite) NSString *groupId;
 
 + (MACloudManager *)sharedManager;

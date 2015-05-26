@@ -7,7 +7,6 @@
 //
 
 #import "UIView+Extras.h"
-#import "AppDelegate.h"
 
 @implementation UIView (Extras)
 
@@ -16,13 +15,15 @@
     if (views.count == 0) {
         result = CGRectZero;
     } else if (views.count == 1) {
-        UIView *elementView = [views anyObject];
-        result = [elementView convertRect:[elementView frame] toView:self];
+        UIView *elementView = views.anyObject;
+        result = [elementView convertRect:elementView.frame
+                                   toView:self];
     } else {
         CGFloat minx = CGPointZero.x, miny = CGPointZero.y, maxx = CGPointZero.x, maxy = CGPointZero.y;
         NSUInteger counter = 0;
         for (UIView *elementView in views) {
-            CGRect frame = [elementView convertRect:[elementView frame] toView:self];
+            CGRect frame = [elementView convertRect:elementView.frame
+                                             toView:self];
             if (counter == 0) {
                 minx = frame.origin.x;
                 miny = frame.origin.y;
@@ -42,7 +43,7 @@
 }
 
 - (CGPoint)locationInMainWindow:(UIGestureRecognizer *)gestureRecognizer {
-    UIWindow *window = [AppDelegate window];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     CGPoint gestureLocation = [gestureRecognizer locationInView:window];
     return [self convertPoint: gestureLocation
                      fromView: window];

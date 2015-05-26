@@ -94,10 +94,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return ((AppDelegate *)[UIApplication sharedApplication].delegate).applicationInstance;
 }
 
-+ (UIWindow *)window {
-    return [UIApplication sharedApplication].keyWindow;
-}
-
 #pragma mark - Initialization
 
 - (instancetype)init {
