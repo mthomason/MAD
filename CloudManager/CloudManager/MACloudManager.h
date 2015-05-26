@@ -16,8 +16,9 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
     MACloudManagerSectionCloud = 1,
 };
 
-extern NSString * const MADNotificationCloudStateUpdated;
+typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL *documents, NSURL *data);
 
+extern NSString * const MADNotificationCloudStateUpdated;
 extern NSString * const MADNotificationUbiquitousContainerFetchingWillBegin;
 extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
@@ -53,7 +54,7 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
                                      groupIdentifier: (NSString *)groupIdentifier
                                                delay: (void (^)())handleLongRunningCall
-                                          completion: (void (^)(BOOL cloudAvailble, NSURL *documents, NSURL *data))handleCompletion;
+                                          completion: (MADBlockCompletionFileStorageLocation)handleCompletion;
 
 // File operations
 

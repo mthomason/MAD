@@ -76,11 +76,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollection
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
-NSString * const MADPredicateFormatDuplcate                     = @"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@";
-
-CGFloat const MADSectionHeaderHeight = 32.0000f;
-CGFloat const MADConstCellDocumentLabelWidth = 124.0000f;
-CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
+CGFloat const MADSectionHeaderHeight                            = 32.0000f;
+CGFloat const MADConstCellDocumentLabelWidth                    = 124.0000f;
+CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
@@ -125,7 +123,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
-@property (nonatomic, assign) BOOL bothContentControllersDisplayed;
 @property (atomic, assign) BOOL aboutViewControllerOnScreen;
 
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readwrite) BOOL savingActivityIndicatorVisible;
@@ -165,6 +162,11 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 }
 + (NSString *)keyLeftView {
     return NSStringFromSelector(@selector(leftView));
+}
+
+static inline CGRect rectCellLabel();
+static inline CGRect rectCellLabel() {
+    return CGRectMake(CGPointZero.x, CGPointZero.y, MADConstCellDocumentLabelWidth, MADConstCellDocumentLabelMaxHeight);
 }
 
 #pragma mark - NSObject
@@ -245,7 +247,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:[MADOpenFileViewController cellLabelRect]];
+    UILabel *label = [[UILabel alloc] initWithFrame:rectCellLabel()];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;
     
@@ -259,7 +261,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     [label addConstraint:constraint];
     self.testLabel = label;
     
-    UILabel *subLabel = [[UILabel alloc] initWithFrame:[MADOpenFileViewController cellLabelRect]];
+    UILabel *subLabel = [[UILabel alloc] initWithFrame:rectCellLabel()];
     subLabel.clipsToBounds = NO;
     subLabel.numberOfLines = 0;
     
@@ -331,14 +333,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-    //searchBar.delegate = self;
-    searchBar.showsBookmarkButton = NO;
-    searchBar.showsCancelButton = YES;
-    searchBar.showsScopeBar = NO;
-    searchBar.showsSearchResultsButton = NO;
-    searchBar.hidden = YES;
-    
     [searchBar sizeToFit];
+    
     self.searchBar = searchBar;
     
     if (self.barButtonItemEdit == nil) {
@@ -347,6 +343,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
                                                                               action: @selector(edit:)];
         self.barButtonItemEdit = edit;
     }
+    
     [toolbarButtons addObject:self.barButtonItemEdit];
     
     UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
@@ -458,7 +455,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
     [super decodeRestorableStateWithCoder:coder];
 }
-
 
 - (void)applicationFinishedRestoringState {
     if ([MTApplicationInstance isMadDesigner]) {
@@ -618,13 +614,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     self.cloudActivityRunning = NO;
     self.cloudActivityRunningDisplay = NO;
     [self.headerCloud stopAnimating];
-}
-
-+ (CGRect)cellLabelRect {
-    return CGRectMake(CGPointZero.x,
-                      CGPointZero.y,
-                      MADConstCellDocumentLabelWidth,
-                      MADConstCellDocumentLabelMaxHeight);
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -810,7 +799,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self setShouldShowAddDocumentPopover:YES];
+    self.shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
@@ -871,7 +860,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self setShouldShowAddDocumentPopover:YES];
+    self.shouldShowAddDocumentPopover = YES;
 
     [self closeAndSave];
     [self dismissViewControllerAnimated:YES completion:^{
@@ -900,7 +889,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
             [weakself reenable];
         }];
     }
-    [self setShouldShowAddDocumentPopover:YES];
+    self.shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
@@ -909,7 +898,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    [self setShouldShowAddDocumentPopover:YES];
+    self.shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
@@ -1009,11 +998,10 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (void)mailComposeController:(MFMailComposeViewController *)controller
           didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
 
-    __weak MADOpenFileViewController *weakself = self;
     [NSError presentError: error
          onViewController: self
                completion:^(BOOL success) {
-                   [weakself dismissViewControllerAnimated:YES completion:nil];
+                   [self dismissViewControllerAnimated:YES completion:nil];
     }];
 
 }
@@ -1218,8 +1206,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     [AppDelegate app].fileManager.openDocument = document;
     
-    //__weak MTApplicationInstance *weakapp = app;
-    __weak MADOpenFileViewController *weakself = self;
     [document openWithCompletionHandler:^(BOOL success) {
         
         if (success) {
@@ -1230,8 +1216,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
                 
                 MTApplicationInstance *app = [AppDelegate app];
                 [[app openDocument] activeDocumentModel];
-                [weakself performSegueWithIdentifier: MTSegueOpenInViewer
-                                              sender: weakself];
+                [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
                 
             } else if ([MTApplicationInstance isMadDesigner]) {
                 
@@ -1266,7 +1251,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
             
         }
         
-        [weakself reenable];
+        [self reenable];
         
     }];
 }
@@ -1307,7 +1292,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
                   contentScaleFactor:(CGFloat)contentScaleFactor
                                 font:(UIFont *)font {
-    self.testLabel.frame = [MADOpenFileViewController cellLabelRect];
+    self.testLabel.frame = rectCellLabel();
     self.testLabel.font = font;
     self.testLabel.attributedText = attributedString;
     self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -1979,33 +1964,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     
 }
 
-- (BOOL)doesNameExistInCloud:(NSString *)name {
-    BOOL nameExist = NO;
-    for (NSInteger i = 0; i<self.filesController.count; i++) {
-        MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:i];
-        if ((nameExist = [metaData.URL.lastPathComponent.stringByDeletingPathExtension isEqualToString:name])) {
-            break;
-        }
-    }
-    return nameExist;
-}
-
-- (NSString *)uniquieCloudNameForHandle:(NSString *)handle {
-    NSString *uniqueName = nil;
-    BOOL nameExistInCloud = [self doesNameExistInCloud:handle];
-    if (nameExistInCloud) {
-        int ctr = 0;
-        while (nameExistInCloud) {
-            handle = [handle stringByAppendingFormat:@" %d", ctr];
-            nameExistInCloud = [self doesNameExistInCloud:handle];
-            ctr++;
-        }
-    } else {
-        uniqueName = handle;
-    }
-    return handle;
-}
-
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated {
     
@@ -2106,76 +2064,31 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 #pragma mark - MADFilesControllerDelegate
 
-/*!
- * Notifies the receiver of this method that the lists controller will change it's contents in some
- * form. This method is *always* called before any insert, remove, or update is received. In this method,
- * you should prepare your UI for making any changes related to the changes that you will need to reflect
- * once they are received. For example, if you have a table view in your UI that needs to respond to
- * changes to a newly inserted \c MADFileInfo object, you would want to call your table view's
- * \c -beginUpdates method. Once all of the updates are performed, your \c -listsControllerDidChangeContent:
- * method will be called. This is where you would to call your table view's \c -endUpdates method.
- *
- * @param listsController The \c AAPLListsController instance that will change its content.
- */
 - (void)listsControllerWillChangeContent:(MADFilesController *)listsController {
     [self.batchInserts removeAllObjects];
     [self.batchRemoves removeAllObjects];
     [self.batchUpdates removeAllObjects];
 }
 
-/*!
- * Notifies the receiver of this method that the lists controller is tracking a new \c MADFileInfo
- * object. Receivers of this method should update their UI accordingly.
- *
- * @param listsController The \c AAPLListsController instance that inserted the new \c MADFileInfo.
- * @param listInfo The new \c MADFileInfo object that has been inserted at \c index.
- * @param index The index that \c listInfo was inserted at.
- */
 - (void)listsController:(MADFilesController *)listsController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchInserts addObject:pair];
 }
 
-/*!
- * Notifies the receiver of this method that the lists controller is no longer tracking \c listInfo.
- * Receivers of this method should update their UI accordingly.
- *
- * @param listsController The \c AAPLListsController instance that removed \c listInfo.
- * @param listInfo The removed \c MADFileInfo object.
- * @param index The index that \c listInfo was removed at.
- */
 - (void)listsController:(MADFilesController *)listsController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchRemoves addObject:pair];
 }
 
-/*!
- * Notifies the receiver of this method that the lists controller received a message that \c listInfo
- * has updated its content. Receivers of this method should update their UI accordingly.
- *
- * @param listsController The \c AAPLListsController instance that was notified that \c listInfo has
- *                       been updated.
- * @param listInfo The \c MADFileInfo object that has been updated.
- * @param index The index of \c listInfo, the updated \c MADFileInfo.
- */
 - (void)listsController:(MADFilesController *)listsController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchUpdates addObject:pair];
 }
 
-/*!
- * Notifies the receiver of this method that the lists controller did change it's contents in some form.
- * This method is *always* called after any insert, remove, or update is received. In this method, you
- * should finish off changes to your UI that were related to any insert, remove, or update. For an example
- * of how you might handle a "did change" contents call, see the discussion for \c -listsControllerWillChangeContent:.
- *
- * @param listsController The \c AAPLListsController instance that did change its content.
- */
-- (void)listsControllerDidChangeContent:(MADFilesController *)listsController
-                             completion:(void (^)(BOOL, NSError *))completion {
+- (void)listsControllerDidChangeContent:(MADFilesController *)listsController completion:(void (^)(BOOL, NSError *))completion {
     
     NSIndexPath *path;
     MTPair *pair;
@@ -2219,27 +2132,10 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     }];
 }
 
-/*!
- * Notifies the receiver of this method that an error occured when creating a new \c MADFileInfo object.
- * In implementing this method, you should present the error to the user. Do not rely on the \c MADFileInfo
- * instance to be valid since an error occured in creating the object.
- *
- * @param listsController The \c AAPLListsController that is notifying that a failure occured.
- * @param listInfo The \c MADFileInfo that represents the list that couldn't be created.
- * @param error The error that occured.
- */
 - (void)listsController:(MADFilesController *)listsController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
     
 }
 
-/*!
- * Notifies the receiver of this method that an error occured when removing an existing \c MADFileInfo
- * object. In implementing this method, you should present the error to the user.
- *
- * @param listsController The \c AAPLListsController that is notifying that a failure occured.
- * @param listInfo The \c MADFileInfo that represents the list that couldn't be removed.
- * @param error The error that occured.
- */
 - (void)listsController:(MADFilesController *)listsController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
     
 }

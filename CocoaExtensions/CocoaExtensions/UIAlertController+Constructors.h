@@ -28,8 +28,8 @@
 
 + (instancetype)promotCloudSignOut:(void (^)(UIAlertAction *action))handler;
 
-+ (instancetype)promotStorageOptionLocal:(void (^)(UIAlertAction *action))handlerLocal
-                                   cloud:(void (^)(UIAlertAction *action))handlerCloud;
++ (instancetype)promotStorageOptionLocal:(void (^)())handlerLocal
+                                   cloud:(void (^)())handlerCloud;
 
 + (instancetype)editLabel:(void (^)(UITextField *textField))textFieldConfig
                completion:(void (^)(UIAlertAction *action, NSString *text))completion;

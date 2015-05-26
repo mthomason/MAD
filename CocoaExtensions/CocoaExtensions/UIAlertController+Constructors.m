@@ -230,8 +230,8 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alertController;
 }
 
-+ (instancetype)promotStorageOptionLocal:(void (^)(UIAlertAction *action))handlerLocal
-                                   cloud:(void (^)(UIAlertAction *action))handlerCloud {
++ (instancetype)promotStorageOptionLocal:(void (^)())handlerLocal
+                                   cloud:(void (^)())handlerCloud {
 
     NSString *title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions);
     NSString *message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions);

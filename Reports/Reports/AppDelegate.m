@@ -126,90 +126,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return YES;
 }
 
-- (void)getUserCloudPrefs {
-    dispatch_async(self.appDelegateQueue, ^{
-        
-        NSLog(@"Getting user prefs");
-        
-        MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
-        if (storageState.cloudAvailable) {
-
-            NSLog(@"Cloud is available");
-            
-            if (storageState.storageOption == MADAppStorageCloud) {
-                
-                NSLog(@"Cloud is also desired");
-                
-                [MACloudManager getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
-                                                             groupIdentifier:MADIdentifierGroup
-                                                                       delay:^{
-                                                                           NSLog(@"Delay getting file locations");
-                                                                           [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                                                                               [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES
-                                                                                                                                                 animated:YES];
-                                                                           }];
-                                                                       }
-                                                                  completion:^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
-                                                                      
-                                                                      NSLog(@"Got file locations");
-                                                                      
-                                                                      [MTApplicationInstance mainInstance].storageOption =
-                                                                      cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-                                                                      [self configureListsController: NO
-                                                                          storageOptionChangeHandler: nil];
-                                                                      
-                                                                      [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                                                                          [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO
-                                                                                                                                            animated:YES];
-                                                                      }];
-                                                                      
-                                                                  }];
-
-            } else if (storageState.storageOption == MADAppStorageLocal ||
-                       storageState.storageOption == MADAppStorageNotSet) {
-
-                NSLog(@"What do they want????");
-
-                
-                UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:^(UIAlertAction *action) {
-                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
-                    [self configureListsController: NO storageOptionChangeHandler: nil];
-                } cloud:^(UIAlertAction *action) {
-                    
-                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
-                    [self configureListsController: NO storageOptionChangeHandler:^{
-                        [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
-                                                    toCloud: MADUbiquityIdentifier
-                                                  extension: MADFileExtentionMobleApplicationDocument];
-                    }];
-                    
-                }];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                    [self.openFileViewController presentViewController:prompt animated:YES completion:nil];
-                }];
-            }
-            
-            
-        } else {
-            
-            NSLog(@"Cloud is not available");
-
-            if (storageState.storageOption == MADAppStorageCloud) {
-                
-                NSLog(@"They desired cloud");
-                
-                [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
-            }
-            
-
-            [self configureListsController: NO
-                storageOptionChangeHandler: nil];
-            
-            
-        }
-    });
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [AppDelegate registerForNotifications:application];
@@ -237,52 +153,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
         
-        NSLog(@"First launch");
-        
         [self getUserCloudPrefs];
 
     } subsquientLaunches:^{
-
-        NSLog(@"Subsquient launch");
-
-        MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
-        
-        if (storageState.accountDidChange) {
-            
-            NSLog(@"Account did change");
-            
-            switch (storageState.storageOption) {
-                case MADAppStorageCloud: {
-
-                    UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-                        NSLog(@"Notified of signout.");
-                        [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
-                        [self getUserCloudPrefs];
-                    }];
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                        [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
-                    }];
-                    
-                    break;
-                }
-                case MADAppStorageLocal:
-                case MADAppStorageNotSet:
-                default:
-                    [self getUserCloudPrefs];
-                    break;
-            }
-    
-                
-        } else {
-        
-            NSLog(@"Account did not change");
-            if (storageState.storageOption == MADAppStorageNotSet) {
-                [self getUserCloudPrefs];
-            } else {
-                [self configureListsController: NO storageOptionChangeHandler: nil];
-            }
-        }
- 
+        [self getUserCloudPrefsSubsquient];
     }];
     
     return YES;
@@ -295,10 +169,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     });
     
     [[MACloudManager sharedManager] setGroupId:MADIdentifierGroup];
-    
-   // dispatch_async(self.appDelegateQueue, ^{
-   //     [self setupUserStoragePreferences];
-   // });
     
 }
 
@@ -576,82 +446,108 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
 }
 
-#pragma mark - User Storage Preferences
+#pragma mark - Convenience
 
-/*- (void)setupUserStoragePreferences {
+- (void)getUserCloudPrefs {
+    
+    dispatch_async(self.appDelegateQueue, ^{
+        
+        MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
+        if (storageState.cloudAvailable) {
+            
+            if (storageState.storageOption == MADAppStorageCloud) {
+                
+                void (^activityIndicatorStart)() = ^ {
+                    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
+                };
+                void (^activityIndicatorStop)() = ^ {
+                    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
+                };
+                
+                void (^handleLongRunningCloudLookup)() = ^ {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStart];
+                };
+                
+                MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
+                    
+                    [MTApplicationInstance mainInstance].storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
+                    [self configureListsController: NO storageOptionChangeHandler: nil];
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
+                    
+                };
+                
+                [MACloudManager getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
+                                                             groupIdentifier:MADIdentifierGroup
+                                                                       delay:handleLongRunningCloudLookup
+                                                                  completion:completion];
+                
+                
+            } else if (storageState.storageOption == MADAppStorageLocal ||
+                       storageState.storageOption == MADAppStorageNotSet) {
+                
+                void (^handleOptionCloud)() = ^ {
+                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
+                    [self configureListsController: NO storageOptionChangeHandler:^{
+                        [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
+                                                    toCloud: MADUbiquityIdentifier
+                                                  extension: MADFileExtentionMobleApplicationDocument];
+                    }];
+                    
+                };
+                void (^handleOptionLocal)() = ^ {
+                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
+                    [self configureListsController: NO storageOptionChangeHandler: nil];
+                };
+                UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:handleOptionLocal
+                                                                                  cloud:handleOptionCloud];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                    [self.openFileViewController presentViewController:prompt animated:YES completion:nil];
+                }];
+            }
+        } else {
+            if (storageState.storageOption == MADAppStorageCloud) {
+                [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
+            }
+            [self configureListsController: NO storageOptionChangeHandler: nil];
+        }
+    });
+}
+
+- (void)getUserCloudPrefsSubsquient {
 
     MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
     if (storageState.accountDidChange) {
-        [self notifyUserOfAccountChange:storageState];
-    } else {
-        [self resolveStateForUserStorageState:storageState];
-    }
-}*/
-/*
-- (void)resolveStateForUserStorageState:(MADAppStorageState)storageState {
-    if (storageState.cloudAvailable) {
-        if (storageState.storageOption == MADAppStorageNotSet ||
-            (storageState.storageOption == MADAppStorageLocal && storageState.accountDidChange)) {
-            // iCloud is available, but we need to ask the user what they prefer.
-            if ([NSThread isMainThread]) {
-                [self promptUserForStorageOption];
-            } else {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [self promptUserForStorageOption];
-                });
+        
+        switch (storageState.storageOption) {
+            case MADAppStorageCloud: {
+                
+                UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
+                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
+                    [self getUserCloudPrefs];
+                }];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                    [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
+                }];
+                
+                break;
             }
+            case MADAppStorageLocal:
+            case MADAppStorageNotSet:
+            default:
+                [self getUserCloudPrefs];
+                break;
         }
-        else {
-            [self configureListsController:storageState.accountDidChange storageOptionChangeHandler:nil];
-        }
+        
+        
     } else {
-        if (storageState.storageOption != MADAppStorageNotSet) {
-            [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
+        if (storageState.storageOption == MADAppStorageNotSet) {
+            [self getUserCloudPrefs];
+        } else {
+            [self configureListsController: NO storageOptionChangeHandler: nil];
         }
-        
-        [self configureListsController:storageState.accountDidChange storageOptionChangeHandler:nil];
     }
+
 }
-*/
-#pragma mark - Alerts
-
-/*- (void)notifyUserOfAccountChange:(MADAppStorageState)storageState {
-
-    UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-        //[self resolveStateForUserStorageState:storageState];
-    }];
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
-    }];
-    
-}*/
-/*
-- (void)promptUserForStorageOption {
-
-    UIAlertController *storageController = [UIAlertController promotStorageOptionLocal:^(UIAlertAction *action) {
-        
-        [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
-        [self configureListsController:YES storageOptionChangeHandler:nil];
-        
-    } cloud:^(UIAlertAction *action) {
-        
-        [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
-        
-        [self configureListsController:YES storageOptionChangeHandler:^{
-            [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
-                                        toCloud: MADUbiquityIdentifier
-                                      extension: MADFileExtentionMobleApplicationDocument];
-        }];
-        
-    }];
-
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self.openFileViewController presentViewController:storageController animated:YES completion:nil];
-    }];
-}
-*/
-#pragma mark - Convenience
 
 - (void)configureListsController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
     if ([MTApplicationInstance mainInstance].filesController != nil && !accountChanged) {

@@ -130,7 +130,7 @@ static MACloudManager *sharedSingleton;
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
                                      groupIdentifier: (NSString *)groupIdentifier
                                                delay: (void (^)())handleLongRunningCall
-                                          completion: (void (^)(BOOL cloudAvailable, NSURL *documents, NSURL *data))handleCompletion {
+                                          completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
     
         if ([MACloudManager isCloudAvailable]) {
             void (^longRunningCallBlock)() = [handleLongRunningCall copy];

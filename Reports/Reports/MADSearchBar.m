@@ -33,7 +33,11 @@
         UIImage *closeImage = [UIImage imageNamed:@"MADImageClear"];
         UIImage *newImageTemplate = [closeImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [self setImage:newImageTemplate forSearchBarIcon:UISearchBarIconClear state:UIControlStateNormal];
-        
+        self.showsBookmarkButton = NO;
+        self.showsCancelButton = YES;
+        self.showsScopeBar = NO;
+        self.showsSearchResultsButton = NO;
+        self.hidden = YES;
     }
     return self;
 }
