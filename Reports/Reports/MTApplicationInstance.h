@@ -42,7 +42,7 @@ extern NSString * const MTGlobalBundleRev;
 extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUpgradeInstalledSamples;
 
-@class MADocument, MTReportDesigner, MTReportViewer, MTQueryDesigner, MTUser, MADFileManager;
+@class MADocument, MTReportDesigner, MTReportViewer, MTQueryDesigner, MADFileManager;
 
 @interface MTApplicationInstance : NSObject
 
@@ -55,7 +55,7 @@ extern NSString * const MADUpgradeInstalledSamples;
 
 @property (nonatomic, strong) MADFilesController *filesController;
 
-@property (nonatomic, strong, readonly) MTUser *user;
+//@property (nonatomic, strong, readonly) MTUser *user;
 
 @property (nonatomic, strong, readonly) MTReportDesigner *reportDesigner;
 @property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
@@ -75,12 +75,13 @@ extern NSString * const MADUpgradeInstalledSamples;
 - (BOOL)sampleInstalled;
 - (void)installedSample;
 
+- (void)cleanupBeforeTerminate;
+
 + (NSString *)applicationName;
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner;
 + (NSAttributedString *)localizedAttributedApplicationNameMadViewer;
 + (NSAttributedString *)localizedAttributedApplicationNameMadQuery;
 
-+ (NSString *)applicationNamePrefixPartFormat;
 + (NSString *)applicationNameSufixPart;
 
 + (BOOL)isMadViewer;

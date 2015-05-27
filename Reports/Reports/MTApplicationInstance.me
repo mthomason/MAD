@@ -23,16 +23,11 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <MessageUI/MessageUI.h>
 #import "MAD.h"
 
-#import "MADQueryViewController.h"
-
-#import "MTUser.h"
 #import "MTReportDesigner.h"
 
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
-#import "NSFileManager+Common.h"
 #import "NSParagraphStyle+CommonStyles.h"
-#import "NSURL+Document.h"
 
 #import "MADFileManager.h"
 
@@ -45,7 +40,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import "MADFilesController.h"
 #import "MADLocalFileCoordinator.h"
 #import "MADCloudFileCoordinator.h"
-#import "MADFileInfo.h"
 #import "MADMetaData.h"
 
 #ifndef MADWATCHKIT
@@ -72,9 +66,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.413";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.413";
-NSString * const MTGlobalBundleRev                                  = @"1788";
+NSString * const MTGlobalBundleVersion                              = @"7.0.414";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.414";
+NSString * const MTGlobalBundleRev                                  = @"1789";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -96,12 +90,10 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
                                                                     //change this url to the url of the open
                                                                     //document.  This url will be key for the
                                                                     //documents array.
-@property (nonatomic, strong, readwrite) MTUser *user;
 @property (nonatomic, strong, readwrite) MTReportDesigner *reportDesigner;
 @property (nonatomic, strong, readwrite) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
-//@property (nonatomic, strong) NSMutableDictionary *documents;   //MADocument stored by their NSURLS
 @property (nonatomic, strong, readwrite) MADFileManager *fileManager;
 
 @property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
@@ -141,18 +133,12 @@ static MTApplicationInstance *mainInstance;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     if (self) {
-        //NSNumber *reportState = [aDecoder decodeObjectForKey:@"reportState"];
-        //self.reportState = reportState.unsignedIntegerValue;
-        //self.openFiles = [aDecoder decodeObjectForKey:@"openFiles"];
+
     }
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    //NSNumber *reportState = @(self.reportState);
-    //[aCoder encodeObject:reportState forKey:@"reportState"];
-    //[aCoder encodeObject:self.openFiles forKey:@"openFiles"];
-}
+- (void)encodeWithCoder:(NSCoder *)aCoder { }
 
 - (instancetype)init {
     self = [super init];
@@ -173,8 +159,8 @@ static MTApplicationInstance *mainInstance;
         MADFileManager *openFiles = [MADFileManager new];
         self.fileManager = openFiles;
 
-        MTUser *user = [[MTUser alloc] init];
-        self.user = user;
+        //MTUser *user = [[MTUser alloc] init];
+        //self.user = user;
 
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
         self.reportDesigner = reportDesigner;
@@ -188,18 +174,12 @@ static MTApplicationInstance *mainInstance;
         NSCAssert([[MTApplicationInstance bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
 #endif
-//        NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
-//        self.documents = documents;
         
     }
     return self;
 }
 
 #pragma mark - App settings
-
-//+ (NSString *)applicationNamePrefixPart {
-//    return MTDocumentExtentionMobleApplicationDocument;
-//}
 
 + (NSString *)applicationNamePrefixPartFormat {
     return @"MAD %@";
@@ -440,6 +420,10 @@ static MTApplicationInstance *mainInstance;
         .accountDidChange = [self hasUbiquityIdentityChanged],
         .cloudAvailable = [MACloudManager isCloudAvailable]
     };
+}
+
+- (void)cleanupBeforeTerminate {
+    [self.openDocument closeWithCompletionHandler:nil];
 }
 
 - (BOOL)sampleInstalled {

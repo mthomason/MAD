@@ -8,20 +8,10 @@
 
 #import "MTTableViewCellDocument.h"
 #import <QuartzCore/QuartzCore.h>
-#import "Constants.h"
 
 @implementation MTTableViewCellDocument
 
 @synthesize labelH1, imageThumbnail;
-
-+ (UIImage *)defaultThumbnail {
-    UIImage *result = [UIImage imageNamed:UIIMAGEDOCUMENTBLANK];
-    return result;
-}
-
-+ (CGFloat)defaultHeight {
-    return MNSDocumentHeight;
-}
 
 - (void)awakeFromNib {
     [self imageThumbnail].contentMode = UIViewContentModeScaleAspectFit;

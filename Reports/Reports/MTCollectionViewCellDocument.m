@@ -32,6 +32,11 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 @implementation MTCollectionViewCellDocument
 
++ (UIImage *)defaultThumbnail {
+    UIImage *result = [UIImage imageNamed:MTImageBlank];
+    return result;
+}
+
 + (UIFont *)CaptionFont {
     return [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
 }

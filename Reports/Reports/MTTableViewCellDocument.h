@@ -16,10 +16,6 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *labelH1;
 @property (nonatomic, weak) IBOutlet UIImageView *imageThumbnail;
-
-+ (CGFloat)defaultHeight;
-+ (UIImage *)defaultThumbnail;
-
 @property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
 
 @end

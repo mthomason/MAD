@@ -62,7 +62,6 @@ NSString * const MNSInterfaceButtonDismiss                          = @"Dismiss"
 NSString * const MNSInterfaceTitleError                             = @"error";
 NSString * const MNSInterfaceMessageErrorDataSourceCreation         = @"Datasource creation failed.";
 
-NSString * const UIIMAGEDOCUMENTBLANK                               = @"UIImageDocumentBlank";
 NSString * const APPLICATIONDATA_FILENAME                           = @"appdata";
 NSString * const MYSQLDATABASEDATA_FILENAME                         = @"mydata";
 NSString * const MTPersistentStoreAliasUserPreferences              = @"preferences";

@@ -58,4 +58,6 @@
                                         submit:(void (^)(NSString *password))handlerContinue
                                         cancel:(void (^)())handlerCancel;
 
++ (instancetype)error:(NSError *)error;
+
 @end

@@ -9,13 +9,13 @@
 #define MTDebugMode
 #endif
 
-#ifdef MTDebugModeNOPE
+#if DEBUG
     #define MTLog( s, ... ) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 #else
     #define MTLog( s, ... )
 #endif
 
-#ifdef MTDebugModeNOPE
+#if DEBUG
     #define MTLogStatic( s, ... ) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 #else
     #define MTLogStatic( s, ... )

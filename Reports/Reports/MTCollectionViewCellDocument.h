@@ -33,6 +33,8 @@
 + (NSDictionary *)attributesCaption;
 + (NSDictionary *)attributesCaption2;
 
++ (UIImage *)defaultThumbnail;
+
 - (void)loadPreviewImageForUrl:(NSURL *)url;
 
 - (void)normalizeTint;

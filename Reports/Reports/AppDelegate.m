@@ -22,9 +22,7 @@
 #import "MTQueryBuilderContainerController.h"
 
 #import "MADFileManager.h"
-#import "MTUser.h"
-
-#import "MADocument.h"
+//#import "MTUser.h"
 
 #import "MADOpenFileViewController.h"
 
@@ -39,7 +37,6 @@
 #import "MADUpgradeManager.h"
 
 #import "UIAlertController+Constructors.h"
-#import "NSError+Constructors.h"
 #import "NSString+Encryption.h"
 
 #if MAD_DESIGNER
@@ -177,37 +174,34 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MADocument *documentReport = self.applicationInstance.openDocument;
-    if (documentReport != nil) {
-        [documentReport saveToURL: documentReport.fileURL
-                 forSaveOperation: UIDocumentSaveForOverwriting
-                completionHandler: nil];
-    }
+    [[MTApplicationInstance mainInstance] cleanupBeforeTerminate];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     
-    BOOL result;
+    NSURL *documentsDirectory = [MTApplicationInstance mainInstance].filesController.documentDirectory;
+    NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
     NSError *error = nil;
-    if ([self.applicationInstance.user addDocument:url error:&error]) {
+    
+    BOOL success = [[NSFileManager defaultManager] moveItemAtURL:url toURL:destination error:&error];
+    
+    if (success) {
         
-        result = YES;
-        
-        UIAlertController *alert = [UIAlertController addedDocument];
+        UIAlertController *alert = success ? [UIAlertController addedDocument] : [UIAlertController error:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
         }];
         
     } else {
         
-        result = NO;
-        [NSError presentError: error
-             onViewController: self.openFileViewController
-                   completion: NULL];
+        UIAlertController *alert = [UIAlertController error:error];
+        [self.openFileViewController presentViewController:alert animated:YES completion:^{
+            [self.openFileViewController.collectionView reloadData];
+        }];
         
     }
-    return result;
+    return success;
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {

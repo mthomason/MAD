@@ -20,13 +20,11 @@
 #import "MADGroupedCollectionViewLayout.h"
 
 #import "MADocument.h"
-#import "MACloudManager.h"
 #import "MADMetaData.h"
 #import "MADSearchBar.h"
 
 #import "MADOpenFileSectionHeaderView.h"
 #import "MTCollectionViewCellDocument.h"
-#import "MTTableViewCellDocument.h"
 
 #import "MADViewerController.h"
 
@@ -1087,7 +1085,7 @@ static inline CGRect rectCellLabel() {
     NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
     if (image == nil) {
-        image = [MTTableViewCellDocument defaultThumbnail];
+        image = [MTCollectionViewCellDocument defaultThumbnail];
     }
     cell.imagePreview.image = image;
 }
@@ -1101,7 +1099,7 @@ static inline CGRect rectCellLabel() {
     NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
     if (image == nil) {
-        image = [MTTableViewCellDocument defaultThumbnail];
+        image = [MTCollectionViewCellDocument defaultThumbnail];
     }
     [cell normalizeTint];
     cell.imagePreview.image = image;
@@ -1134,7 +1132,7 @@ static inline CGRect rectCellLabel() {
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
     if (image == nil) {
-        image = [MTTableViewCellDocument defaultThumbnail];
+        image = [MTCollectionViewCellDocument defaultThumbnail];
     }
     cell.imagePreview.image = image;
 }
@@ -1151,7 +1149,7 @@ static inline CGRect rectCellLabel() {
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
     if (image == nil) {
-        image = [MTTableViewCellDocument defaultThumbnail];
+        image = [MTCollectionViewCellDocument defaultThumbnail];
     }
     cell.imagePreview.image = image;
 }
@@ -1444,7 +1442,9 @@ static inline CGRect rectCellLabel() {
 - (void)reenable {
     self.collectionView.userInteractionEnabled = YES;
     self.savingActivityIndicatorVisible = NO;
-    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+    NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+    for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         [cell.activityIndicator stopAnimating];
     }
@@ -1453,10 +1453,13 @@ static inline CGRect rectCellLabel() {
 
 - (void)displaySavingReportActivityIndicator {
     [self setSavingActivityIndicatorVisible:YES];
-    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+    
+    NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+    for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         NSURL *visibleUrl = [self documentForIndexPath:path];
-        MTApplicationInstance *app = [AppDelegate app];
-        BOOL animate = [app.fileManager.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
+
+        BOOL animate = [[AppDelegate app].fileManager.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
         if (animate) {
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
             if (cell != nil) {
@@ -1481,7 +1484,7 @@ static inline CGRect rectCellLabel() {
             if (image) {
                 visibleCell.imagePreview.image = image;
             } else {
-                UIImage *defaultThumbnail = [MTTableViewCellDocument defaultThumbnail];
+                UIImage *defaultThumbnail = [MTCollectionViewCellDocument defaultThumbnail];
                 visibleCell.imagePreview.image = defaultThumbnail;
             }
             [visibleCell setNeedsLayout];
@@ -1662,7 +1665,9 @@ static inline CGRect rectCellLabel() {
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
         
-        for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+        NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+        for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
             [cell startWobble];
         }
@@ -1700,7 +1705,8 @@ static inline CGRect rectCellLabel() {
     [items addObject:self.barButtonItemEdit];
     [self setToolbarItems:items animated:YES];
     
-    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+    for (NSInteger i=0; i<[self.collectionView numberOfItemsInSection:0]; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         [self.collectionView deselectItemAtIndexPath:path animated:YES];
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         [cell stopWobble];
@@ -1708,12 +1714,11 @@ static inline CGRect rectCellLabel() {
         
         NSURL *fileUrl = [self documentForIndexPath:path];
         NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-        NSString *path = [url path];
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
         if (image == nil) {
-            image = [MTTableViewCellDocument defaultThumbnail];
+            image = [MTCollectionViewCellDocument defaultThumbnail];
         }
-        [[cell imagePreview] setImage:image];
+        cell.imagePreview.image = image;
     }
 }
 
@@ -1817,8 +1822,10 @@ static inline CGRect rectCellLabel() {
         NSURL *fileUrl = [self documentForIndexPath:selectedCellLocation];
         [wrappedUrls addObject:fileUrl];
     }
-    for (NSIndexPath *visibleCellLocations in self.collectionView.indexPathsForVisibleItems) {
-        MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:visibleCellLocations];
+    NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+    for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
+        MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         if (documentCell != nil) {
             [documentCell normalizeTint];
         }
@@ -1831,8 +1838,10 @@ static inline CGRect rectCellLabel() {
     MADOpenFileViewController *weakSelf = self;
     
     [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        for (NSIndexPath *visibleCellLocations in weakSelf.collectionView.indexPathsForVisibleItems) {
-            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[weakSelf.collectionView cellForItemAtIndexPath:visibleCellLocations];
+        NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+        for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
+            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[weakSelf.collectionView cellForItemAtIndexPath:path];
             if (documentCell != nil) {
                 [documentCell normalizeTint];
             }

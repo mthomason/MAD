@@ -134,7 +134,6 @@ extern NSString * const MNSInterfaceButtonDismiss;
 extern NSString * const MNSInterfaceTitleError;
 extern NSString * const MNSInterfaceMessageErrorDataSourceCreation;
 
-extern NSString * const UIIMAGEDOCUMENTBLANK;
 extern NSString * const APPLICATIONDATA_FILENAME;
 extern NSString * const MYSQLDATABASEDATA_FILENAME;
 extern NSString * const MTPersistentStoreAliasUserPreferences;

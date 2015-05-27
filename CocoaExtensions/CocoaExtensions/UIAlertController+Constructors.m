@@ -398,6 +398,12 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     [alert addAction: ok];
     return alert;
 }
++ (instancetype)error:(NSError *)error {
+    NSString *title = error.localizedDescription;
+    NSString *messageStart = error.localizedFailureReason ?: @"";
+    NSString *message = [messageStart stringByAppendingString:error.localizedRecoverySuggestion ?: @""];
+    return [self errorDisplayErrorWithTitle:title message:message andCompletion:nil];
+}
 
 + (instancetype)errorDisplayErrorWithTitle:(NSString *)title
                                    message:(NSString *)message
@@ -408,7 +414,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
-                                                     handler: nil];
+                                                     handler: handlerContinue];
     [alertController addAction:actionOK];
     return alertController;
     
