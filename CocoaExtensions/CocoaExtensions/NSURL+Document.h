@@ -16,6 +16,7 @@
 - (NSString *)filenameMinusExtention;
 - (NSURL *)uniqueUrl;
 - (NSString *)key;
++ (NSString *)fileNameFilter:(NSString *)desiredName;
 
 @end
 

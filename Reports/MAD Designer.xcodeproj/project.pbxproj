@@ -1492,6 +1492,7 @@
 		4C1AD32F1B11BD5B00839504 /* MADProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADProgressView.m; sourceTree = "<group>"; };
 		4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "../CocoaExtensions/CocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
+		4C1AD3481B18296F00839504 /* MFMailComposeViewController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MFMailComposeViewController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/MFMailComposeViewController+Constructors.h"; sourceTree = "<group>"; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C2213A317D746C200BD36F5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -4560,6 +4561,7 @@
 			children = (
 				4C65D47B1ADCC67C00279B4D /* BDHost.h */,
 				4CF889331AD1C28E00ED21FC /* CGGeometry+Extras.h */,
+				4C1AD3481B18296F00839504 /* MFMailComposeViewController+Constructors.h */,
 				4C8CDC9D1AD274F800B7B9EA /* MTLog.h */,
 				4C8CDC9E1AD2751200B7B9EA /* NSError+Constructors.h */,
 				4CF889341AD1C28E00ED21FC /* NSFileManager+Common.h */,

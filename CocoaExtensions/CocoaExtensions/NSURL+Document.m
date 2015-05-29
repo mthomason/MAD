@@ -34,4 +34,15 @@
     return self.absoluteString;
 }
 
++ (NSString *)fileNameFilter:(NSString *)desiredName {
+    
+    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
+    [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
+    [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSCharacterSet *invertedSet = characterSet.invertedSet;
+    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:invertedSet];
+    return [components componentsJoinedByString:@""];
+    
+}
+
 @end
