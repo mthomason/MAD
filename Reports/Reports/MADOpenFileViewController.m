@@ -17,7 +17,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 
-#import "MADGroupedCollectionViewLayout.h"
+#import "MADCollectionViewLayoutGroupedDelegate.h"
 
 #import "MADocument.h"
 #import "MADMetaData.h"
@@ -47,18 +47,11 @@
 #import "MADBarButtonItem.h"
 
 #import "UIColor+EverydayApps.h"
-#import "UIView+Animations.h"
-#import "UIDevice+Hack.h"
 #import "NSFileManager+Common.h"
-#import "NSError+Constructors.h"
 #import "NSURL+Document.h"
-#import "UIAlertController+Constructors.h"
 #import "MTNavigationController.h"
-#import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDocumentInformationTableViewController.h"
-#import "NSMetadataItem+Description.h"
-
 #import "MADFilesController.h"
 #import "MADAppLaunchContext.h"
 #import "MADFileInfo.h"
@@ -67,7 +60,11 @@
 
 #import "MADProgressView.h"
 
+#import "UIAlertController+Constructors.h"
 #import "MFMailComposeViewController+Constructors.h"
+#import "UIBarButtonItem+Constructors.h"
+#import "UILabel+Constructors.h"
+#import "NSError+Constructors.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -77,8 +74,6 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 CGFloat const MADSectionHeaderHeight                            = 32.0000f;
-CGFloat const MADConstCellDocumentLabelWidth                    = 124.0000f;
-CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
@@ -94,7 +89,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
         UIStateRestoring,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
-        MADFilesControllerDelegate>
+        MADFilesControllerDelegate,
+        MADCollectionViewLayoutFilesDelegate>
 
 @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
@@ -138,9 +134,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
 @property (nonatomic, assign) BOOL cloudActivityRunning;
 @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
-@property (nonatomic, strong) UILabel *testLabel;
-@property (nonatomic, strong) UILabel *testLabelSub;
-
 @property (nonatomic, strong) UIProgressView *progressViewFileManager;
 
 @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
@@ -148,6 +141,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
 @property (nonatomic, strong) NSMutableArray *batchInserts;
 @property (nonatomic, strong) NSMutableArray *batchRemoves;
 @property (nonatomic, strong) NSMutableArray *batchUpdates;
+
+@property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
 
 @end
 
@@ -162,17 +157,21 @@ CGFloat const MADConstCellDocumentLabelMaxHeight                = 300.0000f;
     return NSStringFromSelector(@selector(leftView));
 }
 
-static inline CGRect rectCellLabel();
-static inline CGRect rectCellLabel() {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, MADConstCellDocumentLabelWidth, MADConstCellDocumentLabelMaxHeight);
++ (NSOperationQueue *)queue {
+    static NSOperationQueue *queue;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = [[NSOperationQueue alloc] init];
+    });
+    
+    return queue;
 }
 
 #pragma mark - NSObject
 
 - (void)dealloc {
-    
     [self removeObservers];
-    
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -195,17 +194,13 @@ static inline CGRect rectCellLabel() {
     return self;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:[MADOpenFileViewController keySubviews]]) {
         if ([object isKindOfClass:[UITextField class]]) {
             
             
             for (UIView *view in ((UITextField *)object).subviews) {
                 if ([view isKindOfClass:[UIButton class]]) {
-                    
                     
                     UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     ((UIButton *)view).tintColor = [UIColor whiteColor];
@@ -218,13 +213,23 @@ static inline CGRect rectCellLabel() {
 
 #pragma mark - UIViewController
 
+- (void)awakeFromNib {
+    self.shouldShowAddDocumentPopover = YES;
+    [self.barButtonItemAddNewDocument setEnabled:YES];
+    [super awakeFromNib];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    delegate.delegate = self;
+    self.collectionViewDelegate = delegate;
+    self.collectionView.delegate = self.collectionViewDelegate;
     
     [self addObservers];
     
     self.aboutViewControllerOnScreen = NO;
-    
     self.updatingEnabled = YES;
     self.cloudActivityRunning = NO;
     self.cloudActivityRunningDisplay = NO;
@@ -232,34 +237,6 @@ static inline CGRect rectCellLabel() {
     self.rightBarButtonItemActivityIndicatorVisible = NO;
     
     [self setNeedsStatusBarAppearanceUpdate];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:rectCellLabel()];
-    label.clipsToBounds = NO;
-    label.numberOfLines = 0;
-    
-    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: label
-                                                                  attribute: NSLayoutAttributeWidth
-                                                                  relatedBy: NSLayoutRelationEqual
-                                                                     toItem: nil
-                                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                                 multiplier: 1.0000f
-                                                                   constant: MADConstCellDocumentLabelWidth];
-    [label addConstraint:constraint];
-    self.testLabel = label;
-    
-    UILabel *subLabel = [[UILabel alloc] initWithFrame:rectCellLabel()];
-    subLabel.clipsToBounds = NO;
-    subLabel.numberOfLines = 0;
-    
-    NSLayoutConstraint *constraintSub = [NSLayoutConstraint constraintWithItem: subLabel
-                                                                  attribute: NSLayoutAttributeWidth
-                                                                  relatedBy: NSLayoutRelationEqual
-                                                                     toItem: nil
-                                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                                 multiplier: 1.0000f
-                                                                   constant: MADConstCellDocumentLabelWidth];
-    [subLabel addConstraint:constraintSub];
-    self.testLabelSub = subLabel;
     
     self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager isCloudAvailable] ? MADSectionHeaderHeight : CGSizeZero.height),
                                                                  self.collectionView.contentInset.left,
@@ -270,11 +247,10 @@ static inline CGRect rectCellLabel() {
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
+    //self.collectionView.dataSource = self;
+    //self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
     
-    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                                           target: self
-                                                                                           action: @selector(edit:)];
-    self.barButtonItemEditDone = barButtonItemEditDone;
     [self setEditing:NO animated:NO];
     
     UIColor *barTintColor = [UIColor tintColorBlue];
@@ -283,61 +259,54 @@ static inline CGRect rectCellLabel() {
     self.navigationController.toolbar.tintColor = tintColor;
     
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    //UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
-    //testimage.frame=self.collectionView.frame;
-    //[watermarkView addSubview:testimage];
-    
     self.collectionView.backgroundView = watermarkView;
-    //self.collectionView.backgroundColor = [UIColor purpleColor];
-    
-    UIColor *bgColor = [UIColor lightGrayColor];
-    self.collectionView.backgroundColor = bgColor;
+    self.collectionView.backgroundColor = [UIColor lightGrayColor];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = [MTApplicationInstance applicationName];
-    
-    
     self.navigationItem.titleView = titleView;
     self.labelMadDesigner = titleView;
     
     self.navigationItem.hidesBackButton = YES;
     
-    UITapGestureRecognizer *tapGestureRecognizer = [self tapGestureRecognizer];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                                           action: @selector(handleDidTapCollectionView:)];
+    tapGestureRecognizer.delegate = self;
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
     self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
-    NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
-    [toolbarButtons removeObject:self.barButtonItemAction];
-    
-    // FIXME: Remove cloud down button until feature is added.
-    [toolbarButtons removeObject:self.barButtonItemCloudDown];
-    
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
     [searchBar sizeToFit];
-    
     self.searchBar = searchBar;
-    
-    if (self.barButtonItemEdit == nil) {
-        UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                              target: self
-                                                                              action: @selector(edit:)];
-        self.barButtonItemEdit = edit;
-    }
+
+    NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
+    [toolbarButtons removeObject:self.barButtonItemAction];
+    [toolbarButtons removeObject:self.barButtonItemCloudDown];
     
     [toolbarButtons addObject:self.barButtonItemEdit];
-    
-    UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
-    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
-                                                                               style: UIBarButtonItemStylePlain
-                                                                              target: self
-                                                                              action: @selector(duplicate:)];
-    barButtonItemDuplicate.enabled = NO;
-    [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
-    self.barButtonItemDuplicate = barButtonItemDuplicate;
+    [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.collectionView.backgroundView setNeedsDisplay];
+    
+    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        if (isLicensedUser) {
+            [self addActionItemToToolbar:animated];
+        }
+    }];
+    
+    if (self.firstViewWillAppear == NO) {
+        [self reenableDataWithSearch];
+    }
+    
+    self.firstViewWillAppear = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -363,22 +332,8 @@ static inline CGRect rectCellLabel() {
     self.aboutViewControllerOnScreen = NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self.collectionView.backgroundView setNeedsDisplay];
-    
-    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-        if (isLicensedUser) {
-            [self addActionItemToToolbar:animated];
-        }
-    }];
-    
-    if (self.firstViewWillAppear == NO) {
-        [self reenableDataWithSearch];
-    }
-    
-    self.firstViewWillAppear = NO;
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -400,27 +355,6 @@ static inline CGRect rectCellLabel() {
     [self configureViewControllerWithLaunchContext:launchContext];
 }
 
-#pragma mark - Property Overrides
-
-- (void)setFilesController:(MADFilesController *)filesController {
-    if (filesController != _filesController) {
-        _filesController = filesController;
-        _filesController.delegate = self;
-    }
-}
-
-#pragma mark - add controls
-
-- (void)addProgressViewToView {
-    self.progressViewFileManager.progress = 0.0000f;
-    [self.view addSubview:self.progressViewFileManager];
-    [self.view bringSubviewToFront:self.progressViewFileManager];
-}
-
-- (void)removeProgressViewFromView {
-    [self.progressViewFileManager removeFromSuperview];
-}
-
 #pragma mark - UIStateRestoring
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
@@ -433,30 +367,22 @@ static inline CGRect rectCellLabel() {
 
 - (void)applicationFinishedRestoringState {
     if ([MTApplicationInstance isMadDesigner]) {
-        [self performSegueWithIdentifier: MTSegueShowOpenDocument
-                                  sender: self];
+        [self performSegueWithIdentifier: MTSegueShowOpenDocument sender: self];
     } else if ([MTApplicationInstance isMadViewer]) {
-        [self performSegueWithIdentifier: MTSegueOpenInViewer
-                                  sender: self];
+        [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
     }
 }
 
 #pragma mark - Exit
-
-- (void)closeAndSave {
-    MTApplicationInstance *app = [AppDelegate app];
-    [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
-    [app closeReportWithCompletionHandler:^(BOOL success) {
-        [self reenable];
-    }];
-}
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        [self closeAndSave];
+        [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
+            [self reenable];
+        }];
     }
     self.shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -470,15 +396,11 @@ static inline CGRect rectCellLabel() {
     }
 }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
-                         withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     return action == @selector(unwindToOpenDocumentViewController:);
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     
     return action == @selector(unwindToOpenDocumentViewController:) ?
             self :
@@ -487,67 +409,12 @@ static inline CGRect rectCellLabel() {
                                            withSender: sender];
 }
 
-- (void)awakeFromNib {
-    self.shouldShowAddDocumentPopover = YES;
-    [self.barButtonItemAddNewDocument setEnabled:YES];
-    [super awakeFromNib];
-}
-
 #pragma mark - NSNotificationCenter
-
-- (void)addObservers {
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
-                                                 name: UIContentSizeCategoryDidChangeNotification
-                                               object: nil];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleCloudActivityStarted:)
-                                                 name: @"MADNotificationCloudActivityStarted"
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleCloudActivityCompleted:)
-                                                 name: @"MADNotificationCloudActivityCompleted"
-                                               object: nil];
-}
-
-- (void)removeObservers {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIContentSizeCategoryDidChangeNotification
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: @"MADNotificationCloudActivityStarted"
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: @"MADNotificationCloudActivityCompleted"
-                                                  object: nil];
-}
-
-- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
-    NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
-    [self updateInterfaceForPerferedContentSizeCategory:contentSize];
-    [self.view setNeedsLayout];
-}
 
 - (void)updateInterfaceForPerferedContentSizeCategory:(NSString *)preferredContentSizeCategory {
     for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
         [cell updateFont];
     }
-}
-
-- (void)handleCloudActivityStarted:(NSNotification *)notification {
-    self.cloudActivityRunning = YES;
-    NSTimer *timer = [NSTimer timerWithTimeInterval: 0.5000f
-                                             target: self
-                                           selector: @selector(displayActivityIndictor)
-                                           userInfo: nil
-                                            repeats: NO];
-    [timer fire];
 }
 
 #pragma mark - UIViewController
@@ -558,17 +425,14 @@ static inline CGRect rectCellLabel() {
     }
 }
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
-              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
-    
-    __weak MADOpenFileViewController *weakself = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakself.collectionView.backgroundView setNeedsDisplay];
+        [self.collectionView.backgroundView setNeedsDisplay];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakself.navigationItem.titleView sizeToFit];
+        [self.navigationItem.titleView sizeToFit];
     }];
 
 }
@@ -584,21 +448,8 @@ static inline CGRect rectCellLabel() {
     return self.presentedViewController;
 }
 
-- (void)handleCloudActivityCompleted:(NSNotification *)notification {
-    self.cloudActivityRunning = NO;
-    self.cloudActivityRunningDisplay = NO;
-    [self.headerCloud stopAnimating];
-}
-
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
-}
-
-- (UITapGestureRecognizer *)tapGestureRecognizer {
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                                           action: @selector(handleDidTapCollectionView:)];
-    tapGestureRecognizer.delegate = self;
-    return tapGestureRecognizer;
 }
 
 #pragma mark - UISearchBarDelegate
@@ -836,7 +687,9 @@ static inline CGRect rectCellLabel() {
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = YES;
 
-    [self closeAndSave];
+    [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
+        [self reenable];
+    }];
     [self dismissViewControllerAnimated:YES completion:^{
         [self.collectionView reloadData];
     }];
@@ -856,9 +709,7 @@ static inline CGRect rectCellLabel() {
         [sender isKindOfClass: queryBuilderContainerClass] ||
         [sender isKindOfClass: reportDesignerClass] ||
         [sender isKindOfClass: reportViewerClass]) {
-        MTApplicationInstance *app = [AppDelegate app];
-        [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
-        [app closeReportWithCompletionHandler:^(BOOL success) {
+        [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
             [self reenable];
         }];
     }
@@ -910,51 +761,9 @@ static inline CGRect rectCellLabel() {
     }
 }
 
-- (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-
-    return [self documentForIndexPath:indexPath];
-
-}
-
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
     return metadata.URL;
-}
-
-#pragma mark - UICollectionView Layout
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout*)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
-    
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
-                                                                                         UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
-    
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-                    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
-    
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
-    
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-                    referenceSizeForHeaderInSection:(NSInteger)section {
-    
-    return CGSizeZero;
-    
 }
 
 #pragma mark - MFMailComposeViewController delegate protocol
@@ -1000,164 +809,10 @@ static inline CGRect rectCellLabel() {
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
     [((UICollectionView *)scrollView).collectionViewLayout invalidateLayout];
-
 }
 
 #pragma mark - UICollectionViewDelegate
-
-- (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
-
-    [super collectionView: collectionView
-         canPerformAction: action
-       forItemAtIndexPath: indexPath
-               withSender: sender];
-    
-    return YES;
-
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
-    MADOpenFileSectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                        withReuseIdentifier: MADIdentifierOpenFileSectionHeader
-                                                               forIndexPath: indexPath];
-        
-    switch (indexPath.section) {
-            
-        case 0:
-            [headerView stopAnimating];
-            headerView.sectionType = MACloudManagerSectionLocal;
-            break;
-            
-        case 1:
-            self.cloudActivityRunningDisplay ? [headerView startAnimating] : [headerView stopAnimating];
-            headerView.sectionType = MACloudManagerSectionCloud;
-            break;
-            
-        default:
-            headerView.sectionType = MACloudManagerSectionLocal;
-            break;
-            
-    }
-    return headerView;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView: (UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind: (NSString *)elementKind atIndexPath: (NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [self selectionsUpdated];
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
-    
-    NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
-    if (image == nil) {
-        image = [MTCollectionViewCellDocument defaultThumbnail];
-    }
-    cell.imagePreview.image = image;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performDeselectionAnimations];
-    
-    NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
-    if (image == nil) {
-        image = [MTCollectionViewCellDocument defaultThumbnail];
-    }
-    [cell normalizeTint];
-    cell.imagePreview.image = image;
-
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
-    [self selectionsUpdated];
-
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
-
-    NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    if (self.isEditing == NO) {
-        
-        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        [cell.activityIndicator startAnimating];
-        [self.collectionView setUserInteractionEnabled: NO];
-
-        [self openFileWithUrl:fileUrl];
-
-    } else {
-        [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
-    }
-    [self selectionsUpdated];
-
-    
-    NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
-    NSString *path = [url path];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
-    if (image == nil) {
-        image = [MTCollectionViewCellDocument defaultThumbnail];
-    }
-    cell.imagePreview.image = image;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [self selectionsUpdated];
-    
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performDeselectionAnimations];
-    
-    NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-    NSString *path = [url path];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
-    if (image == nil) {
-        image = [MTCollectionViewCellDocument defaultThumbnail];
-    }
-    cell.imagePreview.image = image;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender { }
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
-+ (NSOperationQueue *)queue {
-    static NSOperationQueue *queue;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        queue = [[NSOperationQueue alloc] init];
-    });
-    
-    return queue;
-}
-
 
 - (void)openFileWithUrl:(NSURL *)url {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
@@ -1213,50 +868,55 @@ static inline CGRect rectCellLabel() {
     }];
 }
 
-#pragma mark - UICollectionViewFlowLayoutDelegate
+#pragma mark - MADCollectionViewLayoutFilesDelegate
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    MADMetaData *metadata;
-    if (indexPath.section == 0) {
-        metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
-    } else {
-        metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
-    }
-    NSString *filename = [MADocument fileNameForMadUrl:metadata.URL];
-    NSString *size = [metadata fileSystemSizeMB];
-    
-    NSDictionary *attributesCaption = [MTCollectionViewCellDocument attributesCaption];
-    NSDictionary *attributesCaption2 = [MTCollectionViewCellDocument attributesCaption];
-
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
-                                                                           attributes: attributesCaption];
-
-    CGFloat sizeLabelHeight = [self heightForAttributedString: attributedString
-                                           contentScaleFactor: self.collectionView.contentScaleFactor
-                                                         font: [MTCollectionViewCellDocument CaptionFont]];
-    
-    NSAttributedString *attributedStringSub = [[NSAttributedString alloc] initWithString: size
-                                                                              attributes: attributesCaption2];
-    CGFloat sizeLabelSubHeight = [self heightForAttributedString: attributedStringSub
-                                              contentScaleFactor: self.collectionView.contentScaleFactor
-                                                            font: [MTCollectionViewCellDocument CaptionFont2]];
-    return CGSizeMake(140.0000f, 128.0000f /*+ ceil(self.testLabel.frame.size.height)*/ + ceilf(sizeLabelHeight) + ceilf(sizeLabelSubHeight) + 20.0000f);
+- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
+    return [MADocument fileNameForMadUrl:metadata.URL];
 }
 
-- (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
-                  contentScaleFactor:(CGFloat)contentScaleFactor
-                                font:(UIFont *)font {
-    self.testLabel.frame = rectCellLabel();
-    self.testLabel.font = font;
-    self.testLabel.attributedText = attributedString;
-    self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.testLabel.contentScaleFactor = contentScaleFactor;
-    [self.testLabel sizeToFit];
-    return self.testLabel.frame.size.height;
+- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
+    return [metadata fileSystemSizeMB];
+}
+
+- (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [self.filesController objectAtIndexedSubscript: indexPath.item];
+}
+
+- (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSURL *fileUrl = [self documentForIndexPath:indexPath];
+    [self openFileWithUrl:fileUrl];
 }
 
 #pragma mark - UICollectionViewDataSource
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    MADOpenFileSectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                                                  withReuseIdentifier: MADIdentifierOpenFileSectionHeader
+                                                                                         forIndexPath: indexPath];
+    
+    switch (indexPath.section) {
+            
+        case 0:
+            [headerView stopAnimating];
+            headerView.sectionType = MACloudManagerSectionLocal;
+            break;
+            
+        case 1:
+            self.cloudActivityRunningDisplay ? [headerView startAnimating] : [headerView stopAnimating];
+            headerView.sectionType = MACloudManagerSectionCloud;
+            break;
+            
+        default:
+            headerView.sectionType = MACloudManagerSectionLocal;
+            break;
+            
+    }
+    return headerView;
+}
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -1266,87 +926,31 @@ static inline CGRect rectCellLabel() {
     return self.filesController ? self.filesController.count : 0;
 }
 
-- (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
-
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
-    
-    //NSURL *url = metadata.URL;
-    
     if (cell.delegate == nil) {
         cell.delegate = self;
     }
-    
-    [cell normalizeTint];
-    
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(MTCollectionViewCellDocument *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
-    NSString *filename = [MADocument fileNameForMadUrl:metadata.URL];
-    cell.labelTitle.text = filename;
-    
-    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
-    cell.progressViewUpload.hidden = YES;//!metadata.ubiquitousItemIsUploading;
-    
-    cell.labelTitleSub.text = (notDownloaded ? NSLocalizedString(@"Not Downloaded", @"Not Downloaded") : [metadata fileSystemSizeMB]);
-    
-    if (metadata.ubiquitousItemIsUploading) {
-        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
-    } else {
-        [cell.progressViewUpload setProgress:0.0000f animated:YES];
-    }
-    
-    if (metadata.ubiquitousItemIsDownloading) {
-        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
-    } else {
-        [cell.progressViewDownload setProgress:0.0000f animated:YES];
-    }
-    
-    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ? [UIImage imageNamed:@"MADImageToolbarCloudDownload"] : nil;
-    
-    [cell.labelTitle layoutIfNeeded];
-    [cell loadPreviewImageForUrl:metadata.URL];
-
-    if (self.isEditing) {
-        [cell startWobble];
-    } else {
-        [cell stopWobble];
-    }
-}
-
-#pragma mark - Misc
-
-- (NSArray *)defaultPassthoughViews {
-    return @[self.navigationController.navigationBar, self.navigationController.toolbar];
-}
-
-#pragma mark Edit Mode
+#pragma mark - MTDocumentCellProtocol
 
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
-
     if ([sender state] == UIGestureRecognizerStateBegan) {
-
+        
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
         if (self.isEditing == NO) {
             [self edit:self];
         }
-        
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
         [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-        
         [self selectionsUpdated];
-        
-        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-        [cell performSelectionAnimations];
-        [cell normalizeTint];
     }
-
 }
 
-- (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
+#pragma mark - Touch Event Handlers
 
+- (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
     [self.searchBar resignFirstResponder];
     if (self.isEditing) {
         [self edit:self];
@@ -1684,20 +1288,25 @@ static inline CGRect rectCellLabel() {
     [self setEditing:startEdit animated:YES];
     
     if (startEdit) {
-        self.editing = YES;
+        //self.editing = YES;
         self.barButtonItemLicensing.enabled = NO;
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
-        
+        /*
         NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
         for (NSInteger i=0; i<numberOfItemsInSection; i++) {
             NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
-            [cell startWobble];
-        }
-        
+            //[cell startWobble];
+        }*/
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //    dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+        //    });
+        //});
+
         NSMutableArray *items = [self.toolbarItems mutableCopy];
         [items removeObject:self.barButtonItemEdit];
         [items addObject:self.barButtonItemEditDone];
@@ -1708,6 +1317,10 @@ static inline CGRect rectCellLabel() {
     } else {
         [self done:sender];
     }
+}
+
+- (BOOL)isFileViewEditing {
+    return self.editing;
 }
 
 - (void)done:(id)sender {
@@ -1731,11 +1344,13 @@ static inline CGRect rectCellLabel() {
     [items addObject:self.barButtonItemEdit];
     [self setToolbarItems:items animated:YES];
     
+    [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+    /*
     for (NSInteger i=0; i<[self.collectionView numberOfItemsInSection:0]; i++) {
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         [self.collectionView deselectItemAtIndexPath:path animated:YES];
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
-        [cell stopWobble];
+        //[cell stopWobble];
         [cell performDeselectionAnimations];
         
         NSURL *fileUrl = [self documentForIndexPath:path];
@@ -1745,7 +1360,7 @@ static inline CGRect rectCellLabel() {
             image = [MTCollectionViewCellDocument defaultThumbnail];
         }
         cell.imagePreview.image = image;
-    }
+    }*/
 }
 
 - (IBAction)download:(id)sender {
@@ -2008,7 +1623,40 @@ static inline CGRect rectCellLabel() {
     
 }
 
+#pragma mark - Notification Handlers
+
+- (void)handleCloudActivityStarted:(NSNotification *)notification {
+    self.cloudActivityRunning = YES;
+    NSTimer *timer = [NSTimer timerWithTimeInterval: 0.5000f
+                                             target: self
+                                           selector: @selector(displayActivityIndictor)
+                                           userInfo: nil
+                                            repeats: NO];
+    [timer fire];
+}
+
+- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
+    NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
+    [self updateInterfaceForPerferedContentSizeCategory:contentSize];
+    [self.view setNeedsLayout];
+}
+
+- (void)handleCloudActivityCompleted:(NSNotification *)notification {
+    self.cloudActivityRunning = NO;
+    self.cloudActivityRunningDisplay = NO;
+    [self.headerCloud stopAnimating];
+}
+
 #pragma mark - Convenience
+
+- (NSArray *)defaultPassthoughViews {
+    return @[self.navigationController.navigationBar, self.navigationController.toolbar];
+}
+
+- (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
+    return [self documentForIndexPath:indexPath];
+}
 
 - (void)configureViewControllerWithLaunchContext:(MADAppLaunchContext *)launchContext {
     /**
@@ -2026,6 +1674,81 @@ static inline CGRect rectCellLabel() {
     //activityListInfo.color = launchContext.listColor;
     
     //[self performSegueWithIdentifier:AAPLAppDelegateMainStoryboardListDocumentsViewControllerContinueUserActivity sender:activityListInfo];
+}
+
+- (void)addObservers {
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
+                                                 name: UIContentSizeCategoryDidChangeNotification
+                                               object: nil];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleCloudActivityStarted:)
+                                                 name: @"MADNotificationCloudActivityStarted"
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleCloudActivityCompleted:)
+                                                 name: @"MADNotificationCloudActivityCompleted"
+                                               object: nil];
+}
+
+- (void)removeObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: @"MADNotificationCloudActivityStarted"
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: @"MADNotificationCloudActivityCompleted"
+                                                  object: nil];
+}
+
+#pragma mark - Property Overrides
+
+- (void)setFilesController:(MADFilesController *)filesController {
+    if (filesController != _filesController) {
+        _filesController = filesController;
+        _filesController.delegate = self;
+    }
+}
+
+- (UIBarButtonItem *)barButtonItemEditDone {
+    if (!_barButtonItemEditDone) {
+        _barButtonItemEditDone = [UIBarButtonItem buttonEditDone:self action:@selector(edit:)];
+    }
+    return _barButtonItemEditDone;
+}
+
+- (UIBarButtonItem *)barButtonItemDuplicate {
+    if (!_barButtonItemDuplicate) {
+        _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(duplicate:)];
+    }
+    return _barButtonItemDuplicate;
+}
+
+- (UIBarButtonItem *)barButtonItemEdit {
+    if (!_barButtonItemEdit) {
+        _barButtonItemEdit = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
+    }
+    return _barButtonItemEdit;
+}
+
+#pragma mark - add controls
+
+- (void)addProgressViewToView {
+    self.progressViewFileManager.progress = 0.0000f;
+    [self.view addSubview:self.progressViewFileManager];
+    [self.view bringSubviewToFront:self.progressViewFileManager];
+}
+
+- (void)removeProgressViewFromView {
+    [self.progressViewFileManager removeFromSuperview];
 }
 
 @end

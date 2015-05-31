@@ -253,6 +253,8 @@
 		4C23FB3A18FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3718FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FBEC18FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBE918FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FBED18FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBE918FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2831821B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
+		4C2831831B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
@@ -521,8 +523,8 @@
 		4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C01ACA97C8006D3996 /* Interface.storyboard */; };
 		4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C31ACA97C9006D3996 /* Images.xcassets */; };
 		4C8F99C71ACA97C9006D3996 /* MAD Designer WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C8F99A71ACA97C8006D3996 /* MAD Designer WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		4C90D47E19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
-		4C90D47F19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */; };
+		4C90D47E19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
+		4C90D47F19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
 		4C92946418C4CBA70010AAEF /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4C92946518C4CBAA0010AAEF /* MADOpenFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MADOpenFileViewController.m */; };
@@ -1493,6 +1495,8 @@
 		4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "../CocoaExtensions/CocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
 		4C1AD3481B18296F00839504 /* MFMailComposeViewController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MFMailComposeViewController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/MFMailComposeViewController+Constructors.h"; sourceTree = "<group>"; };
+		4C1AD34D1B183A1500839504 /* UILabel+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UILabel+Constructors.h"; sourceTree = "<group>"; };
+		4C1AD3511B1841A200839504 /* UIBarButtonItem+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIBarButtonItem+Constructors.h"; sourceTree = "<group>"; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C2213A317D746C200BD36F5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -1546,6 +1550,8 @@
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C26F22319D5D16800B7A417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C2831801B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewLayoutGroupedDelegate.h; sourceTree = "<group>"; };
+		4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewLayoutGroupedDelegate.m; sourceTree = "<group>"; };
 		4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
 		4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeMySQL.png; path = Reports/UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -1994,8 +2000,8 @@
 		4C8F99BF1ACA97C8006D3996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C8F99C11ACA97C8006D3996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		4C8F99C31ACA97C9006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4C90D47C19E7892D005136B2 /* MADGroupedCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGroupedCollectionViewLayout.h; sourceTree = "<group>"; };
-		4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGroupedCollectionViewLayout.m; sourceTree = "<group>"; };
+		4C90D47C19E7892D005136B2 /* MADCollectionViewLayoutGrouped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewLayoutGrouped.h; sourceTree = "<group>"; };
+		4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewLayoutGrouped.m; sourceTree = "<group>"; };
 		4C94AA1117DCB3C9000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Designer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3717DCB88A000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Viewer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3A17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesPadOS7.storyboard; sourceTree = "<group>"; };
@@ -4454,11 +4460,13 @@
 				4C75C9F118E20306006E8526 /* MTTableCell.m */,
 				4C75C9FC18E272F6006E8526 /* MTTableCellHeader.h */,
 				4C75C9FD18E272F6006E8526 /* MTTableCellHeader.m */,
-				4C90D47C19E7892D005136B2 /* MADGroupedCollectionViewLayout.h */,
-				4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */,
+				4C90D47C19E7892D005136B2 /* MADCollectionViewLayoutGrouped.h */,
+				4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */,
 				4C47408E19FEDA7200B11434 /* MADPopoverBackgroundView.h */,
 				4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */,
 				4C54F2E61A1302CF004B5228 /* MADViewControllerProtocol.h */,
+				4C2831801B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.h */,
+				4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */,
 			);
 			name = "Report Desinger";
 			sourceTree = "<group>";
@@ -4568,8 +4576,10 @@
 				4CF889351AD1C28E00ED21FC /* NSURL+Document.h */,
 				4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */,
 				4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */,
+				4C1AD3511B1841A200839504 /* UIBarButtonItem+Constructors.h */,
 				4C8CDC981AD2710D00B7B9EA /* UIColor+EverydayApps.h */,
 				4CF889321AD1C28E00ED21FC /* UIDevice+Hack.h */,
+				4C1AD34D1B183A1500839504 /* UILabel+Constructors.h */,
 			);
 			name = libCocoaExtensions;
 			sourceTree = "<group>";
@@ -5706,7 +5716,7 @@
 				4C30A77E1B00FFCC00AD4423 /* MADFileUtilities.m in Sources */,
 				4CDB48C71ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
-				4C90D47F19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */,
+				4C90D47F19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */,
 				4C9E446818D8AADE00F0F578 /* MTTableController.m in Sources */,
 				4CC96A371AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4CFC3DE516714A270016E1E8 /* MADViewControllerSQL.m in Sources */,
@@ -5756,6 +5766,7 @@
 				4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4C23FB0718FADCE4009F234F /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
+				4C2831831B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C8BAFE319AB113600A55780 /* UIView+Extras.m in Sources */,
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
@@ -5904,7 +5915,8 @@
 				4CC96A5D1AC90D220044C157 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
-				4C90D47E19E7892D005136B2 /* MADGroupedCollectionViewLayout.m in Sources */,
+				4C90D47E19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */,
+				4C2831821B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4CC96A361AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4C23FAEC18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,

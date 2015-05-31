@@ -14,14 +14,14 @@ CGFloat const MTAnimationRotateDeg = 1.0000f;
 @implementation UIView (Animations)
 
 - (void)startWobble {
-    [[self layer] removeAllAnimations];
+    [self.layer removeAllAnimations];
     NSInteger randomInt = arc4random() % 500;
     float r = (randomInt / 500.0000f) + 0.5000f;
     CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians( (MTAnimationRotateDeg * -1.0) - r ));
     CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( MTAnimationRotateDeg + r ));
     [self setTransform: leftWobble];
     
-    [[self layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
+    [self.layer setAnchorPoint:CGPointMake(0.5, 0.5)];
 
     __block UIView *v = self;
     [UIView animateWithDuration:0.3500

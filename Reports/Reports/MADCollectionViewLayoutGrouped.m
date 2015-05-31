@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADGroupedCollectionViewLayout.h"
+#import "MADCollectionViewLayoutGrouped.h"
 
-@implementation MADGroupedCollectionViewLayout
+@implementation MADCollectionViewLayoutGrouped
 
 - (void)prepareLayout {
     [super prepareLayout];

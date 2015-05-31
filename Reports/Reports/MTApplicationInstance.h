@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MADFilesController;
+@class MADFilesController, UITraitCollection;
 @protocol MADFileCoordinator;
 
 typedef NS_ENUM(NSUInteger, MTReportState) {
@@ -97,7 +97,7 @@ extern NSString * const MADUpgradeInstalledSamples;
 
 + (NSString *)bundleDisplayName;
 
-- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
+- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;

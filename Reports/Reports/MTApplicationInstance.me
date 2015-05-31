@@ -66,9 +66,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.415";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.415";
-NSString * const MTGlobalBundleRev                                  = @"1790";
+NSString * const MTGlobalBundleVersion                              = @"7.0.416";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.416";
+NSString * const MTGlobalBundleRev                                  = @"1791";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -572,8 +572,9 @@ static MTApplicationInstance *mainInstance;
 
 #pragma mark - Document Operations
 
-- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler {
+- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
     
+    [[self openDocument] regenThumbnailWithTraits:traitCollectionForThumbnail];
     __weak MADocument *activeDocument = [self openDocument];
     if (activeDocument) {
         
@@ -586,7 +587,7 @@ static MTApplicationInstance *mainInstance;
                             weakself.reportState = MTReportStateClosed;
                             [weakself.fileManager removeDocumentWithUrl:weakself.fileManager.openUrl];
                         }
-                        completionHandler(success);
+                        completion(success);
                     }];
                     
                 }

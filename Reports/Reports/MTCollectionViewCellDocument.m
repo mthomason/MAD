@@ -18,6 +18,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 #import "UIColor+EverydayApps.h"
 #import "MADocument.h"
 
+
 @interface MTCollectionViewCellDocument ()
 
 @property (nonatomic, strong) UIColor *bgColor;
@@ -155,12 +156,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 - (void)performDeselectionAnimations {
     [self normalizeTint];
 }
-
-/*- (void)configureCellForUrl:(NSURL *)url {
-    self.text = [MADocument fileNameForMadUrl:url];
-    self.labelTitle.text = [MADocument fileNameForMadUrl:url];
-    [self loadPreviewImageForUrl:url];
-}*/
 
 - (void)loadPreviewImageForUrl:(NSURL *)url {
     NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];

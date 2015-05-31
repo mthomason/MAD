@@ -38,12 +38,11 @@
                  withTransitionCoordinator: coordinator];
 
     if (self.isViewLoaded) {
-        __weak UITableViewController *weakself = self;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself.tableView.backgroundView setNeedsDisplay];
-            [weakself.navigationItem.titleView sizeToFit];
+            [self.tableView.backgroundView setNeedsDisplay];
+            [self.navigationItem.titleView sizeToFit];
         } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself.navigationItem.titleView sizeToFit];
+            [self.navigationItem.titleView sizeToFit];
         }];
     }
     
@@ -60,12 +59,11 @@
                  withTransitionCoordinator: coordinator];
     
     if (self.isViewLoaded) {
-        __weak UICollectionViewController *weakself = self;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself.collectionView.backgroundView setNeedsDisplay];
-            [weakself.navigationItem.titleView sizeToFit];
+            [self.collectionView.backgroundView setNeedsDisplay];
+            [self.navigationItem.titleView sizeToFit];
         } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself.navigationItem.titleView sizeToFit];
+            [self.navigationItem.titleView sizeToFit];
         }];
     }
     
@@ -82,11 +80,10 @@
                  withTransitionCoordinator: coordinator];
     
     if (self.isViewLoaded) {
-        __weak UISplitViewController *weakself = self;
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself.navigationItem.titleView sizeToFit];
+            [self.navigationItem.titleView sizeToFit];
         } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself.navigationItem.titleView sizeToFit];
+            [self.navigationItem.titleView sizeToFit];
         }];
     }
     

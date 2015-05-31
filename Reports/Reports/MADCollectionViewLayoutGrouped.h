@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MADGroupedCollectionViewLayout : UICollectionViewFlowLayout
+@interface MADCollectionViewLayoutGrouped : UICollectionViewFlowLayout
 
 @end

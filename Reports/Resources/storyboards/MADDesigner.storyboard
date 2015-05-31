@@ -1804,7 +1804,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <collectionViewLayout key="collectionViewLayout" id="GVO-6R-WrF" customClass="MADGroupedCollectionViewLayout"/>
+                        <collectionViewLayout key="collectionViewLayout" id="GVO-6R-WrF" customClass="MADCollectionViewLayoutGrouped"/>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="anu-JF-du3" customClass="MTCollectionViewCellDocument">
                                 <rect key="frame" x="0.0" y="64" width="140" height="168"/>
