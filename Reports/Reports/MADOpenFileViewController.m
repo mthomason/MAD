@@ -65,6 +65,7 @@
 #import "UIBarButtonItem+Constructors.h"
 #import "UILabel+Constructors.h"
 #import "NSError+Constructors.h"
+#import "UIView+Animations.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -73,13 +74,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollection
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
+static NSString * const sNotDownloaded              = @"Not Downloaded";
+
 CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
         UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
-        UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
         UITextFieldDelegate,
@@ -492,6 +494,41 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Segues
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
+    
+    [self dismissAllPopovers];
+    
+    if ([segue.identifier isEqualToString:MTSegueLicensing]) {
+        [self prepareForSegueLicensing:segue];
+        
+    }
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    
+    // FIXME: Only do this when you are going to disable some feature for copy protection
+    //          Right now it's just a pain in the ass.
+    //static dispatch_once_t onceToken;
+    //dispatch_once(&onceToken, ^{
+    //[MTVerificationController sharedInstance];
+    //});
+    
+    BOOL shouldPerformSegueWithIdentifier = YES;
+    if ([identifier isEqualToString:MTSegueShowAddDocument]) {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
+            self.shouldShowAddDocumentPopover = NO;
+            self.barButtonItemAddNewDocument.enabled = NO;
+        }
+    } else if ([identifier isEqualToString:MTSegueShowOpenDocument]) {
+        shouldPerformSegueWithIdentifier = !self.isEditing;
+    } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
+        shouldPerformSegueWithIdentifier = !self.isEditing;
+    }
+    return shouldPerformSegueWithIdentifier;
+}
+
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
@@ -582,41 +619,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [super prepareForSegue:segue sender:sender];
-
-    [self dismissAllPopovers];
-    
-    if ([segue.identifier isEqualToString:MTSegueLicensing]) {
-        [self prepareForSegueLicensing:segue];
-
-    }
-}
-
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    
-    // FIXME: Only do this when you are going to disable some feature for copy protection
-    //          Right now it's just a pain in the ass.
-    //static dispatch_once_t onceToken;
-    //dispatch_once(&onceToken, ^{
-        //[MTVerificationController sharedInstance];
-    //});
-    
-    BOOL shouldPerformSegueWithIdentifier = YES;
-    if ([identifier isEqualToString:MTSegueShowAddDocument]) {
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
-            self.shouldShowAddDocumentPopover = NO;
-            self.barButtonItemAddNewDocument.enabled = NO;
-        }
-    } else if ([identifier isEqualToString:MTSegueShowOpenDocument]) {
-        shouldPerformSegueWithIdentifier = !self.isEditing;
-    } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
-        shouldPerformSegueWithIdentifier = !self.isEditing;
-    }
-    return shouldPerformSegueWithIdentifier;
-}
-
 #pragma mark - UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
@@ -653,9 +655,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.aboutViewControllerOnScreen = NO;
 }
 
-- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController
-          willRepositionPopoverToRect:(inout CGRect *)rect
-                               inView:(inout UIView **)view {
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view {
     
 }
 
@@ -761,15 +761,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
-- (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
-    return metadata.URL;
-}
-
 #pragma mark - MFMailComposeViewController delegate protocol
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller
-          didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
 
     [NSError presentError: error
          onViewController: self
@@ -891,33 +885,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - UICollectionViewDataSource
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    MADOpenFileSectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                                                  withReuseIdentifier: MADIdentifierOpenFileSectionHeader
-                                                                                         forIndexPath: indexPath];
-    
-    switch (indexPath.section) {
-            
-        case 0:
-            [headerView stopAnimating];
-            headerView.sectionType = MACloudManagerSectionLocal;
-            break;
-            
-        case 1:
-            self.cloudActivityRunningDisplay ? [headerView startAnimating] : [headerView stopAnimating];
-            headerView.sectionType = MACloudManagerSectionCloud;
-            break;
-            
-        default:
-            headerView.sectionType = MACloudManagerSectionLocal;
-            break;
-            
-    }
-    return headerView;
-}
-
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
@@ -926,11 +893,55 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return self.filesController ? self.filesController.count : 0;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
     if (cell.delegate == nil) {
         cell.delegate = self;
     }
+    MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
+    NSString *filename = metadata.name;
+    cell.labelTitle.text = filename;
+    
+    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    //cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
+    //cell.progressViewUpload.hidden = YES;
+    
+    cell.labelTitleSub.text = (notDownloaded ? NSLocalizedString(sNotDownloaded, sNotDownloaded) : [metadata fileSystemSizeMB]);
+    
+    if (metadata.ubiquitousItemIsUploading) {
+        cell.progressViewUpload.hidden = NO;
+        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
+    } else {
+        cell.progressViewUpload.hidden = YES;
+        [cell.progressViewUpload setProgress:0.0000f animated:YES];
+    }
+    
+    if (metadata.ubiquitousItemIsDownloading) {
+        cell.progressViewDownload.hidden = NO;
+        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
+    } else {
+        cell.progressViewDownload.hidden = YES;
+        [cell.progressViewDownload setProgress:0.0000f animated:YES];
+    }
+    
+    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading) {
+        [cell.activityIndicator startAnimating];
+    } else {
+        [cell.activityIndicator stopAnimating];
+    }
+    
+    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ? [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
+    
+    [cell.labelTitle layoutIfNeeded];
+    [cell.labelTitleSub layoutIfNeeded];
+    [cell loadPreviewImageForUrl:metadata.URL];
+    
+    if ([self isFileViewEditing]) {
+        [cell startWobble];
+    } else {
+        [cell stopWobble];
+    }
+    [cell normalizeTint];
     return cell;
 }
 
@@ -1090,18 +1101,21 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+    NSLog(@"Did insert list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchInserts addObject:pair];
 }
 
 - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+    NSLog(@"Did remove list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchRemoves addObject:pair];
 }
 
 - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+    NSLog(@"Did update list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchUpdates addObject:pair];
@@ -1345,22 +1359,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self setToolbarItems:items animated:YES];
     
     [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
-    /*
-    for (NSInteger i=0; i<[self.collectionView numberOfItemsInSection:0]; i++) {
-        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
-        [self.collectionView deselectItemAtIndexPath:path animated:YES];
-        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
-        //[cell stopWobble];
-        [cell performDeselectionAnimations];
-        
-        NSURL *fileUrl = [self documentForIndexPath:path];
-        NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
-        if (image == nil) {
-            image = [MTCollectionViewCellDocument defaultThumbnail];
-        }
-        cell.imagePreview.image = image;
-    }*/
 }
 
 - (IBAction)download:(id)sender {
@@ -1590,10 +1588,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
     } else {
         
-        NSURL *fileToAttach = [self urlForDocumentCell:cell];
-        MADocument *documentReport = [[MADocument alloc] initWithFileURL:fileToAttach];
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
+        MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+
+        MADocument *documentReport = [[MADocument alloc] initWithFileURL:metadata.URL];
         
-        if ([documentReport documentState] != UIDocumentStateClosed) {
+        if (documentReport.documentState != UIDocumentStateClosed) {
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
                     [self email:cell];
@@ -1601,16 +1601,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             }];
         } else {
             
-            NSURL *fileUrl = [self urlForDocumentCell:cell];
-            
             NSString *messageStringStart = NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
                                                              @"The attached document can be opened with MAD Viewer.");
             NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
             [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
             
             NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
-            NSString *subject = [NSString stringWithFormat:formatString, documentReport.fileName];
-            MFMailComposeViewController	*mailComposer = [MFMailComposeViewController mailDocument: fileUrl
+            NSString *subject = [NSString stringWithFormat:formatString, metadata.name];
+            MFMailComposeViewController	*mailComposer = [MFMailComposeViewController mailDocument: metadata.URL
                                                                                          mimeType: MADMimeType
                                                                                             title: subject
                                                                                              body: messageBody
@@ -1656,6 +1654,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     return [self documentForIndexPath:indexPath];
+}
+
+- (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+    return metadata.URL;
 }
 
 - (void)configureViewControllerWithLaunchContext:(MADAppLaunchContext *)launchContext {
@@ -1709,6 +1712,18 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                                                   object: nil];
 }
 
+#pragma mark Add controls
+
+- (void)addProgressViewToView {
+    self.progressViewFileManager.progress = 0.0000f;
+    [self.view addSubview:self.progressViewFileManager];
+    [self.view bringSubviewToFront:self.progressViewFileManager];
+}
+
+- (void)removeProgressViewFromView {
+    [self.progressViewFileManager removeFromSuperview];
+}
+
 #pragma mark - Property Overrides
 
 - (void)setFilesController:(MADFilesController *)filesController {
@@ -1737,18 +1752,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         _barButtonItemEdit = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
     }
     return _barButtonItemEdit;
-}
-
-#pragma mark - add controls
-
-- (void)addProgressViewToView {
-    self.progressViewFileManager.progress = 0.0000f;
-    [self.view addSubview:self.progressViewFileManager];
-    [self.view bringSubviewToFront:self.progressViewFileManager];
-}
-
-- (void)removeProgressViewFromView {
-    [self.progressViewFileManager removeFromSuperview];
 }
 
 @end

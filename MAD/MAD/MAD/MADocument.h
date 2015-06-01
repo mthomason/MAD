@@ -54,7 +54,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
-@property (nonatomic, strong, readonly) NSString *fileName;
+//@property (nonatomic, strong, readonly) NSString *fileName;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;

@@ -417,8 +417,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.navigationControllerToolbox = navigationControllerToolbox;
     self.toolboxTransitioningDelegate = transitioningDelegate;
 
-    NSString *defaultPrompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:defaultPrompt];
+    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:self.document.fileURL.lastPathComponent];
     self.promptManager = promptManager;
 
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {

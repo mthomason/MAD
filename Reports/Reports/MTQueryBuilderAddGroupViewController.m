@@ -49,7 +49,7 @@
     [self setSortOrder:MNSSortOrderAccending];
     NSString *accending = NSLocalizedString(@"Accending", @"Accending");
     NSString *lowercase = [accending lowercaseString];
-    [[[self tableViewCellSort] detailTextLabel] setText: lowercase];
+    [[self.tableViewCellSort detailTextLabel] setText: lowercase];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -109,22 +109,22 @@
     switch (sortOrderType) {
         case MNSSortOrderAccending:
             label = NSLocalizedString(@"Accending", @"Accending");
-            [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+            [[self.tableViewCellSort detailTextLabel] setText: [label lowercaseString]];
             [[self detailLabelSort] setText:label];
             break;
         case MNSSortOrderDecending:
             label = NSLocalizedString(@"Decending", @"Decending");
-            [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+            [[self.tableViewCellSort detailTextLabel] setText: [label lowercaseString]];
             [[self detailLabelSort] setText:label];
             break;
         default:
             label = NSLocalizedString(@"Default", @"Default");
-            [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+            [[self.tableViewCellSort detailTextLabel] setText: [label lowercaseString]];
             [[self detailLabelSort] setText:label];
             break;
     }
     [[self navigationController] popToViewController:self animated:YES];
-    //[[[self tableViewCellSort] detailTextLabel] setNeedsDisplay];
+    //[[self.tableViewCellSort detailTextLabel] setNeedsDisplay];
 }
 
 #pragma mark - Actions

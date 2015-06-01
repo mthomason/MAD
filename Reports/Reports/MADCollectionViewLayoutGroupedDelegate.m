@@ -16,7 +16,6 @@ NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
 
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
-static NSString * const sNotDownloaded              = @"Not Downloaded";
 
 @interface MADCollectionViewLayoutGroupedDelegate ()
 
@@ -184,39 +183,9 @@ static inline CGRect rectCellLabel() {
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(MTCollectionViewCellDocument *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MADMetaData *metadata = [self.delegate metadataForItemAtIndexPath:indexPath];
-    NSString *filename = metadata.name;
-    cell.labelTitle.text = filename;
-    
-    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
-    cell.progressViewUpload.hidden = YES;
-    
-    cell.labelTitleSub.text = (notDownloaded ? NSLocalizedString(sNotDownloaded, sNotDownloaded) : [metadata fileSystemSizeMB]);
-    
-    if (metadata.ubiquitousItemIsUploading) {
-        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
-    } else {
-        [cell.progressViewUpload setProgress:0.0000f animated:YES];
-    }
-    
-    if (metadata.ubiquitousItemIsDownloading) {
-        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
-    } else {
-        [cell.progressViewDownload setProgress:0.0000f animated:YES];
-    }
-    
-    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ? [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
-    
-    [cell.labelTitle layoutIfNeeded];
-    [cell loadPreviewImageForUrl:metadata.URL];
-    
-    if ([self.delegate isFileViewEditing]) {
-        [cell startWobble];
-    } else {
-        [cell stopWobble];
-    }
-    [cell normalizeTint];
+
 }
+
+
 
 @end

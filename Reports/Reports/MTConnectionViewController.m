@@ -215,7 +215,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                         dispatch_sync(dispatch_get_main_queue(), ^{
                             
-                            [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileName
+                            [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileURL.lastPathComponent
                                                       andBackgroundTask: backgroundTask];
                             
                         });

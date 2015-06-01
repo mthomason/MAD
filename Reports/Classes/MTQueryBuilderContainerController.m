@@ -108,7 +108,7 @@
     titleView.text = [MTApplicationInstance madQuery];
     self.navigationItem.titleView = titleView;
     
-    self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+    self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
 
     self.delegate = self;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
@@ -282,7 +282,7 @@
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

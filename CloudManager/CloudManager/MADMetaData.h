@@ -16,7 +16,6 @@
 @property (nonatomic, strong, readonly) NSString  *fileSystemName;
 @property (nonatomic, strong, readonly) NSString  *name;
 @property (nonatomic, strong, readonly) NSURL     *URL;
-@property (nonatomic, strong, readonly) NSString *path;
 
 @property (nonatomic, assign, readonly) unsigned long long fileSystemFileSize;
 
@@ -24,10 +23,8 @@
 @property (nonatomic, strong, readonly) NSDate    *fileSystemContentChangeDate;
 
 @property (nonatomic, strong, readonly) NSString  *contentType;
-@property (nonatomic, strong, readonly) NSString  *contentTypeTree;
 
 @property (nonatomic, assign, getter=isUbiquitous, readonly) BOOL ubiquitous;
-@property (nonatomic, assign, readonly) BOOL ubiquitousItemHasUnresolvedConflicts;
 @property (nonatomic, strong, readonly) NSString *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
 
 @property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly)

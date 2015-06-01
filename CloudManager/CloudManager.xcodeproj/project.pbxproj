@@ -46,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C2831861B1AFC8100511D2D /* libsystem_stats.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_stats.dylib; path = usr/lib/system/libsystem_stats.dylib; sourceTree = SDKROOT; };
 		4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4CF46F641AC64BA5007C0A82 /* libCloudManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF46F671AC64BA5007C0A82 /* CloudManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloudManager.h; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		4CF46F5B1AC64BA5007C0A82 = {
 			isa = PBXGroup;
 			children = (
+				4C2831861B1AFC8100511D2D /* libsystem_stats.dylib */,
 				4C37E0F21ACB285800B4BC0D /* Resources */,
 				4CF46F661AC64BA5007C0A82 /* CloudManager */,
 				4CF46F731AC64BA5007C0A82 /* CloudManagerTests */,
@@ -351,6 +353,7 @@
 					"/Users/mthomason/Desktop/Reports/Reports/libCocoaExtension/CocoaExtentions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
+					"$(SDKROOT)/usr/lib/system",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -366,6 +369,7 @@
 					"/Users/mthomason/Desktop/Reports/Reports/libCocoaExtension/CocoaExtentions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
+					"$(SDKROOT)/usr/lib/system",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

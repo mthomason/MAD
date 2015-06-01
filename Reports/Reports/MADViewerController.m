@@ -328,7 +328,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 - (void)updateNavigationPrompt:(BOOL)animated {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         [UIView setAnimationsEnabled:animated];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

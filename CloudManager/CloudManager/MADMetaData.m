@@ -9,47 +9,16 @@
 #import "MADMetaData.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <UIKit/UIKit.h>
+#import <sys/stat.h>
 
 @interface MADMetaData ()
 
-@property (nonatomic, strong, readwrite) NSString  *fileSystemName;
-@property (nonatomic, strong, readwrite) NSString  *name;
 @property (nonatomic, strong, readwrite) NSURL     *URL;
-
-@property (nonatomic, assign, readwrite) unsigned long long fileSystemFileSize;
-
-@property (nonatomic, strong, readwrite) NSDate    *fileSystemFileCreationDate;
-@property (nonatomic, strong, readwrite) NSDate    *fileSystemContentChangeDate;
-
-@property (nonatomic, strong, readwrite) NSString  *contentType;
-@property (nonatomic, strong, readwrite) NSString  *contentTypeTree;
-
-@property (nonatomic, assign, getter=isUbiquitous, readwrite) BOOL ubiquitous;
-@property (nonatomic, assign, readwrite) BOOL ubiquitousItemHasUnresolvedConflicts;
-@property (nonatomic, strong, readwrite) NSString *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
-
-@property (nonatomic, assign, readwrite) BOOL ubiquitousItemIsDownloading;
-@property (nonatomic, assign, readwrite) BOOL ubiquitousItemIsUploaded;
-@property (nonatomic, assign, readwrite) BOOL ubiquitousItemIsUploading;
-
-@property (nonatomic, assign, readwrite) double ubiquitousItemPercentDownloaded;
-@property (nonatomic, assign, readwrite) double ubiquitousItemPercentUploaded;
-
-
-@property (nonatomic, strong, readwrite) NSError * ubiquitousItemDownloadingError;                 // The error when downloading the item from iCloud failed, see the NSUbiquitousFile section in FoundationErrors.h
-@property (nonatomic, strong, readwrite) NSError * ubiquitousItemUploadingError;                   // The error when uploading the item to iCloud failed, see the NSUbiquitousFile section in FoundationErrors.h
-
-@property (nonatomic, assign, readwrite) BOOL ubiquitousItemDownloadRequested;
-@property (nonatomic, assign, readwrite) BOOL ubiquitousItemIsExternalDocument;
-
-@property (nonatomic, strong, readwrite) NSString *ubiquitousItemContainerDisplayName;
-@property (nonatomic, strong, readwrite) NSURL *ubiquitousItemURLInLocalContainer;
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterFileSize;
 
-@property (nonatomic, strong) NSString *path;
-
 @property (nonatomic, strong) NSMetadataItem *metadataItem;
+@property (nonatomic, strong) NSDictionary *attributes;
 
 @end
 
@@ -61,47 +30,56 @@
         
         NSError *__autoreleasing error = nil;
 
-        self.URL = url;
+        self.URL = url.copy;
         
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:&error];
-
-        NSString *fileSystemName = url.path.lastPathComponent;
-        self.fileSystemName = fileSystemName;
+        self.attributes = attributes;
         
-        self.path = url.path;
-        
-        NSNumber *filesize = [attributes objectForKey:NSFileSize];
-        self.fileSystemFileSize = filesize.unsignedLongLongValue;
-        
-        NSDate *creationDate = [attributes objectForKey:NSFileCreationDate];
-        self.fileSystemFileCreationDate = creationDate;
-        
-        NSDate *lastChangeDate = [attributes objectForKey:NSFileModificationDate];
-        self.fileSystemContentChangeDate = lastChangeDate;
-        
-        NSString *uti = CFBridgingRelease(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(url.pathExtension), NULL));
-        self.contentType = uti;
-        
-        self.contentTypeTree = nil;
-        
-        self.ubiquitous = NO;
-        self.ubiquitousItemHasUnresolvedConflicts = NO;
-        self.ubiquitousItemDownloadingStatus = NSMetadataUbiquitousItemDownloadingStatusCurrent;
-        self.ubiquitousItemIsDownloading = NO;
-        self.ubiquitousItemIsUploaded = NO;
-        self.ubiquitousItemPercentDownloaded = 1;
-        self.ubiquitousItemPercentUploaded = 0;
-        self.ubiquitousItemDownloadingError = nil;
-        self.ubiquitousItemUploadingError = nil;
-        self.ubiquitousItemDownloadRequested = NO;
-        self.ubiquitousItemIsExternalDocument = NO;
-        self.ubiquitousItemContainerDisplayName = @"";
-        self.ubiquitousItemURLInLocalContainer = nil;
-
         [self commonInit];
 
     }
     return self;
+}
+
+- (id)initWithMetadataItem:(NSMetadataItem *)item {
+    self = [super init];
+    if (self) {
+
+        self.metadataItem = item;
+        
+        NSURL *url =            [item valueForAttribute: NSMetadataItemURLKey];
+        self.URL = url;
+        
+        [self commonInit];
+        
+    }
+    return self;
+}
+
+- (NSData *)fileSystemFileCreationDate {
+    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey] :
+                                [self.attributes objectForKey:NSFileCreationDate];
+}
+
+- (NSData *)fileSystemContentChangeDate {
+    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey] :
+    [self.attributes objectForKey:NSFileModificationDate];
+}
+
+- (BOOL)isUbiquitous {
+    return self.metadataItem ? ((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataItemIsUbiquitousKey]).boolValue : NO;
+}
+
+- (NSError *)ubiquitousItemUploadingError {
+    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey] : nil;
+}
+
+- (NSError *)ubiquitousItemDownloadingError {
+    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey] : nil;
+}
+
+- (NSString *)ubiquitousItemDownloadingStatus {
+    return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey] : NSMetadataUbiquitousItemDownloadingStatusCurrent;
 }
 
 - (NSString *)name {
@@ -111,71 +89,57 @@
     } else {
         displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
     }
-    return displayName;
+    return [displayName stringByDeletingPathExtension];
 }
 
-- (id)initWithMetadataItem:(NSMetadataItem *)item {
-    self = [super init];
-    if (self) {
+- (NSString *)fileSystemName {
+    return self.metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSNameKey] : self.URL.path.lastPathComponent;
+}
 
-        self.metadataItem = item;
-        
-        NSString *itemFsName = [item valueForAttribute: NSMetadataItemFSNameKey];
-        self.fileSystemName = itemFsName;
-        
-        NSString *path = [item valueForAttribute:NSMetadataItemPathKey];
-        self.path = path;
-                
-        NSURL *url =            [item valueForAttribute: NSMetadataItemURLKey];
-        self.URL = url;
-        
-        NSNumber *fileSize =    [item valueForAttribute: NSMetadataItemFSSizeKey];
-        self.fileSystemFileSize = fileSize.unsignedLongLongValue;
-        
-        NSDate *itemFsCreationDate = [item valueForAttribute: NSMetadataItemFSCreationDateKey];
-        self.fileSystemFileCreationDate = itemFsCreationDate;
-        
-        NSDate *itemFsContentChangeDate = [item valueForAttribute: NSMetadataItemFSContentChangeDateKey];
-        self.fileSystemContentChangeDate = itemFsContentChangeDate;
-        
-        NSString *itemContentType = [item valueForAttribute: NSMetadataItemContentTypeKey];
-        self.contentType = itemContentType;
-        
-        id itemContentTypeTree = [item valueForAttribute: NSMetadataItemContentTypeTreeKey];
-        self.contentTypeTree = itemContentTypeTree;
-        
-        NSNumber *itemIsUbiquitous = [item valueForAttribute:NSMetadataItemIsUbiquitousKey];
-        self.ubiquitous = itemIsUbiquitous.boolValue;
-        if (self.ubiquitous) {   //If the result of the assignment is true...
-            
-            self.ubiquitousItemHasUnresolvedConflicts = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemHasUnresolvedConflictsKey]).boolValue;
-            
-            self.ubiquitousItemDownloadingStatus = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey];
-            
-            self.ubiquitousItemIsDownloading = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey]).boolValue;
-            
-            self.ubiquitousItemIsUploaded = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue;
-            self.ubiquitousItemIsUploading = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue;
-            
-            self.ubiquitousItemPercentDownloaded = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue;
-            
-            self.ubiquitousItemPercentUploaded = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey]).doubleValue;
-            
-            self.ubiquitousItemDownloadingError = [item valueForAttribute:NSMetadataUbiquitousItemDownloadingErrorKey];
-            self.ubiquitousItemUploadingError = [item valueForAttribute:NSMetadataUbiquitousItemUploadingErrorKey];
-            
-            self.ubiquitousItemDownloadRequested = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey]).boolValue;
-            
-            self.ubiquitousItemIsExternalDocument = ((NSNumber *)[item valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey]).boolValue;
-            self.ubiquitousItemContainerDisplayName = [item valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey];
-            self.ubiquitousItemURLInLocalContainer = [item valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey];
-            
-        }
+- (unsigned long long)fileSystemFileSize {
+    return self.metadataItem ? ((NSNumber *)[self.metadataItem valueForAttribute: NSMetadataItemFSSizeKey]).unsignedLongLongValue :
+                                ((NSNumber *)[self.attributes objectForKey:NSFileSize]).unsignedLongLongValue;
+}
 
-        [self commonInit];
-        
-    }
-    return self;
+- (NSString *)contentType {
+    return self.metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemContentTypeKey] :
+                                    CFBridgingRelease(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(self.URL.pathExtension), NULL));
+}
+
+- (NSString *)ubiquitousItemContainerDisplayName {
+    return self.metadataItem ? ((NSString *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemContainerDisplayNameKey]) : self.URL.path.lastPathComponent;
+}
+
+- (NSURL *)ubiquitousItemURLInLocalContainer {
+    return self.metadataItem ? ((NSURL *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemURLInLocalContainerKey]) : self.URL;
+}
+
+- (BOOL)ubiquitousItemDownloadRequested {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadRequestedKey]).boolValue) : NO;
+}
+
+- (BOOL)ubiquitousItemIsDownloading {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsDownloadingKey]).boolValue) : NO;
+}
+
+- (BOOL)ubiquitousItemIsUploading {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadingKey]).boolValue) : NO;
+}
+
+- (BOOL)ubiquitousItemIsUploaded {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue) : NO;
+}
+
+- (double)ubiquitousItemPercentUploaded {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey]).doubleValue) : 100.0;
+}
+
+- (double)ubiquitousItemPercentDownloaded {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue) : 100.0;
+}
+
+- (BOOL)ubiquitousItemIsExternalDocument {
+    return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey]).boolValue) : NO;
 }
 
 - (UIImage *)imageForCloudStatus {
@@ -198,11 +162,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %f, %@, %@", self.fileSystemName,
-                                                                        self.fileSystemFileSize,
-                                                                        self.ubiquitousItemPercentDownloaded,
-                                                                        self.fileSystemContentChangeDate,
-                                                                        self.fileSystemFileCreationDate];
+    return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %f, %@, %@", self.fileSystemName, self.fileSystemFileSize, self.ubiquitousItemPercentDownloaded, self.fileSystemContentChangeDate, self.fileSystemFileCreationDate];
 }
 
 - (NSString *)fileSystemSizeMB {
@@ -229,15 +189,21 @@
 }
 
 - (BOOL)isEqual:(id)object {
+    
     if (self == object) {
         return YES;
     } else {
-        return [self.URL.absoluteString isEqual:((MADMetaData *)object).URL.absoluteString];
+        struct stat sa, sb;
+        if (stat(self.URL.path.UTF8String, &sa) < 0 || stat(((MADMetaData *)object).URL.path.UTF8String, &sb) < 0)
+            return 0;
+        return  sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
     }
 }
 
 - (NSUInteger)hash {
-    return self.URL.absoluteString.hash;
+    struct stat sa;
+    int r = stat(self.URL.path.UTF8String, &sa);
+    return r < 0 ? 0 : sa.st_dev * 2 + sa.st_ino * 3;
 }
 
 @end
