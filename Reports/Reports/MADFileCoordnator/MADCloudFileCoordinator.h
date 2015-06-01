@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADCloudFileCoordinator_h
+#define MADDesigner_MADCloudFileCoordinator_h
+
 #import <Foundation/Foundation.h>
 #import "MADFileCoordinator.h"
 
@@ -21,3 +24,5 @@ extern NSString * const MADNotificationCloudActivityCompleted;
                   firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
 
 @end
+
+#endif

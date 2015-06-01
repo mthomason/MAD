@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocumentObjectImage_Extras_h
+#define Reports_RptqDocumentObjectImage_Extras_h
+
 #import "RptqDocumentObjectImage.h"
 #import "MTDataType.h"
 
@@ -14,3 +17,5 @@
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 
 @end
+
+#endif

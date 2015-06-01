@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTGraph_MTObject_h
+#define MAD_MTGraph_MTObject_h
+
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
 #import "MTVertex.h"
@@ -41,3 +44,5 @@
 - (MTLinkedList *)topologicalSortWithError:(NSError **)anError;
 
 @end
+
+#endif

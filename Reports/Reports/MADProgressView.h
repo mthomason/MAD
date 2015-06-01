@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADProgressView_h
+#define Reports_MADProgressView_h
+
 #import <UIKit/UIKit.h>
 
 @interface MADProgressView : UIProgressView
 
 @end
+
+#endif

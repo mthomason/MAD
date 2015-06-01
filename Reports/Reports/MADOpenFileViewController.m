@@ -926,9 +926,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     if (metadata.ubiquitousItemIsUploading) {
         cell.progressViewUpload.hidden = NO;
-        //if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded) {
-            [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
-        //}
+        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
     } else {
         cell.progressViewUpload.hidden = YES;
         [cell.progressViewUpload setProgress:0.0000f animated:YES];
@@ -936,9 +934,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     if (metadata.ubiquitousItemIsDownloading) {
         cell.progressViewDownload.hidden = NO;
-        //if (cell.progressViewDownload.progress > metadata.ubiquitousItemPercentDownloaded) {
-            [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
-        //}
+        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
     } else {
         cell.progressViewDownload.hidden = YES;
         [cell.progressViewDownload setProgress:0.0000f animated:YES];

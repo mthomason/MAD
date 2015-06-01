@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADDirectoryMonitor_h
+#define MADDesigner_MADDirectoryMonitor_h
+
 #import <Foundation/Foundation.h>
 
 @class MADDirectoryMonitor;
@@ -27,3 +30,5 @@
 - (void)stopMonitoring;
 
 @end
+
+#endif

@@ -2069,8 +2069,6 @@
 		4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MysqlClientObjC.xcodeproj; path = libMysqlClientObjC/MysqlClientObjC/MysqlClientObjC.xcodeproj; sourceTree = "<group>"; };
 		4CB56E531AC683CC00756775 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CB56E541AC683CC00756775 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
-		4CB56E551AC683CC00756775 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
-		4CB56E561AC683CC00756775 /* rwlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwlock.h; sourceTree = "<group>"; };
 		4CB56E571AC683CC00756775 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
 		4CB56E591AC683CC00756775 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		4CB56E5A1AC683CC00756775 /* big_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = big_endian.h; sourceTree = "<group>"; };
@@ -3991,8 +3989,6 @@
 			children = (
 				4CB56E531AC683CC00756775 /* gcc_builtins.h */,
 				4CB56E541AC683CC00756775 /* generic-msvc.h */,
-				4CB56E551AC683CC00756775 /* nolock.h */,
-				4CB56E561AC683CC00756775 /* rwlock.h */,
 				4CB56E571AC683CC00756775 /* solaris.h */,
 			);
 			path = atomic;

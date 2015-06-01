@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong, readwrite) NSURL     *URL;
 
-@property (nonatomic, strong) NSNumberFormatter *numberFormatterFileSize;
+//@property (nonatomic, strong) NSNumberFormatter *numberFormatterFileSize;
 
 @property (nonatomic, strong) NSMetadataItem *metadataItem;
 @property (nonatomic, strong) NSDictionary *attributes;
@@ -34,8 +34,6 @@
         
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:&error];
         self.attributes = attributes;
-        
-        [self commonInit];
 
     }
     return self;
@@ -49,8 +47,6 @@
         
         NSURL *url =            [item valueForAttribute: NSMetadataItemURLKey];
         self.URL = url;
-        
-        [self commonInit];
         
     }
     return self;
@@ -153,24 +149,8 @@
     return result;
 }
 
-- (void)commonInit {
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    [numberFormatter setMaximumFractionDigits:2];
-    [numberFormatter setDecimalSeparator:@"."];
-    [numberFormatter setGroupingSeparator:@""];
-    self.numberFormatterFileSize = numberFormatter;
-}
-
 - (NSString *)description {
     return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %f, %@, %@", self.fileSystemName, self.fileSystemFileSize, self.ubiquitousItemPercentDownloaded, self.fileSystemContentChangeDate, self.fileSystemFileCreationDate];
-}
-
-- (NSString *)fileSystemSizeMB {
-    NSNumber *fileSizeMB = @((double)self.fileSystemFileSize / 1000000);
-    NSString *sizeInMB = [self.numberFormatterFileSize stringFromNumber:fileSizeMB];
-    return [NSString stringWithFormat:@"%@ MB", sizeInMB];
-
 }
 
 - (BOOL)isSyncing {

@@ -257,10 +257,12 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                         removedMetaDatum: removed
                                                         updatedMetaDatum: updated completion:^(BOOL success, NSError *error) {
                                                             
+                                                            if (success) {
+                                                                [self.metadataQuery enableUpdates];
+                                                            }
                                                             
                                                         }];
     
-    [self.metadataQuery enableUpdates];
     
 }
 

@@ -6,11 +6,15 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocumentObjectAggregate_Extras_h
+#define Reports_RptqDocumentObjectAggregate_Extras_h
+
 #import "RptqDocumentObjectAggregate.h"
 #import "MTAggregateFunctionInputType.h"
 #import "MTAggregateFunctionType.h"
 #import "MADAggregateGroupByType.h"
 #import "MTDataType.h"
+
 extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
 extern NSString * const MTAggregateTypeKeyGroupNumber;
@@ -29,3 +33,5 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
 - (NSString *)designerRepresentationText;
 
 @end
+
+#endif

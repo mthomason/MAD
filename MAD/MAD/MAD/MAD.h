@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #ifndef MAD_MAD_h
 #define MAD_MAD_h
+
+#import <Foundation/Foundation.h>
 
 #import "MADConstants.h"
 #import "MADocument.h"

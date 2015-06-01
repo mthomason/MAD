@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocumentObjectBarcode_Extras_h
+#define Reports_RptqDocumentObjectBarcode_Extras_h
+
 #import "RptqDocumentObjectBarcode.h"
 
 @class MTBarcode, RptqQueryField;
@@ -18,3 +21,5 @@
 + (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject;
 
 @end
+
+#endif

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQueryTable_Extras_h
+#define Reports_RptqQueryTable_Extras_h
+
 #import "RptqQueryTable.h"
 #import "MTProtocolCompare.h"
 
@@ -21,3 +24,5 @@
 - (NSString *)tableAlias;
 
 @end
+
+#endif

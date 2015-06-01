@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQueryField_Extras_h
+#define Reports_RptqQueryField_Extras_h
+
 #import "RptqQueryField.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
@@ -20,3 +23,5 @@
 - (NSString *)toStringReverse;
 
 @end
+
+#endif

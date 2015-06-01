@@ -56,7 +56,6 @@
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithMetadataItem:(NSMetadataItem *)item;
 
-- (NSString *)fileSystemSizeMB;
 - (BOOL)isSyncing;
 
 @end

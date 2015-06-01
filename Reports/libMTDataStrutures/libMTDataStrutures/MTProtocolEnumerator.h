@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTProtocolEnumerator_h
+#define MAD_DataStructures_MTProtocolEnumerator_h
+
 #import <Foundation/Foundation.h>
 
 @protocol MTProtocolEnumerator <NSObject>
@@ -19,3 +22,5 @@
 - (id)last;
 
 @end
+
+#endif

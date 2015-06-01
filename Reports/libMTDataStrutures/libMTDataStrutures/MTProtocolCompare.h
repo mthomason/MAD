@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTProtocolCompare_h
+#define MAD_DataStructures_MTProtocolCompare_h
+
 #import <Foundation/Foundation.h>
 
 @protocol MTProtocolCompare <NSObject>
@@ -22,3 +25,5 @@
 - (BOOL)isLessThanOrEqualToSender:(id)sender;
 
 @end
+
+#endif

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTTree_h
+#define MAD_DataStructures_MTTree_h
+
 #import <Foundation/Foundation.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
@@ -24,3 +27,5 @@
 - (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right NS_DESIGNATED_INITIALIZER;
 
 @end
+
+#endif

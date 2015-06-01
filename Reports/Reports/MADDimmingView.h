@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADDimmingView_h
+#define Reports_MADDimmingView_h
+
 #import <UIKit/UIKit.h>
 
 @interface MADDimmingView : UIView
@@ -16,3 +19,5 @@
 @property (nonatomic, strong) NSSet *passthoughViews;
 
 @end
+
+#endif

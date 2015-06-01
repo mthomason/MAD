@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADAppLaunchContext_h
+#define MADDesigner_MADAppLaunchContext_h
+
 #import <Foundation/Foundation.h>
 
 extern NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey;
@@ -31,3 +34,5 @@ extern NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey;
 - (instancetype)initWithFileURL:(NSURL *)fileURL;
 
 @end
+
+#endif

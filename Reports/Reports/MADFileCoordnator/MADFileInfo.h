@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADFileInfo_h
+#define MADDesigner_MADFileInfo_h
+
 #import <Foundation/Foundation.h>
 
 @interface MADFileInfo : NSObject
@@ -19,3 +22,5 @@
 - (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler;
 
 @end
+
+#endif

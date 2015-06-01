@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADFilesController_h
+#define MADDesigner_MADFilesController_h
+
 #import <Foundation/Foundation.h>
 
 @class MADFilesController, MADMetaData, MADFile;
@@ -54,3 +57,5 @@
     - (void)setFileInfoHasNewContents:(MADMetaData *)listInfo;
 
 @end
+
+#endif

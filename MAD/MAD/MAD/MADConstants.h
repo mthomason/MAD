@@ -6,9 +6,14 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_Constants_h
+#define MADDesigner_Constants_h
+
 #import <Foundation/Foundation.h>
 
 extern NSString * const MADIdentifierGroup;
 extern NSString * const MADFileExtentionMobleApplicationDocumentArchive;
 extern NSString * const MADFileExtentionMobleApplicationDocument;
 extern NSString * const MADTrademark;
+
+#endif

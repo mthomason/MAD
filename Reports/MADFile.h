@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADFile_h
+#define MADDesigner_MADFile_h
+
 #import <Foundation/Foundation.h>
 
 @interface MADFile : NSObject
 
 @end
+
+#endif

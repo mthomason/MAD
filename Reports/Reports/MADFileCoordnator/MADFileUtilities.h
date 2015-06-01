@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADFileUtilities_h
+#define MADDesigner_MADFileUtilities_h
+
 #import <Foundation/Foundation.h>
 
 @class MADFile;
@@ -28,3 +31,5 @@
 + (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
 
 @end
+
+#endif

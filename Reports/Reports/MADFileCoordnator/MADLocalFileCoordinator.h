@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADLocalFileCoordinator_h
+#define MADDesigner_MADLocalFileCoordinator_h
+
 #import <Foundation/Foundation.h>
 #import "MADFileCoordinator.h"
 
@@ -18,3 +21,5 @@
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
 
 @end
+
+#endif
