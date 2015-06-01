@@ -67,6 +67,10 @@
 #import "NSError+Constructors.h"
 #import "UIView+Animations.h"
 
+#import "MTMath.h"
+
+#import "NSNumberFormatter+Constructors.h"
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
@@ -145,6 +149,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) NSMutableArray *batchUpdates;
 
 @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+
+@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
 @end
 
@@ -871,7 +877,19 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
-    return [metadata fileSystemSizeMB];
+    return [self subtitleForMetadata:metadata];
+}
+
+- (NSString *)subtitleForMetadata:(MADMetaData *)metadata {
+    NSString *result;
+    if ([metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = NSLocalizedString(sNotDownloaded, sNotDownloaded);;
+    } else {
+        NSNumber *systemFileSizeMB =  [MTMath systemFileSizeToMB: metadata.fileSystemFileSize];
+        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
+        result = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
+    }
+    return result;
 }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -903,14 +921,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     cell.labelTitle.text = filename;
     
     BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    //cell.progressViewDownload.hidden = !metadata.ubiquitousItemIsDownloading;
-    //cell.progressViewUpload.hidden = YES;
-    
-    cell.labelTitleSub.text = (notDownloaded ? NSLocalizedString(sNotDownloaded, sNotDownloaded) : [metadata fileSystemSizeMB]);
+
+    cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
     
     if (metadata.ubiquitousItemIsUploading) {
         cell.progressViewUpload.hidden = NO;
-        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
+        //if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded) {
+            [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
+        //}
     } else {
         cell.progressViewUpload.hidden = YES;
         [cell.progressViewUpload setProgress:0.0000f animated:YES];
@@ -918,7 +936,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     if (metadata.ubiquitousItemIsDownloading) {
         cell.progressViewDownload.hidden = NO;
-        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
+        //if (cell.progressViewDownload.progress > metadata.ubiquitousItemPercentDownloaded) {
+            [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
+        //}
     } else {
         cell.progressViewDownload.hidden = YES;
         [cell.progressViewDownload setProgress:0.0000f animated:YES];
@@ -1725,6 +1745,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 #pragma mark - Property Overrides
+
+- (NSNumberFormatter *)subtitleNumberFormatter {
+    if (!_subtitleNumberFormatter) {
+        _subtitleNumberFormatter = [NSNumberFormatter twoDecimalPlaces];
+    }
+    return _subtitleNumberFormatter;
+}
 
 - (void)setFilesController:(MADFilesController *)filesController {
     if (filesController != _filesController) {

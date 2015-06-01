@@ -328,6 +328,18 @@
                 // Track the new list info instead of the old one.
                 if (updatedListInfoIndex != NSNotFound) {
                     self.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
+                } else {
+                    updatedListInfoIndex = [self.fileMetaDatum indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                        if ([updatedListInfo.URL.lastPathComponent isEqualToString:((MADMetaData *)obj).URL.lastPathComponent]) {
+                            *stop = YES;
+                            return YES;
+                        } else {
+                            return NO;
+                        }
+                    }];
+                    if (updatedListInfoIndex != NSNotFound) {
+                        self.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
+                    }
                 }
             });
             

@@ -135,6 +135,7 @@
 }
 
 - (double)ubiquitousItemPercentDownloaded {
+    NSLog(@"Percent d %@", [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]);
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue) : 100.0;
 }
 
@@ -188,22 +189,39 @@
     return madMetaDataItems;
 }
 
+- (BOOL)sameFile:(MADMetaData *)unknown {
+    struct stat sa, sb;
+    if (stat(self.URL.path.UTF8String, &sa) < 0 || stat(unknown.URL.path.UTF8String, &sb) < 0)
+        return 0;
+    return  sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
+}
+
+- (BOOL)samePercentages:(MADMetaData *)unknown {
+    return self.ubiquitousItemPercentDownloaded == unknown.ubiquitousItemPercentDownloaded &&
+            self.ubiquitousItemPercentUploaded == unknown.ubiquitousItemPercentUploaded;
+}
+
+- (NSUInteger)samePercentageHash {
+    return self.ubiquitousItemPercentDownloaded * 5 + self.ubiquitousItemPercentUploaded * 7;
+}
+
+- (NSUInteger)sameFileHash {
+    struct stat sa;
+    int r = stat(self.URL.path.UTF8String, &sa);
+    return r < 0 ? 0 : (NSUInteger)(sa.st_dev * 2 + sa.st_ino * 3);
+}
+
 - (BOOL)isEqual:(id)object {
-    
     if (self == object) {
         return YES;
     } else {
-        struct stat sa, sb;
-        if (stat(self.URL.path.UTF8String, &sa) < 0 || stat(((MADMetaData *)object).URL.path.UTF8String, &sb) < 0)
-            return 0;
-        return  sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
+        return  [self sameFile:object];
     }
+    
 }
 
 - (NSUInteger)hash {
-    struct stat sa;
-    int r = stat(self.URL.path.UTF8String, &sa);
-    return r < 0 ? 0 : sa.st_dev * 2 + sa.st_ino * 3;
+    return [self sameFileHash] * 11;
 }
 
 @end

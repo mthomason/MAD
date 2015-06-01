@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADExtensions_UIAlertController_Constructors_h
+#define MADExtensions_UIAlertController_Constructors_h
+
 #import <UIKit/UIKit.h>
 
 @interface UIAlertController (Constructors)
@@ -61,3 +64,5 @@
 + (instancetype)error:(NSError *)error;
 
 @end
+
+#endif

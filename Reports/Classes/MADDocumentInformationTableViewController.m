@@ -10,13 +10,25 @@
 #import "MADMetaData.h"
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
+#import "MTMath.h"
+#import "NSNumberFormatter+Constructors.h"
 
 @interface MADDocumentInformationTableViewController ()
     <MADVibrantTableViewCellDelegate>
 
+@property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+
 @end
 
 @implementation MADDocumentInformationTableViewController
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        NSNumberFormatter *numberFormatter = [NSNumberFormatter twoDecimalPlaces];
+        self.numberFormatter = numberFormatter;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,6 +55,7 @@
                                                                     forIndexPath: indexPath];
     cell.vibrantTableViewCellDelegate = self;
     MADMetaData *metadata = self.metadataItems[indexPath.section];
+    NSString *systemFileSizeString;
     switch (indexPath.row) {
         case 0:
             cell.label.text = metadata.name;
@@ -50,7 +63,8 @@
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             break;
         case 1:
-            cell.label.text = metadata.fileSystemSizeMB;
+            systemFileSizeString = [self.numberFormatter stringFromNumber: [MTMath systemFileSizeToMB: metadata.fileSystemFileSize]];
+            cell.label.text = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             break;
         case 2: {

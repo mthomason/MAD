@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADExtensions_UIBarButtonItem_Constructors_h
+#define MADExtensions_UIBarButtonItem_Constructors_h
+
 #import <UIKit/UIKit.h>
 
 @interface UIBarButtonItem (Constructors)
@@ -14,3 +17,5 @@
 + (UIBarButtonItem *)buttonEditDone:(id)target action:(SEL)action;
 
 @end
+
+#endif

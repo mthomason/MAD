@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C111BF61B1C268C005CA4DD /* NSNumberFormatter+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111BF51B1C268C005CA4DD /* NSNumberFormatter+Constructors.m */; };
 		4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD3401B126ABF00839504 /* UIAlertController+Constructors.m */; };
 		4C1AD3471B1826B800839504 /* MFMailComposeViewController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD3461B1826B800839504 /* MFMailComposeViewController+Constructors.m */; };
 		4C1AD34B1B1838B600839504 /* UILabel+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD34A1B1838B600839504 /* UILabel+Constructors.m */; };
@@ -52,6 +53,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C111BF41B1C268C005CA4DD /* NSNumberFormatter+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+Constructors.h"; sourceTree = "<group>"; };
+		4C111BF51B1C268C005CA4DD /* NSNumberFormatter+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+Constructors.m"; sourceTree = "<group>"; };
 		4C1AD33F1B126ABF00839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C1AD3401B126ABF00839504 /* UIAlertController+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Constructors.m"; sourceTree = "<group>"; };
 		4C1AD3451B1826B800839504 /* MFMailComposeViewController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+Constructors.h"; sourceTree = "<group>"; };
@@ -160,6 +163,8 @@
 				4C1AD34A1B1838B600839504 /* UILabel+Constructors.m */,
 				4C1AD34E1B18413E00839504 /* UIBarButtonItem+Constructors.h */,
 				4C1AD34F1B18413E00839504 /* UIBarButtonItem+Constructors.m */,
+				4C111BF41B1C268C005CA4DD /* NSNumberFormatter+Constructors.h */,
+				4C111BF51B1C268C005CA4DD /* NSNumberFormatter+Constructors.m */,
 			);
 			path = CocoaExtensions;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
 				4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */,
 				4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */,
+				4C111BF61B1C268C005CA4DD /* NSNumberFormatter+Constructors.m in Sources */,
 				4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */,
 				4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */,
 				4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */,

@@ -9,6 +9,9 @@
 //  MIT license
 //
 
+#ifndef MADExtensions_BDHost_h
+#define MADExtensions_BDHost_h
+
 #import <Foundation/Foundation.h>
 
 @interface BDHost : NSObject
@@ -17,3 +20,5 @@
     + (NSArray *)addressesForHostname:(NSString *)hostname;
 
 @end
+
+#endif

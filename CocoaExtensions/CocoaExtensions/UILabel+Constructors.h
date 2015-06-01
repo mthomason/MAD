@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADExtensions_UILabel_Constructors_h
+#define MADExtensions_UILabel_Constructors_h
+
 #import <UIKit/UIKit.h>
 
 @interface UILabel (Constructors)
@@ -13,3 +16,5 @@
 + (instancetype)documentCaption:(CGRect)frame width:(CGFloat)width;
 
 @end
+
+#endif

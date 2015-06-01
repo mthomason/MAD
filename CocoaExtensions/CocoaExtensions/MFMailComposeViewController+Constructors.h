@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADExtensions_MFMailComposeViewController_Constructors_h
+#define MADExtensions_MFMailComposeViewController_Constructors_h
+
 #import <MessageUI/MessageUI.h>
 
 @interface MFMailComposeViewController (Constructors)
@@ -17,3 +20,5 @@
           userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
 
 @end
+
+#endif
