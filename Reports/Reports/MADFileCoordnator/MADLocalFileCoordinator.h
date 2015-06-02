@@ -14,10 +14,10 @@
 
 @interface MADLocalFileCoordinator : NSObject <MADFileCoordinator>
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension
+- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup
               firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
 
-- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent
+- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)fileGroup
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
 
 @end

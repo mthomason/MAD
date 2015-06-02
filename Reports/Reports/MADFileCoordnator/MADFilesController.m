@@ -115,12 +115,12 @@
     [self.fileCoordinator renameFileAtURL: url toName: name];
 }
 
-- (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name {
-    [self.fileCoordinator createURLForFile:list withName:name];
+- (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    [self.fileCoordinator createURLForFile:list withName:name extention:extention fileGroup:fileGroup];
 }
 
-- (BOOL)canCreateFileInfoWithName:(NSString *)name {
-    return [self.fileCoordinator canCreateFileWithName:name];
+- (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    return [self.fileCoordinator canCreateFileWithName:name extention:extention fileGroup:fileGroup];
 }
 
 - (NSURL *)documentDirectory {

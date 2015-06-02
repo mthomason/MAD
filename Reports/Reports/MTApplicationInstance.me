@@ -66,9 +66,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.423";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.423";
-NSString * const MTGlobalBundleRev                                  = @"1798";
+NSString * const MTGlobalBundleVersion                              = @"7.0.424";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.424";
+NSString * const MTGlobalBundleRev                                  = @"1799";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -533,18 +533,18 @@ static MTApplicationInstance *mainInstance;
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
     if ([MTApplicationInstance mainInstance].storageOption != MADAppStorageCloud) {
         // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension firstQueryUpdateHandler:firstQueryHandler];
+        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
     }  else {
-        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension firstQueryUpdateHandler:firstQueryHandler];
+        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
     }
 }
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
     if ([MTApplicationInstance mainInstance].storageOption != MADAppStorageCloud) {
         // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent firstQueryUpdateHandler:firstQueryHandler];
+        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
     } else {
-        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent firstQueryUpdateHandler:firstQueryHandler];
+        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
     }
 }
 

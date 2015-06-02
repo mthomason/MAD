@@ -9,7 +9,6 @@
 #import "MADLocalFileCoordinator.h"
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
-#import "MADConstants.h"
 #import "NSFileManager+Common.h"
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
@@ -23,6 +22,8 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 @property (nonatomic, strong) MADDirectoryMonitor *directoryMonitor;
 @property (nonatomic, copy) NSArray *currentLocalContents;
 
+@property (nonatomic, strong) NSString *fileGroup;
+
 @end
 
 @implementation MADLocalFileCoordinator
@@ -30,13 +31,14 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 
 #pragma mark - Initialization
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)fileGroup firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
 
     if (self = [super init]) {
+        self.fileGroup = fileGroup;
         self.predicate = predicate;
         self.firstQueryUpdateHandler = firstQueryUpdateHandler;
         
-        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:fileGroup];
         
         MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
         self.directoryMonitor = directoryMonitor;
@@ -50,20 +52,24 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     return self;
 }
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension, pathExtension];
     
-    if (self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler]) { }
+    if (self = [self initWithPredicate:predicate identifier:fileGroup firstQueryUpdateHandler:firstQueryUpdateHandler]) {
+        self.fileGroup = fileGroup;
+    }
     
     return self;
 }
 
-- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)fileGroup firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent, lastPathComponent];
     
-    if (self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler]) { }
+    if (self = [self initWithPredicate:predicate identifier:fileGroup firstQueryUpdateHandler:firstQueryUpdateHandler]) {
+        self.fileGroup = fileGroup;
+    }
     
     return self;
 }
@@ -117,8 +123,8 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     }];
 }
 
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name {
-    NSURL *documentURL = [self documentURLForName:name];
+- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
     [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
         if (error) {
@@ -132,11 +138,11 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     }];
 }
 
-- (BOOL)canCreateFileWithName:(NSString *)name {
+- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
     if (name.length <= 0) {
         return NO;
     }
-    NSURL *documentURL = [self documentURLForName:name];
+    NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     return ![[NSFileManager defaultManager] fileExistsAtPath:documentURL.path];
 
 }
@@ -148,7 +154,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 }
 
 - (NSURL *)documentsDirectory {
-    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
     return url;
 }
 
@@ -160,7 +166,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     dispatch_async(defaultQueue, ^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
-        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+        NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:self.fileGroup];
         NSArray *localDocumentURLs = [fileManager contentsOfDirectoryAtURL: url
                                                 includingPropertiesForKeys: nil
                                                                    options: NSDirectoryEnumerationSkipsPackageDescendants
@@ -193,10 +199,10 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
     });
 }
 
-- (NSURL *)documentURLForName:(NSString *)name {
-    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
+- (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    NSURL *url = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:fileGroup];
     NSURL *documentURLWithoutExtension = [url URLByAppendingPathComponent:name];
-    return [documentURLWithoutExtension URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+    return [documentURLWithoutExtension URLByAppendingPathExtension:extention];
 }
 
 @end

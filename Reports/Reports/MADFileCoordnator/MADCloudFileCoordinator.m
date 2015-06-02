@@ -8,8 +8,6 @@
 
 #import "MADCloudFileCoordinator.h"
 #import "MADFileUtilities.h"
-#import "MADConstants.h"
-#import "MTApplicationInstance.h"
 #import "NSFileManager+Common.h"
 #import "MADMetaData.h"
 
@@ -33,7 +31,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - Initialization
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate
+- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)ubiquityIdentifier
           firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
     self = [super init];
@@ -56,7 +54,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         self.metadataQuery = metadataQuery;
         
         dispatch_barrier_async(_documentsDirectoryQueue, ^{
-            NSURL *cloudContainerURL = [[NSFileManager defaultManager] cloudDocumentsDirectoryForUbiquityID:MADUbiquityIdentifier];
+            NSURL *cloudContainerURL = [[NSFileManager defaultManager] cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
             _documentsDirectory = cloudContainerURL;
         });
         
@@ -99,23 +97,23 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 }
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension
+- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)ubiquityIdentifier
               firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.pathExtension = %@)", NSMetadataItemURLKey, pathExtension];
     
-    self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler];
+    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier firstQueryUpdateHandler:firstQueryUpdateHandler];
     
     if (self) { }
     
     return self;
 }
 
-- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent
+- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)ubiquityIdentifier
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.lastPathComponent = %@)", NSMetadataItemURLKey, lastPathComponent];
     
-    self = [self initWithPredicate:predicate firstQueryUpdateHandler:firstQueryUpdateHandler];
+    self = [self initWithPredicate:predicate identifier:ubiquityIdentifier firstQueryUpdateHandler:firstQueryUpdateHandler];
     
     if (self) { }
     
@@ -156,8 +154,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     });
 }
 
-- (void)createURLForFile:(MADFile *)list withName:(NSString *)name {
-    NSURL *documentURL = [self documentURLForName:name];
+- (void)createURLForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
+    NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
     [MADFileUtilities createFile:list atURL:documentURL withCompletionHandler:^(NSError *error) {
         if (error) {
@@ -275,20 +273,20 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - Convenience
 
-- (BOOL)canCreateFileWithName:(NSString *)name {
+- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
     if (name.length <= 0) {
         return NO;
     }
     
-    NSURL *documentURL = [self documentURLForName:name];
+    NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
     
     return ![[NSFileManager defaultManager] fileExistsAtPath:documentURL.path];
 }
 
-- (NSURL *)documentURLForName:(NSString *)name {
+- (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup {
     NSURL *documentURLWithoutExtension = [self.documentsDirectory URLByAppendingPathComponent:name];
     
-    return [documentURLWithoutExtension URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+    return [documentURLWithoutExtension URLByAppendingPathExtension:extention];
 }
 
 - (NSArray *)URLsByMappingMetadataItems:(NSArray *)metadataItems {

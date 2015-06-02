@@ -17,11 +17,14 @@ extern NSString * const MADNotificationCloudActivityCompleted;
 
 @interface MADCloudFileCoordinator : NSObject <MADFileCoordinator>
 
-- (instancetype)initWithPathExtension: (NSString *)pathExtension
-              firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
+- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)identifier
+          firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
 
-- (instancetype)initWithLastPathComponent: (NSString *)lastPathComponent
-                  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
+- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)identifier
+              firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
+
+- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)identifier
+                  firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
 
 @end
 

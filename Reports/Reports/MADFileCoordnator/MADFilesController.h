@@ -52,8 +52,8 @@
     - (void)removeFileInfo:(MADMetaData *)listInfo;
     - (void)duplicateFileInfo:(MADMetaData *)listInfo;
     - (void)renameFileInfo:(MADMetaData *)listInfo toName:(NSString *)name;
-    - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name;
-    - (BOOL)canCreateFileInfoWithName:(NSString *)name;
+    - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
+    - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (void)setFileInfoHasNewContents:(MADMetaData *)listInfo;
 
 @end

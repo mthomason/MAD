@@ -2659,8 +2659,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
         
         self.toolboxVisible = NO;
-        [self dismissViewControllerAnimated: YES
-                                 completion: NULL];
+        [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
         [self.document.managedObjectContext save:nil];
         
