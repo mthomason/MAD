@@ -139,6 +139,17 @@
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey]).boolValue) : NO;
 }
 
+- (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded {
+    return self.isUbiquitous ? [self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] : NO;
+}
+- (BOOL)isUbiquitousItemDownloadingStatusDownloaded {
+    return self.isUbiquitous ? [self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] : NO;
+}
+- (BOOL)isUbiquitousItemDownloadingStatusCurrent {
+    return self.isUbiquitous ? [self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] : NO;
+}
+
+
 - (UIImage *)imageForCloudStatus {
     UIImage *result;
     if ([self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {

@@ -78,7 +78,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollection
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
-static NSString * const sNotDownloaded              = @"Not Downloaded";
+static NSString * const sNotDownloaded                          = @"Not Downloaded";
 
 CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
@@ -687,7 +687,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return self.navigationController;
 }
 
-
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
@@ -785,8 +784,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return YES;
 }
 
-- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error
-    movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
     
     //Only allow the thumbnails to proceed to after an error.
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
@@ -897,8 +895,25 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    [self openFileWithUrl:fileUrl];
+    
+    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    [cell performSelectionAnimations];
+    
+    if (self.isEditing) {
+        [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        if (metadata.isUbiquitous) {
+            if (metadata.isUbiquitousItemDownloadingStatusNotDownloaded) {
+                NSError *error = nil;
+                [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL:metadata.URL error:&error];
+            }
+        }
+    } else {
+        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        [cell.activityIndicator startAnimating];
+        [self.collectionView setUserInteractionEnabled: NO];
+        [self openFileWithUrl:metadata.URL];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -926,7 +941,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     if (metadata.ubiquitousItemIsUploading) {
         cell.progressViewUpload.hidden = NO;
-        [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded animated:YES];
+        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded / 100.0000f) {
+            [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded / 100.0000f animated:YES];
+        }
     } else {
         cell.progressViewUpload.hidden = YES;
         [cell.progressViewUpload setProgress:0.0000f animated:YES];
@@ -934,7 +951,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     if (metadata.ubiquitousItemIsDownloading) {
         cell.progressViewDownload.hidden = NO;
-        [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded animated:YES];
+        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
+            [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded / 100.0000f animated:YES];
+        }
     } else {
         cell.progressViewDownload.hidden = YES;
         [cell.progressViewDownload setProgress:0.0000f animated:YES];
@@ -1076,16 +1095,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {
     if (self.presentedViewController != nil) {
-        __weak MADOpenFileViewController *weakself = self;
         [self dismissViewControllerAnimated: YES completion:^{
-            [weakself presentViewController: vc
-                                   animated: YES
-                                 completion: nil];
+            [self presentViewController: vc animated: YES completion: nil];
         }];
     } else {
-        [self presentViewController: vc
-                           animated: YES
-                         completion: nil];
+        [self presentViewController: vc animated: YES completion: nil];
     }
 }
 

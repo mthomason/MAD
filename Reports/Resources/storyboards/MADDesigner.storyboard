@@ -1843,14 +1843,18 @@
                                                 <constraint firstAttribute="width" constant="24" id="sek-Po-dk0"/>
                                             </constraints>
                                         </imageView>
-                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.30000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Mve-Nt-261">
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.30000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Mve-Nt-261">
                                             <rect key="frame" x="20" y="134" width="100" height="3"/>
                                             <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="progressTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="trackTintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                                         </progressView>
-                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="l2R-ss-MRX">
-                                            <rect key="frame" x="20" y="131" width="100" height="3"/>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="l2R-ss-MRX">
+                                            <rect key="frame" x="20" y="134" width="100" height="3"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="9Fd-wI-3Oi"/>
+                                                <constraint firstAttribute="height" constant="2" id="Qtu-c8-Qnn"/>
+                                            </constraints>
                                             <color key="progressTintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="trackTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                                         </progressView>
@@ -1858,13 +1862,22 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
+                                    <constraint firstItem="Mve-Nt-261" firstAttribute="trailing" secondItem="l2R-ss-MRX" secondAttribute="trailing" id="3Yg-Nj-olV"/>
                                     <constraint firstItem="dSE-E7-hqG" firstAttribute="trailing" secondItem="anu-JF-du3" secondAttribute="trailingMargin" id="3xv-Mb-nA7"/>
+                                    <constraint firstItem="Mve-Nt-261" firstAttribute="leading" secondItem="l2R-ss-MRX" secondAttribute="leading" id="5n1-c5-cmH"/>
+                                    <constraint firstItem="l2R-ss-MRX" firstAttribute="leading" secondItem="anu-JF-du3" secondAttribute="leadingMargin" constant="12" id="6E4-85-gOo"/>
+                                    <constraint firstItem="l2R-ss-MRX" firstAttribute="top" secondItem="dSE-E7-hqG" secondAttribute="bottom" constant="102" id="95b-gQ-Tw3"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="N8i-ts-oFY" secondAttribute="trailing" id="EdD-pj-SDP"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="l2R-ss-MRX" secondAttribute="trailing" constant="12" id="HgB-70-8fX"/>
+                                    <constraint firstItem="Mve-Nt-261" firstAttribute="centerX" secondItem="N8i-ts-oFY" secondAttribute="centerX" id="K6X-NT-Zdi"/>
                                     <constraint firstItem="2uu-8R-Ec3" firstAttribute="centerX" secondItem="N8i-ts-oFY" secondAttribute="centerX" id="OwP-3t-Llx"/>
                                     <constraint firstItem="dSE-E7-hqG" firstAttribute="top" secondItem="anu-JF-du3" secondAttribute="topMargin" id="RVa-2p-CIK"/>
                                     <constraint firstItem="2uu-8R-Ec3" firstAttribute="top" secondItem="N8i-ts-oFY" secondAttribute="bottom" constant="2" id="WTl-MQ-pI3"/>
+                                    <constraint firstItem="N8i-ts-oFY" firstAttribute="top" secondItem="Mve-Nt-261" secondAttribute="bottom" constant="4" id="ZJa-vU-1hB"/>
+                                    <constraint firstItem="Mve-Nt-261" firstAttribute="top" secondItem="l2R-ss-MRX" secondAttribute="top" id="iLB-sa-TMC"/>
                                     <constraint firstItem="hwh-42-DIx" firstAttribute="top" secondItem="anu-JF-du3" secondAttribute="top" constant="9" id="myZ-NC-BM8"/>
                                     <constraint firstAttribute="centerX" secondItem="hwh-42-DIx" secondAttribute="centerX" id="oAJ-5U-LVR"/>
+                                    <constraint firstItem="Mve-Nt-261" firstAttribute="leading" secondItem="anu-JF-du3" secondAttribute="leadingMargin" constant="12" id="qtU-rv-1Xb"/>
                                     <constraint firstItem="N8i-ts-oFY" firstAttribute="leading" secondItem="anu-JF-du3" secondAttribute="leadingMargin" id="sVp-1e-dVG"/>
                                     <constraint firstItem="N8i-ts-oFY" firstAttribute="top" secondItem="hwh-42-DIx" secondAttribute="bottom" constant="3" id="taR-kA-A0n"/>
                                 </constraints>

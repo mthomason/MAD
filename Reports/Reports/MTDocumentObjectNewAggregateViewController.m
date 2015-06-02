@@ -115,6 +115,8 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 
 - (IBAction)unwindToNewAggregateFunction:(UIStoryboardSegue *)action {
     
+    //[self performSegueWithIdentifier:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer" sender:self];
+    
     MTAggregateFunctionType aggregateFunctionType = MTAggregateFunctionTypeNotSet;
     
     if ([[action identifier] isEqualToString:MTSegueAggregateFunctionCount]) {
@@ -327,6 +329,9 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 
     [self setAggregateDocumentObject:aggregateDocumentObject];
 
+}
+- (IBAction)save:(id)sender {
+    [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer" sender:sender];
 }
 
 #pragma mark - View lifecycle

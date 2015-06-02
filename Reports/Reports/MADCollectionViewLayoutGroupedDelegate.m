@@ -82,20 +82,8 @@ static inline CGRect rectCellLabel() {
         [self.delegate selectionsUpdated];
     }
 
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
-    
-    if ([self.delegate isFileViewEditing] == NO) {
-        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        [cell.activityIndicator startAnimating];
-        [collectionView setUserInteractionEnabled: NO];
-        
-        if ([self.delegate respondsToSelector:@selector(userSelectedItemAtIndexPath:)]) {
-            [self.delegate userSelectedItemAtIndexPath:indexPath];
-        }
-        
-    } else {
-        [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+    if ([self.delegate respondsToSelector:@selector(userSelectedItemAtIndexPath:)]) {
+        [self.delegate userSelectedItemAtIndexPath:indexPath];
     }
     
     if ([self.delegate respondsToSelector:@selector(selectionsUpdated)]) {

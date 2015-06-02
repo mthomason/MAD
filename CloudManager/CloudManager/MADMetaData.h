@@ -29,8 +29,10 @@
 
 @property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly)
                                     BOOL ubiquitousItemDownloadingStatusNotDownloaded;        // this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.
+
 @property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusDownloaded, readonly)
                                     BOOL ubiquitousItemDownloadingStatusDownloaded;           // there is a local version of this item available. The most current version will get downloaded as soon as possible.
+
 @property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusCurrent, readonly)
                                     BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local version of this item and it is the most up-to-date version known to this device.
 

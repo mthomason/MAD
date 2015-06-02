@@ -52,7 +52,7 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
     [self.labelTextTextbox becomeFirstResponder];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Static Label", @"Title of form to create a non changing text label document object.");
+    titleView.text = NSLocalizedString(@"Static Label", @"Title of button to create a non-changing (static) text-label-document-object.");
     self.navigationItem.titleView = titleView;
 
 }

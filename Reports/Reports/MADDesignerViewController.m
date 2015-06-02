@@ -725,8 +725,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
     documentObject.originx = @(attributes.frame.origin.x);
     documentObject.originy = @(attributes.frame.origin.y);
-    //documentObject.sizewidth = @(attributes.frame.size.width);
-    //documentObject.sizeheight = @(attributes.frame.size.height);
     [objectContext save:nil];
 
 }
@@ -1048,7 +1046,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         self.ruler.contentScaleFactor = scaleWithScreen;
         
-        NSSet *elementViews = self.visibleElementViews; //[self elementViews]
+        NSSet *elementViews = self.visibleElementViews;
         for (MADDesignerElementView *elementView in elementViews) {
             elementView.contentScaleFactor = scaleWithScreen;
         }
@@ -2118,7 +2116,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     [self insertDocumentObjectWithDefination: documentObjectDefination];
     self.hidesStatusBar = NO;
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -2205,8 +2202,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)collectionView: (UICollectionView *)collectionView
          prepareLayout: (MTReportDesignerSectionViewLayoutLiquid *)collectionViewLayout {
     MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
-    //[layoutManager layout];
-    
+
     NSManagedObjectContext *objectContext = self.document.managedObjectContext;
     MADReportDesignerSectionLayoutAttributes *attributes;
     RptqDocumentObject *documentObject;
@@ -2215,8 +2211,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
         documentObject.originx = @(attributes.frame.origin.x);
         documentObject.originy = @(attributes.frame.origin.y);
-        //documentObject.sizewidth = @(attributes.frame.size.width);
-        //documentObject.sizeheight = @(attributes.frame.size.height);
     }
     [objectContext save:nil];
 }
@@ -2517,26 +2511,22 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
  
     RptqDocument *document = [self.document activeDocumentModel];
     
-    __weak RptqDocumentSection *section = document.hasDetailSection;
+    RptqDocumentSection *section = document.hasDetailSection;
     
-    __weak MADDesignerViewController *reportDesigner = self;
-    __weak UICollectionView *detailSection = [self getSectionViewForDocumentSection:document.hasDetailSection];
-    
-    __weak MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[detailSection.objectIdTag];
+    UICollectionView *detailSection = [self getSectionViewForDocumentSection:document.hasDetailSection];
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[detailSection.objectIdTag];
 
     [detailSection performBatchUpdates:^{
 
     
-        RptqDocumentObject *documentObject = [reportDesigner.document.document addDocumentObject:documentObjectDefination];
+        RptqDocumentObject *documentObject = [self.document.document addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
 
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
         MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
         la.objectID = documentObject.objectID;
-        la.frame = CGRectMake(documentObject.originx.floatValue,
-                              documentObject.originy.floatValue,
-                              documentObject.size.width,
-                              documentObject.size.height);
+        la.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue,
+                              documentObject.size.width, documentObject.size.height);
         [layoutManager addItem:la];
         [layoutManager layout];
         
@@ -2549,7 +2539,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
     } completion:^(BOOL finished) {
         
-        [reportDesigner.scroller.container setNeedsUpdateConstraints];
+        [self.scroller.container setNeedsUpdateConstraints];
         
     }];
 }
