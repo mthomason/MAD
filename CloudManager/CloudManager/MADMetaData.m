@@ -180,13 +180,6 @@
     return madMetaDataItems;
 }
 
-- (BOOL)sameFile:(MADMetaData *)unknown {
-    struct stat sa, sb;
-    if (stat(self.URL.path.UTF8String, &sa) < 0 || stat(unknown.URL.path.UTF8String, &sb) < 0)
-        return 0;
-    return  sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
-}
-
 - (BOOL)samePercentages:(MADMetaData *)unknown {
     return self.ubiquitousItemPercentDownloaded == unknown.ubiquitousItemPercentDownloaded &&
             self.ubiquitousItemPercentUploaded == unknown.ubiquitousItemPercentUploaded;
@@ -194,6 +187,13 @@
 
 - (NSUInteger)samePercentageHash {
     return self.ubiquitousItemPercentDownloaded * 5 + self.ubiquitousItemPercentUploaded * 7;
+}
+
+- (BOOL)sameFile:(MADMetaData *)unknown {
+    struct stat sa, sb;
+    if (stat(self.URL.path.UTF8String, &sa) < 0 || stat(unknown.URL.path.UTF8String, &sb) < 0)
+        return 0;
+    return  sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
 }
 
 - (NSUInteger)sameFileHash {
