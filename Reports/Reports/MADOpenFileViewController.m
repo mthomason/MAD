@@ -1604,7 +1604,20 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         if (name.length > 0) {
             NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
             if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
-                [self.filesController renameFileInfo:metaData toName:text];
+                if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
+                    UIDocument *doc = [[MADocument alloc] initWithFileURL:metaData.URL];
+                    [doc openWithCompletionHandler:^(BOOL success) {
+                        if (success) {
+                            [doc closeWithCompletionHandler:^(BOOL success) {
+                                if (success) {
+                                    [self.filesController renameFileInfo:metaData toName:text];
+                                }
+                            }];
+                        }
+                    }];
+                } else {
+                    [self.filesController renameFileInfo:metaData toName:text];
+                }
             } else {
                 UIAlertController *alert = [UIAlertController errorFileExist];
                 [self showViewController:alert sender:self];

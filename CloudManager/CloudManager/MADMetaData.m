@@ -146,17 +146,6 @@
     return self.isUbiquitous ? [self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] : NO;
 }
 
-
-- (UIImage *)imageForCloudStatus {
-    UIImage *result;
-    if ([self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = [UIImage imageNamed:@"MADImageToolbarCloudDownload"];
-    } else {
-        result = [UIImage imageNamed:@"MADImageToolbarCloud"];
-    }
-    return result;
-}
-
 - (BOOL)isSyncing {
     return self.isUbiquitous && (self.ubiquitousItemIsDownloading ||
                                  self.ubiquitousItemIsUploading);

@@ -8,7 +8,6 @@
 
 #import "MADFileUtilities.h"
 #import <UIKit/UIKit.h>
-#import "MADocument.h"
 #import "NSFileManager+Common.h"
 
 @implementation MADFileUtilities
@@ -165,21 +164,12 @@
 }
 
 + (void)moveRemoveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *, NSError *))completionHandler {
-    UIDocument * doc = [[MADocument alloc] initWithFileURL:source];
-    [doc openWithCompletionHandler:^(BOOL success) {
-        [doc closeWithCompletionHandler:^(BOOL success) {
-            if (success) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                    [self moveFileAtURL:source toUrl:destination withCompletionHandler:^(NSURL *result, NSError *error) {
-                        completionHandler(destination, error);
-                    }];
-                    
-                });
-            } else {
-                completionHandler(source, nil);
-            }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        [self moveFileAtURL:source toUrl:destination withCompletionHandler:^(NSURL *result, NSError *error) {
+            completionHandler(destination, error);
         }];
-    }];
+        
+    });
 }
 
 + (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler {

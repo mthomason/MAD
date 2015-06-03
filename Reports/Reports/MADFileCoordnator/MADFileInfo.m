@@ -36,25 +36,6 @@
 
 - (void)fetchInfoWithCompletionHandler:(void (^)(void))completionHandler {
     dispatch_async(self.fetchQueue, ^{
-        /*
-        if (self.color != AAPLListColorUndefined) {
-            completionHandler();
-            
-            return;
-        }
-        
-        [MADFileUtilities readListAtURL:self.URL withCompletionHandler:^(AAPLList *list, NSError *error) {
-            dispatch_async(self.fetchQueue, ^{
-                if (list) {
-                    self.color = list.color;
-                }
-                else {
-                    self.color = AAPLListColorGray;
-                }
-                
-                completionHandler();
-            });
-        }];*/
         completionHandler();
         return;
     });
