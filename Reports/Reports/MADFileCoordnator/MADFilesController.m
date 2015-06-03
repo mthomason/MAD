@@ -304,9 +304,9 @@
     NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
-    NSLog(@"Inserted %lu", (unsigned long)insertedMetaDatum.count);
-    NSLog(@"Removed %lu", (unsigned long)removedMetaDatum.count);
-    NSLog(@"Updated %lu", (unsigned long)updatedMetaDatum.count);
+    NSLog(@"Inserted %@", insertedMetaDatum);
+    NSLog(@"Removed %@", removedMetaDatum);
+    NSLog(@"Updated %@", updatedMetaDatum);
     
     [self.delegateQueue addOperationWithBlock:^{
         
@@ -338,14 +338,7 @@
             __block NSInteger trackedRemovedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
-                trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    if ([trackedRemovedListInfo.URL isEqual:((MADMetaData *)obj).URL]) {
-                        *stop = YES;
-                        return YES;
-                    } else {
-                        return NO;
-                    }
-                }];
+                trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObject:trackedRemovedListInfo];
                 
                 [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
             });
@@ -375,14 +368,7 @@
                 
                 untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
                 
-                untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    if ([untrackedInsertedListInfo.URL isEqual:((MADMetaData *)obj).URL]) {
-                        *stop = YES;
-                        return YES;
-                    } else {
-                        return NO;
-                    }
-                }];
+                
             });
             
             if ([self.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {
@@ -402,18 +388,6 @@
                 // Track the new list info instead of the old one.
                 if (updatedListInfoIndex != NSNotFound) {
                     self.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
-                } else {
-                    updatedListInfoIndex = [self.fileMetaDatum indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                        if ([updatedListInfo.URL.lastPathComponent isEqualToString:((MADMetaData *)obj).URL.lastPathComponent]) {
-                            *stop = YES;
-                            return YES;
-                        } else {
-                            return NO;
-                        }
-                    }];
-                    if (updatedListInfoIndex != NSNotFound) {
-                        self.fileMetaDatum[updatedListInfoIndex] = updatedListInfo;
-                    }
                 }
             });
             

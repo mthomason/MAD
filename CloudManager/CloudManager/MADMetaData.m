@@ -21,29 +21,30 @@
 
 @implementation MADMetaData
 
-- (id)initWithURL:(NSURL *)url {
+- (instancetype)initWithURL:(NSURL *)url {
     self = [super init];
     if (self) {
         
         NSError *__autoreleasing error = nil;
 
-        self.URL = url.copy;
+        NSURL *urlc = url.copy;
+        self.URL = urlc;
         
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:&error];
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:urlc.path error:&error];
         self.attributes = attributes;
 
     }
     return self;
 }
 
-- (id)initWithMetadataItem:(NSMetadataItem *)item {
+- (instancetype)initWithMetadataItem:(NSMetadataItem *)item {
     self = [super init];
     if (self) {
 
         self.metadataItem = item;
         
         NSURL *url =            [item valueForAttribute: NSMetadataItemURLKey];
-        self.URL = url;
+        self.URL = url.copy;
         
     }
     return self;
@@ -56,7 +57,7 @@
 
 - (NSData *)fileSystemContentChangeDate {
     return self.metadataItem ? [self.metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey] :
-    [self.attributes objectForKey:NSFileModificationDate];
+                                    [self.attributes objectForKey:NSFileModificationDate];
 }
 
 - (BOOL)isUbiquitous {
@@ -156,10 +157,6 @@
     return result;
 }
 
-- (NSString *)description {
-    return [NSString stringWithFormat:@"MADMetaData: %@, %llu, %f, %@, %@", self.fileSystemName, self.fileSystemFileSize, self.ubiquitousItemPercentDownloaded, self.fileSystemContentChangeDate, self.fileSystemFileCreationDate];
-}
-
 - (BOOL)isSyncing {
     return self.isUbiquitous && (self.ubiquitousItemIsDownloading ||
                                  self.ubiquitousItemIsUploading);
@@ -167,10 +164,8 @@
 
 + (NSArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems {
     NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
-    MADMetaData *metaData;
-    NSMetadataItem *metadataItem;
-    for (metadataItem in metadataItems) {
-        metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+    for (NSMetadataItem *metadataItem in metadataItems) {
+        MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
         [madMetaDataItems addObject:metaData];
     }
     return madMetaDataItems;
@@ -185,30 +180,44 @@
     return self.ubiquitousItemPercentDownloaded * 5 + self.ubiquitousItemPercentUploaded * 7;
 }
 
-- (BOOL)sameFile:(MADMetaData *)unknown {
-    struct stat sa, sb;
-    if (stat(self.URL.path.UTF8String, &sa) < 0 || stat(unknown.URL.path.UTF8String, &sb) < 0)
-        return 0;
-    return  sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
+- (unsigned long long)fileSystemFileNumber {
+    NSError *error = nil;
+    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
+    NSNumber *fsfn = [attributes objectForKey:NSFileSystemFileNumber];
+    return fsfn.longLongValue;
 }
 
-- (NSUInteger)sameFileHash {
+- (unsigned long long)fileSystemNumber {
+    NSError *error = nil;
+    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
+    NSNumber *fsf = [attributes objectForKey:NSFileSystemNumber];
+    return fsf.longLongValue;
+}
+
+- (unsigned long long)st_ino {
     struct stat sa;
-    int r = stat(self.URL.path.UTF8String, &sa);
-    return r < 0 ? 0 : (NSUInteger)(sa.st_dev * 2 + sa.st_ino * 3);
+    if (stat(self.URL.path.UTF8String, &sa) < 0) return 0;
+    return sa.st_ino;
+}
+
+- (BOOL)sameFile:(MADMetaData *)unknown {
+    return self.fileSystemNumber == unknown.fileSystemNumber &&
+            self.fileSystemFileNumber == self.fileSystemFileNumber;
+}
+
+- (unsigned long long)sameFileHash {
+    return self.fileSystemNumber * 2 + self.fileSystemFileNumber * 3;
 }
 
 - (BOOL)isEqual:(id)object {
-    if (self == object) {
-        return YES;
-    } else {
-        return  [self sameFile:object];
+    if ([object isKindOfClass:[MADMetaData class]]) {
+        return [self.fileSystemName compare:((MADMetaData *)object).fileSystemName] == NSOrderedSame;
     }
-    
+    return  NO;
 }
 
 - (NSUInteger)hash {
-    return [self sameFileHash] * 11;
+    return self.fileSystemName.hash;
 }
 
 @end

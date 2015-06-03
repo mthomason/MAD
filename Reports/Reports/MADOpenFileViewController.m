@@ -939,9 +939,18 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
 
-    cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
+    BOOL downloading = metadata.ubiquitousItemIsDownloading;
+    BOOL uploading = metadata.ubiquitousItemIsUploading;
     
-    if (metadata.ubiquitousItemIsUploading) {
+    if (downloading) {
+        cell.labelTitleSub.text = NSLocalizedString(@"Downloading", @"Downloading");
+    } else if (uploading) {
+        cell.labelTitleSub.text = NSLocalizedString(@"Syncing", @"Syncing");
+    } else {
+        cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
+    }
+    
+    if (uploading) {
         cell.progressViewUpload.hidden = NO;
         if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded / 100.0000f) {
             [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded / 100.0000f animated:YES];
@@ -951,7 +960,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [cell.progressViewUpload setProgress:0.0000f animated:YES];
     }
     
-    if (metadata.ubiquitousItemIsDownloading) {
+    if (downloading) {
         cell.progressViewDownload.hidden = NO;
         if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
             [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded / 100.0000f animated:YES];

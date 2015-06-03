@@ -44,48 +44,50 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         self.documentsDirectoryQueue = documentsDirectoryQueue;
         
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
-        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDataScope,
-                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
+        metadataQuery.searchScopes = @[//NSMetadataQueryUbiquitousDataScope,
+                                       //NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
                                        NSMetadataQueryUbiquitousDocumentsScope];
         metadataQuery.notificationBatchingInterval = 0.5000;
         metadataQuery.predicate = predicate;
-        metadataQuery.operationQueue = [[NSOperationQueue alloc] init];
-        metadataQuery.operationQueue.name = @"com.everydayapps.mad.cloudfilecoordinator.metadataQuery";
+        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+        operationQueue.name = @"com.everydayapps.mad.cloudfilecoordinator.metadataQuery";
+        metadataQuery.operationQueue = operationQueue;
+
+        [self addObserversToQuery:metadataQuery];
         self.metadataQuery = metadataQuery;
         
-        dispatch_barrier_async(_documentsDirectoryQueue, ^{
+        dispatch_barrier_async(self.documentsDirectoryQueue, ^{
             NSURL *cloudContainerURL = [[NSFileManager defaultManager] cloudDocumentsDirectoryForUbiquityID:ubiquityIdentifier];
             _documentsDirectory = cloudContainerURL;
         });
         
-        [self addObservers];
     }
     
     return self;
 }
 
-- (void)addObservers {
+- (void)addObserversToQuery:(NSMetadataQuery *)metadataQuery {
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver: self
                            selector: @selector(metadataQueryDidFinishGathering:)
                                name: NSMetadataQueryDidFinishGatheringNotification
-                             object: self.metadataQuery];
+                             object: metadataQuery];
     
     [notificationCenter addObserver: self
                            selector: @selector(metadataQueryDidUpdate:)
                                name: NSMetadataQueryDidUpdateNotification
-                             object: self.metadataQuery];
+                             object: metadataQuery];
     
     [notificationCenter addObserver: self
                            selector: @selector(handleMetadataQueryDidStartGatheringNotification:)
                                name: NSMetadataQueryDidStartGatheringNotification
-                             object: self.metadataQuery];
+                             object: metadataQuery];
     
     [notificationCenter addObserver: self
                            selector: @selector(handleMetadataQueryGatheringProgressNotification:)
                                name: NSMetadataQueryGatheringProgressNotification
-                             object: self.metadataQuery];
+                             object: metadataQuery];
 }
 
 - (void)removeObservers {
@@ -247,22 +249,18 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSArray *removedMetadata = removedMetadataItemsOrNil ?: @[];
     NSArray *updatedMetadata = updatedMetadataItemsOrNil ?: @[];
     
+    NSLog(@"UInserted %@", insertedMetadata);
+    NSLog(@"URemoved  %@", removedMetadata);
+    NSLog(@"UUpdated  %@", updatedMetadata);
+    
     NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata];
     NSArray *removed = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata];
     NSArray *updated = [MADMetaData madMetaDataItemsForNSMetadataItems:updatedMetadata];
 
     [self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
                                                         removedMetaDatum: removed
-                                                        updatedMetaDatum: updated completion:^(BOOL success, NSError *error) {
-                                                            
-                                                            if (success) {
-
-                                                            }
-                                                            
-                                                        }];
-    
+                                                        updatedMetaDatum: updated completion:^(BOOL success, NSError *error) { }];
     [self.metadataQuery enableUpdates];
-
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {

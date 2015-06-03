@@ -55,10 +55,13 @@
 
 + (NSArray *)madMetaDataItemsForNSMetadataItems:(NSArray *)metadataItems;
 
-- (id)initWithURL:(NSURL *)url;
-- (id)initWithMetadataItem:(NSMetadataItem *)item;
+- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
 
 - (BOOL)isSyncing;
+//- (unsigned long long)st_ino;
+- (unsigned long long)fileSystemFileNumber;
+- (unsigned long long)fileSystemNumber;
 
 @end
 
