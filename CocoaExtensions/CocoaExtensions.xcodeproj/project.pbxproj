@@ -13,9 +13,7 @@
 		4C1AD34B1B1838B600839504 /* UILabel+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD34A1B1838B600839504 /* UILabel+Constructors.m */; };
 		4C1AD3501B18413E00839504 /* UIBarButtonItem+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD34F1B18413E00839504 /* UIBarButtonItem+Constructors.m */; };
 		4C37E1191ACC864500B4BC0D /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C37E10D1ACC864500B4BC0D /* libCocoaExtensions.a */; };
-		4C37E12B1ACC87C600B4BC0D /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E1291ACC87C600B4BC0D /* NSFileManager+Common.m */; };
 		4C37E12C1ACC87C600B4BC0D /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E12A1ACC87C600B4BC0D /* NSURL+Document.m */; };
-		4C37E12D1ACC87DB00B4BC0D /* NSFileManager+Common.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */; };
 		4C37E12E1ACC87DB00B4BC0D /* NSURL+Document.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */; };
 		4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */; };
 		4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C65D4761ADCC3F100279B4D /* BDHost.m */; };
@@ -45,7 +43,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				4C37E12D1ACC87DB00B4BC0D /* NSFileManager+Common.h in CopyFiles */,
 				4C37E12E1ACC87DB00B4BC0D /* NSURL+Document.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,9 +63,7 @@
 		4C37E10D1ACC864500B4BC0D /* libCocoaExtensions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCocoaExtensions.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C37E1181ACC864500B4BC0D /* CocoaExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C37E11E1ACC864500B4BC0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Document.h"; sourceTree = "<group>"; };
-		4C37E1291ACC87C600B4BC0D /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Common.m"; sourceTree = "<group>"; };
 		4C37E12A1ACC87C600B4BC0D /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Document.m"; sourceTree = "<group>"; };
 		4C4AC1C21AD1125000D4C461 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C4AC1C31AD1125000D4C461 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
@@ -143,8 +138,6 @@
 				4C8CDAC91AD243B500B7B9EA /* MTLog.h */,
 				4C8CDAC51AD2433D00B7B9EA /* NSError+Constructors.h */,
 				4C8CDAC61AD2433D00B7B9EA /* NSError+Constructors.m */,
-				4C37E1271ACC87C600B4BC0D /* NSFileManager+Common.h */,
-				4C37E1291ACC87C600B4BC0D /* NSFileManager+Common.m */,
 				4C8CDC7F1AD2667000B7B9EA /* NSThread+Extras.h */,
 				4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */,
 				4C37E1281ACC87C600B4BC0D /* NSURL+Document.h */,
@@ -295,7 +288,6 @@
 				4C8CDADE1AD246A700B7B9EA /* UIApplication+Helpers.m in Sources */,
 				4C1AD3501B18413E00839504 /* UIBarButtonItem+Constructors.m in Sources */,
 				4C1AD34B1B1838B600839504 /* UILabel+Constructors.m in Sources */,
-				4C37E12B1ACC87C600B4BC0D /* NSFileManager+Common.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

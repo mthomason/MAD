@@ -225,6 +225,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C111C181B1EDED2005CA4DD /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CloudManager/CloudManager/NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,7 +245,6 @@
 		4C8CD99E1AD1D28B00B7B9EA /* MADocumentState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADocumentState.h; sourceTree = "<group>"; };
 		4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADocumentState.m; sourceTree = "<group>"; };
 		4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
-		4C8CD9A41AD1D33400B7B9EA /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = ../../CloudManager/CloudManager/MACloudManager.h; sourceTree = "<group>"; };
 		4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
 		4C8CD9AC1AD1D4EA00B7B9EA /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnection.h; sourceTree = "<group>"; };
@@ -320,7 +320,6 @@
 		4C8CDA141AD1DA5E00B7B9EA /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
 		4C8CDA151AD1DA5E00B7B9EA /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
 		4C8CDA161AD1DA5E00B7B9EA /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
-		4C8CDA271AD1DAF000B7B9EA /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4C8CDA291AD1DCC100B7B9EA /* MTQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuery.h; sourceTree = "<group>"; };
 		4C8CDA2A1AD1DCC100B7B9EA /* MTQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuery.m; sourceTree = "<group>"; };
 		4C8CDA2B1AD1DCC100B7B9EA /* MTQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCache.h; sourceTree = "<group>"; };
@@ -928,7 +927,6 @@
 				4C65D4781ADCC4F100279B4D /* BDHost.h */,
 				4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */,
 				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
-				4C8CDA271AD1DAF000B7B9EA /* NSFileManager+Common.h */,
 				4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */,
 				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
 				4C8CDACA1AD243C300B7B9EA /* MTLog.h */,
@@ -944,7 +942,7 @@
 		4C8CD9A31AD1D2F700B7B9EA /* libCloudManager */ = {
 			isa = PBXGroup;
 			children = (
-				4C8CD9A41AD1D33400B7B9EA /* MACloudManager.h */,
+				4C111C181B1EDED2005CA4DD /* NSFileManager+Common.h */,
 				4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */,
 			);
 			name = libCloudManager;
