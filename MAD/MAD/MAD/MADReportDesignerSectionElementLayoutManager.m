@@ -753,11 +753,9 @@
 - (CGPoint)pointNearestDropPoint: (CGPoint)dropPoint
                  fromValidPoints: (NSArray *)validLocations {
     
-    CGPoint nearestPoint = dropPoint;
-    CGFloat distance = CGSizeZero.width;
-    CGFloat d2;
+    CGPoint nearestPoint = dropPoint, point;
+    CGFloat distance = CGSizeZero.width, d2;
     NSValue *value;
-    CGPoint point;
     for (value in validLocations) {
         point = [value CGPointValue];
         d2 = CGDistance(dropPoint, point);

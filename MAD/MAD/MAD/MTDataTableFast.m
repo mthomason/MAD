@@ -571,7 +571,8 @@
         if (success) {  //Expect success to == NO in normal working conditions.
             success = sqlite3_step(statement) == SQLITE_ROW;
             result = [self currentObject:statement];
-            self.lastDataForCacheId = [MTPair pairWithFormer:cacheId andLatter:result];
+            NSNumber *cid = [NSNumber numberWithInteger:cacheId.integerValue];
+            self.lastDataForCacheId = [MTPair pairWithFormer:cid andLatter:result];
         }
         
         sqlite3_finalize(statement);
