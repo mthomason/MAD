@@ -304,9 +304,9 @@
     NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
-    NSLog(@"Inserted %@", insertedMetaDatum);
-    NSLog(@"Removed %@", removedMetaDatum);
-    NSLog(@"Updated %@", updatedMetaDatum);
+    //NSLog(@"Inserted %@", insertedMetaDatum);
+    //NSLog(@"Removed %@", removedMetaDatum);
+    //NSLog(@"Updated %@", updatedMetaDatum);
     
     [self.delegateQueue addOperationWithBlock:^{
         

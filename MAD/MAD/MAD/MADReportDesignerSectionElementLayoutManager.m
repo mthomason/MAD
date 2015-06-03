@@ -24,7 +24,7 @@
 @property (nonatomic, strong, readwrite) NSMutableDictionary *items;
 @property (nonatomic, weak) MADReportDesignerSectionLayoutAttributes *lastItem;
 @property (nonatomic, assign) BOOL lastOpperationWasAdditon;
-
+@property (nonatomic, assign) BOOL visibility;
 @end
 
 @implementation MADReportDesignerSectionElementLayoutManager
@@ -35,7 +35,7 @@
         
         NSMutableDictionary *items = [NSMutableDictionary dictionary];
         self.items = items;
-        
+        self.visibility = section.visibility.boolValue;
         RptqDocumentSectionRows *rows = section.hasRows.firstObject;
         NSOrderedSet *objects = rows.hasObjects;
         NSInteger itemCounter = 0;
@@ -241,10 +241,12 @@
 
 - (CGSize)size {
     __block CGSize size = CGSizeZero;
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
-        size.width = MAX(size.width, layout.frame.origin.x + layout.frame.size.width);
-        size.height = MAX(size.height, layout.frame.origin.y + layout.frame.size.height);
-    }];
+    if (self.visibility) {
+        [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
+            size.width = MAX(size.width, layout.frame.origin.x + layout.frame.size.width);
+            size.height = MAX(size.height, layout.frame.origin.y + layout.frame.size.height);
+        }];
+    }
     return size;
 }
 
