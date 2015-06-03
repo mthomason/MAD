@@ -26,7 +26,6 @@
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIViewController+UI.h"
-#import "MACloudManager.h"
 
 #import "MADQueryNavigationController.h"
 #import "UIColor+EverydayApps.h"

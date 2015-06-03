@@ -30,6 +30,8 @@
 
 + (void)moveFileAtURL:(NSURL *)source toUrl:(NSURL *)destination withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler;
 
++ (NSURL *)uniqueURLForURL:(NSURL *)url;;
+
 @end
 
 #endif

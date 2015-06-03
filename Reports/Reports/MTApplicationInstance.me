@@ -34,9 +34,7 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import "MTNavigationController.h"
 #import "MTNavigationControllerHideBottomBarUnlicensed.h"
 #import "MADNavigationControllerSplitParentViewController.h"
-#import "MACloudManager.h"
 
-#import "MADFileCoordinator.h"
 #import "MADFilesController.h"
 #import "MADLocalFileCoordinator.h"
 #import "MADCloudFileCoordinator.h"
@@ -66,9 +64,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.424";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.424";
-NSString * const MTGlobalBundleRev                                  = @"1799";
+NSString * const MTGlobalBundleVersion                              = @"7.0.426";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.426";
+NSString * const MTGlobalBundleRev                                  = @"1801";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -411,14 +409,14 @@ static MTApplicationInstance *mainInstance;
 #pragma mark - Property Overrides
 
 - (BOOL)isCloudAvailable {
-    return [MACloudManager isCloudAvailable];
+    return [MADFilesController isCloudAvailable];
 }
 
 - (MADAppStorageState)storageState {
     return (MADAppStorageState) {
         .storageOption = self.storageOption,
         .accountDidChange = [self hasUbiquityIdentityChanged],
-        .cloudAvailable = [MACloudManager isCloudAvailable]
+        .cloudAvailable = [MADFilesController isCloudAvailable]
     };
 }
 

@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "MACloudManager.h"
 
 @interface Test_Cloud : XCTestCase
 

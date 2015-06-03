@@ -12,6 +12,7 @@
 
 #import "MADAboutTableViewController.h"
 #import <MessageUI/MessageUI.h>
+#import <CoreText/CoreText.h>
 #import "MTApplicationInstance.h"
 #import "UIApplication+Extras.h"
 #import "MADOpenFileViewController.h"
@@ -20,8 +21,6 @@
 #import "UIColor+EverydayApps.h"
 #import "MADVibrantTableViewCell.h"
 #import "MADVibrantTableView.h"
-#import <CoreText/CoreText.h>
-#import "MACloudManager.h"
 #import "MADocument.h"
 #import "MADConstants.h"
 

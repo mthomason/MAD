@@ -13,10 +13,7 @@
 
 @interface MADMetaData ()
 
-@property (nonatomic, strong, readwrite) NSURL     *URL;
-
-//@property (nonatomic, strong) NSNumberFormatter *numberFormatterFileSize;
-
+@property (nonatomic, strong, readwrite) NSURL *URL;
 @property (nonatomic, strong) NSMetadataItem *metadataItem;
 @property (nonatomic, strong) NSDictionary *attributes;
 
@@ -131,7 +128,6 @@
 }
 
 - (double)ubiquitousItemPercentDownloaded {
-    NSLog(@"Percent d %@", [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]);
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue) : 100.0;
 }
 

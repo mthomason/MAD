@@ -42,7 +42,6 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 
 #import "MADFileManager.h"
-#import "MADMetadataQueryManager.h"
 #import "MADUpgradeManager.h"
 #import "MADBarButtonItem.h"
 
@@ -79,6 +78,9 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 static NSString * const sNotDownloaded                          = @"Not Downloaded";
+NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
+NSString * const MADUtiPublicData                               = @"public.data";
+
 
 CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
@@ -246,7 +248,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager isCloudAvailable] ? MADSectionHeaderHeight : CGSizeZero.height),
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MADFilesController isCloudAvailable] ? MADSectionHeaderHeight : CGSizeZero.height),
                                                                  self.collectionView.contentInset.left,
                                                                  self.collectionView.contentInset.bottom,
                                                                  self.collectionView.contentInset.right);

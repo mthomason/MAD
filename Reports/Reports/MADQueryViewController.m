@@ -94,7 +94,6 @@
 #import "NSParagraphStyle+CommonStyles.h"
 
 #import "UIViewController+UI.h"
-#import "MACloudManager.h"
 
 #import "MADNavigationBarTitleView.h"
 

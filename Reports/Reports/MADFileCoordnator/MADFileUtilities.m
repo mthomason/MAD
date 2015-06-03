@@ -8,10 +8,8 @@
 
 #import "MADFileUtilities.h"
 #import <UIKit/UIKit.h>
-#import "MTApplicationInstance.h"
-#import "NSFileManager+Common.h"
-#import "MACloudManager.h"
 #import "MADocument.h"
+#import "NSFileManager+Common.h"
 
 @implementation MADFileUtilities
 
@@ -64,7 +62,7 @@
     if ([fileManager isUbiquitousItemAtURL:destinationURL] ||
         [fileManager fileExistsAtPath:destinationURL.path]) {
 
-        destinationURL = [MACloudManager uniqueURLForURL:destinationURL];
+        destinationURL = [MADFileUtilities uniqueURLForURL:destinationURL];
         
     }
     
@@ -150,7 +148,7 @@
 + (void)renameFileAtURL:(NSURL *)source toName:(NSString *)name withCompletionHandler:(void (^)(NSURL *sourceURL, NSURL *newURL, NSError *error))completionHandler {
     NSString *filename = [name stringByAppendingPathExtension:source.lastPathComponent.pathExtension];
     NSURL *desired = [source.URLByDeletingLastPathComponent URLByAppendingPathComponent:filename isDirectory:NO];
-    NSURL *destination = [MACloudManager uniqueURLForURL:desired];
+    NSURL *destination = [MADFileUtilities uniqueURLForURL:desired];
 
     NSString *status;
     NSError *errorGettingAttributes = nil;
@@ -214,9 +212,37 @@
 
 }
 
++ (NSURL *)uniqueURLForURL:(NSURL *)url {
+    return [self uniqueUrlInDirectory: url.URLByDeletingLastPathComponent
+                    withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
+                         andExtension: url.lastPathComponent.pathExtension];
+}
+
++ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory
+              withDesiredHandle:(NSString *)desiredFileHandle
+                   andExtension:(NSString *)extension {
+    
+    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+    NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
+    NSURL *fileUrl = extension.length > 0 ?
+    [baseUrl URLByAppendingPathExtension: extension] :
+    baseUrl;
+    NSInteger ctr = 0;
+    BOOL isDir1;
+    while ([defaultFileManager fileExistsAtPath:fileUrl.path isDirectory:&isDir1] || [defaultFileManager isUbiquitousItemAtURL:fileUrl]) {
+        
+        NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
+        NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
+        fileUrl = [baseUrlFormatted URLByAppendingPathExtension: extension];
+        ctr++;
+    }
+    return fileUrl;
+    
+}
+
 + (void)duplicateFileAtURL:(NSURL *)url withCompletionHandler:(void (^)(NSURL *result, NSError *error))completionHandler {
     
-    NSURL *uniqueUrl = [MACloudManager uniqueUrlInDirectory: url.URLByDeletingLastPathComponent
+    NSURL *uniqueUrl = [self uniqueUrlInDirectory: url.URLByDeletingLastPathComponent
                                           withDesiredHandle: url.lastPathComponent.stringByDeletingPathExtension
                                                andExtension: url.lastPathComponent.pathExtension];
 

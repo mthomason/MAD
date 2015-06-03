@@ -22,14 +22,10 @@
 #import "MTQueryBuilderContainerController.h"
 
 #import "MADFileManager.h"
-//#import "MTUser.h"
 
 #import "MADOpenFileViewController.h"
 
-#import "MACloudManager.h"
 #import "MTLog.h"
-
-#import "UIDevice+Hack.h"
 
 #import "MADFilesController.h"
 #import "MADFileUtilities.h"
@@ -51,8 +47,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                     //  otherwise load window in didFinishLaunchingWithOptions
 
 @interface AppDelegate()
-    <UIDocumentInteractionControllerDelegate,
-        MADCloudManagerProtocolAppDetails>
+    <UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTApplicationInstance *applicationInstance;
 @property (nonatomic, strong) UIStoryboard *storyboard;
@@ -142,8 +137,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [self.applicationInstance initalizeAppearance];
     
-    [MACloudManager sharedManager].delegateApplication = self;
-
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
         
         [self getUserCloudPrefs];
@@ -160,8 +153,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     dispatch_async(self.appDelegateQueue, ^{
         [MTApplicationInstance deleteCoreDataCache];
     });
-    
-    [[MACloudManager sharedManager] setGroupId:MADIdentifierGroup];
     
 }
 
@@ -427,7 +418,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                     
                 };
                 
-                [MACloudManager getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
+                [MADFilesController getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
                                                              groupIdentifier:MADIdentifierGroup
                                                                        delay:handleLongRunningCloudLookup
                                                                   completion:completion];

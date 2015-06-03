@@ -35,6 +35,8 @@
 
 @end
 
+typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL *documents, NSURL *data);
+
 @interface MADFilesController : NSObject
 
     @property (nonatomic, weak) id<MADFilesControllerDelegate> delegate;
@@ -55,6 +57,13 @@
     - (void)createFileInfoForFile:(MADFile *)list withName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention fileGroup:(NSString *)fileGroup;
     - (void)setFileInfoHasNewContents:(MADMetaData *)listInfo;
+
+    + (BOOL)isCloudAvailable;
+
+    + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+                                         groupIdentifier: (NSString *)groupIdentifier
+                                                   delay: (void (^)())handleLongRunningCall
+                                              completion: (MADBlockCompletionFileStorageLocation)handleCompletion;
 
 @end
 

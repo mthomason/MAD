@@ -9,6 +9,7 @@
 #import "MADFilesController.h"
 #import "MADFileCoordinator.h"
 #import "MADMetaData.h"
+#import "NSFileManager+Common.h"
 
 @interface MADFilesController () <MADFileCoordinatorDelegate>
 
@@ -22,6 +23,59 @@
 @implementation MADFilesController
 @synthesize fileCoordinator = _fileCoordinator;
 @synthesize delegateQueue = _delegateQueue;
+
+#pragma mark - Static helpers
+
++ (BOOL)isCloudAvailable {
+    return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
+}
+
++ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+                                     groupIdentifier: (NSString *)groupIdentifier
+                                               delay: (void (^)())handleLongRunningCall
+                                          completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
+    
+    if ([self isCloudAvailable]) {
+        void (^longRunningCallBlock)() = [handleLongRunningCall copy];
+        [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
+                                target: self
+                              selector: @selector(handleLongRunningCloudUrlLookup:)
+                              userInfo: longRunningCallBlock
+                               repeats: NO];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            
+            NSFileManager *fileManager = [[NSFileManager alloc] init];
+            //This call may be SLOW, so only do on BACKGROUND thread.
+            
+            NSURL *ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
+            
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                NSURL *documentDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Documents"];
+                NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
+                [fileManager coordinateCreateDirectoryIfDoesNotExist:documentDirectory];
+                [fileManager coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
+                
+                if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
+                
+            });
+        });
+    } else {
+        NSURL *documents = [[NSFileManager defaultManager] localDataDirectoryForGroupIdentifier:groupIdentifier];
+        NSURL *data = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:groupIdentifier];
+        if (handleCompletion) handleCompletion(NO, documents, data);
+    }
+    
+}
+
++ (void)handleLongRunningCloudUrlLookup:(NSTimer *)timer {
+    if(timer.userInfo) {
+        void (^block)() = (void (^)())timer.userInfo;
+        block();
+    }
+}
 
 #pragma mark - Initialization
 

@@ -24,11 +24,11 @@
 #import "UIColor+EverydayApps.h"
 #import "UIApplication+Extras.h"
 #import "MTErrorContainer.h"
-#import "MACloudManager.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTKeyChain.h"
 #import "UIAlertController+Constructors.h"
+#import "MADFileUtilities.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
@@ -179,7 +179,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     
     NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
     NSURL *desiredUrl = [[MTApplicationInstance mainInstance].filesController.documentDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-    NSURL *uniqueURL = [MACloudManager uniqueURLForURL:desiredUrl];
+    NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL:desiredUrl];
     
     MADocument *doc = [[MADocument alloc] initWithFileURL:uniqueURL];
     self.docToSave = doc;

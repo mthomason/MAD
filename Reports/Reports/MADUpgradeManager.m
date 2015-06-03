@@ -8,10 +8,7 @@
 
 #import "MADUpgradeManager.h"
 #import "MADConstants.h"
-#import "MACloudManager.h"
 #import "MTApplicationInstance.h"
-#import "MADMetaData.h"
-#import "MADFilesController.h"
 #import "NSFileManager+Common.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.

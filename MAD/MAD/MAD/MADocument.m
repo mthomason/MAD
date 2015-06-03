@@ -11,6 +11,7 @@
 #endif
 
 #import "MADocument.h"
+
 #import "MADConstants.h"
 #import "MTActivityIndicator.h"
 
@@ -19,9 +20,6 @@
 #import "CGGeometry+Extras.h"
 
 #import "MADocumentState.h"
-
-#import "MACloudManager.h"
-
 
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTPaper.h"
@@ -965,7 +963,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSString *fileName = [handle stringByAppendingString:@"1024"];
     fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     
-    NSString *fileNameId = [MACloudManager filenameId:handle.hash];
+    NSString *fileNameId = [self filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
     
@@ -976,7 +974,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     
-    NSString *fileNameId = [MACloudManager filenameId:handle.hash];
+    NSString *fileNameId = [self filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
@@ -1161,6 +1159,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
 }
 
+#pragma mark File Name
+
++ (NSString *)filenameId:(NSUInteger)tag {
+    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+}
+
 - (void)removeGuts {
     NSArray *propertyKeys = @[NSURLIsDirectoryKey];
     NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts
@@ -1188,7 +1192,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [MACloudManager filenameId:[filename hash]];
+    NSString *filenameId = [self filenameId:[filename hash]];
     return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 

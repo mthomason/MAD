@@ -93,7 +93,6 @@
 #import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
-#import "MACloudManager.h"
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
 
