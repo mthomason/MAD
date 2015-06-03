@@ -256,12 +256,13 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                         updatedMetaDatum: updated completion:^(BOOL success, NSError *error) {
                                                             
                                                             if (success) {
-                                                                [self.metadataQuery enableUpdates];
+
                                                             }
                                                             
                                                         }];
     
-    
+    [self.metadataQuery enableUpdates];
+
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {

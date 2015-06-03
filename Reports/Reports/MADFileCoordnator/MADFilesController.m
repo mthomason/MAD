@@ -304,6 +304,9 @@
     NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
+    NSLog(@"Inserted %lu", (unsigned long)insertedMetaDatum.count);
+    NSLog(@"Removed %lu", (unsigned long)removedMetaDatum.count);
+    NSLog(@"Updated %lu", (unsigned long)updatedMetaDatum.count);
     
     [self.delegateQueue addOperationWithBlock:^{
         
@@ -314,11 +317,12 @@
         NSArray *fileMetaDatum = [NSArray arrayWithArray:self.fileMetaDatum];
  
         dispatch_sync(self.fileMetaDataQueue, ^{
-            NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"self in %@", fileMetaDatum];
+            NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
             trackedRemovedListInfos = [removedMetaDatum filteredArrayUsingPredicate:containPredicate];
             
             NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             untrackedInsertedListInfos = [insertedMetaDatum filteredArrayUsingPredicate:doesntContainPredicate];
+            
         });
         
         if (untrackedInsertedListInfos.count == 0 && trackedRemovedListInfos.count == 0 && updatedMetaDatum.count == 0) {
@@ -334,7 +338,14 @@
             __block NSInteger trackedRemovedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
-                trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObject:trackedRemovedListInfo];
+                trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([trackedRemovedListInfo.URL isEqual:((MADMetaData *)obj).URL]) {
+                        *stop = YES;
+                        return YES;
+                    } else {
+                        return NO;
+                    }
+                }];
                 
                 [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
             });
@@ -363,6 +374,15 @@
                 }
                 
                 untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
+                
+                untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([untrackedInsertedListInfo.URL isEqual:((MADMetaData *)obj).URL]) {
+                        *stop = YES;
+                        return YES;
+                    } else {
+                        return NO;
+                    }
+                }];
             });
             
             if ([self.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {
