@@ -259,8 +259,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
     [self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
                                                         removedMetaDatum: removed
-                                                        updatedMetaDatum: updated completion:^(BOOL success, NSError *error) { }];
-    [self.metadataQuery enableUpdates];
+                                                        updatedMetaDatum: updated completion:^(BOOL success, NSError *error) {
+                                                            [self.metadataQuery enableUpdates];
+                                                        }];
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {

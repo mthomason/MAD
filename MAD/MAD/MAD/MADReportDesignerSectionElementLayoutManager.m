@@ -25,6 +25,7 @@
 @property (nonatomic, weak) MADReportDesignerSectionLayoutAttributes *lastItem;
 @property (nonatomic, assign) BOOL lastOpperationWasAdditon;
 @property (nonatomic, assign) BOOL visibility;
+
 @end
 
 @implementation MADReportDesignerSectionElementLayoutManager

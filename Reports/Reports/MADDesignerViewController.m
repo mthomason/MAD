@@ -105,6 +105,7 @@
 #import "MADToolboxViewController.h"
 
 #import "UIAlertController+Constructors.h"
+#import "NSLayoutConstraint+Designer.h"
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
@@ -460,18 +461,22 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.scroller.delegate = self;
 
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
-    NSLayoutConstraint *constraintContentLeft = [self layoutConstraintViewContentLeft];
+    NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint layoutConstraintView:self.view
+                                                                             contentLeft:self.scroller.container];
     constraintContentLeft.priority = 999;
     [constraints addObject:constraintContentLeft];
     
-    NSLayoutConstraint *constraintContentRight = [self layoutConstraintViewContentRight];
+    NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint layoutConstraintView:self.view
+                                                                             contentRight:self.scroller.container];
     constraintContentRight.priority = 999;
     [constraints addObject:constraintContentRight];
 
-    NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
+    NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint layoutConstraintView:self.scroller
+                                                                             contentTop:self.scroller.container];
     [constraints addObject:constraintContentTop];
     
-    NSLayoutConstraint *constraintScrollerBottom = [self layoutConstraintViewScrollerBottom];
+    NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint layoutConstraintViewScroller:self.scroller
+                                                                                             bottom:self.bottomLayoutGuide];
     [constraints addObject:constraintScrollerBottom];
 
     NSLayoutConstraint *constraintWidth = [self layoutConstraintContentWidthCalculated];
@@ -496,23 +501,28 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.navigationControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
     self.navigationControllerSectionLayoutSettings.preferredContentSize = [MADDesignerViewController sizePopoverSectionSettings];
     
-    NSLayoutConstraint *layoutConstraintToolboxHeight = [self layoutConstraintToolBoxViewHeight];
+    NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint layoutConstraintToolBoxViewHeight:self.toolbox
+                                                                                                              height:[self toolboxHeightCalculated]];
     self.layoutConstraintsToolboxVisiable =  @[layoutConstraintToolboxHeight];
     
-    NSLayoutConstraint *layoutConstraintViewToolbarHeightHidden = [self layoutConstraintViewToolbarHeightHidden];
+    NSLayoutConstraint *layoutConstraintViewToolbarHeightHidden = [NSLayoutConstraint layoutConstraintViewToolbarHeightHidden:self.toolbarBottom];
     layoutConstraintViewToolbarHeightHidden.constant = CGSizeZero.height;
     [constraints addObject: layoutConstraintViewToolbarHeightHidden];
     
-    NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [self layoutConstraintToolboxHeightHidden];
+    NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint layoutConstraintToolboxHeightHidden:self.toolbox];
     [constraints addObject: layoutConstraintToolboxHeightHidden];
     
-    NSLayoutConstraint *layoutConstraintToolBoxViewBottom = [self layoutConstraintToolBoxViewBottom];
+    NSLayoutConstraint *layoutConstraintToolBoxViewBottom = [NSLayoutConstraint layoutConstraintToolBoxViewBottom: self.toolbox
+                                                                                                           toItem: self.view];
     [constraints addObject:layoutConstraintToolBoxViewBottom];
     
-    NSLayoutConstraint *layoutConstraintViewScrollerTop = [self layoutConstraintViewScrollerTop];
+    NSLayoutConstraint *layoutConstraintViewScrollerTop = [NSLayoutConstraint layoutConstraintViewScrollerTop: self.scroller
+                                                                                                       toItem: self.topLayoutGuide];
     [constraints addObject: layoutConstraintViewScrollerTop];
     
-    NSLayoutConstraint *layoutConstraintToolbarBottomToToolboxView = [self layoutConstraintToolbarBottomToToolboxView];
+    NSLayoutConstraint *layoutConstraintToolbarBottomToToolboxView = [NSLayoutConstraint layoutConstraintToolbarBottomToToolboxView:self.toolbarBottom
+                                                                                                                             toItem:self.toolbox];
+    
     [constraints addObject: layoutConstraintToolbarBottomToToolboxView];
     
     NSArray *layoutConstraintsToolboxHidden = @[layoutConstraintToolboxHeightHidden, constraintScrollerBottom];
@@ -574,11 +584,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
     NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
     
-    NSArray *rulerConstraints = [MADDesignerViewController layoutConstraintsRuler: self.ruler
-                                                                       inDesigner: self.scroller.container];
+    NSArray *rulerConstraints = [NSLayoutConstraint layoutConstraintsRuler: self.ruler
+                                                                       inDesigner: self.scroller.container marginTop:MTReportDesignerBorderPaddingVertical heigh:MTReportDesignerRulerHeight];
     
-    NSArray *rulerSideConstraints = [MADDesignerViewController layoutConstraintsRulerSide: self.ruler
-                                                                               inDesigner: self.scroller.container];
+    NSArray *rulerSideConstraints = [NSLayoutConstraint layoutConstraintsRulerSide: self.ruler
+                                                                        inDesigner: self.scroller.container
+                                                                        sideMargin:MTReportDesignerBorderPaddingSides];
     
     [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
     
@@ -628,13 +639,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             sectionView.showsVerticalScrollIndicator = YES;
             
-            NSLayoutConstraint *lc1a = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                             toItemBottom: constraintItem];
+            NSLayoutConstraint *lc1a = [NSLayoutConstraint layoutConstraintSection: sectionView
+                                                                             toItemBottom: constraintItem padding:MTReportDesignerBufferPaddingVertical];
             [self.layoutConstraintsSectionsVerticalBuffer addObject:lc1a];
             [constraintsContainer addObject:lc1a];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1a];
             
-            NSLayoutConstraint *lc1b = [MADDesignerViewController layoutConstraintSection: sectionView
+            NSLayoutConstraint *lc1b = [NSLayoutConstraint layoutConstraintSection: sectionView
                                                                                  toHeight: reportSection.height.floatValue];
             NSManagedObjectID *objectId = [sectionView objectIdTag];
             NSString *key = [objectId key];
@@ -643,24 +654,25 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [constraintsContainer addObject:lc1b];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1b];
 
-            NSLayoutConstraint *lc1c = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                             toLabelRight: sectionViewLabel];
+            NSLayoutConstraint *lc1c = [NSLayoutConstraint layoutConstraintSection: sectionView
+                                                                             toLabelRight: sectionViewLabel padding:MTReportDesignerBufferPaddingVertical];
             [constraintsContainer addObject:lc1c];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1c];
             
-            NSLayoutConstraint *lc1d = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                            toLabelBottom: sectionViewLabel];
+            NSLayoutConstraint *lc1d = [NSLayoutConstraint layoutConstraintSection: sectionView
+                                                                            toLabelBottom: sectionViewLabel
+                                                                           padding:MTReportDesignerBufferPaddingVertical];
             [constraintsContainer addObject:lc1d];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1d];
             
-            NSLayoutConstraint *lc1e = [MADDesignerViewController layoutConstraintLabel: sectionViewLabel
+            NSLayoutConstraint *lc1e = [NSLayoutConstraint layoutConstraintLabel: sectionViewLabel
                                                                                toHeight: MTReportDesignerSectionLabelHeight];
             [self.layoutConstraintSectionLabelHeightContainer addObject:lc1e];
             [constraintsContainer addObject:lc1e];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1e];
             
-            NSArray *collectionViewConstraints = [MADDesignerViewController layoutConstraintsForSection: sectionView
-                                                                                                content: self.scroller.container];
+            NSArray *collectionViewConstraints = [NSLayoutConstraint layoutConstraintsForSection: sectionView
+                                                                                                content: self.scroller.container padding:MTReportDesignerBorderPaddingSides];
             [constraintsScroller addObjectsFromArray:collectionViewConstraints];
             [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
             
@@ -693,15 +705,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     sectionHeights += MTReportDesignerBorderPaddingVertical;
 
     
-    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [MADDesignerViewController layoutConstraintViewContent: self.scroller.container
-                                                                                                                    height: sectionHeights];
+    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint layoutConstraintViewContent: self.scroller.container
+                                                                                                             height: sectionHeights];
     [constraintsScroller addObject:layoutConstraintDesignerContentViewHeight];
     [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintDesignerContentViewHeight];
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
 
     
-    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [MADDesignerViewController layoutConstraintViewContent: self.scroller.container
-                                                                                                       toScrollerBottom: self.scroller];
+    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint layoutConstraintViewContent: self.scroller.container
+                                                                                                toScrollerBottom: self.scroller];
     
     [constraintsScroller addObject:layoutConstraintContentToScollerBottom];
     [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintContentToScollerBottom];
@@ -1035,9 +1047,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView
-                       withView: (UIView *)view
-                        atScale: (CGFloat)scale {
+- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
     
     if ([scrollView isEqual:self.scroller]) {
 
@@ -1432,9 +1442,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return UIModalPresentationOverFullScreen;
 }
 
-
-- (UIViewController *)presentationController:(UIPresentationController *)controller
-  viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
+- (UIViewController *)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
     
     UIViewController *result;
     if (style != UIModalPresentationPopover &&
@@ -1473,14 +1481,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-- (void)cancel:(id)sender {
-    self.hidesStatusBar = NO;
-    __weak MADDesignerViewController *weakself = self;
-    [self dismissViewControllerAnimated:YES completion:^{
-        [weakself setDisplayActive];
-    }];
-}
-
 #pragma mark - UIPopoverPresentationControllerDelegate
 
 - (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController {
@@ -1494,78 +1494,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
     [self dismiss];
     [self setDisplayActive];
-}
-
-- (void)dismiss {
-    [self deselectAllElementsAnimated:YES];
-    [self.document.managedObjectContext save:nil];
-}
-
-- (void)hideToolbox {
-    self.hidesStatusBar = NO;
-    __weak MADDesignerViewController *weakself = self;
-    [self dismissViewControllerAnimated:YES completion:^{
-        [weakself dismiss];
-        [weakself setDisplayActive];
-    }];
-}
-
-- (void)showSectionSettingsFromLabel:(UILabel *)label {
-    
-    self.toolboxVisible = NO;
-    self.settingsTransitioningDelegate.sourceRect = label.frame;
-    self.settingsTransitioningDelegate.sourceView = self.scroller.container;
-    self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.settingsTransitioningDelegate.container = self.scroller.container;
-    self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-    self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
-    self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
-    
-    if (self.sectionSettingsVisible == NO) {
-        self.sectionSettingsVisible = YES;
-        __weak MADDesignerViewController *weakself = self;
-        [self presentViewController: self.navigationControllerSectionLayoutSettings
-                           animated: YES
-                         completion: ^{
-                             [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
-                         }];
-    } else {
-        [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
-    }
-    
-}
-
-- (NSSet *)passthoughViews {
-    NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsArray];
-    NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
-    return passthroughViews;
-}
-
-- (void)showToolbox {
-    
-    self.toolboxVisible = YES;
-    self.sectionSettingsVisible = NO;
-    
-    self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
-    self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.toolboxTransitioningDelegate.container = self.scroller.container;
-    self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-    self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
-    self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
-    
-    self.viewControllerToolbox.clearsBackground = [self padLike];
-    self.viewControllerToolbox.document = self.document;
-    [self adjustToolboxLocation];
-    
-    __weak MADDesignerViewController *weakself = self;
-    [self presentViewController: self.navigationControllerToolbox
-                       animated: YES
-                     completion: ^{
-                         [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeElement];
-                     }];
-
 }
 
 #pragma mark - UIMenuController required methods
@@ -2369,7 +2297,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)setConstraintsForToolboxVisible {
     [self.view removeConstraints:self.layoutConstraintsToolboxHidden];
-    NSLayoutConstraint *constraint = self.layoutConstraintToolBoxViewHeight;
+    NSLayoutConstraint *constraint = [NSLayoutConstraint layoutConstraintToolBoxViewHeight:self.toolbox
+                                                                                    height:[self toolboxHeightCalculated]];
 
     self.layoutConstraintsToolboxVisiable = constraint != nil ? @[constraint] : @[];
     [self.view addConstraints:self.layoutConstraintsToolboxVisiable];
@@ -3390,279 +3319,86 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return collectionView;
 }
 
-#pragma mark - NSLayoutConstraint
-#pragma mark Content View
+#pragma mark - Convenience
 
-- (NSLayoutConstraint *)layoutConstraintViewContentLeft {
-    return [NSLayoutConstraint constraintWithItem: self.scroller.container
-                                        attribute: NSLayoutAttributeLeft
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeLeft
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
+- (void)cancel:(id)sender {
+    self.hidesStatusBar = NO;
+    __weak MADDesignerViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself setDisplayActive];
+    }];
 }
 
-- (NSLayoutConstraint *)layoutConstraintViewContentRight {
-    return [NSLayoutConstraint constraintWithItem: self.scroller.container
-                                        attribute: NSLayoutAttributeRight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeRight
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
+- (void)dismiss {
+    [self deselectAllElementsAnimated:YES];
+    [self.document.managedObjectContext save:nil];
 }
 
-- (NSLayoutConstraint *)layoutConstraintViewLeft:(UIView *)view {
-    return [NSLayoutConstraint constraintWithItem: view
-                                        attribute: NSLayoutAttributeLeft
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.scroller.container
-                                        attribute: NSLayoutAttributeLeft
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
+- (void)hideToolbox {
+    self.hidesStatusBar = NO;
+    __weak MADDesignerViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself dismiss];
+        [weakself setDisplayActive];
+    }];
 }
 
-- (NSLayoutConstraint *)layoutConstraintViewRight:(UIView *)view {
-    return [NSLayoutConstraint constraintWithItem: view
-                                        attribute: NSLayoutAttributeRight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.scroller.container
-                                        attribute: NSLayoutAttributeRight
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-- (NSLayoutConstraint *)layoutConstraintViewContentTop {
-    return [NSLayoutConstraint constraintWithItem: self.scroller.container
-                                        attribute: NSLayoutAttributeTop
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.scroller
-                                        attribute: NSLayoutAttributeTop
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-#pragma mark Scroll View
-
-- (NSLayoutConstraint *)layoutConstraintViewScrollerTop {
-    return [NSLayoutConstraint constraintWithItem: self.scroller
-                                        attribute: NSLayoutAttributeTop
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.topLayoutGuide
-                                        attribute: NSLayoutAttributeTop
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-- (NSLayoutConstraint *)layoutConstraintViewScrollerBottom {
-    return [NSLayoutConstraint constraintWithItem: self.scroller
-                                        attribute: NSLayoutAttributeBottom
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.bottomLayoutGuide
-                                        attribute: NSLayoutAttributeBottom
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-- (NSLayoutConstraint *)layoutConstraintViewToolbarHeightHidden {
-    return [NSLayoutConstraint constraintWithItem: self.toolbarBottom
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-- (NSLayoutConstraint *)layoutConstraintToolbarBottomToToolboxView {
-    return [NSLayoutConstraint constraintWithItem: self.toolbarBottom
-                                        attribute: NSLayoutAttributeBottom
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.toolbox
-                                        attribute: NSLayoutAttributeTop
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-- (NSLayoutConstraint *)layoutConstraintToolBoxViewBottom {
-    return [NSLayoutConstraint constraintWithItem: self.toolbox
-                                        attribute: NSLayoutAttributeBottom
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeBottom
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-- (NSLayoutConstraint *)layoutConstraintToolBoxViewHeight {
-    return self.toolbox != nil ? [NSLayoutConstraint constraintWithItem: self.toolbox
-                                                              attribute: NSLayoutAttributeHeight
-                                                              relatedBy: NSLayoutRelationEqual
-                                                                 toItem: nil
-                                                              attribute: NSLayoutAttributeNotAnAttribute
-                                                             multiplier: 1.000f
-                                                               constant: [self toolboxHeightCalculated]] : nil;
-}
-
-- (NSLayoutConstraint *)layoutConstraintToolboxHeightHidden {
-    return [NSLayoutConstraint constraintWithItem: self.toolbox
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 0.0000f
-                                         constant: 0.0000f];
-}
-
-+ (NSArray *)layoutConstraintsRuler:(MTRulerView *)ruler inDesigner:(UIView *)designer {
-    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: ruler
-                                                                   attribute: NSLayoutAttributeHeight
-                                                                   relatedBy: NSLayoutRelationEqual
-                                                                      toItem: nil
-                                                                   attribute: NSLayoutAttributeNotAnAttribute
-                                                                  multiplier: 1.0000f
-                                                                    constant: MTReportDesignerRulerHeight];
+- (void)showSectionSettingsFromLabel:(UILabel *)label {
     
-    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem: ruler
-                                                                   attribute: NSLayoutAttributeTop
-                                                                   relatedBy: NSLayoutRelationEqual
-                                                                      toItem: designer
-                                                                   attribute: NSLayoutAttributeTop
-                                                                  multiplier: 1.0000f
-                                                                    constant: MTReportDesignerBorderPaddingVertical];
+    self.toolboxVisible = NO;
+    self.settingsTransitioningDelegate.sourceRect = label.frame;
+    self.settingsTransitioningDelegate.sourceView = self.scroller.container;
+    self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
+    self.settingsTransitioningDelegate.container = self.scroller.container;
+    self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
+    self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
+    self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     
-    return @[constraint1, constraint2];
-}
-
-+ (NSArray *)layoutConstraintsRulerSide:(MTRulerView *)ruler inDesigner:(UIView *)designer {
-    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem: ruler
-                                                                   attribute: NSLayoutAttributeLeft
-                                                                   relatedBy: NSLayoutRelationEqual
-                                                                      toItem: designer
-                                                                   attribute: NSLayoutAttributeLeft
-                                                                  multiplier: 1.0000f
-                                                                    constant: MTReportDesignerBorderPaddingSides];
+    if (self.sectionSettingsVisible == NO) {
+        self.sectionSettingsVisible = YES;
+        __weak MADDesignerViewController *weakself = self;
+        [self presentViewController: self.navigationControllerSectionLayoutSettings
+                           animated: YES
+                         completion: ^{
+                             [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
+                         }];
+    } else {
+        [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
+    }
     
-    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem: ruler
-                                                                   attribute: NSLayoutAttributeRight
-                                                                   relatedBy: NSLayoutRelationEqual
-                                                                      toItem: designer
-                                                                   attribute: NSLayoutAttributeRight
-                                                                  multiplier: 1.0000f
-                                                                    constant: -MTReportDesignerBorderPaddingSides];
-    return @[constraint3, constraint4];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintLabel:(UIView *)label toHeight:(CGFloat)height {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.0000f
-                                         constant: height];
+- (NSSet *)passthoughViews {
+    NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsArray];
+    NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
+    return passthroughViews;
 }
 
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toLabelBottom:(UIView *)label {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeBottom
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: section
-                                        attribute: NSLayoutAttributeBottom
-                                       multiplier: 1.0000f
-                                         constant: -MTReportDesignerBufferPaddingVertical];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toLabelRight:(UIView *)label {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeRight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: section
-                                        attribute: NSLayoutAttributeRight
-                                       multiplier: 1.0000f
-                                                    constant: -MTReportDesignerBufferPaddingVertical];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toHeight:(CGFloat)height {
-    return [NSLayoutConstraint constraintWithItem: section
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.0000f
-                                         constant: height];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toItemBottom:(UIView *)item {
-    return  [NSLayoutConstraint constraintWithItem: item
-                                         attribute: NSLayoutAttributeBottom
-                                         relatedBy: NSLayoutRelationEqual
-                                            toItem: section
-                                         attribute: NSLayoutAttributeTop
-                                        multiplier: 1.0000f
-                                          constant: -MTReportDesignerBufferPaddingVertical];
-}
-
-+ (NSArray *)layoutConstraintsForSection:(UIView *)section content:(UIView *)content {
-    NSLayoutConstraint *lc1 = [NSLayoutConstraint constraintWithItem: section
-                                                           attribute: NSLayoutAttributeLeft
-                                                           relatedBy: NSLayoutRelationEqual
-                                                              toItem: content
-                                                           attribute: NSLayoutAttributeLeft
-                                                          multiplier: 1.0000f
-                                                            constant: MTReportDesignerBorderPaddingSides];
+- (void)showToolbox {
     
-    NSLayoutConstraint *lc2 = [NSLayoutConstraint constraintWithItem: section
-                                                           attribute: NSLayoutAttributeRight
-                                                           relatedBy: NSLayoutRelationEqual
-                                                              toItem: content
-                                                           attribute: NSLayoutAttributeRight
-                                                          multiplier: 1.0000f
-                                                            constant: -MTReportDesignerBorderPaddingSides];
+    self.toolboxVisible = YES;
+    self.sectionSettingsVisible = NO;
     
-    return @[lc1, lc2];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintsForSectionLabel:(UIView *)label content:(UIView *)content {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeWidth
-                                        relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                           toItem: content
-                                        attribute: NSLayoutAttributeWidth
-                                       multiplier: MADSizeWidthSectionLabel
-                                         constant: 0.0000f];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintsForSectionLabel2:(UIView *)label content:(UIView *)content {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeWidth
-                                        relatedBy: NSLayoutRelationLessThanOrEqual
-                                           toItem: content
-                                        attribute: NSLayoutAttributeWidth
-                                       multiplier: 0.9500f
-                                         constant: 0.0000f];
-}
-
-
-
-+ (NSLayoutConstraint *)layoutConstraintViewContent:(UIView *)view toScrollerBottom:(UIScrollView *)scroller {
-    return [NSLayoutConstraint constraintWithItem: scroller
-                                        attribute: NSLayoutAttributeBottom
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: view
-                                        attribute: NSLayoutAttributeBottom
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintViewContent:(UIView *)view height:(CGFloat)height {
-    return [NSLayoutConstraint constraintWithItem: view
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.0000f
-                                         constant: height];
+    self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
+    self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
+    self.toolboxTransitioningDelegate.container = self.scroller.container;
+    self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
+    self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
+    self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
+    
+    self.viewControllerToolbox.clearsBackground = [self padLike];
+    self.viewControllerToolbox.document = self.document;
+    [self adjustToolboxLocation];
+    
+    __weak MADDesignerViewController *weakself = self;
+    [self presentViewController: self.navigationControllerToolbox
+                       animated: YES
+                     completion: ^{
+                         [weakself adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeElement];
+                     }];
+    
 }
 
 #pragma mark - Save after Unwind from Modal View Controller

@@ -304,9 +304,9 @@
     NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
-    //NSLog(@"Inserted %@", insertedMetaDatum);
-    //NSLog(@"Removed %@", removedMetaDatum);
-    //NSLog(@"Updated %@", updatedMetaDatum);
+    NSLog(@"Inserted %@", insertedMetaDatum);
+    NSLog(@"Removed %@", removedMetaDatum);
+    NSLog(@"Updated %@", updatedMetaDatum);
     
     [self.delegateQueue addOperationWithBlock:^{
         
@@ -319,10 +319,12 @@
         dispatch_sync(self.fileMetaDataQueue, ^{
             NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
             trackedRemovedListInfos = [removedMetaDatum filteredArrayUsingPredicate:containPredicate];
-            
+            NSLog(@"trackedRemovedListInfos %@", trackedRemovedListInfos);
+
             NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             untrackedInsertedListInfos = [insertedMetaDatum filteredArrayUsingPredicate:doesntContainPredicate];
-            
+            NSLog(@"untrackedInsertedListInfos %@", untrackedInsertedListInfos);
+
         });
         
         if (untrackedInsertedListInfos.count == 0 && trackedRemovedListInfos.count == 0 && updatedMetaDatum.count == 0) {
@@ -339,7 +341,7 @@
             
             dispatch_sync(self.fileMetaDataQueue, ^{
                 trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObject:trackedRemovedListInfo];
-                
+                NSLog(@"REMOVING %@", trackedRemovedListInfo);
                 [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
             });
             
@@ -360,6 +362,8 @@
             __block NSInteger untrackedInsertedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
+                NSLog(@"INSERTING %@", untrackedInsertedListInfo);
+
                 [self.fileMetaDatum addObject:untrackedInsertedListInfo];
                 
                 if (self.sortComparator) {
@@ -383,6 +387,8 @@
             __block NSInteger updatedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
+                NSLog(@"UPDATING %@", updatedListInfo);
+
                 updatedListInfoIndex = [self.fileMetaDatum indexOfObject:updatedListInfo];
                 
                 // Track the new list info instead of the old one.
@@ -400,6 +406,8 @@
             [self.delegate filesControllerDidChangeContent:self completion:^(BOOL success, NSError *error) {
                 completion(success, error);
             }];
+        } else {
+            completion(YES, nil);
         }
     }];
 }
