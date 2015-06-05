@@ -8,6 +8,7 @@
 
 #import "MADBackgroundScrollView.h"
 #import "UIColor+EverydayApps.h"
+#import "CGGeometry+Extras.h"
 
 static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
 
@@ -89,6 +90,39 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
                                       withView: self.container
                                        atScale: zoomScale];
     }
+}
+
+- (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment {
+    
+    if (presentedRect.origin.y > CGPointZero.y) {
+        
+        if (self.zoomScale <= 1.0000f) {
+            [self setZoomScale: 1.0000f animated: YES];
+        }
+        
+        CGRect visibleRect;
+        visibleRect.origin = CGPointMake(self.contentOffset.x, self.contentOffset.y);
+        visibleRect.size = CGSizeMake(containerSize.width, containerSize.height - presentedRect.size.height);
+        
+        visibleRect = CGRectAdjustForScale(visibleRect, self.zoomScale);
+        
+        CGRect rectOfInterestAdjusted = self.zoomScale >= 1 ?
+        rectOfInterest :
+        CGRectAdjustForScale(rectOfInterest, self.zoomScale);
+        
+        CGRect visibleRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f), visibleRect.origin.y + adjustment, CGFLOAT_MAX, visibleRect.size.height - adjustment);
+        
+        if (CGRectContainsRect(visibleRectAdjusted, rectOfInterestAdjusted) == NO) {
+            
+            CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest, visibleRect);
+            if (self.zoomScale > 1) {
+                contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.zoomScale);
+            }
+            [self setContentOffset: contentOffset animated: YES];
+            
+        }
+    }
+    return presentedRect;
 }
 
 @end

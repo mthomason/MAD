@@ -10,37 +10,7 @@
 
 @implementation NSLayoutConstraint (Designer)
 
-+ (NSLayoutConstraint *)layoutConstraintToolBoxViewHeight:(id)toolbox height:(CGFloat)height {
-    return [NSLayoutConstraint constraintWithItem: toolbox
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.000f
-                                         constant: height];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintContent:(id)container widthCalculated:(CGFloat)width {
-    return [NSLayoutConstraint constraintWithItem: container
-                                        attribute: NSLayoutAttributeWidth
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: nil
-                                        attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.0000f
-                                         constant: width];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintViewScrollerTop:(id)item toItem:(id)toItem {
-    return [NSLayoutConstraint constraintWithItem: item
-                                        attribute: NSLayoutAttributeTop
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: toItem
-                                        attribute: NSLayoutAttributeTop
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-+ (NSArray *)layoutConstraintsRuler:(MTRulerView *)ruler inDesigner:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height {
++ (NSArray *)ruler:(MTRulerView *)ruler designer:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height {
     NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: ruler
                                                                    attribute: NSLayoutAttributeHeight
                                                                    relatedBy: NSLayoutRelationEqual
@@ -60,7 +30,7 @@
     return @[constraint1, constraint2];
 }
 
-+ (NSArray *)layoutConstraintsRulerSide:(MTRulerView *)ruler inDesigner:(UIView *)designer sideMargin:(CGFloat)sideMargin {
++ (NSArray *)ruler:(MTRulerView *)ruler designer:(UIView *)designer sideMargin:(CGFloat)sideMargin {
     NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem: ruler
                                                                    attribute: NSLayoutAttributeLeft
                                                                    relatedBy: NSLayoutRelationEqual
@@ -79,87 +49,67 @@
     return @[constraint3, constraint4];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintLabel:(UIView *)label toHeight:(CGFloat)height {
-    return [NSLayoutConstraint constraintWithItem: label
++ (instancetype)toolBoxView:(id)toolbox height:(CGFloat)height {
+    return [NSLayoutConstraint constraintWithItem: toolbox
                                         attribute: NSLayoutAttributeHeight
                                         relatedBy: NSLayoutRelationEqual
                                            toItem: nil
                                         attribute: NSLayoutAttributeNotAnAttribute
-                                       multiplier: 1.0000f
+                                       multiplier: 1.000f
                                          constant: height];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toLabelBottom:(UIView *)label padding:(CGFloat)padding {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeBottom
++ (instancetype)content:(id)container width:(CGFloat)width {
+    return [NSLayoutConstraint constraintWithItem: container
+                                        attribute: NSLayoutAttributeWidth
                                         relatedBy: NSLayoutRelationEqual
-                                           toItem: section
-                                        attribute: NSLayoutAttributeBottom
-                                       multiplier: 1.0000f
-                                         constant: -padding];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toLabelRight:(UIView *)label padding:(CGFloat)padding {
-    return [NSLayoutConstraint constraintWithItem: label
-                                        attribute: NSLayoutAttributeRight
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: section
-                                        attribute: NSLayoutAttributeRight
-                                       multiplier: 1.0000f
-                                         constant: -padding];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toHeight:(CGFloat)height {
-    return [NSLayoutConstraint constraintWithItem: section
-                                        attribute: NSLayoutAttributeHeight
-                                        relatedBy: NSLayoutRelationGreaterThanOrEqual
                                            toItem: nil
                                         attribute: NSLayoutAttributeNotAnAttribute
                                        multiplier: 1.0000f
-                                         constant: height];
+                                         constant: width];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toItemBottom:(UIView *)item padding:(CGFloat)padding {
-    return  [NSLayoutConstraint constraintWithItem: item
-                                         attribute: NSLayoutAttributeBottom
-                                         relatedBy: NSLayoutRelationEqual
-                                            toItem: section
-                                         attribute: NSLayoutAttributeTop
-                                        multiplier: 1.0000f
-                                          constant: -padding];
-}
-
-+ (NSArray *)layoutConstraintsForSection:(UIView *)section content:(UIView *)content padding:(CGFloat)padding {
-    NSLayoutConstraint *lc1 = [NSLayoutConstraint constraintWithItem: section
-                                                           attribute: NSLayoutAttributeLeft
-                                                           relatedBy: NSLayoutRelationEqual
-                                                              toItem: content
-                                                           attribute: NSLayoutAttributeLeft
-                                                          multiplier: 1.0000f
-                                                            constant: padding];
-    
-    NSLayoutConstraint *lc2 = [NSLayoutConstraint constraintWithItem: section
-                                                           attribute: NSLayoutAttributeRight
-                                                           relatedBy: NSLayoutRelationEqual
-                                                              toItem: content
-                                                           attribute: NSLayoutAttributeRight
-                                                          multiplier: 1.0000f
-                                                            constant: -padding];
-    
-    return @[lc1, lc2];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintViewContent:(UIView *)view toScrollerBottom:(UIScrollView *)scroller {
-    return [NSLayoutConstraint constraintWithItem: scroller
-                                        attribute: NSLayoutAttributeBottom
++ (instancetype)viewScrollerTop:(id)item view:(id)toItem {
+    return [NSLayoutConstraint constraintWithItem: item
+                                        attribute: NSLayoutAttributeTop
                                         relatedBy: NSLayoutRelationEqual
-                                           toItem: view
-                                        attribute: NSLayoutAttributeBottom
+                                           toItem: toItem
+                                        attribute: NSLayoutAttributeTop
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintViewContent:(UIView *)view height:(CGFloat)height {
++ (instancetype)label:(UIView *)label toHeight:(CGFloat)height {
+    return [NSLayoutConstraint constraintWithItem: label
+                                        attribute: NSLayoutAttributeHeight
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: nil
+                                        attribute: NSLayoutAttributeNotAnAttribute
+                                       multiplier: 1.0000f
+                                         constant: height];
+}
+
++ (instancetype)labelBottom:(UIView *)label container:(UIView *)section padding:(CGFloat)padding {
+    return [NSLayoutConstraint constraintWithItem: label
+                                        attribute: NSLayoutAttributeBottom
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: section
+                                        attribute: NSLayoutAttributeBottom
+                                       multiplier: 1.0000f
+                                         constant: -padding];
+}
+
++ (instancetype)labelRight:(UIView *)label container:(UIView *)section padding:(CGFloat)padding {
+    return [NSLayoutConstraint constraintWithItem: label
+                                        attribute: NSLayoutAttributeRight
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: section
+                                        attribute: NSLayoutAttributeRight
+                                       multiplier: 1.0000f
+                                         constant: -padding];
+}
+
++ (instancetype)view:(UIView *)view height:(CGFloat)height {
     return [NSLayoutConstraint constraintWithItem: view
                                         attribute: NSLayoutAttributeHeight
                                         relatedBy: NSLayoutRelationGreaterThanOrEqual
@@ -169,7 +119,48 @@
                                          constant: height];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintToolbarBottomToToolboxView:(id)item toItem:(id)toItem {
++ (instancetype)viewTop:(UIView *)item viewBottom:(UIView *)section padding:(CGFloat)padding {
+    return  [NSLayoutConstraint constraintWithItem: item
+                                         attribute: NSLayoutAttributeBottom
+                                         relatedBy: NSLayoutRelationEqual
+                                            toItem: section
+                                         attribute: NSLayoutAttributeTop
+                                        multiplier: 1.0000f
+                                          constant: -padding];
+}
+
+
++ (instancetype)viewLeft:(UIView *)section content:(UIView *)content padding:(CGFloat)padding {
+    return [NSLayoutConstraint constraintWithItem: section
+                                        attribute: NSLayoutAttributeLeft
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: content
+                                        attribute: NSLayoutAttributeLeft
+                                       multiplier: 1.0000f
+                                         constant: padding];
+}
+
++ (instancetype)viewRight:(UIView *)section content:(UIView *)content padding:(CGFloat)padding {
+    return [NSLayoutConstraint constraintWithItem: section
+                                        attribute: NSLayoutAttributeRight
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: content
+                                        attribute: NSLayoutAttributeRight
+                                       multiplier: 1.0000f
+                                         constant: -padding];
+}
+
++ (instancetype)view:(UIView *)view containerBottom:(UIScrollView *)scroller {
+    return [NSLayoutConstraint constraintWithItem: scroller
+                                        attribute: NSLayoutAttributeBottom
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: view
+                                        attribute: NSLayoutAttributeBottom
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}
+
++ (instancetype)viewBottom:(id)item container:(id)toItem {
     return [NSLayoutConstraint constraintWithItem: item
                                         attribute: NSLayoutAttributeBottom
                                         relatedBy: NSLayoutRelationEqual
@@ -178,7 +169,8 @@
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
 }
-+ (NSLayoutConstraint *)layoutConstraintToolBoxViewBottom:(id)item toItem:(id)toItem {
+
++ (instancetype)toolBoxBottom:(id)item container:(id)toItem {
     return [NSLayoutConstraint constraintWithItem: item
                                         attribute: NSLayoutAttributeBottom
                                         relatedBy: NSLayoutRelationEqual
@@ -188,7 +180,7 @@
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintToolboxHeightHidden:(id)item {
++ (instancetype)toolboxHeightHidden:(id)item {
     return [NSLayoutConstraint constraintWithItem: item
                                         attribute: NSLayoutAttributeHeight
                                         relatedBy: NSLayoutRelationEqual
@@ -198,7 +190,7 @@
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintView:(id)view contentLeft:(id)container {
++ (instancetype)view:(id)view containerLeft:(id)container {
     return [NSLayoutConstraint constraintWithItem: container
                                         attribute: NSLayoutAttributeLeft
                                         relatedBy: NSLayoutRelationEqual
@@ -208,7 +200,7 @@
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintView:(UIView *)view contentRight:(id)container {
++ (instancetype)view:(UIView *)view containerRight:(id)container {
     return [NSLayoutConstraint constraintWithItem: container
                                         attribute: NSLayoutAttributeRight
                                         relatedBy: NSLayoutRelationEqual
@@ -218,7 +210,7 @@
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintView:(UIView *)view contentTop:(id)container {
++ (instancetype)view:(UIView *)view containerTop:(id)container {
     return [NSLayoutConstraint constraintWithItem: container
                                         attribute: NSLayoutAttributeTop
                                         relatedBy: NSLayoutRelationEqual
@@ -228,7 +220,7 @@
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintViewScroller:(id)scroller bottom:(id)bottom {
++ (instancetype)scroller:(id)scroller bottom:(id)bottom {
     return [NSLayoutConstraint constraintWithItem: scroller
                                         attribute: NSLayoutAttributeBottom
                                         relatedBy: NSLayoutRelationEqual
@@ -238,7 +230,7 @@
                                          constant: 0.0000f];
 }
 
-+ (NSLayoutConstraint *)layoutConstraintViewToolbarHeightHidden:(id)toolbar {
++ (instancetype)toolbarHeightHidden:(id)toolbar {
     return [NSLayoutConstraint constraintWithItem: toolbar
                                         attribute: NSLayoutAttributeHeight
                                         relatedBy: NSLayoutRelationEqual

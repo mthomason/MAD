@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UIView *container;
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTapToZoom;
 
+- (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment;
+
 @end
 
 #endif

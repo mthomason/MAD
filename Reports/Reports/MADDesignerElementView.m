@@ -152,9 +152,9 @@ static size_t const kDashedCount            = (2.0f);
     self.backgroundColor = labelBackgroundColor;
 }
 
-- (instancetype)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (instancetype)initWithObjectId:(NSManagedObjectID *)objectID inObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    CGSize viewSize = [[RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext] size];
+    CGSize viewSize = [[RptqDocumentObject documentObjectForObjectID:objectID managedObjectContext:managedObjectContext] size];
     CGRect viewFrame = CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height);
     self = [super initWithFrame: viewFrame];
 
@@ -169,7 +169,7 @@ static size_t const kDashedCount            = (2.0f);
         self.canvasView = canvasView;
                 
         self.displayHighlighted = NO;
-        self.objectIdTag = objectId;
+        self.objectIdTag = objectID;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
@@ -245,6 +245,10 @@ static size_t const kDashedCount            = (2.0f);
         
         self.resizeHandles = resizeHandles;
         self.clipsToBounds = NO;
+        
+        self.tag = objectID.hash;
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
 
     }
     return self;

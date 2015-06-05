@@ -44,6 +44,8 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
 }
 
 - (void)commonInit {
+    self.layer.borderWidth = [UIView borderWidthThin];
+    self.layer.borderColor = [UIColor blackColor].CGColor;
     self.backgroundColor = [UIColor whiteColor];
     UIFont *font = [UIFont systemFontOfSize: 5.0000f];
     UIFont *font2 = [UIFont systemFontOfSize: 4.0000f];

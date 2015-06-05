@@ -39,16 +39,11 @@
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
         NSString *documentElementReuseIdentifier = [MTCollectionViewCellElement reuseIdentifier];
         
-        [self registerClass: [MTCollectionViewCellElement class]
- forCellWithReuseIdentifier: documentElementReuseIdentifier];
+        [self registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
         
-        [self registerClass: [MTCollectionReuseableViewDefault class]
- forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-        withReuseIdentifier: supplmentaryViewReuseIdHeader];
+        [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionHeader withReuseIdentifier: supplmentaryViewReuseIdHeader];
         
-        [self registerClass: [MTCollectionReuseableViewDefault class]
- forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
-        withReuseIdentifier: supplmentaryViewReuseIdHeader];
+        [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionFooter withReuseIdentifier: supplmentaryViewReuseIdHeader];
         
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;

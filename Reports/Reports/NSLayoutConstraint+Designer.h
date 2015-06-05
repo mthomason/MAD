@@ -12,27 +12,27 @@
 
 @interface NSLayoutConstraint (Designer)
 
-+ (NSLayoutConstraint *)layoutConstraintViewScrollerTop:(id)item toItem:(id)item;
-+ (NSArray *)layoutConstraintsRuler:(MTRulerView *)ruler inDesigner:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height;
-+ (NSArray *)layoutConstraintsRulerSide:(MTRulerView *)ruler inDesigner:(UIView *)designer sideMargin:(CGFloat)sideMargin;
-+ (NSArray *)layoutConstraintsForSection:(UIView *)section content:(UIView *)content padding:(CGFloat)padding;
++ (NSArray *)ruler:(MTRulerView *)ruler designer:(UIView *)designer marginTop:(CGFloat)marginTop heigh:(CGFloat)height;
++ (NSArray *)ruler:(MTRulerView *)ruler designer:(UIView *)designer sideMargin:(CGFloat)sideMargin;
 
-+ (NSLayoutConstraint *)layoutConstraintLabel:(UIView *)label toHeight:(CGFloat)height;
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toLabelBottom:(UIView *)label padding:(CGFloat)padding;
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toLabelRight:(UIView *)label padding:(CGFloat)padding;
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toHeight:(CGFloat)height;
-+ (NSLayoutConstraint *)layoutConstraintSection:(UIView *)section toItemBottom:(UIView *)item  padding:(CGFloat)padding;
-+ (NSLayoutConstraint *)layoutConstraintViewContent:(UIView *)view toScrollerBottom:(UIScrollView *)scroller;
-+ (NSLayoutConstraint *)layoutConstraintViewContent:(UIView *)view height:(CGFloat)height;
-+ (NSLayoutConstraint *)layoutConstraintToolbarBottomToToolboxView:(id)item toItem:(id)toItem;
-+ (NSLayoutConstraint *)layoutConstraintToolBoxViewBottom:(id)item toItem:(id)toItem;
-+ (NSLayoutConstraint *)layoutConstraintToolBoxViewHeight:(id)toolbox height:(CGFloat)height;
-+ (NSLayoutConstraint *)layoutConstraintToolboxHeightHidden:(id)item;
-+ (NSLayoutConstraint *)layoutConstraintView:(id)view contentLeft:(id)container;
-+ (NSLayoutConstraint *)layoutConstraintView:(UIView *)view contentRight:(id)container;
-+ (NSLayoutConstraint *)layoutConstraintView:(UIView *)view contentTop:(id)container;
-+ (NSLayoutConstraint *)layoutConstraintViewScroller:(id)scroller bottom:(id)bottom;
-+ (NSLayoutConstraint *)layoutConstraintViewToolbarHeightHidden:(id)toolbar;
-+ (NSLayoutConstraint *)layoutConstraintContent:(id)container widthCalculated:(CGFloat)width;
++ (instancetype)viewScrollerTop:(id)item view:(id)item;
++ (instancetype)viewLeft:(UIView *)section content:(UIView *)content padding:(CGFloat)padding;
++ (instancetype)viewRight:(UIView *)section content:(UIView *)content padding:(CGFloat)padding;
++ (instancetype)label:(UIView *)label toHeight:(CGFloat)height;
++ (instancetype)labelBottom:(UIView *)label container:(UIView *)section padding:(CGFloat)padding;
++ (instancetype)labelRight:(UIView *)label container:(UIView *)section padding:(CGFloat)padding;
++ (instancetype)viewTop:(UIView *)item viewBottom:(UIView *)section padding:(CGFloat)padding;
++ (instancetype)view:(UIView *)view containerBottom:(UIScrollView *)scroller;
++ (instancetype)view:(UIView *)view height:(CGFloat)height;
++ (instancetype)viewBottom:(id)item container:(id)toItem;
++ (instancetype)toolBoxBottom:(id)item container:(id)toItem;
++ (instancetype)toolBoxView:(id)toolbox height:(CGFloat)height;
++ (instancetype)toolboxHeightHidden:(id)item;
++ (instancetype)view:(id)view containerLeft:(id)container;
++ (instancetype)view:(UIView *)view containerRight:(id)container;
++ (instancetype)view:(UIView *)view containerTop:(id)container;
++ (instancetype)scroller:(id)scroller bottom:(id)bottom;
++ (instancetype)toolbarHeightHidden:(id)toolbar;
++ (instancetype)content:(id)container width:(CGFloat)width;
 
 @end
