@@ -437,7 +437,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
-                        RptqQuery *query = [[self.document activeDocumentModel] defaultQuery];
+                        RptqQuery *query = [self.document.activeDocumentModel defaultQuery];
                         
                         RptqDocumentSection *section = [query documentSectionForRow: self.lastSelectedRowNumber];
                         tvc.initalHeightValue = section.height.floatValue;
@@ -475,7 +475,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         [weakself enableTabBarItems];
     }];
     
-    [[self.document activeDocumentModel] addPredicate:predicate];
+    [self.document.activeDocumentModel addPredicate:predicate];
     [self.document saveContext];
 }
 
@@ -483,60 +483,49 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    RptqDocument *document = [self.document activeDocumentModel];
-    [document setHeight:height forSectionAtRow:self.lastSelectedRowNumber];
+    [self.document.activeDocumentModel setHeight:height forSectionAtRow:self.lastSelectedRowNumber];
     [self.document saveContext];
     
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
-    RptqDocument *document = [self.document activeDocumentModel];
-    [document setVisibility: isVisible
-            forSectionAtRow: self.lastSelectedRowNumber];
+    [self.document.activeDocumentModel setVisibility: isVisible forSectionAtRow: self.lastSelectedRowNumber];
     [self.document saveContext];
 }
 
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
-          newPageAfter:(BOOL)newPageAfter {
-    RptqDocument *document = [self.document activeDocumentModel];
-    [document setNewPageAfter: newPageAfter
-              forSectionAtRow: self.lastSelectedRowNumber];
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
+    [self.document.activeDocumentModel setNewPageAfter: newPageAfter forSectionAtRow: self.lastSelectedRowNumber];
     [self.document saveContext];
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
-    RptqDocument *document = [self.document activeDocumentModel];
-    [document setNumberOfRows: numberOfRows
-              forSectionAtRow: self.lastSelectedRowNumber];
+    [self.document.activeDocumentModel setNumberOfRows: numberOfRows forSectionAtRow: self.lastSelectedRowNumber];
     [self.document saveContext];
 }
 
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
-    UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self enableTabBarItems];
     }];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
-    UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self enableTabBarItems];
     }];
 }
 
 #pragma mark - MTQueryBuilderLinkBuilderDelegate
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
-    UIViewController *weakself = self;
+
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self enableTabBarItems];
     }];
 
-    RptqDocument *document = [self.document activeDocumentModel];
-    [document addQueryLink:link];
+    [self.document.activeDocumentModel addQueryLink:link];
     [self.document saveContext];
     NSInteger suspectedSection = 2;
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
@@ -554,9 +543,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID
                        andSortOrder:(MNSSortOrder)sortOrder {
     
-    UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self enableTabBarItems];
     }];
 
     [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];
@@ -567,9 +555,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - MTQueryBuilderAddTableDelegate
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable {
-    UIViewController *weakself = self;
+
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self enableTabBarItems];
     }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
@@ -703,8 +691,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
 
-            RptqDocument *document = [self.document activeDocumentModel];
-            RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+            RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
 
             if (database.ownedByUser) {
                 NSString *databaseType = [NSString stringWithFormat:@"%@", database.ownedByUser.database_driver_type];
@@ -1241,9 +1228,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         
         {
             
-            
-            RptqDocument *document = [reportDocument activeDocumentModel];
-            RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+            RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
             RptqQuery *query = [database.hasQueries anyObject];
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
@@ -1314,8 +1299,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (NSMutableDictionary *)datamodel {
-    RptqDocument *document = [self.document activeDocumentModel];
-    RptqDatabase *database = [document defaultDatabase];
+    RptqDatabase *database = [self.document.activeDocumentModel defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     NSInteger numberOfTablesInQuery = [query numberOfTables];
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
@@ -1773,10 +1757,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
     
-    RptqDocument *document = [self.document activeDocumentModel];
-    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = self.document.activeDocumentModel.managedObjectContext;
 
-    RptqDatabase *database = [document defaultDatabase];
+    RptqDatabase *database = [self.document.activeDocumentModel defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     NSInteger numberOfTables = [query numberOfTables];
     
@@ -1837,17 +1820,15 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    RptqDocument *document = [self.document activeDocumentModel];
-    RptqQueryGroup *groupToRemove = [document.defaultQuery queryGroupForIndex:indexPath.row];
+    RptqQueryGroup *groupToRemove = [self.document.activeDocumentModel.defaultQuery queryGroupForIndex:indexPath.row];
     [self.document removeGroup:groupToRemove];
 }
 
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     NSManagedObjectID *objid = [(MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath] tableID];
-    RptqDocument *doc = [self.document activeDocumentModel];
-    NSManagedObject *predicate = [doc.managedObjectContext objectRegisteredForID:objid];
-    [doc.managedObjectContext deleteObject:predicate];
-    [doc.managedObjectContext save:nil];
+    NSManagedObject *predicate = [self.document.activeDocumentModel.managedObjectContext objectRegisteredForID:objid];
+    [self.document.activeDocumentModel.managedObjectContext deleteObject:predicate];
+    [self.document.activeDocumentModel.managedObjectContext save:nil];
 }
 
 - (void)deleteItemFromQuerySection:(MTQuerySections)querySection fromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {

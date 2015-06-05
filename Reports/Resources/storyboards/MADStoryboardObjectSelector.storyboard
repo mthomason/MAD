@@ -449,7 +449,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="320"/>
                     <connections>
-                        <outlet property="labelTextTextbox" destination="0ug-fW-EyC" id="P0Z-en-BkC"/>
+                        <outlet property="textField" destination="0ug-fW-EyC" id="qNX-lf-v7h"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jzo-5E-oV2" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -18,7 +18,6 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 @interface MTDocumentObjectNewStaticLabelViewController ()
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTextLabel;
-@property (nonatomic, weak) IBOutlet UITextField *labelTextTextbox;
 
 @end
 
@@ -38,18 +37,14 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
     [super didReceiveMemoryWarning];
 }
 
-- (NSString *)userInputedText {
-    return [self.labelTextTextbox text];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
-    self.labelTextTextbox.delegate = self;
-    [self.labelTextTextbox becomeFirstResponder];
+    self.textField.delegate = self;
+    [self.textField becomeFirstResponder];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Static Label", @"Title of button to create a non-changing (static) text-label-document-object.");

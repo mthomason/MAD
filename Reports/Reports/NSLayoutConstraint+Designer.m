@@ -10,6 +10,26 @@
 
 @implementation NSLayoutConstraint (Designer)
 
++ (NSLayoutConstraint *)layoutConstraintToolBoxViewHeight:(id)toolbox height:(CGFloat)height {
+    return [NSLayoutConstraint constraintWithItem: toolbox
+                                        attribute: NSLayoutAttributeHeight
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: nil
+                                        attribute: NSLayoutAttributeNotAnAttribute
+                                       multiplier: 1.000f
+                                         constant: height];
+}
+
++ (NSLayoutConstraint *)layoutConstraintContent:(id)container widthCalculated:(CGFloat)width {
+    return [NSLayoutConstraint constraintWithItem: container
+                                        attribute: NSLayoutAttributeWidth
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: nil
+                                        attribute: NSLayoutAttributeNotAnAttribute
+                                       multiplier: 1.0000f
+                                         constant: width];
+}
+
 + (NSLayoutConstraint *)layoutConstraintViewScrollerTop:(id)item toItem:(id)toItem {
     return [NSLayoutConstraint constraintWithItem: item
                                         attribute: NSLayoutAttributeTop
@@ -166,16 +186,6 @@
                                         attribute: NSLayoutAttributeBottom
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
-}
-
-+ (NSLayoutConstraint *)layoutConstraintToolBoxViewHeight:(id)toolbox height:(CGFloat)height {
-    return toolbox != nil ? [NSLayoutConstraint constraintWithItem: toolbox
-                                                         attribute: NSLayoutAttributeHeight
-                                                         relatedBy: NSLayoutRelationEqual
-                                                            toItem: nil
-                                                         attribute: NSLayoutAttributeNotAnAttribute
-                                                        multiplier: 1.000f
-                                                          constant: height] : nil;
 }
 
 + (NSLayoutConstraint *)layoutConstraintToolboxHeightHidden:(id)item {

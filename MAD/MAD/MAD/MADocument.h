@@ -58,7 +58,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
-@property (nonatomic, weak, readonly) RptqDocument *activeDocumentModel;
+@property (readonly) RptqDocument *activeDocumentModel;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 
