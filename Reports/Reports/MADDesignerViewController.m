@@ -479,9 +479,9 @@ UITabBarControllerDelegate>
     [constraints addObject:constraintWidth];
     self.layoutConstraintContainerWidth = constraintWidth;
     
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MADDesignerViewController toolboxSettings];
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
-    viewControllerSectionLayoutSettings.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    
     self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewControllerSectionLayoutSettings];
@@ -743,14 +743,11 @@ UITabBarControllerDelegate>
     
     if (self.shownAndHidden && self.zoomScaleRestore > 1.0001) {
         [self.scroller setZoomScale:self.zoomScaleRestore animated:NO];
-        [self scrollViewDidEndZooming: nil
-                             withView: nil
-                              atScale: self.scroller.zoomScale];
+        [self scrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
         [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
     }
     
     [self.scroller flashScrollIndicators];
-    
     [self.view setNeedsUpdateConstraints];
 }
 
@@ -803,17 +800,13 @@ UITabBarControllerDelegate>
                self.settingsTransitioningDelegate.presentationController != nil &&
                [((MADToolboxPresentationController *)self.settingsTransitioningDelegate.presentationController) showOnSide] == NO) {
         
-        insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                  CGSizeZero.width,
-                                  self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
-                                  CGSizeZero.width);
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                  self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height, CGSizeZero.width);
         
     } else {
         
-        insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                  CGSizeZero.width,
-                                  self.bottomLayoutGuide.length,
-                                  CGSizeZero.width);
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                  self.bottomLayoutGuide.length, CGSizeZero.width);
         
     }
     
@@ -3073,12 +3066,6 @@ UITabBarControllerDelegate>
 
 + (CGSize)sizePopoverFonts {
     return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
-}
-
-+ (MTReportDesignerSectionLayoutSettingsViewController *)toolboxSettings {
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    return [storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier];
 }
 
 + (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {

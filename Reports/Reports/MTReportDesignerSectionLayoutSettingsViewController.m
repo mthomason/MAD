@@ -12,6 +12,7 @@
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "UIColor+EverydayApps.h"
+#import "MTApplicationInstance.h"
 
 NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
 
@@ -30,11 +31,23 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 @implementation MTReportDesignerSectionLayoutSettingsViewController
 
++ (instancetype)toolboxSettings {
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
+    return [storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

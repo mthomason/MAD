@@ -28,6 +28,8 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 @interface MTReportDesignerSectionLayoutSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
++ (instancetype)toolboxSettings;
+
 @property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
 
 @property (nonatomic, assign) NSInteger initalHeightValue;
