@@ -228,8 +228,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                         removedMetaDatum: removed
                                                         updatedMetaDatum: updated
                                                               completion: ^(BOOL success, NSError *error) {
-                                                        }];
-    
+
+                                                              }];
     [self.metadataQuery enableUpdates];
     
     if (self.firstQueryUpdateHandler) {
@@ -249,9 +249,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSArray *removedMetadata = removedMetadataItemsOrNil ?: @[];
     NSArray *updatedMetadata = updatedMetadataItemsOrNil ?: @[];
     
-    NSLog(@"UInserted %@", insertedMetadata);
-    NSLog(@"URemoved  %@", removedMetadata);
-    NSLog(@"UUpdated  %@", updatedMetadata);
+    //NSLog(@"UInserted %@", insertedMetadata);
+    //NSLog(@"URemoved  %@", removedMetadata);
+    //NSLog(@"UUpdated  %@", updatedMetadata);
     
     NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata];
     NSArray *removed = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata];

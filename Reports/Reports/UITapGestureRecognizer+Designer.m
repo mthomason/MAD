@@ -8,7 +8,7 @@
 
 #import "UITapGestureRecognizer+Designer.h"
 
-@implementation UITapGestureRecognizer (Designer)
+@implementation UIGestureRecognizer (Designer)
 
 + (instancetype)sectionToggleWithTarget:(id)target
                                  action:(SEL)action
@@ -43,6 +43,26 @@
     tap.delegate = delegate;
     tap.delaysTouchesBegan = YES;
     return tap;
+}
+
++ (instancetype)elementPan:(id)target
+                    action:(SEL)action
+                  delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: target
+                                                                                 action: action];
+    panGesture.minimumNumberOfTouches = 1;
+    panGesture.maximumNumberOfTouches = 2;
+    panGesture.delegate = delegate;
+    return panGesture;
+}
+
++ (instancetype)elementPinch:(id)target
+                      action:(SEL)action
+                    delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    UIPinchGestureRecognizer *panGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: target
+                                                                                     action: action];
+    panGesture.delegate = delegate;
+    return panGesture;
 }
 
 @end

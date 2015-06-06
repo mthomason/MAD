@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UITapGestureRecognizer (Designer)
+@interface UIGestureRecognizer (Designer)
 
 + (instancetype)sectionToggleWithTarget:(id)target
                                  action:(SEL)action
@@ -21,5 +21,13 @@
 + (instancetype)strayTouchWithTarget:(id)target
                               action:(SEL)action
                             delegate:(id<UIGestureRecognizerDelegate>)delegate;
+
++ (instancetype)elementPan:(id)target
+                    action:(SEL)action
+                  delegate:(id<UIGestureRecognizerDelegate>)delegate;
+
++ (instancetype)elementPinch:(id)target
+                      action:(SEL)action
+                    delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
 @end

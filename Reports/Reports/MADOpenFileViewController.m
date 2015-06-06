@@ -1142,21 +1142,21 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
-    NSLog(@"Did insert list info: %@", listInfo);
+    //NSLog(@"Did insert list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchInserts addObject:pair];
 }
 
 - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
-    NSLog(@"Did remove list info: %@", listInfo);
+    //NSLog(@"Did remove list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchRemoves addObject:pair];
 }
 
 - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
-    NSLog(@"Did update list info: %@", listInfo);
+    //NSLog(@"Did update list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchUpdates addObject:pair];
