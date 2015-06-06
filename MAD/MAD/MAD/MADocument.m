@@ -789,9 +789,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)removeDocumentObject:(NSManagedObjectID *)objectID
                  fromSection:(NSManagedObjectID *)sectionID {
     
-    
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID
-                                                                  managedObjectContext: self.document.managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: self.document.managedObjectContext];
     
     RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
     RptqDocumentSection *section = sectionRow.inSection;

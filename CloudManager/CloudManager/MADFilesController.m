@@ -341,7 +341,7 @@
             
             dispatch_sync(self.fileMetaDataQueue, ^{
                 trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObject:trackedRemovedListInfo];
-                NSLog(@"REMOVING %@", trackedRemovedListInfo);
+                //NSLog(@"REMOVING %@", trackedRemovedListInfo);
                 [self.fileMetaDatum removeObjectAtIndex: trackedRemovedListInfoIndex];
             });
             
@@ -362,7 +362,7 @@
             __block NSInteger untrackedInsertedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
-                NSLog(@"INSERTING %@", untrackedInsertedListInfo);
+                //NSLog(@"INSERTING %@", untrackedInsertedListInfo);
 
                 [self.fileMetaDatum addObject:untrackedInsertedListInfo];
                 
@@ -387,7 +387,7 @@
             __block NSInteger updatedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
-                NSLog(@"UPDATING %@", updatedListInfo);
+                //NSLog(@"UPDATING %@", updatedListInfo);
 
                 updatedListInfoIndex = [self.fileMetaDatum indexOfObject:updatedListInfo];
                 

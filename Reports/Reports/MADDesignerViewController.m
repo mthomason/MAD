@@ -144,24 +144,25 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
-MTViewControllerAggregateDelegate,
-MTCollectionViewCellElementDelegate,
-MTReportDesignerSectionViewLayoutLiquidDelegate,
-MADDesignerElementPickerDelegate,
-MTViewControllerProtocol,
-MTDocumentSectionViewDelegate,
-MTReportDesignerSectionLayoutSettingsDelegate,
-MTQueryBuilderChooseFieldDelegate,
-MTTabBarImageProtocol, MADReportDesignerSectionElementLayoutManagerDelegate,
-UIPopoverPresentationControllerDelegate,
-UICollectionViewDataSource,
-UICollectionViewDelegate,
-UICollectionViewDelegateFlowLayout,
-UIGestureRecognizerDelegate,
-UINavigationControllerDelegate,
-UIScrollViewDelegate,
-UIImagePickerControllerDelegate,
-UITabBarControllerDelegate>
+    MTViewControllerAggregateDelegate,
+    MTCollectionViewCellElementDelegate,
+    MTReportDesignerSectionViewLayoutLiquidDelegate,
+    MADDesignerElementPickerDelegate,
+    MTViewControllerProtocol,
+    MTDocumentSectionViewDelegate,
+    MTReportDesignerSectionLayoutSettingsDelegate,
+    MTQueryBuilderChooseFieldDelegate,
+    MTTabBarImageProtocol,
+    MADReportDesignerSectionElementLayoutManagerDelegate,
+    UIPopoverPresentationControllerDelegate,
+    UICollectionViewDataSource,
+    UICollectionViewDelegate,
+    UICollectionViewDelegateFlowLayout,
+    UIGestureRecognizerDelegate,
+    UINavigationControllerDelegate,
+    UIScrollViewDelegate,
+    UIImagePickerControllerDelegate,
+    UITabBarControllerDelegate>
 
 @property (nonatomic, strong) MTRulerView *ruler;
 @property (nonatomic, strong) MADPromptManager *promptManager;
@@ -453,7 +454,7 @@ UITabBarControllerDelegate>
     UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
-    UITapGestureRecognizer *tap = [UITapGestureRecognizer strayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
+    UIGestureRecognizer *tap = [UIGestureRecognizer strayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
     [tap requireGestureRecognizerToFail:tapGestureDoubleTap];
     [self.scroller addGestureRecognizer:tap];
     self.strayTouchGesture = tap;
@@ -463,20 +464,17 @@ UITabBarControllerDelegate>
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
     NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint view:self.view containerLeft:self.scroller.container];
     constraintContentLeft.priority = 999;
-    [constraints addObject:constraintContentLeft];
-    
     NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint view:self.view containerRight:self.scroller.container];
     constraintContentRight.priority = 999;
-    [constraints addObject:constraintContentRight];
-    
     NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint view:self.scroller containerTop:self.scroller.container];
-    [constraints addObject:constraintContentTop];
-    
     NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint scroller:self.scroller bottom:self.bottomLayoutGuide];
-    [constraints addObject:constraintScrollerBottom];
-    
     NSLayoutConstraint *constraintWidth = [NSLayoutConstraint content: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
+    [constraints addObject:constraintContentLeft];
+    [constraints addObject:constraintContentRight];
+    [constraints addObject:constraintContentTop];
+    [constraints addObject:constraintScrollerBottom];
     [constraints addObject:constraintWidth];
+    
     self.layoutConstraintContainerWidth = constraintWidth;
     
     MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
@@ -494,7 +492,7 @@ UITabBarControllerDelegate>
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
     
-    self.navigationControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
+    self.navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
     self.navigationControllerSectionLayoutSettings.preferredContentSize = [MADDesignerViewController sizePopoverSectionSettings];
     
     NSLayoutConstraint *layoutConstraintToolboxHeight = nil;
@@ -553,15 +551,13 @@ UITabBarControllerDelegate>
     NSInteger numberOfSections = [sectionEnumerator count];
     
     NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
-    
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    self.sectionViews = dictionarySections;
-    
     NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    self.sectionControlViews = dictionarySectionControls;
-    
     NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
+
+    self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
+    self.sectionViews = dictionarySections;
+    self.sectionControlViews = dictionarySectionControls;
     self.collectionViewReuseIdentifiers = collectionViewReuseIdentifiers;
     
     [self.scroller.container addSubview:self.ruler];
@@ -608,7 +604,7 @@ UITabBarControllerDelegate>
             
             MADDesignerSectionLabel *sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
             
-            UITapGestureRecognizer *tapGestureRecognizer = [UITapGestureRecognizer sectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
+            UIGestureRecognizer *tapGestureRecognizer = [UIGestureRecognizer sectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
             
             [self.strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
             [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
@@ -1050,8 +1046,7 @@ UITabBarControllerDelegate>
         CGPoint offset = self.scroller.contentOffset;
         offset.x = CGPointZero.x;
         self.scroller.contentOffset = offset;
-        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width,
-                                               self.scroller.contentSize.height);
+        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
     }
 }
 
@@ -1212,7 +1207,6 @@ UITabBarControllerDelegate>
 - (void)toolboxHeightChanged:(CGFloat)newHeight {
     self.navigationControllerToolbox.preferredContentSize = CGSizeMake(320.0000f, newHeight);
 }
-
 
 #pragma mark - NSManagedObjectContextObjectsDidChangeNotification
 
@@ -1410,17 +1404,6 @@ UITabBarControllerDelegate>
     return documentObject.type.integerValue;
 }
 
-- (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    NSManagedObjectID *objectId = [cell objectIdTag];
-    
-    [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
-        if (finished) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                          managedObjectContext: self.document.managedObjectContext];
-            [self.document.activeDocumentModel removeDocumentObject:documentObject];
-        }
-    }];
-}
 
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     [self deselectAllElementsAnimated:YES];
@@ -1662,7 +1645,7 @@ UITabBarControllerDelegate>
                                                                   managedObjectContext: self.document.managedObjectContext];
     
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
-    NSString *resuseId = [MTCollectionViewCellElement reuseIdentifier];
+    NSString * resuseId = [MTCollectionViewCellElement reuseIdentifier];
     
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
@@ -1688,16 +1671,9 @@ UITabBarControllerDelegate>
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             
-            UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self
-                                                                                         action: @selector(handlePanPiece:)];
-            panGesture.minimumNumberOfTouches = 1;
-            panGesture.maximumNumberOfTouches = 2;
-            panGesture.delegate = self;
-            
-            UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: self
-                                                                                               action: @selector(handlePinchPiece:)];
-            pinchGesture.delegate = self;
-            
+            UIGestureRecognizer *panGesture = [UIGestureRecognizer elementPan:self action: @selector(handlePanPiece:) delegate:self];
+            UIGestureRecognizer *pinchGesture = [UIGestureRecognizer elementPinch: self action: @selector(handlePinchPiece:) delegate:self];
+
             [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
             [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
             
@@ -2184,7 +2160,7 @@ UITabBarControllerDelegate>
     //Find the section to add the element.
     for (UIView *sectionView in [self.scroller.container subviews]) {
         if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
-            if (CGRectContainsPoint([sectionView frame], viewLocation) && ![sectionView isEqual:self]) {
+            if (CGRectContainsPoint(sectionView.frame, viewLocation) && ![sectionView isEqual:self]) {
                 result = (MADDesignerSectionView *)sectionView;
                 gestureLocation = [gesture locationInView:result];
                 gestureLocation = CGPointRoundPointToGrid(gestureLocation);
@@ -2261,53 +2237,56 @@ UITabBarControllerDelegate>
     }];
 }
 
-- (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
-                                    completion:(void (^)(BOOL finished))completion {
+- (void)beginPanPiece:(UIView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
+    [self gestureBegan];
+    piece.alpha = 0.8888f;
+    [self.scroller.container bringSubviewToFront: piece];
+    [self.scroller addSubview: piece];
+    transition();
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
-                                                                  managedObjectContext: self.document.managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
     
-    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
-    RptqDocumentSection *section = sectionRow.inSection;
-    UICollectionView *sectionCollectionView = [self getSectionViewForDocumentSection:section];
-    
-    [sectionCollectionView performBatchUpdates:^{
-        
-        MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionCollectionView.objectIdTag];
-        MADReportDesignerSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:elementViewId];
-        
-        NSIndexPath *deletePath = itemToRemove.indexPath.copy;
-        [self.document removeDocumentObject: elementViewId fromSection: sectionCollectionView.objectIdTag];
-        
-        NSArray *indexPaths = @[deletePath];
-        [sectionCollectionView deleteItemsAtIndexPaths: indexPaths];
-        
-    } completion:^(BOOL finished) {
-        
+    MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADReportDesignerSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
+
+    [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
+        [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
+    } animationComplete:^(BOOL finished) {
         if (finished) {
-            
-            
-            [UIView animateWithDuration:0.6666f animations:^{
-                
-                [sectionCollectionView invalidateIntrinsicContentSize];
-                
-            } completion:^(BOOL finished) {
-                
-                if (finished) {
-                    [self.scroller.container invalidateIntrinsicContentSize];
-                    [self.view setNeedsUpdateConstraints];
-                }
-                
-            }];
-            
-            [self redrawAllElementViewsInCollectionView:sectionCollectionView];
-            
-            if (completion != nil) {
-                completion(YES);
-            }
-            
+            [self.scroller.container invalidateIntrinsicContentSize];
+            [self.view setNeedsUpdateConstraints];
         }
-        
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self redrawAllElementViewsInCollectionView:sectionView];
+             completion();
+        }
+    }];
+}
+
+- (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
+    NSManagedObjectID *objectId = cell.objectIdTag;
+    
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
+    
+    MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
+    MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADReportDesignerSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:objectId];
+    
+    [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
+        [self.document removeDocumentObject: objectId fromSection: sectionView.objectIdTag];
+    } animationComplete:^(BOOL finished) {
+        if (finished) {
+            [self.scroller.container invalidateIntrinsicContentSize];
+            [self.view setNeedsUpdateConstraints];
+        }
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self redrawAllElementViewsInCollectionView:sectionView];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
+            [self.document.activeDocumentModel removeDocumentObject:documentObject];
+        }
     }];
 }
 
@@ -2387,10 +2366,20 @@ UITabBarControllerDelegate>
 }
 
 - (void)gestureEnded {
-    [self setScrollersEnabled:YES];
+    [self setScrollersEnabled: YES];
 }
 
 #pragma mark Gesture handlers
+
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller];
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
 
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     
@@ -2427,113 +2416,88 @@ UITabBarControllerDelegate>
     }
 }
 
-- (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+- (void)translatePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
+    CGPoint translation = [gestureRecognizer translationInView:self.scroller];
+    gestureRecognizer.view.center = CGPointMake(gestureRecognizer.view.center.x + translation.x, gestureRecognizer.view.center.y + translation.y);
+    [gestureRecognizer setTranslation:CGPointZero inView:self.scroller];
+}
+
+- (void)endPanPiece:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
+    piece.alpha = 1.0000f;
+    piece.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
     
-    switch ([gestureRecognizer state]) {
+    if (sectionView != nil) {
+        
+        [self relayoutSectionView:sectionView];
+
+        NSManagedObjectID *objectId = piece.objectIdTag;
+        CGRect frame = piece.frame;
+        
+        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag inManagedObjectContext: managedObjectContext];
+        MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+        NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
+        
+        [sectionView insertItemAtIndex:path update:^(){
+            MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+            la.objectID = objectId;
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: managedObjectContext];
+            la.frame = CGRectMake(frame.origin.x, frame.origin.y, documentObject.size.width, documentObject.size.height);
+            [layoutManager addItem:la];
+            [layoutManager layout];
+            
+            [piece removeFromSuperview];
+            [documentSection addDocumentObject: documentObject withDropPoint: frame.origin];
+            [documentSection.managedObjectContext save:nil];
+            
+        } animationComplete:^(BOOL finished) {
+            if (finished) {
+                [self.scroller.container invalidateIntrinsicContentSize];
+                [self.view setNeedsUpdateConstraints];
+            }
+        } completion:^(BOOL finished) {
+            NSNumber *height = @([sectionView intrinsicContentSize].height);
+            documentSection.height = height;
+            [managedObjectContext save:nil];    // FIXME: Triggers a collection view invalidate layout...
+            [self redrawAllElementViewsInCollectionView:sectionView];
+            [self.view setNeedsLayout];
+        }];
+    }
+    
+    [piece setNeedsDisplay];
+    [self gestureEnded];
+
+}
+
+- (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+    [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+
+    switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {
+            gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
+                                                                      self.scroller.zoomScale,
+                                                                      self.scroller.zoomScale);
             
-            [self gestureBegan];
-            
-            gestureRecognizer.view.alpha = 0.8888f;
-            [self.scroller.container bringSubviewToFront: gestureRecognizer.view];
-            
-            gestureRecognizer.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.scroller.zoomScale, self.scroller.zoomScale);
-            CGPoint newCenter = [self.scroller locationInMainWindow:gestureRecognizer];
-            [self.scroller addSubview: gestureRecognizer.view];
-            gestureRecognizer.view.center = newCenter;
-            
-            [self removeCollectionViewCellForElementView: gestureRecognizer.view.objectIdTag
-                                              completion: ^(BOOL finished) {
-                                                  
-                                                  if (finished) {
-                                                      gestureRecognizer.view.center = [self.scroller locationInMainWindow:gestureRecognizer];
-                                                  }
-                                                  
-                                              }];
+            [self beginPanPiece:gestureRecognizer.view transition:^{
+                [self translatePanGesture:gestureRecognizer];
+            } completion:^{
+                [self translatePanGesture:gestureRecognizer];
+            }];
             
             break;
         }
         case UIGestureRecognizerStateChanged: {
-            
-            gestureRecognizer.view.center = [self.scroller locationInMainWindow:gestureRecognizer];
-            
+            [self translatePanGesture:gestureRecognizer];
             break;
         }
         case UIGestureRecognizerStatePossible:
             break;
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateFailed:
-        case UIGestureRecognizerStateEnded: {
-            
-            gestureRecognizer.view.alpha = 1.0000f;
-            gestureRecognizer.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
-            
-            UICollectionView *sectionView = [self sectionViewFor:gestureRecognizer];
-            
-            if (sectionView != nil) {
-                
-                [self relayoutSectionView:sectionView];
-                
-                NSManagedObjectID *objectId = gestureRecognizer.view.objectIdTag;
-                NSManagedObjectID *sectionId = sectionView.objectIdTag;
-                
-                CGRect frame = gestureRecognizer.view.frame;
-
-                NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-                RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionId
-                                                                                inManagedObjectContext: managedObjectContext];
-                [sectionView performBatchUpdates:^(void) {
-                    
-                    MADReportDesignerSectionElementLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
-                    
-                    NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count
-                                                            inSection: 0];
-                    MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-                    la.objectID = objectId;
-                    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                                  managedObjectContext: managedObjectContext];
-                    CGSize size = documentObject.size;
-                    
-                    la.frame = CGRectMake(frame.origin.x, frame.origin.y, size.width, size.height);
-                    [layoutManager addItem:la];
-                    [layoutManager layout];
-                    NSArray *indexPathsInserted = @[path];
-                    
-                    [gestureRecognizer.view removeFromSuperview];
-                    
-                    [documentSection addDocumentObject: documentObject
-                                         withDropPoint: frame.origin];
-                    [sectionView insertItemsAtIndexPaths: indexPathsInserted];
-                    [documentSection.managedObjectContext save:nil];
-                    
-                } completion:^(BOOL finished) {
-                    if (finished) {
-                        NSNumber *height = @([sectionView intrinsicContentSize].height);
-                        documentSection.height = height;
-                        [UIView animateWithDuration:0.6666f animations:^{
-                            [sectionView invalidateIntrinsicContentSize];
-                        } completion:^(BOOL finished) {
-                            if (finished) {
-                                [self.scroller.container invalidateIntrinsicContentSize];
-                                [self.view setNeedsUpdateConstraints];
-                            }
-                        }];
-                        [managedObjectContext save:nil];    // FIXME: Triggers a collection view invalidate layout...
-                        [self redrawAllElementViewsInCollectionView:sectionView];
-                        
-                        //[self.scroller.container invalidateIntrinsicContentSize];
-                        
-                        [self.view setNeedsLayout];
-                    }
-                }];
-                
-            }
-            
-            [gestureRecognizer.view setNeedsDisplay];
-            [self gestureEnded];
-            break;
-        }
+        case UIGestureRecognizerStateEnded:
+            [self endPanPiece: gestureRecognizer.view inSection: [self sectionViewFor:gestureRecognizer]];
         default:
             break;
     }
@@ -2541,8 +2505,7 @@ UITabBarControllerDelegate>
 
 - (void)handleStrayTouch:(UITapGestureRecognizer *)sender {
     if ([sender state] == UIGestureRecognizerStateEnded) {
-        [[UIMenuController sharedMenuController] setMenuVisible: NO
-                                                       animated: YES];
+        [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
         if (self.presentedViewController != nil) {
             [self hideToolbox];
         }
@@ -2611,31 +2574,6 @@ UITabBarControllerDelegate>
     }
 }
 
-/*
- 
- Options:
- Select a unselected element
- Select first element
- Show toolbox
- Select nth element
- Adjust toolbox location
- 
- Select a selected element to delesect it
- Deselect a nth element
- Deselect the last element
- Hide toolbx
- 
- */
-
-- (void)adjustSettingsLocation {
-    self.settingsTransitioningDelegate.sourceRect = self.lastSelectedLabel.frame;
-}
-
-- (void)adjustToolboxLocation {
-    self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
-    self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
-}
-
 - (void)handleToggleElementView:(UITapGestureRecognizer *)sender {
     
     if (sender.state == UIGestureRecognizerStateEnded) {
@@ -2688,13 +2626,37 @@ UITabBarControllerDelegate>
     }
 }
 
+/*
+ 
+ Options:
+ Select a unselected element
+ Select first element
+ Show toolbox
+ Select nth element
+ Adjust toolbox location
+ 
+ Select a selected element to delesect it
+ Deselect a nth element
+ Deselect the last element
+ Hide toolbx
+ 
+ */
+
+- (void)adjustSettingsLocation {
+    self.settingsTransitioningDelegate.sourceRect = self.lastSelectedLabel.frame;
+}
+
+- (void)adjustToolboxLocation {
+    self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
+    self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+}
+
 #pragma mark Display Helpers
 
 - (void)relayoutSectionView:(UICollectionView *)documentSectionView {
     
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: self.document.managedObjectContext];
     NSString *key = [documentSection sectionKey];
     NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];
     layoutConstraint.constant = documentSection.height.floatValue;
@@ -2834,7 +2796,7 @@ UITabBarControllerDelegate>
     return results;
 }
 
-- (UICollectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
+- (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
     return self.sectionViews[[documentSection sectionKey]];
 }
 
@@ -2940,19 +2902,13 @@ UITabBarControllerDelegate>
                 [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
                 
                 
-                UITapGestureRecognizer *tapGestureRecognizer = [UITapGestureRecognizer elementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
+                UIGestureRecognizer *tapGestureRecognizer = [UITapGestureRecognizer elementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
                 [elementView addGestureRecognizer:tapGestureRecognizer];
                 
             }
         }
     }
     return elementView;
-}
-
-- (RptqDocumentObject *)documentObjectForElementView: (MADDesignerElementView *)elementView
-                              inManagedObjectContext: (NSManagedObjectContext *)managedObjectContext {
-    NSManagedObjectID *objectID = [elementView objectIdTag];
-    return (RptqDocumentObject *)[managedObjectContext objectWithID:objectID];
 }
 
 #pragma mark Constraints Helpers
@@ -3048,12 +3004,8 @@ UITabBarControllerDelegate>
 
 #pragma mark - Creators
 
-+ (CGSize)sizePopoverDefault {
+static const inline CGSize sizePopoverDefault() {
     return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
-}
-
-+ (CGSize)sizePopoverStyle {
-    return CGSizeMake(MADDefaultsPopooverWidth, 300.0000f);
 }
 
 + (CGSize)sizePopoverLayout {
@@ -3069,9 +3021,9 @@ UITabBarControllerDelegate>
 }
 
 + (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {
-    MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
-    [backgroundView setNumberOfRowsInBackground:section.numberOfRows.integerValue];
-    backgroundView.backgroundColor = [UIColor clearColor];
+    //MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
+    //[backgroundView setNumberOfRowsInBackground:section.numberOfRows.integerValue];
+    //backgroundView.backgroundColor = [UIColor clearColor];
     
     MADDesignerSectionView *collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
     ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
@@ -3087,12 +3039,8 @@ UITabBarControllerDelegate>
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    
     NSError *error = nil;
     [self.document.managedObjectContext save:&error];
-    if (error != nil) {
-        [self.document.managedObjectContext save:&error];
-    }
     if (![self dismissAllPopovers]) {
         [self.delegate viewControllerDidFinish:@(NO)];
     } else {
@@ -3110,15 +3058,13 @@ UITabBarControllerDelegate>
     pickerController.document = self.document;
     
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
-    navigationController.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
+    navigationController.preferredContentSize = sizePopoverDefault();
     
     UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.barButtonItem = sender;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    [self presentViewController: navigationController
-                       animated: YES
-                     completion: nil];
+    [self presentViewController: navigationController animated: YES completion: nil];
     [self setDisplayInactive];
     
 }
@@ -3272,9 +3218,7 @@ UITabBarControllerDelegate>
         NSManagedObjectID *objectId = [self objectIdEditBarcode];
         RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
         RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
-        [barcodeObject updateWithBarcode: barcode
-                                fieldOne: viewController.queryField1
-                                fieldTwo: viewController.queryField2];
+        [barcodeObject updateWithBarcode: barcode fieldOne: viewController.queryField1 fieldTwo: viewController.queryField2];
         [self setObjectIdEditBarcode:nil];
         
     } else {

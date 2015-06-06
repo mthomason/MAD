@@ -58,8 +58,7 @@
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     if (self.completedInitalLayout == NO) {
-        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length)
-                                animated:NO];
+        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length) animated:NO];
         self.completedInitalLayout = YES;
     }
 }
@@ -67,11 +66,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden: NO
-                                             animated: animated];
-
+    [self.navigationController setNavigationBarHidden: NO animated: animated];
     [self updateDisplay];
-    
     if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }
@@ -84,8 +80,7 @@
     
     for (NSManagedObjectID *objectId in objectIds) {
 
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
         MTDataType dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.integerValue;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
@@ -189,8 +184,7 @@
         [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                          managedObjectContext: self.document.managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
             [documentObject setFormatNumericDecimals:valueThatChanged];
             [documentObject.managedObjectContext save:nil];
         }
@@ -206,8 +200,7 @@
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
     
     NSString *decimals = NSLocalizedString(@"Decimals", "Decimals");
-    NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: decimals
-                                                                                                   attributes: boldAttributes];
+    NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: decimals attributes: boldAttributes];
     NSString *pointsString;
     if (numberOfDecimals == -1) {
         pointsString = @"-";
@@ -228,9 +221,7 @@
     cell.contentView.backgroundColor = [UIColor clearColor];
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

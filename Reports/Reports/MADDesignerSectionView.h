@@ -21,6 +21,10 @@
 
 @property (nonatomic, assign) id <MTDocumentSectionViewDelegate> sectionDelegate;
 
+- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
+
+- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
+
 @end
 
 #endif
