@@ -116,8 +116,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 }
 
 - (IBAction)valueChangedNewPageAfter:(id)sender {
-    [self.delegate layoutSettings: self
-                     newPageAfter: self.switchFormFeed.isOn];
+    [self.delegate layoutSettings: self newPageAfter: self.switchFormFeed.isOn];
 }
 
 #pragma mark - Helpers

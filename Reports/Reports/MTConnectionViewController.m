@@ -35,7 +35,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MTConnectionViewController()
 
-@property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
 @property (nonatomic, strong) MADocument *docToSave;
 @property (nonatomic, strong) UIProgressView *progressView;

@@ -125,4 +125,11 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
     return presentedRect;
 }
 
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    [self.subviews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+        [view setNeedsDisplay];
+    }];
+}
+
 @end

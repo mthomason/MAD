@@ -1087,13 +1087,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     MTReportViewerReportPageViewController *result = nil;
     if (viewerViewController.pageIsAnimating == NO) {
-        NSUInteger visablePageNumber = 0;
+        NSUInteger visiblePageNumber = 0;
         if (pageViewControllerPrevious != nil && [pageViewControllerPrevious respondsToSelector:@selector(pageNumber)]) {
-            visablePageNumber = pageViewControllerPrevious.pageNumber;
+            visiblePageNumber = pageViewControllerPrevious.pageNumber;
         }
-        if (visablePageNumber - 1 > 0) {
+        if (visiblePageNumber - 1 > 0) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                           pageNumber: visablePageNumber - 1
+                                                                           pageNumber: visiblePageNumber - 1
                                                                               ofPages: self.numberOfPages];
             result.delegate =  self;
             result.view.frame = self.view.bounds;

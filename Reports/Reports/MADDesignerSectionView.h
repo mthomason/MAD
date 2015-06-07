@@ -16,10 +16,19 @@
 - (void)didUpdateLayout:(id)sender;
 @end
 
+typedef NS_ENUM(NSUInteger, MADBorderState) {
+    MADBorderStateNormal,
+    MADBorderStateSelected,
+    MADBorderStateDisabled
+};
+
 @interface MADDesignerSectionView : UICollectionView
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) id <MTDocumentSectionViewDelegate> sectionDelegate;
+
+@property (nonatomic, assign) BOOL visible;
+@property (nonatomic, assign) BOOL selected;
 
 - (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
 

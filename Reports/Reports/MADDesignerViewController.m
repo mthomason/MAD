@@ -664,7 +664,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             [self.scroller.container addSubview:sectionView];
             [self.scroller.container addSubview:sectionViewLabel];
-            
             [passthroughContainers addObject:sectionView];
             
         }
@@ -1100,9 +1099,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *documentSection = [query documentSectionForRow: selectedSectionNumber];
     
-    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
-    UIColor *color = [MADDesignerViewController sectionBackgroundColor:isVisible];
-    documentSectionView.backgroundColor = color;
+    MADDesignerSectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
+    documentSectionView.visible = isVisible;
     [self.document saveContext];
 }
 
@@ -2127,12 +2125,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
 }
 
-- (void)applyBorderToSection:(UIView *)view {
-    UIColor *borderColor = [UIColor tintColorAnalogous4];
-    view.layer.borderColor = [borderColor CGColor];
-    view.layer.borderWidth = 1.0000f;
-}
-
 - (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag {
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
@@ -2192,7 +2184,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (MADDesignerElementView *)elementViewForCollectionViewCell:(UICollectionViewCell *)cell {
     MADDesignerElementView *result = nil;
-    
     for (id elementView in [cell.contentView subviews]) {
         if ([elementView isKindOfClass:[MADDesignerElementView class]]) {
             result = elementView;
@@ -2546,8 +2537,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 self.lastSelectedSectionControlPanel = label.tag;
                 self.lastSelectedLabel = label;
                 RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
-                UIView *superView = [self getSectionViewForDocumentSection: section];
-                [self applyBorderToSection:superView];
+                MADDesignerSectionView *superView = [self getSectionViewForDocumentSection: section];
+                superView.selected = YES;
                 [label dimView];
                 
                 
@@ -2604,8 +2595,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         } else {
             
-            [self deselectElementView: elementView
-                             animated: YES];
+            [self deselectElementView: elementView animated: YES];
             [self.selectedObjectIds removeObject: elementView.objectIdTag];
             [self.viewControllerToolbox setSelectedObjectIds: self.selectedObjectIds];
             
@@ -2661,10 +2651,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];
     layoutConstraint.constant = documentSection.height.floatValue;
     [self.view setNeedsUpdateConstraints];
-}
-
-+ (UIColor *)sectionBackgroundColor:(BOOL)isVisible {
-    return isVisible ? [UIColor whiteColor] : [[UIColor whiteColor] colorWithAlphaComponent:0.70000f];
 }
 
 - (void)setDisplayActive {
@@ -2850,9 +2836,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }];
     
     //Remove border from the section views
-    [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, UICollectionView *view, BOOL *stop) {
-        view.layer.borderColor = [UIColor blackColor].CGColor;
-        view.layer.borderWidth = [UIView borderWidthThin];
+    [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
+        view.selected = NO;
     }];
     
 }
@@ -3021,18 +3006,12 @@ static const inline CGSize sizePopoverDefault() {
 }
 
 + (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {
-    //MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
-    //[backgroundView setNumberOfRowsInBackground:section.numberOfRows.integerValue];
-    //backgroundView.backgroundColor = [UIColor clearColor];
-    
     MADDesignerSectionView *collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
     ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
     [collectionView setObjectIdTag: section.objectID];
     collectionView.tag = section.identifier.integerValue;
-    
-    UIColor *bgcolor = [MADDesignerViewController sectionBackgroundColor:section.visibility.boolValue];
-    collectionView.backgroundColor = bgcolor;
-    
+    collectionView.visible = section.visibility.boolValue;
+    collectionView.selected = NO;
     return collectionView;
 }
 
