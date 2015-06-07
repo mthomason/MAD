@@ -12,15 +12,27 @@
 #import <UIKit/UIKit.h>
 
 @interface MADViewController : UIViewController
+
+#include "MADViewControllerBase.h"
+
 @end
 
 @interface MADTableViewController : UITableViewController
+
+#include "MADViewControllerBase.h"
+
 @end
 
 @interface MADCollectionViewController : UICollectionViewController
+
+#include "MADViewControllerBase.h"
+
 @end
 
 @interface MADSplitViewController : UISplitViewController
+
+#include "MADViewControllerBase.h"
+
 @end
 
 #endif
