@@ -17,18 +17,18 @@
 #import "UIColor+EverydayApps.h"
 
 
-static const CGFloat selectedAlpha = 0.33333333f;
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {
-        return [[UIColor edaBlackFiftyPercent] colorWithAlphaComponent:selectedAlpha];
+        return [UIColor disabledColor];
     } else if (selected && !visible) {
-        return [[UIColor edaBlackFiftyPercent] colorWithAlphaComponent:selectedAlpha];
+        return [UIColor disabledColor];
     } else if (selected && visible) {
         return [UIColor whiteColor];
     } else {
         return [UIColor whiteColor];
     }
 }
+
 
 static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     if (selected) {

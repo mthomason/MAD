@@ -40,6 +40,8 @@
 + (instancetype)tintColorGold;
 + (instancetype)tintColorGold2;
 
++ (instancetype)disabledColor;
+
 + (instancetype)tintColorAnalogous4;
 + (instancetype)borderColor;
 

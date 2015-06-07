@@ -11,6 +11,8 @@
 
 @implementation UIColor(EverydayApps)
 
+static const CGFloat selectedAlpha = 0.33333333f;
+
 + (instancetype)edaBlackish                       {vendColor(0.0000f, 0.0000f, 0.0000f);}
 + (instancetype)edaBlueDark                       {vendColor(2.0000f, 108.0000f, 182.0000f);}
 + (instancetype)edaBlueLight                      {vendColor(185.0000f, 224.0000f, 247.0000f);}
@@ -45,4 +47,7 @@
 + (instancetype)tintColorAnalogous3 { vendColor(2.0000f, 233.0000f, 238.0000f); };
 + (instancetype)tintColorAnalogous4 { vendColor(2.0000f, 228.0000f, 169.0000f); };
 + (instancetype)borderColor { return [UIColor blackColor]; }
+
++ (instancetype)disabledColor { return [[UIColor edaBlackFiftyPercent] colorWithAlphaComponent:selectedAlpha]; }
+
 @end
