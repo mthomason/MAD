@@ -286,11 +286,9 @@ static size_t const kDashedCount            = (2.0f);
                           delay: 0.3333f
                         options: UIViewAnimationOptionAutoreverse
                      animations: ^{
-                         self.backgroundColor = [UIColor edaYellow];
+                         self.backgroundColor = [[UIColor tintColorBlue] colorWithAlphaComponent:0.33333333];
                      } completion:^(BOOL finished) {
-                         if (finished) {
-                             self.backgroundColor = [UIColor clearColor];
-                         }
+                         if (finished) self.backgroundColor = [UIColor clearColor];
                          completion(finished);
                      }];
 }
@@ -304,22 +302,22 @@ static size_t const kDashedCount            = (2.0f);
         CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
         CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
         
-        [self setTransform: leftWobble];
+        self.transform = leftWobble;
         
-        [[self layer] setAnchorPoint:CGPointMake(0.5000f, 0.5000f)];
+        self.layer.anchorPoint = CGPointMake(0.5000f, 0.5000f);
         
         [UIView animateWithDuration:0.3500
                               delay:0
                             options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
                          animations:^{
                              [UIView setAnimationRepeatCount:NSNotFound];
-                             [self setTransform: rightWobble];
+                             self.transform = rightWobble;
                          }
                          completion:nil];
         
     } else {
-        [[self layer] removeAllAnimations];
-        [self setTransform: CGAffineTransformIdentity];
+        [self.layer removeAllAnimations];
+        self.transform = CGAffineTransformIdentity;
     }
 }
 
