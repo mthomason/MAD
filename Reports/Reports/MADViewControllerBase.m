@@ -30,7 +30,7 @@
 - (void)commonInit {
     _firstTimeViewDidAppear = YES;
     _firstTimeViewWillAppear = YES;
-    _viewWillLayoutSubviewsCounter = 0;
+    self.viewWillLayoutSubviewsCounter = 0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
