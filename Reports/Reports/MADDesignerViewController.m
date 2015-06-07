@@ -1692,11 +1692,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             if (self.objectIdJustDisplayed != nil) {
                 
                 if (self.objectIdJustDisplayed == documentObject.objectID) {
-                    [elementView flash:^(BOOL finished) {
-                        if (finished) {
-                            self.objectIdJustDisplayed = nil;
-                        }
-                    }];
+                    [elementView flash:^(BOOL finished) { if (finished) self.objectIdJustDisplayed = nil; }];
                     
                 }
                 
@@ -2211,6 +2207,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
         MADReportDesignerSectionLayoutAttributes *la = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
         la.objectID = documentObject.objectID;
+        self.objectIdJustDisplayed = la.objectID;
         la.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
         [layoutManager addItem:la];
         [layoutManager layout];

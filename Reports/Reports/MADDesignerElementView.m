@@ -282,15 +282,14 @@ static size_t const kDashedCount            = (2.0f);
 #pragma mark - Members
 
 - (void)flash:(void (^)(BOOL finished))completion {
-    __weak UIView *weakself = self;
     [UIView animateWithDuration: 0.6666f
                           delay: 0.3333f
                         options: UIViewAnimationOptionAutoreverse
                      animations: ^{
-                         weakself.backgroundColor = [UIColor edaYellow];
+                         self.backgroundColor = [UIColor edaYellow];
                      } completion:^(BOOL finished) {
                          if (finished) {
-                             weakself.backgroundColor = [UIColor clearColor];
+                             self.backgroundColor = [UIColor clearColor];
                          }
                          completion(finished);
                      }];
