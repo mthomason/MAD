@@ -19,7 +19,6 @@
 @interface MADFontSelectorViewController()
 
 @property (nonatomic, strong) MTFont *initalSelectedFont;
-@property (nonatomic, assign) BOOL firstTimeLayout;
 
 @end
 
@@ -35,13 +34,11 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    self.firstTimeLayout = YES;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
     self.navigationController.navigationBar.alpha = 1.0000f;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden: NO animated: animated];
@@ -65,9 +62,8 @@
     self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x, self.topLayoutGuide.length - self.navigationController.navigationBar.frame.size.height, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
     self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    if (self.firstTimeLayout) {
+    if (self.firstTimeViewWillLayoutSubviews) {
         self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
-        self.firstTimeLayout = NO;
     }
 
 }

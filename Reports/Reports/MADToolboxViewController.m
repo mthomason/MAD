@@ -32,8 +32,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
 
-@property (nonatomic, assign) BOOL firstTimeViewWillAppear;
-
 @property (nonatomic, weak) UIViewController *currentViewController;
 
 @end
@@ -99,8 +97,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.firstTimeViewWillAppear = YES;
-    
     self.modalPresentationStyle = UIModalPresentationPopover;
     self.modalTransitionStyle = self.segmentedControlActionStyle;
     
@@ -123,8 +119,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (self.firstTimeViewWillAppear) {
-        self.firstTimeViewWillAppear = NO;
+    if (self.firstTimeViewWillLayoutSubviews) {
         [self showInitalChildViewController];
     }
 }

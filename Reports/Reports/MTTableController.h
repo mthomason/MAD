@@ -10,10 +10,11 @@
 #define MAD_MTTableController_h
 
 #import <UIKit/UIKit.h>
+#import "MADViewController.h"
 
 @class MTDataFormatter, MTQuery;
 
-@interface MTTableController : UICollectionViewController
+@interface MTTableController : MADCollectionViewController
 
 @property (nonatomic, strong, readonly) MTDataFormatter *tableFormatter;
 

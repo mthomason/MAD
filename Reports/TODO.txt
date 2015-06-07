@@ -9,7 +9,6 @@ Can press buttons behind cloud activity indicator.
     This needs to be refactored, use standard activity indicator, etc.
 
 How To
-    Document Interaction
     Display YouTube Demo Video
     In App Purchase
     Report Viewer Stand Alone Version

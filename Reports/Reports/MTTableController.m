@@ -39,8 +39,6 @@
 @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
 @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
 
-@property (nonatomic, assign) BOOL firstTimeTablePosition;
-
 @end
 
 @implementation MTTableController
@@ -77,7 +75,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.firstTimeTablePosition = NO;
     [self initalize];
     self.collectionView.backgroundColor = [UIColor tintColorBlue];
     self.collectionView.alwaysBounceHorizontal = YES;
@@ -175,10 +172,8 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
-    if (self.firstTimeTablePosition == NO) {
-        self.firstTimeTablePosition = YES;
-        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f);
-        [self.collectionView scrollRectToVisible: r
+    if (self.firstTimeViewDidAppear == NO) {
+        [self.collectionView scrollRectToVisible: CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f)
                                         animated: NO];
     }
 }

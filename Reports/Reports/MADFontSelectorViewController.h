@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MADViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 
 @class MADocument, MADFontSelectorViewController, MTFont;
@@ -18,7 +19,7 @@
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
 @end
 
-@interface MADFontSelectorViewController : UITableViewController
+@interface MADFontSelectorViewController : MADTableViewController
     <UITableViewDelegate, MADToolboxDisplayProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;

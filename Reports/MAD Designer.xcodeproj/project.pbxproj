@@ -171,6 +171,8 @@
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C111C1F1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */; };
 		4C111C221B2172FA005CA4DD /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C211B2172F9005CA4DD /* UITapGestureRecognizer+Designer.m */; };
+		4C111C281B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
+		4C111C291B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C113C9119A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
 		4C113C9219A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
 		4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
@@ -1446,6 +1448,9 @@
 		4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+Designer.m"; sourceTree = "<group>"; };
 		4C111C201B2172F9005CA4DD /* UITapGestureRecognizer+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+Designer.h"; sourceTree = "<group>"; };
 		4C111C211B2172F9005CA4DD /* UITapGestureRecognizer+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITapGestureRecognizer+Designer.m"; sourceTree = "<group>"; };
+		4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewControllerBase.m; sourceTree = "<group>"; };
+		4C111C261B23E853005CA4DD /* MADViewControllerBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBase.h; sourceTree = "<group>"; };
+		4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBaseInterfacePrivate.h; sourceTree = "<group>"; };
 		4C113C8F19A3D6BB00D1A3B0 /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
 		4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
 		4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = Barcodes/Barcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
@@ -4270,6 +4275,9 @@
 				4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */,
 				4CA19F801A15C197004DDA52 /* MADViewController.h */,
 				4CA19F811A15C197004DDA52 /* MADViewController.m */,
+				4C111C261B23E853005CA4DD /* MADViewControllerBase.h */,
+				4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */,
+				4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */,
 				4CD696F11AD92029008A9ED3 /* MADModelNavigationController.h */,
 				4CD696F21AD92029008A9ED3 /* MADModelNavigationController.m */,
 				4C111C1D1B2030E1005CA4DD /* NSLayoutConstraint+Designer.h */,
@@ -5617,6 +5625,7 @@
 				4C0E773F163B5AEC003B951E /* MTConnectionViewController.m in Sources */,
 				4CDB48881ABFBA9E00E76879 /* NSMetadataItem+Description.m in Sources */,
 				4C23FAEB18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */,
+				4C111C291B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */,
 				4C23FB3118FADE65009F234F /* MTCellEnterText.m in Sources */,
 				4C0E7754163B5AEC003B951E /* MADQueryViewController.m in Sources */,
@@ -5874,6 +5883,7 @@
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4CC96A361AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4C23FAEC18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
+				4C111C281B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4CFC3DE416714A270016E1E8 /* MADViewControllerSQL.m in Sources */,
 				4CFFCBB019C35B2100919440 /* MADUpgradeManager.m in Sources */,
 				4C0A077519C95F390059E1D9 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,

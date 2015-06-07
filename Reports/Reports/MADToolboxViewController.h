@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MADToolboxDisplayProtocol.h"
+#import "MADViewController.h"
 
 @class MADocument;
 
 extern NSString * const MADToolbox;
 
-@interface MADToolboxViewController : UIViewController
+@interface MADToolboxViewController : MADViewController
     <MADToolboxDisplayProtocol>
 
 @property (nonatomic, strong) MADocument *document;

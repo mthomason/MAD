@@ -145,8 +145,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 @property (nonatomic, assign) CGFloat headerSectionHeight;
 
-@property (nonatomic, assign) BOOL firstTimeTablePosition;
-
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
@@ -266,8 +264,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.firstTimeTablePosition = NO;
-
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
     self.tableView.backgroundView = watermarkView;
     [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
@@ -339,8 +335,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (void)viewDidLayoutSubviews {
-    if (self.firstTimeTablePosition == NO) {
-        self.firstTimeTablePosition = YES;
+    if (self.firstTimeViewWillLayoutSubviews == NO) {
         CGRect r = CGRectMake(CGPointZero.x,
                               CGPointZero.y,
                               self.tableView.frame.size.width,

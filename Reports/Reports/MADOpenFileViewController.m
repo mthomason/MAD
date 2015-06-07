@@ -135,7 +135,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
-@property (nonatomic, assign) BOOL firstViewWillAppear;
+//@property (nonatomic, assign) BOOL firstViewWillAppear;
 
 @property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
 
@@ -243,30 +243,20 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.updatingEnabled = YES;
     self.cloudActivityRunning = NO;
     self.cloudActivityRunningDisplay = NO;
-    self.firstViewWillAppear = YES;
     self.rightBarButtonItemActivityIndicatorVisible = NO;
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MADFilesController isCloudAvailable] ? MADSectionHeaderHeight : CGSizeZero.height),
-                                                                 self.collectionView.contentInset.left,
-                                                                 self.collectionView.contentInset.bottom,
-                                                                 self.collectionView.contentInset.right);
-    
-    
+    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset;
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
-    //self.collectionView.dataSource = self;
-    //self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     
     [self setEditing:NO animated:NO];
     
-    UIColor *barTintColor = [UIColor tintColorBlue];
-    UIColor *tintColor = [UIColor tintColorWhite];
-    self.navigationController.toolbar.barTintColor = barTintColor;
-    self.navigationController.toolbar.tintColor = tintColor;
+    self.navigationController.toolbar.barTintColor = [UIColor tintColorBlue];
+    self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
     
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
     self.collectionView.backgroundView = watermarkView;
@@ -290,13 +280,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [searchBar sizeToFit];
     self.searchBar = searchBar;
 
-    NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
+    NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:self.barButtonItemAction];
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
-    
     [toolbarButtons addObject:self.barButtonItemEdit];
     [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
-    
     [self setToolbarItems:toolbarButtons animated:NO];
     
 }
@@ -312,11 +300,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }
     }];
     
-    if (self.firstViewWillAppear == NO) {
+    if (self.firstTimeViewWillAppear == NO) {
         [self reenableDataWithSearch];
     }
-    
-    self.firstViewWillAppear = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -704,8 +690,18 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
+
+
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    [self dismissViewControllerAnimated:animated completion:^{ }];
+    [self dismissViewControllerAnimated:animated completion:^{
+        [self.collectionView.indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:animated];
+        }];
+        [self.collectionView.indexPathsForVisibleItems enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
+            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            [cell normalizeTint];
+        }];
+    }];
     
     Class queryBuilderClass = [MADQueryViewController class];
     Class queryBuilderContainerClass = [MTQueryBuilderContainerController class];
@@ -814,7 +810,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)openFileWithUrl:(NSURL *)url {
+- (void)openFileWithUrl:(NSURL *)url { //completion:(void (^)(BOOL success))completion {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     [AppDelegate app].fileManager.openDocument = document;
     
