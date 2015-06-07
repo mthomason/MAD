@@ -173,6 +173,8 @@
 		4C111C221B2172FA005CA4DD /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C211B2172F9005CA4DD /* UITapGestureRecognizer+Designer.m */; };
 		4C111C281B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C111C291B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
+		4C111C2C1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C2B1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m */; };
+		4C111C2D1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C2B1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m */; };
 		4C113C9119A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
 		4C113C9219A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
 		4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
@@ -1451,6 +1453,8 @@
 		4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewControllerBase.m; sourceTree = "<group>"; };
 		4C111C261B23E853005CA4DD /* MADViewControllerBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBase.h; sourceTree = "<group>"; };
 		4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBaseInterfacePrivate.h; sourceTree = "<group>"; };
+		4C111C2A1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+FileManager.h"; sourceTree = "<group>"; };
+		4C111C2B1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+FileManager.m"; sourceTree = "<group>"; };
 		4C113C8F19A3D6BB00D1A3B0 /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
 		4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
 		4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = Barcodes/Barcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
@@ -4284,6 +4288,8 @@
 				4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */,
 				4C111C201B2172F9005CA4DD /* UITapGestureRecognizer+Designer.h */,
 				4C111C211B2172F9005CA4DD /* UITapGestureRecognizer+Designer.m */,
+				4C111C2A1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.h */,
+				4C111C2B1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -5779,6 +5785,7 @@
 				4CA19F831A15C197004DDA52 /* MADViewController.m in Sources */,
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
+				4C111C2D1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C67B75419475A88006B4D5B /* UIPageViewController+Extras.m in Sources */,
 				4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
@@ -5932,6 +5939,7 @@
 				4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
 				4C4740D31A0170B100B11434 /* MADToolboxStyleLayoutViewController.m in Sources */,
 				4CC96A4B1AC90C6D0044C157 /* MADGettingStartedTableViewController.m in Sources */,
+				4C111C2C1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */,
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4C23FB0218FADCE4009F234F /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4CF3E77A19F04D2D0064DA5F /* MADSearchBar.m in Sources */,

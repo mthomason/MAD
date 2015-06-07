@@ -69,6 +69,7 @@
 #import "MTMath.h"
 
 #import "NSNumberFormatter+Constructors.h"
+#import "MFMailComposeViewController+FileManager.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -733,21 +734,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self dismissViewControllerAnimated:animated completion:nil];
 
     if ([MFMailComposeViewController canSendMail]) {
-        
-        MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
-        mFMailComposeViewController.mailComposeDelegate = self;
-        mFMailComposeViewController.toRecipients = @[@"admin@everydayapps.com"];
-        mFMailComposeViewController.subject = @"MAD Designer";
-        mFMailComposeViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
-        [self presentViewController: mFMailComposeViewController
-                           animated: YES
-                         completion: nil];
-        
+        MFMailComposeViewController	*controller = [MFMailComposeViewController contactUs:self];
+        [self presentViewController: controller animated: YES completion: nil];
     } else {
         UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
-        [self presentViewController: alert
-                           animated: YES
-                         completion: nil];
+        [self presentViewController: alert animated: YES completion: nil];
     }
 }
 
