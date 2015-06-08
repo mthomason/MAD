@@ -95,9 +95,7 @@ static MTKeyChain *sharedSingleton = nil;
             
             UIAlertController *alertController = [UIAlertController saveCredentials:^(UIAlertAction *action) {
                 
-                [self saveUsername: self.saveUsername
-                       andPassword: self.savePassword
-                            forKey: self.saveKey];
+                [self saveUsername: self.saveUsername andPassword: self.savePassword forKey: self.saveKey];
                 self.saveCompletion(YES, nil, self.saveUsername, self.savePassword);
                 
             } cancel:^(UIAlertAction *action) {
@@ -107,35 +105,34 @@ static MTKeyChain *sharedSingleton = nil;
           [NSThread safeSwitchToMainThread:^{
                 UIViewController *topViewController = [UIApplication topViewController];
                 topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-                [topViewController  presentViewController: alertController
-                                                 animated: YES
-                                               completion: nil];
+                [topViewController  presentViewController: alertController animated: YES completion: nil];
             }];
         }
         
     } else {
-        
         completion(YES, nil, username, password);
-        
     }
     
 }
 
 - (void)deleteKey:(NSString *)key usingViewController:(UIViewController *)viewController {
-
-    self.credentialsKey = key;
-    
-    UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+    if ([MTKeyChain credentialsExist:key]) {
+        self.credentialsKey = key;
+        
+        UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+            [self deleteSavedPassword];
+        } cancel:nil];
+        
+        [NSThread safeSwitchToMainThread:^{
+            UIViewController *topViewController = viewController == nil ? [UIApplication topViewController] : viewController;
+            topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            [topViewController  presentViewController: alertController
+                                             animated: YES
+                                           completion: nil];
+        }];
+    } else {
         [self deleteSavedPassword];
-    } cancel:nil];
-    
-    [NSThread safeSwitchToMainThread:^{
-        UIViewController *topViewController = viewController == nil ? [UIApplication topViewController] : viewController;
-        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: alertController
-                                         animated: YES
-                                       completion: nil];
-    }];
+    }
 }
 
 - (void)deleteKey:(NSString *)key {
@@ -193,7 +190,7 @@ static MTKeyChain *sharedSingleton = nil;
         NSDictionary *updateQueryUsername = @{(__bridge id)(kSecClass): (__bridge id)(kSecClassGenericPassword),
                                               (__bridge id)(kSecAttrService): keyUsername,
                                               (__bridge id)(kSecAttrAccount): MTKeyChainUsernameAccountDesc};
-        NSDictionary *changesUsername = @{(__bridge id)(kSecValueData): [password dataUsingEncoding: NSUTF8StringEncoding]};
+        NSDictionary *changesUsername = @{(__bridge id)(kSecValueData): [username dataUsingEncoding: NSUTF8StringEncoding]};
         OSStatus statusUsernameUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
         if (statusUsernameUpdate != errSecSuccess) {
             SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
@@ -230,6 +227,23 @@ static MTKeyChain *sharedSingleton = nil;
     }
 }
 
++ (NSDictionary *)queryUsernameDefination:(NSString *)key {
+    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
+    NSDictionary *queryUsername = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
+                                    (__bridge id)(kSecAttrService) : keyUsername,
+                                    (__bridge id)(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
+                                    (__bridge id)(kSecReturnData) : @YES};
+    return queryUsername;
+}
++ (NSDictionary *)queryPasswordDefination:(NSString *)key {
+    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+    NSDictionary *queryPassword = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
+                                    (__bridge id)(kSecAttrService) : keyPassword,
+                                    (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
+                                    (__bridge id)(kSecReturnData) : @YES};
+    return queryPassword;
+}
+
 - (void)getUsernameAndPasswordForKey:(NSString *)key
                           completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion {
     
@@ -240,25 +254,9 @@ static MTKeyChain *sharedSingleton = nil;
     const NSInteger stateGetNothing = 3;
     
     NSInteger status;
-    
-    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
-    NSDictionary *queryUsername = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
-                                    (__bridge id)(kSecAttrService) : keyUsername,
-                                    (__bridge id)(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
-                                    (__bridge id)(kSecReturnData) : @YES};
-    CFDataRef queryUsernameData = NULL;
-
-    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
-    NSDictionary *queryPassword = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
-                                    (__bridge id)(kSecAttrService) : keyPassword,
-                                    (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
-                                    (__bridge id)(kSecReturnData) : @YES};
-    
-    CFDataRef queryPasswordData = NULL;
-    
-    //SecItemDelete((CFDictionaryRef)queryUsername);
-    //SecItemDelete((CFDictionaryRef)queryPassword);
-    
+    CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
+    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
+    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
     OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
     OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
     
@@ -320,6 +318,13 @@ static MTKeyChain *sharedSingleton = nil;
     }
 }
 
++ (BOOL)credentialsExist:(NSString *)key {
+    CFDataRef queryUsernameData = NULL;
+    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
+    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+    return errSecItemNotFound != queryUsernameStatus;
+}
+
 - (void)promptForPasswordGivenUsername:(NSString *)username {
     
     self.credentialsUsername = username;
@@ -367,10 +372,7 @@ static MTKeyChain *sharedSingleton = nil;
 + (NSError *)errorUserCanceled {
     NSString *title = NSLocalizedString(@"User Canceled", @"User Cancled");
     NSString *message = NSLocalizedString(@"User canceled save.", @"User canceled save.");
-    return [NSError errorWithDomain: @"MTKeyChain"
-                               code: MTKeyErrorUserCanceled
-                              title: title
-                         andMessage: message];
+    return [NSError errorWithDomain: @"MTKeyChain" code: MTKeyErrorUserCanceled title: title andMessage: message];
 }
 
 - (void)configureTextFieldForPassword:(UITextField **)textField {
