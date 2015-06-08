@@ -358,9 +358,7 @@ static MTKeyChain *sharedSingleton = nil;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = [UIApplication topViewController];
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: prompt
-                                         animated: YES
-                                       completion: nil];
+        [topViewController  presentViewController: prompt animated: YES completion: nil];
     }];
     
 }
@@ -381,9 +379,7 @@ static MTKeyChain *sharedSingleton = nil;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = [UIApplication topViewController];
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: prompt
-                                         animated: YES
-                                       completion: nil];
+        [topViewController  presentViewController: prompt animated: YES completion: nil];
     }];
     
 }
