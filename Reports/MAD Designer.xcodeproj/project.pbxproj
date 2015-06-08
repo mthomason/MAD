@@ -537,7 +537,6 @@
 		4C92949618C4CBF90010AAEF /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */; };
 		4C92949818C4CBF90010AAEF /* MADFontSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* MADFontSelectorViewController.m */; };
 		4C92949918C4CBF90010AAEF /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; };
-		4C92949A18C4CBF90010AAEF /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; };
 		4C92949B18C4CBF90010AAEF /* MADToolboxFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */; };
 		4C92949C18C4CBF90010AAEF /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; };
 		4C92949D18C4CBF90010AAEF /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; };
@@ -1179,8 +1178,6 @@
 		4CDB48C71ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C51ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m */; };
 		4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
 		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
@@ -2466,8 +2463,6 @@
 		4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderPredicateFormatViewController.m; sourceTree = "<group>"; };
 		4CDB626314E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewTableSectionHeaderQueryBuilder.h; sourceTree = "<group>"; };
 		4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderQueryBuilder.m; sourceTree = "<group>"; };
-		4CDF618916B66BA500C80E01 /* MTReportDesignerToolBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerToolBoxViewController.h; sourceTree = "<group>"; };
-		4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerToolBoxViewController.m; sourceTree = "<group>"; };
 		4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignVerticalCenter20.png; path = Reports/UIImageAlignVerticalCenter20.png; sourceTree = "<group>"; };
 		4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignVerticalCenter20@2x.png"; path = "Reports/UIImageAlignVerticalCenter20@2x.png"; sourceTree = "<group>"; };
 		4CE314131694BCEC00114431 /* UIImageAlignTop20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignTop20.png; path = Reports/UIImageAlignTop20.png; sourceTree = "<group>"; };
@@ -4410,8 +4405,6 @@
 				4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */,
 				4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */,
 				4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */,
-				4CDF618916B66BA500C80E01 /* MTReportDesignerToolBoxViewController.h */,
-				4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */,
 				4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */,
 				4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */,
 				4C8BF42D16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.h */,
@@ -5719,7 +5712,6 @@
 				4C75C9FF18E272F6006E8526 /* MTTableCellHeader.m in Sources */,
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4C88C4431A09C8E400991908 /* MADDimmingView.m in Sources */,
-				4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C23FB1118FADD17009F234F /* objcmad.c in Sources */,
 				4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
 				4C47409119FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */,
@@ -5917,7 +5909,6 @@
 				4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C05FD3119DE47D9003B2076 /* MADBarButtonItem.m in Sources */,
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
-				4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C9E445718D88D7000F0F578 /* MTTableLayout.m in Sources */,
 				4C50DF8F16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
 				4CC182CB16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
@@ -6037,7 +6028,6 @@
 				4C92949D18C4CBF90010AAEF /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C94ADF317C3514200037FCB /* main.m in Sources */,
 				4C92953018C4CC890010AAEF /* UICollectionViewCell+Reuse.m in Sources */,
-				4C92949A18C4CBF90010AAEF /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C9294C318C4CC340010AAEF /* MTGradientView.m in Sources */,
 				4C92948B18C4CBF40010AAEF /* MTQueryBuilderAddPredicateViewController.m in Sources */,
 				4C9294C118C4CC340010AAEF /* MADDesignerSectionView.m in Sources */,

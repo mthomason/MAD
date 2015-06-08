@@ -33,6 +33,17 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 @implementation MTCollectionViewCellDocument
 
++ (dispatch_queue_t)queue {
+    static dispatch_queue_t queue;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.everydayapps.mad.cell.image", DISPATCH_QUEUE_SERIAL);
+    });
+    
+    return queue;
+}
+
 + (UIImage *)defaultThumbnail {
     UIImage *result = [UIImage imageNamed:MTImageBlank];
     return result;
@@ -158,15 +169,13 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 }
 
 - (void)loadPreviewImageForUrl:(NSURL *)url {
-    NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-    if ([NSThread isMainThread]) {
-        [self updatePreviewImageUIForImage:image];
-    } else {
+    dispatch_async([MTCollectionViewCellDocument queue], ^{
+        NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             [self updatePreviewImageUIForImage:image];
         });
-    }
+    });
 }
 
 - (void)updatePreviewImageUIForImage:(UIImage *)image {

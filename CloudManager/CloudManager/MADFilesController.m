@@ -11,11 +11,19 @@
 #import "MADMetaData.h"
 #import "NSFileManager+Common.h"
 
+int finderSortWithLocale(id string1, id string2, void *locale);
+int finderSortWithLocale(id string1, id string2, void *locale) {
+    
+    static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+    NSRange string1Range = NSMakeRange(0, ((MADMetaData *)string1).fileSystemName.length);
+    return [((MADMetaData *)string1).fileSystemName compare:((MADMetaData *)string2).fileSystemName options:comparisonOptions range:string1Range locale:(__bridge NSLocale *)locale];
+    
+}
+
 @interface MADFilesController () <MADFileCoordinatorDelegate>
 
 @property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
 @property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;
-@property (nonatomic, copy)     NSComparisonResult (^sortComparator)(MADMetaData *lhs, MADMetaData *rhs);
 @property (nonatomic, strong)   NSOperationQueue *delegateQueue;
 
 @end
@@ -80,14 +88,12 @@
 #pragma mark - Initialization
 
 - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
-                          delegateQueue:(NSOperationQueue *)delegateQueue
-                         sortComparator:(NSComparisonResult (^)(MADMetaData *lhs, MADMetaData *rhs))sortComparator {
+                          delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADMetaData *, MADMetaData *))sortComparator {
     self = [super init];
     
     if (self) {
         
         _fileCoordinator = fileCoordinator;
-        self.sortComparator = sortComparator;
         
         self.delegateQueue = delegateQueue ?: [NSOperationQueue mainQueue];
         
@@ -353,26 +359,17 @@
         }
         
         // Sort the untracked inserted list infos
-        if (self.sortComparator) {
-            untrackedInsertedListInfos = [untrackedInsertedListInfos sortedArrayUsingComparator:self.sortComparator];
-        }
+        untrackedInsertedListInfos = [untrackedInsertedListInfos sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
         
         // Insert
+        [self.fileMetaDatum addObjectsFromArray:untrackedInsertedListInfos];
+        NSArray *fileMetaDatumSorted = [self.fileMetaDatum sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
+        self.fileMetaDatum = fileMetaDatumSorted.mutableCopy;
         for (MADMetaData *untrackedInsertedListInfo in untrackedInsertedListInfos) {
             __block NSInteger untrackedInsertedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
-                //NSLog(@"INSERTING %@", untrackedInsertedListInfo);
-
-                [self.fileMetaDatum addObject:untrackedInsertedListInfo];
-                
-                if (self.sortComparator) {
-                    [self.fileMetaDatum sortUsingComparator:self.sortComparator];
-                }
-                
                 untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
-                
-                
             });
             
             if ([self.delegate respondsToSelector:@selector(filesController:didInsertListInfo:atIndex:)]) {

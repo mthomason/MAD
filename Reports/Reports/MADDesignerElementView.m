@@ -79,7 +79,6 @@ static size_t const kDashedCount            = (2.0f);
     CGContextStrokePath(context);
 }
 
-
 @end
 
 #pragma mark - MTElementView
@@ -100,8 +99,6 @@ static size_t const kDashedCount            = (2.0f);
 
 @property (nonatomic, strong) NSArray *resizeHandles;
 
-//@property (nonatomic, assign, readwrite, getter=isResizingEnabled) BOOL enableResizing;
-
 @end
 
 @implementation MADDesignerElementView
@@ -117,6 +114,18 @@ static size_t const kDashedCount            = (2.0f);
     [_handleCornerTopLeft removeFromSuperview];
     [_handleCornerBottomRight removeFromSuperview];
     [_handleCornerBottomLeft removeFromSuperview];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.handleEdgeLeft.center = CGEdgeLeftPointInRect(self.frame);
+    self.handleEdgeRight.center = CGEdgeRightPointInRect(self.frame);
+    self.handleEdgeBottom.center = CGEdgeBottomPointInRect(self.frame);
+    self.handleEdgeTop.center = CGEdgeTopPointInRect(self.frame);
+    self.handleCornerBottomLeft.center = CGCornerBottomLeftPointInRect(self.frame);
+    self.handleCornerBottomRight.center = CGCornerBottomRightPointInRect(self.frame);
+    self.handleCornerTopRight.center = CGCornerTopRightPointInRect(self.frame);
+    self.handleCornerTopLeft.center = CGCornerTopLeftPointInRect(self.frame);
 }
 
 #pragma mark - UIView
@@ -182,7 +191,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleCornerTopLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                     andType: northWest];
         handleCornerTopLeft.hidden = YES;
-        handleCornerTopLeft.center = CGCornerTopLeftPointInRect(viewFrame);
         [self addSubview: handleCornerTopLeft];
         NSArray *resizeHandles = [NSArray arrayWithObject:handleCornerTopLeft];
         self.handleCornerTopLeft = handleCornerTopLeft;
@@ -190,7 +198,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleCornerTopRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                      andType: northEast];
         handleCornerTopRight.hidden = YES;
-        handleCornerTopRight.center = CGCornerTopRightPointInRect(viewFrame);
         [self addSubview: handleCornerTopRight];
         resizeHandles = [resizeHandles arrayByAddingObject:handleCornerTopRight];
         self.handleCornerTopRight = handleCornerTopRight;
@@ -198,7 +205,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleCornerBottomRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                         andType: southEast];
         handleCornerBottomRight.hidden = YES;
-        handleCornerBottomRight.center = CGCornerBottomRightPointInRect(viewFrame);
         [self addSubview: handleCornerBottomRight];
         resizeHandles = [resizeHandles arrayByAddingObject:handleCornerBottomRight];
         self.handleCornerBottomRight = handleCornerBottomRight;
@@ -206,7 +212,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleCornerBottomLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                        andType: southWest];
         handleCornerBottomLeft.hidden = YES;
-        handleCornerBottomLeft.center = CGCornerBottomLeftPointInRect(viewFrame);
         [self addSubview: handleCornerBottomLeft];
         resizeHandles = [resizeHandles arrayByAddingObject:handleCornerBottomLeft];
         self.handleCornerBottomLeft = handleCornerBottomLeft;
@@ -214,7 +219,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleEdgeTop = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                               andType: north];
         handleEdgeTop.hidden = YES;
-        handleEdgeTop.center = CGEdgeTopPointInRect(viewFrame);
         [self addSubview: handleEdgeTop];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeTop];
         self.handleEdgeTop = handleEdgeTop;
@@ -222,7 +226,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleEdgeBottom = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                  andType: south];
         handleEdgeBottom.hidden = YES;
-        handleEdgeBottom.center = CGEdgeBottomPointInRect(viewFrame);
         [self addSubview: handleEdgeBottom];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeBottom];
         self.handleEdgeBottom = handleEdgeBottom;
@@ -230,7 +233,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleEdgeRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                 andType: east];
         handleEdgeRight.hidden = YES;
-        handleEdgeRight.center = CGEdgeRightPointInRect(viewFrame);
         [self addSubview: handleEdgeRight];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeRight];
         self.handleEdgeRight = handleEdgeRight;
@@ -238,7 +240,6 @@ static size_t const kDashedCount            = (2.0f);
         MTResizeHandleView *handleEdgeLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds
                                                                                andType: west];
         handleEdgeLeft.hidden = YES;
-        handleEdgeLeft.center = CGEdgeLeftPointInRect(viewFrame);
         [self addSubview: handleEdgeLeft];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeLeft];
         self.handleEdgeLeft = handleEdgeLeft;
@@ -248,7 +249,6 @@ static size_t const kDashedCount            = (2.0f);
         
         self.tag = objectID.hash;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
 
     }
     return self;
@@ -282,9 +282,7 @@ static size_t const kDashedCount            = (2.0f);
 #pragma mark - Members
 
 - (void)flash:(void (^)(BOOL finished))completion {
-    [UIView animateWithDuration: 0.6666f
-                          delay: 0.3333f
-                        options: UIViewAnimationOptionAutoreverse
+    [UIView animateWithDuration: 0.6666f delay: 0.3333f options: UIViewAnimationOptionAutoreverse
                      animations: ^{
                          self.backgroundColor = [[UIColor tintColorBlue] colorWithAlphaComponent:0.33333333];
                      } completion:^(BOOL finished) {
@@ -299,10 +297,8 @@ static size_t const kDashedCount            = (2.0f);
         NSInteger randomInt = arc4random() % 500;
         float r = (randomInt / 500.0000f) + 0.5000f;
         
-        CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
+        self.transform = CGAffineTransformMakeRotation(degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
         CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
-        
-        self.transform = leftWobble;
         
         self.layer.anchorPoint = CGPointMake(0.5000f, 0.5000f);
         
@@ -397,145 +393,5 @@ static size_t const kDashedCount            = (2.0f);
     }
     
 }
-
-
-/*
-
-
-- (void)updateElementView:(MTElementView *)elementView forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (elementView) {
-        
-        // TODO: Only update specific properties when they change.
-        
-        RptqDocumentObject *documentObject = [self documentObjectForElementView:elementView inManagedObjectContext:managedObjectContext];
-        
-        if (documentObject != nil) {
-            
-            CGRect marginViewFrame = [documentObject boundsContentView];
-            
-            [elementView setFrame: marginViewFrame];
-            
-            NSString *fontName = [documentObject fontname];
-            CGFloat pointSize = [[documentObject fontsize] floatValue];
-            
-            UIFont *displayFont = nil;
-            if ([fontName length] == 0) {
-                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            } else {
-                MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
-                if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
-                    displayFont = [stylizedDisplayFont boldItalicFont];
-                } else if ([[documentObject bold] boolValue]) {
-                    displayFont = [stylizedDisplayFont boldFont];
-                } else if ([[documentObject italic] boolValue]) {
-                    displayFont = [stylizedDisplayFont italicFont];
-                } else {
-                    displayFont = [stylizedDisplayFont font];
-                }
-            }
-            
-            if (displayFont == nil) {
-                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            }
-            [self setDisplayFont:displayFont];
-            
-            NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-            
-            MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
-            NSTextAlignment textAlignment;
-            switch (horizontalAlignment) {
-                case MTHorizontalAlignmentCenter:
-                    textAlignment = NSTextAlignmentCenter;
-                    break;
-                case MTHorizontalAlignmentLeft:
-                    textAlignment = NSTextAlignmentLeft;
-                    break;
-                case MTHorizontalAlignmentRight:
-                    textAlignment = NSTextAlignmentRight;
-                    break;
-                case MTHorizontalAlignmentJustified:
-                    textAlignment = NSTextAlignmentJustified;
-                    break;
-                default:
-                    textAlignment = NSTextAlignmentLeft;
-                    break;
-            }
-            [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingMiddle];
-            [paragraphStyle setAlignment:textAlignment];
-            [elementView setParagraphStyle:paragraphStyle];
-            
-            NSString *string = [documentObject designerRepresentationText];
-            
-            [elementView setDisplayImage:nil];
-            [elementView setDisplayBarcode:nil];
-            [elementView setDisplayImage:nil];
-            
-            if ([documentObject getType] == MTDocumentObjectTypeImage) {
-                
-                [elementView setDisplayImage:[[documentObject isImage] image]];
-                
-            } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
-                
-                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
-                [elementView setDisplayBarcode:displayBarcode];
-            }
-            
-            NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-            [elementView setUnderlineStyle:underlineStyle];
-            
-            NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-            [elementView setStrikeThroughStyle:strikeThroughStyle];
-            
-            NSDictionary *attributes = @{
-                                         NSParagraphStyleAttributeName : [elementView paragraphStyle],
-                                         NSFontAttributeName : [elementView displayFont],
-                                         NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
-                                         NSUnderlineStyleAttributeName : [elementView underlineStyle]
-                                         };
-            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
-                                                                                    attributes:attributes];
-            [elementView setDisplayStringAttributed:attributtedString];
-            
-            CGSize sizeContentView = [documentObject sizeContentView];
-            CGRect boundsContentView = [documentObject boundsContentView]; //x1
-            NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
-            [elementView setDrawingOptions:drawingOptions];
-            CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize:sizeContentView options:drawingOptions context:nil]; //x35
-            CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
-            
-            MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-            
-            switch (verticalAlignment) {
-                case MTVerticalAlignmentCenter: {
-                    CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
-                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                    break;
-                }
-                case MTVerticalAlignmentBottom: {
-                    CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
-                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                    break;
-                }
-                case MTVerticalAlignmentTop:
-                default:
-                    break;
-            }
-            
-            CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
-            CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
-            CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
-            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
-            [elementView setDrawingRect:drawingBounds];
-            
-            [elementView setNeedsLayout];
-            [elementView setNeedsDisplay];
-        }
-    }
-}
-
-*/
-
 
 @end

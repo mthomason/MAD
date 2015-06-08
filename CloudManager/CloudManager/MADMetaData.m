@@ -14,6 +14,8 @@
 @interface MADMetaData ()
 
 @property (nonatomic, strong, readwrite) NSURL *URL;
+@property (nonatomic, strong, readwrite) NSString  *fileSystemName;
+@property (nonatomic, strong, readwrite) NSString  *name;
 @property (nonatomic, strong) NSMetadataItem *metadataItem;
 @property (nonatomic, strong) NSDictionary *attributes;
 
@@ -77,17 +79,23 @@
 }
 
 - (NSString *)name {
-    NSString *displayName;
-    if (self.metadataItem) {
-        displayName = [self.metadataItem valueForAttribute: NSMetadataItemDisplayNameKey];
-    } else {
-        displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
+    if (_name == nil) {
+        NSString *displayName;
+        if (self.metadataItem) {
+            displayName = [self.metadataItem valueForAttribute: NSMetadataItemDisplayNameKey];
+        } else {
+            displayName = [[NSFileManager defaultManager] displayNameAtPath:self.URL.path];
+        }
+        _name = [displayName stringByDeletingPathExtension];
     }
-    return [displayName stringByDeletingPathExtension];
+    return _name;
 }
 
 - (NSString *)fileSystemName {
-    return self.metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSNameKey] : self.URL.path.lastPathComponent;
+    if (_fileSystemName == nil) {
+        _fileSystemName = self.metadataItem ? [self.metadataItem valueForAttribute: NSMetadataItemFSNameKey] : self.URL.path.lastPathComponent;
+    }
+    return _fileSystemName;
 }
 
 - (unsigned long long)fileSystemFileSize {

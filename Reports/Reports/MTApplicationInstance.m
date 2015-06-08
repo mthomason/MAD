@@ -64,9 +64,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.448";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.448";
-NSString * const MTGlobalBundleRev                                  = @"1823";
+NSString * const MTGlobalBundleVersion                              = @"7.0.449";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.449";
+NSString * const MTGlobalBundleRev                                  = @"1824";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -549,23 +549,23 @@ static MTApplicationInstance *mainInstance;
 - (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
 
     id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
-    
-    return [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                 delegateQueue:[NSOperationQueue mainQueue]
-                                                sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-        return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-    }];
+    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
+                                                                                delegateQueue:[NSOperationQueue mainQueue]
+                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+                                                                               }];
+    return filesController;
 }
 
 - (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
 
     id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
-    
-    return [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                 delegateQueue:[NSOperationQueue mainQueue]
-                                                sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-        return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-    }];
+    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
+                                                                                delegateQueue:[NSOperationQueue mainQueue]
+                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+                                                                               }];
+    return filesController;
 }
 
 #pragma mark - Document Operations
