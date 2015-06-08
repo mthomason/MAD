@@ -1169,11 +1169,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
     NSMutableArray *updates = [[NSMutableArray alloc] initWithCapacity:self.batchUpdates.count];
     for (pair in self.batchUpdates) {
-        path = [NSIndexPath indexPathForItem:((NSNumber *)pair.right).integerValue
-                                   inSection:0];
+        path = [NSIndexPath indexPathForItem:((NSNumber *)pair.right).integerValue inSection:0];
         [updates addObject:path];
     }
 
+    [inserts removeObjectsInArray:updates];
+    [removes removeObjectsInArray:updates];
+    
     [self.collectionView performBatchUpdates:^{
         
         if (inserts.count > 0) {
