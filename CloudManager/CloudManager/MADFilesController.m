@@ -11,8 +11,8 @@
 #import "MADMetaData.h"
 #import "NSFileManager+Common.h"
 
-int finderSortWithLocale(id string1, id string2, void *locale);
-int finderSortWithLocale(id string1, id string2, void *locale) {
+NSInteger finderSortWithLocale(id string1, id string2, void *locale);
+NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
     
     static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
     NSRange string1Range = NSMakeRange(0, ((MADMetaData *)string1).fileSystemName.length);
