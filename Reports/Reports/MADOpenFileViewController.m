@@ -1173,8 +1173,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [updates addObject:path];
     }
 
-    [inserts removeObjectsInArray:updates];
-    [removes removeObjectsInArray:updates];
+    [updates removeObjectsInArray:inserts];
+    [updates removeObjectsInArray:removes];
     
     [self.collectionView performBatchUpdates:^{
         
