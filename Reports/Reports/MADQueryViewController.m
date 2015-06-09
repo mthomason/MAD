@@ -323,25 +323,16 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                            CGSizeZero.width,
-                                                            self.bottomLayoutGuide.length,
-                                                            CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
     
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                   CGSizeZero.width,
-                                                   self.bottomLayoutGuide.length,
-                                                   CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
 - (void)viewDidLayoutSubviews {
-    if (self.firstTimeViewWillLayoutSubviews == NO) {
-        CGRect r = CGRectMake(CGPointZero.x,
-                              CGPointZero.y,
-                              self.tableView.frame.size.width,
-                              1.0000f);
-        [self.tableView scrollRectToVisible: r
-                                   animated: NO];
+    [super viewDidLayoutSubviews];
+    if (self.firstTimeViewWillLayoutSubviews) {
+        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.frame.size.width, 1.0000f);
+        [self.tableView scrollRectToVisible: r animated: NO];
         
     }
     [super viewDidLayoutSubviews];
