@@ -42,7 +42,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
                                      groupIdentifier: (NSString *)groupIdentifier
                                                delay: (void (^)())handleLongRunningCall
                                           completion: (MADBlockCompletionFileStorageLocation)handleCompletion {
-    
+
     if ([self isCloudAvailable]) {
         void (^longRunningCallBlock)() = [handleLongRunningCall copy];
         [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
@@ -57,7 +57,6 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
             //This call may be SLOW, so only do on BACKGROUND thread.
             
             NSURL *ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
-            
             
             dispatch_sync(dispatch_get_main_queue(), ^{
                 
@@ -188,6 +187,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 }
 
 - (void)setFileInfoHasNewContents:(MADMetaData *)listInfo {
+
     dispatch_async(self.fileMetaDataQueue, ^{
         // Remove the old list info and replace it with the new one.
         NSInteger indexOfListInfo = [self.fileMetaDatum indexOfObject:listInfo];
@@ -214,9 +214,10 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 - (void)fileCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
                                              removedURLs:(NSArray *)removedURLs
                                              updatedURLs:(NSArray *)updatedURLs {
+
     NSMutableArray *insertedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count];
-    NSMutableArray *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count];
-    NSMutableArray *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:insertedURLs.count];
+    NSMutableArray *removedMetaDatum = [[NSMutableArray alloc] initWithCapacity:removedURLs.count];
+    NSMutableArray *updatedMetaDatum = [[NSMutableArray alloc] initWithCapacity:updatedURLs.count];
     NSURL *URL;
     MADMetaData *metadata;
     for (URL in insertedURLs) {
@@ -306,13 +307,9 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
                                   removedMetaDatum:(NSArray *)removes
                                   updatedMetaDatum:(NSArray *)updates
                                         completion:(void (^)(BOOL success, NSError *error))completion {
-    
     NSArray *insertedMetaDatum = [NSArray arrayWithArray: inserts];
     NSArray *removedMetaDatum = [NSArray arrayWithArray: removes];
     NSArray *updatedMetaDatum = [NSArray arrayWithArray: updates];
-    NSLog(@"Inserted %@", insertedMetaDatum);
-    NSLog(@"Removed %@", removedMetaDatum);
-    NSLog(@"Updated %@", updatedMetaDatum);
     
     [self.delegateQueue addOperationWithBlock:^{
         
@@ -325,12 +322,9 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         dispatch_sync(self.fileMetaDataQueue, ^{
             NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
             trackedRemovedListInfos = [removedMetaDatum filteredArrayUsingPredicate:containPredicate];
-            NSLog(@"trackedRemovedListInfos %@", trackedRemovedListInfos);
 
             NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
             untrackedInsertedListInfos = [insertedMetaDatum filteredArrayUsingPredicate:doesntContainPredicate];
-            NSLog(@"untrackedInsertedListInfos %@", untrackedInsertedListInfos);
-
         });
         
         if (untrackedInsertedListInfos.count == 0 && trackedRemovedListInfos.count == 0 && updatedMetaDatum.count == 0) {
