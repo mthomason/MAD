@@ -16,11 +16,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 @interface MADCloudFileCoordinator ()
 
-@property (nonatomic, strong) NSMetadataQuery *metadataQuery;
-@property (nonatomic, strong) dispatch_queue_t documentsDirectoryQueue;
-
-/// Closure executed after the first update provided by the coordinator regarding tracked URLs.
-@property (nonatomic, strong) void (^firstQueryUpdateHandler)(void);
+    @property (nonatomic, strong) NSMetadataQuery *metadataQuery;
+    @property (nonatomic, strong) dispatch_queue_t documentsDirectoryQueue;
+    @property (nonatomic, strong) void (^firstQueryUpdateHandler)(void);
 
 @end
 
@@ -31,8 +29,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - Initialization
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)ubiquityIdentifier
-          firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
+- (instancetype)initWithPredicate:(NSPredicate *)predicate identifier:(NSString *)ubiquityIdentifier firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler {
     
     self = [super init];
     
@@ -46,12 +43,10 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
         metadataQuery.searchScopes = @[//NSMetadataQueryUbiquitousDataScope,
                                        //NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
+                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
                                        NSMetadataQueryUbiquitousDocumentsScope];
         metadataQuery.notificationBatchingInterval = 0.5000;
         metadataQuery.predicate = predicate;
-        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
-        operationQueue.name = @"com.everydayapps.mad.cloudfilecoordinator.metadataQuery";
-        metadataQuery.operationQueue = operationQueue;
 
         [self addObserversToQuery:metadataQuery];
         self.metadataQuery = metadataQuery;
@@ -211,11 +206,10 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - NSMetadataQuery Notifications
 
 - (void)metadataQueryDidFinishGathering:(NSNotification *)notification {
-    
+    [self.metadataQuery disableUpdates];
+
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
                                                         object: nil];
-
-    [self.metadataQuery disableUpdates];
     
     NSArray *results = [NSArray arrayWithArray:self.metadataQuery.results];
     NSArray *i = [MADMetaData madMetaDataItemsForNSMetadataItems:results];
@@ -228,10 +222,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                         removedMetaDatum: removed
                                                         updatedMetaDatum: updated
                                                               completion: ^(BOOL success, NSError *error) {
-
+                                                                  [self.metadataQuery enableUpdates];
                                                               }];
-    [self.metadataQuery enableUpdates];
-    
     if (self.firstQueryUpdateHandler) {
         self.firstQueryUpdateHandler();
         self.firstQueryUpdateHandler = nil;
@@ -248,10 +240,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     NSArray *insertedMetadata = insertedMetadataItemsOrNil ?: @[];
     NSArray *removedMetadata = removedMetadataItemsOrNil ?: @[];
     NSArray *updatedMetadata = updatedMetadataItemsOrNil ?: @[];
-    
-    //NSLog(@"UInserted %@", insertedMetadata);
-    //NSLog(@"URemoved  %@", removedMetadata);
-    //NSLog(@"UUpdated  %@", updatedMetadata);
     
     NSArray *inserted = [MADMetaData madMetaDataItemsForNSMetadataItems:insertedMetadata];
     NSArray *removed = [MADMetaData madMetaDataItemsForNSMetadataItems:removedMetadata];
@@ -291,7 +279,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (NSArray *)URLsByMappingMetadataItems:(NSArray *)metadataItems {
     NSMutableArray *URLs = [NSMutableArray arrayWithCapacity:metadataItems.count];
-    
     for (NSMetadataItem *metadataItem in metadataItems) {
         NSURL *URL = [metadataItem valueForAttribute:NSMetadataItemURLKey];
         
