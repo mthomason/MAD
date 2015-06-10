@@ -9,6 +9,8 @@
 #import "MADDesignerElementView.h"
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
+#import "MTElementCanvas.h"
+#import "MADResizeHandles.h"
 #import "UIView+NSObjectIdTag.h"
 #import "MTAlignment.h"
 #import "UIColor+EverydayApps.h"
@@ -28,58 +30,6 @@
 #define kAnimationTranslateX 2.0
 #define kAnimationTranslateY 2.0
 
-#pragma mark - MTElementCanvas
-
-@protocol MTElementCanvasDelegate <NSObject>
-
-- (id)displayObject;
-
-@end
-
-@interface MTElementCanvas : UIView
-
-@property (nonatomic, weak) id <MTElementCanvasDelegate>canvasDelegate;
-@property (nonatomic, strong) UIFont *displayFont;
-@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
-@property (nonatomic, strong) NSNumber *underlineStyle;
-@property (nonatomic, strong) NSNumber *strikeThroughStyle;
-@property (nonatomic, assign) CGRect drawingRect;
-
-@end
-
-@implementation MTElementCanvas
-
-static CGFloat const kDashedBorderWidth     = (0.5f);
-static CGFloat const kDashedPhase           = (0.0f);
-static CGFloat const kDashedLinesLength[]   = {4.0f, 2.0f};
-static size_t const kDashedCount            = (2.0f);
-
-- (void)drawRect:(CGRect)rect {
-    
-    id displayObject = [self.canvasDelegate displayObject];
-    if ([displayObject isKindOfClass: [MTBarcode class]]) {
-        [displayObject initSampleData];
-        [displayObject setForgroundColor:[UIColor lightGrayColor]];
-    }
-    
-    if ([displayObject isKindOfClass: [NSAttributedString class]]) {
-        [displayObject drawWithRect: rect
-                            options: [MADDesignerElementView drawingOptions]
-                            context: nil];
-    } else {
-        [displayObject drawInRect:rect];
-    }
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, kDashedBorderWidth);
-    UIColor *tintColor = [UIColor blackColor];
-    CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
-    CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount) ;
-    CGContextAddRect(context, rect);
-    CGContextStrokePath(context);
-}
-
-@end
 
 #pragma mark - MTElementView
 
@@ -87,17 +37,7 @@ static size_t const kDashedCount            = (2.0f);
     <MTElementCanvasDelegate>
 
 @property (nonatomic, strong) MTElementCanvas *canvasView;
-
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeRight;
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeLeft;
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeTop;
-@property (nonatomic, strong) MTResizeHandleView *handleEdgeBottom;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerTopRight;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerTopLeft;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerBottomRight;
-@property (nonatomic, strong) MTResizeHandleView *handleCornerBottomLeft;
-
-@property (nonatomic, strong) NSArray *resizeHandles;
+@property (nonatomic, strong) MADResizeHandles *resizeHandles;
 
 @end
 
@@ -106,26 +46,14 @@ static size_t const kDashedCount            = (2.0f);
 #pragma mark - NSObject
 
 - (void)dealloc {
-    [_handleEdgeRight removeFromSuperview];
-    [_handleEdgeLeft removeFromSuperview];
-    [_handleEdgeTop removeFromSuperview];
-    [_handleEdgeBottom removeFromSuperview];
-    [_handleCornerTopRight removeFromSuperview];
-    [_handleCornerTopLeft removeFromSuperview];
-    [_handleCornerBottomRight removeFromSuperview];
-    [_handleCornerBottomLeft removeFromSuperview];
+    for (UIView *view in _resizeHandles.resizeHandles) {
+        [view removeFromSuperview];
+    }
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.handleEdgeLeft.center = CGEdgeLeftPointInRect(self.frame);
-    self.handleEdgeRight.center = CGEdgeRightPointInRect(self.frame);
-    self.handleEdgeBottom.center = CGEdgeBottomPointInRect(self.frame);
-    self.handleEdgeTop.center = CGEdgeTopPointInRect(self.frame);
-    self.handleCornerBottomLeft.center = CGCornerBottomLeftPointInRect(self.frame);
-    self.handleCornerBottomRight.center = CGCornerBottomRightPointInRect(self.frame);
-    self.handleCornerTopRight.center = CGCornerTopRightPointInRect(self.frame);
-    self.handleCornerTopLeft.center = CGCornerTopLeftPointInRect(self.frame);
+    [self.resizeHandles positionAroundRect:self.frame];
 }
 
 #pragma mark - UIView
@@ -184,58 +112,12 @@ static size_t const kDashedCount            = (2.0f);
         
         self.backgroundColor = [UIColor clearColor];
         
-        CGSize handleSize = CGSizeMake(10.0000f, 10.0000f);
-        CGRect handleBounds = CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height);
-        
-        MTResizeHandleView *handleCornerTopLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: northWest];
-        handleCornerTopLeft.hidden = YES;
-        [self addSubview: handleCornerTopLeft];
-        NSArray *resizeHandles = [NSArray arrayWithObject:handleCornerTopLeft];
-        self.handleCornerTopLeft = handleCornerTopLeft;
-        
-        MTResizeHandleView *handleCornerTopRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: northEast];
-        handleCornerTopRight.hidden = YES;
-        [self addSubview: handleCornerTopRight];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleCornerTopRight];
-        self.handleCornerTopRight = handleCornerTopRight;
-        
-        MTResizeHandleView *handleCornerBottomRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: southEast];
-        handleCornerBottomRight.hidden = YES;
-        [self addSubview: handleCornerBottomRight];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleCornerBottomRight];
-        self.handleCornerBottomRight = handleCornerBottomRight;
-        
-        MTResizeHandleView *handleCornerBottomLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: southWest];
-        handleCornerBottomLeft.hidden = YES;
-        [self addSubview: handleCornerBottomLeft];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleCornerBottomLeft];
-        self.handleCornerBottomLeft = handleCornerBottomLeft;
-        
-        MTResizeHandleView *handleEdgeTop = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: north];
-        handleEdgeTop.hidden = YES;
-        [self addSubview: handleEdgeTop];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeTop];
-        self.handleEdgeTop = handleEdgeTop;
-        
-        MTResizeHandleView *handleEdgeBottom = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: south];
-        handleEdgeBottom.hidden = YES;
-        [self addSubview: handleEdgeBottom];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeBottom];
-        self.handleEdgeBottom = handleEdgeBottom;
-        
-        MTResizeHandleView *handleEdgeRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: east];
-        handleEdgeRight.hidden = YES;
-        [self addSubview: handleEdgeRight];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeRight];
-        self.handleEdgeRight = handleEdgeRight;
-        
-        MTResizeHandleView *handleEdgeLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: west];
-        handleEdgeLeft.hidden = YES;
-        [self addSubview: handleEdgeLeft];
-        resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeLeft];
-        self.handleEdgeLeft = handleEdgeLeft;
-        
+        MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
+        for (UIView *view in resizeHandles.resizeHandles) {
+            [self addSubview:view];
+        }
         self.resizeHandles = resizeHandles;
+        
         self.clipsToBounds = NO;
         
         self.tag = documentObject.objectID.hash;
@@ -257,14 +139,14 @@ static size_t const kDashedCount            = (2.0f);
 
 - (void)showResizeHandles {
     id resizeView;
-    for (resizeView in self.resizeHandles) {
+    for (resizeView in self.resizeHandles.resizeHandles) {
         ((UIView *)resizeView).hidden = NO;
     }
 }
 
 - (void)hideResizeHandles {
     id resizeView;
-    for (resizeView in self.resizeHandles) {
+    for (resizeView in self.resizeHandles.resizeHandles) {
         ((UIView *)resizeView).hidden = YES;
     }
 }
@@ -353,8 +235,8 @@ static size_t const kDashedCount            = (2.0f);
         CGSize sizeContentView = [documentObject sizeContentView];
         CGRect boundsContentView = [documentObject boundsContentView]; //x1
         CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize: sizeContentView
-                                                                                  options: [MADDesignerElementView drawingOptions]
-                                                                                  context: nil];
+                                                                           options: self.canvasView.drawingOptions
+                                                                           context: nil];
         CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
         
         switch ([documentObject.verticalAlignment integerValue]) {

@@ -169,6 +169,8 @@
 		4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
 		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
+		4C0F89391B28C0EA00D75AF6 /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */; };
+		4C0F893C1B28C30800D75AF6 /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */; };
 		4C111C1F1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */; };
 		4C111C221B2172FA005CA4DD /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C211B2172F9005CA4DD /* UITapGestureRecognizer+Designer.m */; };
 		4C111C281B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
@@ -1434,6 +1436,10 @@
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
 		4C0F89361B280A3400D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportDesignerSectionElementLayoutManager.h; path = ../MAD/MAD/MAD/MADReportDesignerSectionElementLayoutManager.h; sourceTree = "<group>"; };
+		4C0F89371B28C0EA00D75AF6 /* MTElementCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTElementCanvas.h; sourceTree = "<group>"; };
+		4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTElementCanvas.m; sourceTree = "<group>"; };
+		4C0F893A1B28C30800D75AF6 /* MADResizeHandles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeHandles.h; sourceTree = "<group>"; };
+		4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADResizeHandles.m; sourceTree = "<group>"; };
 		4C111BEE1B1C2607005CA4DD /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../MAD/MAD/MAD/MTMath.h; sourceTree = "<group>"; };
 		4C111BF71B1C2715005CA4DD /* NSNumberFormatter+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/NSNumberFormatter+Constructors.h"; sourceTree = "<group>"; };
 		4C111C141B1EDDE4005CA4DD /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../CloudManager/CloudManager/NSFileManager+Common.h"; sourceTree = "<group>"; };
@@ -2832,6 +2838,10 @@
 			children = (
 				4C88A9AE14ECDE560069A0AF /* MADDesignerElementView.h */,
 				4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */,
+				4C0F89371B28C0EA00D75AF6 /* MTElementCanvas.h */,
+				4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */,
+				4C0F893A1B28C30800D75AF6 /* MADResizeHandles.h */,
+				4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */,
 			);
 			name = "Element View";
 			sourceTree = "<group>";
@@ -5854,6 +5864,7 @@
 				4CDB48C21ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */,
 				4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C111C221B2172FA005CA4DD /* UITapGestureRecognizer+Designer.m in Sources */,
+				4C0F893C1B28C30800D75AF6 /* MADResizeHandles.m in Sources */,
 				4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4C4A68BD17E945C800FD6A73 /* MTBlurView.m in Sources */,
@@ -5992,6 +6003,7 @@
 				4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
 				4CA57A5B179FD46300B58871 /* MADDesignerSectionLabel.m in Sources */,
 				4CB46B6517C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
+				4C0F89391B28C0EA00D75AF6 /* MTElementCanvas.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
