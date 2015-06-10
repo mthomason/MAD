@@ -517,8 +517,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
-        [self.tableView reloadSections: linksSection
-                      withRowAnimation: UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections: linksSection withRowAnimation: UITableViewRowAnimationAutomatic];
     }
     [self.document saveToURL: self.document.fileURL
             forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];

@@ -161,10 +161,9 @@ static size_t const kDashedCount            = (2.0f);
     self.backgroundColor = labelBackgroundColor;
 }
 
-- (instancetype)initWithObjectId:(NSManagedObjectID *)objectID inObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject {
     
-    CGSize viewSize = [[RptqDocumentObject documentObjectForObjectID:objectID managedObjectContext:managedObjectContext] size];
-    CGRect viewFrame = CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height);
+    CGRect viewFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObject.size.width, documentObject.size.height);
     self = [super initWithFrame: viewFrame];
 
     if (self) {
@@ -178,7 +177,7 @@ static size_t const kDashedCount            = (2.0f);
         self.canvasView = canvasView;
                 
         self.displayHighlighted = NO;
-        self.objectIdTag = objectID;
+        self.objectIdTag = documentObject.objectID;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
@@ -188,57 +187,49 @@ static size_t const kDashedCount            = (2.0f);
         CGSize handleSize = CGSizeMake(10.0000f, 10.0000f);
         CGRect handleBounds = CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height);
         
-        MTResizeHandleView *handleCornerTopLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                                    andType: northWest];
+        MTResizeHandleView *handleCornerTopLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: northWest];
         handleCornerTopLeft.hidden = YES;
         [self addSubview: handleCornerTopLeft];
         NSArray *resizeHandles = [NSArray arrayWithObject:handleCornerTopLeft];
         self.handleCornerTopLeft = handleCornerTopLeft;
         
-        MTResizeHandleView *handleCornerTopRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                                     andType: northEast];
+        MTResizeHandleView *handleCornerTopRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: northEast];
         handleCornerTopRight.hidden = YES;
         [self addSubview: handleCornerTopRight];
         resizeHandles = [resizeHandles arrayByAddingObject:handleCornerTopRight];
         self.handleCornerTopRight = handleCornerTopRight;
         
-        MTResizeHandleView *handleCornerBottomRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                                        andType: southEast];
+        MTResizeHandleView *handleCornerBottomRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: southEast];
         handleCornerBottomRight.hidden = YES;
         [self addSubview: handleCornerBottomRight];
         resizeHandles = [resizeHandles arrayByAddingObject:handleCornerBottomRight];
         self.handleCornerBottomRight = handleCornerBottomRight;
         
-        MTResizeHandleView *handleCornerBottomLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                                       andType: southWest];
+        MTResizeHandleView *handleCornerBottomLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: southWest];
         handleCornerBottomLeft.hidden = YES;
         [self addSubview: handleCornerBottomLeft];
         resizeHandles = [resizeHandles arrayByAddingObject:handleCornerBottomLeft];
         self.handleCornerBottomLeft = handleCornerBottomLeft;
         
-        MTResizeHandleView *handleEdgeTop = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                              andType: north];
+        MTResizeHandleView *handleEdgeTop = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: north];
         handleEdgeTop.hidden = YES;
         [self addSubview: handleEdgeTop];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeTop];
         self.handleEdgeTop = handleEdgeTop;
         
-        MTResizeHandleView *handleEdgeBottom = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                                 andType: south];
+        MTResizeHandleView *handleEdgeBottom = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: south];
         handleEdgeBottom.hidden = YES;
         [self addSubview: handleEdgeBottom];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeBottom];
         self.handleEdgeBottom = handleEdgeBottom;
         
-        MTResizeHandleView *handleEdgeRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                                andType: east];
+        MTResizeHandleView *handleEdgeRight = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: east];
         handleEdgeRight.hidden = YES;
         [self addSubview: handleEdgeRight];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeRight];
         self.handleEdgeRight = handleEdgeRight;
         
-        MTResizeHandleView *handleEdgeLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds
-                                                                               andType: west];
+        MTResizeHandleView *handleEdgeLeft = [[MTResizeHandleView alloc] initWithFrame: handleBounds andType: west];
         handleEdgeLeft.hidden = YES;
         [self addSubview: handleEdgeLeft];
         resizeHandles = [resizeHandles arrayByAddingObject:handleEdgeLeft];
@@ -247,8 +238,10 @@ static size_t const kDashedCount            = (2.0f);
         self.resizeHandles = resizeHandles;
         self.clipsToBounds = NO;
         
-        self.tag = objectID.hash;
+        self.tag = documentObject.objectID.hash;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self updateForManagedObjectContent:documentObject.managedObjectContext];
 
     }
     return self;
@@ -257,11 +250,8 @@ static size_t const kDashedCount            = (2.0f);
 - (void)setEnableResizing:(BOOL)enableResizing {
     if (_enableResizing != enableResizing) {
         _enableResizing = enableResizing;
-        if (enableResizing) {
-            [self showResizeHandles];
-        } else {
-            [self hideResizeHandles];
-        }
+        if (enableResizing) [self showResizeHandles];
+        else [self hideResizeHandles];
     }
 }
 

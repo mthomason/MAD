@@ -125,7 +125,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     }
     
     #if DEBUG
-        NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+        //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     #endif
 
     MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];

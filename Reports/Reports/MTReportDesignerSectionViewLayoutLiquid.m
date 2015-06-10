@@ -39,7 +39,7 @@
     return self;
 }
 
-- (NSSet *)positionsOfRects: (CGRect)rect
++ (NSSet *)positionsOfRects: (CGRect)rect
                  aroundRect: (CGRect)centerRect {
     
     //There exist four potental placement spots for each alredy placed rect
@@ -63,7 +63,7 @@
             [NSValue valueWithCGRect: placement3], nil];
 }
 
-- (NSSet *)availablePositionsOfRect: (CGRect)rect
++ (NSSet *)availablePositionsOfRect: (CGRect)rect
                          aroundRect: (CGRect)centerRect {
     
     //There exist two potental placement spots around a rect to put another rect.
@@ -101,8 +101,7 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 
-    NSArray *layoutAttributes = [self.delegate collectionView: self.collectionView
-                                          attributesForLayout: self];
+    NSArray *layoutAttributes = [self.delegate collectionView: self.collectionView attributesForLayout: self];
     NSArray *results = @[];
     UICollectionViewLayoutAttributes *itemAttributes;
     for (itemAttributes in layoutAttributes) {

@@ -2464,9 +2464,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {
-            gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
-                                                                      self.scroller.zoomScale,
-                                                                      self.scroller.zoomScale);
+            gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, self.scroller.zoomScale, self.scroller.zoomScale);
             
             [self beginPanPiece:gestureRecognizer.view transition:^{
                 [self translatePanGesture:gestureRecognizer];
@@ -2871,18 +2869,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (MADDesignerElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
-    MADDesignerElementView *elementView = nil;
-    elementView = (MADDesignerElementView *)[self viewForObjectID:managedObject.objectID];
+    MADDesignerElementView *elementView = (MADDesignerElementView *)[self viewForObjectID:managedObject.objectID];
     if (!elementView) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
         if (documentObject) {
-            elementView = (MADDesignerElementView *)[self.scroller.container viewWithTag:documentObject.objectID.hash];
+            elementView = (MADDesignerElementView *)[self viewForObjectID:documentObject.objectID];
             if (!elementView) {
                 
-                elementView = [[MADDesignerElementView alloc] initWithObjectId: documentObject.objectID
-                                                               inObjectContext: documentObject.managedObjectContext];
+                elementView = [[MADDesignerElementView alloc] initWithDocumentObject: documentObject];
                 [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
-                
                 
                 UIGestureRecognizer *tapGestureRecognizer = [UITapGestureRecognizer elementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
                 [elementView addGestureRecognizer:tapGestureRecognizer];

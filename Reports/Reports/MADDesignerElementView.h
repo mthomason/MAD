@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
+@class RptqDocumentObject, MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 
 @interface MADDesignerElementView : UIView
     <UIGestureRecognizerDelegate>
@@ -31,8 +31,7 @@
 - (BOOL)isWobbleRunning;
 - (void)flash:(void (^)(BOOL finished))completion;
 
-- (instancetype)initWithObjectId:(NSManagedObjectID *)objectId
-                 inObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject NS_DESIGNATED_INITIALIZER;
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
 
