@@ -125,24 +125,27 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     }
     
     #if DEBUG
-        //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+        NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     #endif
 
-    MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];
-    dispatch_async(self.appDelegateQueue, ^{
-        [upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
-    });
+    //MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];
+    //dispatch_async(self.appDelegateQueue, ^{
+        //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
+    //});
     
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     
     [self.applicationInstance initalizeAppearance];
     
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
-        
+        [MADUpgradeManager installSamples];
         [self getUserCloudPrefs];
+        //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
 
     } subsquientLaunches:^{
+        [MADUpgradeManager installSamples];
         [self getUserCloudPrefsSubsquient];
+        //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
     }];
     
     return YES;
@@ -202,13 +205,11 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)displayActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES
-                                                                      animated:YES];
+    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
 }
 
 - (void)hideActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO
-                                                                      animated:YES];
+    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
 }
 
 - (UIViewController *)viewControllerWithrestorationIdentifier:(NSString *)restorationIdentifier
@@ -391,9 +392,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #pragma mark - Convenience
 
 - (void)getUserCloudPrefs {
-    
+
     dispatch_async(self.appDelegateQueue, ^{
-        
+
         MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
         if (storageState.cloudAvailable) {
             
@@ -411,7 +412,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                 };
                 
                 MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
-                    
                     [MTApplicationInstance mainInstance].storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
                     [self configureFilesController: NO storageOptionChangeHandler: nil];
                     [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
@@ -499,6 +499,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                                                                                               firstQueryHandler:storageOptionChangeHandler];
             [MTApplicationInstance mainInstance].filesController = filesController;
             self.openFileViewController.filesController = [MTApplicationInstance mainInstance].filesController;
+            
             [[MTApplicationInstance mainInstance].filesController startSearching];
             
         } else if (accountChanged) {
@@ -510,11 +511,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)loadAndDisplayWindow {
-    
     MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
     self.applicationInstance = appInstance;
-
-    [MADUpgradeManager installSamples];
     
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     NSString *storyboardName = [MTApplicationInstance storyboardName];

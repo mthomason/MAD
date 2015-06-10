@@ -174,6 +174,4 @@ static inline CGRect rectCellLabel() {
 
 }
 
-
-
 @end

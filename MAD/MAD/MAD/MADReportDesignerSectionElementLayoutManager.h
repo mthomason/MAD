@@ -23,8 +23,7 @@
 
 @protocol MADReportDesignerSectionElementLayoutManagerDelegate <NSObject>
 
-- (void)layoutManager:(MADReportDesignerSectionElementLayoutManager *)layoutManager
-      itemNeedsUpdate:(MADReportDesignerSectionLayoutAttributes *)item;
+- (void)layoutManager:(MADReportDesignerSectionElementLayoutManager *)layoutManager itemNeedsUpdate:(MADReportDesignerSectionLayoutAttributes *)item;
 
 @end
 
@@ -34,6 +33,7 @@
 @property (nonatomic, weak) id <MADReportDesignerSectionElementLayoutManagerDelegate>delegate;
 
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
+
 - (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item;
 - (void)removeItemWithID:(NSManagedObjectID *)objectID;
 - (CGSize)size;

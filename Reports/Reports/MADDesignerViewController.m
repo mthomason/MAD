@@ -1190,13 +1190,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - MTDocumentSectionViewDelegate
 
-- (void)didUpdateLayout:(id)sender {
-    MADDesignerSectionView *documentSectionView = (MADDesignerSectionView *)sender;
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: documentSectionView.objectIdTag
+- (void)didUpdateLayout:(MADDesignerSectionView *)sectionView {
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag
                                                                     inManagedObjectContext: self.document.managedObjectContext];
-    NSNumber *height = @(documentSectionView.bounds.size.height);
+    NSNumber *height = @(sectionView.bounds.size.height);
     documentSection.height = height;
-    [self relayoutSectionView:documentSectionView];
+    [self relayoutSectionView:sectionView];
     [self.document.managedObjectContext save:nil];
 }
 

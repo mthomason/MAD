@@ -136,8 +136,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
-//@property (nonatomic, assign) BOOL firstViewWillAppear;
-
 @property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
 
 @property (nonatomic, assign) BOOL cloudActivityRunning;
@@ -186,7 +184,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    
     if (self = [super initWithCoder:aDecoder]) {
         
         MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
@@ -1037,7 +1034,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
-    NSURL *fileUrl = [self documentForIndexPath:indexPath];
+   NSURL *fileUrl = [self documentForIndexPath:indexPath];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             
@@ -1129,28 +1126,24 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
-    //NSLog(@"Did insert list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchInserts addObject:pair];
 }
 
 - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
-    //NSLog(@"Did remove list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchRemoves addObject:pair];
 }
 
 - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
-    //NSLog(@"Did update list info: %@", listInfo);
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchUpdates addObject:pair];
 }
 
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL, NSError *))completion {
-    
     NSIndexPath *path;
     MTPair *pair;
     NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity:self.batchInserts.count];
@@ -1177,7 +1170,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [updates removeObjectsInArray:removes];
     
     [self.collectionView performBatchUpdates:^{
-        
         if (inserts.count > 0) {
             [self.collectionView insertItemsAtIndexPaths: inserts];
         }
@@ -1187,7 +1179,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         if (updates.count > 0) {
             [self.collectionView reloadItemsAtIndexPaths: updates];
         }
-    
     } completion:^(BOOL finished) {
         if (finished) {
             completion(YES, nil);
@@ -1196,15 +1187,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+
 }
 
 - (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+
 }
 
 - (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+
 }
 
 #pragma mark - Actions
@@ -1232,7 +1223,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (IBAction)search:(id)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.searchBar.isHidden) {
         //        self.searchBar.showsCancelButton = YES;
         
@@ -1469,6 +1459,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (IBAction)activity:(id)sender {
+    
     NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.filesController ? self.filesController.count : 0];
     for (NSIndexPath *selectedCellLocation in self.collectionView.indexPathsForSelectedItems) {
         NSURL *fileUrl = [self documentForIndexPath:selectedCellLocation];
@@ -1490,6 +1481,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     MADOpenFileViewController *weakSelf = self;
     
     [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        
         NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
         for (NSInteger i=0; i<numberOfItemsInSection; i++) {
             NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
@@ -1515,7 +1507,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (IBAction)documentInformation:(id)sender {
-    
     MADMetaData *metadata = nil;
     NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
     NSIndexPath *indexPath;
@@ -1554,7 +1545,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                                                                 } cancel:^(UIAlertAction *action) {
                                                                     
                                                                 }];
-    
+    if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+        alertController.popoverPresentationController.barButtonItem = sender;
+    }
     [self presentViewController:alertController animated:YES completion:NULL];
     
 }

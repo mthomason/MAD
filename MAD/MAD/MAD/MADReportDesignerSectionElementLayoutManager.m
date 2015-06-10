@@ -17,6 +17,13 @@
 
 @implementation MADReportDesignerSectionLayoutAttributes
 
+- (instancetype)init {
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
+
 @end
 
 @interface MADReportDesignerSectionElementLayoutManager ()
@@ -47,10 +54,8 @@
             layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
             layout.objectID = object.objectID;
             CGSize size = object.size;
-            layout.frame = CGRectMake(object.originx.floatValue,
-                                      object.originy.floatValue,
-                                      size.width,
-                                      size.height);
+            layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue,
+                                      size.width, size.height);
             [self addItem:layout];
             itemCounter++;
         }
@@ -76,7 +81,6 @@
 - (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item {
 
     [self appendItemToItems:item];
-    
     self.lastOpperationWasAdditon = YES;
 
 }

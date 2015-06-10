@@ -68,15 +68,11 @@
     
     //There exist two potental placement spots around a rect to put another rect.
     
-    CGRect placement1 = CGRectMake(centerRect.origin.x + centerRect.size.width,
-                                   centerRect.origin.y,
-                                   rect.size.width,
-                                   rect.size.height);
+    CGRect placement1 = CGRectMake(centerRect.origin.x + centerRect.size.width, centerRect.origin.y,
+                                   rect.size.width, rect.size.height);
     
-    CGRect placement3 = CGRectMake(centerRect.origin.x,
-                                   centerRect.origin.y + centerRect.size.height,
-                                   rect.size.width,
-                                   rect.size.height);
+    CGRect placement3 = CGRectMake(centerRect.origin.x, centerRect.origin.y + centerRect.size.height,
+                                   rect.size.width, rect.size.height);
     
     NSValue *value1 = [NSValue valueWithCGRect: placement1];
     NSValue *value2 = [NSValue valueWithCGRect: placement3];

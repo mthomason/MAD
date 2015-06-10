@@ -64,9 +64,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.457";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.457";
-NSString * const MTGlobalBundleRev                                  = @"1832";
+NSString * const MTGlobalBundleVersion                              = @"7.0.460";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.460";
+NSString * const MTGlobalBundleRev                                  = @"1835";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -151,8 +151,6 @@ static MTApplicationInstance *mainInstance;
         self.applicationUserDefaults = defaults;
     
         [self registerDefaults];
-        
-        NSLog(@"Cloud %@", MADUbiquityIdentifier);
         
         MADFileManager *openFiles = [MADFileManager new];
         self.fileManager = openFiles;
@@ -384,7 +382,7 @@ static MTApplicationInstance *mainInstance;
                 NSDictionary *rootPlistSettings = [NSDictionary dictionaryWithContentsOfFile:pathRootPlist];
                 NSArray *preferences = rootPlistSettings[@"PreferenceSpecifiers"];
                 NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
-                
+
                 for (NSDictionary *prefSpecification in preferences)  {
                     NSString *key = prefSpecification[@"Key"];
                     if (key) {

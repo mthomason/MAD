@@ -63,12 +63,10 @@
 - (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Start timer, and display activity indictor if it takes too long
     //  to bring back a ubiquitous container.
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Remove activity indictor for ubiquitous container.
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
@@ -76,9 +74,6 @@
     //  Pop to root view controller / file view controller.
     //  Reload file view controller, getting docs from new
     //  cloud container.
-    
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, notification);
-    
 }
 
 

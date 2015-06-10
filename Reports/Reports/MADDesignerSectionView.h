@@ -11,10 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol MTDocumentSectionViewDelegate
-@optional
-- (void)didUpdateLayout:(id)sender;
-@end
+@protocol MTDocumentSectionViewDelegate;
 
 typedef NS_ENUM(NSUInteger, MADBorderState) {
     MADBorderStateNormal,
@@ -34,6 +31,11 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 
 - (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
 
+@end
+
+@protocol MTDocumentSectionViewDelegate
+@optional
+- (void)didUpdateLayout:(MADDesignerSectionView *)sectionView;
 @end
 
 #endif

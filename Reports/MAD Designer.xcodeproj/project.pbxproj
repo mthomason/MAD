@@ -1433,6 +1433,7 @@
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTViewTableHeader.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
+		4C0F89361B280A3400D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportDesignerSectionElementLayoutManager.h; path = ../MAD/MAD/MAD/MADReportDesignerSectionElementLayoutManager.h; sourceTree = "<group>"; };
 		4C111BEE1B1C2607005CA4DD /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../MAD/MAD/MAD/MTMath.h; sourceTree = "<group>"; };
 		4C111BF71B1C2715005CA4DD /* NSNumberFormatter+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/NSNumberFormatter+Constructors.h"; sourceTree = "<group>"; };
 		4C111C141B1EDDE4005CA4DD /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../CloudManager/CloudManager/NSFileManager+Common.h"; sourceTree = "<group>"; };
@@ -1952,7 +1953,6 @@
 		4C8CDCED1AD279BB00B7B9EA /* MTQueryTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryTest.h; path = ../MAD/MAD/MAD/MTQueryTest.h; sourceTree = "<group>"; };
 		4C8CDCEE1AD279DD00B7B9EA /* MTAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAggregateFunctionInputType.h; path = ../MAD/MAD/MAD/MTAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4C8CDCEF1AD279EF00B7B9EA /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SectionEnumerator.h; path = ../MAD/MAD/MAD/SectionEnumerator.h; sourceTree = "<group>"; };
-		4C8CDCF01AD27A0600B7B9EA /* MADReportDesignerSectionElementLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportDesignerSectionElementLayoutManager.h; path = ../MAD/MAD/MAD/MADReportDesignerSectionElementLayoutManager.h; sourceTree = "<group>"; };
 		4C8CDCF11AD27A5800B7B9EA /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTReportViewerPrintPageRenderer.h; path = ../MAD/MAD/MAD/MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C8CDCF21AD27A7700B7B9EA /* MTActivityItemProviderPdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTActivityItemProviderPdf.h; path = ../MAD/MAD/MAD/MTActivityItemProviderPdf.h; sourceTree = "<group>"; };
 		4C8CDCF31AD27AAF00B7B9EA /* MTDatabaseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseField.h; path = ../MAD/MAD/MAD/MTDatabaseField.h; sourceTree = "<group>"; };
@@ -2642,8 +2642,6 @@
 				4CE3143616952E3B00114431 /* MTTextView.m */,
 				4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */,
 				4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */,
-				4CA226A516C963CC00315EA2 /* MADDesignerSectionView.h */,
-				4CA226A616C963CC00315EA2 /* MADDesignerSectionView.m */,
 				4CAB178F150FE38400BA0A9B /* MTRulerView.h */,
 				4CAB1790150FE38400BA0A9B /* MTRulerView.m */,
 				4CC24AA31503E3AB00C4EE98 /* MTGradientView.h */,
@@ -2814,6 +2812,28 @@
 				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 			);
 			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		4C0F89291B27FE0500D75AF6 /* Section View */ = {
+			isa = PBXGroup;
+			children = (
+				4CA226A516C963CC00315EA2 /* MADDesignerSectionView.h */,
+				4CA226A616C963CC00315EA2 /* MADDesignerSectionView.m */,
+				4CB53B4917396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.h */,
+				4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */,
+				4C6C9B261733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.h */,
+				4C6C9B251733681B000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m */,
+			);
+			name = "Section View";
+			sourceTree = "<group>";
+		};
+		4C0F892F1B2800A700D75AF6 /* Element View */ = {
+			isa = PBXGroup;
+			children = (
+				4C88A9AE14ECDE560069A0AF /* MADDesignerElementView.h */,
+				4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */,
+			);
+			name = "Element View";
 			sourceTree = "<group>";
 		};
 		4C23FC2118FC323C009F234F /* Activities */ = {
@@ -3621,6 +3641,7 @@
 		4C8CD98B1AD1CEEB00B7B9EA /* libMAD */ = {
 			isa = PBXGroup;
 			children = (
+				4C0F89361B280A3400D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */,
 				4C8CDCA31AD276A800B7B9EA /* rptq */,
 				4C8CD98C1AD1CF3700B7B9EA /* MAD.h */,
 				4C111BEE1B1C2607005CA4DD /* MTMath.h */,
@@ -3630,7 +3651,6 @@
 				4C8CDCED1AD279BB00B7B9EA /* MTQueryTest.h */,
 				4C8CDCF61AD27B3E00B7B9EA /* MTNotificationDidFormatPage.h */,
 				4C8CDCEC1AD2798800B7B9EA /* MADLinkType.h */,
-				4C8CDCF01AD27A0600B7B9EA /* MADReportDesignerSectionElementLayoutManager.h */,
 				4C8CDCF71AD27B6100B7B9EA /* MTNotificationDidReadRows.h */,
 				4C8CDCF21AD27A7700B7B9EA /* MTActivityItemProviderPdf.h */,
 				4C8CDC9C1AD274D100B7B9EA /* MADocument.h */,
@@ -4239,6 +4259,7 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C54F2E61A1302CF004B5228 /* MADViewControllerProtocol.h */,
 				4C62692719F6313000DCCC2E /* Information */,
 				4C08B3131AB67FD500B54D3A /* Document Information */,
 				4C6268F219F5FFD200DCCC2E /* About */,
@@ -4393,16 +4414,12 @@
 			children = (
 				4C76F0B714B51042005DCE49 /* MADDesignerViewController.h */,
 				4C76F0B014B4F132005DCE49 /* MADDesignerViewController.m */,
-				4C88A9AE14ECDE560069A0AF /* MADDesignerElementView.h */,
-				4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */,
+				4C0F89291B27FE0500D75AF6 /* Section View */,
+				4C0F892F1B2800A700D75AF6 /* Element View */,
 				4CE7B77314C2D168007D0148 /* MADDesignerElementPIckerViewController.h */,
 				4CE7B77414C2D168007D0148 /* MADDesignerElementPIckerViewController.m */,
 				4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */,
 				4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */,
-				4C6C9B261733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.h */,
-				4C6C9B251733681B000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m */,
-				4CB53B4917396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.h */,
-				4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */,
 				4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */,
 				4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */,
 				4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */,
@@ -4429,7 +4446,6 @@
 				4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */,
 				4C47408E19FEDA7200B11434 /* MADPopoverBackgroundView.h */,
 				4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */,
-				4C54F2E61A1302CF004B5228 /* MADViewControllerProtocol.h */,
 				4C2831801B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.h */,
 				4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */,
 			);
