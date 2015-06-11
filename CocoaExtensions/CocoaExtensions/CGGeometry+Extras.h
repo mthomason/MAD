@@ -33,6 +33,14 @@ struct CGLine {
 };
 typedef struct CGLine CGLine;
 
+struct MTCorners {
+    CGPoint topLeft;
+    CGPoint topRight;
+    CGPoint bottomLeft;
+    CGPoint bottomRight;
+};
+typedef struct MTCorners MTCorners;
+
 struct CGLineSegment {
     CGPoint start;
     CGPoint end;
@@ -57,6 +65,16 @@ typedef NS_ENUM(NSUInteger, MADDirection) {
     down,
     noDirection
 };
+
+CG_INLINE MTCorners
+MTCornersMake(CGRect rect) {
+    MTCorners corners;
+    corners.topLeft = rect.origin;
+    corners.topRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
+    corners.bottomLeft = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
+    corners.bottomRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+    return corners;
+}
 
 CG_INLINE BOOL CGFloatCompare(CGFloat x, CGFloat y);
 CG_INLINE BOOL
@@ -86,25 +104,25 @@ CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
 
 CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees);
 CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees) {
-    MADCompusDirection direction = north;
     if (degrees > 60.0000f && degrees < 120.0000f) {
-        direction = north;
+        return north;
     } else if (degrees > 30.0000f && degrees < 60.0000f) {
-        direction = northEast;
+        return northEast;
     } else if ( degrees > 120.0000f && degrees < 150.0000f ) {
-        direction = northWest;
+        return northWest;
     } else if ( degrees > 240.0000f && degrees < 300.0000f ) {
-        direction = south;
+        return south;
     } else if ( degrees > 300.0000f && degrees < 330.0000f ) {
-        direction = southEast;
+        return southEast;
     } else if ( degrees > 210.0000f && degrees < 240.0000f ) {
-        direction = southWest;
+        return southWest;
     } else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
-        direction = east;
+        return east;
     } else if ( degrees > 150.0000f && degrees < 210.0000f) {
-        direction = west;
+        return west;
+    } else {
+        return north;
     }
-    return direction;
 }
 
 CG_INLINE CGSize CGSizeFingerDefault();
