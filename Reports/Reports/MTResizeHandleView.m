@@ -8,7 +8,17 @@
 
 #import "MTResizeHandleView.h"
 
+@interface MTResizeHandleView()
+
+@end
+
 @implementation MTResizeHandleView
+
+static const CGFloat colors[] = {
+    204.0000f / 255.0000f, 224.0000f / 255.0000f, 244.0000f / 255.0000f, 1.00000f,
+    29.0000f / 255.0000f, 156.0000f / 255.0000f, 215.0000f / 255.0000f, 1.00000f,
+    0.0000f / 255.0000f,  50.0000f / 255.0000f, 126.0000f / 255.0000f, 1.00000f,
+};
 
 - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position {
     self = [super initWithFrame:frame];
@@ -17,16 +27,6 @@
         self.initalPoint = self.center;
         self.type = position;
         self.highlighted = NO;
-
-        // Initialization code
-		CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-		CGFloat colors[] = {
-			204.0000f / 255.0000f, 224.0000f / 255.0000f, 244.0000f / 255.0000f, 1.00000f,
-            29.0000f / 255.0000f, 156.0000f / 255.0000f, 215.0000f / 255.0000f, 1.00000f,
-            0.0000f / 255.0000f,  50.0000f / 255.0000f, 126.0000f / 255.0000f, 1.00000f,
-		};
-		_gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
-		CGColorSpaceRelease(rgb);
         self.backgroundColor =  [UIColor clearColor];
     }
     return self;
@@ -46,8 +46,10 @@
     
     [[UIColor clearColor] setFill];
     CGContextDrawPath(currentContext, kCGPathFillStroke);
-
-    CGContextDrawRadialGradient(currentContext, _gradient, start, startRadius, end, endRadius, options);
+    CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
+    CGContextDrawRadialGradient(currentContext, gradient, start, startRadius, end, endRadius, options);
+    CGGradientRelease(gradient);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

@@ -19,9 +19,7 @@
 - (void)resizeHandle:(MTResizeHandleView *)handle didMoveToPoint:(CGPoint)point;
 @end
 
-@interface MTResizeHandleView : UIView {
-    CGGradientRef _gradient;
-}
+@interface MTResizeHandleView : UIView
 
 @property (weak) IBOutlet id <MTResizeHandleViewDelegate> delegate;
 @property (assign) MADCompusDirection type;
