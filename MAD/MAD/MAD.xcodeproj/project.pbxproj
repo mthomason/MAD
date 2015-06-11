@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C0F89351B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89341B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.m */; };
+		4C0F89351B280A2300D75AF6 /* MADSectionLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */; };
+		4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */; };
 		4C8CD96A1AD1CDC800B7B9EA /* libMAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */; };
 		4C8CD98A1AD1CEAF00B7B9EA /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */; };
 		4C8CD9981AD1D1AD00B7B9EA /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */; };
@@ -225,8 +226,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C0F89331B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportDesignerSectionElementLayoutManager.h; sourceTree = "<group>"; };
-		4C0F89341B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportDesignerSectionElementLayoutManager.m; sourceTree = "<group>"; };
+		4C0F89331B280A2300D75AF6 /* MADSectionLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionLayoutManager.h; sourceTree = "<group>"; };
+		4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutManager.m; sourceTree = "<group>"; };
+		4C0F893D1B29146C00D75AF6 /* MADSectionLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionLayoutAttributes.h; sourceTree = "<group>"; };
+		4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutAttributes.m; sourceTree = "<group>"; };
 		4C111C181B1EDED2005CA4DD /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CloudManager/CloudManager/NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
@@ -788,6 +791,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C0F89401B29149000D75AF6 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				4C8CDBAF1AD2514700B7B9EA /* MADArrayCaching.h */,
+				4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */,
+				4C8CDBB51AD252B400B7B9EA /* MTErrorContainer.h */,
+				4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */,
+				4C8CDC921AD26DC700B7B9EA /* MTActivityItemProviderPdf.h */,
+				4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */,
+				4C8CDC951AD26EEB00B7B9EA /* MTActivityIndicator.h */,
+				4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */,
+				4C8CDBB71AD252B400B7B9EA /* MTMath.h */,
+				4C8CDBB81AD252B400B7B9EA /* MTMath.m */,
+				4C8CDADF1AD247F900B7B9EA /* MTDatabaseDataBinding.h */,
+				4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */,
+				4C8CDBC41AD2552C00B7B9EA /* MTFont.h */,
+				4C8CDBC51AD2552C00B7B9EA /* MTFont.m */,
+				4C8CDC871AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.h */,
+				4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */,
+				4C8CDAF01AD24C9000B7B9EA /* SectionEnumerator.h */,
+				4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */,
+				4C8CDABF1AD1E32C00B7B9EA /* MTDataColumn.h */,
+				4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */,
+				4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */,
+				4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */,
+				4C8CDBB21AD2519300B7B9EA /* MTNotificationDidFormatPage.h */,
+				4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */,
+				4C8CDABC1AD1E1A300B7B9EA /* MTNotificationDidReadRows.h */,
+				4C8CDABD1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m */,
+				4C8CD99E1AD1D28B00B7B9EA /* MADocumentState.h */,
+				4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */,
+				4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */,
+				4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */,
+			);
+			name = Misc;
+			sourceTree = "<group>";
+		};
 		4C65D47D1ADF735A00279B4D /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -839,11 +879,14 @@
 			isa = PBXGroup;
 			children = (
 				4C8CD9851AD1CE4200B7B9EA /* MAD.h */,
-				4C0F89331B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */,
-				4C0F89341B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.m */,
+				4C0F89331B280A2300D75AF6 /* MADSectionLayoutManager.h */,
+				4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */,
+				4C0F893D1B29146C00D75AF6 /* MADSectionLayoutAttributes.h */,
+				4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */,
 				4C8CD9961AD1D1AD00B7B9EA /* MADConstants.h */,
 				4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */,
 				4C8CDA281AD1DCAD00B7B9EA /* Query */,
+				4C0F89401B29149000D75AF6 /* Misc */,
 				4C8CDCFD1AD2866000B7B9EA /* Formatters */,
 				4C8CDCA51AD276DA00B7B9EA /* Database */,
 				4C8CDCA41AD276C200B7B9EA /* DataTable */,
@@ -855,36 +898,6 @@
 				4C65D47E1ADF779500279B4D /* Protocols */,
 				4C8CD9891AD1CEAF00B7B9EA /* MADocument.h */,
 				4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */,
-				4C8CDBAF1AD2514700B7B9EA /* MADArrayCaching.h */,
-				4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */,
-				4C8CDBB51AD252B400B7B9EA /* MTErrorContainer.h */,
-				4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */,
-				4C8CDC921AD26DC700B7B9EA /* MTActivityItemProviderPdf.h */,
-				4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */,
-				4C8CDC951AD26EEB00B7B9EA /* MTActivityIndicator.h */,
-				4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */,
-				4C8CDBB71AD252B400B7B9EA /* MTMath.h */,
-				4C8CDBB81AD252B400B7B9EA /* MTMath.m */,
-				4C8CDADF1AD247F900B7B9EA /* MTDatabaseDataBinding.h */,
-				4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */,
-				4C8CDBC41AD2552C00B7B9EA /* MTFont.h */,
-				4C8CDBC51AD2552C00B7B9EA /* MTFont.m */,
-				4C8CDC871AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.h */,
-				4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */,
-				4C8CDAF01AD24C9000B7B9EA /* SectionEnumerator.h */,
-				4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */,
-				4C8CDABF1AD1E32C00B7B9EA /* MTDataColumn.h */,
-				4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */,
-				4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */,
-				4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */,
-				4C8CDBB21AD2519300B7B9EA /* MTNotificationDidFormatPage.h */,
-				4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */,
-				4C8CDABC1AD1E1A300B7B9EA /* MTNotificationDidReadRows.h */,
-				4C8CDABD1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m */,
-				4C8CD99E1AD1D28B00B7B9EA /* MADocumentState.h */,
-				4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */,
-				4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */,
-				4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */,
 			);
 			path = MAD;
 			sourceTree = "<group>";
@@ -1797,7 +1810,7 @@
 				4C8CD9F91AD1D72E00B7B9EA /* RptqDocumentObjectLabel.m in Sources */,
 				4C8CDAEF1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m in Sources */,
 				4C8CDAC11AD1E32C00B7B9EA /* MTDataColumn.m in Sources */,
-				4C0F89351B280A2300D75AF6 /* MADReportDesignerSectionElementLayoutManager.m in Sources */,
+				4C0F89351B280A2300D75AF6 /* MADSectionLayoutManager.m in Sources */,
 				4C8CD9B61AD1D53300B7B9EA /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C8CD9B71AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m in Sources */,
 				4C8CDA831AD1DCC100B7B9EA /* MTQueryDefinitionField.m in Sources */,
@@ -1840,6 +1853,7 @@
 				4C8CDAD81AD244D000B7B9EA /* MTDataTableLocation.m in Sources */,
 				4C8CDB881AD2500800B7B9EA /* MTPaperB2.m in Sources */,
 				4C8CDBD71AD2567400B7B9EA /* NSManagedObject+Extras.m in Sources */,
+				4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */,
 				4C8CDA061AD1D72E00B7B9EA /* RptqRelationship.m in Sources */,
 				4C8CD9F71AD1D72E00B7B9EA /* RptqDocumentObjectGroupKey.m in Sources */,
 				4C8CDBC61AD2552C00B7B9EA /* MTFont.m in Sources */,

@@ -12,29 +12,18 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
+#import "MADSectionLayoutAttributes.h"
 
-@interface MADReportDesignerSectionLayoutAttributes : UICollectionViewLayoutAttributes
+@class MADSectionLayoutManager, RptqDocumentSection;
 
-@property (nonatomic, assign) NSManagedObjectID *objectID;
-
-@end
-
-@class MADReportDesignerSectionElementLayoutManager, RptqDocumentSection;
-
-@protocol MADReportDesignerSectionElementLayoutManagerDelegate <NSObject>
-
-- (void)layoutManager:(MADReportDesignerSectionElementLayoutManager *)layoutManager itemNeedsUpdate:(MADReportDesignerSectionLayoutAttributes *)item;
-
-@end
-
-@interface MADReportDesignerSectionElementLayoutManager : NSObject
+@interface MADSectionLayoutManager : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *items;
 @property (nonatomic, weak) id <MADReportDesignerSectionElementLayoutManagerDelegate>delegate;
 
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
 
-- (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item;
+- (void)addItem:(MADSectionLayoutAttributes *)item;
 - (void)removeItemWithID:(NSManagedObjectID *)objectID;
 - (CGSize)size;
 - (void)layout;

@@ -74,7 +74,7 @@
 #import "NSThread+Extras.h"
 
 #import "SectionEnumerator.h"
-#import "MADReportDesignerSectionElementLayoutManager.h"
+#import "MADSectionLayoutManager.h"
 
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
@@ -198,7 +198,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSDictionary *)layoutHeightsBySectionKey {
     __block NSMutableDictionary *dictionary = [NSMutableDictionary new];
-    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADReportDesignerSectionElementLayoutManager *secManager, BOOL *stop) {
+    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADSectionLayoutManager *secManager, BOOL *stop) {
         
         NSString *k = [key key];
         dictionary[k] = @(secManager.size.height);
@@ -598,12 +598,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     footerSectionRow.inSection = dsFooter;
     [queryGroup addHasSectionObject:dsFooter];
     
-    MADReportDesignerSectionElementLayoutManager *layoutManagerHeader = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:dsHeader];
+    MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:dsHeader];
     layoutManagerHeader.delegate = self;
     [self.sectionLayoutManagers setObject: layoutManagerHeader
                                    forKey: dsHeader.objectID];
     
-    MADReportDesignerSectionElementLayoutManager *layoutManagerFooter = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:dsFooter];
+    MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:dsFooter];
     layoutManagerFooter.delegate = self;
     [self.sectionLayoutManagers setObject: layoutManagerFooter
                                    forKey: dsFooter.objectID];
@@ -765,7 +765,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
-        MADReportDesignerSectionElementLayoutManager *layoutManager = [[MADReportDesignerSectionElementLayoutManager alloc] initWithDocumentSection:reportSection];
+        MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
         layoutManager.delegate = self;
         [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
     }
@@ -774,8 +774,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)layoutManager:(MADReportDesignerSectionElementLayoutManager *)layoutManager
-      itemNeedsUpdate:(MADReportDesignerSectionLayoutAttributes *)attributes {
+- (void)layoutManager:(MADSectionLayoutManager *)layoutManager
+      itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
     
     NSManagedObjectContext *objectContext = self.document.managedObjectContext;
     RptqDocumentObject *documentObject;
@@ -798,7 +798,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
     [hasObjects removeObjectAtIndex:deleteIndex];
     
-    MADReportDesignerSectionElementLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
+    MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
     
     [layoutManager removeItemWithID:objectID];
     [layoutManager layout];

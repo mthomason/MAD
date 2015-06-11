@@ -1435,7 +1435,7 @@
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTViewTableHeader.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
-		4C0F89361B280A3400D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportDesignerSectionElementLayoutManager.h; path = ../MAD/MAD/MAD/MADReportDesignerSectionElementLayoutManager.h; sourceTree = "<group>"; };
+		4C0F89361B280A3400D75AF6 /* MADSectionLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSectionLayoutManager.h; path = ../MAD/MAD/MAD/MADSectionLayoutManager.h; sourceTree = "<group>"; };
 		4C0F89371B28C0EA00D75AF6 /* MTElementCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTElementCanvas.h; sourceTree = "<group>"; };
 		4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTElementCanvas.m; sourceTree = "<group>"; };
 		4C0F893A1B28C30800D75AF6 /* MADResizeHandles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeHandles.h; sourceTree = "<group>"; };
@@ -3651,7 +3651,7 @@
 		4C8CD98B1AD1CEEB00B7B9EA /* libMAD */ = {
 			isa = PBXGroup;
 			children = (
-				4C0F89361B280A3400D75AF6 /* MADReportDesignerSectionElementLayoutManager.h */,
+				4C0F89361B280A3400D75AF6 /* MADSectionLayoutManager.h */,
 				4C8CDCA31AD276A800B7B9EA /* rptq */,
 				4C8CD98C1AD1CF3700B7B9EA /* MAD.h */,
 				4C111BEE1B1C2607005CA4DD /* MTMath.h */,

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADReportDesignerSectionElementLayoutManager.h"
+#import "MADSectionLayoutManager.h"
 #import "CGGeometry+Extras.h"
 #import "MTPair.h"
 
@@ -15,27 +15,16 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
 
-@implementation MADReportDesignerSectionLayoutAttributes
-
-- (instancetype)init {
-    if (self = [super init]) {
-        
-    }
-    return self;
-}
-
-@end
-
-@interface MADReportDesignerSectionElementLayoutManager ()
+@interface MADSectionLayoutManager ()
 
 @property (nonatomic, strong, readwrite) NSMutableDictionary *items;
-@property (nonatomic, weak) MADReportDesignerSectionLayoutAttributes *lastItem;
+@property (nonatomic, weak) MADSectionLayoutAttributes *lastItem;
 @property (nonatomic, assign) BOOL lastOpperationWasAdditon;
 @property (nonatomic, assign) BOOL visibility;
 
 @end
 
-@implementation MADReportDesignerSectionElementLayoutManager
+@implementation MADSectionLayoutManager
 
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section {
 
@@ -48,10 +37,10 @@
         NSOrderedSet *objects = rows.hasObjects;
         NSInteger itemCounter = 0;
         RptqDocumentObject *object;
-        MADReportDesignerSectionLayoutAttributes *layout;
+        MADSectionLayoutAttributes *layout;
         for (object in objects) {
             NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
-            layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+            layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
             layout.objectID = object.objectID;
             CGSize size = object.size;
             layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue,
@@ -77,7 +66,7 @@
     
 }
 
-- (void)addItem:(MADReportDesignerSectionLayoutAttributes *)item {
+- (void)addItem:(MADSectionLayoutAttributes *)item {
 
     [self appendItemToItems:item];
     self.lastOpperationWasAdditon = YES;
@@ -86,10 +75,10 @@
 
 - (void)removeItemWithID:(NSManagedObjectID *)objectID {
     
-    MADReportDesignerSectionLayoutAttributes *item = [self.items objectForKey:objectID];
+    MADSectionLayoutAttributes *item = [self.items objectForKey:objectID];
     NSIndexPath *pathToRemvoe = item.indexPath;
     
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *obj, BOOL *stop) {
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
         if (obj.indexPath.item >= pathToRemvoe.item) {
             obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1
                                                 inSection: obj.indexPath.section];
@@ -100,17 +89,16 @@
     self.lastOpperationWasAdditon = NO;
 }
 
-- (void)positionItem:(MADReportDesignerSectionLayoutAttributes *)item {
+- (void)positionItem:(MADSectionLayoutAttributes *)item {
     NSArray *allValues = self.items.allValues;
-    NSArray *allPotentalDropPoints = [MADReportDesignerSectionElementLayoutManager allValidLocationsForAttributes: item
+    NSArray *allPotentalDropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: item
                                                                                                    withAttributes: allValues
                                                                                                    excludingItems: @[]];
-    [MADReportDesignerSectionElementLayoutManager moveItem:item toNearestPointInGroup:allPotentalDropPoints dropTolerance:18.0000f];
-    
+    BOOL placedItem = [MADSectionLayoutManager moveItem:item toNearestPointInGroup:allPotentalDropPoints dropTolerance:18.0000f];
     
 }
 
-+ (void)moveItem:(MADReportDesignerSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
++ (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
     CGPoint nearestPoint = CGPointZero;
     CGFloat distanceToLastDropPoint = tolerance;
     BOOL foundNearDropPoint = NO;
@@ -129,12 +117,13 @@
     if (foundNearDropPoint) {
         item.frame = CGRectMake(nearestPoint.x, nearestPoint.y, item.frame.size.width, item.frame.size.height);
     }
+    return foundNearDropPoint;
 }
 
 - (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
     
     NSIndexPath *path = [NSIndexPath indexPathForItem:self.items.count inSection:0];
-    MADReportDesignerSectionLayoutAttributes *layout = [MADReportDesignerSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+    MADSectionLayoutAttributes *layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
     layout.objectID = objectID;
     layout.frame = frame;
     [self.items setObject: layout forKey: objectID];
@@ -150,18 +139,18 @@
 
 - (void)layoutAfterItemRemoval {
     
-    MADReportDesignerSectionLayoutAttributes *opp;
+    MADSectionLayoutAttributes *opp;
     while ((opp = [self getAnOutOfPositionItem]) != nil) {
         [self layoutOutOfPlaceItem:opp];
     }
     
 }
 
-- (MADReportDesignerSectionLayoutAttributes *)getAnOutOfPositionItem {
+- (MADSectionLayoutAttributes *)getAnOutOfPositionItem {
 
-    __block MADReportDesignerSectionLayoutAttributes *opp = nil;
-    MADReportDesignerSectionLayoutAttributes *layout;
-    __weak MADReportDesignerSectionElementLayoutManager *weakself = self;
+    __block MADSectionLayoutAttributes *opp = nil;
+    MADSectionLayoutAttributes *layout;
+    __weak MADSectionLayoutManager *weakself = self;
     [self.items enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([weakself isItemMisplaced:layout]) {
             opp = layout;
@@ -171,13 +160,13 @@
     return opp;
 }
 
-- (BOOL)isItemMisplaced:(MADReportDesignerSectionLayoutAttributes *)item {
+- (BOOL)isItemMisplaced:(MADSectionLayoutAttributes *)item {
     
     __block BOOL originFound = NO;
     __block CGFloat x1, x2, y1, y2;
     __block CGPoint p0, p1, p2, p3;
 
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *layout, BOOL *stop) {
         if (item != layout) {
             
             //There exist four potental placement spots for each alredy placed rect
@@ -216,15 +205,15 @@
     return originFound == NO;
 }
 
-- (void)layoutOutOfPlaceItem:(MADReportDesignerSectionLayoutAttributes *)opp {
+- (void)layoutOutOfPlaceItem:(MADSectionLayoutAttributes *)opp {
     
 }
 
-- (void)removeItem:(MADReportDesignerSectionLayoutAttributes *)itemToRemove {
+- (void)removeItem:(MADSectionLayoutAttributes *)itemToRemove {
     
     NSIndexPath *pathToRemvoe = itemToRemove.indexPath;
     
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *obj, BOOL *stop) {
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
         if (obj.indexPath.item >= pathToRemvoe.item) {
             obj.indexPath = [NSIndexPath indexPathForItem: obj.indexPath.item - 1
                                                 inSection: obj.indexPath.section];
@@ -238,7 +227,7 @@
 - (CGSize)size {
     __block CGSize size = CGSizeZero;
     if (self.visibility) {
-        [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
+        [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *layout, BOOL *stop) {
             size.width = MAX(size.width, layout.frame.origin.x + layout.frame.size.width);
             size.height = MAX(size.height, layout.frame.origin.y + layout.frame.size.height);
         }];
@@ -248,7 +237,7 @@
 
 #pragma mark - Helpers
 
-- (void)appendItemToItems:(MADReportDesignerSectionLayoutAttributes *)item {
+- (void)appendItemToItems:(MADSectionLayoutAttributes *)item {
     [self.items setObject:item forKey:item.objectID];
     self.lastItem = item;
 }
@@ -259,8 +248,8 @@
  
  */
 
-- (void)pushingItem: (MADReportDesignerSectionLayoutAttributes *)pushingItem
-         pushesItem: (MADReportDesignerSectionLayoutAttributes *)pushedItem
+- (void)pushingItem: (MADSectionLayoutAttributes *)pushingItem
+         pushesItem: (MADSectionLayoutAttributes *)pushedItem
         inDirection: (MADDirection)direction {
     
     NSArray *allPotentalDropPoints = [self allValidLocationsForPushedItem: pushedItem
@@ -275,15 +264,15 @@
     
 }
 
-- (NSArray *)allValidLocationsForPushedItem: (MADReportDesignerSectionLayoutAttributes *)pushedItem
-                            withPushingItem: (MADReportDesignerSectionLayoutAttributes *)pushingItem
+- (NSArray *)allValidLocationsForPushedItem: (MADSectionLayoutAttributes *)pushedItem
+                            withPushingItem: (MADSectionLayoutAttributes *)pushingItem
                                   direction: (MADDirection)direction {
     
     NSValue *v = [NSValue valueWithCGPoint:CGPointZero];
     __block NSArray *allValidLocations = @[v];
     BOOL directionIsHorizontal = MADDirectionIsHorizontal(direction);
     NSMutableArray *placemntValues = [[NSMutableArray alloc] initWithCapacity:4];
-    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADReportDesignerSectionLayoutAttributes *layout, BOOL *stop) {
+    [self.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *layout, BOOL *stop) {
         
         BOOL isPushedItem = layout == pushedItem;
         
@@ -346,7 +335,7 @@
     
 }
 
-- (void)moveItem:(MADReportDesignerSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints direction:(MADDirection)direction {
+- (void)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints direction:(MADDirection)direction {
     CGPoint nearestPoint = CGPointZero;
     CGFloat distanceToLastDropPoint = -1.0000f;
     BOOL foundNearDropPoint = NO;
@@ -390,12 +379,12 @@
     }
 }
 
-+ (MTPair *)seperateByDestionationDirection: (NSArray *)overlappingItems inRelationToAttributes: (MADReportDesignerSectionLayoutAttributes *)droppedAttributes {
++ (MTPair *)seperateByDestionationDirection: (NSArray *)overlappingItems inRelationToAttributes: (MADSectionLayoutAttributes *)droppedAttributes {
     CGFloat x = droppedAttributes.frame.origin.x + droppedAttributes.frame.size.width;
     CGFloat y = droppedAttributes.frame.origin.y + droppedAttributes.frame.size.height;
     CGPoint bottomLeft, topRight;
     
-    MADReportDesignerSectionLayoutAttributes *attributes;
+    MADSectionLayoutAttributes *attributes;
     NSArray *itemsLeft = @[];
     NSArray *itemsRight = @[];
     CGFloat d1, d2;
@@ -415,12 +404,12 @@
 }
 
 - (MTPair *)seperateByDestionationDirection:(NSArray *)overlappingItems {
-    MADReportDesignerSectionLayoutAttributes *droppedAttributes = self.lastItem;
+    MADSectionLayoutAttributes *droppedAttributes = self.lastItem;
     CGFloat x = droppedAttributes.frame.origin.x + droppedAttributes.frame.size.width;
     CGFloat y = droppedAttributes.frame.origin.y + droppedAttributes.frame.size.height;
     CGPoint bottomLeft, topRight;
     
-    MADReportDesignerSectionLayoutAttributes *attributes;
+    MADSectionLayoutAttributes *attributes;
     NSArray *items = self.items.allValues;
     NSArray *itemsLeft = @[];
     NSArray *itemsRight = @[];
@@ -442,7 +431,7 @@
 
 - (NSArray *)sortOverlappingItems: (NSArray *)overlappingItems distanctFromPoint: (CGPoint)origin {
 
-    NSArray *sortedArray = [overlappingItems sortedArrayUsingComparator:^NSComparisonResult(MADReportDesignerSectionLayoutAttributes *obj1, MADReportDesignerSectionLayoutAttributes *obj2) {
+    NSArray *sortedArray = [overlappingItems sortedArrayUsingComparator:^NSComparisonResult(MADSectionLayoutAttributes *obj1, MADSectionLayoutAttributes *obj2) {
         NSNumber *distance1 = @(CGDistance(origin, obj1.frame.origin));
         NSNumber *distance2 = @(CGDistance(origin, obj2.frame.origin));
         return [distance1 compare:distance2];
@@ -451,8 +440,8 @@
     return sortedArray;
 }
 
-- (NSArray *)itemsThatOverlapItem:(MADReportDesignerSectionLayoutAttributes *)lastItem {
-    MADReportDesignerSectionLayoutAttributes *layout;
+- (NSArray *)itemsThatOverlapItem:(MADSectionLayoutAttributes *)lastItem {
+    MADSectionLayoutAttributes *layout;
     NSArray *allItems = self.items.allValues;
     NSArray *results = @[];
     for (layout in allItems) {
@@ -467,9 +456,9 @@
 
 - (NSArray *)itemsThatOverlapLastItem {
     
-    MADReportDesignerSectionLayoutAttributes *layout;
+    MADSectionLayoutAttributes *layout;
     NSArray *allItems = self.items.allValues;
-    MADReportDesignerSectionLayoutAttributes *lastItem = self.lastItem;
+    MADSectionLayoutAttributes *lastItem = self.lastItem;
     NSArray *results = @[];
     for (layout in allItems) {
         if (lastItem != layout) {
@@ -483,7 +472,7 @@
 
 - (void)slideItems: (NSArray *)itemsToSlide direction: (MADDirection)direction distance: (CGFloat)distance {
     
-    MADReportDesignerSectionLayoutAttributes *attributes;
+    MADSectionLayoutAttributes *attributes;
 
     switch (direction) {
     
@@ -563,7 +552,7 @@
     NSArray *potentialPlacements = @[];
     id lastItem = self.lastItem;
     NSArray *allItems = self.items.allValues;
-    MADReportDesignerSectionLayoutAttributes *layout;
+    MADSectionLayoutAttributes *layout;
     for (layout in allItems) {
         if (lastItem != layout) {
             
@@ -585,19 +574,19 @@
     return allValidLocations;
 }
 
-+ (NSArray *)allValidLocationsForAttributes: (MADReportDesignerSectionLayoutAttributes *)attribute
++ (NSArray *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute
                              withAttributes: (NSArray *)attributes excludingItems:(NSArray *)excludingItems {
 
     NSValue *placement0Value, *placement1Value, *placement2Value, *placement3Value;
     placement0Value = [NSValue valueWithCGPoint:CGPointZero];
     NSArray *allValidLocations = @[placement0Value];
     NSArray *potentialPlacements = @[];
-    MADReportDesignerSectionLayoutAttributes *layout;
+    MADSectionLayoutAttributes *layout;
     BOOL excludedItem = NO;
     for (layout in attributes) {
         excludedItem = layout == attribute;
         if (excludedItem == NO) {
-            for (MADReportDesignerSectionLayoutAttributes *excludingItem in excludingItems) {
+            for (MADSectionLayoutAttributes *excludingItem in excludingItems) {
                 excludedItem = layout == excludingItem;
             }
         }
@@ -641,7 +630,7 @@
     NSArray *allValidLocations = @[];
     NSArray *potentialPlacements = @[];
     NSArray *allItems = self.items.allValues;
-    MADReportDesignerSectionLayoutAttributes *layout;
+    MADSectionLayoutAttributes *layout;
     for (layout in allItems) {
         
         MTCorners corners = MTCornersMake(layout.frame);
@@ -662,12 +651,12 @@
     return allValidLocations;
 }
 
-- (void)positionAllItemsAroundItem:(MADReportDesignerSectionLayoutAttributes *)lastItemDropped {
+- (void)positionAllItemsAroundItem:(MADSectionLayoutAttributes *)lastItemDropped {
     NSArray *overlappingItems = [self itemsThatOverlapItem:lastItemDropped];
     CGPoint origin = lastItemDropped.frame.origin;
-    MTPair *sepratedItems = [MADReportDesignerSectionElementLayoutManager seperateByDestionationDirection: overlappingItems
+    MTPair *sepratedItems = [MADSectionLayoutManager seperateByDestionationDirection: overlappingItems
                                                                                    inRelationToAttributes: lastItemDropped];
-    NSComparator sortBydistanceAsc = ^NSComparisonResult(MADReportDesignerSectionLayoutAttributes *obj1, MADReportDesignerSectionLayoutAttributes *obj2) {
+    NSComparator sortBydistanceAsc = ^NSComparisonResult(MADSectionLayoutAttributes *obj1, MADSectionLayoutAttributes *obj2) {
         NSNumber *distance1 = @(CGDistance(origin, obj1.frame.origin));
         NSNumber *distance2 = @(CGDistance(origin, obj2.frame.origin));
         return [distance1 compare:distance2];
@@ -688,7 +677,7 @@
 }
 
 - (void)positionLastItem {
-    MADReportDesignerSectionLayoutAttributes *attributes = self.lastItem;
+    MADSectionLayoutAttributes *attributes = self.lastItem;
     NSArray *validLocations = [self allValidLocationsForLastItem];
     CGPoint newLocation = [self pointNearestDropPoint: attributes.frame.origin
                                       fromValidPoints: validLocations];
