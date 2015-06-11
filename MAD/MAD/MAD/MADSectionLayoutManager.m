@@ -79,15 +79,136 @@
 
 - (void)positionItem:(MADSectionLayoutAttributes *)placedItem {
     NSArray *allValues = self.items.allValues;
+    NSMutableArray *placedItems = [[NSMutableArray alloc] initWithCapacity:allValues.count];
     NSArray *allPotentalDropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: placedItem
                                                                               withAttributes: allValues];
-    BOOL anchored = [placedItem moveToNearestPointInGroup:allPotentalDropPoints dropTolerance:18.0000f];
+    BOOL anchored = [placedItem moveToNearestPointInGroup:allPotentalDropPoints dropTolerance:24.0000f];
     if (!anchored) {
         anchored = [placedItem moveOnScreen];
     }
     if ([placedItem intersectsAnItemInArray: allValues]) {
         [placedItem placeItemGivenAttributes: allValues];
     }
+    [placedItems addObject:placedItem];
+    
+    NSPredicate *unplaced = [NSPredicate predicateWithFormat:@"objectID != %@.objectID", placedItem];
+    NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:unplaced];
+    [self positionUnplacedItems:unplacedItems aroundPlacedItems:placedItems];
+}
+
+- (void)positionUnplacedItems:(NSArray *)unplacedItems aroundPlacedItems:(NSArray *)placedItems {
+    NSMutableArray *unplacedOverlapping = [[NSMutableArray alloc] initWithCapacity:unplacedItems.count];
+    NSMutableArray *placedItemsTracker = [[NSMutableArray alloc] initWithArray:placedItems];
+    for (MADSectionLayoutAttributes *unplacedItem in unplacedItems) {
+        if ([unplacedItem intersectsAnItemInArray:placedItemsTracker]) {
+            [unplacedOverlapping addObject:unplacedItem];
+        }
+    }
+    
+    BOOL stillPlacing = YES;
+    while (stillPlacing) {
+        if ((stillPlacing = (unplacedOverlapping.count > 0))) {
+            [unplacedOverlapping sortUsingComparator:^NSComparisonResult(MADSectionLayoutAttributes *attr1, MADSectionLayoutAttributes *attr2) {
+                CGFloat d1 = [self distanceToBestDropPoint:attr1 placedItems:placedItems];
+                CGFloat d2 = [self distanceToBestDropPoint:attr2 placedItems:placedItems];
+                if (d1 == d2) {
+                    return NSOrderedSame;
+                } else if (d1 > d2) {
+                    return NSOrderedAscending;
+                } else {
+                    return NSOrderedDescending;
+                }
+            }];
+            MADSectionLayoutAttributes *attribute = unplacedOverlapping[0];
+            [attribute placeItemGivenAlreadyPlacedItems:placedItems];
+            placedItems = [placedItems arrayByAddingObject:attribute];
+            [placedItemsTracker addObject:attribute];
+            [unplacedOverlapping removeObjectAtIndex:0];
+            /*
+            NSMutableArray *unplacedItemsA = [[NSMutableArray alloc] init];
+            for (MADSectionLayoutAttributes *a in self.items.allValues) {
+                BOOL aIsP = NO;
+                for (MADSectionLayoutAttributes *p in placedItems) {
+                    if (a.objectID != p.objectID) {
+                        aIsP = YES;
+                        break;
+                    }
+                }
+                if (aIsP) {
+                    [unplacedItemsA addObject:a];
+                }
+            }
+            
+            [unplacedOverlapping removeAllObjects];
+            for (MADSectionLayoutAttributes *a in unplacedItemsA) {
+                if ([a intersectsAnItemInArray:placedItemsTracker]) {
+                    [unplacedOverlapping addObject:a];
+                }
+            }*/
+        }
+    }
+    
+    
+    //Sort the unplaced overlapping by distance from best drop point.
+    /*for (MADSectionLayoutAttributes *unplacedItem in unplacedItems) {
+        NSArray *dropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: unplacedItem
+                                                                       withAttributes: placedItemsTracker];
+        CGFloat distanceToNearestDropPoint = 0.00000000f;
+        CGPoint nearestPoint = CGPointZero;
+        BOOL foundNearDropPoint = NO;
+        for (NSValue *pointObj in dropPoints) {
+            CGPoint dropPoint = pointObj.CGPointValue;
+            CGFloat distanceToDropPoint = CGDistance(dropPoint, unplacedItem.frame.origin);
+            if (distanceToDropPoint <= distanceToNearestDropPoint && distanceToNearestDropPoint > 0.00000000f)                                        //Not yet found
+            {
+                
+                nearestPoint = dropPoint;
+                foundNearDropPoint = YES;
+                distanceToNearestDropPoint = distanceToDropPoint;
+            }
+        }
+    }*/
+    /*
+    NSArray *unplacedOverlapping =
+    
+    NSArray *unplacedItemsSorted = [unplacedItems sortedArrayUsingComparator:^NSComparisonResult(MADSectionLayoutAttributes *obj1, MADSectionLayoutAttributes *obj2) {
+        NSNumber *distance1 = @(CGDistance(origin, obj1.frame.origin));
+        NSNumber *distance2 = @(CGDistance(origin, obj2.frame.origin));
+        return [distance1 compare:distance2];
+*/
+}
+
+- (CGFloat)distanceToBestDropPoint:(MADSectionLayoutAttributes *)attr1 placedItems:(NSArray *)placedItems {
+    CGFloat d = 0.0000f;
+    CGPoint nearestPoint = CGPointZero;
+    NSArray *dropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: attr1
+                                                                   withAttributes: placedItems];
+    BOOL foundNearDropPoint = NO;
+    BOOL firstTime = YES;
+    for (NSValue *pointObj in dropPoints) {
+        CGPoint dropPoint = pointObj.CGPointValue;
+        CGFloat distanceToDropPoint = CGDistance(dropPoint, attr1.frame.origin);
+        
+        // Is drop point valid... doesn't it overlap a placed item?
+        BOOL valid = YES;
+        for (MADSectionLayoutAttributes *placedItem in placedItems) {
+            if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, attr1.frame.size.width, attr1.frame.size.height), placedItem.frame)) {
+                valid = NO;
+                break;
+            }
+        }
+        if (firstTime) {
+            firstTime = NO;
+            nearestPoint = dropPoint;
+            foundNearDropPoint = YES;
+            d = distanceToDropPoint;
+        } else if (valid && distanceToDropPoint <= d && d > 0.00000000f) {
+            nearestPoint = dropPoint;
+            foundNearDropPoint = YES;
+            d = distanceToDropPoint;
+        }
+    }
+    return d;
 }
 
 - (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
@@ -136,12 +257,12 @@
 #pragma mark - Helpers
 
 + (NSArray *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute
-                             withAttributes: (NSArray *)attributes {
+                             withAttributes: (NSArray *)placedItems {
     
-    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: 4 * attributes.count];
-    for (MADSectionLayoutAttributes *a in attributes) {
-        if (a.objectID != attribute.objectID) {
-            NSArray * dropPoints = [attribute dropPoints];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count];
+    for (MADSectionLayoutAttributes *placedItem in placedItems) {
+        if (placedItem.objectID != attribute.objectID) {
+            NSArray * dropPoints = [placedItem dropPoints];
             [results addObjectsFromArray:dropPoints];
         }
     }

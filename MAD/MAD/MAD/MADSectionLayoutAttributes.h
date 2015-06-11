@@ -21,6 +21,7 @@
     - (BOOL)moveToNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance;
     - (BOOL)moveOnScreen;
     - (void)placeItemGivenAttributes:(NSArray *)layoutAttributes;
+    - (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems;
     - (NSArray *)dropPoints;
 
 @end

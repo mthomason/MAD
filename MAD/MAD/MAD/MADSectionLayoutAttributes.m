@@ -92,6 +92,36 @@
     placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
+- (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems {
+    [MADSectionLayoutAttributes moveItem:self alreadyPlacedItems:alreadyPlacedItems];
+}
+
++ (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace alreadyPlacedItems:(NSArray *)alreadyPlacedItems {
+    CGPoint dropPoint = CGPointZero;
+    CGFloat distance = 0.00000000f, tmpDistance;//CGDistance(itemToPlace.frame.origin, dropPoint), tmpDistance;
+    BOOL distanceSet = NO;
+    for (MADSectionLayoutAttributes *alreadyPlacedItem in alreadyPlacedItems) {
+        if (itemToPlace.objectID != alreadyPlacedItem.objectID) {
+            NSArray *alreadyPlacedItemDropPoints = [alreadyPlacedItem dropPoints];
+            for (NSValue *v in alreadyPlacedItemDropPoints) {
+                CGRect potentalPlacement = CGRectMake(v.CGPointValue.x, v.CGPointValue.y, itemToPlace.size.width, itemToPlace.size.height);
+                if (!CGRectIntersectsRect(potentalPlacement, alreadyPlacedItem.frame)) {
+                    if (distanceSet == NO) {
+                        dropPoint = v.CGPointValue;
+                        distance = CGDistance(itemToPlace.frame.origin, v.CGPointValue);
+                        distanceSet = YES;
+                    }
+                    if ((tmpDistance = CGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
+                        dropPoint = v.CGPointValue;
+                        distance = tmpDistance;
+                    }
+                }
+            }
+        }
+    }
+    itemToPlace.frame = CGRectMake(dropPoint.x, dropPoint.y, itemToPlace.frame.size.width, itemToPlace.frame.size.height);
+}
+
 - (NSArray *)dropPoints {
     return [MADSectionLayoutAttributes dropPointsOnAttribute:self];
 }
