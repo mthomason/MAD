@@ -150,6 +150,14 @@
     return 0.5;
 }
 
+- (BOOL)showOnSide {
+    return YES;
+}
+
+//- (BOOL)showOnSide {
+//    return self.presentationController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+//}
+
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
     
     UITabBarController *tabBarController;

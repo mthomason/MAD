@@ -783,7 +783,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if (self.toolboxTransitioningDelegate.presentationController.presentedView.superview != nil &&
         self.presentedViewController.childViewControllers.count > 0 &&
         self.toolboxTransitioningDelegate.presentationController != nil &&
-        [((MADToolboxPresentationController *)self.toolboxTransitioningDelegate.presentationController) showOnSide] == NO) {
+        [self showOnSide] == NO) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                   CGSizeZero.width,
@@ -793,15 +793,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     } else if (self.settingsTransitioningDelegate.presentationController.presentedView.superview != nil &&
                self.presentedViewController.childViewControllers.count > 0 &&
                self.settingsTransitioningDelegate.presentationController != nil &&
-               [((MADToolboxPresentationController *)self.settingsTransitioningDelegate.presentationController) showOnSide] == NO) {
+               [self showOnSide] == NO) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                                   self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height, CGSizeZero.width);
         
     } else {
         
-        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                                  self.bottomLayoutGuide.length, CGSizeZero.width);
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
         
     }
     
@@ -812,6 +811,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
     [self.ruler setNeedsDisplay];
     
+}
+
+- (BOOL)showOnSide {
+    return self.presentingViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -2350,6 +2353,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)gestureBegan {
     [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
+    if (self.presentedViewController != nil) {
+        [self hideToolbox];
+    }
     [self setScrollersEnabled: NO];
 }
 
