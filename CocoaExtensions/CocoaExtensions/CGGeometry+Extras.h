@@ -180,6 +180,15 @@ CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect) {
     return CGPointMake(CGPointZero.x, yOffset);
 }
 
+CG_INLINE CGFloat CGDelta(CGFloat f1, CGFloat f2) {
+    return f2 - f1;
+}
+
+CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2);
+CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
+    return atan2f(p2.y - p1.y, p2.x - p1.x) * (180.0000f / M_PI);
+}
+
 CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity);
 CG_INLINE CGFloat
 CGDirectionInDegreesFromVelocity(CGPoint velocity) {
