@@ -28,32 +28,6 @@
     return intersects;
 }
 
-- (BOOL)moveToNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
-    return [MADSectionLayoutAttributes moveItem:self toNearestPointInGroup:dropPoints dropTolerance:tolerance];
-}
-
-+ (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
-    CGPoint nearestPoint = CGPointZero;
-    CGFloat distanceToLastDropPoint = tolerance;
-    BOOL foundNearDropPoint = NO;
-    for (NSValue *pointObj in dropPoints) {
-        CGPoint dropPoint = pointObj.CGPointValue;
-        CGFloat distanceToDropPoint = CGDistance(dropPoint, item.frame.origin);
-        if ((distanceToDropPoint <= tolerance && distanceToDropPoint <= distanceToLastDropPoint &&
-             distanceToLastDropPoint > CGSizeZero.width))                                        //Not yet found
-        {
-            
-            nearestPoint = dropPoint;
-            foundNearDropPoint = YES;
-            distanceToLastDropPoint = distanceToDropPoint;
-        }
-    }
-    if (foundNearDropPoint) {
-        item.frame = CGRectMake(nearestPoint.x, nearestPoint.y, item.frame.size.width, item.frame.size.height);
-    }
-    return foundNearDropPoint;
-}
-
 - (BOOL)moveOnScreen {
     return [MADSectionLayoutAttributes moveItemOnScreen:self];
 }
@@ -92,10 +66,6 @@
     placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
-- (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems {
-    [MADSectionLayoutAttributes moveItem:self alreadyPlacedItems:alreadyPlacedItems];
-}
-
 - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems {
     BOOL valid = YES;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
@@ -107,33 +77,18 @@
     return valid;
 }
 
-+ (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace alreadyPlacedItems:(NSArray *)alreadyPlacedItems {
-    CGPoint dropPoint = CGPointZero;
-    CGFloat distance = 0.00000000f, tmpDistance;//CGDistance(itemToPlace.frame.origin, dropPoint), tmpDistance;
-    BOOL distanceSet = NO;
-    for (MADSectionLayoutAttributes *alreadyPlacedItem in alreadyPlacedItems) {
-        if (itemToPlace.objectID != alreadyPlacedItem.objectID) {
-            NSArray *alreadyPlacedItemDropPoints = [alreadyPlacedItem dropPoints];
-            for (NSValue *v in alreadyPlacedItemDropPoints) {
-                BOOL validLocation = [itemToPlace validDropPoint:v.CGPointValue givenPlacedItems:alreadyPlacedItems];
-                if (validLocation) {
-                    if (distanceSet == NO) {
-                        dropPoint = v.CGPointValue;
-                        distance = CGDistance(itemToPlace.frame.origin, v.CGPointValue);
-                        distanceSet = YES;
-                    } else if ((tmpDistance = CGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
-                        dropPoint = v.CGPointValue;
-                        distance = tmpDistance;
-                    }
-                }
-            }
-        }
-    }
-    itemToPlace.frame = CGRectMake(dropPoint.x, dropPoint.y, itemToPlace.frame.size.width, itemToPlace.frame.size.height);
-}
-
 - (NSArray *)dropPoints {
     return [MADSectionLayoutAttributes dropPointsOnAttribute:self];
+}
+
+- (NSArray *)dropPointsHorizontal {
+    return [MADSectionLayoutAttributes dropPointsHorizontalOnAttribute:self];
+}
+
++ (NSArray *)dropPointsHorizontalOnAttribute:(MADSectionLayoutAttributes *)item {
+    MTCorners corners = MTCornersMake(item.frame);
+    NSArray *cornersArray = @[[NSValue valueWithCGPoint:corners.bottomRight] ,[NSValue valueWithCGPoint:corners.topRight]];
+    return cornersArray;
 }
 
 + (NSArray *)dropPointsOnAttribute:(MADSectionLayoutAttributes *)item {

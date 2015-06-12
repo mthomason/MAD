@@ -18,12 +18,12 @@
     @property (nonatomic, assign) NSManagedObjectID *objectID;
 
     - (BOOL)intersectsAnItemInArray:(NSArray *)items;
-    - (BOOL)moveToNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance;
     - (BOOL)moveOnScreen;
     - (void)placeItemGivenAttributes:(NSArray *)layoutAttributes;
-    - (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems;
-    - (NSArray *)dropPoints;
+    //- (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems;
     - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems;
+    - (NSArray *)dropPointsHorizontal;
+    - (NSArray *)dropPoints;
 
 @end
 
