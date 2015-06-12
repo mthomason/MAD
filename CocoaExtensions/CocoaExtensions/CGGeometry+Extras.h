@@ -27,6 +27,23 @@ extern const CGFloat MTDefaultFingerSizeHeight;
 
 /* Lines. */
 
+typedef NS_ENUM(NSUInteger, MAD2dDirection) {
+    horizontal,
+    vertical,
+    diagonal
+};
+
+typedef NS_ENUM(NSUInteger, MADAspectRatio) {
+    stretch,
+    skew,
+    fixed
+};
+
+struct MADResizeAspect {
+    MADAspectRatio aspectRatio;
+    MAD2dDirection direction;
+};
+
 struct CGLine {
     CGFloat m;
     CGFloat b;
@@ -121,6 +138,9 @@ CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
 
 CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees);
 CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees) {
+    while (degrees < 0.0000f) {
+        degrees += 360.0000f;
+    }
     if (degrees > 60.0000f && degrees < 120.0000f) {
         return north;
     } else if (degrees > 30.0000f && degrees < 60.0000f) {
@@ -190,23 +210,8 @@ CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
 }
 
 CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity);
-CG_INLINE CGFloat
-CGDirectionInDegreesFromVelocity(CGPoint velocity) {
-    CGFloat direction = 0.0000f;
-    if (velocity.y == 0) {
-        if (velocity.x < 0) {
-            direction = -90.0000f;
-        } else {
-            direction = 90.0000f;
-        }
-    } else {
-        if (velocity.y > 0) {
-            direction = atan(velocity.x / velocity.y);
-        } else {
-            direction = 180 + atan(velocity.x / velocity.y);
-        }
-    }
-    return direction;
+CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity) {
+    return atan2f(velocity.y, velocity.x);
 }
 
 CG_INLINE CGRect CGRectAdjustForScale(CGRect rect, CGFloat zoomScale);

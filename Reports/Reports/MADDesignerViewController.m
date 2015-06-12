@@ -2132,11 +2132,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView {
-    NSUInteger numberOfItemsInSectionZero = [collectionView numberOfItemsInSection:0];
-    for (int i = 0; i < numberOfItemsInSectionZero; i++) {
-        
-        NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:i inSection:0];
-        MADDesignerElementView *elementView = [self elementViewAtIndexPath: insertedPath
+    for (NSIndexPath *indexPath in collectionView.indexPathsForVisibleItems) {
+        MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath
                                                           inCollectionView: collectionView];
         [elementView setNeedsDisplay];
     }
@@ -2376,38 +2373,80 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
-    
-    gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
-                                                              gestureRecognizer.scale,
-                                                              gestureRecognizer.scale);
+    if (gestureRecognizer.numberOfTouches > 1) {
+        struct MADResizeAspect resizeAspect;
+        CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
+        CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
+        CGFloat degrees = CGAngleBetweenTwoPoints(p1, p2);
+        MADCompusDirection direction = generalDirectionOfDegrees(degrees);
+        switch (direction) {
+            case south:
+            case north:
+                resizeAspect.aspectRatio = stretch;
+                resizeAspect.direction = vertical;
+                break;
+            case east:
+            case west:
+                resizeAspect.aspectRatio = stretch;
+                resizeAspect.direction = horizontal;
+                break;
+            case northEast:
+            case northWest:
+            case southEast:
+            case southWest:
+                resizeAspect.aspectRatio = fixed;
+                resizeAspect.direction = diagonal;
+                break;
+            default:
+                resizeAspect.aspectRatio = stretch;
+                resizeAspect.direction = horizontal;
+                break;
+        }
+        switch (resizeAspect.direction) {
+            case horizontal:
+                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
+                                                                          gestureRecognizer.scale, 1.0000f);
+                break;
+            case vertical:
+                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
+                                                                          1.0000f, gestureRecognizer.scale);
+                break;
+            default:
+                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
+                                                                          gestureRecognizer.scale, gestureRecognizer.scale);
+                break;
+        }
+
+    }
     gestureRecognizer.scale = 1.0000f;
+    
     
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
         gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
         gestureRecognizer.state == UIGestureRecognizerStateFailed) {
         
-        UICollectionView *collectionView = [self sectionViewFor:gestureRecognizer];
-        
-        [collectionView performBatchUpdates:^(void) {
+        MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
+        [sectionView performBatchUpdates:^(void) {
             
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: ((MADDesignerElementView *)gestureRecognizer.view).objectIdTag
                                                                           managedObjectContext: self.document.managedObjectContext];
             [documentObject dropAtRect:gestureRecognizer.view.frame];   // FIXME: Handle padding, etc...
             [documentObject.managedObjectContext save:nil];
             
-            [gestureRecognizer.view setNeedsLayout];
-            [gestureRecognizer.view setNeedsDisplay];
             
         } completion:^(BOOL finished) {
             if (finished) {
+                [self redrawAllElementViewsInCollectionView:sectionView];
+                [gestureRecognizer.view setNeedsDisplay];
                 [UIView animateWithDuration:0.6666f animations:^{
-                    [collectionView invalidateIntrinsicContentSize];
+                    [sectionView invalidateIntrinsicContentSize];
                 }];
             }
         }];
         
-        [collectionView.collectionViewLayout invalidateLayout];
+        [sectionView.collectionViewLayout invalidateLayout];
     }
+    [gestureRecognizer.view setNeedsDisplay];
 }
 
 - (void)translatePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {

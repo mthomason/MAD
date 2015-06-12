@@ -82,6 +82,11 @@
     [super setNeedsDisplay];
 }
 
+- (void)setTransform:(CGAffineTransform)transform {
+    self.canvasView.transform = transform;
+    [super setTransform:transform];
+}
+
 - (void)setAlpha:(CGFloat)alpha {
     [super setAlpha:alpha];
     
