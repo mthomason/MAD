@@ -4422,10 +4422,10 @@
 		4CF1329416CA1E4900FD0F0B /* Report Desinger */ = {
 			isa = PBXGroup;
 			children = (
-				4C76F0B714B51042005DCE49 /* MADDesignerViewController.h */,
-				4C76F0B014B4F132005DCE49 /* MADDesignerViewController.m */,
 				4C0F89291B27FE0500D75AF6 /* Section View */,
 				4C0F892F1B2800A700D75AF6 /* Element View */,
+				4C76F0B714B51042005DCE49 /* MADDesignerViewController.h */,
+				4C76F0B014B4F132005DCE49 /* MADDesignerViewController.m */,
 				4CE7B77314C2D168007D0148 /* MADDesignerElementPIckerViewController.h */,
 				4CE7B77414C2D168007D0148 /* MADDesignerElementPIckerViewController.m */,
 				4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */,

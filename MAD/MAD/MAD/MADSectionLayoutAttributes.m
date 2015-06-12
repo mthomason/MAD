@@ -96,6 +96,17 @@
     [MADSectionLayoutAttributes moveItem:self alreadyPlacedItems:alreadyPlacedItems];
 }
 
+- (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems {
+    BOOL valid = YES;
+    for (MADSectionLayoutAttributes *placedItem in placedItems) {
+        if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, self.frame.size.width, self.frame.size.height), placedItem.frame)) {
+            valid = NO;
+            break;
+        }
+    }
+    return valid;
+}
+
 + (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace alreadyPlacedItems:(NSArray *)alreadyPlacedItems {
     CGPoint dropPoint = CGPointZero;
     CGFloat distance = 0.00000000f, tmpDistance;//CGDistance(itemToPlace.frame.origin, dropPoint), tmpDistance;
@@ -104,14 +115,13 @@
         if (itemToPlace.objectID != alreadyPlacedItem.objectID) {
             NSArray *alreadyPlacedItemDropPoints = [alreadyPlacedItem dropPoints];
             for (NSValue *v in alreadyPlacedItemDropPoints) {
-                CGRect potentalPlacement = CGRectMake(v.CGPointValue.x, v.CGPointValue.y, itemToPlace.size.width, itemToPlace.size.height);
-                if (!CGRectIntersectsRect(potentalPlacement, alreadyPlacedItem.frame)) {
+                BOOL validLocation = [itemToPlace validDropPoint:v.CGPointValue givenPlacedItems:alreadyPlacedItems];
+                if (validLocation) {
                     if (distanceSet == NO) {
                         dropPoint = v.CGPointValue;
                         distance = CGDistance(itemToPlace.frame.origin, v.CGPointValue);
                         distanceSet = YES;
-                    }
-                    if ((tmpDistance = CGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
+                    } else if ((tmpDistance = CGDistance(itemToPlace.frame.origin, v.CGPointValue)) < distance) {
                         dropPoint = v.CGPointValue;
                         distance = tmpDistance;
                     }
@@ -132,9 +142,8 @@
     return cornersArray;
 }
 
-/*
-- (NSArray *)allValidLocationsInLayoutAttributes:(NSArray *)layoutAttributes {
-    
+- (id)debugQuickLookObject {
+    return [NSString stringWithFormat:@"%@\t\t%@", self.objectID, NSStringFromCGRect(self.frame)];
 }
-*/
+
 @end

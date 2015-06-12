@@ -23,6 +23,7 @@
     - (void)placeItemGivenAttributes:(NSArray *)layoutAttributes;
     - (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems;
     - (NSArray *)dropPoints;
+    - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems;
 
 @end
 
