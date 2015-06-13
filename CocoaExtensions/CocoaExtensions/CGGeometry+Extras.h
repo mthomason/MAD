@@ -100,6 +100,35 @@ static inline CGRect CGRectFlushTop(CGRect rect) {
     return CGRectMake(rect.origin.x, CGPointZero.y, rect.size.width, rect.size.height);
 }
 
+static inline struct MADResizeAspect MADResizeTypeForDirection(MADCompusDirection direction);
+static inline struct MADResizeAspect MADResizeTypeForDirection(MADCompusDirection direction) {
+    struct MADResizeAspect resizeAspect;
+    switch (direction) {
+        case south:
+        case north:
+            resizeAspect.aspectRatio = stretch;
+            resizeAspect.direction = vertical;
+            break;
+        case east:
+        case west:
+            resizeAspect.aspectRatio = stretch;
+            resizeAspect.direction = horizontal;
+            break;
+        case northEast:
+        case northWest:
+        case southEast:
+        case southWest:
+            resizeAspect.aspectRatio = fixed;
+            resizeAspect.direction = diagonal;
+            break;
+        default:
+            resizeAspect.aspectRatio = stretch;
+            resizeAspect.direction = horizontal;
+            break;
+    }
+    return resizeAspect;
+}
+
 CG_INLINE MTCorners
 MTCornersMake(CGRect rect) {
     MTCorners corners;

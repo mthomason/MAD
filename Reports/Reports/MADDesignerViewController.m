@@ -2375,34 +2375,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer.numberOfTouches > 1) {
-        struct MADResizeAspect resizeAspect;
         CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
         CGFloat degrees = CGAngleBetweenTwoPoints(p1, p2);
         MADCompusDirection direction = generalDirectionOfDegrees(degrees);
-        switch (direction) {
-            case south:
-            case north:
-                resizeAspect.aspectRatio = stretch;
-                resizeAspect.direction = vertical;
-                break;
-            case east:
-            case west:
-                resizeAspect.aspectRatio = stretch;
-                resizeAspect.direction = horizontal;
-                break;
-            case northEast:
-            case northWest:
-            case southEast:
-            case southWest:
-                resizeAspect.aspectRatio = fixed;
-                resizeAspect.direction = diagonal;
-                break;
-            default:
-                resizeAspect.aspectRatio = stretch;
-                resizeAspect.direction = horizontal;
-                break;
-        }
+        struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
+
         switch (resizeAspect.direction) {
             case horizontal:
                 gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
