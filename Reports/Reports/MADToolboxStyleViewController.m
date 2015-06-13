@@ -764,6 +764,7 @@
 - (IBAction)controlValueChanged:(id)sender {
     
     if ([sender isEqual:self.stepperFontSize]) {
+
         NSNumber *value = @([self.stepperFontSize value]);
         self.labelFontSize.attributedText = [self fontSizeStringForSizeInPoints:value.floatValue];
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -774,6 +775,7 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeHeight]]) {
+        
         NSNumber *value = @(self.stepperSizeHeight.value);
         CGFloat fontSize = self.labelSizeHeight.font.pointSize;
         NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
@@ -786,6 +788,7 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeWidth]]) {
+        
         NSNumber *value = @(self.stepperSizeWidth.value);
         CGFloat fontSize = self.labelSizeWidth.font.pointSize;
         NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
@@ -798,6 +801,7 @@
         }
         
     } else if ([sender isEqual:self.segmentedControlHorizontalAlignment]) {
+        
         MTHorizontalAlignment horizontalAlignment = [self.segmentedControlHorizontalAlignment selectedSegmentIndex];
         NSNumber *value = @(horizontalAlignment);
         [self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -809,6 +813,7 @@
         }
         
     } else if ([sender isEqual:self.segmentedControlVerticalAlignment]) {
+        
         MTVerticalAlignment verticalAlignment = [self.segmentedControlVerticalAlignment selectedSegmentIndex];
         NSNumber *value = @(verticalAlignment);
         [self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -820,6 +825,7 @@
         }
         
     } else if ([sender isEqual:[self stepperPaddingBottom]]) {
+        
         NSNumber *value = @([[self stepperPaddingBottom] value]);
         [[self labelPaddingBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelPaddingBottom] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -830,6 +836,7 @@
         }
 
     } else if ([sender isEqual:[self stepperPaddingLeft]]) {
+        
         NSNumber *value = @([[self stepperPaddingLeft] value]);
         [self.labelPaddingLeft setAttributedText:[self marginLeftForValue:value andFontSize:[[self.labelPaddingLeft font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -840,6 +847,7 @@
         }
 
     } else if ([sender isEqual:[self stepperPaddingRight]]) {
+
         NSNumber *value = @([[self stepperPaddingRight] value]);
         [self.labelPaddingRight setAttributedText:[self marginRightForValue:value andFontSize:[[self.labelPaddingRight font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -850,8 +858,9 @@
         }
 
     } else if ([sender isEqual:[self stepperPaddingTop]]) {
+        
         NSNumber *value = @([[self stepperPaddingTop] value]);
-        [[self labelPaddingTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelPaddingTop] font] pointSize]]];
+        [[self labelPaddingTop] setAttributedText:[self marginTopForValue:value andFontSize: self.labelPaddingTop.font.pointSize]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -860,8 +869,9 @@
         }
 
     } else if ([sender isEqual:[self stepperMarginBottom]]) {
+
         NSNumber *value = @([[self stepperMarginBottom] value]);
-        [[self labelMarginBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelMarginBottom] font] pointSize]]];
+        [[self labelMarginBottom] setAttributedText:[self marginBottomForValue:value andFontSize: self.labelMarginBottom.font.pointSize]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -870,8 +880,9 @@
         }
 
     } else if ([sender isEqual:[self stepperMarginTop]]) {
+        
         NSNumber *value = @([[self stepperMarginTop] value]);
-        [[self labelMarginTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelMarginTop] font] pointSize]]];
+        [[self labelMarginTop] setAttributedText:[self marginTopForValue:value andFontSize: self.labelMarginTop.font.pointSize]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -880,8 +891,9 @@
         }
 
     } else if ([sender isEqual:[self stepperMarginLeft]]) {
+        
         NSNumber *value = @([[self stepperMarginLeft] value]);
-        [[self labelMarginLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelMarginLeft] font] pointSize]]];
+        self.labelMarginLeft.attributedText = [self marginLeftForValue:value andFontSize: self.labelMarginLeft.font.pointSize];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
@@ -900,9 +912,9 @@
             [documentObject setMarginRight:value];
             [documentObject saveContext];
         }
-        
+
     }
-    //[self.document saveContext];
+
 }
 
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {

@@ -1928,11 +1928,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     BOOL panGesture = [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
     BOOL elementView = [gestureRecognizer.view isKindOfClass:[MADDesignerElementView class]];
-    BOOL simultaneousl = panGesture && !elementView;
-    
+    BOOL simultaneously = panGesture && !elementView;
+    if ([gestureRecognizer isKindOfClass:[UIPinchGestureRecognizer class]]) {
+        simultaneously = NO;
+    }
     //Simultaneus if pan gesture that is not attached to element view
-    return [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] &&
-    ![gestureRecognizer.view isKindOfClass:[MADDesignerElementView class]];
+    return simultaneously;
 }
 /*
  - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
@@ -2374,58 +2375,36 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
+    
+    MADDesignerElementView *piece = ((MADDesignerElementView *)gestureRecognizer.view);
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag
+                                                                  managedObjectContext: self.document.managedObjectContext];
+
     if (gestureRecognizer.numberOfTouches > 1) {
+
         CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
         CGFloat degrees = CGAngleBetweenTwoPoints(p1, p2);
         MADCompusDirection direction = generalDirectionOfDegrees(degrees);
         struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
-
         switch (resizeAspect.direction) {
             case horizontal:
-                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
-                                                                          gestureRecognizer.scale, 1.0000f);
+                documentObject.sizewidth = @(documentObject.sizewidth.floatValue * gestureRecognizer.scale);
                 break;
             case vertical:
-                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
-                                                                          1.0000f, gestureRecognizer.scale);
+                documentObject.sizeheight = @(documentObject.sizeheight.floatValue * gestureRecognizer.scale);
                 break;
             default:
-                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform,
-                                                                          gestureRecognizer.scale, gestureRecognizer.scale);
+                documentObject.sizewidth = @(documentObject.sizewidth.floatValue * gestureRecognizer.scale);
+                documentObject.sizeheight = @(documentObject.sizeheight.floatValue * gestureRecognizer.scale);
                 break;
         }
 
     }
     gestureRecognizer.scale = 1.0000f;
+
+    [documentObject.managedObjectContext save:nil];
     
-    
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
-        gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
-        gestureRecognizer.state == UIGestureRecognizerStateFailed) {
-        
-        MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
-        [sectionView performBatchUpdates:^(void) {
-            
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: ((MADDesignerElementView *)gestureRecognizer.view).objectIdTag
-                                                                          managedObjectContext: self.document.managedObjectContext];
-            [documentObject dropAtRect:gestureRecognizer.view.frame];   // FIXME: Handle padding, etc...
-            [documentObject.managedObjectContext save:nil];
-            
-            
-        } completion:^(BOOL finished) {
-            if (finished) {
-                [self redrawAllElementViewsInCollectionView:sectionView];
-                [gestureRecognizer.view setNeedsDisplay];
-                [UIView animateWithDuration:0.6666f animations:^{
-                    [sectionView invalidateIntrinsicContentSize];
-                }];
-            }
-        }];
-        
-        [sectionView.collectionViewLayout invalidateLayout];
-    }
-    [gestureRecognizer.view setNeedsDisplay];
 }
 
 - (void)translatePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -2436,7 +2415,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)endPanPiece:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
     piece.alpha = 1.0000f;
-    piece.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
+    //piece.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
     
     if (sectionView != nil) {
         
@@ -2488,7 +2467,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {
-            gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, self.scroller.zoomScale, self.scroller.zoomScale);
+            //gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, self.scroller.zoomScale, self.scroller.zoomScale);
             
             [self beginPanPiece:gestureRecognizer.view transition:^{
                 [self translatePanGesture:gestureRecognizer];
