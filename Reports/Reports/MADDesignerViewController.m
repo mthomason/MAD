@@ -2366,7 +2366,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         UIView *piece = gestureRecognizer.view;
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller.container];
+        locationInSuperview = [self.scroller.container convertPoint:locationInSuperview toView:self.scroller];
         piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
         piece.center = locationInSuperview;
     }
