@@ -165,10 +165,13 @@ CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
     return d == up || d == down;
 }
 
-CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees);
-CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees) {
+CG_INLINE MADCompusDirection MADGeneralDirectionOfDegrees(CGFloat degrees);
+CG_INLINE MADCompusDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
     while (degrees < 0.0000f) {
         degrees += 360.0000f;
+    }
+    while (degrees > 360.0000f) {
+        degrees -= 360.0000f;
     }
     if (degrees > 60.0000f && degrees < 120.0000f) {
         return north;
@@ -185,6 +188,27 @@ CG_INLINE MADCompusDirection generalDirectionOfDegrees(CGFloat degrees) {
     } else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
         return east;
     } else if ( degrees > 150.0000f && degrees < 210.0000f) {
+        return west;
+    } else {
+        return north;
+    }
+}
+
+CG_INLINE MADCompusDirection MADSpecificDirectionOfDegrees(CGFloat degrees);
+CG_INLINE MADCompusDirection MADSpecificDirectionOfDegrees(CGFloat degrees) {
+    while (degrees < 0.0000f) {
+        degrees += 360.0000f;
+    }
+    while (degrees > 360.0000f) {
+        degrees -= 360.0000f;
+    }
+    if (degrees >= 45.0000f && degrees <= 135.0000f) {
+        return north;
+    } else if ( degrees >= 225.0000f && degrees <= 315.0000f ) {
+        return south;
+    } else if ((degrees >= 315.0000f && degrees <= 360.0000f) || (degrees >= 0.0000f && degrees <= 45.0000f)) {
+        return east;
+    } else if ( degrees >= 135.0000f && degrees <= 225.0000f) {
         return west;
     } else {
         return north;

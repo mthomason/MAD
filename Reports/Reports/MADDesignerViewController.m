@@ -2385,7 +2385,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
         CGFloat degrees = CGAngleBetweenTwoPoints(p1, p2);
-        MADCompusDirection direction = generalDirectionOfDegrees(degrees);
+        MADCompusDirection direction = MADSpecificDirectionOfDegrees(degrees);
         struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
         switch (resizeAspect.direction) {
             case horizontal:
@@ -2404,6 +2404,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     gestureRecognizer.scale = 1.0000f;
 
     [documentObject.managedObjectContext save:nil];
+  
+    // FIXME: Adjust other elements after layout, the same as pan gesture.
+    /*
+    MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
+    NSNumber *height = @([sectionView intrinsicContentSize].height);
+    documentObject.inSectionRow.inSection.height = height;
+    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    [layoutManager layout];
+*/
     
 }
 
