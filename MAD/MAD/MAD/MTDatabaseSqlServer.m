@@ -156,18 +156,18 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
             
             while (dbresults(dbconn) != NO_MORE_RESULTS) {
                 
-                DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+                //DBINT columnNumberBytes     = dbdatlen(dbconn, 1);
                 DBINT nameLenght            = dbcollen(dbconn, 1);
-                DBINT typeLenght            = dbcollen(dbconn, 2);
-                DBINT lengthLenght          = dbcollen(dbconn, 3);
-                DBINT percisionLenght       = dbcollen(dbconn, 4);
-                DBINT scaleLenght           = dbcollen(dbconn, 5);
+                //DBINT typeLenght            = dbcollen(dbconn, 2);
+                //DBINT lengthLenght          = dbcollen(dbconn, 3);
+                //DBINT percisionLenght       = dbcollen(dbconn, 4);
+                //DBINT scaleLenght           = dbcollen(dbconn, 5);
                 
-                int columnType1 = dbcoltype(dbconn, 1);
-                int columnType2 = dbcoltype(dbconn, 2);
-                int columnType3 = dbcoltype(dbconn, 3);
-                int columnType4 = dbcoltype(dbconn, 4);
-                int columnType5 = dbcoltype(dbconn, 5);
+                //int columnType1 = dbcoltype(dbconn, 1);
+                //int columnType2 = dbcoltype(dbconn, 2);
+                //int columnType3 = dbcoltype(dbconn, 3);
+                //int columnType4 = dbcoltype(dbconn, 4);
+                //int columnType5 = dbcoltype(dbconn, 5);
                 
                 char *nameBind;
                 int typeBind, lengthBind, percisionBind, scaleBind;
