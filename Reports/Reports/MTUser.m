@@ -28,11 +28,4 @@
     return self;
 }
 
-- (BOOL)addDocument:(NSURL *)url error:(NSError **)error {
-    NSURL *documentsDirectory = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
-    NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
-    BOOL success = [[NSFileManager defaultManager] moveItemAtURL:url toURL:destination error:error];
-    return success && error == nil;
-}
-
 @end

@@ -13,8 +13,6 @@
 
 @interface MTUser : NSObject
 
-- (BOOL)addDocument:(NSURL *)url error:(NSError **)error;
-
 @end
 
 #endif
