@@ -10,7 +10,7 @@
 
 @interface MTResizeHandleView()
 
-@property (nonatomic, strong) __attribute__((NSObject)) CGGradientRef gradient;
+//@property (nonatomic, strong) __attribute__((NSObject)) CGGradientRef gradient;
 
 @end
 
@@ -22,10 +22,6 @@ static const CGFloat colors[] = {
     0.0000f / 255.0000f,  50.0000f / 255.0000f, 126.0000f / 255.0000f, 1.00000f,
 };
 
-- (void)dealloc {
-    CGGradientRelease(_gradient);
-}
-
 - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position {
     self = [super initWithFrame:frame];
     if (self) {
@@ -34,9 +30,7 @@ static const CGFloat colors[] = {
         self.type = position;
         self.highlighted = NO;
         self.backgroundColor =  [UIColor clearColor];
-        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-        CGGradientRef gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
-        self.gradient = gradient;
+
     }
     return self;
 }
@@ -55,45 +49,10 @@ static const CGFloat colors[] = {
     
     [[UIColor clearColor] setFill];
     CGContextDrawPath(currentContext, kCGPathFillStroke);
-    CGContextDrawRadialGradient(currentContext, self.gradient, start, startRadius, end, endRadius, options);
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.highlighted = YES;
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.highlighted = NO;
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGPoint pointAfterMove = [self center];
-    switch (self.type) {
-        case west:
-            pointAfterMove = CGPointMake([touches.anyObject locationInView: self.superview].x, self.initalPoint.y);
-            break;
-        case northWest:
-            break;
-        case north:
-            break;
-        case northEast:
-            break;
-        case east:
-            break;
-        case southEast:
-            break;
-        case south:
-            break;
-        case southWest:
-            break;
-        default:
-            break;
-    }
-    [self.delegate resizeHandle:self didMoveToPoint:pointAfterMove];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self setHighlighted: NO];
+    CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
+    CGContextDrawRadialGradient(currentContext, gradient, start, startRadius, end, endRadius, options);
+    CGGradientRelease(gradient);
 }
 
 @end

@@ -34,6 +34,7 @@
 - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject NS_DESIGNATED_INITIALIZER;
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 
 @end
 

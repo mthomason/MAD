@@ -15,8 +15,7 @@
 @class MTResizeHandleView;
 
 @protocol MTResizeHandleViewDelegate
-@optional
-- (void)resizeHandle:(MTResizeHandleView *)handle didMoveToPoint:(CGPoint)point;
+- (void)resizeHandle:(MTResizeHandleView *)handle translate:(CGPoint)distance;
 @end
 
 @interface MTResizeHandleView : UIView

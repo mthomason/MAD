@@ -8,10 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class MADResizeHandles;
+
+@protocol MTResizeHandlesDelegate
+- (void)resizeHandle:(MADResizeHandles *)handles resize:(CGSize)size;
+@end
+
 @interface MADResizeHandles : NSObject
 
 - (void)positionAroundRect:(CGRect)rect;
 
 @property (nonatomic, strong, readonly) NSArray *resizeHandles;
+@property (nonatomic, assign) id <MTResizeHandlesDelegate> delegate;
 
 @end

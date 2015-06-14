@@ -34,16 +34,27 @@
 #pragma mark - MTElementView
 
 @interface MADDesignerElementView ()
-    <MTElementCanvasDelegate>
+    <MTElementCanvasDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) MTElementCanvas *canvasView;
 @property (nonatomic, strong) MADResizeHandles *resizeHandles;
+
+@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
 @end
 
 @implementation MADDesignerElementView
 
 #pragma mark - NSObject
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer; {
+    return [gestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)] || [otherGestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)] ? YES : NO;
+}
+
+- (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer
+       shouldReceiveTouch: (UITouch *)touch {
+    return YES;
+}
 
 - (void)dealloc {
     for (UIView *view in _resizeHandles.resizeHandles) {
@@ -117,8 +128,13 @@
         
         self.backgroundColor = [UIColor clearColor];
         
+
         MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
         for (UIView *view in resizeHandles.resizeHandles) {
+            //UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesturePanResizeHandle:)];
+            //[panGesture setDelegate:self];
+            //[view addGestureRecognizer:panGesture];
+            //view.userInteractionEnabled = YES;
             [self addSubview:view];
         }
         self.resizeHandles = resizeHandles;
@@ -129,6 +145,8 @@
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self updateForManagedObjectContent:documentObject.managedObjectContext];
+        
+        self.managedObjectContext = documentObject.managedObjectContext;
 
     }
     return self;
@@ -144,9 +162,9 @@
 
 - (void)showResizeHandles {
     id resizeView;
-    for (resizeView in self.resizeHandles.resizeHandles) {
-        ((UIView *)resizeView).hidden = NO;
-    }
+    //for (resizeView in self.resizeHandles.resizeHandles) {
+    //    ((UIView *)resizeView).hidden = NO;
+    //}
 }
 
 - (void)hideResizeHandles {
@@ -156,6 +174,56 @@
     }
 }
 
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
+        
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
+
+- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer {
+    UIView *piece = nil;
+    for (UIView *v in self.resizeHandles.resizeHandles) {
+        NSLog(@"Loc: %@", NSStringFromCGPoint([gestureRecognizer locationInView:v]));
+    }
+    if ([piece isKindOfClass:[MTResizeHandleView class]]) {
+        [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+        if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [gestureRecognizer translationInView:piece.superview];
+            
+            switch (((MTResizeHandleView *)piece).type) {
+                case north:
+                case south:
+                    [self resize:CGSizeMake(self.frame.size.width, self.frame.size.width + translation.y)];
+                    break;
+                case east:
+                case west:
+                    [self resize:CGSizeMake(self.frame.size.width + translation.x, self.frame.size.width)];
+                    break;
+                case northWest:
+                case northEast:
+                case southEast:
+                case southWest:
+                default:
+                    [self resize:CGSizeMake(self.frame.size.width + translation.x, self.frame.size.width + translation.y)];
+                    break;
+            }
+            
+            [gestureRecognizer setTranslation:CGPointZero inView:piece.superview];
+        }
+    }
+    
+}
+- (void)resize:(CGSize)size {
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.managedObjectContext objectWithID:self.objectIdTag];
+    documentObject.sizewidth = @(size.width);
+    documentObject.sizeheight = @(size.height);
+    [self.managedObjectContext save:nil];
+}
 #pragma mark - Members
 
 - (void)flash:(void (^)(BOOL finished))completion {
@@ -268,7 +336,7 @@
         [self setNeedsLayout];
         [self setNeedsDisplay];
     }
-    
+    self.managedObjectContext = context;
 }
 
 @end

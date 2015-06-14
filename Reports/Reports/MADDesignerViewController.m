@@ -1673,6 +1673,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             
             UIGestureRecognizer *panGesture = [UIGestureRecognizer elementPan:self action: @selector(handlePanPiece:) delegate:self];
+            
             UIGestureRecognizer *pinchGesture = [UIGestureRecognizer elementPinch: self action: @selector(handlePinchPiece:) delegate:self];
 
             [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
@@ -1918,6 +1919,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
  Pinch Element View          -   Resize                              -  NO
  
  */
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    
+    //Require the failure of the resize handles.
+    if ([otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [otherGestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)]) {
+        return YES;
+    } else {
+        return  NO;
+    }
+}
 
 - (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer
        shouldReceiveTouch: (UITouch *)touch {
@@ -2384,8 +2395,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
         CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
-        CGFloat degrees = CGAngleBetweenTwoPoints(p1, p2);
-        MADCompusDirection direction = MADSpecificDirectionOfDegrees(degrees);
+        MADCompusDirection direction = MADSpecificDirectionOfDegrees(CGAngleBetweenTwoPoints(p1, p2));
         struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
         switch (resizeAspect.direction) {
             case horizontal:
@@ -2876,7 +2886,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
-    NSNumber *key = @([view tag]);
+    NSNumber *key = @(view.tag);
     return [self.borderAppliedToView[key] boolValue];
 }
 
