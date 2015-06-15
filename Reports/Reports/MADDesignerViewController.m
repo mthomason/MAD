@@ -23,7 +23,7 @@
 #import "MADDesignerSectionLabel.h"
 #import "MTReportDesigner.h"
 #import "MTSettingsViewController.h"
-#import "MADDesignerElementPIckerViewController.h"
+#import "MADDesignerElementPickerViewController.h"
 #import "MADViewerController.h"
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
@@ -107,6 +107,10 @@
 #import "UIAlertController+Constructors.h"
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"
+#import "UINavigationController+Designer.h"
+#import "MTViewControllerBarcode+Designer.h"
+
+#import "MTQueryBuilderChooseFieldViewController+Designer.h"
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
@@ -123,7 +127,6 @@ NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueN
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
 NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
 NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
-NSString * const MADStoryboardObjectSelector = @"MADStoryboardObjectSelector";
 
 const CGFloat MNSAnimationDurationShowFromBottomHalf = 0.3500f;
 
@@ -404,9 +407,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     MADToolboxTransitioningDelegate *settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     
-    UIStoryboard *storyboardToolbox = [UIStoryboard storyboardWithName: MADToolbox
-                                                                bundle: [NSBundle mainBundle]];
-    UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
+    UINavigationController *navigationControllerToolbox = [UINavigationController navigationControllerToolbox];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
     
@@ -1346,7 +1347,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         navigationController.view.backgroundColor = [UIColor clearColor];
         result = navigationController;
     } else if ([controller.presentedViewController isKindOfClass:[UINavigationController class]]) {
-        if ([((UINavigationController *)controller.presentedViewController).topViewController isKindOfClass:[MADDesignerElementPIckerViewController class]]) {
+        if ([((UINavigationController *)controller.presentedViewController).topViewController isKindOfClass:[MADDesignerElementPickerViewController class]]) {
             UINavigationController *navigationController = (UINavigationController *)controller.presentedViewController;
             if (navigationController.navigationItem.leftBarButtonItem == nil) {
                 UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
@@ -1483,9 +1484,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID: object.objectID];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
-                                                         bundle: [NSBundle mainBundle]];
-    UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier];
+    UINavigationController *navigationController = [UINavigationController aggregateAdd];
     
     MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
     aggregateViewController.document = self.document;
@@ -1515,10 +1514,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
-                                                         bundle: [NSBundle mainBundle]];
-    
-    MTViewControllerBarcode *barcodeViewController = [storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier];
+    MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
     barcodeViewController.document = self.document;
     barcodeViewController.delegate = self;
     
@@ -1550,9 +1546,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
-                                                         bundle: [NSBundle mainBundle]];
-    MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [storyboard instantiateViewControllerWithIdentifier: @"UITableViewControllerChooseFieldDataObject"];
+    MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [MTQueryBuilderChooseFieldViewController main];
     chooseFieldViewController.document = self.document;
     chooseFieldViewController.delegate = self;
     
@@ -3043,10 +3037,8 @@ static const inline CGSize sizePopoverDefault() {
 
 - (IBAction)add:(id)sender {
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADStoryboardObjectSelector
-                                                         bundle: [NSBundle mainBundle]];
-    UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierNavigationControllerDocumentObjectSelector"];
-    MADDesignerElementPIckerViewController *pickerController = (MADDesignerElementPIckerViewController *)navigationController.topViewController;
+    UINavigationController *navigationController = [UINavigationController elementPicker];
+    MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
     pickerController.objectSelectorDelegate = self;
     pickerController.document = self.document;
     

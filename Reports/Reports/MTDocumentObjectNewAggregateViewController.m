@@ -35,7 +35,6 @@ NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSav
 NSString * const MADSegueAggregateFunctionField     = @"MADSegueAggregateFunctionField";
 NSString * const MTIdentifierSegueDocumentObjectEditAggregate = @"MTIdentifierSegueDocumentObjectEditAggregate";
 NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
-NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
 
 @interface MTDocumentObjectNewAggregateViewController ()
     <MTAggregateFunctionsViewControllerDelegate,

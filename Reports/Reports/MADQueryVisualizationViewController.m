@@ -44,6 +44,8 @@
 
 #import "MTQueryTest.h"
 #import "NSError+Constructors.h"
+#import "UIViewController+Designer.h"
+#import "MADQueryVisualizationSchemaViewController+Designer.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -51,7 +53,6 @@ NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundr
 NSString * const MTIdentifierCollisionBoundryRight = @"MTIdentifierCollisionBoundryLandscapeRight";
 NSString * const MTIdentifierCollisionBoundryBottom = @"MTIdentifierCollisionBoundryLandscapeBottom";
 NSString * const MTIdentifierCollisionBoundryLeft = @"MTIdentifierCollisionBoundryLandscapeLeft";
-NSString * const MTQueryBuilderAdvancedSchemaViewControllerIdentifier = @"MTQueryBuilderAdvancedSchemaViewControllerIdentifier";
 
 typedef void(^MTBlockResultVoid)(void);
 
@@ -88,8 +89,6 @@ typedef void(^MTBlockResultVoid)(void);
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
 
     @property (nonatomic, assign) NSUInteger tableDisplayCounter;
-
-    @property (nonatomic, strong) UIStoryboard *storyboardDefault;
 
 @end
 
@@ -129,10 +128,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.tableDisplayCounter = 0;
     
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    self.storyboardDefault = sb;
-
     CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
     UIColor *borderColor = [UIColor lightGrayColor];
     self.backgroundContainer.layer.borderWidth = borderWidth;
@@ -1268,9 +1263,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
     
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    MADQueryVisualizationSchemaViewController *viewController = [sb instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier];
+    MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController advancedSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
     viewController.tableObjectId = table.objectID;
@@ -1313,6 +1306,7 @@ typedef void(^MTBlockResultVoid)(void);
                                                              attribute:NSLayoutAttributeNotAnAttribute
                                                             multiplier:1.0000f
                                                               constant:desiredFrame.size.width];
+    
     NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:viewController.view
                                                               attribute:NSLayoutAttributeHeight
                                                               relatedBy:NSLayoutRelationEqual

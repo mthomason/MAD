@@ -26,7 +26,7 @@
         <!--Document Objects-->
         <scene sceneID="OeB-WP-Brm">
             <objects>
-                <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="K93-6D-DcO" customClass="MADDesignerElementPIckerViewController" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="K93-6D-DcO" customClass="MADDesignerElementPickerViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="s2X-lR-oPm">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

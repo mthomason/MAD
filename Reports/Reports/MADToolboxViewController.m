@@ -8,14 +8,13 @@
 
 #import "MADToolboxViewController.h"
 #import "MTToolboxViewControllerProtocol.h"
-
 #import "UIColor+EverydayApps.h"
+#import "UIStoryboard+Designer.h"
+#import "UINavigationController+Designer.h"
 
-NSString * const MADToolbox                         = @"MADToolbox";
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
 NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardStyle";
-NSString * const MADIdentifierStoryboardFontPicker  = @"MADIdentifierStoryboardFontPicker";
 
 CGFloat const MADNavigationBarSizeHeightNormal = 44.0000f;
 CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
@@ -63,12 +62,10 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     if (self = [super initWithCoder:aDecoder]) {
         
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName: MADToolbox
-                                                             bundle: [NSBundle mainBundle]];
-
+        UIStoryboard *storyboard = [UIStoryboard toolbox];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
-        UINavigationController *styleNavigationController =                                     [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFontPicker];
+        UINavigationController *styleNavigationController = [UINavigationController navigationControllerFontPicker];
         
         self.layout = layout;
         self.format = format;

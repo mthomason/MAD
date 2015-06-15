@@ -18,6 +18,7 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
 #endif
 
+#import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 #import <MessageUI/MessageUI.h>
@@ -39,6 +40,12 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import "MADLocalFileCoordinator.h"
 #import "MADCloudFileCoordinator.h"
 #import "MADMetaData.h"
+
+#if MAD_DESIGNER
+    #import "UIViewController+Designer.h"
+#elif MAD_VIEWER
+    #import "UIViewController+Viewer.h"
+#endif
 
 #ifndef MADWATCHKIT
     #import "MADToolboxNavigationController.h"
@@ -64,12 +71,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.477";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.477";
-NSString * const MTGlobalBundleRev                                  = @"1852";
-
-NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
-NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
+NSString * const MTGlobalBundleVersion                              = @"7.0.486";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.486";
+NSString * const MTGlobalBundleRev                                  = @"1861";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -105,6 +109,15 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 @implementation MTApplicationInstance
 
 static MTApplicationInstance *mainInstance;
+
++ (UIViewController *)initalViewController {
+    return
+#ifndef MADWATCHKIT
+    [UIViewController initalViewController];
+#else
+    nil;
+#endif
+}
 
 + (void)initialize {
     if (self == [MTApplicationInstance self]) {
@@ -311,16 +324,6 @@ static MTApplicationInstance *mainInstance;
                                         value:[NSNull null]
                                         range:range];
     return attributedStringMadDesigner;
-}
-
-+ (NSString *)storyboardName {
-    return MADHandleStoryboardDesigner;
-}
-
-+ (UIStoryboard *)storyboard {
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    return storyboard;
 }
 
 - (void)initalizeAppearance {

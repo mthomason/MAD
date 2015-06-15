@@ -17,10 +17,6 @@
 #import "MTAggregateFunctionType.h"
 #import "MADViewController.h"
 
-extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
-extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;
-extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
-
 @class MADocument, RptqQueryField, RptqDocumentObjectAggregate;
 
 @protocol MTViewControllerAggregateDelegate

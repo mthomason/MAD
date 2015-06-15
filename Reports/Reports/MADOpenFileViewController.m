@@ -71,6 +71,11 @@
 #import "NSNumberFormatter+Constructors.h"
 #import "MFMailComposeViewController+FileManager.h"
 
+#import "UITabBarController+Shared.h"
+#import "UINavigationController+Designer.h"
+#import "MADDocumentInformationTableViewController+Designer.h"
+#import "UITableViewController+Designer.h"
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
@@ -278,12 +283,20 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [searchBar sizeToFit];
     self.searchBar = searchBar;
 
+    NSString *store = NSLocalizedString(@"Store", @"Store");
+    UIBarButtonItem *barButtonItemLicensing = [[UIBarButtonItem alloc] initWithTitle:store style:UIBarButtonItemStylePlain target:self action:@selector(handleBarButtonItemStore:)];
+    
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:self.barButtonItemAction];
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
     [toolbarButtons addObject:self.barButtonItemEdit];
     [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
+    [toolbarButtons addObject:barButtonItemLicensing];
     [self setToolbarItems:toolbarButtons animated:NO];
+    
+}
+
+- (void)handleBarButtonItemStore:(id)sender {
     
 }
 
@@ -817,9 +830,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             } else if ([MTApplicationInstance isMadDesigner]) {
                 
                 [[AppDelegate app].openDocument activeDocumentModel];
-                NSString *storyboardName = [MTApplicationInstance storyboardName];
-                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-                UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
+                UITabBarController *tabBarController = [UITabBarController mainTabBarController];
                 
                 tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
                 tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -1202,9 +1213,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)addDocument:(id)sender {
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardNewDocument"
-                                                         bundle: [NSBundle mainBundle]];
-    MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
+    UINavigationController *navControl = [UINavigationController NewDocument];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
     
     MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
@@ -1415,10 +1424,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)info:(id)sender {
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardInformationTable" bundle:[NSBundle mainBundle]];
-    UINavigationController *infoViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierInformationNavigationController"];
-    infoViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-    infoViewController.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+    UINavigationController *infoViewController = [UINavigationController AppInformation];
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
     ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
     
@@ -1440,10 +1446,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }];
     } else {
         self.aboutViewControllerOnScreen = YES;
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardAboutTable" bundle:[NSBundle mainBundle]];
-        UITableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierAboutViewController"];
-        
-        aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
+
+        UITableViewController *aboutViewController = [UITableViewController About];
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
         ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
         
@@ -1516,11 +1520,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [metadataItems addObject:metadata];
     }
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardDocumentInformation" bundle:[NSBundle mainBundle]];
-    MADDocumentInformationTableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierDocumentInformationTableViewController"];
+    MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformation];
     
-    aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
-    UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+    documentInformation.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
     ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
     
     ppc.backgroundColor = [UIColor clearColor];
@@ -1528,8 +1531,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     ppc.barButtonItem = sender;
     self.documentInformationPopoverPresentationController = ppc;
     
-    aboutViewController.metadataItems = metadataItems;
-    [self showViewController:aboutViewController sender:self];
+    documentInformation.metadataItems = metadataItems;
+    [self showViewController:documentInformation sender:self];
     
     [self done:sender];
 }

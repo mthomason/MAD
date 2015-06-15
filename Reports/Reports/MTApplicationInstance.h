@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MADFilesController, UITraitCollection;
+@class MADFilesController, UITraitCollection, UIViewController;
 @protocol MADFileCoordinator;
 
 typedef NS_ENUM(NSUInteger, MTReportState) {
@@ -47,6 +47,8 @@ extern NSString * const MADUpgradeInstalledSamples;
 @interface MTApplicationInstance : NSObject
 
 + (MTApplicationInstance *)mainInstance;
+
++ (UIViewController *)initalViewController;
 
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
              subsquientLaunches:(void (^)(void))subsequentLaunch;
@@ -89,7 +91,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 + (NSString *)bundleId;
 + (NSString *)bundleVersion;
 + (void)deleteCoreDataCache;
-+ (NSString *)storyboardName;
 
 + (NSString *)madDesigner;
 + (NSString *)madViewer;

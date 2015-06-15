@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTViewControllerBarcodeOptions_h
+#define Barcodes_MTViewControllerBarcodeOptions_h
+
 #import <UIKit/UIKit.h>
 #import "MTBarcode.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+//#import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTViewControllerBarcodeType.h"
 #import "MTTableViewControllerBarcodeExtraAztec.h"
 #import "MTTableViewControllerBarcodeExtraGridMatrix.h"
@@ -87,3 +90,5 @@
 @property (nonatomic, retain) NSArray *sampleBarcodeDataMaxicode;
 
 @end
+
+#endif

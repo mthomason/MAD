@@ -34,6 +34,8 @@
 
 #import "UIAlertController+Constructors.h"
 #import "NSString+Encryption.h"
+#import "UIViewController+Designer.h"
+#import "UITabBarController+Shared.h"
 
 #if MAD_DESIGNER
 NSString *s = @"";
@@ -50,7 +52,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     <UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTApplicationInstance *applicationInstance;
-@property (nonatomic, strong) UIStoryboard *storyboard;
 @property (nonatomic, strong) UIApplication *application;
 
 @property (nonatomic, strong) MTNavigationController *navigationController;
@@ -242,59 +243,64 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     // FIXME: Currently not implemented... working
     
     self.application = application;
-    if (self.storyboard == nil) {
-        NSString *storyboardName = [MTApplicationInstance storyboardName];
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-        self.storyboard = storyboard;
-    }
     
     UIViewController *vc = nil;
     if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationRootNavigationController"]) {
         vc = self.window.rootViewController;
 
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationMainTabBarController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
+        
+        vc = (UITabBarController *)[UITabBarController mainTabBarController];
         vc.restorationIdentifier = [identifierComponents lastObject];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationOpenFileViewController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardOpenFileViewController"];
+
+        vc = (UITabBarController *)[UIViewController fileManager];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MADOpenFileViewController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryNavigationController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryNavigationController"];
+        
+        vc = (UITabBarController *)[UIViewController queryNavigationController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MTNavigationController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryNavigationController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryViewController"];
+        
+        vc = (UITabBarController *)[UIViewController queryViewController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MADQueryViewController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryContainerController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryContainerController"];
+        
+        vc = (UITabBarController *)[UIViewController queryContainerController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MTQueryBuilderContainerController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationViewerNavigationController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerNavigationController"];
+        
+        vc = (UITabBarController *)[UIViewController viewerNavigationController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MTNavigationController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationViewerViewController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
+        
+        vc = (UITabBarController *)[UIViewController viewerViewController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MADViewerController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationDesignerNavigationController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerNavigationController"];
+        
+        vc = (UITabBarController *)[UIViewController designerNavigationController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MTNavigationController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationDesignerViewController"]) {
-        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
+        
+        vc = (UITabBarController *)[UIViewController designerViewController];
         vc.restorationIdentifier = [identifierComponents lastObject];
         vc.restorationClass = [MADDesignerViewController class];
+
     }
 
     return vc;
@@ -515,9 +521,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     self.applicationInstance = appInstance;
     
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    id initViewController = [storyboard instantiateInitialViewController];
+    id initViewController = [MTApplicationInstance initalViewController];
     
     NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
     
@@ -531,7 +535,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     
     self.window = window;
-    self.storyboard = storyboard;
 }
 
 - (NSString *)ubiquityIdentifier {
