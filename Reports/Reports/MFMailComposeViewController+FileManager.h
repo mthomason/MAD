@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MFMailComposeViewController_FileManager_h
+#define Reports_MFMailComposeViewController_FileManager_h
+
 #import <MessageUI/MessageUI.h>
 
 @interface MFMailComposeViewController (FileManager)
@@ -13,3 +16,5 @@
 + (instancetype)contactUs:(id<MFMailComposeViewControllerDelegate>) mailComposeDelegate;
 
 @end
+
+#endif
