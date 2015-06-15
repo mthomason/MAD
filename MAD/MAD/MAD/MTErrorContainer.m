@@ -65,11 +65,13 @@
              onViewController: nil
                    completion: ^(BOOL success) {
                        if (success) {
-                           [self presentAllErrors];
+                           [self presentAllErrorsWithCompletion:nil];
                        }
                    }];
     } else {
-        completion(YES);
+        if (completion) {
+            completion(YES);
+        }
     }
 }
 
