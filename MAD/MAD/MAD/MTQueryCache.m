@@ -10,4 +10,6 @@
 
 @implementation MTQueryCache
 
+@dynamic database;
+
 @end
