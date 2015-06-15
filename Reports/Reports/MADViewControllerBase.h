@@ -8,6 +8,9 @@
 //
 //  MADViewController Base Class
 //
+//  !!!:    Allow this code to be included multiple times, as it abstracts UIViewController,
+//  !!!:        UITableViewController, UICollectionViewController, etc...
+//
 
 @property (nonatomic, assign, readonly) BOOL firstTimeViewDidAppear;
 @property (nonatomic, assign, readonly) BOOL firstTimeViewWillAppear;
