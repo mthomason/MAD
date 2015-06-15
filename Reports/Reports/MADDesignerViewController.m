@@ -14,6 +14,7 @@
 #import "MADConstants.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
+#import "MTApplicationInstance.h"
 #import "MTRulerView.h"
 #import "MAD.h"
 #import "AppDelegate.h"

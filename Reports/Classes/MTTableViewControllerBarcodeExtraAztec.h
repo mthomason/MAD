@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTTableViewControllerBarcodeExtraAztec_h
+#define Barcodes_MTTableViewControllerBarcodeExtraAztec_h
+
 #import <UIKit/UIKit.h>
 
 @protocol MTTableViewControllerBarcodeExtraAztecDelegate
@@ -23,3 +26,5 @@
 @property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraAztecDelegate> delegate;
 
 @end
+
+#endif

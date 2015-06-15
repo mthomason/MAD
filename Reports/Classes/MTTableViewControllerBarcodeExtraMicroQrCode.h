@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTTableViewControllerBarcodeExtraMicroQrCode_h
+#define Barcodes_MTTableViewControllerBarcodeExtraMicroQrCode_h
+
 #import <UIKit/UIKit.h>
 
 @protocol MTTableViewControllerBarcodeExtraMicroQrCodeDelegate
@@ -23,3 +26,5 @@
 @property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraMicroQrCodeDelegate> delegate;
 
 @end
+
+#endif

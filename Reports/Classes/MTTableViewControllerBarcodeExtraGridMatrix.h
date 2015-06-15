@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTTableViewControllerBarcodeExtraGridMatrix_h
+#define Barcodes_MTTableViewControllerBarcodeExtraGridMatrix_h
+
 #import <UIKit/UIKit.h>
 
 @protocol MTTableViewControllerBarcodeExtraGridMatrixDelegate
@@ -23,3 +26,5 @@
 @property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraGridMatrixDelegate> delegate;
 
 @end
+
+#endif

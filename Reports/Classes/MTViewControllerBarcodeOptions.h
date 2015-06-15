@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MTBarcode.h"
-//#import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTViewControllerBarcodeType.h"
 #import "MTTableViewControllerBarcodeExtraAztec.h"
 #import "MTTableViewControllerBarcodeExtraGridMatrix.h"
@@ -20,9 +19,6 @@
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTTableViewControllerBarcodeExtraDataMatrix.h"
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
-#import "MTBarcodeCode39Extended.h"
-#import "MTBarcodeCode39Iso16388.h"
-#import "MTApplicationInstance.h"
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 - (MTBarcode *)barcodeToDisplay;

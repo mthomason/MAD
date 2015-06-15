@@ -11,6 +11,8 @@
 
 #import <UIKit/UIKit.h>
 
+#ifndef Barcodes_MTTableViewControllerBarcodeExtraPdf417Iso24728_h
+#define Barcodes_MTTableViewControllerBarcodeExtraPdf417Iso24728_h
 
 @protocol MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate
 
@@ -29,3 +31,5 @@
 @property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate> delegate;
 
 @end
+
+#endif

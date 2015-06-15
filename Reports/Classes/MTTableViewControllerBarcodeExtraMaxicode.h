@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTTableViewControllerBarcodeExtraMaxicode_h
+#define Barcodes_MTTableViewControllerBarcodeExtraMaxicode_h
+
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderChooseFieldDelegate.h"
 
@@ -27,3 +30,5 @@
 @property (nonatomic, weak) MADocument *document;
 
 @end
+
+#endif

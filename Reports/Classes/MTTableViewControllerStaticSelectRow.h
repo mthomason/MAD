@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTTableViewControllerStaticSelectRow_h
+#define Barcodes_MTTableViewControllerStaticSelectRow_h
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -20,3 +23,5 @@
 @property (nonatomic, assign) id <MTTableViewControllerStaticSelectRowDelegate> delegate;
 
 @end
+
+#endif
