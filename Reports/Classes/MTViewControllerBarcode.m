@@ -35,8 +35,6 @@
 #import "NSError+Constructors.h"
 #import "MTKeyChain.h"
 
-NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
-
 NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()

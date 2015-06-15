@@ -15,9 +15,6 @@
 #import "MTUnwindProtocol.h"
 #import "MADViewController.h"
 
-extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
-extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier;
-
 @class RptqDocumentObjectBarcode;
 
 @protocol MTViewControllerBarcodeDelegate
