@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIGestureRecognizer_Designer_h
+#define Reports_UIGestureRecognizer_Designer_h
+
 #import <UIKit/UIKit.h>
 
 @interface UIGestureRecognizer (Designer)
@@ -31,3 +34,5 @@
                     delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
 @end
+
+#endif

@@ -13,8 +13,7 @@
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "MTApplicationInstance.h"
-
-NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
+#import "UIViewController+Designer.h"
 
 @interface MTReportDesignerSectionLayoutSettingsViewController ()
 
@@ -32,9 +31,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 @implementation MTReportDesignerSectionLayoutSettingsViewController
 
 + (instancetype)toolboxSettings {
-    NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    return [storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier];
+    return (MTReportDesignerSectionLayoutSettingsViewController *)[UIViewController layoutSettingsViewController];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_NSLayoutConstraint_Designer_h
+#define Reports_NSLayoutConstraint_Designer_h
+
 #import <UIKit/UIKit.h>
 
 @class MTRulerView;
@@ -36,3 +39,5 @@
 + (instancetype)content:(id)container width:(CGFloat)width;
 
 @end
+
+#endif

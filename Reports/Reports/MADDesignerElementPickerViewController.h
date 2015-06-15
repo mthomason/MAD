@@ -35,7 +35,7 @@ extern NSInteger const MTViewTagFieldOrFormulaSelector;
 - (void)viewControllerDidFinish:(id)sender;
 @end
 
-@interface MADDesignerElementPIckerViewController : MADCollectionViewController
+@interface MADDesignerElementPickerViewController : MADCollectionViewController
 
 @property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
 @property (nonatomic, weak) MADocument *document;
