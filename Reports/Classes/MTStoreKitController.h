@@ -56,12 +56,8 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 - (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion;
 - (void)purchaseProductWithIdentifier:(SKProduct *)product completion:(MTBlockCompletion) completion;
 - (void)restorePurchases:(MTBlockCompletion)completion;
-+ (NSArray *)transactions;
-
 
 @property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;
-
-//@property (nonatomic, assign) BOOL verifiedUser;
 @property (nonatomic, retain) NSDate *verifiedExperationDate;
 
 @end

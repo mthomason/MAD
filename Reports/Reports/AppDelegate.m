@@ -36,6 +36,7 @@
 #import "NSString+Encryption.h"
 #import "UIViewController+Designer.h"
 #import "UITabBarController+Shared.h"
+#import "MTVerificationController.h"
 
 #if MAD_DESIGNER
 NSString *s = @"";
@@ -153,6 +154,11 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [MTVerificationController sharedInstance];
+    });
     
     dispatch_async(self.appDelegateQueue, ^{
         [MTApplicationInstance deleteCoreDataCache];

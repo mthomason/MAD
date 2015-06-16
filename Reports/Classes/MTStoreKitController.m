@@ -75,10 +75,10 @@ static MTStoreKitController *sharedSingleton = nil;
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self setProductIdentifiers:nil];
-        [self setProducts:nil];
-        [self setInitalizeProductsCompletion:nil];
-        [self setPurchaseProductWithIdentifierCompletion:nil];
+        self.productIdentifiers = nil;
+        self.products = nil;
+        self.initalizeProductsCompletion = nil;
+        self.purchaseProductWithIdentifierCompletion = nil;
     }
     return self;
 }
@@ -132,20 +132,21 @@ static MTStoreKitController *sharedSingleton = nil;
     }
 }
 
-- (void)purchaseProductWithIdentifier:(SKProduct *)product
-                           completion:(MTBlockCompletion) completion {
-    [self setPurchasingProduct: YES];
-    [self setPurchasingProductObject:product];
-    [self setPurchaseProductWithIdentifierCompletion:[completion copy]];
+- (void)purchaseProductWithIdentifier:(SKProduct *)product completion:(MTBlockCompletion) completion {
+    
+    self.purchasingProduct = YES;
+    self.purchasingProductObject = product;
+    self.purchaseProductWithIdentifierCompletion = [completion copy];
+
     SKPayment *payment = [SKPayment paymentWithProduct:product];
     [[SKPaymentQueue defaultQueue] addPayment:payment];
 }
-
 
 - (void)restorePurchases:(MTBlockCompletion)completion {
     completion(NO, nil);
 }
 
+/*
 + (NSArray *)transactions {
     return [[[[NSUbiquitousKeyValueStore defaultStore] arrayForKey:MTStoreKitTransactionsIdentifier] retain] autorelease];
 }
@@ -161,8 +162,7 @@ static MTStoreKitController *sharedSingleton = nil;
     [defaultStore synchronize];
     [transactionDatum release];
     [updatedTransactionData release];
-    
-}
+}*/
 
 #pragma mark - Private
 

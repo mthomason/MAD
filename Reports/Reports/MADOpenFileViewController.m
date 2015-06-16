@@ -508,13 +508,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     
-    // FIXME: Only do this when you are going to disable some feature for copy protection
-    //          Right now it's just a pain in the ass.
-    //static dispatch_once_t onceToken;
-    //dispatch_once(&onceToken, ^{
-    //[MTVerificationController sharedInstance];
-    //});
-    
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
         if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {

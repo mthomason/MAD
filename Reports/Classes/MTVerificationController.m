@@ -11,7 +11,6 @@
 #import "evp.h"
 #import "ReceiptAttribute.h"
 //#import "asn_application.h"
-//#import "VerifyStoreReceipt.h"
 #import "MADReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTApplicationInstance.h"
@@ -32,10 +31,11 @@ static MTVerificationController *singleton;
 
 + (MTVerificationController *)sharedInstance {
 	if (singleton == nil) {
-		singleton = [[MTVerificationController alloc] init];
-
-        [singleton iOS7VerifyReceipt];
         
+        MTVerificationController *verificationController = [[MTVerificationController alloc] init];
+        [verificationController iOS7VerifyReceipt];
+        
+		singleton = verificationController;
 	}
 	return singleton;
 }
@@ -84,13 +84,8 @@ static MTVerificationController *singleton;
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
-    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    MADReceipt *receipt = [[MADReceipt alloc] initWithPath: receiptUrl.path];
-    BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
-                                               bundleVersion: [MTApplicationInstance bundleVersion]
-                                                 andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
-    [self setModernReceiptIsValid:isValidReceipt];
-    if (isValidReceipt) {
+    [self resetReceipt];
+    if (self.modernReceiptIsValid) {
         NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
         self.modernReceiptProcessLicensed = YES;
         [self setModernReceiptProcessExperationDate:experationDate];
@@ -99,10 +94,10 @@ static MTVerificationController *singleton;
 
 - (NSDictionary *)dictionaryFromPlistData:(NSData *)data {
     NSError *error;
-    NSDictionary *dictionaryParsed = [NSPropertyListSerialization propertyListWithData:data
-                                                                               options:NSPropertyListImmutable
-                                                                                format:nil
-                                                                                 error:&error];
+    NSDictionary *dictionaryParsed = [NSPropertyListSerialization propertyListWithData: data
+                                                                               options: NSPropertyListImmutable
+                                                                                format: nil
+                                                                                 error: &error];
     if (!dictionaryParsed) {
         if (error) {
             NSAssert(error == nil, @"%@", error);
@@ -114,9 +109,9 @@ static MTVerificationController *singleton;
 
 - (NSDictionary *)dictionaryFromJSONData:(NSData *)data {
     NSError *error;
-    NSDictionary *dictionaryParsed = [NSJSONSerialization JSONObjectWithData:data
-                                                                     options:0
-                                                                       error:&error];
+    NSDictionary *dictionaryParsed = [NSJSONSerialization JSONObjectWithData: data
+                                                                     options: 0
+                                                                       error: &error];
     if (!dictionaryParsed) {
         if (error) {
             NSAssert(error == nil, @"%@", error);

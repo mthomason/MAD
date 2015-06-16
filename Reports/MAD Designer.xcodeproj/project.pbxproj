@@ -1586,8 +1586,6 @@
 		4C23FB3E18FAE0CA009F234F /* MTStoreKitController+NonRenewableLicensing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MTStoreKitController+NonRenewableLicensing.m"; path = "Classes/MTStoreKitController+NonRenewableLicensing.m"; sourceTree = "<group>"; };
 		4C23FB3F18FAE0CA009F234F /* MTVerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVerificationController.h; path = Classes/MTVerificationController.h; sourceTree = "<group>"; };
 		4C23FB4018FAE0CA009F234F /* MTVerificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVerificationController.m; path = Classes/MTVerificationController.m; sourceTree = "<group>"; };
-		4C23FB4118FAE0CA009F234F /* VerifyStoreReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerifyStoreReceipt.h; path = Classes/VerifyStoreReceipt.h; sourceTree = "<group>"; };
-		4C23FB4218FAE0CA009F234F /* VerifyStoreReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerifyStoreReceipt.m; path = Classes/VerifyStoreReceipt.m; sourceTree = "<group>"; };
 		4C23FBE818FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseDriverSelectorViewController.h; path = Classes/MTDatabaseDriverSelectorViewController.h; sourceTree = SOURCE_ROOT; };
 		4C23FBE918FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseDriverSelectorViewController.m; path = Classes/MTDatabaseDriverSelectorViewController.m; sourceTree = SOURCE_ROOT; };
 		4C23FC1A18FAEA24009F234F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
@@ -2791,8 +2789,6 @@
 				4C23FB3E18FAE0CA009F234F /* MTStoreKitController+NonRenewableLicensing.m */,
 				4C23FB3F18FAE0CA009F234F /* MTVerificationController.h */,
 				4C23FB4018FAE0CA009F234F /* MTVerificationController.m */,
-				4C23FB4118FAE0CA009F234F /* VerifyStoreReceipt.h */,
-				4C23FB4218FAE0CA009F234F /* VerifyStoreReceipt.m */,
 				4C0F89931B2FF47E00D75AF6 /* MADReceipt.h */,
 				4C0F89941B2FF47E00D75AF6 /* MADReceipt.m */,
 			);

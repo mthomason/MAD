@@ -167,8 +167,6 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSDictionary *data;
 
-//@property (nonatomic, strong, readwrite) NSArray *inAppPurchases;
-
 + (NSData *)appleRootCert;
 
 @end
