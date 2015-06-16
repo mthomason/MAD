@@ -296,10 +296,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
 }
 
-- (void)handleBarButtonItemStore:(id)sender {
-    
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -1460,6 +1456,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [self showViewController:aboutViewController sender:self];
         
     }
+}
+- (void)handleBarButtonItemStore:(id)sender {
+    
+    UINavigationController *licensing = [UINavigationController Licensing];
+    licensing.modalPresentationStyle = UIModalPresentationFullScreen;
+    licensing.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self showViewController:licensing sender:self];    
+    
 }
 
 - (IBAction)activity:(id)sender {
