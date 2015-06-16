@@ -68,13 +68,19 @@ static MTStoreKitController *sharedSingleton = nil;
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedSingleton = [[super allocWithZone:NULL] init];
+        sharedSingleton = [[MTStoreKitController alloc] init];
         [[SKPaymentQueue defaultQueue] addTransactionObserver: sharedSingleton];
-        [sharedSingleton setProductIdentifiers:nil];
-        [sharedSingleton setProducts:nil];
-        [sharedSingleton setInitalizeProductsCompletion:nil];
-        [sharedSingleton setPurchaseProductWithIdentifierCompletion:nil];
     });
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [self setProductIdentifiers:nil];
+        [self setProducts:nil];
+        [self setInitalizeProductsCompletion:nil];
+        [self setPurchaseProductWithIdentifierCompletion:nil];
+    }
+    return self;
 }
 
 + (MTStoreKitController *)sharedObject {
@@ -106,15 +112,17 @@ static MTStoreKitController *sharedSingleton = nil;
 
 #pragma mark - Methods
 
-- (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers
-                              completion:(MTBlockCompletion)completion {
-    if ([self initalizeProductsCompletion] == nil && [[self products] count] == 0) {
-        [self setInitalizeProductsCompletion:   [completion copy]];
-        [self setProductIdentifiers:            productIdentifiers];
-        NSSet *productIdSet = [NSSet setWithArray:[self productIdentifiers]];
+- (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion {
+    if ([self initalizeProductsCompletion] == nil && self.products.count == 0) {
+        
+        self.initalizeProductsCompletion = [completion copy];
+        self.productIdentifiers = productIdentifiers;
+        
+        NSSet *productIdSet = [NSSet setWithArray:self.productIdentifiers];
         SKProductsRequest *request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdSet];
         request.delegate = self;
         [request start];
+        
     } else if ([[self products] count] == 0) {
         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey :         @"Product Load Failed",
                                     NSLocalizedFailureReasonErrorKey :  @"Try again later."};
@@ -160,8 +168,8 @@ static MTStoreKitController *sharedSingleton = nil;
 
 - (SKProduct *)productForIdentifier:(NSString *)productIdentifier {
     SKProduct *result = nil;
-    for (SKProduct *product in [self products]) {
-        if ([[product productIdentifier] isEqualToString:productIdentifier]) {
+    for (SKProduct *product in self.products) {
+        if ([product.productIdentifier isEqualToString:productIdentifier]) {
             result = [product retain];
             break;
         }
@@ -186,7 +194,8 @@ static MTStoreKitController *sharedSingleton = nil;
 #pragma mark - SKProductsRequestDelegate Protocol
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    [self setProducts: [response products]];
+    NSArray *products = [NSArray arrayWithArray:response.products];
+    self.products = products;
 }
 
 #pragma mark - SKPaymentTransactionObserver Protocol
@@ -208,9 +217,7 @@ static MTStoreKitController *sharedSingleton = nil;
                 [verificationController iOS7VerifyReceipt];
                 
                 UIAlertController *alert = [UIAlertController nofityTransactionComplete];
-                [[UIApplication topViewController] presentViewController: alert
-                                                                animated: YES
-                                                              completion: nil];
+                [[UIApplication topViewController] presentViewController: alert animated: YES completion: nil];
                 
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 

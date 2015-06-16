@@ -100,11 +100,6 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
     MTDocumentObjectBuilderValue
 };
 
-extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
-extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1;
-extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
-extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
-
 extern NSString * const MTCollectionElementKindSectionLabel;
 
 extern NSString * const MNSStringInterfaceButtonTitleContinue;

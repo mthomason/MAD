@@ -11,8 +11,10 @@
 #import "evp.h"
 #import "ReceiptAttribute.h"
 //#import "asn_application.h"
-#import "VerifyStoreReceipt.h"
+//#import "VerifyStoreReceipt.h"
+#import "MADReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import "MTApplicationInstance.h"
 
 static MTVerificationController *singleton;
 
@@ -22,6 +24,7 @@ static MTVerificationController *singleton;
 @property (nonatomic, copy) NSDictionary *receiptData;
 @property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
+@property (nonatomic, strong, readwrite) MADReceipt *receipt;
 
 @end
 
@@ -33,30 +36,42 @@ static MTVerificationController *singleton;
 
         [singleton iOS7VerifyReceipt];
         
-        NSMutableDictionary *transactionsReceiptStorageDictionary = [[NSMutableDictionary alloc] init];
-        [singleton setTransactionsReceiptStorageDictionary:transactionsReceiptStorageDictionary];
-        [singleton setReceiptData:nil];
-        [singleton setFailureReason:nil];
-
 	}
 	return singleton;
 }
 
+- (void)resetReceipt {
+    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+    MADReceipt *receipt = [[MADReceipt alloc] initWithPath:receiptUrl.path];
+    BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
+                                               bundleVersion: [MTApplicationInstance bundleVersion]
+                                                 andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
+    if ((self.modernReceiptIsValid = isValidReceipt)) {
+        self.receipt = receipt;
+    }
+}
+
+- (void)refreshReceipt {
+    SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
+    request.delegate = self;
+    [request start];
+}
+
 - (void)iOS7VerifyReceipt {
 
-    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    NSString *receiptUrlPath = [receiptUrl path];
-    BOOL isValidReceipt = verifyReceiptAtPath(receiptUrlPath);
-    [self setModernReceiptIsValid:isValidReceipt];
-    if (isValidReceipt == NO) {
-        SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
-        request.delegate = self;
-        [request start];
+    [self resetReceipt];
+    
+    if (self.modernReceiptIsValid == NO) {
+        
+        // FIXME: Only do this on restore purchases.
+        [self refreshReceipt];
+        
     } else {
         NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
-        [self setModernReceiptProcessLicensed:YES];
+        self.modernReceiptProcessLicensed = YES;
         [self setModernReceiptProcessExperationDate:experationDate];
     }
+    
 }
 
 #pragma mark
@@ -64,17 +79,20 @@ static MTVerificationController *singleton;
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
     [self setModernReceiptIsValid:NO];
-    [self setModernReceiptProcessLicensed:NO];
+    self.modernReceiptProcessLicensed = NO;
     [self setModernReceiptProcessExperationDate:nil];
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    BOOL isValidReceipt = verifyReceiptAtPath([receiptUrl path]);
+    MADReceipt *receipt = [[MADReceipt alloc] initWithPath: receiptUrl.path];
+    BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
+                                               bundleVersion: [MTApplicationInstance bundleVersion]
+                                                 andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
     [self setModernReceiptIsValid:isValidReceipt];
     if (isValidReceipt) {
         NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
-        [self setModernReceiptProcessLicensed:YES];
+        self.modernReceiptProcessLicensed = YES;
         [self setModernReceiptProcessExperationDate:experationDate];
     }
 }
@@ -93,7 +111,6 @@ static MTVerificationController *singleton;
     }
     return dictionaryParsed;
 }
-
 
 - (NSDictionary *)dictionaryFromJSONData:(NSData *)data {
     NSError *error;
@@ -145,7 +162,6 @@ static MTVerificationController *singleton;
         [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
     }
 }
-
 
 #pragma mark
 #pragma mark NSURLConnection - Trust validation

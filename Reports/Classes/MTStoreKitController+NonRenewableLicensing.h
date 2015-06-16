@@ -16,6 +16,10 @@ extern const NSTimeInterval MTTimeIntervalHour;
 extern const NSTimeInterval MTTimeIntervalDay;
 extern const NSTimeInterval MTTimeIntervalMonth;
 extern const NSTimeInterval MTTimeIntervalYear;
+extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
+extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1;
+extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
+extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
 
 @interface MTStoreKitController (NonRenewableLicensing)
 
