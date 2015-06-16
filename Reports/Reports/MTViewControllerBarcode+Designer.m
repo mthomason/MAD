@@ -14,7 +14,7 @@ static NSString * const MainIdentifier = @"MTDocumentObjectNewBarcodeViewControl
 @implementation MTViewControllerBarcode (Designer)
 
 + (instancetype)main {
-    UIStoryboard *storyboard = [UIStoryboard objectSelector];
+    UIStoryboard *storyboard = [UIStoryboard ObjectSelector];
     return [storyboard instantiateViewControllerWithIdentifier: MainIdentifier];
 }
 

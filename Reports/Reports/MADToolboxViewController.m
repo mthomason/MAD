@@ -62,7 +62,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     if (self = [super initWithCoder:aDecoder]) {
         
         
-        UIStoryboard *storyboard = [UIStoryboard toolbox];
+        UIStoryboard *storyboard = [UIStoryboard Toolbox];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
         UINavigationController *styleNavigationController = [UINavigationController navigationControllerFontPicker];

@@ -12,7 +12,7 @@
 @implementation UITabBarController (Shared)
 
 + (instancetype)mainTabBarController {
-    UIStoryboard *designer = [UIStoryboard designer];
+    UIStoryboard *designer = [UIStoryboard Designer];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
 }
 

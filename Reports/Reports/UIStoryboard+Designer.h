@@ -17,10 +17,10 @@
 + (instancetype)InformationTable;
 + (instancetype)DocumentInfo;
 + (instancetype)NewDocument;
-+ (instancetype)designer;
-+ (instancetype)licensing;
-+ (instancetype)toolbox;
-+ (instancetype)objectSelector;
++ (instancetype)Designer;
++ (instancetype)Licensing;
++ (instancetype)Toolbox;
++ (instancetype)ObjectSelector;
 
 @end
 

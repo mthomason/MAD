@@ -11,6 +11,7 @@
 @interface UINavigationController (Designer)
 
 + (instancetype)AppInformation;
++ (instancetype)Licensing;
 + (instancetype)NewDocument;
 + (instancetype)navigationControllerToolbox;
 + (instancetype)navigationControllerFontPicker;

@@ -19,6 +19,14 @@ static NSString * const About                   = @"MADStoryboardAboutTable";
 
 @implementation UIStoryboard (Designer)
 
++ (instancetype)Designer {
+    return [UIStoryboard storyboardWithName: Designer bundle:nil];
+}
+
++ (instancetype)Licensing {
+    return [UIStoryboard storyboardWithName: Licensing bundle:nil];
+}
+
 + (instancetype)About {
     return [UIStoryboard storyboardWithName: About bundle:[NSBundle mainBundle]];
 }
@@ -35,19 +43,11 @@ static NSString * const About                   = @"MADStoryboardAboutTable";
     return [UIStoryboard storyboardWithName: NewDocument bundle:[NSBundle mainBundle]];
 }
 
-+ (instancetype)designer {
-    return [UIStoryboard storyboardWithName: Designer bundle:nil];
-}
-
-+ (instancetype)licensing {
-    return [UIStoryboard storyboardWithName: Licensing bundle:nil];
-}
-
-+ (instancetype)toolbox {
++ (instancetype)Toolbox {
     return [UIStoryboard storyboardWithName: Toolbox bundle: [NSBundle mainBundle]];
 }
 
-+ (instancetype)objectSelector {
++ (instancetype)ObjectSelector {
     return [UIStoryboard storyboardWithName: ObjectSelector bundle: [NSBundle mainBundle]];
 }
 

@@ -14,6 +14,7 @@ static NSString * const AggregateAdd    = @"MTDocumentObjectNewAggregateNavigati
 static NSString * const ElementPicker   = @"MADIdentifierNavigationControllerDocumentObjectSelector";
 static NSString * const NewDocument     = @"MADIdentifierOpenDocumentStart";
 static NSString * const AppInformation  = @"MADIdentifierInformationNavigationController";
+static NSString * const Licensing       = @"MTNavigationControllerLicensing";
 
 @implementation UINavigationController (Designer)
 
@@ -25,29 +26,34 @@ static NSString * const AppInformation  = @"MADIdentifierInformationNavigationCo
     return appInfo;
 }
 
++ (instancetype)Licensing {
+    UIStoryboard *storyboard = [UIStoryboard Licensing];
+    return [storyboard instantiateViewControllerWithIdentifier:Licensing];
+}
+
 + (instancetype)NewDocument {
     UIStoryboard *storyboard = [UIStoryboard NewDocument];
     return [storyboard instantiateViewControllerWithIdentifier:NewDocument];
 }
 
 + (instancetype)navigationControllerToolbox {
-    UIStoryboard *storyboardToolbox = [UIStoryboard toolbox];
+    UIStoryboard *storyboardToolbox = [UIStoryboard Toolbox];
     UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
     return navigationControllerToolbox;
 }
 
 + (instancetype)navigationControllerFontPicker {
-    UIStoryboard *storyboard = [UIStoryboard toolbox];
+    UIStoryboard *storyboard = [UIStoryboard Toolbox];
     return [storyboard instantiateViewControllerWithIdentifier:FontPicker];
 }
 
 + (instancetype)aggregateAdd {
-    UIStoryboard *storyboard = [UIStoryboard objectSelector];
+    UIStoryboard *storyboard = [UIStoryboard ObjectSelector];
     return [storyboard instantiateViewControllerWithIdentifier:AggregateAdd];
 }
 
 + (instancetype)elementPicker {
-    UIStoryboard *storyboard = [UIStoryboard objectSelector];
+    UIStoryboard *storyboard = [UIStoryboard ObjectSelector];
     return [storyboard instantiateViewControllerWithIdentifier:ElementPicker];
 }
 
