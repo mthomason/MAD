@@ -53,4 +53,10 @@
     // Pass the selected object to the new view controller.
 }
 
+- (void)doneButton {
+    if ([super respondsToSelector:@selector(doneButton)]) {
+        [super performSelector:@selector(doneButton) withObject:nil afterDelay:0.0];
+    }
+}
+
 @end

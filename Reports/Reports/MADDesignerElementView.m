@@ -161,7 +161,7 @@
 }
 
 - (void)showResizeHandles {
-    id resizeView;
+    //id resizeView;
     //for (resizeView in self.resizeHandles.resizeHandles) {
     //    ((UIView *)resizeView).hidden = NO;
     //}
