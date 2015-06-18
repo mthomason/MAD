@@ -65,22 +65,32 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 
 static MTStoreKitController *sharedSingleton = nil;
 
+- (id)debugQuickLookObject {
+    NSMutableString *string = [[NSMutableString alloc] init];
+    [string appendString:@"Products: \n"];
+    for (SKProduct *product in self.products) {
+        [string appendString:@"-------P R O D U C T-------\n"];
+        [string appendFormat:@"Title:           %@ (%@)\n", product.localizedDescription, product.productIdentifier];
+        [string appendFormat:@"Description:     %@\n", product.localizedDescription];
+        [string appendFormat:@"Price:           %@ (%@)\n", product.price, [product.priceLocale objectForKey:NSLocaleCountryCode]];
+        [string appendFormat:@"Downloadable:    %@\n", product.isDownloadable ? @"YES" : @"NO"];
+        [string appendString:@"---------------------------\n"];
+    }
+    
+    return string;
+}
+
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedSingleton = [[MTStoreKitController alloc] init];
-        [[SKPaymentQueue defaultQueue] addTransactionObserver: sharedSingleton];
+        MTStoreKitController *skc = [[super allocWithZone:NULL] init];
+        skc.productIdentifiers = nil;
+        skc.products = nil;
+        skc.initalizeProductsCompletion = nil;
+        skc.purchaseProductWithIdentifierCompletion = nil;
+        [[SKPaymentQueue defaultQueue] addTransactionObserver: skc];
+        sharedSingleton = skc;
     });
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        self.productIdentifiers = nil;
-        self.products = nil;
-        self.initalizeProductsCompletion = nil;
-        self.purchaseProductWithIdentifierCompletion = nil;
-    }
-    return self;
 }
 
 + (MTStoreKitController *)sharedObject {

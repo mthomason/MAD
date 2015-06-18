@@ -15,9 +15,6 @@
 @optional
 - (void)viewControllerDidFinish:(id)sender;
 - (void)viewControllerDidCancel:(id)sender;
-- (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated;
-- (void)viewControllerDidCancel:(id)sender animated:(BOOL)animated;
-- (void)viewControllerDidRequestComposeEmail:(id)sender animated:(BOOL)animated;
 @end
 
 #endif

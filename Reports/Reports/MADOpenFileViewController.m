@@ -683,43 +683,21 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
         [self reenable];
     }];
+
     [self dismissViewControllerAnimated:YES completion:^{
-        [self.collectionView reloadData];
-    }];
-    
-    [self.barButtonItemAddNewDocument setEnabled:YES];
-}
-
-
-
-- (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    [self dismissViewControllerAnimated:animated completion:^{
         [self.collectionView.indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
-            [self.collectionView deselectItemAtIndexPath:indexPath animated:animated];
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
         }];
         [self.collectionView.indexPathsForVisibleItems enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
             [cell normalizeTint];
         }];
     }];
+
     
-    Class queryBuilderClass = [MADQueryViewController class];
-    Class queryBuilderContainerClass = [MTQueryBuilderContainerController class];
-    Class reportDesignerClass = [MADDesignerViewController class];
-    Class reportViewerClass = [MADViewerController class];
-    
-    if ([sender isKindOfClass: queryBuilderClass] ||
-        [sender isKindOfClass: queryBuilderContainerClass] ||
-        [sender isKindOfClass: reportDesignerClass] ||
-        [sender isKindOfClass: reportViewerClass]) {
-        [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
-            [self reenable];
-        }];
-    }
     self.shouldShowAddDocumentPopover = YES;
-    [self.barButtonItemAddNewDocument setEnabled:YES];
+    self.barButtonItemAddNewDocument.enabled = YES;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    
 }
 
 - (void)viewControllerDidCancel:(id)sender {
@@ -727,18 +705,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     self.shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
-}
-
-- (void)viewControllerDidRequestComposeEmail:(id)sender animated:(BOOL)animated {
-    [self dismissViewControllerAnimated:animated completion:nil];
-
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController	*controller = [MFMailComposeViewController contactUs:self];
-        [self presentViewController: controller animated: YES completion: nil];
-    } else {
-        UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
-        [self presentViewController: alert animated: YES completion: nil];
-    }
 }
 
 #pragma mark - Static functions

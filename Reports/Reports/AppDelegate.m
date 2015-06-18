@@ -135,8 +135,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
     //});
     
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
-    
     [self.applicationInstance initalizeAppearance];
     
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{

@@ -33,9 +33,9 @@ static MTVerificationController *singleton;
 	if (singleton == nil) {
         
         MTVerificationController *verificationController = [[MTVerificationController alloc] init];
-        [verificationController iOS7VerifyReceipt];
+        singleton = verificationController;
+        [singleton iOS7VerifyReceipt];
         
-		singleton = verificationController;
 	}
 	return singleton;
 }
@@ -427,6 +427,30 @@ outLabel:
                                                      encoding:NSUTF8StringEncoding];
     //MTLog(@"decodeBase64: %@", decodedString);
     return decodedString;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *result = [[NSMutableString alloc] initWithString:self.description];
+    [result appendString:@"\n"];
+    NSString *a = [NSString stringWithFormat:@"Valid\t%@\n", self.modernReceiptIsValid ? @"YES" : @"NO"];
+    NSString *b = [NSString stringWithFormat:@"Process\t%@\n", self.modernReceiptProcess ? @"YES" : @"NO"];
+    NSString *c = [NSString stringWithFormat:@"Licensed\t%@\n", self.modernReceiptProcessLicensed ? @"YES" : @"NO"];
+    NSString *d = [NSString stringWithFormat:@"Expires\t%@\n", self.modernReceiptProcessExperationDate];
+    [result appendString:a];
+    [result appendString:b];
+    [result appendString:c];
+    [result appendString:d];
+    [self.receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSString *debuggingString = [NSString stringWithFormat:@"%@\t\t\t%@", key, obj];
+        [result appendString:debuggingString];
+        if ([obj isKindOfClass:[NSDictionary class]]) {
+            [obj enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                NSString *debuggingString = [NSString stringWithFormat:@"\t%@\t\t%@", key, obj];
+                [result appendString:debuggingString];
+            }];
+        }
+    }];
+    return result;
 }
 
 @end

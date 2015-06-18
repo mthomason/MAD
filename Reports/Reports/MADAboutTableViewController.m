@@ -122,12 +122,6 @@
     [self.delegate viewControllerDidCancel: self];
 }
 
-- (IBAction)composeEmail:(id)sender {
-    [self.delegate viewControllerDidRequestComposeEmail: self
-                                               animated: YES];
-}
-
-
 - (void)mailComposeController:(MFMailComposeViewController*)controller
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError*)error {

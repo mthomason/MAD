@@ -594,4 +594,33 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
     return (!purchases || ![purchases isKindOfClass:[NSArray class]]) ? nil : purchases;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *result = [[NSMutableString alloc] initWithString:self.description];
+    [result appendFormat:@"Displaying receipt at path:\n\t%@\n", self.path];
+    [result appendString:@"------R E C E I P T------\n"];
+    [result appendFormat:@"Hash:                        %@\n", self.data[MTStoreKitIdentifierReceiptHash]];
+    [result appendFormat:@"Bid:                         %@\n", self.data[MTStoreKitIdentifierReceiptBid]];
+    [result appendFormat:@"Bid data:                    %@\n", self.data[MTStoreKitIdentifierReceiptBidData]];
+    [result appendFormat:@"Version:                     %@\n", self.data[MTStoreKitIdentifierReceiptVersion]];
+    [result appendFormat:@"Origional version:           %@\n", self.data[MTStoreKitIdentifierReceiptOriginalVersion]];
+    [result appendFormat:@"Origional purchase date:     %@\n", self.data[MTStoreKitIdentifierReceiptOriginalPurchaseDate]];
+    [result appendFormat:@"Origional purchase date MS:  %@\n", self.data[MTStoreKitIdentifierReceiptOriginalPurchaseDateMs]];
+    [result appendFormat:@"Origional purchase date PST: %@\n", self.data[MTStoreKitIdentifierReceiptOriginalPurchaseDatePst]];
+    [result appendFormat:@"Experation date:             %@\n", self.data[MTStoreKitIdentifierReceiptExpirationDate]];
+    [result appendFormat:@"In app purchases:            %@\n", self.data[MTStoreKitIdentifierReceiptInApp]];
+    /*
+    [self.data enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSString *debuggingString = [NSString stringWithFormat:@"%@\t\t\t%@\n", key, obj];
+        [result appendString:debuggingString];
+        if ([obj isKindOfClass:[NSDictionary class]]) {
+            [obj enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                NSString *debuggingString = [NSString stringWithFormat:@"\t%@\t\t%@\n", key, obj];
+                [result appendString:debuggingString];
+            }];
+        }
+    }];*/
+    [result appendString:@"----------E N D----------\n"];
+    return result;
+}
+
 @end

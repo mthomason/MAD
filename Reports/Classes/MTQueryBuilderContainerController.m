@@ -227,7 +227,7 @@
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
-    [self.viewControllerDelegate viewControllerDidFinish:self animated:YES];
+    [self.viewControllerDelegate viewControllerDidFinish:self];
 }
 
 - (IBAction)showReportDesigner:(id)sender { }
@@ -241,7 +241,7 @@
     if (error != nil) {
         [self.document.managedObjectContext save:&error];
     }
-    [self.viewControllerDelegate viewControllerDidFinish:self animated:YES];
+    [self.viewControllerDelegate viewControllerDidFinish:self];
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
@@ -257,16 +257,12 @@
     [self setEditing:self.localEditing animated:YES];
 }
 
-- (void)viewControllerDidFinish:(id)controller {
-    [self viewControllerDidFinish:controller animated:YES];
-}
-
-- (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
+- (void)viewControllerDidFinish:(id)sender {
     __weak MTQueryBuilderContainerController *weakSelf = self;
     BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
-    [self dismissViewControllerAnimated:animated completion:^{
+    [self dismissViewControllerAnimated:YES completion:^{
         if (procDelegateFunction) {
-            [weakSelf.viewControllerDelegate viewControllerDidFinish:weakSelf animated:YES];
+            [weakSelf.viewControllerDelegate viewControllerDidFinish:weakSelf];
         }
     }];
 }

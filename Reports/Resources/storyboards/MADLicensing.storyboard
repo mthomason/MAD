@@ -4,6 +4,65 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
+        <!--Store View Controller-->
+        <scene sceneID="Gra-ue-g4N">
+            <objects>
+                <collectionViewController id="h0c-bN-5Vg" customClass="MADStoreViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="sa8-cX-xJg">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="bxj-GX-zN3">
+                            <size key="itemSize" width="300" height="200"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MADProdcutFeatureDefault" id="ehV-uw-0yX" customClass="MADCollectionViewCellProductFeature">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oCu-UR-P5f">
+                                            <rect key="frame" x="139" y="8" width="153" height="28"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lc2-rr-rkw">
+                                            <rect key="frame" x="139" y="44" width="153" height="148"/>
+                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KmL-1S-xsU">
+                                            <rect key="frame" x="8" y="8" width="123" height="184"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <size key="customSize" width="300" height="200"/>
+                                <connections>
+                                    <outlet property="image" destination="KmL-1S-xsU" id="dz7-PV-CdO"/>
+                                    <outlet property="labelDescription" destination="Lc2-rr-rkw" id="zR1-wL-zBa"/>
+                                    <outlet property="labelTitle" destination="oCu-UR-P5f" id="RQM-il-uff"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="h0c-bN-5Vg" id="g38-s0-9Yc"/>
+                            <outlet property="delegate" destination="h0c-bN-5Vg" id="4Gx-au-QFz"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="1pm-yb-AlB"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cCB-Eg-cVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="458" y="773"/>
+        </scene>
         <!--Software Licensing-->
         <scene sceneID="rAC-h1-Mwp">
             <objects>
@@ -292,6 +351,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MTNavigationControllerLicensing" definesPresentationContext="YES" id="Rhi-Ik-w3d" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mvQ-9h-xq7">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
@@ -301,7 +361,7 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="MLL-yp-bbA" kind="relationship" relationship="rootViewController" id="YN5-Ek-i7c"/>
+                        <segue destination="h0c-bN-5Vg" kind="relationship" relationship="rootViewController" id="4gb-6H-njV"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSq-zq-tJc" userLabel="First Responder" sceneMemberID="firstResponder"/>

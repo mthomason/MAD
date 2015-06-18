@@ -1466,10 +1466,10 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr);
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
 
-    int result = INT_CONTINUE;
+    int result = INT_CANCEL;
 
     
-        if (severity >= 5) {
+        if (severity >= 5 || dberr == SYBEINTF) {
             NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
             char *osstr = (oserrstr != NULL ? oserrstr : "");
             char *dbstr = (dberrstr != NULL ? dberrstr : "");

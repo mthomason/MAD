@@ -81,6 +81,7 @@
         [self.buttonBuyNowViewerOneMonth setEnabled:success];
         [self.buttonBuyNowViewerOneMonth setHidden:NO];
     }
+    MTStoreKitController *sk = [MTStoreKitController sharedObject];
     NSArray *products = [[MTStoreKitController sharedObject] products];
     
     NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
@@ -209,11 +210,11 @@
     [self setStandardCompletion:completion];
 
     if ([MTApplicationInstance isMadDesigner]) {
-        [self.buttonBuyNowDesignerOneYear layer].cornerRadius = 6.6666f;
-        [self.buttonBuyNowDesignerOneMonth layer].cornerRadius = 6.6666f;
+        self.buttonBuyNowDesignerOneYear.layer.cornerRadius = 6.6666f;
+        self.buttonBuyNowDesignerOneMonth.layer.cornerRadius = 6.6666f;
     } else if ([MTApplicationInstance isMadViewer]) {
-        [self.buttonBuyNowViewerOneYear layer].cornerRadius = 6.6666f;
-        [self.buttonBuyNowViewerOneMonth layer].cornerRadius = 6.6666f;
+        self.buttonBuyNowViewerOneYear.layer.cornerRadius = 6.6666f;
+        self.buttonBuyNowViewerOneMonth.layer.cornerRadius = 6.6666f;
     }
 }
 
@@ -222,12 +223,12 @@
 
     if ([MTApplicationInstance isMadDesigner]) {
         //[self viewBuyButtonsBackground].backgroundColor = YES ? [UIColor whiteColor] : [UIColor lightGrayColor];
-        [self.buttonBuyNowDesignerOneYear setEnabled:NO];
-        [self.buttonBuyNowDesignerOneMonth setEnabled:NO];
+        self.buttonBuyNowDesignerOneYear.enabled = NO;
+        self.buttonBuyNowDesignerOneMonth.enabled = NO;
     } else if ([MTApplicationInstance isMadViewer]) {
         //[self viewBuyButtonsBackground].backgroundColor = YES ? [UIColor whiteColor] : [UIColor lightGrayColor];
-        [self.buttonBuyNowViewerOneYear setEnabled:NO];
-        [self.buttonBuyNowViewerOneMonth setEnabled:NO];
+        self.buttonBuyNowViewerOneYear.enabled = NO;
+        self.buttonBuyNowViewerOneMonth.enabled = NO;
     }
 
     [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
