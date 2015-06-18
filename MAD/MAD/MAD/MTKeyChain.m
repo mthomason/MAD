@@ -84,6 +84,16 @@ static MTKeyChain *sharedSingleton = nil;
     return query;
 }
 
++ (NSDictionary *)queryPasswordDefination:(NSString *)key {
+    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+    const NSNumber *yes = @YES;
+    NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
+                            (__bridge id)(kSecAttrService) : keyPassword,
+                            (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
+                            (__bridge id)(kSecReturnData) : yes};
+    return query;
+}
+
 + (NSDictionary *)queryUsernameAdd:(NSString *)username key:(NSString *)key {
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
     NSData *data = [username dataUsingEncoding:NSUTF8StringEncoding];
@@ -112,21 +122,12 @@ static MTKeyChain *sharedSingleton = nil;
     return [NSDictionary dictionaryWithDictionary:result];
 }
 
-+ (NSDictionary *)queryPasswordDefination:(NSString *)key {
-    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
-    NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
-                            (__bridge id)(kSecAttrService) : keyPassword,
-                            (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
-                            (__bridge id)(kSecReturnData) : @YES};
-    return query;
-}
-
 + (NSDictionary *)queryPasswordAdd:(NSString *)password key:(NSString *)key {
     NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
     NSData *data = [password dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)kSecClassGenericPassword,
                             (__bridge id)(kSecAttrService) : keyPassword,
-                            (__bridge id)(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
+                            (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
                             (__bridge id)(kSecValueData) : data};
     return query;
 }
@@ -265,6 +266,8 @@ static MTKeyChain *sharedSingleton = nil;
         NSDictionary *queryAddPassword = [MTKeyChain queryPasswordAdd:password key:key];
         OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
         if (queryAddStatus != errSecSuccess) {
+            
+
             SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
         }
     } else {
