@@ -30,6 +30,8 @@
 
 @implementation MTQueryCacheAddRow
 
+@dynamic columns;
+
 - (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {

@@ -11,12 +11,11 @@
 
 #import "RptqQueryGroup.h"
 #import "MTProtocolCompare.h"
-#import "MTProtocolEnumerator.h"
 #import "MADSortOrder.h"
 
 @class RptqQueryField;
 
-@interface RptqQueryGroup (Extras) <MTProtocolCompare, MTProtocolEnumerator>
+@interface RptqQueryGroup (Extras) <MTProtocolCompare>
 
 + (NSInteger)numberOfGroupsForQuery:(RptqQuery *)query;
 

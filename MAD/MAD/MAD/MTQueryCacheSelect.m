@@ -32,6 +32,8 @@
 
 @implementation MTQueryCacheSelect
 
+@dynamic fieldKeys;
+
 - (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {

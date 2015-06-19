@@ -1336,13 +1336,6 @@
 			remoteGlobalIDString = 4C8F99B81ACA97C8006D3996;
 			remoteInfo = "MAD Designer WatchKit App";
 		};
-		4C8F99C51ACA97C9006D3996 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C8F99A61ACA97C8006D3996;
-			remoteInfo = "MAD Designer WatchKit Extension";
-		};
 		4CB56DCB1AC6835200756775 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */;
@@ -4706,7 +4699,6 @@
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
-				4C1E897B1B33B99000B26B5E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -4717,7 +4709,6 @@
 				4C359D8D1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D8F1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D911B07CBF100B3E9E0 /* PBXTargetDependency */,
-				4C8F99C61ACA97C9006D3996 /* PBXTargetDependency */,
 			);
 			name = "MAD Designer";
 			productName = TheReportViewer;
@@ -5716,20 +5707,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Updating version/build number from git...\"\nplistwatchkitext=${PROJECT_DIR}/MAD\\ Designer\\ WatchKit\\ Extension/Info.plist\nplistwatchkitapp=${PROJECT_DIR}/MAD\\ Designer\\ WatchKit\\ App/Info.plist\n\nversionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,\"-\"); print a[1]}' )\nversionnum=${versionnum#\"v\"}\ncurrentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}' )\ncurrentvnum=${currentvnum#\"v\"}\nbuildnum=$( git rev-list HEAD --count )\n        \nif [[ \"${versionnum}\" == \"\" ]]; then\n        echo \"No version number from git\"\n        exit 2\nfi\n        \n        if [[ \"${buildnum}\" == \"\" ]]; then\n        echo \"No build number from git\"\n        exit 2\n        fi\n        \n        #/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plistwatchkitext}\"\n        #/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plistwatchkitapp}\"\n        echo \"Updated version number to $versionnum\"\n        \n        #/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plistwatchkitext}\"\n        #/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plistwatchkitapp}\"\n        echo \"Updated build number to $currentvnum\"\n        \n        echo \"Updated build number to $buildnum\"\n        \n";
-		};
-		4C1E897B1B33B99000B26B5E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "\n        \n";
 		};
 		4CF3B6EC18046614004BE0AC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6323,11 +6301,6 @@
 			target = 4C8F99B81ACA97C8006D3996 /* MAD Designer WatchKit App */;
 			targetProxy = 4C8F99BB1ACA97C8006D3996 /* PBXContainerItemProxy */;
 		};
-		4C8F99C61ACA97C9006D3996 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */;
-			targetProxy = 4C8F99C51ACA97C9006D3996 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -6764,7 +6737,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libCloudManager/CloudManager/build/Debug-iphoneos",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos",
 					"$(PROJECT_DIR)/../Compressor/library/openssl",
 				);
@@ -6797,7 +6769,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libCloudManager/CloudManager/build/Debug-iphoneos",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos",
 					"$(PROJECT_DIR)/../Compressor/library/openssl",
 				);

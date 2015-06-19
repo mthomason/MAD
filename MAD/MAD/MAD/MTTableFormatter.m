@@ -15,6 +15,8 @@
 
 @implementation MTTableFormatter
 
+@dynamic didRefresh;
+
 - (instancetype)initWithQuery:(MTQuery *)query {
     self = [super initWithQuery:query];
     if (self) {
