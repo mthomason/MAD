@@ -4727,6 +4727,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C8F99CB1ACA97C9006D3996 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */;
 			buildPhases = (
+				4C1E897A1B33B88900B26B5E /* ShellScript */,
 				4C8F99A31ACA97C8006D3996 /* Sources */,
 				4C8F99A41ACA97C8006D3996 /* Frameworks */,
 				4C8F99A51ACA97C8006D3996 /* Resources */,
@@ -5702,6 +5703,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "echo \"Custom Script Start\"\n\n$( sh ${PROJECT_DIR}/buildcounter.sh )\n\npushd $SRCROOT\ncd ../Compressor\n\necho \"\"\necho $( pwd )\necho \"\"\n\nif [ -e \"library/libmysqlclient/libmysqlclient.a\" ]\nthen\n    echo \"Found MySQL Connector.\"\nelse\n    echo \"Installing MySQL Connector.\"\n    $( sh ./compressor.sh --mysql )\nfi\n\nif [ -e \"library/libpng/libpng.a\" ]\nthen\n    echo \"Found libpng!\"\nelse\n    echo \"Installing libpng.\"\n    $( sh ./compressor.sh --libpng )\nfi\n\nif [ -e \"library/libsybdb/libsybdb.a\" ]\nthen\n    echo \"Found libsybdb!\"\nelse\n    echo \"Installing libsybdb.\"\n    $( sh ./compressor.sh --freetds )\nfi\n\nif [ -e \"library/openssl/libcrypto.a\" ]\nthen\n    echo \"Found libcrypto!\"\nelse\n    echo \"Installing openssl.\"\n    $( sh ./compressor.sh --openssl )\nfi\n\npopd\n\necho \"Custom Script End\"\n";
+		};
+		4C1E897A1B33B88900B26B5E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Updating version/build number from git...\"\nplistwatchkitext=${PROJECT_DIR}/MAD\\ Designer\\ WatchKit\\ Extension/Info.plist\nplistwatchkitapp=${PROJECT_DIR}/MAD\\ Designer\\ WatchKit\\ App/Info.plist\n\nversionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,\"-\"); print a[1]}' )\nversionnum=${versionnum#\"v\"}\ncurrentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}' )\ncurrentvnum=${currentvnum#\"v\"}\nbuildnum=$( git rev-list HEAD --count )\n        \nif [[ \"${versionnum}\" == \"\" ]]; then\n        echo \"No version number from git\"\n        exit 2\nfi\n        \n        if [[ \"${buildnum}\" == \"\" ]]; then\n        echo \"No build number from git\"\n        exit 2\n        fi\n        \n        /usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plistwatchkitext}\"\n        /usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plistwatchkitapp}\"\n        echo \"Updated version number to $versionnum\"\n        \n        /usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plistwatchkitext}\"\n        /usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plistwatchkitapp}\"\n        echo \"Updated build number to $currentvnum\"\n        \n        echo \"Updated build number to $buildnum\"\n        \n";
 		};
 		4CF3B6EC18046614004BE0AC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
