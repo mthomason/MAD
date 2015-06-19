@@ -29,13 +29,13 @@ echo "No build number from git"
 exit 2
 fi
 
-/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitext}"
-/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitapp}"
+#/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitext}"
+#/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitapp}"
 /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plist}"
 echo "Updated version number to $versionnum"
 
-/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitext}"
-/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitapp}"
+#/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitext}"
+#/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitapp}"
 /usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plist}"
 echo "Updated build number to $currentvnum"
 

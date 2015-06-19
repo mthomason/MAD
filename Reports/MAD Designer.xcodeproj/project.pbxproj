@@ -4706,6 +4706,7 @@
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
+				4C1E897B1B33B99000B26B5E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -5716,6 +5717,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "echo \"Updating version/build number from git...\"\nplistwatchkitext=${PROJECT_DIR}/MAD\\ Designer\\ WatchKit\\ Extension/Info.plist\nplistwatchkitapp=${PROJECT_DIR}/MAD\\ Designer\\ WatchKit\\ App/Info.plist\n\nversionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,\"-\"); print a[1]}' )\nversionnum=${versionnum#\"v\"}\ncurrentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}' )\ncurrentvnum=${currentvnum#\"v\"}\nbuildnum=$( git rev-list HEAD --count )\n        \nif [[ \"${versionnum}\" == \"\" ]]; then\n        echo \"No version number from git\"\n        exit 2\nfi\n        \n        if [[ \"${buildnum}\" == \"\" ]]; then\n        echo \"No build number from git\"\n        exit 2\n        fi\n        \n        /usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plistwatchkitext}\"\n        /usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plistwatchkitapp}\"\n        echo \"Updated version number to $versionnum\"\n        \n        /usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plistwatchkitext}\"\n        /usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plistwatchkitapp}\"\n        echo \"Updated build number to $currentvnum\"\n        \n        echo \"Updated build number to $buildnum\"\n        \n";
+		};
+		4C1E897B1B33B99000B26B5E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 		4CF3B6EC18046614004BE0AC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
