@@ -17,7 +17,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+EverydayApps.h"
 #import "MADocument.h"
-
+#import "MADBackgroundViewSelected.h"
 
 @interface MTCollectionViewCellDocument ()
 
@@ -98,9 +98,9 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.longPressGestureRecognizer = longPressGestureRecognizer;
 
     
-    self.selectedBackgroundView.backgroundColor = self.bgColor;
-    self.selectedBackgroundView.clipsToBounds = YES;
-    self.selectedBackgroundView.layer.cornerRadius = 5.0000f;
+    //self.selectedBackgroundView.backgroundColor = self.bgColor;
+    //self.selectedBackgroundView.clipsToBounds = YES;
+    //self.selectedBackgroundView.layer.cornerRadius = 5.0000f;
 
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
 
@@ -117,7 +117,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
         self.bgColor = bgColor;
         
-        UIView *selectedBackground = [[UIView alloc] initWithFrame:self.frame];
+        UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:self.frame];
         self.selectedBackgroundView = selectedBackground;
         
         UIActivityIndicatorView *activityView = [MTCollectionViewCellDocument activityIndicatorView];

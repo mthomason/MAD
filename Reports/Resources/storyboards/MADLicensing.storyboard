@@ -4,11 +4,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--Store View Controller-->
+        <!--Power Up-->
         <scene sceneID="Gra-ue-g4N">
             <objects>
-                <collectionViewController id="h0c-bN-5Vg" customClass="MADStoreViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="sa8-cX-xJg">
+                <collectionViewController title="Power Up" id="h0c-bN-5Vg" customClass="MADStoreViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="sa8-cX-xJg">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -27,20 +27,26 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oCu-UR-P5f">
-                                            <rect key="frame" x="139" y="8" width="153" height="28"/>
+                                            <rect key="frame" x="8" y="8" width="200" height="22"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lc2-rr-rkw">
-                                            <rect key="frame" x="139" y="44" width="153" height="148"/>
+                                            <rect key="frame" x="139" y="38" width="153" height="154"/>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KmL-1S-xsU">
-                                            <rect key="frame" x="8" y="8" width="123" height="184"/>
+                                            <rect key="frame" x="8" y="38" width="123" height="154"/>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgk-2T-cE7">
+                                            <rect key="frame" x="216" y="8" width="76" height="22"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -48,6 +54,7 @@
                                 <connections>
                                     <outlet property="image" destination="KmL-1S-xsU" id="dz7-PV-CdO"/>
                                     <outlet property="labelDescription" destination="Lc2-rr-rkw" id="zR1-wL-zBa"/>
+                                    <outlet property="labelPrice" destination="cgk-2T-cE7" id="Gs3-f7-fXB"/>
                                     <outlet property="labelTitle" destination="oCu-UR-P5f" id="RQM-il-uff"/>
                                 </connections>
                             </collectionViewCell>
@@ -57,7 +64,13 @@
                             <outlet property="delegate" destination="h0c-bN-5Vg" id="4Gx-au-QFz"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="1pm-yb-AlB"/>
+                    <navigationItem key="navigationItem" id="1pm-yb-AlB">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="9rf-Vo-UPc">
+                            <connections>
+                                <action selector="actionDone:" destination="h0c-bN-5Vg" id="DYJ-mO-jwq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cCB-Eg-cVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

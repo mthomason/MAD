@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewControllerDelegate.h"
 
 @interface MADStoreViewController : UICollectionViewController
+    <MTViewControllerProtocol>
+
+@property (nonatomic, assign) id <MTViewControllerProtocol> delegate;
 
 @end

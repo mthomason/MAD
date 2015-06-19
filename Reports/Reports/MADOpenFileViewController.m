@@ -76,6 +76,8 @@
 #import "MADDocumentInformationTableViewController+Designer.h"
 #import "UITableViewController+Designer.h"
 
+#import "MADStoreViewController.h"
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
@@ -104,7 +106,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
         MADFilesControllerDelegate,
-        MADCollectionViewLayoutFilesDelegate>
+        MADCollectionViewLayoutFilesDelegate,
+        MTViewControllerProtocol>
 
 @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
@@ -1421,6 +1424,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     UINavigationController *licensing = [UINavigationController Licensing];
     licensing.modalPresentationStyle = UIModalPresentationFullScreen;
     licensing.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
     [self showViewController:licensing sender:self];    
     
 }

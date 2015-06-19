@@ -238,6 +238,10 @@
 		4C1AD33A1B11BEAD00839504 /* MADProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD32F1B11BD5B00839504 /* MADProgressView.m */; };
 		4C1E89761B328AF000B26B5E /* MADStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89751B328AF000B26B5E /* MADStoreViewController.m */; };
 		4C1E89791B328ED100B26B5E /* MADCollectionViewCellProductFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89781B328ED100B26B5E /* MADCollectionViewCellProductFeature.m */; };
+		4C1E897E1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
+		4C1E897F1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
+		4C1E89821B33CD0600B26B5E /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
+		4C1E89831B33CD0600B26B5E /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AC17D7932B00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -1548,6 +1552,10 @@
 		4C1E89751B328AF000B26B5E /* MADStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreViewController.m; sourceTree = "<group>"; };
 		4C1E89771B328ED100B26B5E /* MADCollectionViewCellProductFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewCellProductFeature.h; sourceTree = "<group>"; };
 		4C1E89781B328ED100B26B5E /* MADCollectionViewCellProductFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewCellProductFeature.m; sourceTree = "<group>"; };
+		4C1E897C1B33C7B500B26B5E /* MADBackgroundViewSelected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundViewSelected.h; sourceTree = "<group>"; };
+		4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundViewSelected.m; sourceTree = "<group>"; };
+		4C1E89801B33CD0600B26B5E /* MADBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundView.h; sourceTree = "<group>"; };
+		4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundView.m; sourceTree = "<group>"; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C2213A317D746C200BD36F5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -2758,6 +2766,10 @@
 				4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */,
 				4C1AD32E1B11BD5B00839504 /* MADProgressView.h */,
 				4C1AD32F1B11BD5B00839504 /* MADProgressView.m */,
+				4C1E897C1B33C7B500B26B5E /* MADBackgroundViewSelected.h */,
+				4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */,
+				4C1E89801B33CD0600B26B5E /* MADBackgroundView.h */,
+				4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -5775,6 +5787,7 @@
 				4C23FB0918FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C0E775E163B5AEC003B951E /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C0E775F163B5AEC003B951E /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
+				4C1E897F1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */,
 				4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4CF5319C1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
 				4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */,
@@ -5797,6 +5810,7 @@
 				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
+				4C1E89831B33CD0600B26B5E /* MADBackgroundView.m in Sources */,
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C0F899F1B31590E00D75AF6 /* MADPreferencesManager.m in Sources */,
 				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
@@ -5965,10 +5979,12 @@
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
 				4CC96A571AC90D220044C157 /* MADVibrantCollectionView.m in Sources */,
 				4C0F89571B2D7EDF00D75AF6 /* UITabBarController+Shared.m in Sources */,
+				4C1E89821B33CD0600B26B5E /* MADBackgroundView.m in Sources */,
 				4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
 				4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */,
 				4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
+				4C1E897E1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */,
 				4CF5319B1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
 				4CD696F31AD92029008A9ED3 /* MADModelNavigationController.m in Sources */,
 				4C111C1F1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m in Sources */,

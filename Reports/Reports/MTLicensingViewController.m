@@ -81,7 +81,7 @@
         [self.buttonBuyNowViewerOneMonth setEnabled:success];
         [self.buttonBuyNowViewerOneMonth setHidden:NO];
     }
-    MTStoreKitController *sk = [MTStoreKitController sharedObject];
+    
     NSArray *products = [[MTStoreKitController sharedObject] products];
     
     NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];

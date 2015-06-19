@@ -10,14 +10,30 @@
 #import "MTStoreKitController.h"
 #import "MADCollectionViewCellProductFeature.h"
 #import <StoreKit/StoreKit.h>
+#import "MADWatermarkView.h"
 
 @interface MADStoreViewController ()
+
+@property (nonatomic, strong) NSNumberFormatter *priceFormatter;
 
 @end
 
 @implementation MADStoreViewController
 
 static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
+    priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    self.priceFormatter = priceFormatter;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,6 +45,14 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     //[self.collectionView registerClass:[MADCollectionViewCellProductFeature class] forCellWithReuseIdentifier:reuseIdentifier];
     
     // Do any additional setup after loading the view.
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+    self.collectionView.backgroundView = watermarkView;
+    
+    self.collectionView.scrollEnabled = YES;
+    self.collectionView.scrollsToTop = YES;
+    self.collectionView.allowsSelection = YES;
+    
+    ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(8.0000f, 8.0000f, 8.0000f, 8.0000f);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -44,7 +68,21 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
             [self.collectionView reloadData];
         }];
     }
+}
+
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
+    if (self.shouldAutorotate) {
+        
+        //will auto rotate
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [self.collectionView.backgroundView setNeedsLayout];
+            [self.collectionView.backgroundView setNeedsDisplay];
+        } completion:nil];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,7 +116,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     SKProduct *product =[MTStoreKitController sharedObject].products[indexPath.item];
     cell.labelTitle.text = product.localizedTitle;
     cell.labelDescription.text = product.localizedDescription;
-    cell.backgroundColor = [UIColor greenColor];
+    self.priceFormatter.locale = product.priceLocale;
+    cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
     return cell;
 }
 
@@ -98,19 +137,26 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 }
 */
 
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+
 /*
 // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
+
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
 	return NO;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
 */
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];   
+}
+
+- (IBAction)actionDone:(id)sender {
+    [self.delegate viewControllerDidCancel:self];
+}
 
 @end
