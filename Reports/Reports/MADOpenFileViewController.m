@@ -436,9 +436,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self.collectionView.backgroundView setNeedsLayout];
         [self.collectionView.backgroundView setNeedsDisplay];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self.navigationItem.titleView sizeToFit];
     }];
 
 }

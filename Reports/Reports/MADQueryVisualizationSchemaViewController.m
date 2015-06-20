@@ -149,11 +149,12 @@
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     
-    __weak UIViewController *weakself = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-
+        [self.containerView setNeedsDisplay];
+        [self.navigationItem.titleView sizeToFit];
+        [self.navigationItem.titleView setNeedsLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakself.navigationItem.titleView sizeToFit];
+        [self.navigationItem.titleView sizeToFit];
     }];
     
 }

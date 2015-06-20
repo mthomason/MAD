@@ -27,6 +27,11 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationItem.titleView sizeToFit];
+}
+
 - (void)commonInit {
     _firstTimeViewDidAppear = YES;
     _firstTimeViewWillAppear = YES;

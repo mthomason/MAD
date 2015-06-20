@@ -456,16 +456,11 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         [displayView setNeedsDisplay];
     }
     
-    __weak MADViewerController *weakself = self;
-
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-    
+        [self.navigationItem.titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-
-        __strong MADViewerController *strongself = weakself;
-        [strongself.navigationItem.titleView sizeToFit];
-        [strongself localDidRotate];
-
+        [self.navigationItem.titleView sizeToFit];
+        [self localDidRotate];
     }];
     
 }

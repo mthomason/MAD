@@ -11,6 +11,7 @@
 #import "MADCollectionViewCellProductFeature.h"
 #import <StoreKit/StoreKit.h>
 #import "MADWatermarkView.h"
+#import "MADNavigationBarTitleView.h"
 
 @interface MADStoreViewController ()
 
@@ -33,6 +34,10 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
     priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
     self.priceFormatter = priceFormatter;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = @"MAD Features";
+    self.navigationItem.titleView = titleView;
 }
 
 - (void)viewDidLoad {
@@ -52,7 +57,7 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     self.collectionView.scrollsToTop = YES;
     self.collectionView.allowsSelection = YES;
     
-    ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(8.0000f, 8.0000f, 8.0000f, 8.0000f);
+    ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -60,7 +65,6 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     
     if ([MTStoreKitController sharedObject].products.count <= 0) {
         NSArray *products = @[@"com.everydayapps.mad.designer.product.viewer",
-                              @"com.everydayapps.mad.designer.product.style.basic",
                               @"com.everydayapps.mad.designer.product.element.barcode",
                               @"com.everydayapps.mad.designer.product.element.images",
                               @"com.everydayapps.mad.designer.product.element.aggregate"];
@@ -70,20 +74,6 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     }
 }
 
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    if (self.shouldAutorotate) {
-        
-        //will auto rotate
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [self.collectionView.backgroundView setNeedsLayout];
-            [self.collectionView.backgroundView setNeedsDisplay];
-        } completion:nil];
-        
-    }
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -118,6 +108,15 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     cell.labelDescription.text = product.localizedDescription;
     self.priceFormatter.locale = product.priceLocale;
     cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
+    if ([product.productIdentifier containsString:@"barcode"]) {
+        UIImage *barcode = [UIImage imageNamed:@"MADBarcode64"];
+        cell.image.image = barcode;
+        cell.image.highlightedImage = [barcode imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    } else {
+        UIImage *infinity = [UIImage imageNamed:@"MADInfinity64"];
+        cell.image.image = infinity;
+        cell.image.highlightedImage = [infinity imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
     return cell;
 }
 
@@ -151,8 +150,18 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
 */
 
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    //MADCollectionViewCellProductFeature *cell = ((MADCollectionViewCellProductFeature *)[collectionView cellForItemAtIndexPath:indexPath]);
+    //cell.labelDescription.textColor = cell.labelTitle.highlightedTextColor;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];   
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    //MADCollectionViewCellProductFeature *cell = ((MADCollectionViewCellProductFeature *)[collectionView cellForItemAtIndexPath:indexPath]);
+    //cell.image.highlightedImage = [UIImage imageNamed:@"MADInfinity64"] im
 }
 
 - (IBAction)actionDone:(id)sender {
