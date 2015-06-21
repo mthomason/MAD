@@ -12,14 +12,35 @@
 #import <StoreKit/StoreKit.h>
 #import "MADWatermarkView.h"
 #import "MADNavigationBarTitleView.h"
+#import "MUIViewControllerDelegate.h"
+#import "MADReceiptViewController.h"
 
 @interface MADStoreViewController ()
+    <MTViewControllerProtocol>
 
 @property (nonatomic, strong) NSNumberFormatter *priceFormatter;
 
 @end
 
 @implementation MADStoreViewController
+
+- (void)viewControllerDidCancel:(id)sender {
+    [self viewControllerDidFinish:sender];
+}
+
+- (void)viewControllerDidFinish:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.collectionView reloadData];
+    }];
+}
+
+- (IBAction)unwindToStore:(UIStoryboardSegue*)sender {
+    
+    //UIViewController *sourceViewController = sender.sourceViewController;
+    
+    // Pull any data from the view controller which initiated the unwind segue.
+    
+}
 
 static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
@@ -80,15 +101,12 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     // Dispose of any resources that can be recreated.
 }
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    ((MADReceiptViewController *)((UINavigationController *)segue.destinationViewController).topViewController).delegate = self;
 }
-*/
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -156,7 +174,12 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];   
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    SKProduct *product = [MTStoreKitController sharedObject].products[indexPath.item];
+    [[MTStoreKitController sharedObject] purchaseProduct:product completion:^(BOOL success, NSError *error) {
+        [self.collectionView reloadData];
+    }];
+
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {

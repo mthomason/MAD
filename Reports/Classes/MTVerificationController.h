@@ -16,9 +16,10 @@
 #define KNOWN_TRANSACTIONS_KEY              @"knownIAPTransactions"
 #define ITC_CONTENT_PROVIDER_SHARED_SECRET  @"your secret here"
 
+typedef void (^MADCompletionSuccessError)(BOOL success, NSError *error);
 typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate);
 
-@class MADReceipt;
+@class MADReceiptApplication;
 
 @interface MTVerificationController : NSObject
 
@@ -30,11 +31,13 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 @property (nonatomic, assign) BOOL modernReceiptProcess;
 @property (nonatomic, assign) BOOL modernReceiptProcessLicensed;
 @property (nonatomic, strong) NSDate *modernReceiptProcessExperationDate;
-@property (nonatomic, strong, readonly) MADReceipt *receipt;
+@property (nonatomic, strong, readonly) MADReceiptApplication *receipt;
 
 // Checking the results of this is not enough.
 // The final verification happens in the connection:didReceiveData: callback within
 // this class.  So ensure IAP feaures are unlocked from there.
+- (void)resetReceipt;                                           //Load receipt from file.
+- (void)refreshReceipt:(MADCompletionSuccessError)completion;   //Load receipt from server.
 - (void)iOS7VerifyReceipt;
 
 @end

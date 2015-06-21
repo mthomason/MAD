@@ -54,7 +54,7 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 @property(nonatomic, readonly, retain) NSArray *products;
 
 - (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion;
-- (void)purchaseProductWithIdentifier:(SKProduct *)product completion:(MTBlockCompletion) completion;
+- (void)purchaseProduct:(SKProduct *)product completion:(MTBlockCompletion) completion;
 - (void)restorePurchases:(MTBlockCompletion)completion;
 
 @property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;

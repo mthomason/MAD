@@ -139,7 +139,7 @@ static MTStoreKitController *sharedSingleton = nil;
     }
 }
 
-- (void)purchaseProductWithIdentifier:(SKProduct *)product completion:(MTBlockCompletion) completion {
+- (void)purchaseProduct:(SKProduct *)product completion:(MTBlockCompletion) completion {
     
     self.purchasingProduct = YES;
     self.purchasingProductObject = product;

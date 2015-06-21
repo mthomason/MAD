@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         
         // FIXME: Only do this when you are going to disable some feature for copy protection
         //          Right now it's just a pain in the ass.
-        [MTVerificationController sharedInstance];
+        [[MTVerificationController sharedInstance] resetReceipt];
         
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }

@@ -11,7 +11,7 @@
 #import "evp.h"
 #import "ReceiptAttribute.h"
 //#import "asn_application.h"
-#import "MADReceipt.h"
+#import "MADReceiptApplication.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTApplicationInstance.h"
 
@@ -21,7 +21,9 @@
 @property (nonatomic, copy) NSDictionary *receiptData;
 @property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
-@property (nonatomic, strong, readwrite) MADReceipt *receipt;
+@property (nonatomic, strong, readwrite) MADReceiptApplication *receipt;
+
+@property (nonatomic, copy) MADCompletionSuccessError completion;
 
 @end
 
@@ -34,15 +36,13 @@ static MTVerificationController *sharedSingleton;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[self alloc] init];
-        [sharedSingleton iOS7VerifyReceipt];
     });
-
 	return sharedSingleton;
 }
 
 - (void)resetReceipt {
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    MADReceipt *receipt = [[MADReceipt alloc] initWithPath:receiptUrl.path];
+    MADReceiptApplication *receipt = [[MADReceiptApplication alloc] initWithPath:receiptUrl.path];
     BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
                                                bundleVersion: [MTApplicationInstance bundleVersion]
                                                  andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
@@ -55,6 +55,11 @@ static MTVerificationController *sharedSingleton;
     SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
     request.delegate = self;
     [request start];
+}
+
+- (void)refreshReceipt:(MADCompletionSuccessError)completion {
+    self.completion = completion;
+    [self refreshReceipt];
 }
 
 - (void)iOS7VerifyReceipt {
@@ -81,14 +86,17 @@ static MTVerificationController *sharedSingleton;
     [self setModernReceiptIsValid:NO];
     self.modernReceiptProcessLicensed = NO;
     [self setModernReceiptProcessExperationDate:nil];
+    if (self.completion) {
+        self.completion(NO, error);
+        self.completion = nil;
+    }
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
     [self resetReceipt];
-    if (self.modernReceiptIsValid) {
-        NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
-        self.modernReceiptProcessLicensed = YES;
-        [self setModernReceiptProcessExperationDate:experationDate];
+    if (self.completion) {
+        self.completion(YES, nil);
+        self.completion = nil;
     }
 }
 

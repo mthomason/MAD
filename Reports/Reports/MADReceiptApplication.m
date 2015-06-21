@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADReceipt.h"
+#import "MADReceiptApplication.h"
 #import <Security/Security.h>
 
 #include "pkcs7.h"
@@ -162,7 +162,7 @@ static NSString * const MTStoreKitIdentifierReceiptExpirationDate              =
 static NSString * const MTStoreKitIdentifierReceiptHash                        = @"hash";
 static NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inapppurchases";
 
-@interface MADReceipt ()
+@interface MADReceiptApplication ()
 
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSDictionary *data;
@@ -171,7 +171,15 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 
 @end
 
-@implementation MADReceipt
+@implementation MADReceiptApplication
+
+- (NSString *)bundleID {
+    return self.data[MTStoreKitIdentifierReceiptBid];
+}
+
+- (NSString *)purcahseDate {
+    return self.data[MTStoreKitIdentifierReceiptPurchaseDate];
+}
 
 - (instancetype)initWithPath:(NSString *)path {
     if (self = [super init]) {
@@ -193,7 +201,7 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
     BOOL validReceipt = NO;
     
     NSDictionary *receipt = dictionaryWithAppStoreReceipt(self.path);
-    self.data = receipt;
+    self.data = [NSDictionary dictionaryWithDictionary: receipt];
     
     if (!receipt) {
         validReceipt = NO;
@@ -402,7 +410,7 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
 
 NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath);
 NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
-    NSData * rootCertData = [MADReceipt appleRootCert];
+    NSData *rootCertData = [MADReceiptApplication appleRootCert];
     
     ERR_load_PKCS7_strings();
     ERR_load_X509_strings();
