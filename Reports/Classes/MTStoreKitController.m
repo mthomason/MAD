@@ -80,26 +80,12 @@ static MTStoreKitController *sharedSingleton = nil;
     return string;
 }
 
-+ (void)initialize {
++ (MTStoreKitController *)sharedObject {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        MTStoreKitController *skc = [[super allocWithZone:NULL] init];
-        skc.productIdentifiers = nil;
-        skc.products = nil;
-        skc.initalizeProductsCompletion = nil;
-        skc.purchaseProductWithIdentifierCompletion = nil;
-        [[SKPaymentQueue defaultQueue] addTransactionObserver: skc];
-        sharedSingleton = skc;
+        sharedSingleton = [[self alloc] init];
     });
-}
-
-+ (MTStoreKitController *)sharedObject {
     return sharedSingleton;
-}
-
-+ (instancetype)allocWithZone:(NSZone *)zone {
-    //Do not release... this is a singleton yo.
-    return [[self sharedObject] retain];
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
@@ -121,6 +107,17 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 #pragma mark - Methods
+
+- (instancetype)init {
+    if (self = [super init]) {
+        self.productIdentifiers = nil;
+        self.products = nil;
+        self.initalizeProductsCompletion = nil;
+        self.purchaseProductWithIdentifierCompletion = nil;
+        [[SKPaymentQueue defaultQueue] addTransactionObserver: self];
+    }
+    return self;
+}
 
 - (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion {
     if ([self initalizeProductsCompletion] == nil && self.products.count == 0) {

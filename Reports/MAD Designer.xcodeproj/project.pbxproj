@@ -2790,7 +2790,6 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C0081E11784968B00874849 /* MTStoreKit */,
 				4C0F89A41B31656B00D75AF6 /* Preferences */,
 				4C5BED5718E8982400BDDDB8 /* User Interface */,
 				4CBF7B7718EDA9E20035FCB9 /* User */,
@@ -2823,7 +2822,6 @@
 				4C0F89941B2FF47E00D75AF6 /* MADReceipt.m */,
 			);
 			name = MTStoreKit;
-			path = ..;
 			sourceTree = "<group>";
 		};
 		4C009F851B01CFBE00F22BFF /* test */ = {
@@ -3028,6 +3026,7 @@
 				4CF46F5A1AC64A2F007C0A82 /* libraries */,
 				4C5BED4E18E897FE00BDDDB8 /* App */,
 				4C49DA5319DCE77700CB4DB8 /* iOS */,
+				4C0081E11784968B00874849 /* MTStoreKit */,
 				4CDB624614E38B9600A5389E /* Controllers */,
 				4CDB624B14E38C8400A5389E /* Categories */,
 				4C00818414B738E9003DF437 /* Model */,

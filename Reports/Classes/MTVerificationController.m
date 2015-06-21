@@ -15,8 +15,6 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTApplicationInstance.h"
 
-static MTVerificationController *singleton;
-
 @interface MTVerificationController() <SKRequestDelegate>
 
 @property (copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
@@ -29,15 +27,17 @@ static MTVerificationController *singleton;
 
 @implementation MTVerificationController
 
+static MTVerificationController *sharedSingleton;
+
 + (MTVerificationController *)sharedInstance {
-	if (singleton == nil) {
-        
-        MTVerificationController *verificationController = [[MTVerificationController alloc] init];
-        singleton = verificationController;
-        [singleton iOS7VerifyReceipt];
-        
-	}
-	return singleton;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedSingleton = [[self alloc] init];
+        [sharedSingleton iOS7VerifyReceipt];
+    });
+
+	return sharedSingleton;
 }
 
 - (void)resetReceipt {

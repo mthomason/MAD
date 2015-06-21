@@ -39,8 +39,6 @@
     UIBezierPath *exclusionPath = [UIBezierPath bezierPathWithRect:r];
     self.labelDescription.textContainer.exclusionPaths = @[exclusionPath];
     self.textColorFromNib = self.labelDescription.textColor;
-    //self.image.layer.borderWidth = 1.0000f;
-    //self.image.layer.borderColor = [UIColor lightGrayColor];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
