@@ -8,7 +8,7 @@
 
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTVerificationController.h"
-#import "MADReceiptApplication.h"
+#import "MADSalesReceipt.h"
 
 //On future versions of the software, we will enable subscription based purchase.  For now, it's free once
 //  they get a download.

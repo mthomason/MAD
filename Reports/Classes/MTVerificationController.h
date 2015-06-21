@@ -19,7 +19,7 @@
 typedef void (^MADCompletionSuccessError)(BOOL success, NSError *error);
 typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate);
 
-@class MADReceiptApplication;
+@class MADSalesReceipt;
 
 @interface MTVerificationController : NSObject
 
@@ -31,7 +31,7 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 @property (nonatomic, assign) BOOL modernReceiptProcess;
 @property (nonatomic, assign) BOOL modernReceiptProcessLicensed;
 @property (nonatomic, strong) NSDate *modernReceiptProcessExperationDate;
-@property (nonatomic, strong, readonly) MADReceiptApplication *receipt;
+@property (nonatomic, strong, readonly) MADSalesReceipt *receipt;
 
 // Checking the results of this is not enough.
 // The final verification happens in the connection:didReceiveData: callback within

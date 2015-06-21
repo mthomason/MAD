@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MADReceiptApplication : NSObject
+@interface MADSalesReceipt : NSObject
 
 - (instancetype)initWithPath:(NSString *)path;
 - (BOOL)verifyReceiptWithBundleID:(NSString *)bundleID

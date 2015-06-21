@@ -14,6 +14,7 @@
 #import "MADNavigationBarTitleView.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADReceiptViewController.h"
+#import "MADFeatures.h"
 
 @interface MADStoreViewController ()
     <MTViewControllerProtocol>
@@ -85,10 +86,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     [super viewWillAppear:animated];
     
     if ([MTStoreKitController sharedObject].products.count <= 0) {
-        NSArray *products = @[@"com.everydayapps.mad.designer.product.viewer",
-                              @"com.everydayapps.mad.designer.product.element.barcode",
-                              @"com.everydayapps.mad.designer.product.element.images",
-                              @"com.everydayapps.mad.designer.product.element.aggregate"];
+        MADFeatures *features = [[MADFeatures alloc] init];
+        NSArray *products = [features availableFeaturesProductIDs];
         [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {
             [self.collectionView reloadData];
         }];

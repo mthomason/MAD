@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADReceiptApplication.h"
+#import "MADSalesReceipt.h"
 #import <Security/Security.h>
 
 #include "pkcs7.h"
@@ -162,7 +162,7 @@ static NSString * const MTStoreKitIdentifierReceiptExpirationDate              =
 static NSString * const MTStoreKitIdentifierReceiptHash                        = @"hash";
 static NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inapppurchases";
 
-@interface MADReceiptApplication ()
+@interface MADSalesReceipt ()
 
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSDictionary *data;
@@ -171,7 +171,7 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 
 @end
 
-@implementation MADReceiptApplication
+@implementation MADSalesReceipt
 
 - (NSString *)bundleID {
     return self.data[MTStoreKitIdentifierReceiptBid];
@@ -410,7 +410,7 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
 
 NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath);
 NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
-    NSData *rootCertData = [MADReceiptApplication appleRootCert];
+    NSData *rootCertData = [MADSalesReceipt appleRootCert];
     
     ERR_load_PKCS7_strings();
     ERR_load_X509_strings();

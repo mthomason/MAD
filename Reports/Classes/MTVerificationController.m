@@ -11,7 +11,7 @@
 #import "evp.h"
 #import "ReceiptAttribute.h"
 //#import "asn_application.h"
-#import "MADReceiptApplication.h"
+#import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTApplicationInstance.h"
 
@@ -21,7 +21,7 @@
 @property (nonatomic, copy) NSDictionary *receiptData;
 @property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
-@property (nonatomic, strong, readwrite) MADReceiptApplication *receipt;
+@property (nonatomic, strong, readwrite) MADSalesReceipt *receipt;
 
 @property (nonatomic, copy) MADCompletionSuccessError completion;
 
@@ -42,7 +42,7 @@ static MTVerificationController *sharedSingleton;
 
 - (void)resetReceipt {
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    MADReceiptApplication *receipt = [[MADReceiptApplication alloc] initWithPath:receiptUrl.path];
+    MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
     BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
                                                bundleVersion: [MTApplicationInstance bundleVersion]
                                                  andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
