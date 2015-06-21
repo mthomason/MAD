@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>product-id</key>
+		<string>com.everydayapps.mad.designer.product.viewer</string>
+		<key>title</key>
+		<string>Reporting Mode</string>
+		<key>description</key>
+		<string>Enable unlimited query results.
+
+By default, the software comes in Design Mode. This limits query results. Enable Reporting Mode to generate the full report.</string>
+		<key>type</key>
+		<integer>1</integer>
+		<key>apple-id</key>
+		<string>1008054444</string>
+		<key>available</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>product-id</key>
+		<string>com.everydayapps.mad.designer.product.element.barcode</string>
+		<key>title</key>
+		<string>Barcode Elements</string>
+		<key>description</key>
+		<string>Render your live data as barcodes.
+
+This feature adds the ability to render your data as barcodes. Supports Aztec to UPC.</string>
+		<key>type</key>
+		<integer>1</integer>
+		<key>apple-id</key>
+		<string>1008059344</string>
+		<key>available</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>product-id</key>
+		<string> com.everydayapps.mad.designer.subscription.month</string>
+		<key>title</key>
+		<string>Subscription: One Month</string>
+		<key>description</key>
+		<string>One month of access to all features in MAD Designer.</string>
+		<key>type</key>
+		<integer>2</integer>
+		<key>apple-id</key>
+		<string>690198388</string>
+		<key>available</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>product-id</key>
+		<string>com.everydayapps.mad.designer.subscription.year</string>
+		<key>title</key>
+		<string>Subscription: One Year</string>
+		<key>description</key>
+		<string>One year of access to all features in MAD Designer.</string>
+		<key>type</key>
+		<integer>2</integer>
+		<key>apple-id</key>
+		<string>668415596</string>
+		<key>available</key>
+		<false/>
+	</dict>
+</array>
+</plist>
