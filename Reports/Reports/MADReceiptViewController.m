@@ -152,7 +152,7 @@
 - (CGFloat)inAppPurchaseCellHeight:(NSInteger)index {
     NSDictionary *purchase = [MTVerificationController sharedInstance].receipt.inAppPurchases[index];
     NSString *cancelDate = purchase[@"cancellation-date"];
-    return cancelDate.length > 0 ? 100.0000f : 74.0000f;
+    return cancelDate.length > 0 ? 126.0000f : 100.0000f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

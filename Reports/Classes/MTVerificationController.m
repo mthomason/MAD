@@ -41,7 +41,9 @@ static MTVerificationController *sharedSingleton;
 }
 
 - (BOOL)freeForCharterMemembers:(NSString *)productID {
-    return self.receipt.charterMembership && ([productID isEqualToString:@"com.everydayapps.mad.designer.product.viewer"] || [productID isEqualToString:@"com.everydayapps.mad.designer.product.element.barcode"]);
+    return self.receipt.charterMembership &&
+            ([productID isEqualToString:@"com.everydayapps.mad.designer.product.viewer"] ||
+                [productID isEqualToString:@"com.everydayapps.mad.designer.product.element.barcode"]);
 }
 
 - (BOOL)purchasedProductWithID:(NSString *)productID {

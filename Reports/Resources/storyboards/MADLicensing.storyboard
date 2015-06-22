@@ -112,63 +112,72 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <inset key="separatorInset" minX="12" minY="0.0" maxX="12" maxY="0.0"/>
+                        <inset key="separatorInset" minX="100" minY="0.0" maxX="100" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceipt" rowHeight="100" id="Vrv-Id-IgT" customClass="MADTableViewCellReceiptInAppPurchase">
+                            <tableViewCell opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceipt" rowHeight="126" id="Vrv-Id-IgT" customClass="MADTableViewCellReceiptInAppPurchase">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="Vrv-Id-IgT" id="QDd-YM-zhf">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5E-SB-qyi">
-                                            <rect key="frame" x="535" y="8" width="42" height="19"/>
-                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
-                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHp-dx-m7o">
-                                            <rect key="frame" x="20" y="8" width="61" height="19"/>
-                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchase Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRp-nc-rgI">
-                                            <rect key="frame" x="20" y="37" width="111" height="19"/>
-                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkZ-VC-f3T">
                                             <rect key="frame" x="535" y="37" width="42" height="19"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cancellation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEq-xd-aEd">
-                                            <rect key="frame" x="20" y="66" width="135" height="19"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHp-dx-m7o">
+                                            <rect key="frame" x="40" y="37" width="61" height="19"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o5M-TA-2sR">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchase Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRp-nc-rgI">
+                                            <rect key="frame" x="40" y="66" width="111" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkZ-VC-f3T">
                                             <rect key="frame" x="535" y="66" width="42" height="19"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cancellation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEq-xd-aEd">
+                                            <rect key="frame" x="40" y="95" width="135" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o5M-TA-2sR">
+                                            <rect key="frame" x="535" y="95" width="42" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7K-Dn-S6m">
+                                            <rect key="frame" x="40" y="8" width="537" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="CRp-nc-rgI" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="0AB-Wn-QD2"/>
+                                        <constraint firstItem="CRp-nc-rgI" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="32" id="0AB-Wn-QD2"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="GkZ-VC-f3T" secondAttribute="trailing" constant="15" id="55j-w5-I7g"/>
-                                        <constraint firstItem="dEq-xd-aEd" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="Abh-av-r36"/>
-                                        <constraint firstItem="G5E-SB-qyi" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" id="Frm-Yw-ULL"/>
+                                        <constraint firstItem="dEq-xd-aEd" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="32" id="Abh-av-r36"/>
+                                        <constraint firstItem="G5E-SB-qyi" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="Frm-Yw-ULL"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="o5M-TA-2sR" secondAttribute="trailing" constant="15" id="HFU-vj-9pn"/>
-                                        <constraint firstItem="dEq-xd-aEd" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="Hk3-38-n4Z"/>
-                                        <constraint firstItem="sHp-dx-m7o" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" id="SXU-Yt-QR7"/>
-                                        <constraint firstItem="sHp-dx-m7o" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="cug-EG-qFg"/>
-                                        <constraint firstItem="GkZ-VC-f3T" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="hvk-8o-K7r"/>
+                                        <constraint firstItem="dEq-xd-aEd" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="87" id="Hk3-38-n4Z"/>
+                                        <constraint firstItem="S7K-Dn-S6m" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" id="JLP-6e-CW8"/>
+                                        <constraint firstItem="sHp-dx-m7o" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="SXU-Yt-QR7"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="S7K-Dn-S6m" secondAttribute="trailing" constant="15" id="UHr-2h-fMR"/>
+                                        <constraint firstItem="S7K-Dn-S6m" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="32" id="WKg-Ig-MTl"/>
+                                        <constraint firstItem="sHp-dx-m7o" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="32" id="cug-EG-qFg"/>
+                                        <constraint firstItem="GkZ-VC-f3T" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="hvk-8o-K7r"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="G5E-SB-qyi" secondAttribute="trailing" constant="15" id="mPu-03-I4L"/>
-                                        <constraint firstItem="CRp-nc-rgI" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="o4I-eh-7pj"/>
-                                        <constraint firstItem="o5M-TA-2sR" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="wH7-Hy-s1a"/>
+                                        <constraint firstItem="CRp-nc-rgI" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="o4I-eh-7pj"/>
+                                        <constraint firstItem="o5M-TA-2sR" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="87" id="wH7-Hy-s1a"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
