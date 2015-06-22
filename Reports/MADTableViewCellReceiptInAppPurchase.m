@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADReceiptTableViewCell.h"
+#import "MADTableViewCellReceiptInAppPurchase.h"
 
-@implementation MADReceiptTableViewCell
+@implementation MADTableViewCellReceiptInAppPurchase
 
 - (void)awakeFromNib {
     // Initialization code

@@ -185,7 +185,6 @@
 		4C0F89641B2E4D9A00D75AF6 /* MTQueryBuilderChooseFieldViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89631B2E4D9A00D75AF6 /* MTQueryBuilderChooseFieldViewController+Designer.m */; };
 		4C0F89671B2E5BE600D75AF6 /* MADDocumentInformationTableViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89661B2E5BE600D75AF6 /* MADDocumentInformationTableViewController+Designer.m */; };
 		4C0F896A1B2E61A900D75AF6 /* UITableViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89691B2E61A900D75AF6 /* UITableViewController+Designer.m */; };
-		4C0F896B1B2ED4C600D75AF6 /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
 		4C0F89951B2FF47E00D75AF6 /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89941B2FF47E00D75AF6 /* MADSalesReceipt.m */; };
 		4C0F89961B2FF47E00D75AF6 /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89941B2FF47E00D75AF6 /* MADSalesReceipt.m */; };
 		4C0F89971B2FF9F800D75AF6 /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89941B2FF47E00D75AF6 /* MADSalesReceipt.m */; };
@@ -479,8 +478,8 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C7B0AF61B36BFCF005DC0CE /* MADReceiptTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0AF51B36BFCF005DC0CE /* MADReceiptTableViewCell.m */; };
-		4C7B0AF71B36BFCF005DC0CE /* MADReceiptTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0AF51B36BFCF005DC0CE /* MADReceiptTableViewCell.m */; };
+		4C7B0AF61B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */; };
+		4C7B0AF71B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */; };
 		4C7B0B011B374242005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B001B374242005DC0CE /* MADFeatures.plist */; };
 		4C7B0B041B374266005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B031B374266005DC0CE /* MADFeatures.plist */; };
 		4C7B0B051B374266005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B031B374266005DC0CE /* MADFeatures.plist */; };
@@ -490,6 +489,12 @@
 		4C7B0B0D1B374B2B005DC0CE /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */; };
 		4C7B0B101B375F07005DC0CE /* NSDateFormatter+RFC_3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */; };
 		4C7B0B111B375F07005DC0CE /* NSDateFormatter+RFC_3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */; };
+		4C7B0B1E1B37EAB1005DC0CE /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
+		4C7B0B1F1B37EAB1005DC0CE /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
+		4C7B0B221B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
+		4C7B0B231B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
+		4C7B0B261B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */; };
+		4C7B0B271B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */; };
 		4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5E0183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */; };
@@ -1896,8 +1901,8 @@
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageArrowDown@2x.png"; path = "Reports/UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Reports/Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = SOURCE_ROOT; };
-		4C7B0AF41B36BFCF005DC0CE /* MADReceiptTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReceiptTableViewCell.h; sourceTree = "<group>"; };
-		4C7B0AF51B36BFCF005DC0CE /* MADReceiptTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReceiptTableViewCell.m; sourceTree = "<group>"; };
+		4C7B0AF41B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTableViewCellReceiptInAppPurchase.h; path = ../MADTableViewCellReceiptInAppPurchase.h; sourceTree = "<group>"; };
+		4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTableViewCellReceiptInAppPurchase.m; path = ../MADTableViewCellReceiptInAppPurchase.m; sourceTree = "<group>"; };
 		4C7B0B001B374242005DC0CE /* MADFeatures.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MADFeatures.plist; path = "MAD Designer/MADFeatures.plist"; sourceTree = "<group>"; };
 		4C7B0B031B374266005DC0CE /* MADFeatures.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MADFeatures.plist; path = "MAD Viewer/MADFeatures.plist"; sourceTree = "<group>"; };
 		4C7B0B061B374A0A005DC0CE /* MADFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFeature.h; path = Classes/MADFeature.h; sourceTree = "<group>"; };
@@ -1906,6 +1911,12 @@
 		4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeatures.m; sourceTree = "<group>"; };
 		4C7B0B0E1B375F07005DC0CE /* NSDateFormatter+RFC_3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+RFC_3339.h"; sourceTree = "<group>"; };
 		4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC_3339.m"; sourceTree = "<group>"; };
+		4C7B0B1C1B37EAB1005DC0CE /* MADUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUser.h; sourceTree = "<group>"; };
+		4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUser.m; sourceTree = "<group>"; };
+		4C7B0B201B37F4C6005DC0CE /* MADSalesReceipt+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADSalesReceipt+Designer.h"; sourceTree = "<group>"; };
+		4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADSalesReceipt+Designer.m"; sourceTree = "<group>"; };
+		4C7B0B241B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellReceiptCharterMember.h; sourceTree = "<group>"; };
+		4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptCharterMember.m; sourceTree = "<group>"; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
 		4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
 		4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
@@ -2408,7 +2419,7 @@
 		4CD0B29A1AC90856005CA75C /* MADStoryboardInformationTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardInformationTable.storyboard; path = Resources/storyboards/MADStoryboardInformationTable.storyboard; sourceTree = "<group>"; };
 		4CD0B29D1AC9087B005CA75C /* MADStoryboardAboutTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardAboutTable.storyboard; path = Resources/storyboards/MADStoryboardAboutTable.storyboard; sourceTree = "<group>"; };
 		4CD0B2A01AC908B6005CA75C /* MADToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADToolbox.storyboard; path = Resources/storyboards/MADToolbox.storyboard; sourceTree = SOURCE_ROOT; };
-		4CD0B2A31AC908E9005CA75C /* MADLicensing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADLicensing.storyboard; path = Resources/storyboards/MADLicensing.storyboard; sourceTree = "<group>"; };
+		4CD0B2A31AC908E9005CA75C /* MADLicensing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADLicensing.storyboard; path = ../Resources/storyboards/MADLicensing.storyboard; sourceTree = "<group>"; };
 		4CD0B2A41AC908E9005CA75C /* MADDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesigner.storyboard; path = Resources/storyboards/MADDesigner.storyboard; sourceTree = "<group>"; };
 		4CD0B2A51AC908E9005CA75C /* MADStoryboardNewDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardNewDocument.storyboard; path = Resources/storyboards/MADStoryboardNewDocument.storyboard; sourceTree = "<group>"; };
 		4CD0B2A61AC908E9005CA75C /* MADStoryboardObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardObjectSelector.storyboard; path = Resources/storyboards/MADStoryboardObjectSelector.storyboard; sourceTree = "<group>"; };
@@ -2815,6 +2826,11 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C7B0B1C1B37EAB1005DC0CE /* MADUser.h */,
+				4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */,
+				4C7B0B1B1B37C852005DC0CE /* Upgrade */,
+				4C7B0B1A1B37C843005DC0CE /* Cache */,
+				4C7B0B191B37C82B005DC0CE /* Protocols */,
 				4C0F89A41B31656B00D75AF6 /* Preferences */,
 				4C5BED5718E8982400BDDDB8 /* User Interface */,
 				4CBF7B7718EDA9E20035FCB9 /* User */,
@@ -2822,14 +2838,7 @@
 				4C23FC2118FC323C009F234F /* Activities */,
 				4C95CABF182B6D1F00160E01 /* Barcode */,
 				4C8F7DE414CFFA13006171A7 /* Rptq */,
-				4C590B26191BC3A400C4E211 /* MTPageCaching.h */,
-				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
-				4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */,
-				4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */,
 				4CC2BE8319D9078B006AAB24 /* MADControlState.h */,
-				4CC2BE8519D90BD1006AAB24 /* MADSectionHeaderViewDelegate.h */,
-				4C7B0B0E1B375F07005DC0CE /* NSDateFormatter+RFC_3339.h */,
-				4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -2838,6 +2847,7 @@
 		4C0081E11784968B00874849 /* MTStoreKit */ = {
 			isa = PBXGroup;
 			children = (
+				4C1E896E1B328AC000B26B5E /* Controllers */,
 				4CD2FAA817F378CA0015458B /* ReceiptModule.ans1 */,
 				4C23FB3B18FAE0CA009F234F /* MTStoreKitController.h */,
 				4C23FB3C18FAE0CA009F234F /* MTStoreKitController.m */,
@@ -2851,6 +2861,8 @@
 				4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */,
 				4C7B0B061B374A0A005DC0CE /* MADFeature.h */,
 				4C7B0B071B374A0A005DC0CE /* MADFeature.m */,
+				4C7B0B201B37F4C6005DC0CE /* MADSalesReceipt+Designer.h */,
+				4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */,
 			);
 			name = MTStoreKit;
 			sourceTree = "<group>";
@@ -2913,14 +2925,11 @@
 			isa = PBXGroup;
 			children = (
 				4CD0B2A41AC908E9005CA75C /* MADDesigner.storyboard */,
-				4CD0B2A31AC908E9005CA75C /* MADLicensing.storyboard */,
 				4CD0B2A51AC908E9005CA75C /* MADStoryboardNewDocument.storyboard */,
 				4CD0B2A61AC908E9005CA75C /* MADStoryboardObjectSelector.storyboard */,
 				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
 				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
 				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
-				4C7B0AF41B36BFCF005DC0CE /* MADReceiptTableViewCell.h */,
-				4C7B0AF51B36BFCF005DC0CE /* MADReceiptTableViewCell.m */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -2964,17 +2973,25 @@
 			name = Preferences;
 			sourceTree = "<group>";
 		};
-		4C1E896E1B328AC000B26B5E /* Store */ = {
+		4C1E896E1B328AC000B26B5E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4CD0B2A31AC908E9005CA75C /* MADLicensing.storyboard */,
+				4C7B0AF41B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.h */,
+				4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */,
+				4C7B0B241B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.h */,
+				4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */,
 				4C1E89741B328AF000B26B5E /* MADStoreViewController.h */,
 				4C1E89751B328AF000B26B5E /* MADStoreViewController.m */,
 				4C1E89771B328ED100B26B5E /* MADCollectionViewCellProductFeature.h */,
 				4C1E89781B328ED100B26B5E /* MADCollectionViewCellProductFeature.m */,
 				4C1E89901B36912500B26B5E /* MADReceiptViewController.h */,
 				4C1E89911B36912500B26B5E /* MADReceiptViewController.m */,
+				4CE9F31A177B39A8009F11AF /* MTLicensingViewController.h */,
+				4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */,
 			);
-			name = Store;
+			name = Controllers;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C23FC2118FC323C009F234F /* Activities */ = {
@@ -3766,6 +3783,44 @@
 			name = "Open Document";
 			sourceTree = "<group>";
 		};
+		4C7B0B181B37C7AC005DC0CE /* Standard */ = {
+			isa = PBXGroup;
+			children = (
+				4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */,
+				4CA19F801A15C197004DDA52 /* MADViewController.h */,
+				4CA19F811A15C197004DDA52 /* MADViewController.m */,
+				4C111C261B23E853005CA4DD /* MADViewControllerBase.h */,
+				4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */,
+			);
+			name = Standard;
+			sourceTree = "<group>";
+		};
+		4C7B0B191B37C82B005DC0CE /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				4CC2BE8519D90BD1006AAB24 /* MADSectionHeaderViewDelegate.h */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		4C7B0B1A1B37C843005DC0CE /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				4C590B26191BC3A400C4E211 /* MTPageCaching.h */,
+				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
+			);
+			name = Cache;
+			sourceTree = "<group>";
+		};
+		4C7B0B1B1B37C852005DC0CE /* Upgrade */ = {
+			isa = PBXGroup;
+			children = (
+				4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */,
+				4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */,
+			);
+			name = Upgrade;
+			sourceTree = "<group>";
+		};
 		4C8394E21AC8F0220055EDE9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -4396,15 +4451,13 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4C1E896E1B328AC000B26B5E /* Store */,
+				4C7B0B181B37C7AC005DC0CE /* Standard */,
 				4C54F2E61A1302CF004B5228 /* MADViewControllerProtocol.h */,
 				4C62692719F6313000DCCC2E /* Information */,
 				4C08B3131AB67FD500B54D3A /* Document Information */,
 				4C6268F219F5FFD200DCCC2E /* About */,
 				4C4740AA1A0026B200B11434 /* Toolbox */,
 				4C15669C19F5A83A00EE465D /* testimage.jpg */,
-				4C38E9C319F232FC000E0B2F /* MADQueryNavigationController.h */,
-				4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */,
 				4C6DF38E16D5F5D500BDC0C1 /* Open Document */,
 				4C35E2F616E4875000ECAB2E /* Database Driver Setup */,
 				4CF1329616CA1E5D00FD0F0B /* Query Builder */,
@@ -4423,21 +4476,24 @@
 				4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */,
 				4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */,
 				4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */,
-				4CE9F31A177B39A8009F11AF /* MTLicensingViewController.h */,
-				4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */,
-				4C44DC6619B95FFA0050BBDD /* NSLayoutConstraint+Extras.h */,
-				4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */,
 				4C38E9DE19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.h */,
 				4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */,
 				4CC96A341AC90C240044C157 /* MADTransparentPresentationController.h */,
 				4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */,
-				4CA19F801A15C197004DDA52 /* MADViewController.h */,
-				4CA19F811A15C197004DDA52 /* MADViewController.m */,
-				4C111C261B23E853005CA4DD /* MADViewControllerBase.h */,
-				4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */,
-				4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */,
 				4CD696F11AD92029008A9ED3 /* MADModelNavigationController.h */,
 				4CD696F21AD92029008A9ED3 /* MADModelNavigationController.m */,
+			);
+			name = Controllers;
+			path = Reports;
+			sourceTree = "<group>";
+		};
+		4CDB624B14E38C8400A5389E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				4C44DC6619B95FFA0050BBDD /* NSLayoutConstraint+Extras.h */,
+				4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */,
+				4C7B0B0E1B375F07005DC0CE /* NSDateFormatter+RFC_3339.h */,
+				4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */,
 				4C111C1D1B2030E1005CA4DD /* NSLayoutConstraint+Designer.h */,
 				4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */,
 				4C111C201B2172F9005CA4DD /* UITapGestureRecognizer+Designer.h */,
@@ -4468,14 +4524,6 @@
 				4C0F89661B2E5BE600D75AF6 /* MADDocumentInformationTableViewController+Designer.m */,
 				4C0F89681B2E61A900D75AF6 /* UITableViewController+Designer.h */,
 				4C0F89691B2E61A900D75AF6 /* UITableViewController+Designer.m */,
-			);
-			name = Controllers;
-			path = Reports;
-			sourceTree = "<group>";
-		};
-		4CDB624B14E38C8400A5389E /* Categories */ = {
-			isa = PBXGroup;
-			children = (
 				4C23FB3318FADEBB009F234F /* UIApplication+Extras.h */,
 				4C23FB3218FADEBB009F234F /* UIApplication+Extras.m */,
 				4C5BED5F18E8C46500BDDDB8 /* UIViewController+tabBarItem.h */,
@@ -4630,6 +4678,8 @@
 		4CF1329616CA1E5D00FD0F0B /* Query Builder */ = {
 			isa = PBXGroup;
 			children = (
+				4C38E9C319F232FC000E0B2F /* MADQueryNavigationController.h */,
+				4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */,
 				4CD0F7C214CC532A003DA079 /* MADQueryViewController.h */,
 				4CD0F7C314CC532A003DA079 /* MADQueryViewController.m */,
 				4CF1335316CD1FE200FD0F0B /* MADQueryVisualizationViewController.h */,
@@ -5911,6 +5961,7 @@
 				4C23FB2918FADDE7009F234F /* MTQueryBuilderContainerController.m in Sources */,
 				4C359E121B082B8800B3E9E0 /* MTVerificationController.m in Sources */,
 				4C23FB0D18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
+				4C7B0B231B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */,
 				4C0A077419C95F390059E1D9 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
 				4CA1500118B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C3727B5168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
@@ -5932,7 +5983,7 @@
 				4C47409119FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
 				4C4740DA1A029A4700B11434 /* MADFontPickerNavigationController.m in Sources */,
-				4C7B0AF71B36BFCF005DC0CE /* MADReceiptTableViewCell.m in Sources */,
+				4C7B0AF71B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
 				4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CA226A816C963CC00315EA2 /* MADDesignerSectionView.m in Sources */,
 				4C23FAF118FADC68009F234F /* MTViewControllerBarcode.m in Sources */,
@@ -6000,6 +6051,8 @@
 				4C38E0D119C203B400AB9789 /* MADFileManager.m in Sources */,
 				4CA57A5C179FD46300B58871 /* MADDesignerSectionLabel.m in Sources */,
 				4CB46B6617C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
+				4C7B0B1F1B37EAB1005DC0CE /* MADUser.m in Sources */,
+				4C7B0B271B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6021,7 +6074,6 @@
 				4CE9985F14B69AA80015C8D1 /* MADToolboxStyleViewController.m in Sources */,
 				4C00818114B6D158003DF437 /* MADFontSelectorViewController.m in Sources */,
 				4C6CDFC414B85BFD00DABF86 /* MTTableViewCellDocument.m in Sources */,
-				4C0F896B1B2ED4C600D75AF6 /* MTLicensingViewController.m in Sources */,
 				4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */,
 				4C1E89921B36912500B26B5E /* MADReceiptViewController.m in Sources */,
 				4C2F6E6B194C3450009D192B /* MTArrayDataSource.m in Sources */,
@@ -6043,6 +6095,7 @@
 				4CD0F7D414CD2068003DA079 /* UITableViewCellInstruction.m in Sources */,
 				4C49DA5C19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4CC96A471AC90C5B0044C157 /* MADInformationTableViewController.m in Sources */,
+				4C7B0B1E1B37EAB1005DC0CE /* MADUser.m in Sources */,
 				4C23FB0818FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */,
 				4C2F6E7D194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
@@ -6065,7 +6118,7 @@
 				4C0F893C1B28C30800D75AF6 /* MADResizeHandles.m in Sources */,
 				4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
-				4C7B0AF61B36BFCF005DC0CE /* MADReceiptTableViewCell.m in Sources */,
+				4C7B0AF61B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
 				4C4A68BD17E945C800FD6A73 /* MTBlurView.m in Sources */,
 				4C507B1414D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
@@ -6120,6 +6173,7 @@
 				4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C23FAF418FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m in Sources */,
+				4C7B0B221B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */,
 				4C23FB2818FADDE7009F234F /* MTQueryBuilderContainerController.m in Sources */,
 				4CD88D0B1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
@@ -6205,6 +6259,7 @@
 				4CA19F821A15C197004DDA52 /* MADViewController.m in Sources */,
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,
+				4C7B0B261B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */,
 				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C67B75319475A88006B4D5B /* UIPageViewController+Extras.m in Sources */,
 				4C0F89531B2D7E5100D75AF6 /* UIViewController+Shared.m in Sources */,

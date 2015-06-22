@@ -138,15 +138,18 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [self.applicationInstance initalizeAppearance];
     
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
-        [MADUpgradeManager installSamples];
         [self getUserCloudPrefs];
-        //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
-
     } subsquientLaunches:^{
-        [MADUpgradeManager installSamples];
         [self getUserCloudPrefsSubsquient];
-        //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
+    } everyLaunch:^{
+        [MADUpgradeManager installSamples];
+        dispatch_async(self.appDelegateQueue, ^{
+           dispatch_sync(dispatch_get_main_queue(), ^{
+               [[MTVerificationController sharedInstance] resetReceipt];
+           });
+        });
     }];
+    
     
     return YES;
 }

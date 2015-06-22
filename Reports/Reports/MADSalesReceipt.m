@@ -164,6 +164,7 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 
 @interface MADSalesReceipt ()
 
+@property (nonatomic, assign, readwrite, getter=isValidReceipt) BOOL validReceipt;
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSDictionary *data;
 
@@ -179,6 +180,14 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 
 - (NSString *)purcahseDate {
     return self.data[MTStoreKitIdentifierReceiptPurchaseDate];
+}
+
+- (NSString *)originalVersion {
+    return  self.data[MTStoreKitIdentifierReceiptOriginalVersion];
+}
+
+- (BOOL)charterMembership {
+    return [self.originalVersion compare:@"7.0.100" options:NSNumericSearch];
 }
 
 - (instancetype)initWithPath:(NSString *)path {
@@ -227,6 +236,7 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
             validReceipt = NO;
         }
     }
+    self.validReceipt = validReceipt;
     return validReceipt;
     
 }
@@ -514,7 +524,7 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
         p += length;
         
         // Only parse attributes we're interested in
-        if ((attr_type > ATTR_START && attr_type < ATTR_END) || attr_type == INAPP_PURCHASE || attr_type == ORIG_VERSION || attr_type == EXPIRE_DATE) {
+        //if ((attr_type > ATTR_START && attr_type < ATTR_END) || attr_type == INAPP_PURCHASE || attr_type == ORIG_VERSION || attr_type == EXPIRE_DATE) {
             NSString *key = nil;
             
             ASN1_get_object(&p, &length, &type, &xclass, seq_end - p);
@@ -580,7 +590,7 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
                 }
             }
             p += length;
-        }
+        //}
         
         // Skip any remaining fields in this SEQUENCE
         while (p < seq_end) {

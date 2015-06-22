@@ -19,7 +19,7 @@
 
 @property (copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
 @property (nonatomic, copy) NSDictionary *receiptData;
-@property (nonatomic, copy) NSDate *purchaseDate;
+//@property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
 @property (nonatomic, strong, readwrite) MADSalesReceipt *receipt;
 
@@ -40,14 +40,51 @@ static MTVerificationController *sharedSingleton;
 	return sharedSingleton;
 }
 
+- (BOOL)purchasedProductWithID:(NSString *)productID {
+    BOOL result = NO;
+    if (self.receipt.isValidReceipt) {
+        NSPredicate *p = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
+            return [evaluatedObject[@"product-id"] isEqualToString:productID];
+        }];
+        NSArray *results = [self.receipt.inAppPurchases filteredArrayUsingPredicate:p];
+        result = results.count >= 1;
+    }
+    return result;
+}
+
+- (void)reloadReceipt {
+    MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
+    self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
+                                                     bundleVersion: [MTApplicationInstance bundleVersion]
+                                                       andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
+    if (self.modernReceiptIsValid) {
+        self.receipt = receipt;
+    }
+}
+
 - (void)resetReceipt {
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
-    BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
-                                               bundleVersion: [MTApplicationInstance bundleVersion]
-                                                 andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
-    if ((self.modernReceiptIsValid = isValidReceipt)) {
-        self.receipt = receipt;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:receiptUrl.path]) {
+        MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
+        BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
+                                                   bundleVersion: [MTApplicationInstance bundleVersion]
+                                                     andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
+        if ((self.modernReceiptIsValid = isValidReceipt)) {
+            self.receipt = receipt;
+        } else {
+            //Invalid receipt!!! Gerr, blast it, and download from APPL
+            NSError *error = nil;
+            NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+            [[NSFileManager defaultManager] removeItemAtURL:receiptUrl error:&error];
+            [self refreshReceipt:^(BOOL success, NSError *error) {
+                if (success) [self reloadReceipt];
+            }];
+        }
+    } else {
+        // No receipt!!! Download it from APPL!
+        [self refreshReceipt:^(BOOL success, NSError *error) {
+            if (success) [self reloadReceipt];
+        }];
     }
 }
 
@@ -65,16 +102,8 @@ static MTVerificationController *sharedSingleton;
 - (void)iOS7VerifyReceipt {
 
     [self resetReceipt];
-    
     if (self.modernReceiptIsValid == NO) {
-        
-        // FIXME: Only do this on restore purchases.
         [self refreshReceipt];
-        
-    } else {
-        NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
-        self.modernReceiptProcessLicensed = YES;
-        [self setModernReceiptProcessExperationDate:experationDate];
     }
     
 }
@@ -84,7 +113,6 @@ static MTVerificationController *sharedSingleton;
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
     [self setModernReceiptIsValid:NO];
-    self.modernReceiptProcessLicensed = NO;
     [self setModernReceiptProcessExperationDate:nil];
     if (self.completion) {
         self.completion(NO, error);
@@ -93,7 +121,7 @@ static MTVerificationController *sharedSingleton;
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
-    [self resetReceipt];
+    [self reloadReceipt];
     if (self.completion) {
         self.completion(YES, nil);
         self.completion = nil;
@@ -442,11 +470,9 @@ outLabel:
     [result appendString:@"\n"];
     NSString *a = [NSString stringWithFormat:@"Valid\t%@\n", self.modernReceiptIsValid ? @"YES" : @"NO"];
     NSString *b = [NSString stringWithFormat:@"Process\t%@\n", self.modernReceiptProcess ? @"YES" : @"NO"];
-    NSString *c = [NSString stringWithFormat:@"Licensed\t%@\n", self.modernReceiptProcessLicensed ? @"YES" : @"NO"];
     NSString *d = [NSString stringWithFormat:@"Expires\t%@\n", self.modernReceiptProcessExperationDate];
     [result appendString:a];
     [result appendString:b];
-    [result appendString:c];
     [result appendString:d];
     [self.receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *debuggingString = [NSString stringWithFormat:@"%@\t\t\t%@", key, obj];

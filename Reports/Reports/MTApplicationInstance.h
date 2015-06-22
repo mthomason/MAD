@@ -51,7 +51,8 @@ extern NSString * const MADUpgradeInstalledSamples;
 + (UIViewController *)initalViewController;
 
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
-             subsquientLaunches:(void (^)(void))subsequentLaunch;
+             subsquientLaunches:(void (^)(void))subsequentLaunch
+                    everyLaunch:(void (^)(void))everyLaunch;
 
 @property (nonatomic, assign) MTReportState reportState;
 

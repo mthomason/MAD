@@ -213,18 +213,12 @@ static MTStoreKitController *sharedSingleton = nil;
 		switch ([transaction transactionState]) {
                 
 			case SKPaymentTransactionStatePurchasing:
-				//MTLog(@"SKPaymentTransactionStatePurchasing");
 				break;
             
             case SKPaymentTransactionStatePurchased: {
-
-                //MTLog(@"SKPaymentTransactionStatePurchased %@", [[transaction payment] productIdentifier]);
                 
                 MTVerificationController *verificationController = [MTVerificationController sharedInstance];
                 [verificationController iOS7VerifyReceipt];
-                
-                UIAlertController *alert = [UIAlertController nofityTransactionComplete];
-                [[UIApplication topViewController] presentViewController: alert animated: YES completion: nil];
                 
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 
@@ -250,7 +244,6 @@ static MTStoreKitController *sharedSingleton = nil;
 				break;
             }
 			default:
-				//MTLog(@"Transaction State Not Found");
 				break;
 		}
 	}

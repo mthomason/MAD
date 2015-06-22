@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MADReceiptTableViewCell : UITableViewCell
+@interface MADTableViewCellReceiptInAppPurchase : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *labelID;
 @property (weak, nonatomic) IBOutlet UILabel *labelOriginalPurchaseDate;

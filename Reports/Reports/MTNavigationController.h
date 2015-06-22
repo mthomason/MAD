@@ -12,8 +12,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MTNavigationController : UINavigationController
-    <UINavigationControllerDelegate,
-        UIViewControllerTransitioningDelegate>
+    <UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
 
 - (IBAction)done:(id)sender;
 

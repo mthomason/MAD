@@ -71,9 +71,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.510";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.510";
-NSString * const MTGlobalBundleRev                                  = @"1885";
+NSString * const MTGlobalBundleVersion                              = @"7.0.511";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.511";
+NSString * const MTGlobalBundleRev                                  = @"1886";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -471,12 +471,14 @@ static MTApplicationInstance *mainInstance;
 }
 
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
-             subsquientLaunches:(void (^)(void))subsequentLaunch {
+             subsquientLaunches:(void (^)(void))subsequentLaunch
+                    everyLaunch:(void (^)(void))everyLaunch {
     if (self.isFirstLaunch) {
         firstLaunchHandler();
     } else {
         subsequentLaunch();
     }
+    everyLaunch();
 }
 
 #pragma mark - Ubiquity Identity Token Handling (Account Change Info)

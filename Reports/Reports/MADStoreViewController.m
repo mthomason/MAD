@@ -8,12 +8,14 @@
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController.h"
+#import "MTVerificationController.h"
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADWatermarkView.h"
 #import "MADNavigationBarTitleView.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
+#import "UIAlertController+Constructors.h"
 
 @interface MADStoreViewController ()
     <MTViewControllerProtocol>
@@ -99,7 +101,12 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     cell.labelTitle.text = product.localizedTitle;
     cell.labelDescription.text = product.localizedDescription;
     self.priceFormatter.locale = product.priceLocale;
-    cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
+    BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+    if (!ownIt) {
+        cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
+    } else {
+        cell.labelPrice.text = @"✓";
+    }
     if ([product.productIdentifier containsString:@"barcode"]) {
         UIImage *barcode = [UIImage imageNamed:@"MADBarcode64"];
         cell.image.image = barcode;
@@ -120,6 +127,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     SKProduct *product = [MTStoreKitController sharedObject].products[indexPath.item];
     [[MTStoreKitController sharedObject] purchaseProduct:product completion:^(BOOL success, NSError *error) {
+        UIAlertController *alert = success ? [UIAlertController nofityTransactionComplete] : [UIAlertController error:error];
+        [self presentViewController: alert animated: YES completion: nil];
         [self.collectionView reloadData];
     }];
 

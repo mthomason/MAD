@@ -399,7 +399,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     return alert;
 }
 + (instancetype)error:(NSError *)error {
-    NSString *title = error.localizedDescription;
+    NSString *title = error.localizedDescription ?: @"";
     NSString *messageStart = error.localizedFailureReason ?: @"";
     NSString *message = [messageStart stringByAppendingString:error.localizedRecoverySuggestion ?: @""];
     return [self errorDisplayErrorWithTitle:title message:message andCompletion:nil];

@@ -230,8 +230,8 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
     
     NSDate *experationDate = nil;
     
-#if SUBSCRIPTION == TRUE
-
+//#if SUBSCRIPTION == TRUE
+/*
     NSMutableArray *transactions = [[NSMutableArray alloc] initWithArray:[MTStoreKitController transactions]];
     NSPredicate *canceledReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         NSDictionary *transactionData = evaluatedObject;
@@ -331,16 +331,16 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
                 }
             }
         }
-        [dateFormat release];
+        //[dateFormat release];
     }
     
-    [transactions release];
+    //[transactions release];
     
-#else
-    NSDate *now = [NSDate date];
-    experationDate = [now dateByAddingTimeInterval:MTTimeIntervalYear*10];//Expires ten years from now
-#endif
-    
+//#else
+//    NSDate *now = [NSDate date];
+//    experationDate = [now dateByAddingTimeInterval:MTTimeIntervalYear*10];//Expires ten years from now
+//#endif
+    */
     return experationDate;
     
 }
