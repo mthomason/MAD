@@ -11,7 +11,7 @@
 #import "MADViewController.h"
 
 @interface MADStoreViewController : MADCollectionViewController
-    <MTViewControllerProtocol>
+    <MTViewControllerProtocol, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, assign) id <MTViewControllerProtocol> delegate;
 

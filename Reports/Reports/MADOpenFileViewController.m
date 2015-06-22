@@ -1422,8 +1422,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)handleBarButtonItemStore:(id)sender {
     
     UINavigationController *licensing = [UINavigationController Licensing];
-    licensing.modalPresentationStyle = UIModalPresentationFullScreen;
-    licensing.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    licensing.modalPresentationStyle = UIModalPresentationFormSheet;
+    licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
     [self showViewController:licensing sender:self];    
     

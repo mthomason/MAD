@@ -9,7 +9,6 @@
 #import "MADStoreViewController.h"
 #import "MTStoreKitController.h"
 #import "MADCollectionViewCellProductFeature.h"
-#import <StoreKit/StoreKit.h>
 #import "MADWatermarkView.h"
 #import "MADNavigationBarTitleView.h"
 #import "MUIViewControllerDelegate.h"
@@ -25,6 +24,8 @@
 
 @implementation MADStoreViewController
 
+static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
+
 - (void)viewControllerDidCancel:(id)sender {
     [self viewControllerDidFinish:sender];
 }
@@ -35,15 +36,7 @@
     }];
 }
 
-- (IBAction)unwindToStore:(UIStoryboardSegue*)sender {
-    
-    //UIViewController *sourceViewController = sender.sourceViewController;
-    
-    // Pull any data from the view controller which initiated the unwind segue.
-    
-}
-
-static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
+- (IBAction)unwindToStore:(UIStoryboardSegue*)sender { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -65,20 +58,12 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Register cell classes
-    //[self.collectionView registerClass:[MADCollectionViewCellProductFeature class] forCellWithReuseIdentifier:reuseIdentifier];
-    
-    // Do any additional setup after loading the view.
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
     self.collectionView.backgroundView = watermarkView;
     
     self.collectionView.scrollEnabled = YES;
     self.collectionView.scrollsToTop = YES;
     self.collectionView.allowsSelection = YES;
-    
     ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
 }
 
@@ -94,25 +79,15 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     }
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     ((MADReceiptViewController *)((UINavigationController *)segue.destinationViewController).topViewController).delegate = self;
 }
 
 #pragma mark <UICollectionViewDataSource>
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [MTStoreKitController sharedObject].products.count;
@@ -139,38 +114,7 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
 #pragma mark <UICollectionViewDelegate>
 
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-*/
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    //MADCollectionViewCellProductFeature *cell = ((MADCollectionViewCellProductFeature *)[collectionView cellForItemAtIndexPath:indexPath]);
-    //cell.labelDescription.textColor = cell.labelTitle.highlightedTextColor;
-}
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath { return NO; }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
@@ -181,13 +125,15 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    //MADCollectionViewCellProductFeature *cell = ((MADCollectionViewCellProductFeature *)[collectionView cellForItemAtIndexPath:indexPath]);
-    //cell.image.highlightedImage = [UIImage imageNamed:@"MADInfinity64"] im
-}
-
 - (IBAction)actionDone:(id)sender {
     [self.delegate viewControllerDidCancel:self];
+}
+
+#pragma mark - UICollectionViewFlowLayout Delegate
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(collectionView.bounds.size.width >= 480 ? (collectionView.bounds.size.width / 2.0) - (8.0000f * 3) : collectionView.bounds.size.width - 8.0000f * 2,
+                      220.0000f);
 }
 
 @end

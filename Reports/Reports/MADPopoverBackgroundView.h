@@ -6,9 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADPopoverBackgroundView_h
+#define MAD_MADPopoverBackgroundView_h
+
 #import <UIKit/UIKit.h>
 
 @interface MADPopoverBackgroundView : UIPopoverBackgroundView
     <UIPopoverBackgroundViewMethods>
 
 @end
+
+#endif
