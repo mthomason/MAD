@@ -182,6 +182,10 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
     return self.data[MTStoreKitIdentifierReceiptPurchaseDate];
 }
 
+- (NSString *)version {
+    return  self.data[MTStoreKitIdentifierReceiptVersion];
+}
+
 - (NSString *)originalVersion {
     return  self.data[MTStoreKitIdentifierReceiptOriginalVersion];
 }

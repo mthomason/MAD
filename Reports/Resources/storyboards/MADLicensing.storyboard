@@ -35,8 +35,8 @@
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lc2-rr-rkw">
-                                            <rect key="frame" x="8" y="38" width="564" height="174"/>
+                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lc2-rr-rkw">
+                                            <rect key="frame" x="8" y="38" width="234" height="174"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -48,8 +48,8 @@
                                                 <constraint firstAttribute="width" constant="64" id="OER-gz-nAa"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgk-2T-cE7">
-                                            <rect key="frame" x="537" y="8" width="35" height="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgk-2T-cE7">
+                                            <rect key="frame" x="207" y="8" width="35" height="17"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -108,53 +108,68 @@
         <scene sceneID="4lb-0e-voD">
             <objects>
                 <tableViewController title="In App Purchases" id="SMd-og-dLO" customClass="MADReceiptViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8qx-bf-g8S">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8qx-bf-g8S">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="12" minY="0.0" maxX="12" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceipt" rowHeight="100" id="Vrv-Id-IgT" customClass="MADTableViewCellReceiptInAppPurchase">
+                            <tableViewCell opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceipt" rowHeight="100" id="Vrv-Id-IgT" customClass="MADTableViewCellReceiptInAppPurchase">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="Vrv-Id-IgT" id="QDd-YM-zhf">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5E-SB-qyi">
-                                            <rect key="frame" x="184" y="8" width="348" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5E-SB-qyi">
+                                            <rect key="frame" x="535" y="8" width="42" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHp-dx-m7o">
-                                            <rect key="frame" x="20" y="8" width="140" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHp-dx-m7o">
+                                            <rect key="frame" x="20" y="8" width="61" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Purchase Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRp-nc-rgI">
-                                            <rect key="frame" x="20" y="37" width="140" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchase Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRp-nc-rgI">
+                                            <rect key="frame" x="20" y="37" width="111" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkZ-VC-f3T">
-                                            <rect key="frame" x="184" y="37" width="348" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkZ-VC-f3T">
+                                            <rect key="frame" x="535" y="37" width="42" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cancellation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEq-xd-aEd">
-                                            <rect key="frame" x="20" y="66" width="140" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cancellation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEq-xd-aEd">
+                                            <rect key="frame" x="20" y="66" width="135" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o5M-TA-2sR">
-                                            <rect key="frame" x="184" y="66" width="348" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o5M-TA-2sR">
+                                            <rect key="frame" x="535" y="66" width="42" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="CRp-nc-rgI" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="0AB-Wn-QD2"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="GkZ-VC-f3T" secondAttribute="trailing" constant="15" id="55j-w5-I7g"/>
+                                        <constraint firstItem="dEq-xd-aEd" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="Abh-av-r36"/>
+                                        <constraint firstItem="G5E-SB-qyi" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" id="Frm-Yw-ULL"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="o5M-TA-2sR" secondAttribute="trailing" constant="15" id="HFU-vj-9pn"/>
+                                        <constraint firstItem="dEq-xd-aEd" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="Hk3-38-n4Z"/>
+                                        <constraint firstItem="sHp-dx-m7o" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" id="SXU-Yt-QR7"/>
+                                        <constraint firstItem="sHp-dx-m7o" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="cug-EG-qFg"/>
+                                        <constraint firstItem="GkZ-VC-f3T" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="hvk-8o-K7r"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="G5E-SB-qyi" secondAttribute="trailing" constant="15" id="mPu-03-I4L"/>
+                                        <constraint firstItem="CRp-nc-rgI" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="o4I-eh-7pj"/>
+                                        <constraint firstItem="o5M-TA-2sR" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="wH7-Hy-s1a"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="labelCancellationDate" destination="o5M-TA-2sR" id="NVf-RP-8zJ"/>
@@ -163,26 +178,77 @@
                                     <outlet property="labelOriginalPurchaseDate" destination="GkZ-VC-f3T" id="ih3-hl-tdo"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptCharterMember" textLabel="9Uf-sW-TH4" detailTextLabel="wWY-xu-uyu" style="IBUITableViewCellStyleValue1" id="yx8-ul-RoZ" customClass="MADTableViewCellReceiptCharterMember">
+                            <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptCharterMember" id="yx8-ul-RoZ" customClass="MADTableViewCellReceiptCharterMember">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yx8-ul-RoZ" id="XBL-xP-pU7">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Charter member" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Uf-sW-TH4">
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n7x-Ta-JzI">
+                                            <rect key="frame" x="20" y="12" width="129" height="19"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="Charter Member">
+                                                    <attributes>
+                                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="16" name="AmericanTypewriter"/>
+                                                        <font key="NSOriginalFont" size="16" name="AmericanTypewriter"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                        <integer key="NSUnderline" value="9"/>
+                                                        <color key="NSUnderlineColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="How rare is that?" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wWY-xu-uyu">
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How rare is that?" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4qJ-60-cYL">
+                                            <rect key="frame" x="443" y="12" width="134" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="n7x-Ta-JzI" firstAttribute="leading" secondItem="XBL-xP-pU7" secondAttribute="leadingMargin" constant="12" id="1SU-Ms-8Rw"/>
+                                        <constraint firstItem="4qJ-60-cYL" firstAttribute="top" secondItem="XBL-xP-pU7" secondAttribute="topMargin" constant="4" id="4yQ-pJ-vcM"/>
+                                        <constraint firstItem="n7x-Ta-JzI" firstAttribute="top" secondItem="XBL-xP-pU7" secondAttribute="topMargin" constant="4" id="FcE-8S-rHE"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="4qJ-60-cYL" secondAttribute="trailing" constant="15" id="Hrh-F9-4bu"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="charterMember" destination="n7x-Ta-JzI" id="AuP-NX-Ati"/>
+                                    <outlet property="detail" destination="4qJ-60-cYL" id="jPh-PW-2Zp"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptApplicationDetails" id="rdo-9e-mbI" customClass="MADTableViewCellReceiptApplication">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rdo-9e-mbI" id="82K-ki-mDv">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGM-HA-Ecj">
+                                            <rect key="frame" x="535" y="11" width="42" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c1O-ly-tdq">
+                                            <rect key="frame" x="20" y="11" width="61" height="19"/>
+                                            <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="c1O-ly-tdq" firstAttribute="leading" secondItem="82K-ki-mDv" secondAttribute="leadingMargin" constant="12" id="1Xz-Zk-19W"/>
+                                        <constraint firstItem="gGM-HA-Ecj" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="3" id="N20-Bb-5S5"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="gGM-HA-Ecj" secondAttribute="trailing" constant="15" id="Oyw-cy-Ysj"/>
+                                        <constraint firstItem="c1O-ly-tdq" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="3" id="RJK-Sy-v9l"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="product" destination="c1O-ly-tdq" id="R7k-ps-8il"/>
+                                    <outlet property="version" destination="gGM-HA-Ecj" id="cnp-G5-N6Y"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

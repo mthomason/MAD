@@ -10,4 +10,7 @@
 
 @interface MADTableViewCellReceiptCharterMember : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *charterMember;
+@property (weak, nonatomic) IBOutlet UILabel *detail;
+
 @end

@@ -20,6 +20,7 @@
 @property (readonly) NSString *purcahseDate;
 @property (readonly) NSArray *inAppPurchases;
 @property (readonly) NSString *originalVersion;
+@property (readonly) NSString *version;
 @property (readonly) BOOL charterMembership;
 
 @end

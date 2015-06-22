@@ -495,6 +495,8 @@
 		4C7B0B231B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
 		4C7B0B261B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */; };
 		4C7B0B271B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */; };
+		4C7B0B2B1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
+		4C7B0B2C1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
 		4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5E0183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */; };
@@ -1046,8 +1048,8 @@
 		4CD0B34A1AC909E0005CA75C /* UIImagePatternFibers2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2C81AC909E0005CA75C /* UIImagePatternFibers2.png */; };
 		4CD0B34B1AC909E0005CA75C /* UIImagePatternFibers2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2C91AC909E0005CA75C /* UIImagePatternFibers2@2x.png */; };
 		4CD0B34C1AC909E0005CA75C /* UIImagePatternFibers2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2C91AC909E0005CA75C /* UIImagePatternFibers2@2x.png */; };
-		4CD0B34D1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CA1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png */; };
-		4CD0B34E1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CA1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png */; };
+		4CD0B34D1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CA1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png */; };
+		4CD0B34E1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CA1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png */; };
 		4CD0B34F1AC909E0005CA75C /* UIImagePatternGoldMetallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CB1AC909E0005CA75C /* UIImagePatternGoldMetallic.png */; };
 		4CD0B3501AC909E0005CA75C /* UIImagePatternGoldMetallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CB1AC909E0005CA75C /* UIImagePatternGoldMetallic.png */; };
 		4CD0B3511AC909E0005CA75C /* UIImagePatternGoldMetallic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2CC1AC909E0005CA75C /* UIImagePatternGoldMetallic@2x.png */; };
@@ -1917,6 +1919,8 @@
 		4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADSalesReceipt+Designer.m"; sourceTree = "<group>"; };
 		4C7B0B241B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellReceiptCharterMember.h; sourceTree = "<group>"; };
 		4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptCharterMember.m; sourceTree = "<group>"; };
+		4C7B0B291B3803B9005DC0CE /* MADTableViewCellReceiptApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellReceiptApplication.h; sourceTree = "<group>"; };
+		4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptApplication.m; sourceTree = "<group>"; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
 		4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
 		4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
@@ -2450,7 +2454,7 @@
 		4CD0B2C71AC909E0005CA75C /* UIImagePatternFibers1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImagePatternFibers1@2x.png"; path = "Resources/Images/patterns/UIImagePatternFibers1@2x.png"; sourceTree = SOURCE_ROOT; };
 		4CD0B2C81AC909E0005CA75C /* UIImagePatternFibers2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImagePatternFibers2.png; path = Resources/Images/patterns/UIImagePatternFibers2.png; sourceTree = SOURCE_ROOT; };
 		4CD0B2C91AC909E0005CA75C /* UIImagePatternFibers2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImagePatternFibers2@2x.png"; path = "Resources/Images/patterns/UIImagePatternFibers2@2x.png"; sourceTree = SOURCE_ROOT; };
-		4CD0B2CA1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImagePatternFibersDarkGray.png; path = Resources/Images/patterns/UIImagePatternFibersDarkGray.png; sourceTree = SOURCE_ROOT; };
+		4CD0B2CA1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImagePatternFiberDarkGray.png; path = Resources/Images/patterns/UIImagePatternFiberDarkGray.png; sourceTree = SOURCE_ROOT; };
 		4CD0B2CB1AC909E0005CA75C /* UIImagePatternGoldMetallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImagePatternGoldMetallic.png; path = Resources/Images/patterns/UIImagePatternGoldMetallic.png; sourceTree = SOURCE_ROOT; };
 		4CD0B2CC1AC909E0005CA75C /* UIImagePatternGoldMetallic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImagePatternGoldMetallic@2x.png"; path = "Resources/Images/patterns/UIImagePatternGoldMetallic@2x.png"; sourceTree = SOURCE_ROOT; };
 		4CD0B2CD1AC909E0005CA75C /* UIImagePatternGoldParchment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImagePatternGoldParchment.png; path = Resources/Images/patterns/UIImagePatternGoldParchment.png; sourceTree = SOURCE_ROOT; };
@@ -2976,11 +2980,8 @@
 		4C1E896E1B328AC000B26B5E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C7B0B281B38039A005DC0CE /* Receipt */,
 				4CD0B2A31AC908E9005CA75C /* MADLicensing.storyboard */,
-				4C7B0AF41B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.h */,
-				4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */,
-				4C7B0B241B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.h */,
-				4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */,
 				4C1E89741B328AF000B26B5E /* MADStoreViewController.h */,
 				4C1E89751B328AF000B26B5E /* MADStoreViewController.m */,
 				4C1E89771B328ED100B26B5E /* MADCollectionViewCellProductFeature.h */,
@@ -3821,6 +3822,19 @@
 			name = Upgrade;
 			sourceTree = "<group>";
 		};
+		4C7B0B281B38039A005DC0CE /* Receipt */ = {
+			isa = PBXGroup;
+			children = (
+				4C7B0AF41B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.h */,
+				4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */,
+				4C7B0B241B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.h */,
+				4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */,
+				4C7B0B291B3803B9005DC0CE /* MADTableViewCellReceiptApplication.h */,
+				4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */,
+			);
+			name = Receipt;
+			sourceTree = "<group>";
+		};
 		4C8394E21AC8F0220055EDE9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -4344,12 +4358,12 @@
 				4CD0B2C21AC909E0005CA75C /* UIImagePatternCharcoalFlecks@2x.png */,
 				4CD0B2C31AC909E0005CA75C /* UIImagePatternCrepe.png */,
 				4CD0B2C41AC909E0005CA75C /* UIImagePatternCrepe@2x.png */,
+				4CD0B2CA1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png */,
 				4CD0B2C51AC909E0005CA75C /* UIImagePatternFiberDarkGray@2x.png */,
 				4CD0B2C61AC909E0005CA75C /* UIImagePatternFibers1.png */,
 				4CD0B2C71AC909E0005CA75C /* UIImagePatternFibers1@2x.png */,
 				4CD0B2C81AC909E0005CA75C /* UIImagePatternFibers2.png */,
 				4CD0B2C91AC909E0005CA75C /* UIImagePatternFibers2@2x.png */,
-				4CD0B2CA1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png */,
 				4CD0B2CB1AC909E0005CA75C /* UIImagePatternGoldMetallic.png */,
 				4CD0B2CC1AC909E0005CA75C /* UIImagePatternGoldMetallic@2x.png */,
 				4CD0B2CD1AC909E0005CA75C /* UIImagePatternGoldParchment.png */,
@@ -5170,7 +5184,7 @@
 				4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */,
 				4C0E77D8163B5AEC003B951E /* UIImageDocumentsAlt20@2x.png in Resources */,
 				4C0E77DC163B5AEC003B951E /* UIImageBolt20.png in Resources */,
-				4CD0B34E1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png in Resources */,
+				4CD0B34E1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png in Resources */,
 				4C0E77DD163B5AEC003B951E /* UIImageBolt20@2x.png in Resources */,
 				4CD0B1991AC8FB2D005CA75C /* Icon-50-Designer-Lagacy@2x.png in Resources */,
 				4CD0B1AF1AC8FB2D005CA75C /* Icon-57-Viewer-Lagacy.png in Resources */,
@@ -5764,7 +5778,7 @@
 				4CD0B3E11AC909E0005CA75C /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
 				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
 				4CD0B3771AC909E0005CA75C /* UIImagePatternKraftPaper2.png in Resources */,
-				4CD0B34D1AC909E0005CA75C /* UIImagePatternFibersDarkGray.png in Resources */,
+				4CD0B34D1AC909E0005CA75C /* UIImagePatternFiberDarkGray.png in Resources */,
 				4C8394DF1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4CD0B1B41AC8FB2D005CA75C /* Icon-57-Viewer-Modern@2x.png in Resources */,
 				4CD0B1BC1AC8FB2D005CA75C /* Icon-60-Viewer-Modern@2x.png in Resources */,
@@ -5890,6 +5904,7 @@
 				4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */,
 				4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */,
 				4CB43ADF19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m in Sources */,
+				4C7B0B2C1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */,
 				4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */,
 				4CC96A481AC90C5B0044C157 /* MADInformationTableViewController.m in Sources */,
@@ -6210,6 +6225,7 @@
 				4C122AEA16D0066B00B69763 /* MTConnectorView.m in Sources */,
 				4C8BAFE219AB113600A55780 /* UIView+Extras.m in Sources */,
 				4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
+				4C7B0B2B1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,

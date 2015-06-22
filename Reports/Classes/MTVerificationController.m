@@ -40,14 +40,22 @@ static MTVerificationController *sharedSingleton;
 	return sharedSingleton;
 }
 
+- (BOOL)freeForCharterMemembers:(NSString *)productID {
+    return self.receipt.charterMembership && ([productID isEqualToString:@"com.everydayapps.mad.designer.product.viewer"] || [productID isEqualToString:@"com.everydayapps.mad.designer.product.element.barcode"]);
+}
+
 - (BOOL)purchasedProductWithID:(NSString *)productID {
     BOOL result = NO;
     if (self.receipt.isValidReceipt) {
-        NSPredicate *p = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
-            return [evaluatedObject[@"product-id"] isEqualToString:productID];
-        }];
-        NSArray *results = [self.receipt.inAppPurchases filteredArrayUsingPredicate:p];
-        result = results.count >= 1;
+        if ([self freeForCharterMemembers:productID]) {
+            result = YES;
+        } else {
+            NSPredicate *p = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
+                return [evaluatedObject[@"product-id"] isEqualToString:productID];
+            }];
+            NSArray *results = [self.receipt.inAppPurchases filteredArrayUsingPredicate:p];
+            result = results.count >= 1;
+        }
     }
     return result;
 }

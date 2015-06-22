@@ -10,4 +10,8 @@
 
 @implementation MADTableViewCellReceiptCharterMember
 
+- (void)awakeFromNib {
+    self.backgroundColor = [UIColor clearColor];
+}
+
 @end
