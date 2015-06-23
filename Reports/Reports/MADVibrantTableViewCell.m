@@ -144,9 +144,7 @@
 
 - (void)updateConstraints {
     [super updateConstraints];
-
     [self invalidateConstraints];
-    
 }
 
 @end

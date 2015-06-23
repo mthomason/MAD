@@ -1,0 +1,19 @@
+//
+//  MADTableViewCellMargin.h
+//  MAD Designer
+//
+//  Created by Michael Thomason on 6/23/15.
+//  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#ifndef MAD_Designer_MADTableViewCellMargin_h
+#define MAD_Designer_MADTableViewCellMargin_h
+
+typedef NS_ENUM(NSUInteger, MADVibrantTableViewCellMarginStyle) {
+    MADTableViewCellMarginStyleTop,
+    MADTableViewCellMarginStyleMiddle,
+    MADTableViewCellMarginStyleBottom,
+    MADTableViewCellMarginStyleFat
+};
+
+#endif

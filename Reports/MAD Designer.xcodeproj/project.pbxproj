@@ -501,6 +501,12 @@
 		4C7B0B321B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */; };
 		4C7B0B351B38D35E005DC0CE /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */; };
 		4C7B0B361B38D35E005DC0CE /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */; };
+		4C7B0B391B391A61005DC0CE /* MADTableViewCellAboutTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B381B391A61005DC0CE /* MADTableViewCellAboutTitle.m */; };
+		4C7B0B3A1B391A61005DC0CE /* MADTableViewCellAboutTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B381B391A61005DC0CE /* MADTableViewCellAboutTitle.m */; };
+		4C7B0B3E1B392372005DC0CE /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
+		4C7B0B3F1B392372005DC0CE /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
+		4C7B0B421B392A9B005DC0CE /* MADAboutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B411B392A9B005DC0CE /* MADAboutTableView.m */; };
+		4C7B0B431B392A9B005DC0CE /* MADAboutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B411B392A9B005DC0CE /* MADAboutTableView.m */; };
 		4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5E0183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */; };
@@ -1928,6 +1934,13 @@
 		4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C7B0B331B38D35E005DC0CE /* UIFont+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Helpers.h"; sourceTree = "<group>"; };
 		4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Helpers.m"; sourceTree = "<group>"; };
+		4C7B0B371B391A61005DC0CE /* MADTableViewCellAboutTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAboutTitle.h; sourceTree = "<group>"; };
+		4C7B0B381B391A61005DC0CE /* MADTableViewCellAboutTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAboutTitle.m; sourceTree = "<group>"; };
+		4C7B0B3B1B392318005DC0CE /* MADTableViewCellMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellMargin.h; sourceTree = "<group>"; };
+		4C7B0B3C1B392372005DC0CE /* MADTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellBase.h; sourceTree = "<group>"; };
+		4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellBase.m; sourceTree = "<group>"; };
+		4C7B0B401B392A9B005DC0CE /* MADAboutTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAboutTableView.h; sourceTree = "<group>"; };
+		4C7B0B411B392A9B005DC0CE /* MADAboutTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAboutTableView.m; sourceTree = "<group>"; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
 		4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
 		4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
@@ -3727,6 +3740,10 @@
 				4CD0B29D1AC9087B005CA75C /* MADStoryboardAboutTable.storyboard */,
 				4CB46B6317C3EC26000D3F3C /* MADAboutTableViewController.h */,
 				4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */,
+				4C7B0B371B391A61005DC0CE /* MADTableViewCellAboutTitle.h */,
+				4C7B0B381B391A61005DC0CE /* MADTableViewCellAboutTitle.m */,
+				4C7B0B401B392A9B005DC0CE /* MADAboutTableView.h */,
+				4C7B0B411B392A9B005DC0CE /* MADAboutTableView.m */,
 			);
 			name = About;
 			path = ..;
@@ -3735,6 +3752,9 @@
 		4C6268FB19F6008700DCCC2E /* Vibrant */ = {
 			isa = PBXGroup;
 			children = (
+				4C7B0B3B1B392318005DC0CE /* MADTableViewCellMargin.h */,
+				4C7B0B3C1B392372005DC0CE /* MADTableViewCellBase.h */,
+				4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */,
 				4CC96A4D1AC90D220044C157 /* MADVibrantCollectionView.h */,
 				4CC96A4E1AC90D220044C157 /* MADVibrantCollectionView.m */,
 				4CC96A4F1AC90D220044C157 /* MADVibrantTableView.h */,
@@ -5959,6 +5979,7 @@
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C0F899F1B31590E00D75AF6 /* MADPreferencesManager.m in Sources */,
 				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
+				4C7B0B3A1B391A61005DC0CE /* MADTableViewCellAboutTitle.m in Sources */,
 				4CC96A5C1AC90D220044C157 /* MADVibrantTableViewCellBase.m in Sources */,
 				4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */,
 				4C0E7779163B5AEC003B951E /* MADDesignerElementView.m in Sources */,
@@ -6041,6 +6062,7 @@
 				4C4740D41A0170B100B11434 /* MADToolboxStyleLayoutViewController.m in Sources */,
 				4CC96A4C1AC90C6D0044C157 /* MADGettingStartedTableViewController.m in Sources */,
 				4C44DC6919B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */,
+				4C7B0B431B392A9B005DC0CE /* MADAboutTableView.m in Sources */,
 				4CF3E77B19F04D2D0064DA5F /* MADSearchBar.m in Sources */,
 				4CAD103319C009C000983B9E /* MADBackgroundScrollView.m in Sources */,
 				4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */,
@@ -6066,6 +6088,7 @@
 				4C23FB0518FADCE4009F234F /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
 				4C23FB3618FADEBB009F234F /* UIApplication+Extras.m in Sources */,
 				4CD0B3EF1AC90B52005CA75C /* MADNavigationBarTitleView.m in Sources */,
+				4C7B0B3F1B392372005DC0CE /* MADTableViewCellBase.m in Sources */,
 				4C5625EC1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C23FAEF18FADC68009F234F /* MTViewControllerBarcodeOptions.m in Sources */,
 				4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */,
@@ -6129,6 +6152,7 @@
 				4C2F6E7D194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
 				4CC96A571AC90D220044C157 /* MADVibrantCollectionView.m in Sources */,
+				4C7B0B3E1B392372005DC0CE /* MADTableViewCellBase.m in Sources */,
 				4C0F89571B2D7EDF00D75AF6 /* UITabBarController+Shared.m in Sources */,
 				4C1E89821B33CD0600B26B5E /* MADBackgroundView.m in Sources */,
 				4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
@@ -6142,6 +6166,7 @@
 				4C111C1F1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m in Sources */,
 				4CDB48C21ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */,
 				4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
+				4C7B0B391B391A61005DC0CE /* MADTableViewCellAboutTitle.m in Sources */,
 				4C111C221B2172FA005CA4DD /* UITapGestureRecognizer+Designer.m in Sources */,
 				4C0F893C1B28C30800D75AF6 /* MADResizeHandles.m in Sources */,
 				4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
@@ -6296,6 +6321,7 @@
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4C23FB0418FADCE4009F234F /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
 				4C0F89A21B31592400D75AF6 /* MADPreference.m in Sources */,
+				4C7B0B421B392A9B005DC0CE /* MADAboutTableView.m in Sources */,
 				4C38E0D019C203B400AB9789 /* MADFileManager.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,

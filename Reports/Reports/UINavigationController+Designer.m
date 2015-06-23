@@ -21,8 +21,8 @@ static NSString * const Licensing       = @"MTNavigationControllerLicensing";
 + (instancetype)AppInformation {
     UIStoryboard *storyboard = [UIStoryboard InformationTable];
     UINavigationController * appInfo = [storyboard instantiateViewControllerWithIdentifier: AppInformation];
-    appInfo.modalPresentationStyle = UIModalPresentationPageSheet;
-    appInfo.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+    appInfo.modalPresentationStyle = UIModalPresentationPopover;
+    appInfo.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
     return appInfo;
 }
 

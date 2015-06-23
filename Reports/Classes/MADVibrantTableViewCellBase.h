@@ -7,13 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef NS_ENUM(NSUInteger, MADVibrantTableViewCellMarginStyle) {
-    MADTableViewCellMarginStyleTop,
-    MADTableViewCellMarginStyleMiddle,
-    MADTableViewCellMarginStyleBottom,
-    MADTableViewCellMarginStyleFat
-};
+#import "MADTableViewCellMargin.h"
 
 @protocol MADVibrantTableViewCellDelegate <NSObject>
 

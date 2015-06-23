@@ -19,26 +19,19 @@
 #import "UIDevice+Hack.h"
 #import "NSError+Constructors.h"
 #import "UIColor+EverydayApps.h"
-#import "MADVibrantTableViewCell.h"
 #import "MADVibrantTableView.h"
+#import "MADTableViewCellBase.h"
 #import "MADocument.h"
 #import "MADConstants.h"
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
     UITableViewDelegate,
-    UITableViewDataSource,
-    MADVibrantTableViewCellDelegate>
+    UITableViewDataSource>
 
 @end
 
 @implementation MADAboutTableViewController
-
-#pragma mark - MADVibrantTableViewCellDelegate
-
-- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
-    return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
-}
 
 #pragma mark - Exit
 
@@ -153,14 +146,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
-    cell.vibrantTableViewCellDelegate = self;
+    MADTableViewCellBase *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
     cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
     switch (indexPath.row) {
 
         case 0:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.label.tintColor = [UIColor edaBlueDark];
+            cell.label.textColor = [UIColor edaBlueDark];
             cell.label.text = @"MAD Designer";
             cell.marginStyle = MADTableViewCellMarginStyleTop;
             break;
@@ -168,35 +160,39 @@
         case 1:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = [self versionText];
-            cell.label.tintColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkTextColor];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 2:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = [self buildText];
-            cell.label.tintColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkTextColor];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 3:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.attributedText = [self trademarkStatement];
-            cell.label.tintColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkTextColor];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
         case 4:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
-            cell.label.tintColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkTextColor];
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            [cell.label sizeToFit];
             break;
 
         default:
             break;
     }
+    [cell setNeedsLayout];
     [cell layoutIfNeeded];
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
     return cell;
 }
 
