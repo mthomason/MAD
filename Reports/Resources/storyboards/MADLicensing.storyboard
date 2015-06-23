@@ -84,7 +84,7 @@
                         </connections>
                     </collectionView>
                     <toolbarItems>
-                        <barButtonItem title="Receipt" id="a0f-zm-1by">
+                        <barButtonItem title="Transactions" id="a0f-zm-1by">
                             <connections>
                                 <segue destination="Prd-S7-N5t" kind="presentation" modalPresentationStyle="formSheet" id="s6L-qh-P1T"/>
                             </connections>
@@ -156,7 +156,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7K-Dn-S6m">
-                                            <rect key="frame" x="40" y="8" width="537" height="21"/>
+                                            <rect key="frame" x="20" y="8" width="557" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -172,7 +172,7 @@
                                         <constraint firstItem="S7K-Dn-S6m" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" id="JLP-6e-CW8"/>
                                         <constraint firstItem="sHp-dx-m7o" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="29" id="SXU-Yt-QR7"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="S7K-Dn-S6m" secondAttribute="trailing" constant="15" id="UHr-2h-fMR"/>
-                                        <constraint firstItem="S7K-Dn-S6m" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="32" id="WKg-Ig-MTl"/>
+                                        <constraint firstItem="S7K-Dn-S6m" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="12" id="WKg-Ig-MTl"/>
                                         <constraint firstItem="sHp-dx-m7o" firstAttribute="leading" secondItem="QDd-YM-zhf" secondAttribute="leadingMargin" constant="32" id="cug-EG-qFg"/>
                                         <constraint firstItem="GkZ-VC-f3T" firstAttribute="top" secondItem="QDd-YM-zhf" secondAttribute="topMargin" constant="58" id="hvk-8o-K7r"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="G5E-SB-qyi" secondAttribute="trailing" constant="15" id="mPu-03-I4L"/>
@@ -187,7 +187,7 @@
                                     <outlet property="labelOriginalPurchaseDate" destination="GkZ-VC-f3T" id="ih3-hl-tdo"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptCharterMember" id="yx8-ul-RoZ" customClass="MADTableViewCellReceiptCharterMember">
+                            <tableViewCell opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptCharterMember" id="yx8-ul-RoZ" customClass="MADTableViewCellReceiptCharterMember">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yx8-ul-RoZ" id="XBL-xP-pU7">
@@ -228,20 +228,26 @@
                                     <outlet property="detail" destination="4qJ-60-cYL" id="jPh-PW-2Zp"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptApplicationDetails" id="rdo-9e-mbI" customClass="MADTableViewCellReceiptApplication">
+                            <tableViewCell opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADIdentifierReceiptApplicationDetails" rowHeight="74" id="rdo-9e-mbI" customClass="MADTableViewCellReceiptApplication">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rdo-9e-mbI" id="82K-ki-mDv">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGM-HA-Ecj">
-                                            <rect key="frame" x="535" y="11" width="42" height="19"/>
+                                            <rect key="frame" x="535" y="40" width="42" height="19"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ucc-GE-Pj8">
+                                            <rect key="frame" x="20" y="11" width="557" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c1O-ly-tdq">
-                                            <rect key="frame" x="20" y="11" width="61" height="19"/>
+                                            <rect key="frame" x="20" y="40" width="61" height="19"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -249,9 +255,12 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="c1O-ly-tdq" firstAttribute="leading" secondItem="82K-ki-mDv" secondAttribute="leadingMargin" constant="12" id="1Xz-Zk-19W"/>
-                                        <constraint firstItem="gGM-HA-Ecj" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="3" id="N20-Bb-5S5"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ucc-GE-Pj8" secondAttribute="trailing" constant="15" id="JKt-cb-K39"/>
+                                        <constraint firstItem="gGM-HA-Ecj" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="32" id="N20-Bb-5S5"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="gGM-HA-Ecj" secondAttribute="trailing" constant="15" id="Oyw-cy-Ysj"/>
-                                        <constraint firstItem="c1O-ly-tdq" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="3" id="RJK-Sy-v9l"/>
+                                        <constraint firstItem="c1O-ly-tdq" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="32" id="RJK-Sy-v9l"/>
+                                        <constraint firstItem="ucc-GE-Pj8" firstAttribute="top" secondItem="82K-ki-mDv" secondAttribute="topMargin" constant="3" id="TVl-J6-bAZ"/>
+                                        <constraint firstItem="ucc-GE-Pj8" firstAttribute="leading" secondItem="82K-ki-mDv" secondAttribute="leadingMargin" constant="12" id="a3T-mS-tMH"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -266,7 +275,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Receipt" id="7RX-ff-Tny">
+                    <navigationItem key="navigationItem" title="Transaction History" id="7RX-ff-Tny">
                         <barButtonItem key="leftBarButtonItem" title="Restore" id="LaF-6E-3vB">
                             <connections>
                                 <action selector="actionRefresh:" destination="SMd-og-dLO" id="PQl-ZM-AkQ"/>

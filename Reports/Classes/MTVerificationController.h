@@ -39,7 +39,10 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 - (void)resetReceipt;                                           //Load receipt from file.
 - (void)refreshReceipt:(MADCompletionSuccessError)completion;   //Load receipt from server.
 - (void)iOS7VerifyReceipt;
+
 - (BOOL)purchasedProductWithID:(NSString *)productID;
+- (BOOL)freeForCharterMemembers:(NSString *)productID;
++ (BOOL)charterMemberGiftLookup:(NSString *)productID;
 
 @end
 

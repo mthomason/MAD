@@ -40,10 +40,14 @@ static MTVerificationController *sharedSingleton;
 	return sharedSingleton;
 }
 
++ (BOOL)charterMemberGiftLookup:(NSString *)productID {
+    return ([productID isEqualToString:@"com.everydayapps.mad.designer.product.viewer"] ||
+            [productID isEqualToString:@"com.everydayapps.mad.designer.product.element.barcode"]);
+}
+
 - (BOOL)freeForCharterMemembers:(NSString *)productID {
     return self.receipt.charterMembership &&
-            ([productID isEqualToString:@"com.everydayapps.mad.designer.product.viewer"] ||
-                [productID isEqualToString:@"com.everydayapps.mad.designer.product.element.barcode"]);
+            ([MTVerificationController charterMemberGiftLookup:productID]);
 }
 
 - (BOOL)purchasedProductWithID:(NSString *)productID {

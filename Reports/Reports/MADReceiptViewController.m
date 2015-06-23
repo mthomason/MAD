@@ -59,12 +59,14 @@
     BOOL inAppPurchase = NO;
     NSInteger inAppPurchaseIndex = 0;
     if ([MTVerificationController sharedInstance].receipt.charterMembership) {
+        
         if (indexPath.item == 0) {
             static NSString *reuseID = @"MADIdentifierReceiptApplicationDetails";
             cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
             ((MADTableViewCellReceiptApplication *)cell).product.text = [MTApplicationInstance applicationName];
             ((MADTableViewCellReceiptApplication *)cell).version.text = [MTVerificationController sharedInstance].receipt.version;
         } else if (indexPath.item == 1) {
+            
             static NSString *reuseID = @"MADIdentifierReceiptCharterMember";
             cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
             NSString *formatString = NSLocalizedString(@"Charter Member (since version %@)", @"Charter Member (since version %@)");
@@ -72,6 +74,7 @@
             NSMutableAttributedString *at = ((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText.mutableCopy;
             [at replaceCharactersInRange:NSMakeRange(0, at.length) withString:formattted];
             ((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText = at;
+            
         } else {
             inAppPurchase = YES;
             inAppPurchaseIndex = indexPath.item - 1;
@@ -157,14 +160,16 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([MTVerificationController sharedInstance].receipt.charterMembership) {
-        if (indexPath.item == 0 || indexPath.item == 1) {
+        if (indexPath.item == 0) {
+            return 74.0000f;
+        } else if (indexPath.item == 1) {
             return 34.0000f;
         } else {
             return [self inAppPurchaseCellHeight:indexPath.item-2];
         }
     } else {
         if (indexPath.item == 0) {
-            return 34.0000f;
+            return 74.0000f;
         } else {
             return [self inAppPurchaseCellHeight:indexPath.item-1];
         }

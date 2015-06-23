@@ -16,11 +16,13 @@
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
 #import "UIAlertController+Constructors.h"
+#import "MADSalesReceipt.h"
 
 @interface MADStoreViewController ()
     <MTViewControllerProtocol>
 
 @property (nonatomic, strong) NSNumberFormatter *priceFormatter;
+@property (nonatomic, assign) BOOL charterMember;
 
 @end
 
@@ -55,6 +57,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = @"MAD Features";
     self.navigationItem.titleView = titleView;
+    
+    self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
 }
 
 - (void)viewDidLoad {
@@ -101,11 +105,17 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     cell.labelTitle.text = product.localizedTitle;
     cell.labelDescription.text = product.localizedDescription;
     self.priceFormatter.locale = product.priceLocale;
-    BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
-    if (!ownIt) {
-        cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
+    
+    if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
+        cell.labelPrice.text = @"";
+        cell.labelPrice.font = [UIFont fontWithName:@"FontAwesome" size:cell.labelPrice.font.pointSize];
     } else {
-        cell.labelPrice.text = @"✓";
+        BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+        if (!ownIt) {
+            cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
+        } else {
+            cell.labelPrice.text = @"✓";
+        }
     }
     if ([product.productIdentifier containsString:@"barcode"]) {
         UIImage *barcode = [UIImage imageNamed:@"MADBarcode64"];
@@ -126,12 +136,33 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     SKProduct *product = [MTStoreKitController sharedObject].products[indexPath.item];
-    [[MTStoreKitController sharedObject] purchaseProduct:product completion:^(BOOL success, NSError *error) {
-        UIAlertController *alert = success ? [UIAlertController nofityTransactionComplete] : [UIAlertController error:error];
-        [self presentViewController: alert animated: YES completion: nil];
-        [self.collectionView reloadData];
-    }];
-
+    if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
+        NSString *title = NSLocalizedString(@"You Got It", @"You Got It");
+        NSString *message = NSLocalizedString(@"Access to this feature is a free gift for charter members. That's you! How rare is that?",
+                                              @"Access to this feature is a free gift for charter members. That's you! How rare is that?");
+        UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle: title
+                                              message: message
+                                        andCompletion: ^(UIAlertAction *action) { }];
+        [self presentViewController:alert animated:YES completion:NULL];
+    } else {
+        BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+        if (ownIt) {
+            NSString *title = NSLocalizedString(@"It's Yours", @"It's Yours");
+            NSString *message = NSLocalizedString(@"You already got this feature. Make sure to collect them all.",
+                                                  @"You already got this feature. Make sure to collect them all.");
+            UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle: title
+                                                                             message: message
+                                                                       andCompletion: ^(UIAlertAction *action) { }];
+            [self presentViewController:alert animated:YES completion:NULL];
+        } else {
+            [[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
+            [[MTStoreKitController sharedObject] purchaseProduct:product completion:^(BOOL success, NSError *error) {
+                UIAlertController *alert = success ? [UIAlertController nofityTransactionComplete] : [UIAlertController error:error];
+                [self presentViewController: alert animated: YES completion: nil];
+                [self.collectionView reloadData];
+            }];
+        }
+    }
 }
 
 - (IBAction)actionDone:(id)sender {

@@ -120,7 +120,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [AppDelegate registerForNotifications:application];
 
-     [self addObservers];
+    [self addObservers];
     
     if (MADStateRestorationSupportEnabled == NO) {
         [self loadAndDisplayWindow];

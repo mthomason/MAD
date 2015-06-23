@@ -497,6 +497,10 @@
 		4C7B0B271B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */; };
 		4C7B0B2B1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
 		4C7B0B2C1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
+		4C7B0B311B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */; };
+		4C7B0B321B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */; };
+		4C7B0B351B38D35E005DC0CE /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */; };
+		4C7B0B361B38D35E005DC0CE /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */; };
 		4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5E0183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */; };
@@ -1809,7 +1813,6 @@
 		4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resizable.m"; sourceTree = "<group>"; };
 		4C4CAC6919BF0253000927AC /* MADPromptManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPromptManager.h; sourceTree = "<group>"; };
 		4C4CAC6A19BF0253000927AC /* MADPromptManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPromptManager.m; sourceTree = "<group>"; };
-		4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = chinook.sqlite3; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstFieldViewController.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
@@ -1921,6 +1924,10 @@
 		4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptCharterMember.m; sourceTree = "<group>"; };
 		4C7B0B291B3803B9005DC0CE /* MADTableViewCellReceiptApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellReceiptApplication.h; sourceTree = "<group>"; };
 		4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptApplication.m; sourceTree = "<group>"; };
+		4C7B0B2D1B38CFBE005DC0CE /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
+		4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
+		4C7B0B331B38D35E005DC0CE /* UIFont+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Helpers.h"; sourceTree = "<group>"; };
+		4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Helpers.m"; sourceTree = "<group>"; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
 		4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
 		4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
@@ -2902,6 +2909,8 @@
 				4C4EBFBE17EFC2B700D10622 /* Fonts */,
 				4C0E7860163B5C8D003B951E /* Images */,
 				4C5BED5818E8999D00BDDDB8 /* Settings.bundle */,
+				4C7B0B331B38D35E005DC0CE /* UIFont+Helpers.h */,
+				4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3514,7 +3523,8 @@
 		4C4EBFBE17EFC2B700D10622 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */,
+				4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */,
+				4C7B0B2D1B38CFBE005DC0CE /* CarbonBlock.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -5282,6 +5292,7 @@
 				4CD0B19D1AC8FB2D005CA75C /* Icon-50-Designer-Modern@2x.png in Resources */,
 				4CD0B3921AC909E0005CA75C /* UIImagePatternLinenWeave@2x.png in Resources */,
 				4C1E89871B340AB100B26B5E /* MADInfinity64.png in Resources */,
+				4C7B0B321B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */,
 				4CD0B3B01AC909E0005CA75C /* UIImagePatternPebbled.png in Resources */,
 				4CD0B3841AC909E0005CA75C /* UIImagePatternLeaf.png in Resources */,
 				4CD0B3361AC909E0005CA75C /* UIImagePatternBuffTextured@2x.png in Resources */,
@@ -5774,6 +5785,7 @@
 				4C1E898C1B34115100B26B5E /* MADBarcode64.png in Resources */,
 				4CD0B2181AC8FBC4005CA75C /* UIButtonHighlighted.png in Resources */,
 				4CD0B18C1AC8FB2D005CA75C /* Icon-29-Viewer-Modern@2x.png in Resources */,
+				4C7B0B311B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */,
 				4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4CD0B3E11AC909E0005CA75C /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
 				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
@@ -5896,6 +5908,7 @@
 				4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */,
 				4C23FB3118FADE65009F234F /* MTCellEnterText.m in Sources */,
 				4C0E7754163B5AEC003B951E /* MADQueryViewController.m in Sources */,
+				4C7B0B361B38D35E005DC0CE /* UIFont+Helpers.m in Sources */,
 				4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */,
 				4CB2936D19FB52EB00C0171D /* MADTabBar.m in Sources */,
 				4C1E89931B36912500B26B5E /* MADReceiptViewController.m in Sources */,
@@ -6251,6 +6264,7 @@
 				4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C23FB3518FADEBB009F234F /* UIApplication+Extras.m in Sources */,
 				4C4740CF1A01709C00B11434 /* MADToolboxStyleStyleViewController.m in Sources */,
+				4C7B0B351B38D35E005DC0CE /* UIFont+Helpers.m in Sources */,
 				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */,
 				4C0F895E1B2D892B00D75AF6 /* UINavigationController+Designer.m in Sources */,
