@@ -8,6 +8,7 @@
 
 #import <UIKit/UIColor.h>
 #import "UIColor+EverydayApps.h"
+#import "MacroVendColor.h"
 
 @implementation UIColor(EverydayApps)
 

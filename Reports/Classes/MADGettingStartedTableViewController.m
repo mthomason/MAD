@@ -7,11 +7,9 @@
 //
 
 #import "MADGettingStartedTableViewController.h"
-#import "MADVibrantTableView.h"
-#import "MADVibrantTableViewCell.h"
+#import "MADTableViewCellBase.h"
 
 @interface MADGettingStartedTableViewController ()
-    <MADVibrantTableViewCellDelegate>
 
 @end
 
@@ -21,100 +19,114 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - MADVibrantTableViewCellDelegate
-
-- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
-    return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.preferredContentSize = CGSizeMake(280, 200);
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return 1; }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 11;
-}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { return 16; }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADIdentiferVibrantTableViewCellGettingStarted" forIndexPath:indexPath];
-    cell.vibrantTableViewCellDelegate = self;
+    MADTableViewCellBase *cell = [tableView dequeueReusableCellWithIdentifier:@"MADIdentiferTableViewCellInformation" forIndexPath:indexPath];
     switch (indexPath.row) {
             
         case 0:
-            cell.label.text = @"Stepping in the Right Direction";
+            cell.label.text = @"MAD Designer Details";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.marginStyle = MADTableViewCellMarginStyleTop;
             break;
             
         case 1:
-            cell.label.text = @"Gettings Started";
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.text = @"MAD is the Mobile Analytics Document from Everyday Apps.  MAD Designer allows one to create and distribute MAD files or mobile analytics documents.";
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 2:
-            cell.label.text = @"You need access to a MySQL or SQL Server database.";
+            cell.label.text = @"MAD Designer is for analyst to create and distribute analytics documents that reference their companies data.  To use MAD Designer, you will need to have access to your companies database.  MAD Designer requires the skills of a business analyst and understanding of your companies database.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 3:
+            cell.label.text = @"MAD Viewer exist for users who do not design documents to view the MAD files with live data.  Get MAD Viewer from the App Store.";
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+            
+        case 4:
+            cell.label.text = @"MAD Designer currently supports MySQL and Microsoft SQL Server databases.  It does this using native database drivers.";
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            break;
+        
+        case 5:
+            cell.label.text = @"Stepping in the Right Direction";
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.marginStyle = MADTableViewCellMarginStyleTop;
+            break;
+            
+        case 6:
+            cell.label.text = @"Gettings Started";
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+            
+        case 7:
+            cell.label.text = @"You need access to a MySQL or SQL Server database.";
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+            
+        case 8:
             cell.label.text = @"The MAD Datasource";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
-        case 4:
+        case 9:
             cell.label.text = @"Attach your datasource as you are creating a new document.  As the document is being created, you will be prompted for the datasource credentials.  If you choose, these credentials are stored in your keychain; they are never stored inside the MAD file.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
-        case 5:
+        case 10:
             cell.label.text = @"The MAD Query";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
-        case 6:
+        case 11:
             cell.label.text = @"Once a MAD file is created, you may design a query for it.  The query builder allows you to add tables, link those tables, group the tables, and add predicates.  This feature requires advanced database or data analysis skills.  The user is required to design queries that are sane and efficient.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
-        case 7:
+        case 12:
             cell.label.text = @"MAD Designer";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
-        case 8:
+        case 13:
             cell.label.text = @"The designer allows the user to layout and format fields from the database query.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
-        case 9:
+        case 14:
             cell.label.text = @"MAD Viewer";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
-        case 10:
+        case 15:
             cell.label.text = @"The viewer allows you to render and refresh your MAD file.  Once rendered, you may print and send to to PDF.";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
@@ -124,7 +136,8 @@
             break;
     }
     cell.label.tintColor = [UIColor darkTextColor];
-    [cell layoutIfNeeded];
+    [cell setNeedsLayout];
+    [cell setNeedsUpdateConstraints];
     return cell;
 }
 

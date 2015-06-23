@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -29,12 +29,12 @@
         <scene sceneID="g5k-wV-0G9">
             <objects>
                 <tableViewController id="Fp4-MZ-YVc" customClass="MADInformationTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q3y-O0-P1y" customClass="MADVibrantTableView">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q3y-O0-P1y" customClass="MADAboutTableView">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MADIdentiferVibrantTableViewCellInformation" id="aoa-Dt-1hN" customClass="MADVibrantTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MADIdentiferTableViewCellInformation" id="aoa-Dt-1hN" customClass="MADTableViewCellAuto">
                                 <rect key="frame" x="0.0" y="0.0" width="540" height="430"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aoa-Dt-1hN" id="NmE-1B-9qU">
@@ -51,84 +51,68 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="What is MAD?" id="vrB-kM-Xtz">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Rbu-ws-Wpn">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Rbu-ws-Wpn">
                             <connections>
                                 <action selector="cancel:" destination="Fp4-MZ-YVc" id="GOu-nm-9FS"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Gettings Started" id="PNw-tr-m2k">
-                            <connections>
-                                <segue destination="sJt-aT-cIi" kind="push" identifier="MTSegueAboutGettingStarted" id="y3P-cU-BQo"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="Onk-WL-hBr" kind="show" identifier="MADStoryboardSegueWhatIsMAD" id="n4z-I3-7lo"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zeq-er-w24" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="left" id="pFP-zE-HZ0">
-                    <connections>
-                        <segue destination="sJt-aT-cIi" kind="push" identifier="MTSegueAboutSwipeNext" id="53Q-zJ-5Ld"/>
-                    </connections>
-                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="pFP-zE-HZ0"/>
                 <swipeGestureRecognizer direction="down" id="lY6-fg-8EQ">
                     <connections>
                         <action selector="cancel:" destination="Fp4-MZ-YVc" id="dRB-dh-Dov"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="476" y="3704"/>
+            <point key="canvasLocation" x="352" y="3629"/>
         </scene>
-        <!--Getting Started-->
-        <scene sceneID="QYX-fD-x4V">
+        <!--What is MAD?-->
+        <scene sceneID="Nuq-lM-1Km">
             <objects>
-                <tableViewController id="sJt-aT-cIi" customClass="MADGettingStartedTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="x8X-di-mPC" customClass="MADVibrantTableView">
-                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                <tableViewController id="Onk-WL-hBr" customClass="MADGettingStartedTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="UPm-eJ-heT" customClass="MADAboutTableView">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MADIdentiferVibrantTableViewCellGettingStarted" id="5JM-bQ-VKc" customClass="MADVibrantTableViewCell">
-                                <rect key="frame" x="0.0" y="0.0" width="540" height="700"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MADIdentiferTableViewCellInformation" id="8hj-wP-Yem" customClass="MADTableViewCellBase">
+                                <rect key="frame" x="0.0" y="0.0" width="540" height="430"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5JM-bQ-VKc" id="QHE-aH-E6o">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="700"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8hj-wP-Yem" id="5Eb-S8-Nv4">
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="430"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
-                            <outlet property="dataSource" destination="sJt-aT-cIi" id="6Ou-XM-U6q"/>
-                            <outlet property="delegate" destination="sJt-aT-cIi" id="i4S-wv-g6r"/>
-                            <outletCollection property="gestureRecognizers" destination="hzl-S0-bOA" appends="YES" id="sbT-CJ-4bw"/>
+                            <outlet property="dataSource" destination="Onk-WL-hBr" id="up8-2D-FGB"/>
+                            <outlet property="delegate" destination="Onk-WL-hBr" id="N7o-SA-g1Q"/>
+                            <outletCollection property="gestureRecognizers" destination="QpE-W7-ZMI" appends="YES" id="AiO-SM-axn"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Getting Started" id="oCS-AK-TM4">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="oPK-Ys-YeS">
+                    <navigationItem key="navigationItem" title="What is MAD?" id="N37-3x-PRo">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="m6N-30-J5H">
                             <connections>
-                                <action selector="done:" destination="sJt-aT-cIi" id="fOZ-ZR-di9"/>
+                                <action selector="cancel:" destination="Onk-WL-hBr" id="s6I-7w-ocR"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xH9-yn-NG9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="right" id="hzl-S0-bOA">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lfW-bJ-92F" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="QpE-W7-ZMI"/>
+                <swipeGestureRecognizer direction="down" id="iQo-wn-7md">
                     <connections>
-                        <segue destination="JiB-sj-s7N" kind="unwind" identifier="MTSegueInfo2SwipeLeft" unwindAction="unwindToInformation:" id="UVt-eH-8lT"/>
+                        <action selector="cancel:" destination="Onk-WL-hBr" id="CDo-vK-FC1"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="down" id="Kgq-Au-WMV">
-                    <connections>
-                        <action selector="done:" destination="sJt-aT-cIi" id="I57-nG-7WC"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <exit id="JiB-sj-s7N" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1283" y="3704"/>
+            <point key="canvasLocation" x="1055" y="3606"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="y3P-cU-BQo"/>
-    </inferredMetricsTieBreakers>
 </document>

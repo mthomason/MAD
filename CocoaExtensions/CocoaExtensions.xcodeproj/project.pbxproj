@@ -23,6 +23,7 @@
 		4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBBC1AD2532600B7B9EA /* UIImage+Border.m */; };
 		4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */; };
 		4C8CDC851AD2687800B7B9EA /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */; };
+		4CE84D861B396A2100BB3A0A /* UIColor+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE84D851B396A2100BB3A0A /* UIColor+Social.m */; };
 		4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,9 @@
 		4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Extras.m"; sourceTree = "<group>"; };
 		4C8CDC831AD2687800B7B9EA /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EverydayApps.h"; sourceTree = "<group>"; };
 		4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EverydayApps.m"; sourceTree = "<group>"; };
+		4CE84D841B396A2100BB3A0A /* UIColor+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Social.h"; sourceTree = "<group>"; };
+		4CE84D851B396A2100BB3A0A /* UIColor+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Social.m"; sourceTree = "<group>"; };
+		4CE84D871B396A5A00BB3A0A /* MacroVendColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroVendColor.h; sourceTree = "<group>"; };
 		4CF8891C1AD1BBA700ED21FC /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
 		4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hack.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,6 +162,9 @@
 				4C1AD34F1B18413E00839504 /* UIBarButtonItem+Constructors.m */,
 				4C111BF41B1C268C005CA4DD /* NSNumberFormatter+Constructors.h */,
 				4C111BF51B1C268C005CA4DD /* NSNumberFormatter+Constructors.m */,
+				4CE84D841B396A2100BB3A0A /* UIColor+Social.h */,
+				4CE84D851B396A2100BB3A0A /* UIColor+Social.m */,
+				4CE84D871B396A5A00BB3A0A /* MacroVendColor.h */,
 			);
 			path = CocoaExtensions;
 			sourceTree = "<group>";
@@ -278,6 +285,7 @@
 				4C1AD3471B1826B800839504 /* MFMailComposeViewController+Constructors.m in Sources */,
 				4C37E12C1ACC87C600B4BC0D /* NSURL+Document.m in Sources */,
 				4C4AC1C41AD1125000D4C461 /* CGGeometry+Extras.m in Sources */,
+				4CE84D861B396A2100BB3A0A /* UIColor+Social.m in Sources */,
 				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
 				4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */,
 				4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */,

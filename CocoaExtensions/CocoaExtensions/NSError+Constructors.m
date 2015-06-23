@@ -31,8 +31,8 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     
     NSString *m = message == nil ? @"" : [NSString stringWithString:message];
     NSString *t = title == nil ? @"" : [NSString stringWithString:title];
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : m,
-                               NSLocalizedFailureReasonErrorKey : t};
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : t,
+                               NSLocalizedFailureReasonErrorKey : m};
     return userInfo;
     
 }

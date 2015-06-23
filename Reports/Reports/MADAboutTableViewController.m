@@ -55,8 +55,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.allowsSelection = NO;
-    self.preferredContentSize = CGSizeMake(280, 200);
+    self.tableView.allowsSelection = YES;
+    self.preferredContentSize = CGSizeMake(240.0000f, 260.0000f);
 }
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
@@ -142,11 +142,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 7;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MADTableViewCellBase *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
+    MADTableViewCellBase *cell;
+    cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
     cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
     switch (indexPath.row) {
 
@@ -154,34 +155,64 @@
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.label.textColor = [UIColor edaBlueDark];
             cell.label.text = @"MAD Designer";
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleTop;
             break;
 
         case 1:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = [self versionText];
+            cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkTextColor];
+            cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
         case 2:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = [self buildText];
+            cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkTextColor];
-            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
-            break;
-            
-        case 3:
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.attributedText = [self trademarkStatement];
-            cell.label.textColor = [UIColor darkTextColor];
+            cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
+        case 3:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.text = @"By EVERYDAY APPS LLC in Cincinnati, OH.";
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.label.textColor = [UIColor darkTextColor];
+            cell.userInteractionEnabled = NO;
+            cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            [cell.label sizeToFit];
+            break;
+
+            
         case 4:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
+            cell.label.text = @"Copyright EVERYDAY APPS LLC 2015.  All rights reserved.";
+            cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkTextColor];
+            cell.userInteractionEnabled = NO;
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+            
+        case 5:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.attributedText = [self trademarkStatement];
+            cell.label.textColor = [UIColor darkTextColor];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.userInteractionEnabled = NO;
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+
+        case 6:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.label.textColor = [UIColor darkTextColor];
+            cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
             break;
@@ -190,10 +221,12 @@
             break;
     }
     [cell setNeedsLayout];
-    [cell layoutIfNeeded];
     [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
