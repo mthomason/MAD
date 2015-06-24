@@ -12,9 +12,10 @@
 #import <UIKit/UIKit.h>
 
 @interface UIBarButtonItem (Constructors)
-+ (UIBarButtonItem *)buttonEdit:(id)target action:(SEL)action;
-+ (UIBarButtonItem *)buttonDuplicate:(id)target action:(SEL)action;
-+ (UIBarButtonItem *)buttonEditDone:(id)target action:(SEL)action;
++ (instancetype)buttonEdit:(id)target action:(SEL)action;
++ (instancetype)buttonDuplicate:(id)target action:(SEL)action;
++ (instancetype)buttonEditDone:(id)target action:(SEL)action;
++ (instancetype)ActivityIndicator;
 
 @end
 

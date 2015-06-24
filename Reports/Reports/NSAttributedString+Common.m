@@ -12,21 +12,28 @@
 @implementation NSAttributedString (Common)
 
 + (NSAttributedString *)FollowUsOnTwitter {
+    
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [style setAlignment:NSTextAlignmentCenter];
     [style setLineBreakMode:NSLineBreakByWordWrapping];
+    
     UIColor *black = [UIColor blackColor];
-    UIFont *sy = [[UIFont preferredFontForTextStyle:UIFontTextStyleBody] fontWithSize:12.0000f];
-    NSDictionary *attributesBlack = @{ NSForegroundColorAttributeName :  black, NSFontAttributeName: sy};
-    NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:@"Follow Us on " attributes:attributesBlack];
     UIColor *color = [UIColor blueTwitter];
+
     UIFont *fa = [UIFont fontWithName:@"FontAwesome" size:12.0000f];
     NSDictionary *attributesTwitter = @{ NSForegroundColorAttributeName :  color, NSFontAttributeName : fa };
-    NSAttributedString *twitter = [[NSAttributedString alloc] initWithString:@"" attributes:attributesTwitter];
-    [s appendAttributedString:twitter];
+    NSMutableAttributedString *twitter = [[NSMutableAttributedString alloc] initWithString:@"" attributes:attributesTwitter];
+
+    UIFont *sy = [[UIFont preferredFontForTextStyle:UIFontTextStyleBody] fontWithSize:12.0000f];
+    NSDictionary *attributesBlack = @{ NSForegroundColorAttributeName :  black, NSFontAttributeName: sy};
+    
+    NSString *follow = NSLocalizedString(@"Follow", @"Follow");
+    NSString *spaceFollow = [@" " stringByAppendingString:follow];
+    NSAttributedString *followAttributed = [[NSAttributedString alloc] initWithString:spaceFollow attributes:attributesBlack];
+    [twitter appendAttributedString:followAttributed];
     NSDictionary *d = @{NSParagraphStyleAttributeName:style};
-    [s addAttributes:d range:NSMakeRange(0, s.length)];
-    return s;
+    [twitter addAttributes:d range:NSMakeRange(0, twitter.length)];
+    return twitter;
 }
 
 @end

@@ -8,12 +8,11 @@
 
 #import "MADInformationTableViewController.h"
 #import "MADTableViewCellAuto.h"
-#import "UIColor+EverydayApps.h"
-#import "NSAttributedString+Common.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
-#import "NSError+Constructors.h"
 #import "UIAlertController+Constructors.h"
+#import "ACAccountStore+Social.h"
+#import "UIButton+FollowTwitter.h"
 
 @interface MADInformationTableViewController ()
 
@@ -90,7 +89,7 @@
             break;
             
         case 1:
-            cell.label.text = @"What is MAD Designer?  Read a breif overview:";
+            cell.label.text = @"MAD Designer: A Breif Overview";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.userInteractionEnabled = YES;
@@ -113,14 +112,7 @@
         case 4: {
             cell.label.text = @"Everyday Apps on Twitter";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            NSAttributedString *followOnTwitter = [NSAttributedString FollowUsOnTwitter];
-            UIButton *b = [UIButton buttonWithType:UIButtonTypeSystem];
-            b.backgroundColor = [UIColor edaBlackTwentyFivePercent];
-            b.layer.cornerRadius = 5.0000f;
-            b.clipsToBounds = YES;
-            b.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 32.0000f);
-            [b addTarget:self action:@selector(followEverydayApps) forControlEvents:UIControlEventTouchUpInside];
-            [b setAttributedTitle:followOnTwitter forState:UIControlStateNormal];
+            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps)];
             cell.accessoryView = b;
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.userInteractionEnabled = YES;
@@ -136,60 +128,26 @@
 }
 
 - (void)followEverydayApps {
-    [self twitterFollow:@"EverydayApps" completion:^(BOOL success, NSError *error) {
-        if (error) {
-            UIAlertController *alert = [UIAlertController error:error];
-            [self presentViewController:alert animated:YES completion:NULL];
-        }
-    }];
-}
-
-- (void)twitterFollow:(NSString *)account completion:(void (^)(BOOL success, NSError *error))completion {
-    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
-    ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-    
-    [accountStore requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error) {
-        if(granted) {
-            // Get the list of Twitter accounts.
-            NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
+    if (self.popoverPresentationController != nil) {
+        [self dismissViewControllerAnimated:YES completion:^{
             
-            // For the sake of brevity, we'll assume there is only one Twitter account present.
-            // You would ideally ask the user which account they want to tweet from, if there is more than one Twitter account present.
-            if (accountsArray.count > 0) {
-                // Grab the initial Twitter account to tweet from.
-                for (ACAccount *twitterAccount in accountsArray) {
-                    NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
-                    [tempDict setValue: @"twitter_name"
-                                forKey: @"EverydayApps"];
-                    [tempDict setValue: @"true"
-                                forKey: @"follow"];
-                    NSLog(@"*******tempDict %@*******",tempDict);
-                    
-                    NSURL *twitterFriendships = [NSURL URLWithString:@"https://api.twitter.com/1.1/friendships/create.json"];
-                    SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:twitterFriendships parameters:tempDict];
-                    [postRequest setAccount:twitterAccount];
-                    [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-                        NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)error.code];
-                        NSLog(@"%@error %@", output,error.description);
-                        completion(error == nil, error);
-                    }];
-                }
-                
-            } else {
-                NSError *noTwitterFound = [NSError errorWithDomain: @"MADSocial"
-                                                              code: 3782
-                                                             title: @"No Accounts Found"
-                                                        andMessage: @"Please add a Twitter account to your device."];
-                completion(NO, noTwitterFound);
-            }
-            
-        } else {
-            NSError *noTwitterFound = [NSError errorWithDomain: @"MADSocial"
-                                                          code: 3782
-                                                         title: @"Access Denied"
-                                                    andMessage: @"The software doesn't have access to your Twitter accounts.  Please check the permission in the Settings app."];
-            completion(NO, noTwitterFound);
+        }];
+    }
+    NSString *user = @"EverydayApps";
+    [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
+        UIAlertController *alert;
+        if (!success && error) {
+            alert = [UIAlertController error:error];
+        } else if (success) {
+            NSString *title = NSLocalizedString(@"Success", @"Success");
+            NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
+                                                        @"You are now Twitter following user %@.");
+            NSString *message = [NSString stringWithFormat:messageFormat, user];
+            alert = [UIAlertController errorDisplayErrorWithTitle: title
+                                                          message: message
+                                                    andCompletion: ^(UIAlertAction *action) { }];
         }
+        [self presentViewController:alert animated:YES completion:NULL];
     }];
 }
 

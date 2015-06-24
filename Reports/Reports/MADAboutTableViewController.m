@@ -23,6 +23,9 @@
 #import "MADTableViewCellBase.h"
 #import "MADocument.h"
 #import "MADConstants.h"
+#import "UIButton+FollowTwitter.h"
+#import "ACAccountStore+Social.h"
+#import "UIAlertController+Constructors.h"
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
@@ -56,7 +59,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.allowsSelection = YES;
-    self.preferredContentSize = CGSizeMake(240.0000f, 260.0000f);
+    self.preferredContentSize = CGSizeMake(320.0000f, 260.0000f);
 }
 
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
@@ -207,16 +210,18 @@
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
-        case 6:
+        case 6: {
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkTextColor];
             cell.userInteractionEnabled = NO;
+            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followMichael) size:small];
+            cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
             break;
-
+        }
         default:
             break;
     }
@@ -228,5 +233,30 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+- (void)followMichael {
+    if (self.popoverPresentationController != nil) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
+    NSString *user = @"MichaelThomason";
+    [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
+        UIAlertController *alert;
+        if (!success && error) {
+            alert = [UIAlertController error:error];
+        } else if (success) {
+            NSString *title = NSLocalizedString(@"Success", @"Success");
+            NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
+                                                        @"You are now Twitter following user %@.");
+            NSString *message = [NSString stringWithFormat:messageFormat, user];
+            alert = [UIAlertController errorDisplayErrorWithTitle: title
+                                                          message: message
+                                                    andCompletion: ^(UIAlertAction *action) { }];
+        }
+        [self presentViewController:alert animated:YES completion:NULL];
+    }];
+}
+
 
 @end

@@ -17,6 +17,7 @@
 #import "MADFeatures.h"
 #import "UIAlertController+Constructors.h"
 #import "MADSalesReceipt.h"
+#import "UIBarButtonItem+Constructors.h"
 
 @interface MADStoreViewController ()
     <MTViewControllerProtocol>
@@ -79,9 +80,20 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
     if ([MTStoreKitController sharedObject].products.count <= 0) {
         MADFeatures *features = [[MADFeatures alloc] init];
         NSArray *products = [features availableFeaturesProductIDs];
+        
+        UIBarButtonItem *barButtonItem = [UIBarButtonItem ActivityIndicator];
+        [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
+
         [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {
+            if (!success && error) {
+                UIAlertController *alert = [UIAlertController error:error];
+                [self presentViewController:alert animated:YES completion:NULL];
+            }
+            [self.navigationItem setLeftBarButtonItem:nil animated:YES];
             [self.collectionView reloadData];
         }];
+    } else {
+        [self.collectionView reloadData];
     }
 }
 
@@ -164,6 +176,8 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
         }
     }
 }
+
+#pragma mark - Actions
 
 - (IBAction)actionDone:(id)sender {
     [self.delegate viewControllerDidCancel:self];

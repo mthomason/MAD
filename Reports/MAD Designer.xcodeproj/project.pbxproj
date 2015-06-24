@@ -481,7 +481,6 @@
 		4C7B0AF61B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */; };
 		4C7B0AF71B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0AF51B36BFCF005DC0CE /* MADTableViewCellReceiptInAppPurchase.m */; };
 		4C7B0B011B374242005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B001B374242005DC0CE /* MADFeatures.plist */; };
-		4C7B0B041B374266005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B031B374266005DC0CE /* MADFeatures.plist */; };
 		4C7B0B051B374266005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B031B374266005DC0CE /* MADFeatures.plist */; };
 		4C7B0B081B374A0A005DC0CE /* MADFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B071B374A0A005DC0CE /* MADFeature.m */; };
 		4C7B0B091B374A0A005DC0CE /* MADFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B071B374A0A005DC0CE /* MADFeature.m */; };
@@ -1273,6 +1272,10 @@
 		4CE8A04314C01ABB007C8345 /* MADOpenFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MADOpenFileViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE8A04914C01EA1007C8345 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE9985F14B69AA80015C8D1 /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CEA5CD21B3A888300163ED4 /* ACAccountStore+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA5CD11B3A888300163ED4 /* ACAccountStore+Social.m */; };
+		4CEA5CD31B3A888300163ED4 /* ACAccountStore+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA5CD11B3A888300163ED4 /* ACAccountStore+Social.m */; };
+		4CEA5CDB1B3A89EE00163ED4 /* UIButton+FollowTwitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA5CDA1B3A89EE00163ED4 /* UIButton+FollowTwitter.m */; };
+		4CEA5CDC1B3A89EE00163ED4 /* UIButton+FollowTwitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA5CDA1B3A89EE00163ED4 /* UIButton+FollowTwitter.m */; };
 		4CF1335516CD1FE400FD0F0B /* MADQueryVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MADQueryVisualizationViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CF1335616CD1FE400FD0F0B /* MADQueryVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MADQueryVisualizationViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
@@ -2634,6 +2637,11 @@
 		4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Viewer.entitlements"; sourceTree = "<group>"; };
 		4CE9F31A177B39A8009F11AF /* MTLicensingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLicensingViewController.h; sourceTree = "<group>"; };
 		4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTLicensingViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4CEA5CD01B3A888300163ED4 /* ACAccountStore+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+Social.h"; sourceTree = "<group>"; };
+		4CEA5CD11B3A888300163ED4 /* ACAccountStore+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+Social.m"; sourceTree = "<group>"; };
+		4CEA5CD91B3A89EE00163ED4 /* UIButton+FollowTwitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+FollowTwitter.h"; sourceTree = "<group>"; };
+		4CEA5CDA1B3A89EE00163ED4 /* UIButton+FollowTwitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+FollowTwitter.m"; sourceTree = "<group>"; };
+		4CEA5CDD1B3A8F1700163ED4 /* MADSizeGeneral.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADSizeGeneral.h; sourceTree = "<group>"; };
 		4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libTdsClient.xcodeproj; path = libTdsClient/libTdsClient.xcodeproj; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF1335316CD1FE200FD0F0B /* MADQueryVisualizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationViewController.h; sourceTree = "<group>"; };
@@ -4553,6 +4561,8 @@
 		4CDB624B14E38C8400A5389E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				4CEA5CD01B3A888300163ED4 /* ACAccountStore+Social.h */,
+				4CEA5CD11B3A888300163ED4 /* ACAccountStore+Social.m */,
 				4C44DC6619B95FFA0050BBDD /* NSLayoutConstraint+Extras.h */,
 				4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */,
 				4C7B0B0E1B375F07005DC0CE /* NSDateFormatter+RFC_3339.h */,
@@ -4645,6 +4655,9 @@
 				4C359D931B081EE300B3E9E0 /* NSString+Encryption.m */,
 				4CE84D7B1B3969C300BB3A0A /* NSAttributedString+Common.h */,
 				4CE84D7C1B3969C300BB3A0A /* NSAttributedString+Common.m */,
+				4CEA5CD91B3A89EE00163ED4 /* UIButton+FollowTwitter.h */,
+				4CEA5CDA1B3A89EE00163ED4 /* UIButton+FollowTwitter.m */,
+				4CEA5CDD1B3A8F1700163ED4 /* MADSizeGeneral.h */,
 			);
 			name = Categories;
 			path = Reports;
@@ -5515,7 +5528,6 @@
 				4CD0B2451AC90018005CA75C /* MTImageLaunchDesignerPadLandscapeRetina.png in Resources */,
 				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
 				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
-				4C7B0B041B374266005DC0CE /* MADFeatures.plist in Resources */,
 				4CD0B2811AC90339005CA75C /* MADIcon320.png in Resources */,
 				4CD0B1B21AC8FB2D005CA75C /* Icon-57-Viewer-Modern.png in Resources */,
 				4CD0B3CF1AC909E0005CA75C /* UIImagePatternWhiteColumns.png in Resources */,
@@ -6048,6 +6060,7 @@
 				4C4C78D5169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 				4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C0F89441B2D73B600D75AF6 /* UIStoryboard+Designer.m in Sources */,
+				4CEA5CDC1B3A89EE00163ED4 /* UIButton+FollowTwitter.m in Sources */,
 				4C75C9FF18E272F6006E8526 /* MTTableCellHeader.m in Sources */,
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4C88C4431A09C8E400991908 /* MADDimmingView.m in Sources */,
@@ -6066,6 +6079,7 @@
 				4C12293116CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m in Sources */,
 				4C12293716CE239900B69763 /* MTSchemaFieldCell.m in Sources */,
 				4C12293B16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */,
+				4CEA5CD31B3A888300163ED4 /* ACAccountStore+Social.m in Sources */,
 				4C12293F16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m in Sources */,
 				4C23FB0B18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C174CDF18B13760007A88B3 /* MTApplicationInstance.m in Sources */,
@@ -6153,6 +6167,7 @@
 				4C1E89921B36912500B26B5E /* MADReceiptViewController.m in Sources */,
 				4C2F6E6B194C3450009D192B /* MTArrayDataSource.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
+				4CEA5CD21B3A888300163ED4 /* ACAccountStore+Social.m in Sources */,
 				4CE8A04314C01ABB007C8345 /* MADOpenFileViewController.m in Sources */,
 				4C44DC5919B93E500050BBDD /* MADDesignerStatusLabel.m in Sources */,
 				4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */,
@@ -6208,6 +6223,7 @@
 				4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C75C9F218E20306006E8526 /* MTTableCell.m in Sources */,
 				4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */,
+				4CEA5CDB1B3A89EE00163ED4 /* UIButton+FollowTwitter.m in Sources */,
 				4C1A585D14DE348200184445 /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C0F89471B2D755600D75AF6 /* UIStoryboard+Viewer.m in Sources */,
 				4C7B0B101B375F07005DC0CE /* NSDateFormatter+RFC_3339.m in Sources */,
