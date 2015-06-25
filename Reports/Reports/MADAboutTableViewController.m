@@ -145,7 +145,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 7;
+    return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -163,58 +163,58 @@
             cell.marginStyle = MADTableViewCellMarginStyleTop;
             break;
 
-        case 1:
+        case 1: {
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = [self versionText];
             cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkGrayColor];
+            UILabel *l = [[UILabel alloc] initWithFrame:CGRectZero];
+            l.text = [self buildText];
+            l.font = cell.label.font;
+            l.textColor = [UIColor lightGrayColor];
+            cell.accessoryView = l;
+            [cell.accessoryView sizeToFit];
             cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
-            
-        case 2:
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = [self buildText];
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkTextColor];
-            cell.userInteractionEnabled = NO;
-            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
-            break;
+        }
 
-        case 3:
+        case 2: {
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = @"By EVERYDAY APPS LLC in Cincinnati, OH.";
             cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
+            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps) size:small];
+            cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
             break;
-
+        }
             
-        case 4:
+        case 3:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = @"Copyright EVERYDAY APPS LLC 2015.  All rights reserved.";
             cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
             
-        case 5:
+        case 4:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.attributedText = [self trademarkStatement];
-            cell.label.textColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkGrayColor];
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleMiddle;
             break;
 
-        case 6: {
+        case 5: {
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
             cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkTextColor];
+            cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
             UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followMichael) size:small];
             cell.accessoryView = b;
@@ -234,13 +234,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)followMichael {
+- (void)followUser:(NSString *)user {
     if (self.popoverPresentationController != nil) {
         [self dismissViewControllerAnimated:YES completion:^{
             
         }];
     }
-    NSString *user = @"MichaelThomason";
     [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
@@ -256,6 +255,14 @@
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];
+}
+
+- (void)followEverydayApps {
+    [self followUser:@"EverydayApps"];
+}
+
+- (void)followMichael {
+    [self followUser:@"MichaelThomason"];
 }
 
 
