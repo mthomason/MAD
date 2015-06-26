@@ -2150,13 +2150,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     MADDesignerSectionView *result = nil;
     CGPoint gestureLocation;
     // Try to find the section to place the element view into.
-    //CGPoint viewLocation = gesture.view.frame.origin;// [gesture locationInView:self.scroller.container];
     
     //Find the section to add the element.
     for (UIView *sectionView in self.scroller.container.subviews) {
         if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
-            CGPoint viewLocation = gesture.view.frame.origin;//[gesture.view convertPoint:gesture.view.frame.origin toView:sectionView];//gesture.view.frame.origin;//[gesture.view convertPoint:gesture.view.frame.origin toView:sectionView];
-            NSLog(@"%@ contains %@? %@", NSStringFromCGRect(sectionView.frame), NSStringFromCGPoint(viewLocation), CGRectContainsPoint(sectionView.frame, viewLocation) ? @"YES" : @"NO");
+            CGPoint viewLocation = gesture.view.frame.origin;
             if (CGRectContainsPoint(sectionView.frame, viewLocation) && ![sectionView isEqual:self]) {
 
                 gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
