@@ -194,7 +194,6 @@
         [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
         if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
             CGPoint translation = [gestureRecognizer translationInView:piece.superview];
-            
             switch (((MTResizeHandleView *)piece).type) {
                 case north:
                 case south:
@@ -212,12 +211,11 @@
                     [self resize:CGSizeMake(self.frame.size.width + translation.x, self.frame.size.width + translation.y)];
                     break;
             }
-            
             [gestureRecognizer setTranslation:CGPointZero inView:piece.superview];
         }
     }
-    
 }
+
 - (void)resize:(CGSize)size {
     RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.managedObjectContext objectWithID:self.objectIdTag];
     documentObject.sizewidth = @(size.width);
