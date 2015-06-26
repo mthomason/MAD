@@ -44,6 +44,8 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 - (BOOL)freeForCharterMemembers:(NSString *)productID;
 + (BOOL)charterMemberGiftLookup:(NSString *)productID;
 
+- (BOOL)entitledToProduct:(NSString *)productID;
+
 @end
 
 #endif

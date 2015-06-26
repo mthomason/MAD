@@ -26,7 +26,8 @@ typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsLinks = 3,
     MTQuerySectionsGroups = 4,
     MTQuerySectionsPredicate = 5,
-    MTQuerySectionsSql = 6
+    MTQuerySectionsSql = 6,
+    MTQuerySectionsNumberOfQueryResults = 7
 };
 
 extern NSString * const MADMimeType;

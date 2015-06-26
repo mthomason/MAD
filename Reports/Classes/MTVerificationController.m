@@ -46,8 +46,7 @@ static MTVerificationController *sharedSingleton;
 }
 
 - (BOOL)freeForCharterMemembers:(NSString *)productID {
-    return self.receipt.charterMembership &&
-            ([MTVerificationController charterMemberGiftLookup:productID]);
+    return [MTVerificationController charterMemberGiftLookup:productID] && self.receipt.charterMembership;
 }
 
 - (BOOL)purchasedProductWithID:(NSString *)productID {
@@ -499,6 +498,12 @@ outLabel:
         }
     }];
     return result;
+}
+
+// FIXME: Instead of returning bool, maybe return a enum type (yes, no, charter, future-entitlment-class)
+
+- (BOOL)entitledToProduct:(NSString *)productID {
+    return [self purchasedProductWithID:productID] || [self freeForCharterMemembers:productID];
 }
 
 @end

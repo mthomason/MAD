@@ -15,7 +15,7 @@
 #import "MADNavigationBarTitleView.h"
 #import "AppDelegate.h"
 #import "MADocument.h"
-
+#import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 
 #import "MTApplicationInstance.h"
@@ -860,6 +860,17 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             }
             break;
         }
+            
+        case MTQuerySectionsNumberOfQueryResults: {
+            static NSString *idNumberOfQueryResults = @"UITableViewCellNumberOfQueryResultsIdentifier";
+            result = [tableView dequeueReusableCellWithIdentifier: idNumberOfQueryResults];
+            UISwitch *s = [[UISwitch alloc] initWithFrame:CGRectZero];
+            s.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
+            [s addTarget:self action:@selector(wantsToChangeReportingMode:) forControlEvents:UIControlEventValueChanged];
+            result.accessoryView = s;
+            result.textLabel.text = [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"] ? @"Reporting Mode" : @"Designer Mode (limited)";
+            break;
+        }
         
         default: {
             break;
@@ -875,44 +886,58 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return result;
 }
 
+- (void)wantsToChangeReportingMode:(UISwitch *)switchControl {
+    if (switchControl.on) {
+        if ([MTStoreKitController sharedObject].isReportingEnabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"defaults.everydayapps.features.viewer.desired"];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"defaults.everydayapps.features.viewer.desired"];
+            [switchControl setOn:NO animated:YES];
+        }
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"defaults.everydayapps.features.viewer.desired"];
+    }
+    // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
+  //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
+    NSIndexPath *i = [NSIndexPath indexPathForItem:0 inSection:self.tableView.numberOfSections - 1];
+    NSArray *paths = @[i];
+    [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+//    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 
-    MTViewTableHeader *result = nil;
     
-    section = [self tableSectionTypeForIndexPathSection: section];
-    
-    switch (section) {
+    switch ([self tableSectionTypeForIndexPathSection: section]) {
             
-        case MTQuerySectionsDatasource: {
-            result = [self tableHeaderDatabaseInfo];
+        case MTQuerySectionsDatasource:
+            return [self tableHeaderDatabaseInfo];
             break;
-        }
             
-        case MTQuerySectionsTables: {
-            result = [self tableHeaderTablesToSelect];
+        case MTQuerySectionsTables:
+            return [self tableHeaderTablesToSelect];
             break;
-        }
             
-        case MTQuerySectionsLinks: {
-            result = [self tableHeaderTableJoins];
+        case MTQuerySectionsLinks:
+            return [self tableHeaderTableJoins];
             break;
-        }
             
-        case MTQuerySectionsGroups: {
-            result = [self tableHeaderGroupedBy];
+        case MTQuerySectionsGroups:
+            return [self tableHeaderGroupedBy];
             break;
-        }
             
-        case MTQuerySectionsPredicate: {
-            result = [self tableHeaderPredicate];
+        case MTQuerySectionsPredicate:
+            return [self tableHeaderPredicate];
             break;
-        }
-        default: {
-            result = [self tableHeaderDatabaseInfo];
+
+        case MTQuerySectionsNumberOfQueryResults:
+            return [self tableHeaderNumberOfQueryResults];
             break;
-        }
+        
+        default:
+            return [self tableHeaderDatabaseInfo];
+            break;
     }
-    return result;
 }
 
 
@@ -1286,8 +1311,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (NSMutableDictionary *)datamodel {
     RptqDatabase *database = [self.document.activeDocumentModel defaultDatabase];
     RptqQuery *query = [database defaultQuery];
-    NSInteger numberOfTablesInQuery = [query numberOfTables];
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:query.hasQueryTables.count]];
     return result;
 }
 
@@ -1300,21 +1324,25 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
     NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
     NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
-    
+    NSString *h7 = NSLocalizedString(@"Reporting Mode", @"Reporting Mode");
+
+    NSNumber *one = @(1);
+    NSNumber *unknown = @(-1);
+    NSNumber *datasource = @(MTQuerySectionsDatasource);
+    NSNumber *tables = @(MTQuerySectionsTables);
+    NSNumber *resultCount = @(MTQuerySectionsNumberOfQueryResults);
+
+    BOOL reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
     switch (numberOfTables) {
         case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
             
-            NSNumber *datasource = @(MTQuerySectionsDatasource);
-            NSNumber *tables = @(MTQuerySectionsTables);
-            NSArray *sections = @[datasource, tables];
-            
-            NSNumber *count1 = @(1);
-            NSNumber *count2 = @(-1);
-            NSArray *countRowsForSection = @[count1, count2];
+            NSArray *sections = reportingEnabled ? @[datasource, tables, resultCount] :
+                                                   @[datasource, tables];
+            NSArray *countRowsForSection = @[one, unknown];
             NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects: countRowsForSection
                                                                                        forKeys: sections];
             
-            NSArray *headersSection = @[h2, h3];
+            NSArray *headersSection = reportingEnabled ? @[h2, h3, h7] : @[h2, h3];
             NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                                  forKeys: sections];
             NSNumber *height1 = @(50.0000f);
@@ -1332,26 +1360,25 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         }
         case 1: {   //Only one table in query.  No ability to add links.
             
-            NSNumber *datasource = @(MTQuerySectionsDatasource);
-            NSNumber *tables = @(MTQuerySectionsTables);
             NSNumber *groups = @(MTQuerySectionsGroups);
             NSNumber *predicate = @(MTQuerySectionsPredicate);
 
-            NSArray *sections = @[datasource, tables, groups, predicate];
+            NSArray *sections = reportingEnabled ? @[datasource, tables, groups, predicate, resultCount] :
+                                                   @[datasource, tables, groups, predicate];
             
-            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
+            NSArray *countRowsForSection = reportingEnabled ? @[one, unknown, unknown, unknown, one] :
+                                                              @[one, unknown, unknown, unknown];
             NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects: countRowsForSection
                                                                                       forKeys: sections];
             
-            NSArray *headersSection = @[h2, h3, h5, h6];
+            NSArray *headersSection = reportingEnabled ? @[h2, h3, h5, h6, h7] : @[h2, h3, h5, h6];
             NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                                  forKeys: sections];
             
             NSNumber *height1 = @(44.0000f);
             NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
-            NSNumber *height3 = @(44.0000f);
-            NSNumber *height4 = @(44.0000f);
-            NSArray *heightRowsForSection = @[height1, height2, height3, height4];
+            NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1, height1, height1] :
+                                                               @[height1, height2, height1, height1];
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
                                                                                                  forKeys: sections];
             
@@ -1364,31 +1391,27 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         }
         default: {   //Two more more tables in query.  All features available.
             
-            NSNumber *datasource = @(MTQuerySectionsDatasource);
-            NSNumber *tables = @(MTQuerySectionsTables);
             NSNumber *links = @(MTQuerySectionsLinks);
             NSNumber *groups = @(MTQuerySectionsGroups);
             NSNumber *predicate = @(MTQuerySectionsPredicate);
-            NSArray *sections = @[datasource, tables, links, groups, predicate];
+
+            NSArray *sections = reportingEnabled ? @[datasource, tables, links, groups, predicate, resultCount] :
+                                                   @[datasource, tables, links, groups, predicate];
             
-            NSNumber *count1 = @(1);
-            NSNumber *count2 = @(-1);
-            NSNumber *count3 = @(-1);
-            NSNumber *count4 = @(-1);
-            NSNumber *count5 = @(-1);
-            NSArray *countRowsForSection = @[count1, count2, count3, count4, count5];
+            NSArray *countRowsForSection = reportingEnabled ? @[one, unknown, unknown, unknown, unknown, one] :
+                                                              @[one, unknown, unknown, unknown, unknown];
             NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects: countRowsForSection
                                                                                       forKeys: sections];
             
-            NSArray *headersSection = @[h2, h3, h4, h5, h6];
+            NSArray *headersSection = reportingEnabled ? @[h2, h3, h4, h5, h6, h7] :
+                                                         @[h2, h3, h4, h5, h6];
             NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                                  forKeys: sections];
             NSNumber *height1 = @(44.0000f);
             NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
             NSNumber *height3 = @([UITableViewCellQueryLink defaultHeight]);    //50.0000f
-            NSNumber *height4 = @(44.0000f);
-            NSNumber *height5 = @(44.0000f);
-            NSArray *heightRowsForSection = @[height1, height2, height3, height4, height5];
+            NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height3, height1, height1, height1] :
+                                                               @[height1, height2, height3, height1, height1];
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection
                                                                                                  forKeys:sections];
             
@@ -1442,14 +1465,22 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return header;
 }
 
-- (MTViewTableHeader *)tableHeaderPredicate {
-    SEL selector = @selector(addPredicate:);
-    NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Next to the button to add database tables.");
+- (MTViewTableHeader *)tableHeaderNumberOfQueryResults {
+    NSString *title = NSLocalizedString(@"Limit Query Results", @"Limit Query Reuslts");
     MTViewTableHeader *header = [self tableHeader];
     header.labelTitle.text = title;
-    [header.buttonAdd addTarget: self
-                         action: selector
-               forControlEvents: UIControlEventTouchUpInside];
+    header.buttonAdd.enabled = NO;
+    header.buttonAdd.hidden = YES;
+    [header.labelTitle sizeToFit];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderPredicate {
+    SEL selector = @selector(addPredicate:);
+    NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Having Specified Criteria");
+    MTViewTableHeader *header = [self tableHeader];
+    header.labelTitle.text = title;
+    [header.buttonAdd addTarget: self action: selector forControlEvents: UIControlEventTouchUpInside];
     [header.labelTitle sizeToFit];
     return header;
 }
@@ -1619,11 +1650,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (NSArray *)deletePredicateRelatedToSection:(MTQuerySections)querySection
-                             sectionIndex:(NSInteger)section
-                                    table:(NSManagedObjectID *)deleatedTableObjectId
-                              inTableView:(UITableView *)tableView
-                           numberOfTables:(NSInteger)numberOfTables
-                                inContext:(NSManagedObjectContext *)context {
+                                sectionIndex:(NSInteger)section
+                                       table:(NSManagedObjectID *)deleatedTableObjectId
+                                 inTableView:(UITableView *)tableView
+                              numberOfTables:(NSInteger)numberOfTables
+                                   inContext:(NSManagedObjectContext *)context {
 
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];

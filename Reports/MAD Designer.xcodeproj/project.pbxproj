@@ -508,6 +508,8 @@
 		4C7B0B431B392A9B005DC0CE /* MADAboutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B411B392A9B005DC0CE /* MADAboutTableView.m */; };
 		4C7B0B461B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
 		4C7B0B471B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
+		4C7F2F931B3D30880002226E /* MTStoreKitController+Features.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7F2F921B3D30880002226E /* MTStoreKitController+Features.m */; };
+		4C7F2F941B3D30880002226E /* MTStoreKitController+Features.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7F2F921B3D30880002226E /* MTStoreKitController+Features.m */; };
 		4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5E0183145F600242703 /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
 		4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */; };
@@ -1952,6 +1954,8 @@
 		4C7B0B411B392A9B005DC0CE /* MADAboutTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAboutTableView.m; sourceTree = "<group>"; };
 		4C7B0B441B394CD5005DC0CE /* MADTableViewCellAuto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAuto.h; sourceTree = "<group>"; };
 		4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAuto.m; sourceTree = "<group>"; };
+		4C7F2F911B3D30880002226E /* MTStoreKitController+Features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTStoreKitController+Features.h"; sourceTree = "<group>"; };
+		4C7F2F921B3D30880002226E /* MTStoreKitController+Features.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTStoreKitController+Features.m"; sourceTree = "<group>"; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
 		4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
 		4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
@@ -2910,6 +2914,8 @@
 				4C7B0B071B374A0A005DC0CE /* MADFeature.m */,
 				4C7B0B201B37F4C6005DC0CE /* MADSalesReceipt+Designer.h */,
 				4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */,
+				4C7F2F911B3D30880002226E /* MTStoreKitController+Features.h */,
+				4C7F2F921B3D30880002226E /* MTStoreKitController+Features.m */,
 			);
 			name = MTStoreKit;
 			sourceTree = "<group>";
@@ -5990,6 +5996,7 @@
 				4CF5319C1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
 				4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */,
 				4C0F89581B2D7EDF00D75AF6 /* UITabBarController+Shared.m in Sources */,
+				4C7F2F941B3D30880002226E /* MTStoreKitController+Features.m in Sources */,
 				4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4C0F899A1B30250000D75AF6 /* MADUserDefault.m in Sources */,
 				4C23FB3A18FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */,
@@ -6337,6 +6344,7 @@
 				4C23FB0A18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4CF5319D1A08092F00511BEF /* MADToolboxTransitioner.m in Sources */,
 				4CB2937419FCB3F700C0171D /* MADTabBarController.m in Sources */,
+				4C7F2F931B3D30880002226E /* MTStoreKitController+Features.m in Sources */,
 				4C0F89951B2FF47E00D75AF6 /* MADSalesReceipt.m in Sources */,
 				4C54F2E41A12D54A004B5228 /* MADToolboxNavigationController.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,
