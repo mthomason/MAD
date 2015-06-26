@@ -2150,12 +2150,17 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     MADDesignerSectionView *result = nil;
     CGPoint gestureLocation;
     // Try to find the section to place the element view into.
-    CGPoint viewLocation = [gesture locationInView:self.scroller.container];
+    //CGPoint viewLocation = gesture.view.frame.origin;// [gesture locationInView:self.scroller.container];
     
     //Find the section to add the element.
-    for (UIView *sectionView in [self.scroller.container subviews]) {
+    for (UIView *sectionView in self.scroller.container.subviews) {
         if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
+            CGPoint viewLocation = gesture.view.frame.origin;//[gesture.view convertPoint:gesture.view.frame.origin toView:sectionView];//gesture.view.frame.origin;//[gesture.view convertPoint:gesture.view.frame.origin toView:sectionView];
+            NSLog(@"%@ contains %@? %@", NSStringFromCGRect(sectionView.frame), NSStringFromCGPoint(viewLocation), CGRectContainsPoint(sectionView.frame, viewLocation) ? @"YES" : @"NO");
             if (CGRectContainsPoint(sectionView.frame, viewLocation) && ![sectionView isEqual:self]) {
+
+                gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
+
                 result = (MADDesignerSectionView *)sectionView;
                 gestureLocation = [gesture locationInView:result];
                 gestureLocation = CGPointRoundPointToGrid(gestureLocation);
@@ -2429,8 +2434,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)endPanPiece:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
     piece.alpha = 1.0000f;
-    //piece.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
-    
+    piece.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
     if (sectionView != nil) {
         
         [self relayoutSectionView:sectionView];
@@ -2477,11 +2481,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, self.scroller.zoomScale, self.scroller.zoomScale);
+    }
 
     switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {
-            //gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, self.scroller.zoomScale, self.scroller.zoomScale);
             
             [self beginPanPiece:gestureRecognizer.view transition:^{
                 [self translatePanGesture:gestureRecognizer];
@@ -2499,8 +2505,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             break;
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateFailed:
-        case UIGestureRecognizerStateEnded:
-            [self endPanPiece: gestureRecognizer.view inSection: [self sectionViewFor:gestureRecognizer]];
+        case UIGestureRecognizerStateEnded: {
+            [self translatePanGesture: gestureRecognizer];
+            MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
+            [self endPanPiece: gestureRecognizer.view inSection: sectionView];
+            break;
+        }
         default:
             break;
     }
