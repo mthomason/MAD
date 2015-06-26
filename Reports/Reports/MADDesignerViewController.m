@@ -2156,9 +2156,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
             CGPoint viewLocation = gesture.view.frame.origin;
             if (CGRectContainsPoint(sectionView.frame, viewLocation) && ![sectionView isEqual:self]) {
-
                 gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
-
                 result = (MADDesignerSectionView *)sectionView;
                 gestureLocation = [gesture locationInView:result];
                 gestureLocation = CGPointRoundPointToGrid(gestureLocation);
