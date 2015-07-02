@@ -131,10 +131,10 @@
     return allEdges;
 }
 
-- (MTVertex *)vertexForObject:(MTObject *)object {
+- (MTVertex *)vertexForObject:(id)object {
     MTVertex *result = nil;
-    for (MTVertex *vertex in [self vertices]) {
-        if ([[vertex object] isEqual: object]) {
+    for (MTVertex *vertex in self.vertices) {
+        if ([vertex.object isEqual: object]) {
             result = vertex;
             break;
         }

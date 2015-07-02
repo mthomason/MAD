@@ -49,6 +49,7 @@
 
 #import "MTKeyChain.h"
 #import "MTDatabaseConnection.h"
+#import "MTStoreKitController+Features.h"
 
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
@@ -335,14 +336,17 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
     [self updateNavigationPrompt:animated];
-    
     [self.navigationController.toolbar setNeedsLayout];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    // MARK: Reporting feature (number of results in main query)
+    self.document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+
     [self.document initalizeMainQuery];
     [self reload];
     [self layoutSubviewSliderPagination];
@@ -776,8 +780,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
+
         __weak __block MADViewerController *weakself = self;
-        [weakself.document refresh:^(BOOL success, NSError *error) {
+        [self.document refresh:^(BOOL success, NSError *error) {
             __strong MADViewerController *strongself = weakself;
             
             if (success) {

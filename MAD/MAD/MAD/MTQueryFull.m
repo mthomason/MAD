@@ -50,6 +50,8 @@
 
 //- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
 
+@property (nonatomic, assign) NSInteger limitResults;
+
 @end
 
 @implementation MTQueryFull
@@ -63,6 +65,8 @@
 
         NSDictionary *parameters = (NSDictionary *)object;
         NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
+        NSNumber *numberOfResults = parameters[@"MADQueryLimit"];
+        self.limitResults = numberOfResults.integerValue;
         RptqQuery *queryObject = parameters[parameterScheam];
         [self setQueryObject:queryObject];
 
@@ -77,15 +81,18 @@
 }
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
+    
+    //BOOL limitQueryResults =
+    
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
-    if ([[[self queryObject] hasQueryTables] count] > 0) {
+    if ([[self.queryObject hasQueryTables] count] > 0) {
         
-        [result appendString:[[[self dataDelegate] database] selectPart]];
+        [result appendString:[[self.dataDelegate database] selectPartWithLimitedResults:self.limitResults]];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
-        NSSet *hasTables = [[self queryObject] hasQueryTables];
+        NSSet *hasTables = [self.queryObject hasQueryTables];
         
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
@@ -95,21 +102,14 @@
         }
         
         //Create an edge in the graph for each query link.
-        NSSet *hasQueryLinks = [[self queryObject] hasQueryLinks];
+        NSSet *hasQueryLinks = [self.queryObject hasQueryLinks];
+        NSNumber *weight = @(1);
         for (RptqQueryLinks *queryLink in hasQueryLinks) {
             
-            RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
-            RptqQueryTable *tableDestination =   [queryLink.hasRightField inQueryTable];
+            MTVertex *vertexOrigin =        [graph vertexForObject:queryLink.hasLeftField.inQueryTable.objectID];
+            MTVertex *vertexDestination =   [graph vertexForObject:queryLink.hasRightField.inQueryTable.objectID];
             
-            id objectOrigin =               [tableOrigin objectID];
-            id objectDestination =          [tableDestination objectID];
-            id objectQueryLink =            [queryLink objectID];
-            
-            MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
-            MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
-            
-            NSNumber *weight = @(1);
-            [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:weight];
+            [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:queryLink.objectID andWeight:weight];
         }
         
         
@@ -127,7 +127,7 @@
             // MAKR: List each field in the query.
             NSString *sqlSelectExpression = [self sqlSelectExpressionWithTables:[topologicalSort toArray]
                                                           usingOnlyActiveFields:onlyActiveFields
-                                                        forManagedObjectContext:[[self queryObject] managedObjectContext]];
+                                                        forManagedObjectContext:[self.queryObject managedObjectContext]];
             if ([sqlSelectExpression length] > 0) {
                 [result appendString:sqlSelectExpression];
                 
@@ -144,7 +144,7 @@
                     }
                 }
                 [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
-                                               forManagedObjectContext:[[self queryObject] managedObjectContext]]];
+                                               forManagedObjectContext:[self.queryObject managedObjectContext]]];
                 
             } else {
                 NSString *message = NSLocalizedString(@"Empty query while using \"only active fields.\" You may need to reference some query fields.", @"Empty query while using \"only active fields.\" You may need to reference some query fields.");
@@ -156,8 +156,8 @@
         }
         
         if ([result length] > 0) {
-            [result appendString:[self sqlWhereClauseWithQuery:[self queryObject]]];
-            [result appendString:[[[self dataDelegate] database] sqlLimitClause]];
+            [result appendString:[self sqlWhereClauseWithQuery:self.queryObject]];
+            [result appendString:[[self.dataDelegate database] sqlLimitClause:self.limitResults]];
         }
         
     }
@@ -366,9 +366,9 @@
             if (fieldCounter != 0)  [result appendString:@",\n"];
             
             NSString *tableName = [[queryField inQueryTable] queryAlias];
-            NSString *safeTableName = [[[self dataDelegate] database] safeIdentifier:tableName];
+            NSString *safeTableName = [[self.dataDelegate database] safeIdentifier:tableName];
             NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-            NSString *fieldName = [[[self dataDelegate] database] safeIdentifier: [field name]];
+            NSString *fieldName = [[self.dataDelegate database] safeIdentifier: [field name]];
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
             [self fields][fieldAlias] = field;
@@ -390,7 +390,7 @@
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
                 NSString *tableName = [table queryAlias];
-                NSString *safeTableName = [[[self dataDelegate] database] safeIdentifier:tableName];
+                NSString *safeTableName = [[self.dataDelegate database] safeIdentifier:tableName];
                 NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
                 
                 NSUInteger fieldCounter = 0;
@@ -398,7 +398,7 @@
                     RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
                     if (fieldCounter != 0)  [result appendString:@",\n"];
                     NSString *fieldName = [field name];
-                    NSString *safeFieldName = [[[self dataDelegate] database] safeIdentifier:fieldName];
+                    NSString *safeFieldName = [[self.dataDelegate database] safeIdentifier:fieldName];
                     NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
                     [result appendFormat: @"\t%@", fieldAlias];
                     fieldCounter++;
@@ -437,11 +437,11 @@
                         [result appendString:@"\t"];
                     }
                     NSString *ogTableName = [[table databaseSchemaTable] name];
-                    NSString *safeOgTableName = [[[self dataDelegate] database] safeIdentifier:ogTableName];
+                    NSString *safeOgTableName = [[self.dataDelegate database] safeIdentifier:ogTableName];
                     [result appendString:safeOgTableName];
-                    [result appendString:[[[self dataDelegate] database] tableAliasConnector]];
+                    [result appendString:[[self.dataDelegate database] tableAliasConnector]];
                     NSString *tableName = [table queryAlias];
-                    NSString *safeTableName = [[[self dataDelegate] database] safeIdentifier:tableName];
+                    NSString *safeTableName = [[self.dataDelegate database] safeIdentifier:tableName];
                     [result appendString:safeTableName];
                 }
                 
@@ -469,11 +469,11 @@
                                 RptqQueryField *rightField = queryLink.hasRightField;
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
                                 NSString *ogTableName = [[rightTable databaseSchemaTable] name];
-                                NSString *safeOgTableName = [[[self dataDelegate] database] safeIdentifier:ogTableName];
+                                NSString *safeOgTableName = [[self.dataDelegate database] safeIdentifier:ogTableName];
                                 [result appendString:safeOgTableName];
-                                [result appendString:[[[self dataDelegate] database] tableAliasConnector]];
+                                [result appendString:[[self.dataDelegate database] tableAliasConnector]];
                                 NSString *ogRightTable = [rightTable queryAlias];
-                                NSString *safeOgRightTable = [[[self dataDelegate] database] safeIdentifier:ogRightTable];
+                                NSString *safeOgRightTable = [[self.dataDelegate database] safeIdentifier:ogRightTable];
                                 [result appendString:safeOgRightTable];
                                 [result appendString:@"\n\t"];
                                 for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {

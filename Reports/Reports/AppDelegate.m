@@ -126,9 +126,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         [self loadAndDisplayWindow];
     }
     
-    #if DEBUG
-        NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    #endif
+//    #if DEBUG
+        //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+//    #endif
 
     //MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];
     //dispatch_async(self.appDelegateQueue, ^{

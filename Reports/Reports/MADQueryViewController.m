@@ -1338,7 +1338,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             
             NSArray *sections = reportingEnabled ? @[datasource, tables, resultCount] :
                                                    @[datasource, tables];
-            NSArray *countRowsForSection = @[one, unknown];
+            NSArray *countRowsForSection = reportingEnabled ? @[one, unknown, one] : @[one, unknown];
             NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects: countRowsForSection
                                                                                        forKeys: sections];
             
@@ -1347,7 +1347,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                                                  forKeys: sections];
             NSNumber *height1 = @(50.0000f);
             NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
-            NSArray *heightRowsForSection = @[height1, height2];
+            NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1] : @[height1, height2]; 
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
                                                                                                  forKeys: sections];
             result = @{MTTableSectionSectionsKey : sections,

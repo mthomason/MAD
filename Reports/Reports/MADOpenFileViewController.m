@@ -77,6 +77,7 @@
 #import "UITableViewController+Designer.h"
 
 #import "MADStoreViewController.h"
+#import "MTStoreKitController+Features.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -788,6 +789,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             } else if ([MTApplicationInstance isMadDesigner]) {
                 
                 [[AppDelegate app].openDocument activeDocumentModel];
+
+                // MARK: Reporting feature (number of results in main query)
+                [AppDelegate app].openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+
+                
                 UITabBarController *tabBarController = [UITabBarController mainTabBarController];
                 
                 tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;

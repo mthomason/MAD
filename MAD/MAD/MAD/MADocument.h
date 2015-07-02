@@ -47,6 +47,8 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     MADDataProtocol,
     UIPrintInteractionControllerDelegate>
 
+@property (nonatomic, assign) BOOL limitResultsDesignMode;
+
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) RptqDocument *document;
 

@@ -11,6 +11,23 @@
 
 @implementation MTStoreKitController (Features)
 
+- (BOOL)isViewerMode {
+    return self.isReportingEnabledAndDesired;
+}
+
+- (BOOL)isDesignMode {
+    return !self.isReportingEnabledAndDesired;
+}
+
+- (BOOL)isReportingLimited {
+    return !self.isReportingEnabledAndDesired;
+}
+
+- (BOOL)isReportingEnabledAndDesired {
+    return [[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"] &&
+            [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
+}
+
 - (BOOL)isReportingEnabled {
     return [[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"];
 }

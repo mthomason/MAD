@@ -163,7 +163,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 }
 
 - (NSString *)sqlLimitClause {
-    return [self sqlLimitClause:NSNotFound];                    //No limit by default
+    return [self sqlLimitClause:  NSNotFound];                    //No limit by default
 }
 
 - (NSString *)sqlLimitClause:(NSInteger)limit {

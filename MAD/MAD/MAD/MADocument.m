@@ -852,8 +852,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         RptqQuery *rquery = [database defaultQuery];
         
         NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
+        NSMutableDictionary *extraParameters = parameters.mutableCopy;
+        NSNumber *queryLimit = @(self.limitResultsDesignMode ? 50 : NSNotFound);
+        extraParameters[@"MADQueryLimit"] = queryLimit;
         MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull
-                                                            object:parameters];
+                                                            object:extraParameters];
         defaultQuery.dataDelegate = self;
         
         [self.mainDataTable sortUsingDescriptors:[self sortDescriptors]];

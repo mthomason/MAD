@@ -35,7 +35,7 @@
 - (NSArray *)allVertices;
 - (NSSet *)allEdges;
 
-- (MTVertex *)vertexForObject:(MTObject *)object;
+- (MTVertex *)vertexForObject:(id)object;
 
 - (NSArray *)breadthFirstSearch:(MTVertex *)root;
 
