@@ -122,7 +122,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAbout;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemAddNewDocument;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
-@property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemSearch;
 @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
 
 @property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
@@ -293,11 +292,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:self.barButtonItemAction];
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
-    [toolbarButtons addObject:self.barButtonItemEdit];
     [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
     [toolbarButtons addObject:barButtonItemLicensing];
     [self setToolbarItems:toolbarButtons animated:NO];
     
+    UIBarButtonItem *editButton = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
+    self.barButtonItemEdit = editButton;
+    [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -1197,14 +1198,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)search:(id)sender {
     if (self.searchBar.isHidden) {
-        //        self.searchBar.showsCancelButton = YES;
-        
-        //[self.searchBar sizeToFit];
         self.searchBar.hidden = NO;
         self.searchBar.showsCancelButton = NO;
         self.searchBar.alpha = 0.0000f;
         self.labelMadDesigner.alpha = 1.0000f;
-        //[self.navigationItem setRightBarButtonItem:nil animated:YES];
         self.navigationItem.leftBarButtonItem.enabled = NO;
         __weak MADOpenFileViewController *weakself = self;
         
@@ -1218,38 +1215,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [searchViewHolder addSubview:self.searchBar];
         [searchViewHolder sizeToFit];
         self.searchBar.translucent = NO;
-        //self.searchBar.
         self.searchBar.backgroundColor = [UIColor clearColor];
         self.searchBar.barTintColor = [UIColor whiteColor];
         self.searchBar.tintColor = [UIColor whiteColor];
         
         
-        /*
-         for (UIView *subview in self.searchBar.subviews) {
-         for (id subview2 in subview.subviews) {
-         if ([subview2 isKindOfClass:[UITextField class]]) {
-         ((UITextField *)subview2).textColor = [UIColor whiteColor];
-         ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-         ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-         ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-         for (UIView *view in ((UITextField *)subview2).subviews) {
-         if ([view isKindOfClass:[UIButton class]]) {
-         
-         
-         UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-         ((UIButton *)view).tintColor = [UIColor whiteColor];
-         [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-         }
-         }
-         ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-         ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-         ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-         }
-         }
-         }*/
-        
-        
-        //        self.navigationController.navigationBar.
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -1265,17 +1235,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     } else {
         if (self.searchBar.text.length > 0) {
             self.searchBar.text = @"";
-            
-            //[[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-            //[[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-            
-            //[self animateUpdates];
-            //[self.collectionView reloadData];
         }
         self.searchBar.hidden = YES;
         self.searchBar.alpha = 0.1000f;
         self.labelMadDesigner.alpha = 0.0000f;
-        //[self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
         self.navigationItem.leftBarButtonItem.enabled = YES;
         __weak MADOpenFileViewController *weakself = self;
         [UIView transitionWithView:self.navigationItem.titleView
@@ -1295,31 +1258,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self setEditing:startEdit animated:YES];
     
     if (startEdit) {
-        //self.editing = YES;
+
         self.barButtonItemLicensing.enabled = NO;
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
-        /*
-        NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-        for (NSInteger i=0; i<numberOfItemsInSection; i++) {
-            NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
-            //[cell startWobble];
-        }*/
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //    dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
-        //    });
-        //});
 
-        NSMutableArray *items = [self.toolbarItems mutableCopy];
-        [items removeObject:self.barButtonItemEdit];
-        [items addObject:self.barButtonItemEditDone];
-        [self setToolbarItems:items animated:YES];
-        [self.navigationItem setRightBarButtonItem: nil
-                                          animated: YES];
+        [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+        [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
         
     } else {
         [self done:sender];
@@ -1344,13 +1291,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     self.collectionView.allowsMultipleSelection = NO;
     
-    [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
-    
-    NSMutableArray *items = [self.toolbarItems mutableCopy];
-    [items removeObject:self.barButtonItemEditDone];
-    [items addObject:self.barButtonItemEdit];
-    [self setToolbarItems:items animated:YES];
-    
+    [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
     [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
 }
 
@@ -1752,6 +1693,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
+#pragma mark - Lazy Load
+
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
         _barButtonItemEditDone = [UIBarButtonItem buttonEditDone:self action:@selector(edit:)];
@@ -1764,13 +1707,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(duplicate:)];
     }
     return _barButtonItemDuplicate;
-}
-
-- (UIBarButtonItem *)barButtonItemEdit {
-    if (!_barButtonItemEdit) {
-        _barButtonItemEdit = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
-    }
-    return _barButtonItemEdit;
 }
 
 @end

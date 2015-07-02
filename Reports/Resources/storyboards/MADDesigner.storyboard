@@ -1948,11 +1948,6 @@
                                 <action selector="addDocument:" destination="9ul-yk-EvR" id="wwf-8J-GrK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="2wM-rP-7Tw">
-                            <connections>
-                                <action selector="search:" destination="9ul-yk-EvR" id="Lmw-cH-S08"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="barButtonItemAbout" destination="Fma-SS-ARx" id="5c8-qD-gQ7"/>
@@ -1961,7 +1956,6 @@
                         <outlet property="barButtonItemCloudDown" destination="TpV-3i-yet" id="Y6q-eR-yJg"/>
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
                         <outlet property="barButtonItemInformationDocument" destination="YqP-1z-fV1" id="ZNo-lj-QEs"/>
-                        <outlet property="barButtonItemSearch" destination="2wM-rP-7Tw" id="i6k-eQ-lDw"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
                         <segue destination="NEH-Kw-MQz" kind="modal" identifier="MADSegueOpenDocument" id="Oc4-uK-0Zg"/>
                     </connections>
