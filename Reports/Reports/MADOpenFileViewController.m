@@ -79,6 +79,8 @@
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
 
+#import "UIMotionEffectGroup+HoverEffects.h"
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
@@ -161,6 +163,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
+@property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
+
 @end
 
 @implementation MADOpenFileViewController
@@ -205,6 +209,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
         NSMutableArray *batchUpdates = [[NSMutableArray alloc] init];
         self.batchUpdates = batchUpdates;
+        
+        //UIMotionEffectGroup *hoverEffects = [UIMotionEffectGroup HoverEffects];
+        //self.hoverEffects = hoverEffects;
 
     }
     return self;
@@ -891,7 +898,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
     if (cell.delegate == nil) {
-        cell.delegate = self;
+        ((MTCollectionViewCellDocument *)cell).delegate = self;
     }
     MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
     NSString *filename = metadata.name;
@@ -942,12 +949,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [cell.labelTitleSub layoutIfNeeded];
     [cell loadPreviewImageForUrl:metadata.URL];
     
+    [cell normalizeTint];
+    
     if ([self isFileViewEditing]) {
         [cell startWobble];
     } else {
         [cell stopWobble];
     }
-    [cell normalizeTint];
+    
     return cell;
 }
 

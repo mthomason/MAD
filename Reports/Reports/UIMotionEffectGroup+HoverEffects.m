@@ -14,7 +14,7 @@
     
     NSNumber *maximumRelativeValue = @(13.0000f);
     NSNumber *minimumRelativeValue = @(-13.0000f);
-    NSNumber *maxHeight = @(10);
+    NSNumber *maxHeight = @(16);
     NSNumber *minHeight = @(-3);
 
     UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];

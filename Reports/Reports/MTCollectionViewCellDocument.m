@@ -30,6 +30,8 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
+@property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
+
 @end
 
 @implementation MTCollectionViewCellDocument
@@ -66,6 +68,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 0.4500f;
+    self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(rename:)];
     tap.numberOfTapsRequired = 1;
@@ -99,10 +102,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     [self normalizeTint];
     
     [super awakeFromNib];
-    
-    UIMotionEffectGroup *hoverEffects = [UIMotionEffectGroup HoverEffects];
-    [self.imagePreview addMotionEffect:hoverEffects];
-
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -128,10 +127,21 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.colorTextNormal = colorTextNormal;
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-
         
     }
     return self;
+}
+
+- (void)addMotionEffect:(UIMotionEffect *)effect {
+    [self.imagePreview addMotionEffect:effect];
+    [self.progressViewDownload addMotionEffect:effect];
+    [self.progressViewUpload addMotionEffect:effect];
+}
+
+- (void)removeMotionEffect:(UIMotionEffect *)effect {
+    [self.imagePreview removeMotionEffect:effect];
+    [self.progressViewDownload removeMotionEffect:effect];
+    [self.progressViewUpload removeMotionEffect:effect];
 }
 
 + (UIActivityIndicatorView *)activityIndicatorView {
@@ -151,10 +161,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.longPressGestureRecognizer.delegate = delegate;
         _delegate = delegate;
     }
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
 }
 
 - (void)performSelectionAnimations {

@@ -20,8 +20,8 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelTitleSub;
 @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
 @property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
-@property (nonatomic, weak) IBOutlet UIProgressView *progressViewDownload;
-@property (nonatomic, weak) IBOutlet UIProgressView *progressViewUpload;
+@property (nonatomic, strong) IBOutlet UIProgressView *progressViewDownload;
+@property (nonatomic, strong) IBOutlet UIProgressView *progressViewUpload;
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
