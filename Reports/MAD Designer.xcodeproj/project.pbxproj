@@ -564,6 +564,8 @@
 		4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4C8CD9A91AD1D3B500B7B9EA /* libMAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD9A81AD1D3B500B7B9EA /* libMAD.a */; };
 		4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
+		4C8D2A241B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */; };
+		4C8D2A251B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2110,6 +2112,8 @@
 		4C8CDCF61AD27B3E00B7B9EA /* MTNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNotificationDidFormatPage.h; path = ../MAD/MAD/MAD/MTNotificationDidFormatPage.h; sourceTree = "<group>"; };
 		4C8CDCF71AD27B6100B7B9EA /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNotificationDidReadRows.h; path = ../MAD/MAD/MAD/MTNotificationDidReadRows.h; sourceTree = "<group>"; };
 		4C8CDD0A1AD2F4BD00B7B9EA /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqFieldSelectorManager.h; path = ../MAD/MAD/MAD/rptq/RptqFieldSelectorManager.h; sourceTree = "<group>"; };
+		4C8D2A221B45307200237C20 /* UIMotionEffectGroup+HoverEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMotionEffectGroup+HoverEffects.h"; sourceTree = "<group>"; };
+		4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
 		4C8F7CE114CEC12B006171A7 /* MTQueryBuilderAddTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddTableViewController.h; sourceTree = "<group>"; };
 		4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddTableViewController.m; sourceTree = "<group>"; };
 		4C8F7CE514CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstTableViewController.h; sourceTree = "<group>"; };
@@ -3843,6 +3847,8 @@
 				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
 				4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */,
 				4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */,
+				4C8D2A221B45307200237C20 /* UIMotionEffectGroup+HoverEffects.h */,
+				4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */,
 			);
 			name = "Open Document";
 			sourceTree = "<group>";
@@ -6014,6 +6020,7 @@
 				4CE84D7E1B3969C300BB3A0A /* NSAttributedString+Common.m in Sources */,
 				4C75C9F318E20306006E8526 /* MTTableCell.m in Sources */,
 				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */,
+				4C8D2A251B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */,
 				4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C7B0B0D1B374B2B005DC0CE /* MADFeatures.m in Sources */,
 				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
@@ -6317,6 +6324,7 @@
 				4CCD2439193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
 				4C4740D31A0170B100B11434 /* MADToolboxStyleLayoutViewController.m in Sources */,
+				4C8D2A241B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */,
 				4CC96A4B1AC90C6D0044C157 /* MADGettingStartedTableViewController.m in Sources */,
 				4C111C2C1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */,
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,

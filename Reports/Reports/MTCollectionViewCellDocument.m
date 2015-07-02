@@ -18,6 +18,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 #import "UIColor+EverydayApps.h"
 #import "MADocument.h"
 #import "MADBackgroundViewSelected.h"
+#import "UIMotionEffectGroup+HoverEffects.h"
 
 @interface MTCollectionViewCellDocument ()
 
@@ -62,15 +63,11 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
-    
     self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
-    self.imagePreview.layer.shadowOpacity = 1.0000f;
-    self.imagePreview.layer.shadowOffset = CGSizeMake(offset, offset);
+    self.imagePreview.layer.shadowOpacity = 0.4500f;
 
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                          action: @selector(rename:)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(rename:)];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
     self.tapGestureRecognizer = tap;
@@ -97,16 +94,15 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     [self addGestureRecognizer: longPressGestureRecognizer];
     self.longPressGestureRecognizer = longPressGestureRecognizer;
 
-    
-    //self.selectedBackgroundView.backgroundColor = self.bgColor;
-    //self.selectedBackgroundView.clipsToBounds = YES;
-    //self.selectedBackgroundView.layer.cornerRadius = 5.0000f;
-
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
 
     [self normalizeTint];
     
     [super awakeFromNib];
+    
+    UIMotionEffectGroup *hoverEffects = [UIMotionEffectGroup HoverEffects];
+    [self.imagePreview addMotionEffect:hoverEffects];
+
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -132,6 +128,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.colorTextNormal = colorTextNormal;
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+
         
     }
     return self;
