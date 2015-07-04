@@ -2146,41 +2146,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
 }
 
-- (MADDesignerSectionView *)sectionViewFor:(UIGestureRecognizer *)gesture {
-    MADDesignerSectionView *result = nil;
-    CGPoint gestureLocation;
-    // Try to find the section to place the element view into.
-    
-    //Find the section to add the element.
-    for (UIView *sectionView in self.scroller.container.subviews) {
-        if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
-            CGPoint viewLocation = gesture.view.frame.origin;
-            if (CGRectContainsPoint(sectionView.frame, viewLocation) && ![sectionView isEqual:self]) {
-                gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
-                result = (MADDesignerSectionView *)sectionView;
-                gestureLocation = [gesture locationInView:result];
-                gestureLocation = CGPointRoundPointToGrid(gestureLocation);
-                gesture.view.center = gestureLocation;
-                break;
-            }
-        }
-    }
-    
-    //Section not found, so add to the first one.
-    if (result == nil) {
-        for (UICollectionView *view in self.scroller.container.subviews) {
-            if ([view isKindOfClass: [MADDesignerSectionView class]]) {
-                result = (MADDesignerSectionView *)view;
-                gestureLocation = [gesture locationInView:result];
-                gestureLocation = CGPointRoundPointToGrid(gestureLocation);
-                gesture.view.center = gestureLocation;
-                break;
-            }
-        }
-    }
-    return result;
-}
-
 - (MADDesignerElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
                                   inCollectionView:(UICollectionView *)collectionView {
     return [self elementViewForCollectionViewCell:[collectionView cellForItemAtIndexPath:indexPath]];
@@ -2230,34 +2195,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [self.scroller.container setNeedsUpdateConstraints];
         
-    }];
-}
-
-- (void)beginPanPiece:(UIView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
-    [self gestureBegan];
-    piece.alpha = 0.8888f;
-    [self.scroller.container bringSubviewToFront: piece];
-    [self.scroller addSubview: piece];
-    transition();
-    
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
-    
-    MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
-    MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
-
-    [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-        [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
-    } animationComplete:^(BOOL finished) {
-        if (finished) {
-            [self.scroller.container invalidateIntrinsicContentSize];
-            [self.view setNeedsUpdateConstraints];
-        }
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [self redrawAllElementViewsInCollectionView:sectionView];
-             completion();
-        }
     }];
 }
 
@@ -2370,17 +2307,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark Gesture handlers
 
-- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        UIView *piece = gestureRecognizer.view;
-        CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller.container];
-        locationInSuperview = [self.scroller.container convertPoint:locationInSuperview toView:self.scroller];
-        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
-        piece.center = locationInSuperview;
-    }
-}
-
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     
     MADDesignerElementView *piece = ((MADDesignerElementView *)gestureRecognizer.view);
@@ -2423,14 +2349,41 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)translatePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
-    CGPoint translation = [gestureRecognizer translationInView:self.scroller];
+    CGPoint translation = [gestureRecognizer translationInView:self.view];
     gestureRecognizer.view.center = CGPointMake(gestureRecognizer.view.center.x + translation.x, gestureRecognizer.view.center.y + translation.y);
-    [gestureRecognizer setTranslation:CGPointZero inView:self.scroller];
+    [gestureRecognizer setTranslation:CGPointZero inView:self.view];
+}
+
+- (void)beginPanPiece:(UIView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
+    [self gestureBegan];
+    piece.alpha = 0.8888f;
+    [self.scroller.container bringSubviewToFront: piece];
+    [self.view addSubview: piece];
+    transition();
+    
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
+    
+    MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
+    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
+    
+    [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
+        [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
+    } animationComplete:^(BOOL finished) {
+        if (finished) {
+            [self.scroller.container invalidateIntrinsicContentSize];
+            [self.view setNeedsUpdateConstraints];
+        }
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self redrawAllElementViewsInCollectionView:sectionView];
+            completion();
+        }
+    }];
 }
 
 - (void)endPanPiece:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
     piece.alpha = 1.0000f;
-    piece.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
     if (sectionView != nil) {
         
         [self relayoutSectionView:sectionView];
@@ -2472,16 +2425,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [piece setNeedsDisplay];
     [self gestureEnded];
-
 }
 
 - (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, self.scroller.zoomScale, self.scroller.zoomScale);
-    }
-
     switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStatePossible:
+            break;
+        case UIGestureRecognizerStateFailed:
+            break;
             
         case UIGestureRecognizerStateBegan: {
             
@@ -2497,10 +2449,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [self translatePanGesture:gestureRecognizer];
             break;
         }
-        case UIGestureRecognizerStatePossible:
-            break;
         case UIGestureRecognizerStateCancelled:
-        case UIGestureRecognizerStateFailed:
         case UIGestureRecognizerStateEnded: {
             [self translatePanGesture: gestureRecognizer];
             MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
@@ -2510,6 +2459,59 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         default:
             break;
     }
+}
+
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller.container];
+        locationInSuperview = [self.scroller.container convertPoint:locationInSuperview toView:self.view];
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
+
+- (MADDesignerSectionView *)sectionViewFor:(UIGestureRecognizer *)gesture {
+    
+    MADDesignerSectionView *result = nil;
+    CGPoint gestureLocation;
+
+    // Try to find the section to place the element view into.
+    
+    //Find the section to add the element.
+    for (UIView *sectionView in self.scroller.container.subviews) {
+        
+        
+        if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
+            
+            CGPoint locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:sectionView];
+            
+            if ([sectionView pointInside:locationInSection withEvent:nil] /*CGRectContainsPoint(sectionView.frame, locationInSection)*/) {
+                gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
+                result = (MADDesignerSectionView *)sectionView;
+                gestureLocation = [gesture locationInView:result];
+                gestureLocation = CGPointRoundPointToGrid(gestureLocation);
+                gesture.view.center = gestureLocation;
+                break;
+            }
+        }
+    }
+    
+    //Section not found, so add to the first one.
+    if (result == nil) {
+        for (UICollectionView *view in self.scroller.container.subviews) {
+            if ([view isKindOfClass: [MADDesignerSectionView class]]) {
+                result = (MADDesignerSectionView *)view;
+                gestureLocation = [gesture locationInView:result];
+                gestureLocation = CGPointRoundPointToGrid(gestureLocation);
+                gesture.view.center = gestureLocation;
+                break;
+            }
+        }
+    }
+
+    return result;
 }
 
 - (void)handleStrayTouch:(UITapGestureRecognizer *)sender {
