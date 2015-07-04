@@ -2404,8 +2404,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {//:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
-    [self translatePanGesture: gesture];
-    
+
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
     CGPoint locationInSection = CGPointZero;
