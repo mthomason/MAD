@@ -313,11 +313,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     [self.collectionView.backgroundView setNeedsDisplay];
     
-    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-        if (isLicensedUser) {
-            [self addActionItemToToolbar:animated];
-        }
-    }];
+    [self addActionItemToToolbar:animated];
     
     if (self.firstTimeViewWillAppear == NO) {
         [self reenableDataWithSearch];
