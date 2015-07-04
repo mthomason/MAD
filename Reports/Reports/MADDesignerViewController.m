@@ -2334,17 +2334,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     }
     gestureRecognizer.scale = 1.0000f;
-
     [documentObject.managedObjectContext save:nil];
-  
-    // FIXME: Adjust other elements after layout, the same as pan gesture.
-    /*
-    MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
-    NSNumber *height = @([sectionView intrinsicContentSize].height);
-    documentObject.inSectionRow.inSection.height = height;
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
-    [layoutManager layout];
-*/
     
 }
 
@@ -2362,7 +2352,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     transition();
     
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
-    
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
@@ -2380,51 +2369,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             completion();
         }
     }];
-}
-
-- (void)endPanPiece:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
-    piece.alpha = 1.0000f;
-    if (sectionView != nil) {
-        
-        [self relayoutSectionView:sectionView];
-
-        NSManagedObjectID *objectId = piece.objectIdTag;
-        CGRect frame = piece.frame;
-        
-        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag inManagedObjectContext: managedObjectContext];
-        MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
-        NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
-        
-        [sectionView insertItemAtIndex:path update:^(){
-            MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-            la.objectID = objectId;
-            
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: managedObjectContext];
-            la.frame = CGRectMake(frame.origin.x, frame.origin.y, documentObject.size.width, documentObject.size.height);
-            [layoutManager addItem:la];
-            [layoutManager layout];
-            
-            [piece removeFromSuperview];
-            [documentSection addDocumentObject: documentObject withDropPoint: frame.origin];
-            [documentSection.managedObjectContext save:nil];
-            
-        } animationComplete:^(BOOL finished) {
-            if (finished) {
-                [self.scroller.container invalidateIntrinsicContentSize];
-                [self.view setNeedsUpdateConstraints];
-            }
-        } completion:^(BOOL finished) {
-            NSNumber *height = @([sectionView intrinsicContentSize].height);
-            documentSection.height = height;
-            [managedObjectContext save:nil];    // FIXME: Triggers a collection view invalidate layout...
-            [self redrawAllElementViewsInCollectionView:sectionView];
-            [self.view setNeedsLayout];
-        }];
-    }
-    
-    [piece setNeedsDisplay];
-    [self gestureEnded];
 }
 
 - (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -2451,14 +2395,88 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         }
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded: {
-            [self translatePanGesture: gestureRecognizer];
-            MADDesignerSectionView *sectionView = [self sectionViewFor:gestureRecognizer];
-            [self endPanPiece: gestureRecognizer.view inSection: sectionView];
+            [self endPanPieceWithGesture:gestureRecognizer];
             break;
         }
         default:
             break;
     }
+}
+
+- (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {//:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
+    [self translatePanGesture: gesture];
+    
+    //Get drop section
+    MADDesignerSectionView *sectionView = nil;
+    CGPoint locationInSection = CGPointZero;
+    for (UIView *subview in self.scroller.container.subviews) {
+        if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
+            locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:subview];
+            if ([subview pointInside:locationInSection withEvent:nil]) {
+                gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
+                sectionView = (MADDesignerSectionView *)subview;
+                break;
+            }
+        }
+    }
+    
+    //Section not found, so add to the first one.
+    if (sectionView == nil) {
+        for (UICollectionView *view in self.scroller.container.subviews) {
+            if ([view isKindOfClass: [MADDesignerSectionView class]]) {
+                sectionView = (MADDesignerSectionView *)view;
+                break;
+            }
+        }
+    }
+
+    
+    
+    UIView *piece = gesture.view;
+    piece.alpha = 1.0000f;
+    if (sectionView != nil) {
+        
+        [self relayoutSectionView:sectionView];
+        
+        NSManagedObjectID *objectId = piece.objectIdTag;
+        //CGPoint locationInSection = [self.view convertPoint:piece.frame.origin toView:sectionView];
+        
+        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag inManagedObjectContext: managedObjectContext];
+        MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+        NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
+        
+        [sectionView insertItemAtIndex:path update:^(){
+            MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+            la.objectID = objectId;
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: managedObjectContext];
+            
+            la.frame = CGRectMake(locationInSection.x, locationInSection.y, documentObject.size.width, documentObject.size.height);
+            [layoutManager addItem:la];
+            [layoutManager layout];
+            
+            [piece removeFromSuperview];
+            [documentSection addDocumentObject: documentObject withDropPoint: locationInSection];//frame.origin];
+            //[documentSection addDocumentObject: documentObject withDropPoint: frame.origin];
+            [documentSection.managedObjectContext save:nil];
+            
+        } animationComplete:^(BOOL finished) {
+            if (finished) {
+                [self.scroller.container invalidateIntrinsicContentSize];
+                [self.view setNeedsUpdateConstraints];
+            }
+        } completion:^(BOOL finished) {
+            NSNumber *height = @([sectionView intrinsicContentSize].height);
+            documentSection.height = height;
+            [managedObjectContext save:nil];    // FIXME: Triggers a collection view invalidate layout...
+            [self redrawAllElementViewsInCollectionView:sectionView];
+            [self.view setNeedsLayout];
+        }];
+    }
+    
+    [piece setNeedsDisplay];
+    [self gestureEnded];
 }
 
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
@@ -2470,48 +2488,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
         piece.center = locationInSuperview;
     }
-}
-
-- (MADDesignerSectionView *)sectionViewFor:(UIGestureRecognizer *)gesture {
-    
-    MADDesignerSectionView *result = nil;
-    CGPoint gestureLocation;
-
-    // Try to find the section to place the element view into.
-    
-    //Find the section to add the element.
-    for (UIView *sectionView in self.scroller.container.subviews) {
-        
-        
-        if ([sectionView isKindOfClass:[MADDesignerSectionView class]]) {
-            
-            CGPoint locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:sectionView];
-            
-            if ([sectionView pointInside:locationInSection withEvent:nil] /*CGRectContainsPoint(sectionView.frame, locationInSection)*/) {
-                gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
-                result = (MADDesignerSectionView *)sectionView;
-                gestureLocation = [gesture locationInView:result];
-                gestureLocation = CGPointRoundPointToGrid(gestureLocation);
-                gesture.view.center = gestureLocation;
-                break;
-            }
-        }
-    }
-    
-    //Section not found, so add to the first one.
-    if (result == nil) {
-        for (UICollectionView *view in self.scroller.container.subviews) {
-            if ([view isKindOfClass: [MADDesignerSectionView class]]) {
-                result = (MADDesignerSectionView *)view;
-                gestureLocation = [gesture locationInView:result];
-                gestureLocation = CGPointRoundPointToGrid(gestureLocation);
-                gesture.view.center = gestureLocation;
-                break;
-            }
-        }
-    }
-
-    return result;
 }
 
 - (void)handleStrayTouch:(UITapGestureRecognizer *)sender {
@@ -2623,9 +2599,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [self updatePrompt];
             
             if (self.selectedObjectIds.count == 0) {
-                
-                // Hide toolbox location
-                [self hideToolbox];
+
+                [self hideToolbox];         // Hide toolbox location
                 
             } else {
                 
