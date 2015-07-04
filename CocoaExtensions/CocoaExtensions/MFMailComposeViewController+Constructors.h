@@ -13,11 +13,14 @@
 
 @interface MFMailComposeViewController (Constructors)
 
-+ (instancetype)mailDocument:(NSURL *)fileURL
-                    mimeType:(NSString *)mimeType
-                       title:(NSString *)title
-                        body:(NSString *)body
-          userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
++ (instancetype)title:(NSString *)title
+                 body:(NSString *)body
+   userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
+
++ (instancetype)body:(NSString *)body
+          attachment:(NSURL *)attachmentURL
+            mimeType:(NSString *)mimeType
+  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
 
 @end
 

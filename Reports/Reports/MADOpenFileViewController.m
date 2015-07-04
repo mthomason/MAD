@@ -1567,17 +1567,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                                                              @"The attached document can be opened with MAD Viewer.");
             NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
             [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
-            
-            NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
-            NSString *subject = [NSString stringWithFormat:formatString, metadata.name];
-            MFMailComposeViewController	*mailComposer = [MFMailComposeViewController mailDocument: metadata.URL
-                                                                                         mimeType: MADMimeType
-                                                                                            title: subject
-                                                                                             body: messageBody
-                                                                               userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
+            MFMailComposeViewController	*mailComposer = [MFMailComposeViewController body: messageBody
+                                                                               attachment: metadata.URL
+                                                                                 mimeType: MADMimeType
+                                                                       userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
             mailComposer.mailComposeDelegate = self;
             [self showViewController:mailComposer sender:self];
-            
         }
     }
     

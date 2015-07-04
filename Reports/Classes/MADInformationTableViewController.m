@@ -11,14 +11,29 @@
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
 #import "UIAlertController+Constructors.h"
+#import "MFMailComposeViewController+Constructors.h"
 #import "ACAccountStore+Social.h"
 #import "UIButton+FollowTwitter.h"
+#import "UIAlertController+Constructors.h"
+//#import "NSError+Constructors.h"
 
 @interface MADInformationTableViewController ()
+    <MFMailComposeViewControllerDelegate>
 
 @end
 
 @implementation MADInformationTableViewController
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    if (error) {
+        UIAlertController *alertController = [UIAlertController error:error];
+        [self showViewController:alertController sender:self];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
+}
 
 - (IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -53,6 +68,10 @@
             [self actionGoToEverydayAppsCom];
             break;
             
+        case 3:
+            [self actionEmailUs];
+            break;
+            
         case 4:
             [self actionTwitterVisitEverydayApps];
             break;
@@ -74,6 +93,19 @@
 - (void)actionTwitterVisitEverydayApps {
     NSURL *eda = [NSURL URLWithString: @"https://twitter.com/EverydayApps"];
     [[UIApplication sharedApplication] openURL:eda];
+}
+
+- (void)actionEmailUs {
+    MFMailComposeViewController *controller = [MFMailComposeViewController title:@"" body:@"" userInterfaceIdiom:self.traitCollection.userInterfaceIdiom];
+    controller.toRecipients = @[@"admin@everydayapps.com"];
+    controller.subject = @"MAD Designer";
+    if (self.popoverPresentationController != nil) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
+    controller.mailComposeDelegate = self;
+    [self showViewController:controller sender:self];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -11,21 +11,13 @@
 
 @implementation MFMailComposeViewController (Constructors)
 
-+ (instancetype)mailDocument:(NSURL *)fileURL
-                    mimeType:(NSString *)mimeType
-                       title:(NSString *)title
-                        body:(NSString *)body
-          userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
++ (instancetype)title:(NSString *)title
+                 body:(NSString *)body
+   userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
     
-    NSData *data = [NSData dataWithContentsOfURL:fileURL];
     MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
-    //mailComposer.mailComposeDelegate = self;
-
-    NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
-    mailComposer.subject = [NSString stringWithFormat:formatString, fileURL.lastPathComponent];
+    mailComposer.subject = title;
     [mailComposer setMessageBody:body isHTML:NO];
-    //NSString *name = [NSString stringWithFormat:@"%@.%@", documentReport.fileNa, MADFileExtentionMobleApplicationDocument];
-    [mailComposer addAttachmentData:data mimeType:mimeType fileName:fileURL.lastPathComponent];
     mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
     
     if (userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -34,6 +26,21 @@
         mailComposer.providesPresentationContextTransitionStyle = YES;
         mailComposer.modalInPopover = NO;
     }
+    return mailComposer;
+}
+
++ (instancetype)body:(NSString *)body
+          attachment:(NSURL *)attachmentURL
+            mimeType:(NSString *)mimeType
+  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
+    
+    NSData *data = [NSData dataWithContentsOfURL:attachmentURL];
+    NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
+    NSString *documentTitle = [NSString stringWithFormat:formatString, attachmentURL.lastPathComponent];
+    
+    MFMailComposeViewController	*mailComposer = [self title:documentTitle body:body userInterfaceIdiom:userInterfaceIdiom];
+
+    [mailComposer addAttachmentData:data mimeType:mimeType fileName:attachmentURL.lastPathComponent];
     return mailComposer;
 }
 
