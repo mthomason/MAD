@@ -2293,18 +2293,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark Gesture Helpers
 
-- (void)gestureBegan {
-    [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
-    if (self.presentedViewController != nil) {
-        [self hideToolbox];
-    }
-    [self setScrollersEnabled: NO];
-}
-
-- (void)gestureEnded {
-    [self setScrollersEnabled: YES];
-}
-
 #pragma mark Gesture handlers
 
 - (void)handlePinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
@@ -2345,8 +2333,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)beginPanPiece:(UIView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
-    [self gestureBegan];
-    piece.alpha = 0.8888f;
+    
+    [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
+    if (self.presentedViewController != nil) {
+        [self hideToolbox];
+    }
+    [self setScrollersEnabled: NO];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        piece.transform = CGAffineTransformMakeScale(1.20000f, 1.20000f);
+        piece.alpha = 0.80000f;
+    }];
+    
     [self.scroller.container bringSubviewToFront: piece];
     [self.view addSubview: piece];
     transition();
@@ -2405,6 +2403,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {//:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
 
+    UIView *piece = gesture.view;
+    
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
     CGPoint locationInSection = CGPointZero;
@@ -2412,7 +2412,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
             locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:subview];
             if ([subview pointInside:locationInSection withEvent:nil]) {
-                gesture.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
+                piece.transform = CGAffineTransformIdentity;
+                piece.alpha = 1.0000f;
                 sectionView = (MADDesignerSectionView *)subview;
                 break;
             }
@@ -2429,16 +2430,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         }
     }
 
-    
-    
-    UIView *piece = gesture.view;
-    piece.alpha = 1.0000f;
     if (sectionView != nil) {
         
         [self relayoutSectionView:sectionView];
-        
-        NSManagedObjectID *objectId = piece.objectIdTag;
-        //CGPoint locationInSection = [self.view convertPoint:piece.frame.origin toView:sectionView];
         
         NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
         RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag inManagedObjectContext: managedObjectContext];
@@ -2447,17 +2441,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [sectionView insertItemAtIndex:path update:^(){
             MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-            la.objectID = objectId;
+            la.objectID = piece.objectIdTag;
             
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: managedObjectContext];
             
             la.frame = CGRectMake(locationInSection.x, locationInSection.y, documentObject.size.width, documentObject.size.height);
             [layoutManager addItem:la];
             [layoutManager layout];
             
             [piece removeFromSuperview];
-            [documentSection addDocumentObject: documentObject withDropPoint: locationInSection];//frame.origin];
-            //[documentSection addDocumentObject: documentObject withDropPoint: frame.origin];
+            [documentSection addDocumentObject: documentObject withDropPoint: locationInSection];
             [documentSection.managedObjectContext save:nil];
             
         } animationComplete:^(BOOL finished) {
@@ -2475,7 +2468,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
     
     [piece setNeedsDisplay];
-    [self gestureEnded];
+    [self setScrollersEnabled: YES];
 }
 
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
