@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.dataSource = self;
-    self.preferredContentSize = CGSizeMake(280, 200);
+    self.preferredContentSize = CGSizeMake(320, 200);
 }
 
 #pragma mark - Table view data source

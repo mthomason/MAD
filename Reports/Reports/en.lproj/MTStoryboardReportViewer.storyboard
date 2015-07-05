@@ -141,7 +141,7 @@
             </objects>
             <point key="canvasLocation" x="47" y="1598"/>
         </scene>
-        <!--What is MAD?-->
+        <!--Info-->
         <scene sceneID="Kmr-uW-f9w">
             <objects>
                 <tableViewController id="xWb-ap-j8N" customClass="MADAboutTableViewController" sceneMemberID="viewController">
@@ -207,7 +207,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="What is MAD?" id="xu8-8B-HYO">
+                    <navigationItem key="navigationItem" title="Info" id="xu8-8B-HYO">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="1YW-mW-uHG">
                             <connections>
                                 <segue destination="HiX-DM-099" kind="unwind" identifier="MTSegueUnwindInfoCancelButton" unwindAction="unwindToOpenDocumentViewController:" id="f6x-Dc-5VY"/>
