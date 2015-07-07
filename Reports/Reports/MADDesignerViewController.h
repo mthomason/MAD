@@ -28,8 +28,6 @@ typedef void (^block_insertObject)(UIViewController *);
 @property (nonatomic, assign) BOOL hidesStatusBar;
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
-- (IBAction)done:(id)sender;
-- (IBAction)add:(id)sender;
 
 @end
 

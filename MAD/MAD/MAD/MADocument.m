@@ -774,8 +774,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)layoutManager:(MADSectionLayoutManager *)layoutManager
-      itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
+- (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
     
     NSManagedObjectContext *objectContext = self.document.managedObjectContext;
     RptqDocumentObject *documentObject;
@@ -786,8 +785,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)removeDocumentObject:(NSManagedObjectID *)objectID
-                 fromSection:(NSManagedObjectID *)sectionID {
+- (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID {
     
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: self.document.managedObjectContext];
     
