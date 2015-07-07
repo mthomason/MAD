@@ -202,11 +202,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionViews;
 @property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
-
 @property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
-
-@property (nonatomic, strong) NSArray *toolbarBottomItems;
-
 @property (nonatomic, strong) NSMutableDictionary *collectionViewReuseIdentifiers;
 
 @property (nonatomic, weak)   IBOutlet UIToolbar *toolbarBottom;                          //iPhone only
@@ -217,6 +213,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, assign) BOOL toolboxVisible;
 @property (nonatomic, assign) BOOL sectionSettingsVisible;
 @property (nonatomic, assign) BOOL insetsSetup;
+@property (nonatomic, assign) BOOL shownAndHidden;
 
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditDynamicLabel;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditAggregateFunction;
@@ -233,7 +230,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, assign) CGFloat zoomScaleRestore;
 @property (nonatomic, assign) CGRect boundsOnDisappear;
-@property (nonatomic, assign) BOOL shownAndHidden;
 @property (nonatomic, assign) CGPoint contentOffsetOnShowToolbox;
 @property (nonatomic, assign) CGFloat zoomScaleOnShowToolbox;
 
@@ -492,9 +488,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     NSMutableSet *selectedObjectIds = [NSMutableSet new];
     self.selectedObjectIds = selectedObjectIds;
-    
-    NSArray *toolbarBottomItems = self.toolbarBottom.items;
-    self.toolbarBottomItems = toolbarBottomItems;
     
     [self.view addConstraints:constraints];
     
@@ -2723,7 +2716,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)applyBorderToView:(MADDesignerElementView *)view {
     view.enableResizing = YES;
-    NSNumber *key = @([view tag]);
+    NSNumber *key = @(view.tag);
     self.borderAppliedToView[key] = @YES;
     UIColor *tintColor = [UIColor tintColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
@@ -2734,10 +2727,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
-        NSNumber *key = @([view tag]);
+        NSNumber *key = @(view.tag);
         self.borderAppliedToView[key] = @NO;
         result = YES;
-        
         view.layer.borderColor = [UIColor blackColor].CGColor;
         view.layer.borderWidth = 0.0000f;
         view.enableResizing = NO;
