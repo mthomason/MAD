@@ -52,7 +52,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, strong) MTApplicationInstance *applicationInstance;
 @property (nonatomic, strong) UIApplication *application;
 
 @property (nonatomic, strong) MTNavigationController *navigationController;
@@ -85,7 +84,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #endif
 
 + (MTApplicationInstance *)app {
-    return ((AppDelegate *)[UIApplication sharedApplication].delegate).applicationInstance;
+    return [MTApplicationInstance mainInstance];
 }
 
 #pragma mark - Initialization
@@ -135,8 +134,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
     //});
     
-    [self.applicationInstance initalizeAppearance];
-    
+    [[MTApplicationInstance mainInstance] initalizeAppearance];
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
         [self getUserCloudPrefs];
     } subsquientLaunches:^{
@@ -316,7 +314,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
     BOOL save = MADStateRestorationSupportEnabled;
     if (save) {
-        save = self.applicationInstance.reportState != UIDocumentStateClosed;
+        save = [MTApplicationInstance mainInstance].reportState != UIDocumentStateClosed;
         if (save == NO) {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setObject: nil
@@ -333,7 +331,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.applicationInstance.fileManager.openUrl.path.lastPathComponent
+    [userDefaults setObject:[MTApplicationInstance mainInstance].fileManager.openUrl.path.lastPathComponent
                      forKey:@"MADStateRestorationOpenFileWithExtension"];
     [userDefaults synchronize];
     
@@ -524,8 +522,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)loadAndDisplayWindow {
-    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
-    self.applicationInstance = appInstance;
     
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     id initViewController = [MTApplicationInstance initalViewController];

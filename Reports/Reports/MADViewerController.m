@@ -151,13 +151,10 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    self.document = [AppDelegate app].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [super decodeRestorableStateWithCoder:coder];
 }
 
@@ -327,7 +324,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 - (void)updateNavigationPrompt:(BOOL)animated {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         [UIView setAnimationsEnabled:animated];
-        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+        self.navigationItem.prompt = [MTApplicationInstance mainInstance].openDocument.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;
@@ -345,17 +342,17 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [super viewDidAppear:animated];
     
     // MARK: Reporting feature (number of results in main query)
-    self.document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    [MTApplicationInstance mainInstance].openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-    [self.document initalizeMainQuery];
+    [[MTApplicationInstance mainInstance].openDocument initalizeMainQuery];
     [self reload];
     [self layoutSubviewSliderPagination];
     [self updateLateRefreshedLabel:self];
     
     if ([self printPageRendererReport] == nil) {
-        [self.document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
-                                                                                                                           dataTable: self.document.mainDataTable];
+        [[MTApplicationInstance mainInstance].openDocument activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [MTApplicationInstance mainInstance].openDocument.reportFormatter
+                                                                                                                           dataTable: [MTApplicationInstance mainInstance].openDocument.mainDataTable];
         [self setPrintPageRendererReport: prtingPageRendererReport];
     }
 }
@@ -575,7 +572,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     if ((int)sliderIndex != self.currentPageIndex) {
         self.currentPageIndex = sliderIndex;
         [self updatePageStatus];
-        MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
+        MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: [MTApplicationInstance mainInstance].openDocument
                                                                                                                 pageNumber: self.currentPageIndex + 1
                                                                                                                    ofPages: self.numberOfPages];
         pageOne.view.frame = self.view.bounds;
@@ -606,9 +603,9 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    [self.document.managedObjectContext save:&error];
+    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     if (error != nil) {
-        [self.document.managedObjectContext save:&error];
+        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish: self];
 }
@@ -771,7 +768,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         self.isRefreshing = YES;
         [self setDisplayInactive];
         
-        MTDatabase *database = self.document.mainDatabase;
+        MTDatabase *database = [MTApplicationInstance mainInstance].openDocument.mainDatabase;
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         
@@ -782,7 +779,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         
 
         __weak __block MADViewerController *weakself = self;
-        [self.document refresh:^(BOOL success, NSError *error) {
+        [[MTApplicationInstance mainInstance].openDocument refresh:^(BOOL success, NSError *error) {
             __strong MADViewerController *strongself = weakself;
             
             if (success) {
@@ -797,7 +794,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                      onViewController: strongself
                            completion:^(BOOL success) {
                                __strong MADViewerController *strongself2 = weakself2;
-                               [[MTKeyChain sharedObject] deleteKey: strongself2.document.mainDatabase.databaseConnection.connectionString
+                               [[MTKeyChain sharedObject] deleteKey: [MTApplicationInstance mainInstance].openDocument.mainDatabase.databaseConnection.connectionString
                                                 usingViewController: strongself2];
                            }];
                 
@@ -830,7 +827,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     MTActivityItemProviderPdf *activityItemProviderPdf = [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
-    activityItemProviderPdf.document = self.document;
+    activityItemProviderPdf.document = [MTApplicationInstance mainInstance].openDocument;
     return activityItemProviderPdf;
 }
 
@@ -848,10 +845,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         
                         UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
                         if (sharedController) {
-                            [self.document setActivityDelegate:weakself];
-                            UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
+                            [[MTApplicationInstance mainInstance].openDocument setActivityDelegate:weakself];
+                            UIPrintPageRenderer *printPageRender = [[MTApplicationInstance mainInstance].openDocument printerPrintPageRender];
                             sharedController.printPageRenderer = printPageRender;
-                            sharedController.delegate = self.document;
+                            sharedController.delegate = [MTApplicationInstance mainInstance].openDocument;
                             __weak MADViewerController *weakself2 = weakself;
                             void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                             ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
@@ -898,9 +895,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
                     if (sharedController) {
                         sharedController.delegate = weakself;
-                        UIPrintPageRenderer *printPageRender = [weakself.document printerPrintPageRender];
+                        UIPrintPageRenderer *printPageRender = [[MTApplicationInstance mainInstance].openDocument printerPrintPageRender];
                         sharedController.printPageRenderer = printPageRender;
-                        sharedController.delegate = self.document;
+                        sharedController.delegate = [MTApplicationInstance mainInstance].openDocument;
                         __weak MADViewerController *weakself = self;
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
                             [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
@@ -977,9 +974,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     __weak MADViewerController *blockViewer = self;
     
-    [self.document prepareForQuery];
+    [[MTApplicationInstance mainInstance].openDocument prepareForQuery];
     
-    __weak MADocument *weakdoc = self.document;
+    __weak MADocument *weakdoc = [MTApplicationInstance mainInstance].openDocument;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
@@ -1000,12 +997,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            NSUInteger numberOfPages = [blockViewer2.document.reportFormatter numberOfPages];
+            NSUInteger numberOfPages = [[MTApplicationInstance mainInstance].openDocument.reportFormatter numberOfPages];
             blockViewer2.numberOfPages = numberOfPages;
             blockViewer2.maxNumberOfPages = numberOfPages > 0 ? (numberOfPages - 1) : 0;
             [blockViewer2 setDisplayActive];
             
-            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
+            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: [MTApplicationInstance mainInstance].openDocument
                                                                                                                     pageNumber: (blockViewer2.currentPageIndex + 1)
                                                                                                                        ofPages: numberOfPages];
             pageOne.view.frame = blockViewer2.view.bounds;
@@ -1069,7 +1066,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             visiblePageNumber = pageViewControllerLast.pageNumber;
         }
         if (visiblePageNumber + 1 <= self.numberOfPages) {
-            result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
+            result = [[MTReportViewerReportPageViewController alloc] initWithDocument: [MTApplicationInstance mainInstance].openDocument
                                                                            pageNumber: visiblePageNumber + 1
                                                                               ofPages: self.numberOfPages];
             result.delegate =  self;
@@ -1092,7 +1089,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             visiblePageNumber = pageViewControllerPrevious.pageNumber;
         }
         if (visiblePageNumber - 1 > 0) {
-            result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
+            result = [[MTReportViewerReportPageViewController alloc] initWithDocument: [MTApplicationInstance mainInstance].openDocument
                                                                            pageNumber: visiblePageNumber - 1
                                                                               ofPages: self.numberOfPages];
             result.delegate =  self;
@@ -1222,7 +1219,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)updateLateRefreshedLabel:(id)sender {
     if (self.lastCacheDate == nil) {
         
-        NSURL *cachedDataUrl = [self.document cachedDataUrl];
+        NSURL *cachedDataUrl = [[MTApplicationInstance mainInstance].openDocument cachedDataUrl];
         NSString *cachedDataPath = [cachedDataUrl path];
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
@@ -1287,7 +1284,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [weakSelf updateRecordsReadStatus];
         });
     } else {
-        NSNumber *numberOfResults = @([self.document.mainDataTable numberOfRows]);
+        NSNumber *numberOfResults = @([[MTApplicationInstance mainInstance].openDocument.mainDataTable numberOfRows]);
         [self updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
     }
 }

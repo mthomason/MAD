@@ -69,9 +69,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.538";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.538";
-NSString * const MTGlobalBundleRev                                  = @"1913";
+NSString * const MTGlobalBundleVersion                              = @"7.0.539";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.539";
+NSString * const MTGlobalBundleRev                                  = @"1914";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -90,9 +90,6 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
                                                                     //change this url to the url of the open
                                                                     //document.  This url will be key for the
                                                                     //documents array.
-//@property (nonatomic, strong, readwrite) MTReportDesigner *reportDesigner;
-@property (nonatomic, strong, readwrite) MTReportViewer *reportViewer;
-@property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
 @property (nonatomic, strong, readwrite) MADFileManager *fileManager;
 
@@ -110,18 +107,15 @@ static MTApplicationInstance *mainInstance;
 
 + (UIViewController *)initalViewController {
     return
-#ifndef MADWATCHKIT
-    [UIViewController initalViewController];
-#else
-    nil;
-#endif
+        #ifndef MADWATCHKIT
+            [UIViewController initalViewController];
+        #else
+            nil;
+        #endif
 }
 
-+ (void)initialize {
-    if (self == [MTApplicationInstance self]) {
-        MTApplicationInstance *instance = [[MTApplicationInstance alloc] init];
-        mainInstance = instance;
-    }
+- (instancetype)copyWithZone:(NSZone *)zone {
+    return self;
 }
 
 + (void)load { }
@@ -131,11 +125,11 @@ static MTApplicationInstance *mainInstance;
 }
 
 
-- (id)copyWithZone:(NSZone *)zone {
-    return self;
-}
-
 + (MTApplicationInstance *)mainInstance {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        mainInstance = [[self alloc] init];
+    });
     return mainInstance;
 }
 
@@ -153,8 +147,6 @@ static MTApplicationInstance *mainInstance;
     self = [super init];
     if (self) {
         
-        self.filesController = nil;
-        
         dispatch_queue_t appInstaceQueue = dispatch_queue_create(MADQueueAppInstance, DISPATCH_QUEUE_SERIAL);
         self.appInstaceQueue = appInstaceQueue;
         
@@ -163,7 +155,7 @@ static MTApplicationInstance *mainInstance;
     
         [self registerDefaults];
         
-        MADFileManager *openFiles = [MADFileManager new];
+        MADFileManager *openFiles = [[MADFileManager alloc] init];
         self.fileManager = openFiles;
         
 #ifndef MADWATCHKIT
@@ -592,11 +584,8 @@ static MTApplicationInstance *mainInstance;
 }
 
 - (MADocument *)openDocument {
-    MADocument *result = nil;
-    if ([self reportState] == MTReportStateOpen) {
-        result = (MADocument *)self.fileManager.openDocument;
-    }
-    return result;
+    if (self.reportState == MTReportStateOpen) return (MADocument *)self.fileManager.openDocument;
+    else return nil;
 }
 
 + (void)deleteCoreDataCache {

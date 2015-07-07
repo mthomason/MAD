@@ -107,7 +107,7 @@
     titleView.text = [MTApplicationInstance madQuery];
     self.navigationItem.titleView = titleView;
     
-    self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+    self.navigationItem.prompt = [MTApplicationInstance mainInstance].openDocument.fileURL.lastPathComponent;
 
     self.delegate = self;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
@@ -116,11 +116,10 @@
     navigationController.navigationBarHidden = NO;
     
     MADQueryViewController *queryViewController = (MADQueryViewController *)navigationController.topViewController;
-    queryViewController.document = self.document;
     self.queryBuilderController = queryViewController;
     
     MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
-    queryVisualizationViewController.document = self.document;
+    queryVisualizationViewController.document = [MTApplicationInstance mainInstance].openDocument;
     self.queryBuilderControllerAdvanced = queryVisualizationViewController;
 
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
@@ -131,9 +130,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self.queryBuilderController reloadDocument: self.document
+    [self.queryBuilderController reloadDocument: [MTApplicationInstance mainInstance].openDocument
                                        animated: YES];
-    [self.queryBuilderControllerAdvanced reloadDocument:self.document animated:YES];
+    [self.queryBuilderControllerAdvanced reloadDocument:[MTApplicationInstance mainInstance].openDocument animated:YES];
     
     __block MTQueryBuilderContainerController *blockSelf = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
@@ -163,11 +162,11 @@
             viewController = segue.destinationViewController;
         }
         viewController.delegate = self;
-        viewController.query = self.queryBuilderController.document.mainQuery;
+        viewController.query = [MTApplicationInstance mainInstance].openDocument.mainQuery;
         
     } else if (sender == self) {
-        [segue.destinationViewController setDocument:self.document];
-        [segue.destinationViewController reloadDocument:self.document animated:YES];
+        [segue.destinationViewController setDocument:[MTApplicationInstance mainInstance].openDocument];
+        [segue.destinationViewController reloadDocument:[MTApplicationInstance mainInstance].openDocument animated:YES];
     } else {
         if ([self popover] != nil) {
             if ([[self popover] isPopoverVisible]) {
@@ -237,9 +236,9 @@
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    [self.document.managedObjectContext save:&error];
+    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     if (error != nil) {
-        [self.document.managedObjectContext save:&error];
+        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish:self];
     [self dismissViewControllerAnimated:YES completion:^{
@@ -277,7 +276,7 @@
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+        self.navigationItem.prompt = [MTApplicationInstance mainInstance].openDocument.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

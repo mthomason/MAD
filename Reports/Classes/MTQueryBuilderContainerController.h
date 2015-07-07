@@ -21,7 +21,6 @@
     <MTViewControllerProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
-@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, strong) MADQueryViewController *queryBuilderController;
 @property (nonatomic, strong) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;

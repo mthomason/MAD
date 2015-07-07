@@ -552,8 +552,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
     MADViewerController *viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
-    MTApplicationInstance *app = [AppDelegate app];
-    viewControllerReportViewer.document = [app openDocument];
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -576,12 +574,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self ;
             
-            MTApplicationInstance *app = [AppDelegate app];
-            MADocument *document = [app openDocument];
-            queryBuilderContainerController.document = document;
-            reportDesignerViewController.document = document;
-            reportViewerViewController.document = document;
-
         } else {
             
             UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
@@ -593,8 +585,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
             queryBuilderContainerController.viewControllerDelegate = self;
             
-            MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
-            
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
             MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
             reportDesignerViewController.delegate = self;
@@ -602,11 +592,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
             MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self;
-            MTApplicationInstance *app = [AppDelegate app];
-            MADocument *document = [app openDocument];
-            queryBuilderViewController.document = document;
-            reportDesignerViewController.document = document;
-            reportViewerViewController.document = document;
 
         }
         
@@ -616,7 +601,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
         MTApplicationInstance *app = [AppDelegate app];
         MADocument *document = [app openDocument];
-        queryBuilderViewController.document = document;
         [queryBuilderViewController reloadDocument:document animated:YES];
     }
 }
@@ -797,7 +781,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                 // MARK: Reporting feature (number of results in main query)
                 [AppDelegate app].openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-                
                 UITabBarController *tabBarController = [UITabBarController mainTabBarController];
                 
                 tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -809,7 +792,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                 
                 MTQueryBuilderContainerController * queryBuilderViewController = (MTQueryBuilderContainerController *)navController.topViewController;
                 queryBuilderViewController.viewControllerDelegate = self;
-                queryBuilderViewController.document = document;
                 
                 MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
                 reportDesignerViewController.delegate = self;
@@ -817,13 +799,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                 MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
                 reportViewerViewController.viewControllerDelegate = self ;
                 
-                reportDesignerViewController.document = [AppDelegate app].openDocument;
-                reportViewerViewController.document = [AppDelegate app].openDocument;
-                
                 [self presentViewController:tabBarController animated:YES completion:nil];
-                
             }
-            
         }
         
         [self reenable];

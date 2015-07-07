@@ -158,10 +158,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, strong) MTRulerView *ruler;
 @property (nonatomic, strong) MADPromptManager *promptManager;
 
-@property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
-
 @property (nonatomic, weak) IBOutlet UIView *toolbox;                               //iPhone only
 @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
+
+@property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
 @property (nonatomic, assign) BOOL editAggregate;
 @property (nonatomic, assign) BOOL editDynamicField;
@@ -335,7 +335,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    self.document = [MTApplicationInstance mainInstance].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -386,14 +385,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
     viewControllerToolbox.clearsBackground = [self padLike];
-    viewControllerToolbox.document = self.document;
+    viewControllerToolbox.document = [MTApplicationInstance mainInstance].openDocument;
     viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
     self.viewControllerToolbox = viewControllerToolbox;
     
     self.navigationControllerToolbox = navigationControllerToolbox;
     self.toolboxTransitioningDelegate = transitioningDelegate;
     
-    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:self.document.fileURL.lastPathComponent];
+    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:[MTApplicationInstance mainInstance].openDocument.fileURL.lastPathComponent];
     self.promptManager = promptManager;
     
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
@@ -511,7 +510,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.zoomScaleRestore = self.scroller.zoomScale;
     [self.scroller setZoomScale: 1.0000f animated: NO];
     
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
     
     NSInteger sectionCounter = 0;
     NSInteger numberOfSections = [sectionEnumerator count];
@@ -668,7 +667,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
     
-    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
+    NSManagedObjectContext *objectContext = [MTApplicationInstance mainInstance].openDocument.managedObjectContext;
     RptqDocumentObject *documentObject;
     documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
     documentObject.originx = @(attributes.frame.origin.x);
@@ -724,8 +723,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
     
     self.shownAndHidden = YES;
-    //[[MTApplicationInstance mainInstance] reportDesigner].shownAndHidden = YES;
-    [self.document saveContext];
+    [[MTApplicationInstance mainInstance].openDocument saveContext];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -826,7 +824,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [super prepareForSegue:segue sender:sender];
     
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-        [segue.destinationViewController setDocument:self.document];
+        [segue.destinationViewController setDocument:[MTApplicationInstance mainInstance].openDocument];
     }
     
 }
@@ -969,7 +967,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)documentStateChanged {
     
-    switch (self.document.documentState) {
+    switch ([MTApplicationInstance mainInstance].openDocument.documentState) {
         case UIDocumentStateEditingDisabled:
             self.view.userInteractionEnabled = NO;
             break;
@@ -988,7 +986,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
     
-    [self.document.activeDocumentModel setNewPageAfter: newPageAfter
+    [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel setNewPageAfter: newPageAfter
                                        forSectionAtRow: selectedSectionNumber];
     
     /*
@@ -1002,27 +1000,27 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
      documentSectionView.backgroundColor = color;
      */
     
-    [self.document saveContext];
+    [[MTApplicationInstance mainInstance].openDocument saveContext];
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
     
-    [self.document.activeDocumentModel setVisibility:isVisible forSectionAtRow:selectedSectionNumber];
+    [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel setVisibility:isVisible forSectionAtRow:selectedSectionNumber];
     
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDatabase *database = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *documentSection = [query documentSectionForRow: selectedSectionNumber];
     
     MADDesignerSectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     documentSectionView.visible = isVisible;
-    [self.document saveContext];
+    [[MTApplicationInstance mainInstance].openDocument saveContext];
 }
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDatabase *database = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = [database.hasQueries anyObject];
     RptqDocumentSection *documentSection = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
@@ -1043,7 +1041,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDatabase *database = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *documentSection = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
     
@@ -1060,7 +1058,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                                inManagedObjectContext: self.document.managedObjectContext];
+                                                                                inManagedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
         newRowToAppend.inSection = documentSection;
         [hasRows addObject:newRowToAppend];
@@ -1084,9 +1082,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
     NSError *error = nil;
-    [self.document.managedObjectContext save:&error];
+    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     
-    [self.document saveToURL: self.document.fileURL
+    [[MTApplicationInstance mainInstance].openDocument saveToURL: [MTApplicationInstance mainInstance].openDocument.fileURL
             forSaveOperation: UIDocumentSaveForOverwriting
            completionHandler: ^(BOOL success) {
                
@@ -1109,11 +1107,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)didUpdateLayout:(MADDesignerSectionView *)sectionView {
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
+                                                                    inManagedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     NSNumber *height = @(sectionView.bounds.size.height);
     documentSection.height = height;
     [self relayoutSectionView:sectionView];
-    [self.document.managedObjectContext save:nil];
+    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:nil];
 }
 
 #pragma mark - MTReportDesignerToolBoxDelegate
@@ -1318,7 +1316,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
 
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: cell.objectIdTag
-                                                                  managedObjectContext: self.document.activeDocumentModel.managedObjectContext];
+                                                                  managedObjectContext: [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.managedObjectContext];
     return documentObject.type.integerValue;
 }
 
@@ -1333,13 +1331,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     NSManagedObjectID *elementViewId = [cell objectIdTag];
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
-                                                                  managedObjectContext: self.document.managedObjectContext];
+                                                                  managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
     UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: svSection.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
+                                                                    inManagedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     BOOL found = NO;
     
@@ -1403,7 +1401,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UINavigationController *navigationController = [UINavigationController aggregateAdd];
     
     MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
-    aggregateViewController.document = self.document;
+    aggregateViewController.document = [MTApplicationInstance mainInstance].openDocument;
     aggregateViewController.delegate = self;
     [aggregateViewController setAggregateObjectToEdit:self.aggregateToEdit];
     
@@ -1431,10 +1429,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
     MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
-    barcodeViewController.document = self.document;
+    barcodeViewController.document = [MTApplicationInstance mainInstance].openDocument;
     barcodeViewController.delegate = self;
     
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[[MTApplicationInstance mainInstance].openDocument.managedObjectContext objectWithID:object.objectID];
     barcodeViewController.barcodeToEdit = documentObject.isBarcode;
     self.barcodeToEdit = documentObject.isBarcode;
     
@@ -1463,7 +1461,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
     MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [MTQueryBuilderChooseFieldViewController main];
-    chooseFieldViewController.document = self.document;
+    chooseFieldViewController.document = [MTApplicationInstance mainInstance].openDocument;
     chooseFieldViewController.delegate = self;
     
     chooseFieldViewController.modalPresentationStyle = UIModalPresentationPopover;
@@ -1485,9 +1483,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         textField.clearButtonMode = UITextFieldViewModeAlways;
     } completion:^(UIAlertAction *action, NSString *text) {
         
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[[MTApplicationInstance mainInstance].openDocument.managedObjectContext objectWithID:object.objectID];
         documentObject.isLabel.text = text;
-        [self.document.managedObjectContext save:nil];
+        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:nil];
     }];
     
     [self presentViewController:alert animated:YES completion:nil];
@@ -1541,7 +1539,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView
                   cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     
     __block MADSectionLayoutAttributes *attributes;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *object, BOOL *stop) {
@@ -1553,7 +1551,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }];
     
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: attributes.objectID
-                                                                  managedObjectContext: self.document.managedObjectContext];
+                                                                  managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
     NSString * resuseId = [MTCollectionViewCellElement reuseIdentifier];
@@ -1627,7 +1625,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (NSInteger)collectionView: (UICollectionView *)collectionView
      numberOfItemsInSection: (NSInteger)section {
     
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
 }
 
@@ -1703,7 +1701,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSInteger row = indexPath.row;
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
+                                                                    inManagedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     NSOrderedSet *objects = [documentSection.hasRows[indexPath.section] hasObjects];
     
     if ([objects count] > row) {
@@ -1845,9 +1843,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - MTReportDesignerSectionViewLayoutLiquidDelegate
 
 - (void)collectionView: (UICollectionView *)collectionView prepareLayout: (UICollectionViewLayout *)collectionViewLayout {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     
-    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
+    NSManagedObjectContext *objectContext = [MTApplicationInstance mainInstance].openDocument.managedObjectContext;
     MADSectionLayoutAttributes *attributes;
     RptqDocumentObject *documentObject;
     NSArray *allItems = layoutManager.items.allValues;
@@ -1862,7 +1860,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     __block MTCollectionViewLayoutLiquidAttributes *item;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MTCollectionViewLayoutLiquidAttributes *object, BOOL *stop) {
         if (object.indexPath.item == indexPath.item && object.indexPath.section == indexPath.section) {
@@ -1876,17 +1874,17 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSUInteger)numberOfItemsInSection: (NSUInteger)section ofCollectionView: (UICollectionView *)collectionView {
     
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
 }
 
 - (NSArray *)collectionView: (UICollectionView *)collectionView attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.allValues;
 }
 
 - (CGSize)collectionView: (UICollectionView *)collectionView sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     return [layoutManager size];
 }
 
@@ -1897,7 +1895,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     MADDesignerElementView *piece = ((MADDesignerElementView *)gestureRecognizer.view);
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag
-                                                                  managedObjectContext: self.document.managedObjectContext];
+                                                                  managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
 
     if (gestureRecognizer.numberOfTouches > 1) {
 
@@ -1984,7 +1982,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         } else {
             
-            self.viewControllerToolbox.document = self.document;
+            self.viewControllerToolbox.document = [MTApplicationInstance mainInstance].openDocument;
             
             if (label.selected) {
                 
@@ -2126,7 +2124,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         MTBarcode *barcode = [viewController barcode];
         
-        NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = [[MTApplicationInstance mainInstance].openDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditBarcode];
         RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
         RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
@@ -2193,7 +2191,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
-    RptqQuery *query = [self.document.activeDocumentModel defaultQuery];
+    RptqQuery *query = [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel defaultQuery];
     RptqDocumentSection *documentSection = [query documentSectionForRow: reportDesigner.lastSelectedSectionControlPanel];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
     if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
@@ -2225,7 +2223,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self.selectedObjectIds addObject:elementView.objectIdTag];
         [self applyBorderToView:elementView];
         
-        self.viewControllerToolbox.document = self.document;
+        self.viewControllerToolbox.document = [MTApplicationInstance mainInstance].openDocument;
         self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
         
     }
@@ -2243,7 +2241,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag {
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    RptqDatabase *database = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *section = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
     return section;
@@ -2276,15 +2274,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [self setDisplayActive];
     
-    RptqDocumentSection *section = self.document.activeDocumentModel.hasDetailSection;
+    RptqDocumentSection *section = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDetailSection;
     
-    UICollectionView *detailSection = [self getSectionViewForDocumentSection:self.document.activeDocumentModel.hasDetailSection];
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[detailSection.objectIdTag];
+    UICollectionView *detailSection = [self getSectionViewForDocumentSection:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDetailSection];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[detailSection.objectIdTag];
     
     [detailSection performBatchUpdates:^{
         
         
-        RptqDocumentObject *documentObject = [self.document.document addDocumentObject:documentObjectDefination];
+        RptqDocumentObject *documentObject = [[MTApplicationInstance mainInstance].openDocument.document addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
         
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
@@ -2311,14 +2309,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     NSManagedObjectID *objectId = cell.objectIdTag;
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[sectionView.objectIdTag];
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-        [self.document removeDocumentObject: objectId fromSection: sectionView.objectIdTag];
+        [[MTApplicationInstance mainInstance].openDocument removeDocumentObject: objectId fromSection: sectionView.objectIdTag];
     } animationComplete:^(BOOL finished) {
         if (finished) {
             [self.scroller.container invalidateIntrinsicContentSize];
@@ -2327,8 +2325,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     } completion:^(BOOL finished) {
         if (finished) {
             [self redrawAllElementViewsInCollectionView:sectionView];
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
-            [self.document.activeDocumentModel removeDocumentObject:documentObject];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
+            [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel removeDocumentObject:documentObject];
         }
     }];
 }
@@ -2381,7 +2379,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self dismissViewControllerAnimated: YES
                                  completion: NULL];
         [self removeBorderFromAllSectionViews];
-        [self.document.managedObjectContext save:nil];
+        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:nil];
         
     }
     
@@ -2395,7 +2393,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.toolboxVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
-        [self.document.managedObjectContext save:nil];
+        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:nil];
         
     }
     
@@ -2426,13 +2424,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.view addSubview: piece];
     transition();
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[sectionView.objectIdTag];
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-        [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
+        [[MTApplicationInstance mainInstance].openDocument removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
     } animationComplete:^(BOOL finished) {
         if (finished) {
             [self.scroller.container invalidateIntrinsicContentSize];
@@ -2479,9 +2477,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [self relayoutSectionView:sectionView];
         
-        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+        NSManagedObjectContext *managedObjectContext = [MTApplicationInstance mainInstance].openDocument.managedObjectContext;
         RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag inManagedObjectContext: managedObjectContext];
-        MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+        MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[sectionView.objectIdTag];
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
         
         [sectionView insertItemAtIndex:path update:^(){
@@ -2532,7 +2530,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)relayoutSectionView:(UICollectionView *)documentSectionView {
     
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: self.document.managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     NSString *key = [documentSection sectionKey];
     NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];
     layoutConstraint.constant = documentSection.height.floatValue;
@@ -2592,7 +2590,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSSet *)elementViews {
     
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
@@ -2646,7 +2644,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
         if (quickHashWorks == NO) {     //Case when views are off screen.
             
-            SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
+            SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
             
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
                 MADDesignerSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
@@ -2818,7 +2816,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (UIView *)detailSectionView {
-    return (UIView *)[self.sectionControlViews objectForKey:self.document.document.hasDetailSection.objectID.key];
+    return (UIView *)[self.sectionControlViews objectForKey:[MTApplicationInstance mainInstance].openDocument.document.hasDetailSection.objectID.key];
 }
 
 - (void)adjustSettingsLocation {
@@ -2839,12 +2837,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [defaultCenter addObserver: self
                       selector: @selector(managedObjectContextDidChange:)
                           name: NSManagedObjectContextObjectsDidChangeNotification
-                        object: self.document.managedObjectContext];
+                        object: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     [defaultCenter addObserver: self
                       selector: @selector(managedObjectContextDidSave:)
                           name: NSManagedObjectContextDidSaveNotification
-                        object: self.document.managedObjectContext];
+                        object: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     [defaultCenter addObserver: self
                       selector: @selector(didHideMenuNotification:)
@@ -2869,7 +2867,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [defaultCenter addObserver: self
                       selector: @selector(documentStateChanged)
                           name: UIDocumentStateChangedNotification
-                        object: self.document];
+                        object: [MTApplicationInstance mainInstance].openDocument];
 }
 
 - (void)removeObservers {
@@ -2878,11 +2876,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: self.document.managedObjectContext];
+                           object: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextDidSaveNotification
-                           object: self.document.managedObjectContext];
+                           object: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     
     [defaultCenter removeObserver: self
                              name: UIMenuControllerDidHideMenuNotification
@@ -2902,7 +2900,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [defaultCenter removeObserver: self
                              name: UIDocumentStateChangedNotification
-                           object: self.document];
+                           object: [MTApplicationInstance mainInstance].openDocument];
 }
 
 #pragma mark - Creators
@@ -2929,7 +2927,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)actionDone:(id)sender {
     NSError *error = nil;
-    [self.document.managedObjectContext save:&error];
+    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     if (![self dismissAllPopovers]) {
         [self.delegate viewControllerDidFinish:@(NO)];
     } else {
@@ -2942,7 +2940,7 @@ static const inline CGSize sizePopoverFonts() {
     UINavigationController *navigationController = [UINavigationController elementPicker];
     MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
     pickerController.objectSelectorDelegate = self;
-    pickerController.document = self.document;
+    pickerController.document = [MTApplicationInstance mainInstance].openDocument;
     
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
     navigationController.preferredContentSize = sizePopoverDefault();
@@ -2965,7 +2963,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)actionDismiss {
     [self deselectAllElementsAnimated:YES];
-    [self.document.managedObjectContext save:nil];
+    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:nil];
 }
 
 - (IBAction)hideToolbox {
@@ -2990,7 +2988,7 @@ static const inline CGSize sizePopoverFonts() {
     self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
     
     self.viewControllerToolbox.clearsBackground = [self padLike];
-    self.viewControllerToolbox.document = self.document;
+    self.viewControllerToolbox.document = [MTApplicationInstance mainInstance].openDocument;
     [self adjustToolboxLocation];
     
     [self presentViewController: self.navigationControllerToolbox animated: YES

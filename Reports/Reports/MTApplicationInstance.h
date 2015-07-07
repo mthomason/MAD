@@ -42,7 +42,7 @@ extern NSString * const MTGlobalBundleRev;
 extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUpgradeInstalledSamples;
 
-@class MADocument, MTReportDesigner, MTReportViewer, MTQueryDesigner, MADFileManager;
+@class MADocument, MADFileManager;
 
 @interface MTApplicationInstance : NSObject
 
@@ -55,22 +55,14 @@ extern NSString * const MADUpgradeInstalledSamples;
                     everyLaunch:(void (^)(void))everyLaunch;
 
 @property (nonatomic, assign) MTReportState reportState;
-
 @property (nonatomic, strong) MADFilesController *filesController;
-
-//@property (nonatomic, strong, readonly) MTUser *user;
-
-@property (nonatomic, strong, readonly) MTReportDesigner *reportDesigner;
-@property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
-@property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
-
 @property (nonatomic, strong, readonly) MADFileManager *fileManager;
 
 @property (nonatomic, readonly) MADAppStorageState storageState;
 @property (nonatomic, assign) MADAppStorage storageOption;
 
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
-@property (nonatomic, strong, readonly) MADocument *openDocument;
+@property (readonly) MADocument *openDocument;
 
 - (void)initalizeAppearance;
 - (void)registerDefaultsFromSettingsBundle;

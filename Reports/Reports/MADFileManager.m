@@ -30,7 +30,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 - (instancetype)init {
     self = [super init];
     if (self) {
-        NSMutableDictionary *openFiles = [NSMutableDictionary new];
+        NSMutableDictionary *openFiles = [[NSMutableDictionary alloc] init];
         self.openFiles = openFiles;
         self.openUrl = nil;
     }
