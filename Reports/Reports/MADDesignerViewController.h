@@ -14,9 +14,11 @@
 #import "MADViewController.h"
 #import "MADViewControllerProtocol.h"
 
-typedef void(^MTBlockCompletionSimple)(BOOL finished);
-typedef void(^MTBlockCompletionNoReturn)(void);
-typedef void (^block_insertObject)(UIViewController *);
+typedef NS_ENUM(NSUInteger, MTToolboxType) {
+    MTToolboxTypeElement = 2,
+    MTToolboxTypeSection = 3,
+    MTToolboxTypeNone = 4,
+};
 
 @class MADocument;
 

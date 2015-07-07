@@ -10,22 +10,24 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADDesignerViewController.h"
-#import "MADConstants.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
-#import "MTApplicationInstance.h"
-#import "MTRulerView.h"
+
+#import "MADDesignerViewController.h"
+
 #import "MAD.h"
-#import "AppDelegate.h"
+
+#import "MTApplicationInstance.h"
+
+#import "MTRulerView.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDesignerElementView.h"
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
-#import "MTReportDesigner.h"
-#import "MTSettingsViewController.h"
+
 #import "MADDesignerElementPickerViewController.h"
-#import "MADViewerController.h"
+
+#import "MTFont.h"
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
@@ -37,15 +39,9 @@
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 #import "SectionEnumerator.h"
-#import "MTFont.h"
 #import "MADPopoverBackgroundView.h"
 
 #import "MADToolboxPresentationController.h"
-
-#import "UIColor+EverydayApps.h"
-#import "UIView+NSObjectIdTag.h"
-#import "CGGeometry+Extras.h"
-#import "UIDevice+Hack.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -66,7 +62,6 @@
 #import "RptqDocumentSection+Extras.h"
 
 #import "RptqDocumentObjectLabel.h"
-
 #import "RptqDocumentObjectLabelDataField.h"
 
 #import "RptqDocumentObjectBarcode.h"
@@ -77,14 +72,6 @@
 
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
-
-#import "UIViewController+UI.h"
-#import "UIViewController+tabBarItem.h"
-#import "UIScrollView+Extras.h"
-
-#import "NSManagedObjectID+Extras.h"
-
-#import "UIView+Extras.h"
 
 #import "MADDesignerStatusLabel.h"
 #import "MADBackgroundScrollView.h"
@@ -103,21 +90,21 @@
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 
 #import "NSManagedObject+Extras.h"
-#import "MADToolboxViewController.h"
-
 #import "UIAlertController+Constructors.h"
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"
 #import "UINavigationController+Designer.h"
 #import "MTViewControllerBarcode+Designer.h"
-
 #import "MTQueryBuilderChooseFieldViewController+Designer.h"
-
-typedef NS_ENUM(NSUInteger, MTToolboxType) {
-    MTToolboxTypeElement = 2,
-    MTToolboxTypeSection = 3,
-    MTToolboxTypeNone = 4,
-};
+#import "UIColor+EverydayApps.h"
+#import "UIView+NSObjectIdTag.h"
+#import "CGGeometry+Extras.h"
+#import "UIDevice+Hack.h"
+#import "UIViewController+UI.h"
+#import "UIViewController+tabBarItem.h"
+#import "UIScrollView+Extras.h"
+#import "NSManagedObjectID+Extras.h"
+#import "UIView+Extras.h"
 
 const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
@@ -191,11 +178,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintToolbarHeight;
+
 @property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelHeightContainer;
-@property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelWidthContainer;
-@property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelWidthContainer2;
 @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsSidesBorder;
 @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsVerticalBuffer;
+
 @property (nonatomic, strong) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
 @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
@@ -251,8 +238,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, assign) CGFloat zoomScaleOnShowToolbox;
 
 @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
-
-@property (nonatomic, strong) UIFont *captionFont;
 
 @property (nonatomic, weak)   UIViewController *childViewController;
 
@@ -329,17 +314,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         NSMutableDictionary *borderAppliedToView = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         
-        UIFont *captionFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        self.captionFont = captionFont;
-        
         NSMutableArray *layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] init];
         self.layoutConstraintSectionLabelHeightContainer = layoutConstraintSectionLabelHeightContainer;
-        
-        NSMutableArray *layoutConstraintSectionLabelContainer = [[NSMutableArray alloc] init];
-        self.layoutConstraintSectionLabelWidthContainer = layoutConstraintSectionLabelContainer;
-        
-        NSMutableArray *layoutConstraintSectionLabelWidthContainer2 = [[NSMutableArray alloc] init];
-        self.layoutConstraintSectionLabelWidthContainer2 = layoutConstraintSectionLabelWidthContainer2;
         
         NSMutableArray *layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] init];
         self.layoutConstraintsSectionsSidesBorder = layoutConstraintsSectionsSidesBorder;
@@ -363,7 +339,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    self.document = [AppDelegate app].openDocument;
+    self.document = [MTApplicationInstance mainInstance].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -754,7 +730,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.layoutConstraintsSectionsSidesBorder removeAllObjects];
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
     
-    [[AppDelegate app] reportDesigner].shownAndHidden = YES;
+    self.shownAndHidden = YES;
+    //[[MTApplicationInstance mainInstance] reportDesigner].shownAndHidden = YES;
     [self.document saveContext];
 }
 
@@ -893,9 +870,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.statusLabelZoomScale.frame = [self detailDisplayFrame];
         
         [self.ruler setNeedsDisplay];
-        CGFloat pointsize = self.captionFont.pointSize;
-        
-        UIFont *font = [self.captionFont fontWithSize:(pointsize / scrollView.zoomScale)];
+        UIFont *captionFont = [MADDesignerViewController captionFont];
+        CGFloat pointsize = captionFont.pointSize;
+        UIFont *font = [captionFont fontWithSize:(pointsize / scrollView.zoomScale)];
         NSDictionary *attributes = @{NSFontAttributeName : font};
         
         NSArray *sectionControlViewsArray = self.sectionControlViewsArray;
@@ -937,12 +914,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         for (MADDesignerElementView *elementView in elementViews) {
             elementView.contentScaleFactor = scaleWithScreen;
         }
-        
-        CGFloat pointsize = self.captionFont.pointSize;
+        UIFont *captionFont = [MADDesignerViewController captionFont];
+        CGFloat pointsize = captionFont.pointSize;
         NSArray *sectionControlViewsArray = self.sectionControlViewsArray;
         MADDesignerSectionLabel *controlView;
         for (controlView in sectionControlViewsArray) {
-            controlView.font = [self.captionFont fontWithSize:pointsize / scale];
+            controlView.font = [captionFont fontWithSize:pointsize / scale];
             controlView.contentScaleFactor = scaleWithScreen;
             [controlView setNeedsDisplay];
         }
@@ -1771,26 +1748,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - MUIViewControllerDelegate
 
-- (void)viewControllerDidFinish:(id)sender {
-    
-    if ([sender isKindOfClass:[MTSettingsViewController class]]) {
-        [self.scroller setZoomScale: 1.0000f animated:NO];
-        __weak MADDesignerViewController *weakself = self;
-        self.hidesStatusBar = NO;
-        [self dismissViewControllerAnimated:YES completion:^{
-            [weakself.view setNeedsUpdateConstraints];
-            [weakself.scroller.container setNeedsLayout];
-            [weakself.scroller.container setNeedsDisplay];
-        }];
-        
-    } else if ([sender isKindOfClass:[MADViewerController class]]) {
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {   // ???: Why only dismiss on pad interface????
-            self.hidesStatusBar = NO;
-            [self dismissViewControllerAnimated:YES completion:^{}];
-            [self setDisplayActive];
-        }
-    }
-}
+- (void)viewControllerDidFinish:(id)sender { }
 
 #pragma mark - MADDesignerElementPickerDelegate
 
@@ -2766,7 +2724,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)applyBorderToView:(MADDesignerElementView *)view {
     view.enableResizing = YES;
     NSNumber *key = @([view tag]);
-    [self borderAppliedToView][key] = @YES;
+    self.borderAppliedToView[key] = @YES;
     UIColor *tintColor = [UIColor tintColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
     view.layer.borderWidth = [UIView borderWidthThin];
@@ -3051,6 +3009,10 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 #pragma mark - Convenience
+
++ (UIFont *)captionFont {
+    return [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+}
 
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     

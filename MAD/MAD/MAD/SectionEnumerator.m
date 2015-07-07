@@ -30,8 +30,8 @@
 - (id)initWithDocument:(RptqDocument *)document {
     self = [super init];
     if (self) {
-        RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-        RptqQuery *query = [database.hasQueries anyObject];
+        RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
+        RptqQuery *query = database.hasQueries.anyObject;
         self.current = 0;
         self.total = query.hasQueryGroups.count;
         self.document = document;
@@ -44,12 +44,11 @@
 }
 
 - (NSArray *)allObjects {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
-    
-    NSInteger current = [self current];
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:([self total] - current)];
-    for (; [self current]<[self total]; self.current++) {
+    RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
+    RptqQuery *query = database.hasQueries.anyObject;
+    NSInteger current = self.current;
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(self.total - current)];
+    for (; self.current<self.total; self.current++) {
         @autoreleasepool {
             RptqDocumentSection *section = [query documentSectionForRow: current];
             [result addObject:section];
@@ -59,10 +58,10 @@
 }
 
 - (id)nextObject {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
+    RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
+    RptqQuery *query = database.hasQueries.anyObject;
 
-    NSInteger current = [self current];
+    NSInteger current = self.current;
     id result = [query documentSectionForRow: current];
     current++;
     [self setCurrent:current];

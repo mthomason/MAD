@@ -24,8 +24,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <MessageUI/MessageUI.h>
 #import "MAD.h"
 
-#import "MTReportDesigner.h"
-
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 #import "NSParagraphStyle+CommonStyles.h"
@@ -71,9 +69,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.536";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.536";
-NSString * const MTGlobalBundleRev                                  = @"1911";
+NSString * const MTGlobalBundleVersion                              = @"7.0.537";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.537";
+NSString * const MTGlobalBundleRev                                  = @"1912";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -92,7 +90,7 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
                                                                     //change this url to the url of the open
                                                                     //document.  This url will be key for the
                                                                     //documents array.
-@property (nonatomic, strong, readwrite) MTReportDesigner *reportDesigner;
+//@property (nonatomic, strong, readwrite) MTReportDesigner *reportDesigner;
 @property (nonatomic, strong, readwrite) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
@@ -167,12 +165,6 @@ static MTApplicationInstance *mainInstance;
         
         MADFileManager *openFiles = [MADFileManager new];
         self.fileManager = openFiles;
-
-        //MTUser *user = [[MTUser alloc] init];
-        //self.user = user;
-
-        MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
-        self.reportDesigner = reportDesigner;
         
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
