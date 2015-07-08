@@ -20,6 +20,7 @@
 #import "MTBarcode.h"
 #import "RptqDocument.h"
 #import "RptqDatabaseSchemaField.h"
+#import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
 #import "RptqDocumentObjectFactory.h"
@@ -636,8 +637,9 @@ static NSNumberFormatter *currencyNumberFormatter;
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
     [description appendFormat:@"Identifier:             %@ (%@)\n", self.identifier, self.debugDescriptionType];
+    [description appendFormat:@"Section:                %@\n", [self.inSectionRow.inSection localizedDisplayName]];
     [description appendFormat:@"Font:                   %@ (%f)\n", self.fontname, self.fontsize.floatValue];
-    [description appendFormat:@"Currency (%@):          %@\n", self.formatNumericCurrencyLocal, self.formatNumericCurrency.boolValue ? @"YES" : @"NO"];
+    [description appendFormat:@"Currency:               %@-%@\n", self.formatNumericCurrencyLocal, self.formatNumericCurrency.boolValue ? @"YES" : @"NO"];
     [description appendFormat:@"Numeric:                %@\n", self.formatNumericDecimals.boolValue ? @"YES" : @"NO"];
     [description appendFormat:@"Horizontal alignment:   %@\n", self.horizontalAlignment];
     [description appendFormat:@"B: %@ I: %@ S: %@ U: %@\n", self.bold.boolValue ? @"YES" : @"NO ", self.italic.boolValue ? @"YES" : @"NO ", self.strike.boolValue ? @"YES" : @"NO ", self.underline.boolValue ? @"YES" : @"NO "];

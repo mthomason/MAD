@@ -23,6 +23,7 @@
 - (NSUInteger)numberOfTables;
 - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)mainDatabase;
 - (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable;
+- (NSUInteger)sectionCount;
 
 @end
 

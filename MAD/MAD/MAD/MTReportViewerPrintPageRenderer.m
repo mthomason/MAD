@@ -313,14 +313,12 @@
 - (void)drawPageAtIndex:(NSInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
 
     NSUInteger rowIndex = 0;
-    
-    RptqDatabase *databaseSchemas = [[self.reportFormatter.layout.document hasDatabaseSchemas] anyObject];
-    RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
+    RptqDocument *document = [self.reportFormatter.layout activeDocumentModel];
+    RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
+    RptqUserCredentals *userCredentals = databaseSchemas.ownedByUser;
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
     RptqQuery *query = databaseSchemas.hasQueries.anyObject;
-    
-    
     
     if (query) {
         NSUInteger numberOfGroups = [self.reportFormatter numberOfGroups];
@@ -342,7 +340,7 @@
                 NSInteger groupLevel = [pageSection[MTReportGroupLevel] integerValue];
                 
                 MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
-                RptqDocumentSection *documentSection = [self.reportFormatter.layout.document documentSectionForType:typeDocumentSection andLevel:groupLevel];
+                RptqDocumentSection *documentSection = [document documentSectionForType:typeDocumentSection andLevel:groupLevel];
 
                 
                 CGFloat sizeHeight = documentSection.visibility.boolValue ? [self.reportFormatter heightForSection:documentSection] : CGSizeZero.height;
@@ -350,7 +348,7 @@
                     case MNSDocumentSectionTypePageFooter: {
                         BOOL lastPage = pageIndex == numberOfPages - 1;
                         if (lastPage) {
-                            originY = pageRect.origin.y + pageRect.size.height - sizeHeight - [self.reportFormatter heightForSection:[self.reportFormatter.layout.document hasReportFooterSection]];
+                            originY = pageRect.origin.y + pageRect.size.height - sizeHeight - [self.reportFormatter heightForSection:document.hasReportFooterSection];
                         } else {
                             originY = pageRect.origin.y + pageRect.size.height - sizeHeight;
                         }

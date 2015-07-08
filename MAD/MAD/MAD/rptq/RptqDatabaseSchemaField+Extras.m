@@ -210,7 +210,20 @@
 }
 
 - (id)debugQuickLookObject {
-    return self.debugDescriptionDetailed;
+    NSMutableString *document = [[NSMutableString alloc] init];
+    [document appendFormat:@"********* RptqDatabaseSchemaField *********\n"];
+    [document appendFormat:@"Name:              %@\n", self.name];
+    [document appendFormat:@"Data type:         %@\n", self.dataType];
+    [document appendFormat:@"Data type native:  %@\n", self.dataTypeNative];
+    [document appendFormat:@"Data type desc:    %@\n", self.dataTypeNativeDescription];
+    [document appendFormat:@"Decimals:          %@\n", self.decimals];
+    [document appendFormat:@"Identifier:        %@\n", self.identifier];
+    [document appendFormat:@"Label:             %@\n", self.label];
+    [document appendFormat:@"Name:              %@\n", self.name];
+    [document appendFormat:@"Primary key:       %@\n", self.primaryKey];
+    [document appendFormat:@"Width:             %@\n", self.width];
+    [document appendFormat:@"********* RptqDatabaseSchemaField *********"];
+    return document;
 }
 
 @end

@@ -342,9 +342,10 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [super viewDidAppear:animated];
     
     // MARK: Reporting feature (number of results in main query)
-    [MTApplicationInstance mainInstance].openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    MADocument *mad = [MTApplicationInstance mainInstance].openDocument;
+    mad.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-    [[MTApplicationInstance mainInstance].openDocument initalizeMainQuery];
+    [mad initalizeMainQuery:[mad activeDocumentModel]];
     [self reload];
     [self layoutSubviewSliderPagination];
     [self updateLateRefreshedLabel:self];
@@ -422,10 +423,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
         
         
-        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x,
-                                                  self.frameBeforeRotation.origin.y,
-                                                  self.frameBeforeRotation.size.width,
-                                                  self.snapshotAfterRotation.frame.size.height);
+        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x, self.frameBeforeRotation.origin.y,
+                                                  self.frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
         
         self.snapshotAfterRotation.frame = framePreservingHeight;
         

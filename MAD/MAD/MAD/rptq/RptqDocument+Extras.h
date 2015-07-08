@@ -21,8 +21,6 @@
 + (instancetype)documentFactory:(NSManagedObjectContext *)objectContext;
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-- (NSUInteger)numberOfReportSections;
-
 - (RptqQuery *)defaultQuery;
 - (RptqDatabase *)defaultDatabase;
 
@@ -32,8 +30,7 @@
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
-- (void)addDatabase:(MTDatabase *)database
-             status:(void (^)(NSString *status, CGFloat progress))status
+- (void)addDatabase:(MTDatabase *)database status:(void (^)(NSString *status, CGFloat progress))status
          completion:(void (^)(BOOL success, MTErrorContainer *error))completion;
 
 - (void)addQueryLink:(RptqQueryLinks *)queryLink;

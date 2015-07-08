@@ -21,7 +21,8 @@
 
 @interface SectionEnumerator ()
 
-@property (nonatomic, strong) RptqDocument *document;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSManagedObjectID *documentObjectID;
 
 @end
 
@@ -30,25 +31,28 @@
 - (id)initWithDocument:(RptqDocument *)document {
     self = [super init];
     if (self) {
-        RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
-        RptqQuery *query = database.hasQueries.anyObject;
+        self.documentObjectID = document.objectID;
+        self.managedObjectContext = document.managedObjectContext;
         self.current = 0;
-        self.total = query.hasQueryGroups.count;
-        self.document = document;
     }
     return self;
 }
 
 - (NSInteger)count {
-    return self.total;
+    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+    RptqQuery *query = database.hasQueries.anyObject;
+    return [query sectionCount];
 }
 
 - (NSArray *)allObjects {
-    RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
+    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     NSInteger current = self.current;
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(self.total - current)];
-    for (; self.current<self.total; self.current++) {
+    NSInteger total = [self count];
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - current)];
+    for (; self.current<total; self.current++) {
         @autoreleasepool {
             RptqDocumentSection *section = [query documentSectionForRow: current];
             [result addObject:section];
@@ -58,13 +62,14 @@
 }
 
 - (id)nextObject {
-    RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
+    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
 
     NSInteger current = self.current;
     id result = [query documentSectionForRow: current];
     current++;
-    [self setCurrent:current];
+    self.current = current;
     return result;
 }
 

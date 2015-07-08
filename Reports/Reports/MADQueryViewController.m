@@ -80,6 +80,9 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
+#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+Extras.h"
+
 #import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
 
@@ -96,6 +99,7 @@
 #import "UIViewController+UI.h"
 
 #import "MADNavigationBarTitleView.h"
+
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
@@ -1553,10 +1557,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
-        RptqDocumentObject *documentObject;
-        for (documentObject in objectsToDelete) {
-            [context deleteObject: documentObject.isLabelDataField];
-            [context deleteObject: documentObject];
+        for (RptqDocumentObject *documentObject in objectsToDelete) {
+            [[MTApplicationInstance mainInstance].openDocument removeDocumentObject:documentObject.objectID
+                                                                        fromSection:documentObject.inSectionRow.inSection.objectID];
+            [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel removeDocumentObject:documentObject];
         }
     }
 }
@@ -1570,10 +1574,14 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
         for (RptqDocumentObject *documentObject in objectsToDelete) {
-            [context deleteObject:[documentObject isAggregate]];
-            [context deleteObject:documentObject];
+            [[MTApplicationInstance mainInstance].openDocument removeDocumentObject:documentObject.objectID
+                                                                        fromSection:documentObject.inSectionRow.inSection.objectID];
+            [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel removeDocumentObject:documentObject];
         }
     }
+    [context save:nil];
+    
+
 }
 
 - (NSArray *)deleteLinksRelatedToSection:(MTQuerySections)querySection
@@ -1770,9 +1778,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
     
-    NSManagedObjectContext *managedObjectContext = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.managedObjectContext;
-
-    RptqDatabase *database = [[MTApplicationInstance mainInstance].openDocument.activeDocumentModel defaultDatabase];
+    NSManagedObjectContext *managedObjectContext = [MTApplicationInstance mainInstance].openDocument.managedObjectContext;
+    RptqDocument *document = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel;
+    RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     NSInteger numberOfTables = [query numberOfTables];
     
@@ -1782,7 +1790,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSIndexPath *tableIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
     RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: tableIndex];
     
-    NSManagedObjectID *deleatedTableObjectId = [table objectID];
+    NSManagedObjectID *deleatedTableObjectId = table.objectID;
     [query removeHasQueryTablesObject:table];
     numberOfTables--;
     

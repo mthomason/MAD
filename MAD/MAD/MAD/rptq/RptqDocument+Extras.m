@@ -696,10 +696,6 @@
     [managedObjectContext save:nil];
 }
 
-- (NSUInteger)numberOfReportSections {
-    return 5 + ((RptqQuery *)((RptqDatabase *)self.hasDatabaseSchemas.anyObject).hasQueries.anyObject).hasQueryGroups.count * 2;
-}
-
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(RptqDocument *)sender {
@@ -717,7 +713,7 @@
     [document appendFormat:@"*********\n"];
     [document appendFormat:@"Name:              %@\n", self.name];
     [document appendFormat:@"URL:               %@\n", self.author_name];
-    [document appendFormat:@"Number of sections %lu\n", (unsigned long)[self numberOfReportSections]];
+    [document appendFormat:@"Number of sections %lu\n", (unsigned long)[((RptqQuery *)((RptqDatabase *)self.hasDatabaseSchemas.anyObject).hasQueries.anyObject) sectionCount]];
     [document appendFormat:@"Comment:           %@\n", self.comment];
     [document appendFormat:@"Copyright:         %@\n", self.copyright];
     [document appendFormat:@"Identifier:        %@\n", self.identifier];

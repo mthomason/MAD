@@ -16,7 +16,6 @@
 @interface SectionEnumerator : NSEnumerator
 
 @property (assign) NSInteger current;
-@property (assign) NSInteger total;
 
 - (id)initWithDocument:(RptqDocument *)document;
 - (NSArray *)allObjects;

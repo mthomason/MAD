@@ -99,6 +99,11 @@
     }
 }
 
+
+- (NSUInteger)sectionCount {
+    return 5 + self.hasQueryGroups.count * 2;
+}
+
 #pragma mark - Actions
 
 - (RptqDocumentSection *)documentSectionForRow:(NSInteger)row {
@@ -180,19 +185,19 @@
 
 - (RptqQueryGroup *)firstQueryGroup {
     NSArray *queryGroups = [self sortedQueryGroups];
-    return ([queryGroups count] >= 1) ? queryGroups[0] : nil;
+    return (queryGroups.count >= 1) ? queryGroups[0] : nil;
 }
 
 - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index {
     NSArray *queryGroups = [self sortedQueryGroups];
-    return (index < [queryGroups count]) ? queryGroups[index] : nil;
+    return (index < queryGroups.count) ? queryGroups[index] : nil;
 }
 
 - (NSArray *)sortedQueryGroups {
     NSString *weight = NSStringFromSelector(@selector(weight));
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
-    return [[self hasQueryGroups] sortedArrayUsingDescriptors:sortDescriptors];
+    return [self.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
 }
 
 - (NSUInteger)numberOfTables {
@@ -226,8 +231,7 @@
 - (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable {
 
     NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: self.hasQueryTables];
-    RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable: schemaTable
-                                                                           database: self.inDatabase];
+    RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable: schemaTable database: self.inDatabase];
     NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:schemaTable.hasFields.count];
     for (RptqDatabaseSchemaField *field in [schemaTable hasFields]) {
         @autoreleasepool {

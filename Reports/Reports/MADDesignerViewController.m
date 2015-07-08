@@ -1624,10 +1624,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSInteger)collectionView: (UICollectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
     
-    RptqDocument *document = [MTApplicationInstance mainInstance].openDocument.document;
+    RptqDocument *document = [[MTApplicationInstance mainInstance].openDocument activeDocumentModel];
     RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
     RptqQuery *query = [database.hasQueries anyObject];
     //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: selectedSectionNumber query: query];
+    NSInteger qc = [query sectionCount];
     
     MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     NSInteger c = layoutManager.items.count;
@@ -2282,8 +2283,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [detailSection performBatchUpdates:^{
         
-        
-        RptqDocumentObject *documentObject = [[MTApplicationInstance mainInstance].openDocument.document addDocumentObject:documentObjectDefination];
+        RptqDocument *document = [[MTApplicationInstance mainInstance].openDocument activeDocumentModel];
+        RptqDocumentObject *documentObject = [document addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
         
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
@@ -2445,7 +2446,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }];
 }
 
-- (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {//:(UIView *)piece inSection:(MADDesignerSectionView *)sectionView {
+- (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {
 
     UIView *piece = gesture.view;
     
@@ -2817,7 +2818,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (UIView *)detailSectionView {
-    return (UIView *)[self.sectionControlViews objectForKey:[MTApplicationInstance mainInstance].openDocument.document.hasDetailSection.objectID.key];
+    RptqDocument *document = [[MTApplicationInstance mainInstance].openDocument activeDocumentModel];
+    return (UIView *)[self.sectionControlViews objectForKey:document.hasDetailSection.objectID.key];
 }
 
 - (void)adjustSettingsLocation {

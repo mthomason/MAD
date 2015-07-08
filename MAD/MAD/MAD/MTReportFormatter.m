@@ -51,6 +51,7 @@ NSString * const MTNullIdentifier = @"(null)";
     @property (nonatomic, strong) NSNumber *detailRowId;
     @property (nonatomic, strong) NSNumber *detailRowIdLast;
     @property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, strong) RptqDocument *document;   //Valid for one run of the state machine.
 
 @end
 
@@ -94,6 +95,8 @@ NSString * const MTNullIdentifier = @"(null)";
     self.machineState.detailRowIdLast = @(0);
     self.machineState.sortDescriptors = sortDescriptors;
     self.machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
+    RptqDocument *document = [self.layout activeDocumentModel];
+    self.machineState.document = document;
 }
 
 - (NSArray *)keysForCachedID:(NSNumber *)rowid {
@@ -129,7 +132,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (NSUInteger)layoutIdentifier {
     NSUInteger layoutIdentifier;
     if (self.overrideIdentifier == nil) {
-        NSURL *url = [self.layout.document.objectID URIRepresentation];
+        NSURL *url = [self.layout.documentObjectID URIRepresentation];
         NSString *s = [url absoluteString];
         layoutIdentifier = [s hash];
     } else {
@@ -436,8 +439,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return _reportIndexes[pageIndex];
 }
 
-- (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
-    
+/*- (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
     for (NSInteger i=0; i<[containerDetails count]; i++) {
         @autoreleasepool {
             [self addHeightFromDocumentSectionToReportLayout: self.layout.document.hasDetailSection];
@@ -447,7 +449,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
         }
     }
-}
+}*/
 
 // !!!: Is this getting the height correctly?
 - (void)addHeightFromGroupHeaderWithQueryGroup:(RptqQueryGroup *)queryGroup {
@@ -480,7 +482,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
     CGFloat layoutHeight = [self heightForSection:documentSection];
     if ([documentSection producesFormFeed]) {
-        [self forcePageBreakWithFooterHeight:[self heightForSection:self.layout.document.hasPageFooterSection]];
+        [self forcePageBreakWithFooterHeight:[self heightForSection:self.machineState.document.hasPageFooterSection]];
     } else {
         [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
     }
@@ -503,7 +505,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self initReportLayoutContainers];
     self.machineState.rowCounter = 0;
     
-    RptqDocumentSection *detailSection = [self.layout.document hasDetailSection];
+    RptqDocumentSection *detailSection = [self.machineState.document hasDetailSection];
     
     BOOL firstRow = YES;
         
@@ -596,7 +598,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     BOOL newPageCreated = NO;
     
-    CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.document.hasPageFooterSection];
+    CGFloat pageFooterSectionHeight = [self heightForSection:self.machineState.document.hasPageFooterSection];
     
     if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > [self printableHeight]) {
         
@@ -623,7 +625,7 @@ NSString * const MTNullIdentifier = @"(null)";
     self.machineState.pageCounter++;
     [[MTNotificationDidFormatPage sharedObject] reportFormatter:self
                                                   formattedPage:self.machineState.pageCounter];
-    RptqDocumentSection *pageHeaderSection = [self.layout.document hasPageHeaderSection];
+    RptqDocumentSection *pageHeaderSection = [self.machineState.document hasPageHeaderSection];
     
     //Reset height of the page to zero plus the hight of the page header section
     self.machineState.counterHeightUsedCurrentPage = [self heightForSection:pageHeaderSection];
@@ -632,23 +634,23 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addReportHeaderToReportLayout {
     self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage +
-                                                        [self heightForSection:self.layout.document.hasReportHeaderSection];
+                                                        [self heightForSection:self.machineState.document.hasReportHeaderSection];
     [self addReportHeader];
 }
 
 - (void)addPageHeaderToReportLayout {
     self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage +
-                                                        [self heightForSection:self.layout.document.hasPageHeaderSection];
+                                                        [self heightForSection:self.machineState.document.hasPageHeaderSection];
     [self addPageHeader];
 }
 
 - (void)addPageFooterToReportLayout {
-    [self addHeightFromDocumentSectionToReportLayout:[self.layout.document hasPageFooterSection]];
+    [self addHeightFromDocumentSectionToReportLayout:[self.machineState.document hasPageFooterSection]];
     [self addPageFooter];
 }
 
 - (void)addReportFooterToReportLayout {
-    [self addHeightFromDocumentSectionToReportLayout:[self.layout.document hasReportFooterSection]];
+    [self addHeightFromDocumentSectionToReportLayout:[self.machineState.document hasReportFooterSection]];
     [self addPageFooterToReportLayout];
     [self addReportFooter];
 }
