@@ -696,6 +696,10 @@
     [managedObjectContext save:nil];
 }
 
+- (NSUInteger)numberOfReportSections {
+    return 5 + ((RptqQuery *)((RptqDatabase *)self.hasDatabaseSchemas.anyObject).hasQueries.anyObject).hasQueryGroups.count * 2;
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(RptqDocument *)sender {
@@ -706,6 +710,28 @@
         result = [self.identifier isEqualToNumber:sender.identifier];
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *document = [[NSMutableString alloc] init];
+    [document appendFormat:@"*********\n"];
+    [document appendFormat:@"Name:              %@\n", self.name];
+    [document appendFormat:@"URL:               %@\n", self.author_name];
+    [document appendFormat:@"Number of sections %lu\n", (unsigned long)[self numberOfReportSections]];
+    [document appendFormat:@"Comment:           %@\n", self.comment];
+    [document appendFormat:@"Copyright:         %@\n", self.copyright];
+    [document appendFormat:@"Identifier:        %@\n", self.identifier];
+    [document appendFormat:@"Organization:      %@\n", self.organization];
+    [document appendFormat:@"Override:          %@\n", self.override];
+    [document appendFormat:@"Override text:     %@\n", self.overrideText];
+    [document appendFormat:@"Papersize:         %@\n", self.papersize];
+    [document appendFormat:@"Database schemas:  %@\n", self.hasDatabaseSchemas];
+    [document appendFormat:@"Page header:       %@\n", self.hasPageHeaderSection];
+    [document appendFormat:@"Page footer:       %@\n", self.hasPageFooterSection];
+    [document appendFormat:@"Report header:     %@\n", self.hasReportHeaderSection];
+    [document appendFormat:@"Report footer:     %@\n", self.hasReportFooterSection];
+    [document appendFormat:@"*********"];
+    return document;
 }
 
 @end

@@ -15,6 +15,7 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 
@@ -86,6 +87,17 @@
         result = [[self identifier] isEqualToNumber:[s identifier]];
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Text:                   %@\n", self.text];
+    [description appendFormat:@"Table:                  %@\n", self.table];
+    [description appendFormat:@"Field:                  %@\n", self.field];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

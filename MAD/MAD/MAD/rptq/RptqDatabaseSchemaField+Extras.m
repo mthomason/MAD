@@ -14,6 +14,7 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDatabaseSchemaField (Extras)
 
@@ -206,6 +207,10 @@
             break;
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    return self.debugDescriptionDetailed;
 }
 
 @end

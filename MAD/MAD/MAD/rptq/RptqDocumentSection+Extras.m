@@ -36,6 +36,8 @@
 
 #import "NSManagedObjectID+Extras.h"
 
+#import "NSObject+DebugDescription.h"
+
 @interface RptqDocumentSection ()
 
 @end
@@ -408,6 +410,15 @@
         }
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"********** RptqDocumentSection **********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Type:                   %@\n", self.type];
+    [description appendFormat:@"********** RptqDocumentSection **********"];
+    return description;
 }
 
 @end

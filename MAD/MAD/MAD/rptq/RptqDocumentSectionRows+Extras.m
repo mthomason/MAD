@@ -79,4 +79,14 @@
     }
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"********* RptqDocumentSectionRows *********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Row:                    %li\n", (long)self.rowNumber.integerValue];
+    [description appendFormat:@"Height:                 %f\n", self.layoutHeight.floatValue];
+    [description appendFormat:@"********* RptqDocumentSectionRows *********"];
+    return description;
+}
+
 @end

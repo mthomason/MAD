@@ -130,8 +130,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self.queryBuilderController reloadDocument: [MTApplicationInstance mainInstance].openDocument
-                                       animated: YES];
+    [self.queryBuilderController reloadMainDocumentAnimated: YES];
     [self.queryBuilderControllerAdvanced reloadDocument:[MTApplicationInstance mainInstance].openDocument animated:YES];
     
     __block MTQueryBuilderContainerController *blockSelf = self;
@@ -166,7 +165,7 @@
         
     } else if (sender == self) {
         [segue.destinationViewController setDocument:[MTApplicationInstance mainInstance].openDocument];
-        [segue.destinationViewController reloadDocument:[MTApplicationInstance mainInstance].openDocument animated:YES];
+        [segue.destinationViewController reloadMainDocumentAnimated:YES];
     } else {
         if ([self popover] != nil) {
             if ([[self popover] isPopoverVisible]) {

@@ -201,6 +201,7 @@
 		4C8CDD071AD2F43600B7B9EA /* RptqQueryCache+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD011AD2F43600B7B9EA /* RptqQueryCache+Extras.m */; };
 		4C8CDD081AD2F43600B7B9EA /* RptqQuerySort+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */; };
 		4C8CDD091AD2F43600B7B9EA /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */; };
+		4CCC3CEA1B4BC33F00350F3F /* NSObject+DebugDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -763,6 +764,8 @@
 		4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuerySort+Extras.m"; path = "rptq/RptqQuerySort+Extras.m"; sourceTree = "<group>"; };
 		4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqRelationship+Extras.h"; path = "rptq/RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
+		4CCC3CE81B4BC33F00350F3F /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DebugDescription.h"; sourceTree = "<group>"; };
+		4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DebugDescription.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -898,6 +901,8 @@
 				4C65D47E1ADF779500279B4D /* Protocols */,
 				4C8CD9891AD1CEAF00B7B9EA /* MADocument.h */,
 				4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */,
+				4CCC3CE81B4BC33F00350F3F /* NSObject+DebugDescription.h */,
+				4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */,
 			);
 			path = MAD;
 			sourceTree = "<group>";
@@ -1758,6 +1763,7 @@
 				4C8CDB911AD2500800B7B9EA /* MTPaperC0.m in Sources */,
 				4C8CDB7E1AD2500800B7B9EA /* MTPaperA3.m in Sources */,
 				4C8CDA861AD1DCC100B7B9EA /* MTQueryDefinitionPredicate.m in Sources */,
+				4CCC3CEA1B4BC33F00350F3F /* NSObject+DebugDescription.m in Sources */,
 				4C8CDA781AD1DCC100B7B9EA /* MTQueryCacheJournalModeDefault.m in Sources */,
 				4C8CDB011AD24D3E00B7B9EA /* RptqDatabase+Extras.m in Sources */,
 				4C8CDB961AD2500800B7B9EA /* MTPaperC5.m in Sources */,

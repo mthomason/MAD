@@ -22,6 +22,7 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "MTDatabaseTable.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDatabaseSchemaTable (Extras)
 
@@ -140,6 +141,17 @@
 
 - (NSString *)toStringDebug {
     return self.name;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *document = [[NSMutableString alloc] init];
+    [document appendFormat:@"*********\n"];
+    [document appendFormat:@"Name:              %@\n", self.name];
+    [document appendFormat:@"Label:             %@\n", self.label];
+    [document appendFormat:@"Queryable:         %@\n", self.queryable ? @"YES" : @"NO"];
+    [document appendFormat:@"Fields:            %@\n", self.hasFields];
+    [document appendFormat:@"*********"];
+    return document;
 }
 
 @end

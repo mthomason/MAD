@@ -30,6 +30,7 @@
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section {
 
     if (self = [super init]) {
+                
         NSMutableDictionary *items = [NSMutableDictionary dictionary];
         self.items = items;
         self.visibility = section.visibility.boolValue;

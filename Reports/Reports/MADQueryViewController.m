@@ -278,7 +278,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    [self reloadDocument:[MTApplicationInstance mainInstance].openDocument animated:YES];
+    [self reloadMainDocumentAnimated:YES];
     
     self.navigationItem.prompt = nil;
     
@@ -1229,16 +1229,18 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [self.tableView setUserInteractionEnabled:NO];
 }
 
-- (void)reloadDocument:(MADocument *)reportDocument animated:(BOOL)animated {
+- (void)reloadMainDocumentAnimated:(BOOL)animated {
+    
+    MADocument *reportDocument = [MTApplicationInstance mainInstance].openDocument;
     
     if (reportDocument) {
         
-        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = reportDocument.managedObjectContext;
         
         {
             
-            RptqDatabase *database = [MTApplicationInstance mainInstance].openDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
-            RptqQuery *query = [database.hasQueries anyObject];
+            RptqDatabase *database = reportDocument.activeDocumentModel.hasDatabaseSchemas.anyObject;
+            RptqQuery *query = database.hasQueries.anyObject;
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
@@ -1556,7 +1558,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             [context deleteObject: documentObject.isLabelDataField];
             [context deleteObject: documentObject];
         }
-        [context save:&fetchError];
     }
 }
 
@@ -1572,7 +1573,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             [context deleteObject:[documentObject isAggregate]];
             [context deleteObject:documentObject];
         }
-        [context save:&fetchError];
     }
 }
 
@@ -1611,8 +1611,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             }
         }
     }
-    NSError *error = nil;
-    [context save:&error];
     return cellsToDelete;
 }
 
@@ -1807,18 +1805,16 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     
     NSError *error = nil;
     [managedObjectContext save:&error];
-    if (error) {
-        NSLog(@"Error %@", error);
-    }
     
+    NSArray *indexPaths = @[indexPath];
     if (deleteSections != nil) {
         [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     } else {
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    if ([cellsToDelete count]) {
+    if (cellsToDelete.count) {
         [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     

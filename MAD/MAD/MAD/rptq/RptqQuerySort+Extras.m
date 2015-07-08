@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqQuerySort+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqQuerySort (Extras)
 
@@ -69,6 +70,16 @@
         result = [self.identifier isEqualToNumber:((RptqQuerySort *)sender).identifier];
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"***********   RptqQuerySort   ***********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"ASC:                    %@\n", self.ascending.boolValue ? @"YES" : @"NO"];
+    [description appendFormat:@"Fields:                 %@\n", self.fields];
+    [description appendFormat:@"***********   RptqQuerySort   ***********"];
+    return description;
 }
 
 @end

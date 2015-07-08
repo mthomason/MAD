@@ -17,6 +17,7 @@
 
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
 NSString * const MTAggregateTypeKeyFunctionType = @"MTAggregateTypeKeyFunctionType";
@@ -220,6 +221,17 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     NSError *error = nil;
     [self.managedObjectContext save:&error];
     
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Function:               %@\n", self.function];
+    [description appendFormat:@"Group number:           %@\n", self.groupNumber];
+    [description appendFormat:@"Group type:             %@\n", self.groupType];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

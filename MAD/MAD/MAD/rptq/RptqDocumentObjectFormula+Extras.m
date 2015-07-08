@@ -16,6 +16,7 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectFormula (Extras)
 
@@ -114,6 +115,20 @@
 
 - (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", self];
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Name:                   %@\n", self.name];
+    [description appendFormat:@"Source:                 %@\n", self.source];
+    [description appendFormat:@"Result type:            %@\n", self.resultType];
+    [description appendFormat:@"Function scope:         %@\n", self.functionScope];
+    [description appendFormat:@"Function type:          %@\n", self.functionType];
+    [description appendFormat:@"Input type:             %@\n", self.inputType];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

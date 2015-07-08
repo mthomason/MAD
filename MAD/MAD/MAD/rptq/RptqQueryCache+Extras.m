@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqQueryCache+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqQueryCache (Extras)
 
@@ -74,9 +75,20 @@
         result = YES;
     } else {
         RptqQueryCache *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:[s identifier]];
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"***********   RptqQueryCache  ***********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Date:                   %@\n", self.cacheDate];
+    [description appendFormat:@"Data:                   %@\n", self.data];
+    [description appendFormat:@"Filename:               %@\n", self.filename];
+    [description appendFormat:@"***********   RptqQueryCache  ***********"];
+    return description;
 }
 
 @end

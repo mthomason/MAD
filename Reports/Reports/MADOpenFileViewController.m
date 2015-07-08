@@ -599,9 +599,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
         MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
-        MTApplicationInstance *app = [AppDelegate app];
-        MADocument *document = [app openDocument];
-        [queryBuilderViewController reloadDocument:document animated:YES];
+        [queryBuilderViewController reloadMainDocumentAnimated:YES];
     }
 }
 

@@ -327,9 +327,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.navigationItem.titleView = titleView;
         
     }
-    
     return self;
-    
 }
 
 #pragma mark - UIStateRestore
@@ -633,6 +631,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         }
     }
+    
+    NSLog(@"Number of sections: %li", (long)numberOfSections);
+    NSLog(@"Section count: %li", (long)sectionCounter);
     
     self.passthoughContainers = [NSSet setWithSet: passthroughContainers];
     
@@ -1536,8 +1537,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark -
 #pragma mark UICollectionViewDataSource
 
-- (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView
-                  cellForItemAtIndexPath: (NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
     
@@ -1622,10 +1622,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return cell;
 }
 
-- (NSInteger)collectionView: (UICollectionView *)collectionView
-     numberOfItemsInSection: (NSInteger)section {
+- (NSInteger)collectionView: (UICollectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
+    
+    RptqDocument *document = [MTApplicationInstance mainInstance].openDocument.document;
+    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
+    //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: selectedSectionNumber query: query];
     
     MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
+    NSInteger c = layoutManager.items.count;
     return layoutManager.items.count;
 }
 
@@ -1844,17 +1849,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)collectionView: (UICollectionView *)collectionView prepareLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
-    
     NSManagedObjectContext *objectContext = [MTApplicationInstance mainInstance].openDocument.managedObjectContext;
-    MADSectionLayoutAttributes *attributes;
-    RptqDocumentObject *documentObject;
-    NSArray *allItems = layoutManager.items.allValues;
-    for (attributes in allItems) {
-        documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+    for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
         documentObject.originx = @(attributes.frame.origin.x);
         documentObject.originy = @(attributes.frame.origin.y);
     }
-    [objectContext save:nil];
+    //[objectContext save:nil];
 }
 
 - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout

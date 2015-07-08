@@ -134,4 +134,25 @@
     return result;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********   RptqUserCredentals  *********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Type:                   %@\n", self.database_driver_type];
+    [description appendFormat:@"MySQL host:             %@\n", self.mysql_host];
+    [description appendFormat:@"MySQL database:         %@\n", self.mysql_database];
+    [description appendFormat:@"MySQL Port:             %@\n", self.mysql_port];
+
+    [description appendFormat:@"TDS host:               %@\n", self.tds_host];
+    [description appendFormat:@"TDS database:           %@\n", self.tds_database];
+    [description appendFormat:@"TDS port:               %@\n", self.tds_port];
+    
+    [description appendFormat:@"SF Login Domain:        %@\n", self.sf_login_domain];
+    [description appendFormat:@"SF Login Identifier:    %@\n", self.sf_login_identifier];
+    [description appendFormat:@"SF Login Key:           %@\n", self.sf_login_key];
+    [description appendFormat:@"SF Login Redirect URL:  %@\n", self.sf_login_redirect_uri];
+    [description appendFormat:@"*********   RptqUserCredentals  *********"];
+    return description;
+}
+
 @end

@@ -266,4 +266,20 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return result;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"***********   RptqQueryLinks  ***********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Inital layout:          %@\n", self.designerInitalLayout];
+    [description appendFormat:@"Field left:             %@\n", self.fieldleft];
+    [description appendFormat:@"Field right:            %@\n", self.fieldright];
+    [description appendFormat:@"Table left:             %@\n", self.tableleft];
+    [description appendFormat:@"Table right:            %@\n", self.tableright];
+    [description appendFormat:@"Join type:              %@\n", self.jointype];
+    [description appendFormat:@"Join type enum:         %@\n", self.jointypeenum];
+    [description appendFormat:@"Frame:                  (%f, %f, %f, %f)\n", self.designerOriginX.floatValue, self.designerOriginY.floatValue, self.designerSizeWidth.floatValue, self.designerSizeHeight.floatValue];
+    [description appendFormat:@"***********   RptqQueryLinks  ***********"];
+    return description;
+}
+
 @end

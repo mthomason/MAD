@@ -262,4 +262,29 @@
     return result;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:         %@\n", self.identifier];
+    [description appendFormat:@"Sort:               %@\n", self.cachedText];
+    [description appendFormat:@"Override:           %@\n", self.override];
+    [description appendFormat:@"Override text:      %@\n", self.overrideText];
+    [description appendFormat:@"Fields:             %@\n", self.hasFields];
+    [description appendFormat:@"Query cache:        %@\n", self.hasQueryCache];
+    [description appendFormat:@"Database:           %@\n", self.inDatabase];
+    [description appendFormat:@"Query tables (%lu): %@\n", self.hasQueryTables.count, self.hasQueryTables];
+    [description appendFormat:@"Query groups (%lu): %@\n", (unsigned long)self.hasQueryGroups.count, self.hasQueryGroups];
+    
+    NSArray *sortedQueryGroups = [self sortedQueryGroups];
+    for (RptqQueryGroup *group in sortedQueryGroups) {
+        [description appendFormat:@"\t\t- %@", group];
+    }
+    
+    [description appendFormat:@"Query links:        %@\n", self.hasQueryLinks];
+    [description appendFormat:@"Query predicate:    %@\n", self.hasQueryPredicate];
+    [description appendFormat:@"Query sort:         %@\n", self.hasQuerySort];
+    [description appendFormat:@"*********"];
+    return description;
+}
+
 @end

@@ -14,6 +14,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "MTBarcode.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectBarcode (Extras)
 
@@ -155,6 +156,15 @@
     }
     
     return reportObject;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Encoded text:           %@\n", self.humanReadable];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

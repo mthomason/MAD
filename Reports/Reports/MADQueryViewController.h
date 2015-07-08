@@ -25,7 +25,7 @@ extern NSString * const MADSegueShowSql;
 
 @property BOOL debug;
 
-- (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated;
+- (void)reloadMainDocumentAnimated:(BOOL)animated;
 
 - (IBAction)edit:(id)sender;
 - (IBAction)done:(id)sender;

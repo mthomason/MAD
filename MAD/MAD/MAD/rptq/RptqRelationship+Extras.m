@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqRelationship+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqRelationship (Extras)
 
@@ -71,6 +72,17 @@
         result = [[self identifier] isEqualToNumber:[s identifier]];
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"***********   RptqQueryField  ***********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Type:                   %@\n", self.type];
+    [description appendFormat:@"Has fields:             %@\n", self.hasFields];
+    [description appendFormat:@"In database:            %@\n", self.inDatabase];
+    [description appendFormat:@"***********   RptqQueryField  ***********"];
+    return description;
 }
 
 @end

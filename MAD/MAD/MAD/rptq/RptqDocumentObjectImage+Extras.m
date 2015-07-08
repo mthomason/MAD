@@ -13,6 +13,7 @@
 #import "RptqDocumentObjectImage+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectImage (Extras)
 
@@ -71,6 +72,10 @@
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return (RptqDocumentObjectImage *)result;
+}
+
+- (id)debugQuickLookObject {
+    return self.image;
 }
 
 @end

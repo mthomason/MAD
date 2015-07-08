@@ -124,4 +124,18 @@
     return result;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Driver type:        %@\n", self.databaseDriverType];
+    [description appendFormat:@"Driver type id:     %@\n", self.databaseDriverTypeEnum];
+    [description appendFormat:@"Identifier:         %@\n", self.identifier];
+    [description appendFormat:@"Tables:             %@\n", self.hasTables];
+    [description appendFormat:@"Queries:            %@\n", self.hasQueries];
+    [description appendFormat:@"Owned by query:     %@\n", self.ownedByQueryAsStaticResource];
+    [description appendFormat:@"Owned by user:      %@\n", self.ownedByUser];
+    [description appendFormat:@"*********"];
+    return description;
+}
+
 @end

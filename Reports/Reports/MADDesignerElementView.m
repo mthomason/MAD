@@ -303,6 +303,7 @@
                                                                                 attributes:attributes];
         self.displayStringAttributed = attributtedString;
         
+        /*
         CGSize sizeContentView = [documentObject sizeContentView];
         CGRect boundsContentView = [documentObject boundsContentView]; //x1
         CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize: sizeContentView
@@ -326,7 +327,7 @@
             case MTVerticalAlignmentTop:
             default:
                 break;
-        }
+        }*/
         
         //CGAffineTransform transformSpacing = CGAffineTransformMakeTranslation([documentObject spacingLeft],
         //                                                                      [documentObject spacingTop]);

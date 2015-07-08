@@ -121,4 +121,16 @@
     return result;
 }
 
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"***********   RptqQueryTable  ***********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Alias:                  %@\n", self.alias];
+    [description appendFormat:@"Inital layout:          %@\n", self.designerInitalLayout];
+    [description appendFormat:@"Frame:                  (%f, %f, %f, %f)\n", self.designerOriginX.floatValue, self.designerOriginY.floatValue, self.designerSizeWidth.floatValue, self.designerSizeHeight.floatValue];
+    [description appendFormat:@"***********   RptqQueryTable  ***********"];
+    return description;
+}
+
 @end

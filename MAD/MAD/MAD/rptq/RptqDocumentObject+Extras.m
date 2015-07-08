@@ -50,6 +50,7 @@
 #import "RptqDocumentObjectFormula.h"
 #import "RptqDocumentObjectFormula+Extras.h"
 
+#import "NSObject+DebugDescription.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
@@ -259,7 +260,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     switch (self.type.integerValue) {
     
         case MTDocumentObjectTypeAggregate: {
-            result = [[self isAggregate] designerRepresentationText];
+            result = [self.isAggregate designerRepresentationText];
             break;
         }
 
@@ -268,12 +269,11 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
 
         case MTDocumentObjectTypeFormula:
-            result = [[self isFormula] source];
+            result = self.isFormula.source;
             break;
         
         case MTDocumentObjectTypeGroupKey: {
-            NSInteger groupNumber = self.isGroupKey.groupNumber.integerValue;
-            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: @(groupNumber)
+            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: @(self.isGroupKey.groupNumber.integerValue)
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
             result = [NSString stringWithFormat:gorupFormatString, [groupNumberText uppercaseString]];
@@ -285,19 +285,18 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
         
         case MTDocumentObjectTypeLabelDynamic:
-            result = [[[self isLabelDataField] referencesQueryField] toStringReverse];
+            result = self.isLabelDataField.referencesQueryField.toStringReverse;
             break;
         
         case MTDocumentObjectTypeLabelStatic:
-            result = [[self isLabel] text];
+            result = self.isLabel.text;
             break;
         case MTDocumentObjectTypeWhtiespace:
             result = @"Whitespace";
             break;
             
         case MTDocumentObjectTypeBarcode: {
-            MTBarcodeType type = [[[self isBarcode] type] integerValue];
-            NSString *barcodeName = [MTBarcode barcodeNameForType:type];
+            NSString *barcodeName = [MTBarcode barcodeNameForType:self.isBarcode.type.integerValue];
             result = [NSString stringWithFormat:@"Barcode (%@)", barcodeName];
             break;
         }
@@ -307,6 +306,9 @@ static NSNumberFormatter *currencyNumberFormatter;
     
     }
 
+    if (!result) {
+        NSLog(@"WTF");
+    }
     return result;
 }
 
@@ -584,6 +586,71 @@ static NSNumberFormatter *currencyNumberFormatter;
 
 - (NSAttributedString *)toAttributedString {
     return nil;
+}
+
+- (NSString *)debugDescriptionType {
+    switch (self.type.integerValue) {
+        case MTDocumentObjectTypeAggregate:
+            return @"Aggregate";
+            break;
+            
+        case MTDocumentObjectTypeChart:
+            return @"Chart";
+            break;
+            
+        case MTDocumentObjectTypeFormula:
+            return @"Formula";
+            break;
+            
+        case MTDocumentObjectTypeGroupKey:
+            return @"Group Key";
+            break;
+
+        case MTDocumentObjectTypeImage:
+            return @"Image";
+            break;
+            
+        case MTDocumentObjectTypeLabelDynamic:
+            return @"Dynamic";
+            break;
+            
+        case MTDocumentObjectTypeLabelStatic:
+            return @"Static";
+            break;
+            
+        case MTDocumentObjectTypeWhtiespace:
+            return @"Whitespace";
+            break;
+            
+        case MTDocumentObjectTypeBarcode:
+            return @"Barcode";
+            break;
+
+        default:
+            return @"Unknown";
+            break;
+    }
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:             %@ (%@)\n", self.identifier, self.debugDescriptionType];
+    [description appendFormat:@"Font:                   %@ (%f)\n", self.fontname, self.fontsize.floatValue];
+    [description appendFormat:@"Currency (%@):          %@\n", self.formatNumericCurrencyLocal, self.formatNumericCurrency.boolValue ? @"YES" : @"NO"];
+    [description appendFormat:@"Numeric:                %@\n", self.formatNumericDecimals.boolValue ? @"YES" : @"NO"];
+    [description appendFormat:@"Horizontal alignment:   %@\n", self.horizontalAlignment];
+    [description appendFormat:@"B: %@ I: %@ S: %@ U: %@\n", self.bold.boolValue ? @"YES" : @"NO ", self.italic.boolValue ? @"YES" : @"NO ", self.strike.boolValue ? @"YES" : @"NO ", self.underline.boolValue ? @"YES" : @"NO "];
+    [description appendFormat:@"Label:                  %@\n", self.label];
+    [description appendFormat:@"Drop point:             (%f, %f)\n", self.dropPointX.floatValue, self.dropPointY.floatValue];
+    [description appendFormat:@"Drop index:             %ld\n", (long)self.dropIndex.integerValue];
+    [description appendFormat:@"Origin:                 (%f, %f)\n", self.originx.floatValue, self.originy.floatValue];
+    [description appendFormat:@"Size:                   (%f, %f)\n", self.sizewidth.floatValue, self.sizeheight.floatValue];
+    [description appendFormat:@"Padding:                (%f, %f, %f, %f)\n", self.paddingLeft.floatValue, self.paddingTop.floatValue, self.paddingRight.floatValue, self.paddingBottom.floatValue];
+    [description appendFormat:@"Margin:                 (%f, %f, %f, %f)\n", self.marginLeft.floatValue, self.marginTop.floatValue, self.marginRight.floatValue, self.marginBottom.floatValue];
+    [description appendFormat:@"Border:                 (%f, %f, %f, %f)\n", self.borderWidthLeft.floatValue, self.borderHeightTop.floatValue, self.borderWidthRight.floatValue, self.borderHeightBottom.floatValue];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

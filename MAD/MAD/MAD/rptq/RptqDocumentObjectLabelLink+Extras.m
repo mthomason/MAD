@@ -13,6 +13,7 @@
 #import "RptqDocumentObjectLabelLink+Extras.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
+#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectLabelLink (Extras)
 
@@ -77,6 +78,16 @@
         result = [[self identifier] isEqualToNumber:[s identifier]];
     }
     return result;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:             %@\n", self.identifier];
+    [description appendFormat:@"Text:                   %@\n", self.text];
+    [description appendFormat:@"URL:                    %@\n", self.url];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

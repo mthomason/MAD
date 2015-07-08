@@ -21,6 +21,8 @@
 + (instancetype)documentFactory:(NSManagedObjectContext *)objectContext;
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
+- (NSUInteger)numberOfReportSections;
+
 - (RptqQuery *)defaultQuery;
 - (RptqDatabase *)defaultDatabase;
 

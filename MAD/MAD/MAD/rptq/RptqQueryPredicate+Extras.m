@@ -192,4 +192,18 @@
     }
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Identifier:         %@\n", self.identifier];
+    [description appendFormat:@"Sort:               %@\n", self.comparson];
+    [description appendFormat:@"Right field:        %@\n", self.hasRightField];
+    [description appendFormat:@"Right pred:         %@\n", self.fieldrightpred];
+    [description appendFormat:@"Left field:         %@\n", self.hasLeftField];
+    [description appendFormat:@"Left pred:          %@\n", self.fieldleftpred];
+    [description appendFormat:@"Query:              %@\n", self.inQuery];
+    [description appendFormat:@"*********"];
+    return description;
+}
+
 @end
