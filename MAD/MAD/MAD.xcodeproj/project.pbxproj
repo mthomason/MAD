@@ -104,7 +104,7 @@
 		4C8CDAE71AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAE51AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m */; };
 		4C8CDAEA1AD24BD000B7B9EA /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAE91AD24BD000B7B9EA /* RptqDocument+Extras.m */; };
 		4C8CDAEF1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */; };
-		4C8CDAF21AD24C9000B7B9EA /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */; };
+		4C8CDAF21AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF11AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.m */; };
 		4C8CDAF51AD24CBF00B7B9EA /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF41AD24CBF00B7B9EA /* RptqQuery+Extras.m */; };
 		4C8CDAFC1AD24D2A00B7B9EA /* RptqQueryField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF71AD24D2A00B7B9EA /* RptqQueryField+Extras.m */; };
 		4C8CDAFD1AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF91AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m */; };
@@ -456,8 +456,8 @@
 		4C8CDAEC1AD24C2300B7B9EA /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
 		4C8CDAED1AD24C5100B7B9EA /* RptqDocumentSection+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentSection+Extras.h"; path = "rptq/RptqDocumentSection+Extras.h"; sourceTree = "<group>"; };
 		4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSection+Extras.m"; path = "rptq/RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
-		4C8CDAF01AD24C9000B7B9EA /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEnumerator.h; sourceTree = "<group>"; };
-		4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionEnumerator.m; sourceTree = "<group>"; };
+		4C8CDAF01AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSectionEnumerator.h; sourceTree = "<group>"; };
+		4C8CDAF11AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSectionEnumerator.m; sourceTree = "<group>"; };
 		4C8CDAF31AD24CBF00B7B9EA /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQuery+Extras.h"; path = "rptq/RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4C8CDAF41AD24CBF00B7B9EA /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuery+Extras.m"; path = "rptq/RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C8CDAF61AD24D2A00B7B9EA /* RptqQueryField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryField+Extras.h"; path = "rptq/RptqQueryField+Extras.h"; sourceTree = "<group>"; };
@@ -813,8 +813,8 @@
 				4C8CDBC51AD2552C00B7B9EA /* MTFont.m */,
 				4C8CDC871AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.h */,
 				4C8CDC881AD2696C00B7B9EA /* MTDatabaseProcessSqlServer.m */,
-				4C8CDAF01AD24C9000B7B9EA /* SectionEnumerator.h */,
-				4C8CDAF11AD24C9000B7B9EA /* SectionEnumerator.m */,
+				4C8CDAF01AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.h */,
+				4C8CDAF11AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.m */,
 				4C8CDABF1AD1E32C00B7B9EA /* MTDataColumn.h */,
 				4C8CDAC01AD1E32C00B7B9EA /* MTDataColumn.m */,
 				4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */,
@@ -1732,7 +1732,7 @@
 				4C8CDB9E1AD2500800B7B9EA /* MTPaperLegal.m in Sources */,
 				4C8CDA7A1AD1DCC100B7B9EA /* MTQueryCacheSelect.m in Sources */,
 				4C8CDAFC1AD24D2A00B7B9EA /* RptqQueryField+Extras.m in Sources */,
-				4C8CDAF21AD24C9000B7B9EA /* SectionEnumerator.m in Sources */,
+				4C8CDAF21AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.m in Sources */,
 				4C8CDB841AD2500800B7B9EA /* MTPaperA9.m in Sources */,
 				4C8CDA801AD1DCC100B7B9EA /* MTQueryCacheSyncOff.m in Sources */,
 				4C8CDC001AD2648700B7B9EA /* MysqlUpdate.m in Sources */,

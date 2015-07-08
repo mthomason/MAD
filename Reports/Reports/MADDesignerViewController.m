@@ -38,7 +38,7 @@
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
-#import "SectionEnumerator.h"
+#import "RptqDocumentSectionEnumerator.h"
 #import "MADPopoverBackgroundView.h"
 
 #import "MADToolboxPresentationController.h"
@@ -106,32 +106,24 @@
 #import "NSManagedObjectID+Extras.h"
 #import "UIView+Extras.h"
 
-const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
-const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
+static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
+static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
-NSString * const MADImageBarButtonItemMadDesigner8                  = @"UIBarButtonItemMadDesigner8";
-NSString * const MADImageBarButtonItemMadDesigner                   = @"UIBarButtonItemMadDesigner";
-NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
-NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
-NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
-NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
+static NSString * const MADImageBarButtonItemMadDesigner8                  = @"UIBarButtonItemMadDesigner8";
+static NSString * const MADImageBarButtonItemMadDesigner                   = @"UIBarButtonItemMadDesigner";
+static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
+static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
+static NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
+static NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
 
-const CGFloat MNSAnimationDurationShowFromBottomHalf = 0.3500f;
-
-const CGFloat MADSizeWidthViewDetailDisplay         = 32.0000f;
-const CGFloat MADSizeHeightViewDetailDisplay        = 20.0000f;
-
-const CGFloat MTReportDesignerSectionLabelHeight    = 20.0000f;
-const CGFloat MTReportDesignerBorderPaddingSides    =  8.0000f;
-const CGFloat MTReportDesignerBorderPaddingDetail   =  3.0000f;
-const CGFloat MTReportDesignerBorderPaddingVertical =  3.0000f;
-const CGFloat MTReportDesignerBufferPaddingVertical =  2.0000f;
-const CGFloat MTReportDesignerCornerRadius          =  3.0000f;
-const CGFloat previousScaleWeight                   =  0.6666f;
-
-const CGFloat MADSizeWidthSectionLabel              = 0.2000f;
-
-const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
+static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
+static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
+static const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
+static const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
+static const CGFloat MTReportDesignerBorderPaddingDetail        =  3.0000f;
+static const CGFloat MTReportDesignerBorderPaddingVertical      =  3.0000f;
+static const CGFloat MTReportDesignerBufferPaddingVertical      =  2.0000f;
+static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @interface MADDesignerViewController()
 <MTViewControllerBarcodeDelegate,
@@ -508,7 +500,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.zoomScaleRestore = self.scroller.zoomScale;
     [self.scroller setZoomScale: 1.0000f animated: NO];
     
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
+    RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
     
     NSInteger sectionCounter = 0;
     NSInteger numberOfSections = [sectionEnumerator count];
@@ -592,7 +584,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [constraintsContainer addObject:lc1b];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1b];
             
-            NSLayoutConstraint *lc1c = [NSLayoutConstraint labelRight: sectionViewLabel container: sectionView padding: MTReportDesignerBufferPaddingVertical];
+            NSLayoutConstraint *lc1c = [NSLayoutConstraint labelRight: sectionViewLabel container: sectionView padding: MTReportDesignerSectionLabelPaddingRight];
             [constraintsContainer addObject:lc1c];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1c];
             
@@ -632,16 +624,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         }
     }
     
-    NSLog(@"Number of sections: %li", (long)numberOfSections);
-    NSLog(@"Section count: %li", (long)sectionCounter);
-    
     self.passthoughContainers = [NSSet setWithSet: passthroughContainers];
     
     self.sectionViewsArray = sectionViewsArray;
     self.sectionControlViewsArray = sectionControlViewsArray;
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
-    
     
     NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint view: self.scroller.container
                                                                                                              height: sectionHeights];
@@ -1084,7 +1072,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     NSError *error = nil;
     [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
-    
     [[MTApplicationInstance mainInstance].openDocument saveToURL: [MTApplicationInstance mainInstance].openDocument.fileURL
             forSaveOperation: UIDocumentSaveForOverwriting
            completionHandler: ^(BOOL success) {
@@ -1624,14 +1611,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSInteger)collectionView: (UICollectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
     
-    RptqDocument *document = [[MTApplicationInstance mainInstance].openDocument activeDocumentModel];
-    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
+    //RptqDocument *document = [[MTApplicationInstance mainInstance].openDocument activeDocumentModel];
+    //RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    //RptqQuery *query = [database.hasQueries anyObject];
     //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: selectedSectionNumber query: query];
-    NSInteger qc = [query sectionCount];
+    //NSInteger qc = [query sectionCount];
     
     MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[collectionView.objectIdTag];
-    NSInteger c = layoutManager.items.count;
     return layoutManager.items.count;
 }
 
@@ -2592,7 +2578,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (NSSet *)elementViews {
     
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
+    RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
@@ -2646,7 +2632,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
         if (quickHashWorks == NO) {     //Case when views are off screen.
             
-            SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
+            RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:[MTApplicationInstance mainInstance].openDocument.activeDocumentModel];
             
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
                 MADDesignerSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];

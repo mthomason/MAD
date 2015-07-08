@@ -2095,7 +2095,7 @@
 		4C8CDCEC1AD2798800B7B9EA /* MADLinkType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLinkType.h; path = ../MAD/MAD/MAD/MADLinkType.h; sourceTree = "<group>"; };
 		4C8CDCED1AD279BB00B7B9EA /* MTQueryTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryTest.h; path = ../MAD/MAD/MAD/MTQueryTest.h; sourceTree = "<group>"; };
 		4C8CDCEE1AD279DD00B7B9EA /* MTAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAggregateFunctionInputType.h; path = ../MAD/MAD/MAD/MTAggregateFunctionInputType.h; sourceTree = "<group>"; };
-		4C8CDCEF1AD279EF00B7B9EA /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SectionEnumerator.h; path = ../MAD/MAD/MAD/SectionEnumerator.h; sourceTree = "<group>"; };
+		4C8CDCEF1AD279EF00B7B9EA /* RptqDocumentSectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqDocumentSectionEnumerator.h; path = ../MAD/MAD/MAD/RptqDocumentSectionEnumerator.h; sourceTree = "<group>"; };
 		4C8CDCF11AD27A5800B7B9EA /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTReportViewerPrintPageRenderer.h; path = ../MAD/MAD/MAD/MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C8CDCF21AD27A7700B7B9EA /* MTActivityItemProviderPdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTActivityItemProviderPdf.h; path = ../MAD/MAD/MAD/MTActivityItemProviderPdf.h; sourceTree = "<group>"; };
 		4C8CDCF31AD27AAF00B7B9EA /* MTDatabaseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseField.h; path = ../MAD/MAD/MAD/MTDatabaseField.h; sourceTree = "<group>"; };
@@ -3919,7 +3919,7 @@
 				4C8CDCF71AD27B6100B7B9EA /* MTNotificationDidReadRows.h */,
 				4C8CDCF21AD27A7700B7B9EA /* MTActivityItemProviderPdf.h */,
 				4C8CDC9C1AD274D100B7B9EA /* MADocument.h */,
-				4C8CDCEF1AD279EF00B7B9EA /* SectionEnumerator.h */,
+				4C8CDCEF1AD279EF00B7B9EA /* RptqDocumentSectionEnumerator.h */,
 				4C8CDCEB1AD2797600B7B9EA /* MTDataFormatter.h */,
 				4C8CDCE91AD2793C00B7B9EA /* MTDataTable.h */,
 				4C8CDCF41AD27AC900B7B9EA /* MTReportFormatter.h */,

@@ -13,7 +13,7 @@
 
 @class RptqDocument;
 
-@interface SectionEnumerator : NSEnumerator
+@interface RptqDocumentSectionEnumerator : NSEnumerator
 
 @property (assign) NSInteger current;
 

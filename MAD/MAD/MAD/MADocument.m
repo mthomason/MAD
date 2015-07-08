@@ -68,7 +68,7 @@
 #import "NSFileManager+Common.h"
 #import "NSThread+Extras.h"
 
-#import "SectionEnumerator.h"
+#import "RptqDocumentSectionEnumerator.h"
 #import "MADSectionLayoutManager.h"
 
 #import "NSManagedObject+Extras.h"
@@ -762,7 +762,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)initalizeSectionLayoutManagers:(RptqDocument *)document {
     NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
+    RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];

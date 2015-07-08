@@ -37,7 +37,6 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         self.textAlignment = NSTextAlignmentRight;
         self.lineBreakMode = NSLineBreakByClipping;
         self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        
         self.textColor = tintColor;
         
         self.text = [section localizedDisplayName];
@@ -90,6 +89,10 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
     self.selected = NO;
 }
 
+//- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
+//    return [super textRectForBounds:CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width - 10.0000f, bounds.size.height)
+//             limitedToNumberOfLines:numberOfLines];
+//}
 
 - (void)tintColorDidChange {
 

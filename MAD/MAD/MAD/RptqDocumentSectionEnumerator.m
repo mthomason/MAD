@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "SectionEnumerator.h"
+#import "RptqDocumentSectionEnumerator.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
@@ -19,14 +19,14 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
-@interface SectionEnumerator ()
+@interface RptqDocumentSectionEnumerator ()
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSManagedObjectID *documentObjectID;
 
 @end
 
-@implementation SectionEnumerator
+@implementation RptqDocumentSectionEnumerator
 
 - (id)initWithDocument:(RptqDocument *)document {
     self = [super init];

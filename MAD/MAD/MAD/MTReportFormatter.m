@@ -14,7 +14,7 @@
 #import "MADocument.h"
 #import "MTQueryFull.h"
 
-#import "SectionEnumerator.h"
+#import "RptqDocumentSectionEnumerator.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -33,12 +33,11 @@
 
 #import "MADArrayCaching.h"
 
-#import "NSData+Comparson.h"
-
 #import "MTNotificationDidFormatPage.h"
 #import "MTReportFormatterPageDefinition.h"
 
 #import "CGGeometry+Extras.h"
+#import "NSData+Comparson.h"
 
 NSString * const MTNullIdentifier = @"(null)";
 
@@ -64,12 +63,11 @@ NSString * const MTNullIdentifier = @"(null)";
 
     @property (nonatomic, assign) MTReportFormatterOptions options;
     @property (nonatomic, weak, readwrite) MADocument *layout;
-    @property (nonatomic, strong, readwrite) MADArrayCaching *reportIndexes;
 
+    @property (nonatomic, strong, readwrite) MADArrayCaching *reportIndexes;
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportLayout;
 
     @property (nonatomic, strong) MTReportFormatterState *machineState; //At some point add the ability to format one page at a time.
-
     @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
     @property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
@@ -213,8 +211,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect {
-    self.page.margins = UIEdgeInsetsMake(printableRect.origin.y,
-                                         printableRect.origin.x,
+    self.page.margins = UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x,
                                          self.page.layoutSize.height - printableRect.size.height - printableRect.origin.y,
                                          self.page.layoutSize.width - printableRect.size.width - printableRect.origin.x);
 }

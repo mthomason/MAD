@@ -8,7 +8,7 @@
 //
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
-#import "SectionEnumerator.h"
+#import "RptqDocumentSectionEnumerator.h"
 #import "MTReportDesignerSectionDecorationView.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 #import "CGGeometry+Extras.h"

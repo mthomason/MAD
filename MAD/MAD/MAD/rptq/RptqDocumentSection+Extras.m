@@ -13,7 +13,7 @@
 #import <objc/runtime.h>
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocument+Extras.h"
-#import "SectionEnumerator.h"
+#import "RptqDocumentSectionEnumerator.h"
 #import "MTProtocolCompare.h"
 
 #import "RptqDatabase.h"
@@ -397,7 +397,7 @@
     NSInteger result = 0;
     BOOL breakNow = NO;
     RptqDocument *document = [section inRptqDocument];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
+    RptqDocumentSectionEnumerator *enumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:document];
     NSURL *urlNeedle = [[section objectID] URIRepresentation];
     for (RptqDocumentSection *sec in enumerator) {
         @autoreleasepool {
