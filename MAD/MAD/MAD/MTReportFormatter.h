@@ -32,11 +32,8 @@ extern NSString * const MTNullIdentifier;
 
 - (void)initalizeStateMachine;
 
-- (instancetype)initWithQuery: (MTQuery *)query
-                       layout: (MADocument *)layout
-                      options: (MTReportFormatterOptions)options;
-+ (instancetype)reportFormatterWithQuery: (MTQuery *)query
-                                  layout: (MADocument *)layout
+- (instancetype)initWithQuery: (MTQuery *)query layout: (MADocument *)layout options: (MTReportFormatterOptions)options;
++ (instancetype)reportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
                                  options: (MTReportFormatterOptions)options;
 + (NSValue *)KeyReportSectionType;
 

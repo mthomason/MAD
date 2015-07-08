@@ -181,15 +181,13 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)initalize {
     
     MTReportFormatterPageDefinition *page = [MTReportFormatterPageDefinition new];
-    [self setPage:page];
+    self.page = page;
     
-    UIEdgeInsets margin = (self.options & MTReportFormatterOptionsMargin) ?
+    self.page.margins = (self.options & MTReportFormatterOptionsMargin) ?
                             UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f),
                                              CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f)) :
-    UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
+                            UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
     
-    [[self page] setMargins:margin];
-
     
     MTReportFormatterState *machineState = [MTReportFormatterState new];
     [self setMachineState:machineState];
@@ -205,6 +203,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setPageIndexesTemporary:temporaryDataForPage];
     
     if (self.layout) {
+        [self.layout initalizeSectionLayoutManagers:self.machineState.document];
         NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     } else {

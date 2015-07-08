@@ -408,7 +408,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         [self setFrameBeforeRotation: [displayView frame]];
         
         [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
-        [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
+        [displayView insertSubview:self.snapshotBeforeRotation aboveSubview:displayView];
         
         [displayView setNeedsDisplay];
         
@@ -438,16 +438,16 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         
         if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
             [self.snapshotAfterRotation setAlpha:0.0000f];
-            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:self.snapshotBeforeRotation];
             [self.snapshotAfterRotation setAlpha:1.0000f];
         } else {
-            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
-            [[self snapshotBeforeRotation] setAlpha:0.0000f];
+            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:self.snapshotBeforeRotation];
+            [self.snapshotBeforeRotation setAlpha:0.0000f];
         }
         
-        [[self snapshotAfterRotation] setFrame:self.frameAfterRotation];
+        [self.snapshotAfterRotation setFrame:self.frameAfterRotation];
         framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
-        [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
+        [self.snapshotBeforeRotation setFrame:framePreservingHeight];
         
         if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
             ((MTReportViewerReportPageView *)displayView).drawBlankPage = YES;

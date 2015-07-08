@@ -210,7 +210,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
         NSNumber *inferMappingModelAutomaticallyOption = @(YES);
         NSDictionary *options = @{
-                                  //NSPersistentStoreUbiquitousContentNameKey : @"schema",
+                                  NSPersistentStoreUbiquitousContentNameKey : @"schema",
                                   NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
                                   NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
                                   };
@@ -1187,7 +1187,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [self filenameId:[filename hash]];
+    NSString *filenameId = [self filenameId:filename.hash];
     return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 

@@ -95,6 +95,8 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID;
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 
+- (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
+
 - (NSDictionary *)layoutHeightsBySectionKey;
 
 - (void)removeGuts; //Cleans any cache that may exist.
