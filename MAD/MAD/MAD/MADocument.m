@@ -11,19 +11,13 @@
 #endif
 
 #import "MADocument.h"
-
-#import "MADConstants.h"
-#import "MTActivityIndicator.h"
-
 #import <CoreData/CoreData.h>
 
-#import "CGGeometry+Extras.h"
-
+#import "MTActivityIndicator.h"
 #import "MADocumentState.h"
 
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTPaper.h"
-
 
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
@@ -67,6 +61,7 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
+#import "CGGeometry+Extras.h"
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
 #import "NSError+Constructors.h"
@@ -83,13 +78,13 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 /*
  {
- additionalContent =     {
- generator = "MAD Designer";
- "thumbnail.png" = "<UIImage: 0x1fea0b10>";
- version = 1;
- };
- fileType = "com.everydayapps.productivity.mad";
- parentContext = "<NSManagedObjectContext: 0xffffffff>";
+    additionalContent =     {
+        generator = "MAD Designer";
+        "thumbnail.png" = "<UIImage: 0x1fea0b10>";
+        version = 1;
+    };
+    fileType = "com.everydayapps.productivity.mad";
+    parentContext = "<NSManagedObjectContext: 0xffffffff>";
  }
  */
 
@@ -149,7 +144,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @property (nonatomic, strong) UIImage *thumbnail;
 
 @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
-@property (nonatomic, strong, readwrite) RptqDocument *document;
+@property (nonatomic, strong, readwrite) NSManagedObjectID *documentObjectID;
+
 @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MTQuery *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
@@ -531,21 +527,21 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark Query Building
 
 - (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable {
-    RptqQuery *query = [self.document defaultQuery];
+    RptqDocument *document = [self activeDocumentModel];
+    RptqQuery *query = [document defaultQuery];
     [query addQueryTableBasedOnSchemaTable:schemaTable];
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
                        andSortOrder:(MNSSortOrder)sortOrder; {
-    
-    NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+    RptqDocument *document = [self activeDocumentModel];
     RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID
-                                                  managedObjectContext: managedObjectContext];
+                                                  managedObjectContext: self.managedObjectContext];
     
     RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField
                                                    andSort: sortOrder];
     
-    RptqDatabase *database = self.document.hasDatabaseSchemas.anyObject;
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     [query addHasQueryGroupsObject: queryGroup];
     
@@ -738,31 +734,35 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (RptqDocument *)activeDocumentModel {
-    if (self.document == nil) {
+    RptqDocument *document;
+    if (self.documentObjectID == nil) {
 
-        RptqDocument *document = [RptqDocument documentForManagedObjectContext: self.managedObjectContext];
+        document = [RptqDocument documentForManagedObjectContext: self.managedObjectContext];
         if (document == nil) {
             document = [RptqDocument documentFactory:self.managedObjectContext];
         }
-        self.document = document;
+        
+        self.documentObjectID = document.objectID;
         
         if (self.mainDatabase == nil) {
-            [self initalizeMainDatabase];
+            [self initalizeMainDatabase:document];
         }
         
         if (self.reportFormatter == nil) {
-            [self initalizeMainQuery];
-            [self initalizeSectionLayoutManagers];
+            [self initalizeMainQuery:document];
+            [self initalizeSectionLayoutManagers:document];
             [self initalizeReportFormatter];
         }
 
+    } else {
+        document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     }
-    return self.document;
+    return document;
 }
 
-- (void)initalizeSectionLayoutManagers {
+- (void)initalizeSectionLayoutManagers:(RptqDocument *)document {
     NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:self.document];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
@@ -776,18 +776,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
     
-    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
     RptqDocumentObject *documentObject;
-    documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
+    documentObject = (RptqDocumentObject *)[self.managedObjectContext objectWithID:attributes.objectID];
     documentObject.originx = @(attributes.frame.origin.x);
     documentObject.originy = @(attributes.frame.origin.y);
-    [objectContext save:nil];
+    [self.managedObjectContext save:nil];
     
 }
 
 - (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID {
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: self.document.managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: self.managedObjectContext];
     
     RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
     RptqDocumentSection *section = sectionRow.inSection;
@@ -797,15 +796,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [hasObjects removeObjectAtIndex:deleteIndex];
     
     MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
-    
     [layoutManager removeItemWithID:objectID];
     [layoutManager layout];
+    
     sectionRow.hasObjects = hasObjects;
     documentObject.inSectionRow = nil;
-    section.height = @(layoutManager.size.height);
     
+    section.height = @(layoutManager.size.height);
     [self saveContext];
-
 }
 
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove {
@@ -844,8 +842,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (void)initalizeMainQuery {
-    RptqDatabase *database = [self.document defaultDatabase];
+- (void)initalizeMainQuery:(RptqDocument *)document {
+    RptqDatabase *database = [document defaultDatabase];
     if (database) {
         RptqQuery *rquery = [database defaultQuery];
         
@@ -883,8 +881,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     self.reportFormatter = reportFormatter;
 }
 
-- (void)initalizeMainDatabase {
-    RptqDatabase *database = [self.document defaultDatabase];
+- (void)initalizeMainDatabase:(RptqDocument *)document {
+    RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:query.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
@@ -926,14 +924,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(bgQueue, ^{
         [weakself initalizeMainDataTable];
-        [weakself initalizeMainQuery];
+        RptqDocument *document = [self activeDocumentModel];
+        [weakself initalizeMainQuery:document];
         [weakself initalizeReportFormatter];
-        MTQuery *fullQuery = weakself.mainQuery;
-        [fullQuery database].delegate = weakself;
+        weakself.mainQuery.database.delegate = weakself;
 
         @autoreleasepool {
             
-            [self.database executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
+            [self.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
                 
                 [weakself.mainDataTable cache];
                 weakself.didRefresh = success;
@@ -1027,9 +1025,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSArray *)sortDescriptors {
-    
-    if (self.mainDatabase == nil) [self initalizeMainDatabase];
-    RptqDatabase *database = [self.document defaultDatabase];
+    RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
+    if (self.mainDatabase == nil) [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
+    RptqDatabase *database = [document defaultDatabase];
     RptqQuery *rquery = [database defaultQuery];
     return [rquery sortDescriptorsForDatabase:self.mainDatabase];
 }

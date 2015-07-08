@@ -39,7 +39,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        NSManagedObjectID;
+        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
@@ -50,14 +50,12 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @property (nonatomic, assign) BOOL limitResultsDesignMode;
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (nonatomic, strong, readonly) RptqDocument *document;
+@property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
 
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
 @property (nonatomic, strong, readonly) MTQuery *mainQuery;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
-
-//@property (nonatomic, strong, readonly) NSString *fileName;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
@@ -81,7 +79,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (UIPrintPageRenderer *)printerPrintPageRender;
 
 - (NSURL *)cachedDataUrl;
-
 - (UIImage *)fullyRenderedThumbnail;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
@@ -89,16 +86,13 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
 
-- (void)initalizeMainQuery;
+- (void)initalizeMainQuery:(RptqDocument *)document;
 - (void)prepareForQuery;
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
-
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
-                       andSortOrder:(MNSSortOrder)sortOrder;
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder;
 - (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable;
-- (void)removeDocumentObject:(NSManagedObjectID *)objectID
-                 fromSection:(NSManagedObjectID *)sectionID;
+- (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID;
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 
 - (NSDictionary *)layoutHeightsBySectionKey;
