@@ -1842,7 +1842,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         documentObject.originx = @(attributes.frame.origin.x);
         documentObject.originy = @(attributes.frame.origin.y);
     }
-    //[objectContext save:nil];
 }
 
 - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout

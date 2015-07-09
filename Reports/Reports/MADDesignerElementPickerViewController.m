@@ -12,10 +12,9 @@
 
 #import "MADDesignerElementPickerViewController.h"
 #import <CoreData/CoreData.h>
+#import "MADNavigationBarTitleView.h"
 
 #import "MTAggregateFunctionsViewController.h"
-
-#import "UIDevice+Hack.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
@@ -29,12 +28,13 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
-#import "UIColor+EverydayApps.h"
 #import "MADDocumentObjectType.h"
-
 #import "MADDesignerViewController.h"
 
-#import "MADNavigationBarTitleView.h"
+#import "UIColor+EverydayApps.h"
+
+
+#import "MADObjectIdentifier.h"
 
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";
@@ -61,22 +61,12 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
-
-@property (nonatomic, strong) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
-
 @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
-
-@property (nonatomic, strong) MTGroupByViewController *groupByViewController;
-
-@property (nonatomic, strong) UITableViewController *fieldOrFormulaViewController;
-
-@property (nonatomic, strong) MTQueryBuilderChooseFieldViewController *fieldOrFormulaFieldPickerViewController;
-
-@property (nonatomic, strong) UITableViewController *fieldOrFormulaFormulaPickerViewController;
 @property (nonatomic, assign) BOOL showFieldOrFormulaFormulaPickerViewerController;
-
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
+
+@property (nonatomic, strong) NSArray *dataSource;
 
 - (IBAction)done:(id)sender;
 
@@ -109,43 +99,65 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"MAD Objects", @"Title of the document object select");
     self.navigationItem.titleView = titleView;
-    
-//    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-//    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-//    [self.view addSubview: visualEffectsView];
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     self.navigationController.view.opaque = NO;
-
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.opaque = NO;
-    
-/*
-    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
-        //tableView.backgroundColor = UIColor.clearColor()
-        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        let blurEffect = UIBlurEffect(style: .Light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
-        
-        //if inside a popover
-        if let popover = navigationController?.popoverPresentationController? {
-            popover.backgroundColor = UIColor.clearColor()
-        }
-        
-        //if you want translucent vibrant table view separator lines
-        tableView.separatorEffect = UIVibrancyEffect(forBlurEffect: blurEffect)
-    }
-  */  
     self.view.backgroundColor = [UIColor clearColor];
     self.view.opaque = NO;
 
 }
 
+static NSString * const CellIdentifier = @"ci";
+static NSString * const Tag = @"tag";
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
     self.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
+    
+    NSMutableArray *dataSource = [[NSMutableArray alloc] init];
+    
+    MADObjectIdentifier *labelDynamic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectDataCollectionViewCell
+                                                                           andTag: MTDocumentObjectTypeLabelDynamic];
+    
+    MADObjectIdentifier *labelStatic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectLabelCollectionViewCell
+                                                                                andTag: MTDocumentObjectTypeLabelStatic];
+    
+    MADObjectIdentifier *aggregate = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectAggregateCollectionViewCell
+                                                                              andTag: MTDocumentObjectTypeAggregate];
+    
+    MADObjectIdentifier *image = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectImageCollectionViewCell
+                                                                          andTag: MTDocumentObjectTypeImage];
+    
+    MADObjectIdentifier *whitespace = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectWhitespaceCollectionViewCell
+                                                                               andTag: MTDocumentObjectTypeWhtiespace];
+    
+    MADObjectIdentifier *barcode = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectBarcodeCollectionViewCell
+                                                                            andTag: MTDocumentObjectTypeBarcode];
+    /*
+    MADObjectIdentifier *groupKey = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectGroupKeyCollectionViewCell
+                                                                             andTag: MTDocumentObjectTypeGroupKey];
+    
+    MADObjectIdentifier *chart = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectChartCollectionViewCell
+                                                                          andTag: MTDocumentObjectTypeChart];
+    
+    MADObjectIdentifier *formula = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectFormulaCollectionViewCell
+                                                                            andTag: MTDocumentObjectTypeFormula];
+    
+    [dataSource addObject:groupKey];
+    [dataSource addObject:chart];
+    [dataSource addObject:formula];
+    */
+
+    [dataSource addObject:labelDynamic];
+    [dataSource addObject:labelStatic];
+    [dataSource addObject:aggregate];
+    [dataSource addObject:image];
+    [dataSource addObject:whitespace];
+    [dataSource addObject:barcode];
+    
+    self.dataSource = dataSource;
 }
 
 #pragma mark - View lifecycle
@@ -186,8 +198,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 #pragma mark - UICollectionViewDataSource
 
-- (void)collectionView:(UICollectionView *)collectionView
-        didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
@@ -213,75 +224,16 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *result = nil;
-    NSString *cellIdentifier = nil;
-    NSUInteger tag = 0;
-    switch (indexPath.section) {
-        case 0: {
-            switch (indexPath.row) {
-                case 1: {
-                    cellIdentifier = MTIdentiferDocumentObjectLabelCollectionViewCell;
-                    tag = MTDocumentObjectTypeLabelStatic;
-                    break;
-                }
-                case 6: {
-                    cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
-                    tag = MTDocumentObjectTypeGroupKey;
-                    break;
-                }
-                case 3: {
-                    cellIdentifier = MTIdentiferDocumentObjectImageCollectionViewCell;
-                    tag = MTDocumentObjectTypeImage;
-                    break;
-                }
-                case 7: {
-                    cellIdentifier = MTIdentiferDocumentObjectChartCollectionViewCell;
-                    tag = MTDocumentObjectTypeChart;
-                    break;
-                }
-                case 2: {
-                    cellIdentifier = MTIdentiferDocumentObjectAggregateCollectionViewCell;
-                    tag = MTDocumentObjectTypeAggregate;
-                    break;
-                }
-                case 0: {
-                    cellIdentifier = MTIdentiferDocumentObjectDataCollectionViewCell;
-                    tag = MTDocumentObjectTypeLabelDynamic;
-                    break;
-                }
-                case 9: {
-                    cellIdentifier = MTIdentiferDocumentObjectFormulaCollectionViewCell;
-                    tag = MTDocumentObjectTypeFormula;
-                    break;
-                }
-                case 4: {
-                    cellIdentifier = MTIdentiferDocumentObjectWhitespaceCollectionViewCell;
-                    tag = MTDocumentObjectTypeWhtiespace;
-                    break;
-                }
-                case 5: {
-                    cellIdentifier = MTIdentiferDocumentObjectBarcodeCollectionViewCell;
-                    tag = MTDocumentObjectTypeBarcode;
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-
+    MADObjectIdentifier *madob = self.dataSource[indexPath.row];
+    NSString *cellIdentifier = madob.identifier;
     result = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     if ([result selectedBackgroundView] == nil) {
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
         UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
         selectedBackgroundView.backgroundColor = bgColor;
-        [result setSelectedBackgroundView:selectedBackgroundView];
+        result.selectedBackgroundView = selectedBackgroundView;
     }
-    [[result contentView] setTag: tag];
+    result.contentView.tag = madob.tag;
     return result;
 }
 
@@ -289,7 +241,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     NSInteger result = 0;
     switch (section) {
         case 0:
-            result = 6;
+            result = self.dataSource.count;
             break;
         default:
             break;
@@ -299,64 +251,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
-}
-
-#pragma mark - UICollectionViewDelegate
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
-- (IBAction)saveDocumentObjectAggregate:(id)sender {
-    
-}
-
-- (IBAction)saveDocumentObjectImage:(id)sender {
-    
-}
-
-- (IBAction)saveDocumentObjectLabelDynamic:(id)sender {
-    
 }
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
