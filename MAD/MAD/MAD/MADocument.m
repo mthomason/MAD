@@ -210,7 +210,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
         NSNumber *inferMappingModelAutomaticallyOption = @(YES);
         NSDictionary *options = @{
-                                  NSPersistentStoreUbiquitousContentNameKey : @"schema",
+                                  //NSPersistentStoreUbiquitousContentNameKey : @"schema",
                                   NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
                                   NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
                                   };
@@ -1137,8 +1137,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
             //recreate the store like in the  appDelegate method
             
-            NSDictionary *options = @{//NSPersistentStoreUbiquitousContentNameKey: @"MADCloudStore",
-                                      NSMigratePersistentStoresAutomaticallyOption : @YES,
+            NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
                                       NSInferMappingModelAutomaticallyOption : @YES};
             
             [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
