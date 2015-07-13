@@ -2408,12 +2408,21 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     [self.scroller.container bringSubviewToFront: piece];
 
-    [self.view addSubview: piece];
-    
-    transition();
-    
+
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
+
+    CGRect b = [self.view convertRect:piece.frame fromView:sectionView];
+    piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
+    
+    [self.view addSubview: piece];
+
+    [UIView animateWithDuration:0.2 animations:^{
+        piece.alpha = 0.80000f;
+    }];
+
+    transition();
+    
     MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[sectionView.objectIdTag];
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
     
@@ -2453,10 +2462,25 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     //Section not found, so add to the first one.
     if (sectionView == nil) {
+        CGFloat minDistance = CGFLOAT_MAX, distance;
         for (UICollectionView *view in self.scroller.container.subviews) {
             if ([view isKindOfClass: [MADDesignerSectionView class]]) {
-                sectionView = (MADDesignerSectionView *)view;
-                break;
+                CGPoint p1 = [self.view convertPoint:gesture.view.frame.origin toView:self.view];
+                CGPoint p2 = [self.scroller.container convertPoint:view.frame.origin toView:self.view];
+                if ((distance = CGDistance(p1, p2)) < minDistance) {
+                    sectionView = (MADDesignerSectionView *)view;
+                    minDistance = distance;
+                    //found = YES;
+                }
+            }
+        }
+        
+        if (sectionView == nil) {
+            for (UICollectionView *view in self.scroller.container.subviews) {
+                if ([view isKindOfClass: [MADDesignerSectionView class]]) {
+                    sectionView = (MADDesignerSectionView *)view;
+                    break;
+                }
             }
         }
     }
