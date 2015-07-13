@@ -268,7 +268,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 }
 
 - (void)duplicate:(id)sender {
-    [self.delegate duplicate:self];
+    [self.delegate actionDuplicate:self];
 }
 
 - (void)normalizeTint {

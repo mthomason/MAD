@@ -209,7 +209,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
         NSMutableArray *batchUpdates = [[NSMutableArray alloc] init];
         self.batchUpdates = batchUpdates;
-        
+                
         //UIMotionEffectGroup *hoverEffects = [UIMotionEffectGroup HoverEffects];
         //self.hoverEffects = hoverEffects;
 
@@ -312,6 +312,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [super viewWillAppear:animated];
     
     [self.collectionView.backgroundView setNeedsDisplay];
+    [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
     
     [self addActionItemToToolbar:animated];
     
@@ -868,6 +869,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
+
     if (cell.delegate == nil) {
         ((MTCollectionViewCellDocument *)cell).delegate = self;
     }
@@ -1137,6 +1139,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }
     } completion:^(BOOL finished) {
         if (finished) {
+            //[UIView performWithoutAnimation:^{
+                [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+            //}];
             completion(YES, nil);
         }
     }];
@@ -1449,7 +1454,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
 }
 
-- (void)duplicate:(id)sender {
+- (void)actionDuplicate:(id)sender {
     for (NSIndexPath *selectedItem in self.collectionView.indexPathsForSelectedItems) {
         MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:selectedItem.item];
         [self.filesController duplicateFileInfo:metaData];
@@ -1679,7 +1684,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (UIBarButtonItem *)barButtonItemDuplicate {
     if (!_barButtonItemDuplicate) {
-        _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(duplicate:)];
+        _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(actionDuplicate:)];
     }
     return _barButtonItemDuplicate;
 }
