@@ -2403,12 +2403,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self setScrollersEnabled: NO];
     
     [UIView animateWithDuration:0.2 animations:^{
-        piece.transform = CGAffineTransformMakeScale(1.20000f, 1.20000f);
         piece.alpha = 0.80000f;
     }];
-    
+
     [self.scroller.container bringSubviewToFront: piece];
+
     [self.view addSubview: piece];
+    
     transition();
     
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: [MTApplicationInstance mainInstance].openDocument.managedObjectContext];
