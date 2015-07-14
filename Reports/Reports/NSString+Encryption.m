@@ -16,7 +16,7 @@
 + (NSData *)encryptString:(NSString *)string withKey:(unsigned char *)key keySize:(int)keySize {
     const unsigned char *orig = (const unsigned char *)[string cStringUsingEncoding:NSUTF8StringEncoding];
     AES_KEY key_enc;
-    unsigned char *part_encrypted = malloc(sizeof(unsigned char *) * strlen((const char *)orig));
+    unsigned char *part_encrypted = malloc(sizeof(unsigned char) * strlen((const char *)orig));
     AES_set_encrypt_key(key, keySize, &key_enc);
     AES_encrypt(orig, part_encrypted, &key_enc);
     
@@ -26,7 +26,7 @@
 + (NSString *)decryptString:(NSData *)data withKey:(unsigned char *)key keySize:(int)keySize {
     
     AES_KEY key_dec;
-    unsigned char *dec_out = malloc(sizeof(unsigned char *) * data.length);
+    unsigned char *dec_out = malloc(sizeof(unsigned char) * data.length);
     
     AES_set_decrypt_key(key, keySize, &key_dec);
     AES_decrypt(data.bytes, dec_out, &key_dec);

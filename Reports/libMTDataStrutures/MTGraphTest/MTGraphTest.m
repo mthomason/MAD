@@ -83,7 +83,8 @@
     //NSLog(@"%@", [graph toStringHumanReadable]);
     
     NSError *error = nil;
-    MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error];
+    BOOL isDirectedAcyclicGraph;
+    MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
     
     //NSLog(@"%@", [topologicalSort toStringHumanReadable]);
     XCTAssertNotNil(topologicalSort, @"Topological sort results are nil. Error returned is \"%@\"", [error localizedDescription]);

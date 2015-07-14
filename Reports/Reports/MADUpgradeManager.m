@@ -31,7 +31,7 @@ const NSInteger currentMajorVersion = 8;
 
 - (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error, BOOL upgradePerformed))completion {
     BOOL upgradeRequired = NO;
-    BOOL upgradeVersion1 = NO;
+    //BOOL upgradeVersion1 = NO;
     BOOL upgradeVersion7 = NO;
     BOOL installChinook = NO;
     BOOL installSamples = NO;
@@ -64,7 +64,7 @@ const NSInteger currentMajorVersion = 8;
         
         if (lastVersionRun.integerValue <= 1) {
             upgradeRequired = YES;
-            upgradeVersion1 = YES;
+            //upgradeVersion1 = YES;
         } else if (lastVersionRun.integerValue <= 7) {
             upgradeRequired = YES;
             upgradeVersion7 = YES;

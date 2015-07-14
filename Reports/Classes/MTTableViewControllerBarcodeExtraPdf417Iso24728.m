@@ -85,12 +85,13 @@
     UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:pathError];
     UITableViewCell *cellFormat = [self.tableView cellForRowAtIndexPath:pathFormat];
 
+    /*
     NSString *localziedSize, *localizedError, *localizedFormat;
     
     NSInteger width = [self.delegate barcodePDF417Columns];
     NSInteger errorCorrection = [self.delegate barcodePDF417ErrorCorrection];
     NSInteger format = [self.delegate barcodePDF417Format];
-    
+
     if (width == 0) {
         
         localziedSize = NSLocalizedString(@"Automatic", @"Automatic");
@@ -126,7 +127,7 @@
             break;
         default:
             break;
-    }
+    }*/
     
     cellSize.detailTextLabel.text = @"";
     cellError.detailTextLabel.text = @"";

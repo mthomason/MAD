@@ -700,7 +700,8 @@ typedef void(^MTBlockResultVoid)(void);
     }
     
     NSError *error = nil;
-    MTLinkedList *tableIds = [graph topologicalSortWithError:&error];
+    BOOL isDirectedAcyclicGraph;
+    MTLinkedList *tableIds = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
     
     return tableIds;
 

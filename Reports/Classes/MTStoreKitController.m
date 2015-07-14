@@ -77,7 +77,7 @@ static MTStoreKitController *sharedSingleton = nil;
         [string appendString:@"---------------------------\n"];
     }
     
-    return string;
+    return [string autorelease];
 }
 
 + (MTStoreKitController *)sharedObject {

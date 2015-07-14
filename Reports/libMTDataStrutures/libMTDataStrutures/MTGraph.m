@@ -199,7 +199,7 @@
 
 
 
-- (MTLinkedList *)topologicalSortWithError:(NSError **)anError {
+- (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
     
     NSNumber *counter = @(0);
     
@@ -218,11 +218,12 @@
         }
     }
     
-    BOOL isDirectedAcyclicGraph = YES;
+    *isDirectedAcyclicGraph = YES;
+    //BOOL isDirectedAcyclicGraph = YES;
     for (MTPair *pair in resultEdges) {
         MTEdgeType edgeType = [[pair latter] integerValue];
         if (edgeType == MTEdgeTypeBackEdge) {
-            isDirectedAcyclicGraph = NO;
+            *isDirectedAcyclicGraph = NO;
 
             if (anError != NULL) {
                 *anError = [NSError errorWithDomain: @"MTDataStructures"

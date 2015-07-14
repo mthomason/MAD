@@ -243,10 +243,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
            action == @selector(duplicate:);
 }
 
-- (BOOL)resignFirstResponder {
-    return YES;
-}
-
 - (BOOL)becomeFirstResponder {
     return YES;
 }

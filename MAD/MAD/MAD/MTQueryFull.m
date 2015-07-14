@@ -115,7 +115,8 @@
         
         // MARK: Sort the vectors topologically.
         if (error != NULL) *error = nil;
-        MTLinkedList *topologicalSort = [graph topologicalSortWithError:error];
+        BOOL  isDirectedAcyclicGraph;
+        MTLinkedList *topologicalSort = [graph topologicalSortWithError:error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
         
         // MARK: Error on circuts or other bad query.
         if (error == nil) {

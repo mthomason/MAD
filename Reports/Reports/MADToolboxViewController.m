@@ -126,12 +126,9 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToShow = self.styleNavigationController;
     self.currentViewController = viewControllerToShow;
 
-    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
-    UIViewAnimationOptions options;
-    
+    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;    
     viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     
-    options = UIViewAnimationOptionTransitionCrossDissolve;
     [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
     viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
@@ -247,13 +244,11 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
             break;
             
         case 1:
-            options = UIViewAnimationOptionTransitionFlipFromBottom;
             viewControllerToShow = self.layout;
             viewControllerToUpdate = self.layout;
             break;
             
         case 2:
-            options = UIViewAnimationOptionTransitionFlipFromLeft;
             viewControllerToShow = self.format;
             viewControllerToUpdate = self.format;
             break;

@@ -53,6 +53,7 @@ static const CGFloat colors[] = {
     CGGradientRef gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
     CGContextDrawRadialGradient(currentContext, gradient, start, startRadius, end, endRadius, options);
     CGGradientRelease(gradient);
+    CGColorSpaceRelease(rgb);
 }
 
 @end
