@@ -31,7 +31,7 @@ const NSInteger MADIndexViewer = 2;
     return self.selectedViewController;
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -39,6 +39,5 @@ const NSInteger MADIndexViewer = 2;
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
 
 @end
