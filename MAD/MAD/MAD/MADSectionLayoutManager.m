@@ -81,6 +81,15 @@
 - (void)positionItem:(MADSectionLayoutAttributes *)placedItem {
     NSArray *allValues = self.items.allValues;
     NSMutableArray *placedItems = [[NSMutableArray alloc] initWithCapacity:allValues.count];
+    
+    // If offscreen, move it onscreen.
+    if (placedItem.frame.origin.x < CGPointZero.x) {
+        placedItem.frame = CGRectMake(CGPointZero.x, placedItem.frame.origin.y, placedItem.frame.size.width, placedItem.frame.size.height);
+    }
+    if (placedItem.frame.origin.y < CGPointZero.y) {
+        placedItem.frame = CGRectMake(placedItem.frame.origin.x, CGPointZero.y, placedItem.frame.size.width, placedItem.frame.size.height);
+    }
+    
     NSArray *allPotentalDropPoints = [MADSectionLayoutManager allValidLocationsForAttributes: placedItem
                                                                               withAttributes: allValues];
     BOOL anchored = [self moveItem:placedItem toNearestPointInGroup:allPotentalDropPoints dropTolerance:24.0000f];
@@ -109,6 +118,7 @@
             }
         }
     }
+    placedItem.frame = CGRectMake(roundf(placedItem.frame.origin.x), roundf(placedItem.frame.origin.y), placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
 - (NSArray *)positionUnplacedItems:(NSArray *)unplacedItems aroundPlacedItems:(NSArray *)placedItems {
@@ -161,10 +171,12 @@
 + (NSArray *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute
                              withAttributes: (NSArray *)placedItems {
     
-    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count + 1];
+    NSValue *origin = [NSValue valueWithCGPoint:CGPointZero];
+    [results addObject:origin];
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
         if (placedItem.objectID != attribute.objectID) {
-            NSArray * dropPoints = [placedItem dropPoints];
+            NSArray *dropPoints = [placedItem dropPoints];
             [results addObjectsFromArray:dropPoints];
         }
     }

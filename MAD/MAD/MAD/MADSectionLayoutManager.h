@@ -28,6 +28,8 @@
 - (CGSize)size;
 - (void)layout;
 
+- (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
+
 @end
 
 #endif

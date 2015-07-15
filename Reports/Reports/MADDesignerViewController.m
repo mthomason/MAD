@@ -1128,7 +1128,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                     [change isEqualToString:NSStringFromSelector(@selector(paddingRight))]) {
                     
                     UICollectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
-                    [section.collectionViewLayout invalidateLayout];
+                    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[section.objectIdTag];
+                    MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
+                    if (attributes != nil) {
+                        attributes.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
+                        self.objectIdJustDisplayed = documentObject.objectID;
+                        [layoutManager positionItem:attributes];
+                        [section.collectionViewLayout invalidateLayout];
+                    }
                     
                 } else if ([change isEqualToString:NSStringFromSelector(@selector(sizeheight))] ||
                            [change isEqualToString:NSStringFromSelector(@selector(marginTop))] ||
@@ -1137,7 +1144,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                            [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     UICollectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
-                    [section.collectionViewLayout invalidateLayout];
+                    MADSectionLayoutManager *layoutManager = [MTApplicationInstance mainInstance].openDocument.sectionLayoutManagers[section.objectIdTag];
+                    MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
+                    if (attributes != nil) {
+                        attributes.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
+                        self.objectIdJustDisplayed = documentObject.objectID;
+                        [layoutManager positionItem:attributes];
+                        [section.collectionViewLayout invalidateLayout];
+                    }
                     
                 }
                 
@@ -1841,7 +1855,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         RptqDocumentObject *documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
         documentObject.originx = @(attributes.frame.origin.x);
         documentObject.originy = @(attributes.frame.origin.y);
+        //documentObject.sizewidth = @(attributes.frame.size.width);
+        //documentObject.sizeheight = @(attributes.frame.size.height);
     }
+    //[objectContext save:nil];
 }
 
 - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout
@@ -2447,11 +2464,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
-    CGPoint locationInSection = CGPointZero;
+    //CGPoint locationInSection = CGPointZero;
     for (UIView *subview in self.scroller.container.subviews) {
         if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
-            locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:subview];
-            if ([subview pointInside:locationInSection withEvent:nil]) {
+            CGPoint location = [self.view convertPoint:gesture.view.frame.origin toView:subview];
+            if ([subview pointInside:location withEvent:nil]) {
                 piece.transform = CGAffineTransformIdentity;
                 piece.alpha = 1.0000f;
                 sectionView = (MADDesignerSectionView *)subview;
@@ -2484,6 +2501,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             }
         }
     }
+    
+    CGPoint locationInSection = [self.view convertPoint:gesture.view.frame.origin toView:sectionView];
 
     if (sectionView != nil) {
         
