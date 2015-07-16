@@ -15,6 +15,7 @@
 #import "ACAccountStore+Social.h"
 #import "UIButton+FollowTwitter.h"
 #import "UIAlertController+Constructors.h"
+#import "NSAttributedString+Common.h"
 //#import "NSError+Constructors.h"
 
 @interface MADInformationTableViewController ()
@@ -121,7 +122,7 @@
             break;
             
         case 1:
-            cell.label.text = @"MAD Designer: A Breif Overview";
+            cell.label.text = @"MAD Designer: An Overview";
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.userInteractionEnabled = YES;
@@ -142,7 +143,7 @@
             break;
             
         case 4: {
-            cell.label.text = @"Everyday Apps on Twitter";
+            cell.label.text = @"Twitter";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps)];
             cell.accessoryView = b;

@@ -11,6 +11,21 @@
 
 @implementation NSAttributedString (Common)
 
++ (NSAttributedString *)EverydayAppsOnTwitter {
+    NSMutableAttributedString *everyday = [[NSMutableAttributedString alloc] initWithString:@"Everyday Apps "];
+    NSAttributedString *twitter = [NSAttributedString Twitter];
+    [everyday appendAttributedString:twitter];
+    return everyday;
+}
+
++ (NSAttributedString *)Twitter {
+    UIColor *color = [UIColor blueTwitter];
+    UIFont *fa = [UIFont fontWithName:@"FontAwesome" size:12.0000f];
+    NSDictionary *attributesTwitter = @{ NSForegroundColorAttributeName :  color, NSFontAttributeName : fa};
+    NSAttributedString *twitter = [[NSAttributedString alloc] initWithString:@"" attributes:attributesTwitter];
+    return twitter;
+}
+
 + (NSAttributedString *)FollowUsOnTwitter {
     
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -18,11 +33,7 @@
     [style setLineBreakMode:NSLineBreakByWordWrapping];
     
     UIColor *black = [UIColor blackColor];
-    UIColor *color = [UIColor blueTwitter];
-
-    UIFont *fa = [UIFont fontWithName:@"FontAwesome" size:12.0000f];
-    NSDictionary *attributesTwitter = @{ NSForegroundColorAttributeName :  color, NSFontAttributeName : fa };
-    NSMutableAttributedString *twitter = [[NSMutableAttributedString alloc] initWithString:@"" attributes:attributesTwitter];
+    NSMutableAttributedString *twitter = [NSAttributedString Twitter].mutableCopy;
 
     UIFont *sy = [[UIFont preferredFontForTextStyle:UIFontTextStyleBody] fontWithSize:12.0000f];
     NSDictionary *attributesBlack = @{ NSForegroundColorAttributeName :  black, NSFontAttributeName: sy};

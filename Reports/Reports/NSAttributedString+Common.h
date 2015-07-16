@@ -10,6 +10,8 @@
 
 @interface NSAttributedString (Common)
 
++ (NSAttributedString *)EverydayAppsOnTwitter;
++ (NSAttributedString *)Twitter;
 + (NSAttributedString *)FollowUsOnTwitter;
 
 @end
