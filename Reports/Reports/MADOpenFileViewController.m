@@ -287,7 +287,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     tapGestureRecognizer.delegate = self;
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
-    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
     MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
     [searchBar sizeToFit];
@@ -295,12 +294,16 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
     NSString *store = NSLocalizedString(@"Store", @"Store");
     UIBarButtonItem *barButtonItemLicensing = [[UIBarButtonItem alloc] initWithTitle:store style:UIBarButtonItemStylePlain target:self action:@selector(handleBarButtonItemStore:)];
+    barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:self.barButtonItemAction];
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
     [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
     [toolbarButtons addObject:barButtonItemLicensing];
+    
+    self.barButtonItemLicensing = barButtonItemLicensing;
+    
     [self setToolbarItems:toolbarButtons animated:NO];
     
     UIBarButtonItem *editButton = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
@@ -1264,7 +1267,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)done:(id)sender {
     self.editing = NO;
-    self.barButtonItemLicensing.enabled = YES;
+    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     self.barButtonItemAddNewDocument.enabled = YES;
     self.barButtonItemAbout.enabled = YES;
     self.barButtonItemInformation.enabled = YES;
