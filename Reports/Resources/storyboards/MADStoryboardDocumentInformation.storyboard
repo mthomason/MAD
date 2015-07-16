@@ -8,12 +8,12 @@
         <scene sceneID="bgC-YM-Ogl">
             <objects>
                 <tableViewController storyboardIdentifier="MADIdentifierDocumentInformationTableViewController" id="WCS-jf-IfB" customClass="MADDocumentInformationTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="FSN-D6-q4q" customClass="MADVibrantTableView">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="FSN-D6-q4q">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADTableViewCellDocumentInformation" textLabel="nPp-zi-fhb" detailTextLabel="MlX-Ss-Jei" style="IBUITableViewCellStyleValue1" id="KL0-FR-kGj" customClass="MADVibrantTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MADTableViewCellDocumentInformation" textLabel="nPp-zi-fhb" detailTextLabel="MlX-Ss-Jei" style="IBUITableViewCellStyleValue1" id="KL0-FR-kGj">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KL0-FR-kGj" id="nlE-i1-5j4">
                                     <autoresizingMask key="autoresizingMask"/>

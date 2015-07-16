@@ -34,6 +34,7 @@
     [super viewDidLoad];
     self.tableView.allowsSelection = NO;
     self.preferredContentSize = CGSizeMake(280, 200);
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,44 +51,46 @@
     return 4;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 24.0000f;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"MADTableViewCellDocumentInformation"
-                                                                    forIndexPath: indexPath];
-    cell.vibrantTableViewCellDelegate = self;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"MADTableViewCellDocumentInformation" forIndexPath: indexPath];
+    //cell.vibrantTableViewCellDelegate = self;
     MADMetaData *metadata = self.metadataItems[indexPath.section];
     NSString *systemFileSizeString;
     switch (indexPath.row) {
         case 0:
-            cell.label.text = metadata.name;
-            cell.label.textAlignment = NSTextAlignmentCenter;
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.textLabel.text = metadata.name;
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             break;
         case 1:
             systemFileSizeString = [self.numberFormatter stringFromNumber: [MTMath systemFileSizeToMB: metadata.fileSystemFileSize]];
-            cell.label.text = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             break;
         case 2: {
             NSString *date = [NSDateFormatter localizedStringFromDate: metadata.fileSystemFileCreationDate
                                                             dateStyle: NSDateFormatterShortStyle
                                                             timeStyle: NSDateFormatterShortStyle];
-            cell.label.text = [NSString stringWithFormat:@"Created %@", date];
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.textLabel.text = [NSString stringWithFormat:@"Created %@", date];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             break;
         }
         case 3: {
             NSString *date = [NSDateFormatter localizedStringFromDate: metadata.fileSystemContentChangeDate
                                                             dateStyle: NSDateFormatterShortStyle
                                                             timeStyle: NSDateFormatterShortStyle];
-            cell.label.text = [NSString stringWithFormat:@"Last changed %@", date];
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.textLabel.text = [NSString stringWithFormat:@"Last changed %@", date];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             break;
         }
         default:
             break;
     }
     
-    cell.textLabel.text = @"";
     cell.detailTextLabel.text = @"";
     return cell;
 }
