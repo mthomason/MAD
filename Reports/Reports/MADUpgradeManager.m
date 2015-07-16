@@ -71,18 +71,8 @@ const NSInteger currentMajorVersion = 8;
         }
     }
     
-    //upgradeRequired = YES;
-    //upgradeVersion7 = YES;
-    
     NSNumber *majorVersion = @(currentMajorVersion);
     [standardUserDefault setObject: majorVersion forKey: MADUpgradeLastVersionRun];
-
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [NSThread currentThread]);
-    
-    if (upgradeVersion7 && upgradeRequired) {
-        //[self migrateDocumentToGroupFolder];
-    }
-    
     
     if (installChinook || installSamples) {
         completion (YES, nil, YES);
@@ -99,7 +89,6 @@ const NSInteger currentMajorVersion = 8;
  *      Move documents to group folder.
  */
 - (void)migrateDocumentToGroupFolder {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [NSThread currentThread]);
     NSError *error = nil;
     [MADUpgradeManager installSampleDatabase:&error];
     [MADFileUtilities copyInitialFiles:MADFileExtentionMobleApplicationDocument groupId:MADIdentifierGroup];
@@ -149,8 +138,6 @@ const NSInteger currentMajorVersion = 8;
 }
 
 + (BOOL)installSamplesDocuments:(NSError **)error {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [NSThread currentThread]);
-    
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledSamples];
     if (installed == NO) {
 
@@ -171,7 +158,7 @@ const NSInteger currentMajorVersion = 8;
                                                                  isDirectory: NO];
             musicUrl = [musicUrl URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
             error = nil;
-            NSLog(@"%s, %@", __PRETTY_FUNCTION__, @"Copy");
+
             [defaultManager copyItemAtURL:sampleUrl1 toURL:londonUrl error:error];
             if (error == nil) {
                 [defaultManager copyItemAtURL:sampleUrl2 toURL:musicUrl error:error];
@@ -196,11 +183,9 @@ const NSInteger currentMajorVersion = 8;
 }
 
 + (void)installSamples {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [NSThread currentThread]);
     if ([[MTApplicationInstance mainInstance] sampleInstalled] == NO) {
         dispatch_queue_t queue = dispatch_queue_create(queueUpgrade, DISPATCH_QUEUE_SERIAL);
         dispatch_async(queue, ^{
-            NSLog(@"%s, %@", __PRETTY_FUNCTION__, [NSThread currentThread]);
             NSError *error = nil;
             BOOL installedDocs = [MADUpgradeManager installSamplesDocuments:&error];
             BOOL installedDB = [MADUpgradeManager installSampleDatabase:&error];

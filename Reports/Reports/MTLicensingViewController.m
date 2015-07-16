@@ -89,7 +89,6 @@
     
     for (SKProduct *product in products) {
         
-        //NSLog(@"Product %@", product);
         if ([product.productIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
             
             [priceFormatter setLocale:[product priceLocale]];

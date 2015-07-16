@@ -187,9 +187,6 @@
 
 - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer {
     UIView *piece = nil;
-    for (UIView *v in self.resizeHandles.resizeHandles) {
-        NSLog(@"Loc: %@", NSStringFromCGPoint([gestureRecognizer locationInView:v]));
-    }
     if ([piece isKindOfClass:[MTResizeHandleView class]]) {
         [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
         if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {

@@ -435,9 +435,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                     }
                 }
     }
-    else {
-        NSLog(@"%@", segue.identifier);
-    }
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {

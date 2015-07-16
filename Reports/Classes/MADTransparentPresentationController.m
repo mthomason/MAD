@@ -16,13 +16,6 @@
     return NO;
 }
 
-- (void)presentationTransitionWillBegin {
-    for (UIView *v in self.containerView.subviews) {
-        NSLog(@"%@", v);
-        for (UIView *va in v.subviews) {
-            NSLog(@"%@", va);
-        }
-    }
-}
+- (void)presentationTransitionWillBegin { }
 
 @end

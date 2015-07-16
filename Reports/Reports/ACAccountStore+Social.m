@@ -12,7 +12,7 @@
 @implementation ACAccountStore (Social)
 
 + (void)twitterFollow:(NSString *)screenName completion:(void (^)(BOOL success, NSError *error))completion {
-    NSLog(@"Twitter handle: %@", ACAccountTypeIdentifierTwitter);
+    
     ACAccountStore *accountStore = [[ACAccountStore alloc] init];
     ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     
@@ -29,12 +29,9 @@
                 __block BOOL success = NO;
                 for (ACAccount *twitterAccount in accountsArray) {
                     NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
-                    [tempDict setValue: screenName
-                                forKey: @"screen_name"];
-                    [tempDict setValue: @"true"
-                                forKey: @"follow"];
-                    NSLog(@"*******tempDict %@*******",tempDict);
-                    
+                    [tempDict setValue: screenName forKey: @"screen_name"];
+                    [tempDict setValue: @"true" forKey: @"follow"];
+    
                     NSURL *twitterFriendships = [NSURL URLWithString:@"https://api.twitter.com/1.1/friendships/create.json"];
                     SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:twitterFriendships parameters:tempDict];
                     [postRequest setAccount:twitterAccount];

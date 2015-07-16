@@ -77,9 +77,7 @@
         label.userInteractionEnabled = NO;
         visualEffectsView.userInteractionEnabled = NO;
         visualEffectsView.contentView.userInteractionEnabled = NO;
-        for (UIView *v in self.contentView.subviews) {
-            NSLog(@"%@", v);
-        }
+
         [self.contentView addSubview:visualEffectsView];
         self.selectionStyle = UITableViewCellSelectionStyleGray;
         self.userInteractionEnabled = YES;
