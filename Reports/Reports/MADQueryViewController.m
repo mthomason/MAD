@@ -706,7 +706,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 result.textLabel.text = message;
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
-                result.accessoryType = UITableViewCellAccessoryDetailButton;
+                //result.accessoryType = UITableViewCellAccessoryDetailButton;
                 result.tintColor = [UIColor edaBlackTwentyFivePercent];
             }
             result.textLabel.numberOfLines = 0;
