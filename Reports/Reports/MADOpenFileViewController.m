@@ -319,9 +319,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     [self addActionItemToToolbar:animated];
     
-    if (self.firstTimeViewWillAppear == NO) {
-        [self reenableDataWithSearch];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -676,18 +673,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
     [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
         [self reenable];
-    }];
-
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.collectionView.indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
-            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        }];
-        [self.collectionView.indexPathsForVisibleItems enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
-            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            [cell normalizeTint];
+        [UIView performWithoutAnimation:^{
+            [self.collectionView.backgroundView setNeedsDisplay];
+            [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
         }];
     }];
 
+    [self dismissViewControllerAnimated:YES completion:nil];
     
     self.shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -857,6 +849,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [cell.activityIndicator startAnimating];
         [self.collectionView setUserInteractionEnabled: NO];
         [self openFileWithUrl:metadata.URL];
+        [cell normalizeTint];
     }
 }
 
