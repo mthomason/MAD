@@ -652,7 +652,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark UIDocumentStateChangedNotification
 
 - (void)documentStateChanged:(NSNotification *)notification {
-
+/*
     switch (self.documentState) {
         case UIDocumentStateClosed:
             NSLog(@"\n\n\tDocument state closed.\n\n");
@@ -672,7 +672,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         default:
             break;
     }
-    
+    */
 }
 
 #pragma mark - MTDatabaseProtocol
