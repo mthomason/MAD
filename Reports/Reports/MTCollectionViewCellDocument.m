@@ -92,11 +92,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.labelTitleSub.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     [self.labelTitleSub setNeedsLayout];
 
-    UIImage *image = [UIImage imageNamed:MTImageBlank];
-    UIImageView *view = [[UIImageView alloc] initWithImage:image];
-    view.contentMode = UIViewContentModeScaleAspectFit | UIViewContentModeTop;
-    self.backgroundView = view;
-    
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
                                                                                                              action: @selector(activateEditMode:)];
     [self addGestureRecognizer: longPressGestureRecognizer];
