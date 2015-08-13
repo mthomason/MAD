@@ -1156,6 +1156,8 @@
 		4C8F99BA1ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B91ACA97C8006D3996 /* MAD Designer Designer WatchKit App.app */; };
 		4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C01ACA97C8006D3996 /* Interface.storyboard */; };
 		4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C31ACA97C9006D3996 /* Images.xcassets */; };
+		4C8FFE6F1B7D2E330056A0A5 /* MTStoryboardLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */; };
+		4C8FFE701B7D2E380056A0A5 /* MTStoryboardLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */; };
 		4C90D47E19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
 		4C90D47F19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
@@ -5911,6 +5913,7 @@
 				4C0E77C0163B5AEC003B951E /* UIImageAlignCenter20@2x.png in Resources */,
 				4C0E77C1163B5AEC003B951E /* UIImageAlignLeft20@2x.png in Resources */,
 				4C0E77C2163B5AEC003B951E /* UIImageAlignRight20@2x.png in Resources */,
+				4C8FFE701B7D2E380056A0A5 /* MTStoryboardLaunchImagesOS7.storyboard in Resources */,
 				4CD0B29C1AC90856005CA75C /* MADStoryboardInformationTable.storyboard in Resources */,
 				4C0E77C4163B5AEC003B951E /* UIImageBold20.png in Resources */,
 				4CD0B31C1AC909E0005CA75C /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
@@ -6739,6 +6742,7 @@
 				4CD0B1AC1AC8FB2D005CA75C /* Icon-57-Designer-Modern@2x.png in Resources */,
 				4CD0B1C21AC8FB2D005CA75C /* Icon-72-Designer-Modern.png in Resources */,
 				4CD0B2A91AC908E9005CA75C /* MADDesigner.storyboard in Resources */,
+				4C8FFE6F1B7D2E330056A0A5 /* MTStoryboardLaunchImagesOS7.storyboard in Resources */,
 				4CD0B3711AC909E0005CA75C /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4CD0B3511AC909E0005CA75C /* UIImagePatternGoldMetallic@2x.png in Resources */,
 				4CD0B27B1AC90339005CA75C /* MADIcon44x58.png in Resources */,

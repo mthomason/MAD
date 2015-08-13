@@ -125,15 +125,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         [self loadAndDisplayWindow];
     }
     
-//    #if DEBUG
-        //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-//    #endif
-
-    //MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];
-    //dispatch_async(self.appDelegateQueue, ^{
-        //[upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) { }];
-    //});
-    
     [[MTApplicationInstance mainInstance] initalizeAppearance];
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
         [self getUserCloudPrefs];
@@ -523,18 +514,19 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)loadAndDisplayWindow {
     
-    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    id initViewController = [MTApplicationInstance initalViewController];
+    UIWindow *window = [UIApplication sharedApplication].windows.firstObject;//[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    //id initViewController = [MTApplicationInstance initalViewController];
     
     NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
     
-    window.rootViewController = initViewController;
-    self.navigationController = initViewController;
+    //window.rootViewController = initViewController;
+    MTNavigationController *navigationController = (MTNavigationController *)window.rootViewController;
+    self.navigationController = navigationController;
     
     NSAssert([self.navigationController.topViewController isKindOfClass:@class([MADOpenFileViewController class])] == NO, @"%s Can't find MADOpenFileViewController.", __PRETTY_FUNCTION__);
     
     self.openFileViewController = (MADOpenFileViewController *)self.navigationController.topViewController;
-    [window makeKeyAndVisible];
+    //[window makeKeyAndVisible];
     
     
     self.window = window;

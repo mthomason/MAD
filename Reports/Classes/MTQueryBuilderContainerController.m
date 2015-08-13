@@ -196,7 +196,10 @@
 }
 
 - (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];/*
+    [super viewWillLayoutSubviews];
+    [self.navigationItem.titleView sizeToFit];
+
+    /*
     UIViewController *primaryViewController = self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
     UIViewController *secondaryViewController = self.viewControllers.count > 1 ? self.viewControllers[1] : nil;
     if (primaryViewController) {

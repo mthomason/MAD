@@ -15,7 +15,13 @@ plistwatchkitapp=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ App/Info.plist
 
 versionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1]}' )
 versionnum=${versionnum#"v"}
-currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
+
+versionminor=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); a[2]}' )
+if [-n "$versionminor"]; then
+    currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
+else
+    currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] ".0"}' )
+fi
 currentvnum=${currentvnum#"v"}
 buildnum=$( git rev-list HEAD --count )
 
