@@ -22,7 +22,11 @@ if [-n "$versionminor"]; then
 else
     currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] ".0"}' )
 fi
+
+#Use this while developing.
+currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
 currentvnum=${currentvnum#"v"}
+
 buildnum=$( git rev-list HEAD --count )
 
 if [[ "${versionnum}" == "" ]]; then
