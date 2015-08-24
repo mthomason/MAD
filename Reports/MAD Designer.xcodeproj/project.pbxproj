@@ -1894,13 +1894,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4C2F254A1B53FA1C004DFAEC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CF3C594194F80F600E5705B;
-			remoteInfo = Scrimpter;
-		};
 		4C2F254C1B53FA1C004DFAEC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */;
@@ -1935,13 +1928,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4CDA76CB1825E8D400E462F6;
 			remoteInfo = Barcodes;
-		};
-		4C359D861B07CBF100B3E9E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CF3C594194F80F600E5705B;
-			remoteInfo = Scrimpter;
 		};
 		4C359D881B07CBF100B3E9E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2040,20 +2026,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4CEBFA071760EF8B00FFA4F4;
 			remoteInfo = libTdsClient;
-		};
-		4CF3C5CC194F80F700E5705B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CF3C595194F80F600E5705B;
-			remoteInfo = Scrimpter;
-		};
-		4CF3C5CE194F80F700E5705B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CF3C5A5194F80F600E5705B;
-			remoteInfo = ScrimpterTests;
 		};
 		4CFFD9F219D5CC54001D0B02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2961,7 +2933,6 @@
 		4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extras.m"; sourceTree = "<group>"; };
 		4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBorderedView.h; sourceTree = "<group>"; };
 		4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBorderedView.m; sourceTree = "<group>"; };
-		4CC7F6B41962A43100A84FC0 /* MADScrimpter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADScrimpter.h; path = Scrimpter/Scrimpter/Scrimpter/MADScrimpter.h; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageBolt20.png; path = Reports/UIImageBolt20.png; sourceTree = "<group>"; };
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageBolt20@2x.png"; path = "Reports/UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellQueryPredicate.m; sourceTree = "<group>"; };
@@ -3289,7 +3260,6 @@
 		4CF1335316CD1FE200FD0F0B /* MADQueryVisualizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationViewController.h; sourceTree = "<group>"; };
 		4CF1335416CD1FE300FD0F0B /* MADQueryVisualizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADQueryVisualizationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Scrimpter.xcodeproj; path = Scrimpter/Scrimpter/Scrimpter.xcodeproj; sourceTree = "<group>"; };
 		4CF3E77819F04D2D0064DA5F /* MADSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSearchBar.h; sourceTree = "<group>"; };
 		4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSearchBar.m; sourceTree = "<group>"; };
 		4CF531971A08092F00511BEF /* MADToolboxPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxPresentationController.h; sourceTree = "<group>"; };
@@ -5050,23 +5020,6 @@
 			name = User;
 			sourceTree = "<group>";
 		};
-		4CC7F6B51962A44000A84FC0 /* libScrimpter */ = {
-			isa = PBXGroup;
-			children = (
-				4CC7F6B61962A45800A84FC0 /* headers */,
-				4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */,
-			);
-			name = libScrimpter;
-			sourceTree = "<group>";
-		};
-		4CC7F6B61962A45800A84FC0 /* headers */ = {
-			isa = PBXGroup;
-			children = (
-				4CC7F6B41962A43100A84FC0 /* MADScrimpter.h */,
-			);
-			name = headers;
-			sourceTree = "<group>";
-		};
 		4CCD8CF1150385A5002B9E77 /* Patterns */ = {
 			isa = PBXGroup;
 			children = (
@@ -5478,22 +5431,12 @@
 			name = "Query Builder";
 			sourceTree = "<group>";
 		};
-		4CF3C5BF194F80F600E5705B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4CF3C5CD194F80F700E5705B /* libScrimpter.a */,
-				4CF3C5CF194F80F700E5705B /* ScrimpterTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4CF46F5A1AC64A2F007C0A82 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
 				4C8CD98B1AD1CEEB00B7B9EA /* libMAD */,
 				4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */,
 				4CF46F871AC64BBE007C0A82 /* libCloudManager */,
-				4CC7F6B51962A44000A84FC0 /* libScrimpter */,
 				4C3A969E189F7DFC007AF476 /* libSqlite3 */,
 				4C3A969D189F7DCF007AF476 /* libSybdb */,
 				4C3A969C189F7D51007AF476 /* libDataStructures */,
@@ -5575,7 +5518,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C2F25491B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F254B1B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F254D1B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F254F1B53FA1C004DFAEC /* PBXTargetDependency */,
@@ -5600,7 +5542,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C359D871B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D891B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D8B1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D8D1B07CBF100B3E9E0 /* PBXTargetDependency */,
@@ -5773,10 +5714,6 @@
 					ProjectRef = 4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */;
 				},
 				{
-					ProductGroup = 4CF3C5BF194F80F600E5705B /* Products */;
-					ProjectRef = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
-				},
-				{
 					ProductGroup = 4C8F99821AC9E1CB006D3996 /* Products */;
 					ProjectRef = 4C8F99811AC9E1CB006D3996 /* Sqlite.xcodeproj */;
 				},
@@ -5848,20 +5785,6 @@
 			fileType = archive.ar;
 			path = liblibTdsClient.a;
 			remoteRef = 4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CF3C5CD194F80F700E5705B /* libScrimpter.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libScrimpter.a;
-			remoteRef = 4CF3C5CC194F80F700E5705B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CF3C5CF194F80F700E5705B /* ScrimpterTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ScrimpterTests.xctest;
-			remoteRef = 4CF3C5CE194F80F700E5705B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4CFFD9F319D5CC54001D0B02 /* Tds Tests.xctest */ = {
@@ -7801,11 +7724,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4C2F25491B53FA1C004DFAEC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Scrimpter;
-			targetProxy = 4C2F254A1B53FA1C004DFAEC /* PBXContainerItemProxy */;
-		};
 		4C2F254B1B53FA1C004DFAEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Sqlite;
@@ -7830,11 +7748,6 @@
 			isa = PBXTargetDependency;
 			name = Barcodes;
 			targetProxy = 4C2F25541B53FA1C004DFAEC /* PBXContainerItemProxy */;
-		};
-		4C359D871B07CBF100B3E9E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Scrimpter;
-			targetProxy = 4C359D861B07CBF100B3E9E0 /* PBXContainerItemProxy */;
 		};
 		4C359D891B07CBF100B3E9E0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

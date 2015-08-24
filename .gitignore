@@ -36,6 +36,9 @@ StaticLibraries/freetds/i386/share
 
 .Trashes
 
+
+*.mov
+
 # c.f. http://www.westwind.com/reference/os-x/invisibles.html
 
 *.swp
