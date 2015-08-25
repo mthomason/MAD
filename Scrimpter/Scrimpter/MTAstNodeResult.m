@@ -19,7 +19,7 @@
 }
 
 - (MTAbstractSyntaxTree *)expression {
-    return [self leftNode];
+    return self.leftAST;
 }
 
 - (MADValue *)evaluate {

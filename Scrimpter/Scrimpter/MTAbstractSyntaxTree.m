@@ -138,7 +138,6 @@
             break;
         case SCNodeTypeNumberValue:
             node = [[MTAstNodeExpression alloc] initWithExpression:expression];
-            //node = [[MTAstNodeNumberValue alloc] initWithNumber:((MTAstNodeNumberValue *)expression).number];
             break;
         case SCNodeTypeResult:
             node = [[MTAstNodeExpression alloc] initWithExpression:expression];

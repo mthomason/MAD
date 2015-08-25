@@ -26,20 +26,12 @@
     return self;
 }
 
-- (MTAbstractSyntaxTree *)rightNode {
-    return nil;
-}
-
-- (MTAbstractSyntaxTree *)leftNode {
-    return nil;
-}
-
 - (SCNodeType)nodetype {
     return SCNodeTypeSymbolReference;
 }
 
 - (NSString *)symbol {
-    return [(MADSymbolReference *)[self leftNode] symbol];
+    return [(MADSymbolReference *)[self leftAST] symbol];
 }
 
 - (MADValue *)evaluate {

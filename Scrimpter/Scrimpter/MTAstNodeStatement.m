@@ -13,15 +13,10 @@
 @implementation MTAstNodeStatement
 
 - (id)initWithStatement:(MTAbstractSyntaxTree *)node {
-    self = [super initWithNodeType:SCNodeTypeStatement andValues:nil];
-    if (self) {
-        [self setStatement:node];
-    }
+    MTPair *p = [[MTPair alloc] initWithLeft:node andRight:nil];
+    self = [super initWithNodeType:SCNodeTypeStatement andValues:p];
+    if (self) { }
     return self;
-}
-
-- (void)setStatement:(MTAbstractSyntaxTree *)statment {
-    [self setLeftNode:statment];
 }
 
 - (MTAbstractSyntaxTree *)statement {
