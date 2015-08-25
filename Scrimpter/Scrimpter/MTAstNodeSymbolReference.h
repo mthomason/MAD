@@ -15,8 +15,6 @@
 
 @interface MTAstNodeSymbolReference : MTAbstractSyntaxTree
 
-@property (nonatomic, strong, readonly) MADSymbolReference *symbolReference;
-
 - (id)initWithSymbolReference:(MADSymbolReference *)symbol;
 
 - (NSString *)symbol;

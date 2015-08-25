@@ -27,8 +27,8 @@
 
 - (MADValue *)evaluate {
     BOOL evalution;
-    MADValue *left = self.leftNode.evaluate;
-    MADValue *right = self.rightNode.evaluate;
+    MADValue *left = [self.leftAST evaluate];
+    MADValue *right = [self.rightAST evaluate];
     
     evalution = left.type == right.type;
     
@@ -140,6 +140,36 @@
             return false;
             break;
     }
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"********* MTAstNodeComparson *********\n"];
+    switch (self.comparsonType) {
+        case SCComparesonGreaterThan:
+            [description appendString:@"Greater Than"];
+            break;
+        case SCComparesonLessThan:
+            [description appendString:@"Less Than"];
+            break;
+        case SCComparesonEqualTo:
+            [description appendString:@"Equal To"];
+            break;
+        case SCComparesonNotEqualTo:
+            [description appendString:@"Not Equal To"];
+            break;
+        case SCComparesonGreatThanOrEqualTo:
+            [description appendString:@"Greater Than or Equal To"];
+            break;
+        case SCComparesonLessThanOrEqualTo:
+            [description appendString:@"Less Than or Equal To"];
+            break;
+        default:
+            [description appendString:@"Unknown"];
+            break;
+    }
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

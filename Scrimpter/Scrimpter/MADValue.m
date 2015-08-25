@@ -96,4 +96,28 @@
     return [self value:nil withType:SCVarableTypeNull];
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Symbol:                 %@\n", self.value];
+    switch (self.type) {
+        case SCVarableTypeDouble:
+            [description appendFormat:@"Type:                   Double"];
+            break;
+        case SCVarableTypeString:
+            [description appendFormat:@"Type:                   String"];
+            break;
+        case SCVarableTypeBoolean:
+            [description appendFormat:@"Type:                   Boolean"];
+            break;
+        case SCVarableTypeNull:
+            [description appendFormat:@"Type:                   Null"];
+            break;
+        default:
+            break;
+    }
+    [description appendFormat:@"*********"];
+    return description;
+}
+
 @end

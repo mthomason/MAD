@@ -8,29 +8,21 @@
 
 #import "MTAstNodeNumberValue.h"
 #import "MADValue.h"
+#import "MTPair.h"
 
 @interface MTAstNodeNumberValue ()
 
-@property (nonatomic, assign) double number;
+//@property (nonatomic, strong, readwrite) NSNumber *number;
 
 @end
 
 @implementation MTAstNodeNumberValue
 
-- (id)initWithNumber:(double)number {
-    self = [super initWithNodeType:SCNodeTypeNumberValue andValues:nil];
-    if (self) {
-        [self setNumber:number];
-    }
+- (id)initWithNumber:(NSNumber *)number {
+    MTPair *pair = [[MTPair alloc] initWithLeft:number andRight:nil];
+    self = [super initWithNodeType:SCNodeTypeNumberValue andValues:pair];
+    if (self) { }
     return self;
-}
-
-- (MTTree *)rightNode {
-    return nil;
-}
-
-- (MTTree *)leftNode {
-    return nil;
 }
 
 - (SCNodeType)nodetype {
@@ -38,8 +30,15 @@
 }
 
 - (MADValue *)evaluate {
-    NSNumber *number = [NSNumber numberWithDouble:[self number]];
-    return [MADValue value:number withType:SCVarableTypeDouble];
+    return [MADValue value:self.leftNode withType:SCVarableTypeDouble];
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"********* MTAstNodeNumberValue *********\n"];
+    [description appendFormat:@"%@", self.leftNode];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

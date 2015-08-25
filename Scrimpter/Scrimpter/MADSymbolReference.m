@@ -40,4 +40,15 @@
     return result;
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Symbol:                 %@\n", self.symbol];
+    [description appendFormat:@"Text:                   %@\n", self.filename];
+    [description appendFormat:@"Flags:                  %ld\n", (long)self.flasgs];
+    [description appendFormat:@"Lines & Columns:        (%ld, %ld)\n", (long)self.line, (long)self.column];
+    [description appendFormat:@"*********"];
+    return description;
+}
+
 @end

@@ -13,16 +13,19 @@
 @implementation MTAstNodeStatement
 
 - (id)initWithStatement:(MTAbstractSyntaxTree *)node {
-    MTPair *pair = [MTPair pairWithLeft:node andRight:nil];
-    self = [super initWithNodeType:SCNodeTypeStatement andValues:pair];
+    self = [super initWithNodeType:SCNodeTypeStatement andValues:nil];
     if (self) {
-        
+        [self setStatement:node];
     }
     return self;
 }
 
+- (void)setStatement:(MTAbstractSyntaxTree *)statment {
+    [self setLeftNode:statment];
+}
+
 - (MTAbstractSyntaxTree *)statement {
-    return [self leftNode];
+    return self.leftAST;
 }
 
 - (MADValue *)evaluate {

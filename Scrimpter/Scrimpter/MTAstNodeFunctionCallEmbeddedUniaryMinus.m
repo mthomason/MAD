@@ -30,7 +30,7 @@
 }
 
 - (MADValue *)evaluate {
-    return [MTAstNodeFunctionCallEmbeddedUniaryMinus uniaryMinus:[[self leftNode] evaluate]];
+    return [MTAstNodeFunctionCallEmbeddedUniaryMinus uniaryMinus:[self.leftAST evaluate]];
 }
 
 + (MADValue *)uniaryMinus:(MADValue *)value {

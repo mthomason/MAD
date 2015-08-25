@@ -131,7 +131,7 @@ list: stmt list                                 { $$ = nodeForStatementAndList(n
 
 stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2, $4, nil); }
     | IF exp '{' list '}' ELSE '{' list '}'     { $$ = nodeForIfThenStatement($2, $4, $8); }
-    | WHILE exp DO list                         { while ($2) { $$ = $4; } }
+    //| WHILE exp DO list                         { while ($2) { $$ = $4; } }
     | exp                                       { $$ = nodeForExpression($1); }
     | VARABLE IDENTIFIER '=' exp ';'            { $$ = nodeForAssigningValueToSymbolReference($2, $4); }
     | IDENTIFIER '=' exp ';'                    { $$ = nodeForAssigningValueToSymbolReference($1, $3); }
@@ -142,7 +142,7 @@ stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2
 exp : expnum                                    { $$ = $1; }
     | expbool                                   { $$ = $1; }
     | ERROR                                     { YYABORT; }
-    | '(' exp ')'                               { $$ = nodeForExpression($2); }
+    | '(' exp ')'                               { $$= $2; /* $$ = nodeForExpression($2); */ }
     | exp COMPARESON exp                        { $$ = nodeForComparsonOfValues($2, $1, $3); }
     | exp '.' IDENTIFIER '(' ')'                { $$ = nodeForFunction($1, [$3 symbol], nil); }
     | exp '.' IDENTIFIER '(' explist ')'        { $$ = nodeForFunction($1, [$3 symbol], $5); }
@@ -157,14 +157,14 @@ expbool: BOOLEAN                                { $$ = nodeForBool($1); }
     //expstr: STRING                                  { $$ = nodeForString($1); }
     //;
 
-expnum : '(' expnum ')'                         { $$ = nodeForExpression($2); }
-    | factor                                    { $$ = nodeForExpression($1); }
+expnum : '(' expnum ')'                         { $$ = $2; /*$$ = nodeForExpression($2);*/ }
+    | factor                                    //{ $$ = nodeForExpression($1); }
     | expnum COMPARESON factor                  { $$ = nodeForComparsonOfValues($2, $1, $3); }
-    | expnum '+' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
+    | expnum '+' factor                         { NSLog(@"1:\t%@\n", $1);NSLog(@"3:\t%@\n", $3); $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
     | expnum '-' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
 ;
 
-factor : term                                   { $$ = nodeForExpression($1); }
+factor : term                                   //{ $$ = nodeForExpression($1); }
     | factor '*' term                           { $$ = nodeForArithmeticOfValues(SCArithmeticMultiply, $1, $3); }
     | factor '/' term                           { $$ = nodeForArithmeticOfValues(SCArithmeticDivide, $1, $3); }
 ;
@@ -220,7 +220,8 @@ MTAbstractSyntaxTree *nodeForSymbolReference(MADSymbolReference *symbolReference
 }
 
 MTAbstractSyntaxTree *nodeForNumber(double n) {
-    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithNumber:n];
+    NSNumber *dobj = [NSNumber numberWithDouble:n];
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithNumber:dobj];
     return result;
 }
 

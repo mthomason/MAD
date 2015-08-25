@@ -27,6 +27,14 @@
 
 @implementation MTAbstractSyntaxTree
 
+- (MTAbstractSyntaxTree *)leftAST {
+    return (MTAbstractSyntaxTree *)self.leftNode;
+}
+
+- (MTAbstractSyntaxTree *)rightAST {
+    return (MTAbstractSyntaxTree *)self.rightNode;
+}
+
 - (id)initWithNodeType:(SCNodeType)type andValues:(MTPair *)values {
     self = [super initWithLeftTree:[values left] andRightTree:[values right]];
     if (self) {
@@ -65,7 +73,7 @@
 }
 
 // MARK: MTAstNodeNumberValue
-- (instancetype)initWithNumber:(double)number {
+- (instancetype)initWithNumber:(NSNumber *)number {
     MTAstNodeNumberValue *node = [[MTAstNodeNumberValue alloc] initWithNumber:number];
     return node;
 }
@@ -102,7 +110,67 @@
 
 //MTAstNodeExpression
 - (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression {
-    MTAstNodeExpression *node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+    id node = nil;
+    switch (expression.nodetype) {
+        case SCNodeTypeArithmetic:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeAssignemnt:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeBooleanValue:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeBuiltInFunction:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeComparison:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeExpression:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeExpressionList:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeIf:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeNumberValue:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            //node = [[MTAstNodeNumberValue alloc] initWithNumber:((MTAstNodeNumberValue *)expression).number];
+            break;
+        case SCNodeTypeResult:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeStatement:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeStatementList:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeStringValue:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeSymbolList:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeSymbolReference:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeUnaryMinus:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeUserFunction:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        case SCNodeTypeWhile:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+        default:
+            node = [[MTAstNodeExpression alloc] initWithExpression:expression];
+            break;
+    }
     return node;
 }
 
@@ -134,6 +202,77 @@
 - (instancetype)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value {
     MTAstNodeFunctionCallEmbeddedUniaryMinus *node = [[MTAstNodeFunctionCallEmbeddedUniaryMinus alloc] initWithValueForUniaryMinus:value];
     return node;
+}
+
++ (NSString *)SCNodeTypeDescription:(SCNodeType)type {
+    switch (type) {
+        case SCNodeTypeArithmetic:
+            return @"SCNodeTypeArithmetic";
+            break;
+        case SCNodeTypeComparison:
+            return @"SCNodeTypeComparison";
+            break;
+        case SCNodeTypeUnaryMinus:
+            return @"SCNodeTypeUnaryMinus";
+            break;
+        case SCNodeTypeExpression:
+            return @"SCNodeTypeExpression";
+            break;
+        case SCNodeTypeExpressionList:
+            return @"SCNodeTypeExpressionList";
+            break;
+        case SCNodeTypeStatement:
+            return @"SCNodeTypeStatement";
+            break;
+        case SCNodeTypeStatementList:
+            return @"SCNodeTypeStatementList";
+            break;
+        case SCNodeTypeSymbolList:
+            return @"SCNodeTypeSymbolList";
+            break;
+        case SCNodeTypeIf:
+            return @"SCNodeTypeIf";
+            break;
+        case SCNodeTypeWhile:
+            return @"SCNodeTypeWhile";
+            break;
+        case SCNodeTypeResult:
+            return @"SCNodeTypeResult";
+            break;
+        case SCNodeTypeNumberValue:
+            return @"SCNodeTypeNumberValue";
+            break;
+        case SCNodeTypeStringValue:
+            return @"SCNodeTypeStringValue";
+            break;
+        case SCNodeTypeBooleanValue:
+            return @"SCNodeTypeBooleanValue";
+            break;
+        case SCNodeTypeSymbolReference:
+            return @"SCNodeTypeSymbolReference";
+            break;
+        case SCNodeTypeAssignemnt:
+            return @"SCNodeTypeAssignemnt";
+            break;
+        case SCNodeTypeBuiltInFunction:
+            return @"SCNodeTypeBuiltInFunction";
+            break;
+        case SCNodeTypeUserFunction:
+            return @"SCNodeTypeUserFunction";
+            break;
+        default:
+            return @"Unknown";
+            break;
+    }
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"********* MTAstNodeNumberValue *********\n"];
+    NSString *type = [MTAbstractSyntaxTree SCNodeTypeDescription:self.nodetype];
+    [description appendFormat:@"                %@", type];
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

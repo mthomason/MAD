@@ -53,9 +53,8 @@ typedef NS_ENUM(NSInteger, SCArithmetic) {
 @interface MTAbstractSyntaxTree : MTTree
 
 @property (nonatomic, assign) SCNodeType nodetype;
-
-@property (nonatomic, strong) MTAbstractSyntaxTree *leftNode;
-@property (nonatomic, strong) MTAbstractSyntaxTree *rightNode;
+@property (readonly) MTAbstractSyntaxTree *leftAST;
+@property (readonly) MTAbstractSyntaxTree *rightAST;
 
 - (id)initWithNodeType:(SCNodeType)type andValues:(MTPair *)values;
 - (MADValue *)evaluate;
@@ -72,7 +71,7 @@ typedef NS_ENUM(NSInteger, SCArithmetic) {
 - (instancetype)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values;
 
 //MTAstNodeNumberValue
-- (instancetype)initWithNumber:(double)number;
+- (instancetype)initWithNumber:(NSNumber *)number;
 
 //MTAstNodeStringValue
 - (instancetype)initWithString:(NSString *)string;

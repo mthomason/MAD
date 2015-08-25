@@ -69,6 +69,12 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+- (void)test2Plus2NoReturn {
+    __autoreleasing NSError *error = nil;
+    BOOL success = [self testScript:@"2+2;" forValue:nil error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 - (void)test2Plus2 {
     __autoreleasing NSError *error = nil;
     BOOL success = [self testScript:@"return 2+2;" forValue:@(4) error:&error];

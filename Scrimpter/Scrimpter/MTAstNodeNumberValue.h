@@ -13,7 +13,9 @@
 
 @interface MTAstNodeNumberValue : MTAbstractSyntaxTree
 
-- (id)initWithNumber:(double)number;
+//@property (nonatomic, strong, readonly) NSNumber *number;
+
+- (id)initWithNumber:(NSNumber *)number;
 
 @end
 

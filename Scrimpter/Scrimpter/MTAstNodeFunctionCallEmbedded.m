@@ -103,7 +103,7 @@
 
 - (MADValue *)evaluateNumber {
     MADValue *result;
-    MADValue *baseWrapper = [[self leftNode] evaluate];
+    MADValue *baseWrapper = [self.leftAST evaluate];
     double base = [baseWrapper doubleValue];
     double r = 0;
     if (base != NAN) {
@@ -111,7 +111,7 @@
         switch ((SCFunctionTypeNumber)[self function]) {
                 
             case SCFunctionTypeNumericPower: {
-                MADValue *exponantWrapper = [[self rightNode] evaluate];
+                MADValue *exponantWrapper = [self.rightAST evaluate];
                 double exponant = [exponantWrapper doubleValue];
                 r = exponant != NAN ? pow(base, exponant) : NAN;
                 break;
@@ -134,7 +134,7 @@
                 break;
 
             case SCFunctionTypeNumericModulus: {
-                MADValue *exponantWrapper = [[self rightNode] evaluate];
+                MADValue *exponantWrapper = [self.rightAST evaluate];
                 double divisor = [exponantWrapper doubleValue];
                 r = divisor != NAN ? fmod(base, divisor) : NAN;
                 break;
@@ -161,19 +161,19 @@
     switch ((SCFunctionTypeString)[self function]) {
         
         case SCFunctionTypeStringConcat:
-            rs = [[[[self leftNode] evaluate] stringValue] stringByAppendingString:[[[self rightNode] evaluate] stringValue]];
+            rs = [[[self.leftAST evaluate] stringValue] stringByAppendingString:[[self.rightAST evaluate] stringValue]];
             break;
         
         case SCFunctionTypeStringLower:
-            rs = [[[[self leftNode] evaluate] stringValue] lowercaseString];
+            rs = [[[self.leftAST evaluate] stringValue] lowercaseString];
             break;
 
         case SCFunctionTypeStringUpper:
-            rs = [[[[self leftNode] evaluate] stringValue] uppercaseString];
+            rs = [[[self.leftAST evaluate] stringValue] uppercaseString];
             break;
             
         default:
-            rs = [[[self leftNode] evaluate] stringValue];
+            rs = [[self.leftAST evaluate] stringValue];
             break;
     }
     return [MADValue value: rs

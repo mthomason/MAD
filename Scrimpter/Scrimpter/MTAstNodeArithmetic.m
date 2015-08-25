@@ -26,8 +26,8 @@
 }
 
 - (MADValue *)evaluate {
-    MADValue *left = [[self leftNode] evaluate];
-    MADValue *right = [[self rightNode] evaluate];
+    MADValue *left = [[self leftAST] evaluate];
+    MADValue *right = [[self rightAST] evaluate];
     double leftValue = [[left value] doubleValue];
     double rightValue = [[right value] doubleValue];
     double result;
@@ -54,6 +54,30 @@
 
 - (SCNodeType)nodetype {
     return SCNodeTypeArithmetic;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"********* MTAstNodeArithmetic *********\n"];
+    switch (self.prodcure) {
+        case SCArithmeticAdd:
+            [description appendString:@"Add"];
+            break;
+        case SCArithmeticSubtract:
+            [description appendString:@"Subtract"];
+            break;
+        case SCArithmeticMultiply:
+            [description appendString:@"Multiply"];
+            break;
+        case SCArithmeticDivide:
+            [description appendString:@"Divide"];
+            break;
+        default:
+            [description appendString:@"Unknown"];
+            break;
+    }
+    [description appendFormat:@"*********"];
+    return description;
 }
 
 @end

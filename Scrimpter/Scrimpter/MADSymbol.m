@@ -36,4 +36,16 @@ void (^Scrimpted)(BOOL success, id result, NSError *error);
     self.symbolReferences = [self.symbolReferences arrayByAddingObject:symbolReference];
 }
 
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"*********\n"];
+    [description appendFormat:@"Name:                 %@\n", self.name];
+    [description appendString:@"References:\n"];
+    for (id obj in self.symbolReferences) {
+        [description appendFormat:@"%@", obj];
+    }
+    [description appendFormat:@"*********"];
+    return description;
+}
+
 @end

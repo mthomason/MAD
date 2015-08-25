@@ -11,28 +11,26 @@
 #import "MADSymbol.h"
 #import "MADScrimpter.h"
 #import "MADSymbolTable.h"
+#import "MTPair.h"
 
 @interface MTAstNodeSymbolReference ()
-
-@property (nonatomic, strong, readwrite) MADSymbolReference *symbolReference;
 
 @end
 
 @implementation MTAstNodeSymbolReference
 
 - (id)initWithSymbolReference:(MADSymbolReference *)symbolReference {
-    self = [super initWithNodeType:SCNodeTypeSymbolReference andValues:nil];
-    if (self) {
-        [self setSymbolReference:symbolReference];
-    }
+    MTPair *p = [[MTPair alloc] initWithLeft:symbolReference andRight:nil];
+    self = [super initWithNodeType:SCNodeTypeSymbolReference andValues:p];
+    if (self) { }
     return self;
 }
 
-- (MTTree *)rightNode {
+- (MTAbstractSyntaxTree *)rightNode {
     return nil;
 }
 
-- (MTTree *)leftNode {
+- (MTAbstractSyntaxTree *)leftNode {
     return nil;
 }
 
@@ -41,7 +39,7 @@
 }
 
 - (NSString *)symbol {
-    return [[self symbolReference] symbol];
+    return [(MADSymbolReference *)[self leftNode] symbol];
 }
 
 - (MADValue *)evaluate {

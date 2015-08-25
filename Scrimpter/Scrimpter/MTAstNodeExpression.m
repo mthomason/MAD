@@ -12,8 +12,8 @@
 @implementation MTAstNodeExpression
 
 - (id)initWithExpression:(MTAbstractSyntaxTree *)node {
-    MTPair *pair = [MTPair pairWithLeft:node andRight:nil];
-    self = [super initWithNodeType:SCNodeTypeExpression andValues:pair];
+    MTPair *p = [[MTPair alloc] initWithLeft:node.leftNode andRight:node.rightNode];
+    self = [super initWithNodeType:SCNodeTypeExpression andValues:p];
     if (self) {
 
     }
@@ -21,7 +21,7 @@
 }
 
 - (MADValue *)evaluate {
-    return [[self leftNode] evaluate];
+    return [self.leftAST evaluate];
 }
 
 @end
