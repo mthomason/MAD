@@ -15,7 +15,7 @@
 
 @interface MTAstNodeSymbolAsignNumber : MTAbstractSyntaxTree
 
-- (id)initWithSymbol:(MADSymbol *)symbol andValue:(MTAbstractSyntaxTree *)value;
+- (instancetype)initWithSymbol:(MADSymbol *)symbol andValue:(MTAbstractSyntaxTree *)value;
 - (MTAbstractSyntaxTree *)value;
 
 @property (nonatomic, strong, readonly) MADSymbol *symbol;

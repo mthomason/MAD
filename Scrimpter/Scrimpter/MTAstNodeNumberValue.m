@@ -12,13 +12,11 @@
 
 @interface MTAstNodeNumberValue ()
 
-//@property (nonatomic, strong, readwrite) NSNumber *number;
-
 @end
 
 @implementation MTAstNodeNumberValue
 
-- (id)initWithNumber:(NSNumber *)number {
+- (instancetype)initWithNumber:(NSNumber *)number {
     MTPair *pair = [[MTPair alloc] initWithLeft:number andRight:nil];
     self = [super initWithNodeType:SCNodeTypeNumberValue andValues:pair];
     if (self) { }

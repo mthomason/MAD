@@ -21,7 +21,7 @@
 
 @implementation MTAstNodeFunctionCallEmbedded
 
-- (id)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList {
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList {
     MTPair *pair = [MTPair pairWithLeft:expression andRight:expressionList];
     self = [super initWithNodeType:SCNodeTypeBuiltInFunction andValues:pair];
     if (self) {

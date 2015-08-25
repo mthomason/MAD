@@ -40,7 +40,7 @@ typedef NS_ENUM(NSUInteger, SCFunctionTypeNumber) {
 
 @interface MTAstNodeFunctionCallEmbedded : MTAbstractSyntaxTree
 
-- (id)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList;
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList;
 
 @end
 

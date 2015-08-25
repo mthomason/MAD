@@ -13,7 +13,7 @@
 
 @interface MTAstNodeComparson : MTAbstractSyntaxTree
 
-- (id)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values;
+- (instancetype)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values;
 
 @end
 

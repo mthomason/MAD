@@ -12,7 +12,7 @@
 
 @implementation MTAstNodeStatement
 
-- (id)initWithStatement:(MTAbstractSyntaxTree *)node {
+- (instancetype)initWithStatement:(MTAbstractSyntaxTree *)node {
     MTPair *p = [[MTPair alloc] initWithLeft:node andRight:nil];
     self = [super initWithNodeType:SCNodeTypeStatement andValues:p];
     if (self) { }

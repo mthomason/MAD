@@ -13,7 +13,7 @@
 
 @interface MTAstNodeArithmetic : MTAbstractSyntaxTree
 
-- (id)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values;
+- (instancetype)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values;
 
 @end
 

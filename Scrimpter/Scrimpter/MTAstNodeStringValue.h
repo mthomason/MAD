@@ -13,7 +13,7 @@
 
 @interface MTAstNodeStringValue : MTAbstractSyntaxTree
 
-- (id)initWithString:(NSString *)string;
+- (instancetype)initWithString:(NSString *)string;
 
 @end
 

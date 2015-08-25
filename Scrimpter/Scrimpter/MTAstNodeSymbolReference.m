@@ -19,7 +19,7 @@
 
 @implementation MTAstNodeSymbolReference
 
-- (id)initWithSymbolReference:(MADSymbolReference *)symbolReference {
+- (instancetype)initWithSymbolReference:(MADSymbolReference *)symbolReference {
     MTPair *p = [[MTPair alloc] initWithLeft:symbolReference andRight:nil];
     self = [super initWithNodeType:SCNodeTypeSymbolReference andValues:p];
     if (self) { }

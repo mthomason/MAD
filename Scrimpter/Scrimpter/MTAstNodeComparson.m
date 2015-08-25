@@ -17,7 +17,7 @@
 
 @implementation MTAstNodeComparson
 
-- (id)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values {
+- (instancetype)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values {
     self = [super initWithNodeType:SCNodeTypeComparison andValues:values];
     if (self) {
         [self setComparsonType:comparson];

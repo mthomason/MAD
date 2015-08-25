@@ -10,6 +10,6 @@
 
 @interface MTAstNodeExpressionList : MTAbstractSyntaxTree
 
-- (id)initWithExpression:(MTAbstractSyntaxTree *)expression andList:(MTAbstractSyntaxTree *)list;
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression andList:(MTAbstractSyntaxTree *)list;
 
 @end

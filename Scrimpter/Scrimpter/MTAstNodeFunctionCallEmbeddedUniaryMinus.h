@@ -13,7 +13,7 @@
 
 @interface MTAstNodeFunctionCallEmbeddedUniaryMinus : MTAbstractSyntaxTree
 
-- (id)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value;
+- (instancetype)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value;
 
 @end
 

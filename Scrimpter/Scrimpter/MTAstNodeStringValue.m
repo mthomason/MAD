@@ -17,7 +17,7 @@
 
 @implementation MTAstNodeStringValue
 
-- (id)initWithString:(NSString *)string {
+- (instancetype)initWithString:(NSString *)string {
     self = [super initWithNodeType:SCNodeTypeStringValue andValues:nil];
     if (self) {
         NSString *s = [NSString stringWithString:string];

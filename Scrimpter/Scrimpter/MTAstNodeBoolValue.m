@@ -17,7 +17,7 @@
 
 @implementation MTAstNodeBoolValue
 
-- (id)initWithBool:(bool)b {
+- (instancetype)initWithBool:(bool)b {
     self = [super initWithNodeType:SCNodeTypeBooleanValue andValues:nil];
     if (self) {
         [self setB: b];

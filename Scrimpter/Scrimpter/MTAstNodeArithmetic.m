@@ -17,7 +17,7 @@
 
 @implementation MTAstNodeArithmetic
 
-- (id)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values {
+- (instancetype)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values {
     self = [super initWithNodeType:SCNodeTypeArithmetic andValues:values];
     if (self) {
         [self setProdcure:procedure];

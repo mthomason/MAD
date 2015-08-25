@@ -19,7 +19,7 @@
 
 @implementation MTAstNodeSymbolAsignNumber
 
-- (id)initWithSymbol:(MADSymbol *)symbol andValue:(MTAbstractSyntaxTree *)value {
+- (instancetype)initWithSymbol:(MADSymbol *)symbol andValue:(MTAbstractSyntaxTree *)value {
     MTPair *values = [[MTPair alloc] initWithLeft:nil andRight:value];
     self = [[MTAstNodeSymbolAsignNumber alloc] initWithNodeType:SCNodeTypeAssignemnt andValues:values];
     if (self) {
@@ -27,8 +27,6 @@
     }
     return self;
 }
-
-
 
 - (MTTree *)leftNode {
     return nil;

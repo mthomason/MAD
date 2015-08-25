@@ -19,7 +19,7 @@
 
 @implementation MTAstNodeFlow
 
-- (id)initConditionalWithIfList:(MTAbstractSyntaxTree *)iflist thenList:(MTAbstractSyntaxTree *)thenlist andCondition:(MTAbstractSyntaxTree *)condition {
+- (instancetype)initConditionalWithIfList:(MTAbstractSyntaxTree *)iflist thenList:(MTAbstractSyntaxTree *)thenlist andCondition:(MTAbstractSyntaxTree *)condition {
     self = [super init];
     if (self) {
         [self setFlowType:SCFlowTypeIf];
@@ -30,7 +30,7 @@
     return self;
 }
 
-- (id)initLoopWithList:(MTAbstractSyntaxTree *)list andCondition:(MTAstNodeComparson *)condition {
+- (instancetype)initLoopWithList:(MTAbstractSyntaxTree *)list andCondition:(MTAstNodeComparson *)condition {
     self = [super init];
     if (self) {
         [self setFlowType:SCFlowTypeWhile];

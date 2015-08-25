@@ -15,7 +15,7 @@
 
 @interface MTAstNodeSymbolReference : MTAbstractSyntaxTree
 
-- (id)initWithSymbolReference:(MADSymbolReference *)symbol;
+- (instancetype)initWithSymbolReference:(MADSymbolReference *)symbol;
 
 - (NSString *)symbol;
 

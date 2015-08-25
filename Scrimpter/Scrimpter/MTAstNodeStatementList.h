@@ -13,7 +13,7 @@
 
 @interface MTAstNodeStatementList : MTAbstractSyntaxTree
 
-- (id)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAbstractSyntaxTree *)list;
+- (instancetype)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAbstractSyntaxTree *)list;
 
 @end
 

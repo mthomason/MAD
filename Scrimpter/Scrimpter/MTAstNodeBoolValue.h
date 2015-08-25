@@ -13,7 +13,7 @@
 
 @interface MTAstNodeBoolValue : MTAbstractSyntaxTree
 
-- (id)initWithBool:(bool)b;
+- (instancetype)initWithBool:(bool)b;
 
 @end
 

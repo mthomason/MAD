@@ -16,7 +16,7 @@
 
 @implementation MTAstNodeFunctionCallEmbeddedUniaryMinus
 
-- (id)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value {
+- (instancetype)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value {
     MTPair *pair = [MTPair pairWithLeft:value andRight:nil];
     self = [super initWithNodeType:SCNodeTypeBuiltInFunction andValues:pair];
     if (self) {
