@@ -27,20 +27,20 @@
 
 @implementation MTAbstractSyntaxTree
 
-- (MTAbstractSyntaxTree *)leftAST {
-    return (MTAbstractSyntaxTree *)self.leftNode;
-}
-
-- (MTAbstractSyntaxTree *)rightAST {
-    return (MTAbstractSyntaxTree *)self.rightNode;
-}
-
 - (id)initWithNodeType:(SCNodeType)type andValues:(MTPair *)values {
     self = [super initWithLeftTree:[values left] andRightTree:[values right]];
     if (self) {
         [self setNodetype:type];
     }
     return self;
+}
+
+- (MTAbstractSyntaxTree *)leftAST {
+    return (MTAbstractSyntaxTree *)self.leftNode;
+}
+
+- (MTAbstractSyntaxTree *)rightAST {
+    return (MTAbstractSyntaxTree *)self.rightNode;
 }
 
 - (MADValue *)evaluate {
