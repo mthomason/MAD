@@ -142,7 +142,7 @@ stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2
 exp : expnum                                    { $$ = $1; }
     | expbool                                   { $$ = $1; }
     | ERROR                                     { YYABORT; }
-    | '(' exp ')'                               { $$= $2; /* $$ = nodeForExpression($2); */ }
+    | '(' exp ')'                               { $$ = nodeForExpression($2); /* $$ = nodeForExpression($2); */ }
     | exp COMPARESON exp                        { $$ = nodeForComparsonOfValues($2, $1, $3); }
     | exp '.' IDENTIFIER '(' ')'                { $$ = nodeForFunction($1, [$3 symbol], nil); }
     | exp '.' IDENTIFIER '(' explist ')'        { $$ = nodeForFunction($1, [$3 symbol], $5); }
@@ -160,7 +160,7 @@ expbool: BOOLEAN                                { $$ = nodeForBool($1); }
 expnum : '(' expnum ')'                         { $$ = $2; /*$$ = nodeForExpression($2);*/ }
     | factor                                    //{ $$ = nodeForExpression($1); }
     | expnum COMPARESON factor                  { $$ = nodeForComparsonOfValues($2, $1, $3); }
-    | expnum '+' factor                         { NSLog(@"1:\t%@\n", $1);NSLog(@"3:\t%@\n", $3); $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
+    | expnum '+' factor                         { /*NSLog(@"1:\t%@\n", $1);NSLog(@"3:\t%@\n", $3);*/ $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
     | expnum '-' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
 ;
 

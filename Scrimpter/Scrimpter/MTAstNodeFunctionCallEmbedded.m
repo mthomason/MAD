@@ -185,7 +185,7 @@
 }
 
 + (MADValue *)uniaryMinus:(MADValue *)value {
-    NSNumber *um = [NSNumber numberWithDouble: -[[value value] doubleValue]];
+    NSNumber *um = [NSNumber numberWithDouble: -[value.value doubleValue]];
     return [MADValue value:um withType:SCVarableTypeDouble];
 }
 

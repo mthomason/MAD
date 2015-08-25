@@ -18,7 +18,7 @@
 
 @implementation MADSymbolTable
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         NSMutableDictionary *symbolTable = [NSMutableDictionary new];
@@ -38,7 +38,7 @@
 }
 
 - (MADSymbol *)symbolForString:(NSString *)symbol {
-    return [[self symbolTable] objectForKey:symbol];
+    return [self.symbolTable objectForKey:symbol];
 }
 
 @end

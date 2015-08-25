@@ -25,7 +25,7 @@ void (^Scrimpted)(BOOL success, id result, NSError *error);
 - (id)initWithName:(NSString *)name {
     self = [super init];
     if (self) {
-        [self setName:name];
+        self.name = name;
         NSArray *symbolReference = @[];
         [self setSymbolReferences:symbolReference];
     }
