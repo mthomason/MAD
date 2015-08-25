@@ -420,14 +420,14 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
-- (void)testConcatUPPER {
+- (void)testUPPER {
     __autoreleasing NSError *error = nil;
     NSString *script = @"return \"Michael\".concat(\" \").concat(\"Thomason\").upper();";
     BOOL success = [self testScript:script forValue:@("MICHAEL THOMASON") error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
-- (void)testConcatLower {
+- (void)testLower {
     __autoreleasing NSError *error = nil;
     NSString *script = @"return \"Michael\".concat(\" \").concat(\"Thomason\").upper().lower();";
     BOOL success = [self testScript:script forValue:@("michael thomason") error:&error];
