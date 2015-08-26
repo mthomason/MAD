@@ -223,6 +223,8 @@
 		4C174CDF18B13760007A88B3 /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
+		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
+		4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1A585D14DE348200184445 /* MTQueryBuilderSortTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* MTQueryBuilderSortTypeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1A586614E23DDB00184445 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
@@ -847,7 +849,6 @@
 		4C2F27921B53FA1C004DFAEC /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C2F27931B53FA1C004DFAEC /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
 		4C2F27941B53FA1C004DFAEC /* Icon-29-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1591AC8FB2D005CA75C /* Icon-29-Viewer-Modern@2x.png */; };
-		4C2F27951B53FA1C004DFAEC /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */; };
 		4C2F27961B53FA1C004DFAEC /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C2F27971B53FA1C004DFAEC /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B3141AC909E0005CA75C /* UIImagePatternWhiteWithWoodFibers@2x.png */; };
 		4C2F27981B53FA1C004DFAEC /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
@@ -1054,8 +1055,6 @@
 		4C7B0B271B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */; };
 		4C7B0B2B1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
 		4C7B0B2C1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
-		4C7B0B311B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */; };
-		4C7B0B321B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */; };
 		4C7B0B351B38D35E005DC0CE /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */; };
 		4C7B0B361B38D35E005DC0CE /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */; };
 		4C7B0B391B391A61005DC0CE /* MADTableViewCellAboutTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B381B391A61005DC0CE /* MADTableViewCellAboutTitle.m */; };
@@ -2058,6 +2057,8 @@
 		4C1848021B8DF4F500FA7872 /* MTBarcodeCode39Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Extended.h; path = ../Barcodes/Barcodes/MTBarcodeCode39Extended.h; sourceTree = "<group>"; };
 		4C1848031B8DF52D00FA7872 /* MTBarcodeCode39Iso16388.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Iso16388.h; path = ../Barcodes/Barcodes/MTBarcodeCode39Iso16388.h; sourceTree = "<group>"; };
 		4C1848041B8DF56600FA7872 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = ../Barcodes/Barcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
+		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
+		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
@@ -2141,7 +2142,6 @@
 		4C23FC1A18FAEA24009F234F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
-		4C26F22319D5D16800B7A417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C2831801B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewLayoutGroupedDelegate.h; sourceTree = "<group>"; };
 		4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewLayoutGroupedDelegate.m; sourceTree = "<group>"; };
 		4C2831841B1AFC5500511D2D /* libsystem_stats.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_stats.dylib; path = usr/lib/system/libsystem_stats.dylib; sourceTree = SDKROOT; };
@@ -2421,8 +2421,6 @@
 		4C7B0B251B37F84D005DC0CE /* MADTableViewCellReceiptCharterMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptCharterMember.m; sourceTree = "<group>"; };
 		4C7B0B291B3803B9005DC0CE /* MADTableViewCellReceiptApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellReceiptApplication.h; sourceTree = "<group>"; };
 		4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptApplication.m; sourceTree = "<group>"; };
-		4C7B0B2D1B38CFBE005DC0CE /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
-		4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C7B0B331B38D35E005DC0CE /* UIFont+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Helpers.h"; sourceTree = "<group>"; };
 		4C7B0B341B38D35E005DC0CE /* UIFont+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Helpers.m"; sourceTree = "<group>"; };
 		4C7B0B371B391A61005DC0CE /* MADTableViewCellAboutTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAboutTitle.h; sourceTree = "<group>"; };
@@ -3542,30 +3540,6 @@
 			path = ../3rdPartyProjects/UAAppReviewManager;
 			sourceTree = "<group>";
 		};
-		4C26F22119D5D16800B7A417 /* Test Cloud */ = {
-			isa = PBXGroup;
-			children = (
-				4C26F22219D5D16800B7A417 /* Supporting Files */,
-			);
-			path = "Test Cloud";
-			sourceTree = "<group>";
-		};
-		4C26F22219D5D16800B7A417 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4C26F22319D5D16800B7A417 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4C26F22B19D5D1DE00B7A417 /* Test */ = {
-			isa = PBXGroup;
-			children = (
-				4C26F22119D5D16800B7A417 /* Test Cloud */,
-			);
-			name = Test;
-			sourceTree = "<group>";
-		};
 		4C2F6E80194C9948009D192B /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -3578,13 +3552,6 @@
 				4C2F6E7C194C38E4009D192B /* MTArrayDataSourceCollectionView.m */,
 			);
 			name = "Data Sources";
-			sourceTree = "<group>";
-		};
-		4C30A7621B00FF7E00AD4423 /* File Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "File Coordinator";
 			sourceTree = "<group>";
 		};
 		4C35E2F616E4875000ECAB2E /* Database Driver Setup */ = {
@@ -3601,7 +3568,6 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C30A7621B00FF7E00AD4423 /* File Coordinator */,
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4CF46F5A1AC64A2F007C0A82 /* libraries */,
@@ -3622,7 +3588,6 @@
 				4C8F99BD1ACA97C8006D3996 /* MAD Designer WatchKit App */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
-				4C2F27A61B53FA1D004DFAEC /* app.everydayapps.mad.designer.watchkit.info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -4002,18 +3967,9 @@
 				4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */,
 				4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */,
 				4C6268FB19F6008700DCCC2E /* Vibrant */,
-				4C26F22B19D5D1DE00B7A417 /* Test */,
-				4C49DA5619DCE82200CB4DB8 /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 			);
 			name = iOS;
-			sourceTree = "<group>";
-		};
-		4C49DA5619DCE82200CB4DB8 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		4C49DA5719DCE8C800CB4DB8 /* Viewer */ = {
@@ -4061,8 +4017,8 @@
 		4C4EBFBE17EFC2B700D10622 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				4C7B0B301B38D1F1005DC0CE /* fontawesome-webfont.ttf */,
-				4C7B0B2D1B38CFBE005DC0CE /* CarbonBlock.ttf */,
+				4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */,
+				4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -4540,6 +4496,7 @@
 		4C8F99BD1ACA97C8006D3996 /* MAD Designer WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
+				4C2F27A61B53FA1D004DFAEC /* app.everydayapps.mad.designer.watchkit.info.plist */,
 				4C8F99C01ACA97C8006D3996 /* Interface.storyboard */,
 				4C8F99C31ACA97C9006D3996 /* Images.xcassets */,
 				4C8F99BE1ACA97C8006D3996 /* Supporting Files */,
@@ -5704,7 +5661,6 @@
 				4CD0B19D1AC8FB2D005CA75C /* Icon-50-Designer-Modern@2x.png in Resources */,
 				4CD0B3921AC909E0005CA75C /* UIImagePatternLinenWeave@2x.png in Resources */,
 				4C1E89871B340AB100B26B5E /* MADInfinity64.png in Resources */,
-				4C7B0B321B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */,
 				4CD0B3B01AC909E0005CA75C /* UIImagePatternPebbled.png in Resources */,
 				4CD0B3841AC909E0005CA75C /* UIImagePatternLeaf.png in Resources */,
 				4CD0B3361AC909E0005CA75C /* UIImagePatternBuffTextured@2x.png in Resources */,
@@ -6163,7 +6119,6 @@
 				4C2F27921B53FA1C004DFAEC /* MADBarcode64.png in Resources */,
 				4C2F27931B53FA1C004DFAEC /* UIButtonHighlighted.png in Resources */,
 				4C2F27941B53FA1C004DFAEC /* Icon-29-Viewer-Modern@2x.png in Resources */,
-				4C2F27951B53FA1C004DFAEC /* fontawesome-webfont.ttf in Resources */,
 				4C2F27961B53FA1C004DFAEC /* chinook.sqlite3 in Resources */,
 				4C2F27971B53FA1C004DFAEC /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
 				4C2F27981B53FA1C004DFAEC /* Music.mad in Resources */,
@@ -6271,6 +6226,7 @@
 				4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */,
 				4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */,
 				4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */,
+				4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */,
 				4CD0B3571AC909E0005CA75C /* UIImagePatternGoldVellum.png in Resources */,
 				4C6A17CE19B193610098717E /* MADImageToolbarCloudDownload@2x.png in Resources */,
 				4CD0B19E1AC8FB2D005CA75C /* Icon-50-Viewer-Lagacy.png in Resources */,
@@ -6371,6 +6327,7 @@
 				4CD0B3391AC909E0005CA75C /* UIImagePatternCarbonFiber@2x.png in Resources */,
 				4CD0B3C71AC909E0005CA75C /* UIImagePatternStationary.png in Resources */,
 				4CD0B3431AC909E0005CA75C /* UIImagePatternFiberDarkGray@2x.png in Resources */,
+				4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */,
 				4CD0B1C41AC8FB2D005CA75C /* Icon-72-Designer-Modern@2x.png in Resources */,
 				4CD0B1CA1AC8FB2D005CA75C /* Icon-72-Viewer-Modern.png in Resources */,
 				4CD0B1FE1AC8FBC4005CA75C /* UIBarButtonItemDatabase8@2x.png in Resources */,
@@ -6490,7 +6447,6 @@
 				4C1E898C1B34115100B26B5E /* MADBarcode64.png in Resources */,
 				4CD0B2181AC8FBC4005CA75C /* UIButtonHighlighted.png in Resources */,
 				4CD0B18C1AC8FB2D005CA75C /* Icon-29-Viewer-Modern@2x.png in Resources */,
-				4C7B0B311B38D1F1005DC0CE /* fontawesome-webfont.ttf in Resources */,
 				4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4CD0B3E11AC909E0005CA75C /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
 				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
