@@ -233,6 +233,18 @@
 		4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutAttributes.m; sourceTree = "<group>"; };
 		4C111C181B1EDED2005CA4DD /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CloudManager/CloudManager/NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
+		4C1847E21B8DF03300FA7872 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
+		4C1847E31B8DF03300FA7872 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
+		4C1847E41B8DF03300FA7872 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
+		4C1847E51B8DF03300FA7872 /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../../DataStructures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
+		4C1847E61B8DF03300FA7872 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../../DataStructures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
+		4C1847E71B8DF03300FA7872 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../../DataStructures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
+		4C1847E81B8DF03300FA7872 /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = ../../DataStructures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
+		4C1847E91B8DF03300FA7872 /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../../DataStructures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
+		4C1847EA1B8DF03300FA7872 /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../../DataStructures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
+		4C1847EB1B8DF03300FA7872 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../../DataStructures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
+		4C1847EC1B8DF03300FA7872 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../../DataStructures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
+		4C1847ED1B8DF03300FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
 		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -413,15 +425,6 @@
 		4C8CDAA81AD1E04700B7B9EA /* NSData+Comparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Comparson.h"; sourceTree = "<group>"; };
 		4C8CDAA91AD1E04700B7B9EA /* NSData+Comparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Comparson.m"; sourceTree = "<group>"; };
 		4C8CDAAC1AD1E06A00B7B9EA /* libMTDataStrutures.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMTDataStrutures.a; path = "../../Reports/libMTDataStrutures/build/Debug-iphoneos/libMTDataStrutures.a"; sourceTree = "<group>"; };
-		4C8CDAB01AD1E0E900B7B9EA /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
-		4C8CDAB11AD1E0E900B7B9EA /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
-		4C8CDAB21AD1E0E900B7B9EA /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
-		4C8CDAB31AD1E0E900B7B9EA /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
-		4C8CDAB41AD1E0E900B7B9EA /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
-		4C8CDAB51AD1E0E900B7B9EA /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
-		4C8CDAB61AD1E0E900B7B9EA /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
-		4C8CDAB71AD1E0E900B7B9EA /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
-		4C8CDAB81AD1E0E900B7B9EA /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
 		4C8CDAB91AD1E14000B7B9EA /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTKeyChain.h; sourceTree = "<group>"; };
 		4C8CDABA1AD1E14000B7B9EA /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTKeyChain.m; sourceTree = "<group>"; };
 		4C8CDABC1AD1E1A300B7B9EA /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationDidReadRows.h; sourceTree = "<group>"; };
@@ -452,8 +455,6 @@
 		4C8CDAE51AD24B8700B7B9EA /* RptqDatabaseSchemaTable+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDatabaseSchemaTable+Extras.m"; path = "rptq/RptqDatabaseSchemaTable+Extras.m"; sourceTree = "<group>"; };
 		4C8CDAE81AD24BD000B7B9EA /* RptqDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocument+Extras.h"; path = "rptq/RptqDocument+Extras.h"; sourceTree = "<group>"; };
 		4C8CDAE91AD24BD000B7B9EA /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocument+Extras.m"; path = "rptq/RptqDocument+Extras.m"; sourceTree = "<group>"; };
-		4C8CDAEB1AD24C1300B7B9EA /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
-		4C8CDAEC1AD24C2300B7B9EA /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
 		4C8CDAED1AD24C5100B7B9EA /* RptqDocumentSection+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentSection+Extras.h"; path = "rptq/RptqDocumentSection+Extras.h"; sourceTree = "<group>"; };
 		4C8CDAEE1AD24C5100B7B9EA /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSection+Extras.m"; path = "rptq/RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
 		4C8CDAF01AD24C9000B7B9EA /* RptqDocumentSectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSectionEnumerator.h; sourceTree = "<group>"; };
@@ -598,7 +599,6 @@
 		4C8CDBC41AD2552C00B7B9EA /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4C8CDBC51AD2552C00B7B9EA /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		4C8CDBC91AD2557800B7B9EA /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../../Reports/libMTDataStrutures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
 		4C8CDBCA1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentSectionRows+Extras.h"; path = "rptq/RptqDocumentSectionRows+Extras.h"; sourceTree = "<group>"; };
 		4C8CDBCB1AD255A800B7B9EA /* RptqDocumentSectionRows+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSectionRows+Extras.m"; path = "rptq/RptqDocumentSectionRows+Extras.m"; sourceTree = "<group>"; };
 		4C8CDBD31AD2567400B7B9EA /* NSManagedObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Extras.h"; sourceTree = "<group>"; };
@@ -1245,18 +1245,18 @@
 		4C8CDB081AD24DFB00B7B9EA /* headers */ = {
 			isa = PBXGroup;
 			children = (
-				4C8CDBC91AD2557800B7B9EA /* MTProtocolEnumerator.h */,
-				4C8CDAEC1AD24C2300B7B9EA /* MTProtocolLog.h */,
-				4C8CDAEB1AD24C1300B7B9EA /* MTProtocolCompare.h */,
-				4C8CDAB01AD1E0E900B7B9EA /* MTTree.h */,
-				4C8CDAB11AD1E0E900B7B9EA /* MTEdge.h */,
-				4C8CDAB21AD1E0E900B7B9EA /* MTGraph.h */,
-				4C8CDAB31AD1E0E900B7B9EA /* MTLinkedList.h */,
-				4C8CDAB41AD1E0E900B7B9EA /* MTObject.h */,
-				4C8CDAB51AD1E0E900B7B9EA /* MTPair.h */,
-				4C8CDAB61AD1E0E900B7B9EA /* MTQueue.h */,
-				4C8CDAB71AD1E0E900B7B9EA /* MTStack.h */,
-				4C8CDAB81AD1E0E900B7B9EA /* MTVertex.h */,
+				4C1847E21B8DF03300FA7872 /* MTProtocolEnumerator.h */,
+				4C1847E31B8DF03300FA7872 /* MTProtocolCompare.h */,
+				4C1847E41B8DF03300FA7872 /* MTProtocolLog.h */,
+				4C1847E51B8DF03300FA7872 /* MTTree.h */,
+				4C1847E61B8DF03300FA7872 /* MTEdge.h */,
+				4C1847E71B8DF03300FA7872 /* MTGraph.h */,
+				4C1847E81B8DF03300FA7872 /* MTLinkedList.h */,
+				4C1847E91B8DF03300FA7872 /* MTObject.h */,
+				4C1847EA1B8DF03300FA7872 /* MTPair.h */,
+				4C1847EB1B8DF03300FA7872 /* MTQueue.h */,
+				4C1847EC1B8DF03300FA7872 /* MTStack.h */,
+				4C1847ED1B8DF03300FA7872 /* MTVertex.h */,
 			);
 			name = headers;
 			sourceTree = "<group>";

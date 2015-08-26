@@ -1890,13 +1890,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4C2F25501B53FA1C004DFAEC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C4C6EFB167635B8004A3B04;
-			remoteInfo = libMTDataStrutures;
-		};
 		4C2F25521B53FA1C004DFAEC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */;
@@ -1911,13 +1904,6 @@
 			remoteGlobalIDString = 4CDA76CB1825E8D400E462F6;
 			remoteInfo = Barcodes;
 		};
-		4C359D8C1B07CBF100B3E9E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C4C6EFB167635B8004A3B04;
-			remoteInfo = libMTDataStrutures;
-		};
 		4C359D8E1B07CBF100B3E9E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */;
@@ -1931,20 +1917,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4CDA76CB1825E8D400E462F6;
 			remoteInfo = Barcodes;
-		};
-		4C8394E61AC8F0230055EDE9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4C4C6EFC167635B8004A3B04;
-			remoteInfo = libMTDataStrutures;
-		};
-		4C8394E81AC8F0230055EDE9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4C7674CD18F2F391007CEBD3;
-			remoteInfo = MTGraphTest;
 		};
 		4C8F99BB1ACA97C8006D3996 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2128,6 +2100,19 @@
 		4C1847BD1B8D65AB00FA7872 /* Sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sqlite.h; path = ../Sqlite3/Sqlite/Sqlite.h; sourceTree = "<group>"; };
 		4C1847BE1B8DEA8100FA7872 /* MTTdsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTdsClient.h; path = ../TdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
 		4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
+		4C1847D51B8DEF2E00FA7872 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../DataStructures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
+		4C1847D61B8DEF2E00FA7872 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../DataStructures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
+		4C1847D71B8DEF2E00FA7872 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../DataStructures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
+		4C1847D81B8DEF2E00FA7872 /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../DataStructures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
+		4C1847D91B8DEF2E00FA7872 /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+MTProtocol.h"; path = "../DataStructures/libMTDataStrutures/NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
+		4C1847DA1B8DEF2E00FA7872 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../DataStructures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
+		4C1847DB1B8DEF2E00FA7872 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../DataStructures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
+		4C1847DC1B8DEF2E00FA7872 /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = ../DataStructures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
+		4C1847DD1B8DEF2E00FA7872 /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../DataStructures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
+		4C1847DE1B8DEF2E00FA7872 /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../DataStructures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
+		4C1847DF1B8DEF2E00FA7872 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../DataStructures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
+		4C1847E01B8DEF2E00FA7872 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../DataStructures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
+		4C1847E11B8DEF2E00FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
@@ -2528,20 +2513,6 @@
 		4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageBackgroundIcon.png; path = Resources/Images/MADImageBackgroundIcon.png; sourceTree = "<group>"; };
 		4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@2x.png"; path = "Resources/Images/MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
 		4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@3x.png"; path = "Resources/Images/MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
-		4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMTDataStrutures.xcodeproj; path = libMTDataStrutures/libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
-		4C8394EB1AC8F1140055EDE9 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = libMTDataStrutures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
-		4C8394EC1AC8F1140055EDE9 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = libMTDataStrutures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
-		4C8394ED1AC8F1140055EDE9 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = libMTDataStrutures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
-		4C8394EE1AC8F1140055EDE9 /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = libMTDataStrutures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
-		4C8394EF1AC8F1140055EDE9 /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+MTProtocol.h"; path = "libMTDataStrutures/libMTDataStrutures/NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
-		4C8394F01AC8F1140055EDE9 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
-		4C8394F11AC8F1140055EDE9 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
-		4C8394F21AC8F1140055EDE9 /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = libMTDataStrutures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
-		4C8394F31AC8F1140055EDE9 /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
-		4C8394F41AC8F1140055EDE9 /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
-		4C8394F51AC8F1140055EDE9 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = libMTDataStrutures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
-		4C8394F61AC8F1140055EDE9 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = libMTDataStrutures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
-		4C8394F71AC8F1140055EDE9 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = libMTDataStrutures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
 		4C85C6A814FF72F3003785AC /* MADViewerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewerController.h; sourceTree = "<group>"; };
 		4C85C6A914FF72F3003785AC /* MADViewerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADViewerController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C860AB0167ED98900AC1904 /* NSString+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MTProtocol.h"; sourceTree = "<group>"; };
@@ -3821,7 +3792,6 @@
 		4C3A969C189F7D51007AF476 /* libDataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */,
 				4C4C6F1C1676424C004A3B04 /* MTDataStructures */,
 			);
 			name = libDataStructures;
@@ -4132,19 +4102,19 @@
 		4C4C6F1C1676424C004A3B04 /* MTDataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				4C8394EB1AC8F1140055EDE9 /* MTProtocolEnumerator.h */,
-				4C8394EC1AC8F1140055EDE9 /* MTProtocolCompare.h */,
-				4C8394ED1AC8F1140055EDE9 /* MTProtocolLog.h */,
-				4C8394EE1AC8F1140055EDE9 /* MTTree.h */,
-				4C8394EF1AC8F1140055EDE9 /* NSNumber+MTProtocol.h */,
-				4C8394F01AC8F1140055EDE9 /* MTEdge.h */,
-				4C8394F11AC8F1140055EDE9 /* MTGraph.h */,
-				4C8394F21AC8F1140055EDE9 /* MTLinkedList.h */,
-				4C8394F31AC8F1140055EDE9 /* MTObject.h */,
-				4C8394F41AC8F1140055EDE9 /* MTPair.h */,
-				4C8394F51AC8F1140055EDE9 /* MTQueue.h */,
-				4C8394F61AC8F1140055EDE9 /* MTStack.h */,
-				4C8394F71AC8F1140055EDE9 /* MTVertex.h */,
+				4C1847D51B8DEF2E00FA7872 /* MTProtocolEnumerator.h */,
+				4C1847D61B8DEF2E00FA7872 /* MTProtocolCompare.h */,
+				4C1847D71B8DEF2E00FA7872 /* MTProtocolLog.h */,
+				4C1847D81B8DEF2E00FA7872 /* MTTree.h */,
+				4C1847D91B8DEF2E00FA7872 /* NSNumber+MTProtocol.h */,
+				4C1847DA1B8DEF2E00FA7872 /* MTEdge.h */,
+				4C1847DB1B8DEF2E00FA7872 /* MTGraph.h */,
+				4C1847DC1B8DEF2E00FA7872 /* MTLinkedList.h */,
+				4C1847DD1B8DEF2E00FA7872 /* MTObject.h */,
+				4C1847DE1B8DEF2E00FA7872 /* MTPair.h */,
+				4C1847DF1B8DEF2E00FA7872 /* MTQueue.h */,
+				4C1847E01B8DEF2E00FA7872 /* MTStack.h */,
+				4C1847E11B8DEF2E00FA7872 /* MTVertex.h */,
 			);
 			name = MTDataStructures;
 			sourceTree = "<group>";
@@ -4480,15 +4450,6 @@
 				4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */,
 			);
 			name = Receipt;
-			sourceTree = "<group>";
-		};
-		4C8394E21AC8F0220055EDE9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4C8394E71AC8F0230055EDE9 /* libMTDataStrutures.a */,
-				4C8394E91AC8F0230055EDE9 /* MTGraphTest.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		4C8CD98B1AD1CEEB00B7B9EA /* libMAD */ = {
@@ -5443,7 +5404,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C2F254F1B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F25511B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F25531B53FA1C004DFAEC /* PBXTargetDependency */,
 			);
@@ -5465,7 +5425,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C359D8D1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D8F1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D911B07CBF100B3E9E0 /* PBXTargetDependency */,
 			);
@@ -5623,10 +5582,6 @@
 					ProjectRef = 4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */;
 				},
 				{
-					ProductGroup = 4C8394E21AC8F0220055EDE9 /* Products */;
-					ProjectRef = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
-				},
-				{
 					ProductGroup = 4CB56DC71AC6835000756775 /* Products */;
 					ProjectRef = 4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */;
 				},
@@ -5644,20 +5599,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4C8394E71AC8F0230055EDE9 /* libMTDataStrutures.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libMTDataStrutures.a;
-			remoteRef = 4C8394E61AC8F0230055EDE9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4C8394E91AC8F0230055EDE9 /* MTGraphTest.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MTGraphTest.xctest;
-			remoteRef = 4C8394E81AC8F0230055EDE9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		4CB56DCC1AC6835200756775 /* libMysqlClientObjC.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -7606,11 +7547,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4C2F254F1B53FA1C004DFAEC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libMTDataStrutures;
-			targetProxy = 4C2F25501B53FA1C004DFAEC /* PBXContainerItemProxy */;
-		};
 		4C2F25511B53FA1C004DFAEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MysqlClientObjC;
@@ -7620,11 +7556,6 @@
 			isa = PBXTargetDependency;
 			name = Barcodes;
 			targetProxy = 4C2F25541B53FA1C004DFAEC /* PBXContainerItemProxy */;
-		};
-		4C359D8D1B07CBF100B3E9E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libMTDataStrutures;
-			targetProxy = 4C359D8C1B07CBF100B3E9E0 /* PBXContainerItemProxy */;
 		};
 		4C359D8F1B07CBF100B3E9E0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
