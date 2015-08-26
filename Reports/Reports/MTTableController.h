@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong, readonly) MTDataFormatter *tableFormatter;
 
-- (instancetype)initWithQuery:(MTQuery *)query NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithQuery:(MTQuery *)query;
 - (NSUInteger)rowCount;
 - (NSUInteger)columnCount;
 

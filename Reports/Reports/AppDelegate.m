@@ -76,10 +76,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 #if DEBUG
 
-    static void uncaughtExceptionHandler(NSException *exception);
-    static void uncaughtExceptionHandler(NSException *exception) {
-        MTLogStatic(@"%@", exception);
-    }
+    //static void uncaughtExceptionHandler(NSException *exception);
+    //static void uncaughtExceptionHandler(NSException *exception) {
+    //    MTLogStatic(@"%@", exception);
+    //}
 
 #endif
 
@@ -195,10 +195,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return success;
 }
 
-- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
-    UIInterfaceOrientationMaskAllButUpsideDown :
-    UIInterfaceOrientationMaskAll;
+        UIInterfaceOrientationMaskAllButUpsideDown :
+        UIInterfaceOrientationMaskAll;
 }
 
 - (void)displayActivityIndictor:(id)sender {

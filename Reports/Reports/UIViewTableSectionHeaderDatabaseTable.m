@@ -24,7 +24,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
     
-    self = [super initWithFrame:frame];
+    self = [self initWithFrame:frame];
     
     if (self) {
         

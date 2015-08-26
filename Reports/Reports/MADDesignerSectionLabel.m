@@ -26,7 +26,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 - (instancetype)initWithSection:(RptqDocumentSection *)section {
     CGRect frame = CGRectZero;
-    self = [super initWithFrame:frame];
+    self = [self initWithFrame:frame];
     if (self) {
         [self setSelected:NO];
         

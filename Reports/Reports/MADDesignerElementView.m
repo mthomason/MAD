@@ -108,7 +108,7 @@
 - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject {
     
     CGRect viewFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObject.size.width, documentObject.size.height);
-    self = [super initWithFrame: viewFrame];
+    self = [self initWithFrame: viewFrame];
 
     if (self) {
         

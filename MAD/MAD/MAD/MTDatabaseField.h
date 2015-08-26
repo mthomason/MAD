@@ -14,7 +14,7 @@
 
 @interface MTDatabaseField : NSObject
 
-- (instancetype)initWithName:(NSString *)name NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(NSString *)name;
 
 @property (nonatomic, strong) NSString *label;
 @property (nonatomic, strong) NSString *name;

@@ -16,7 +16,7 @@
 @property (nonatomic, strong) NSString *prompt;
 @property (nonatomic, strong, readonly) NSString *defaultPrompt;
 
-- (instancetype)initWithDefaultPrompt:(NSString *)defaultPrompt NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDefaultPrompt:(NSString *)defaultPrompt;
 
 - (void)addString:(NSString *)string;
 - (void)removeString:(NSString *)string;

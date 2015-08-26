@@ -680,7 +680,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     if (self.shownAndHidden && self.zoomScaleRestore > 1.0001) {
         [self.scroller setZoomScale:self.zoomScaleRestore animated:NO];
-        [self scrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
+        [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
         [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
     }
     
@@ -882,8 +882,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
 }
 
-- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
-    
+- (void)handledScrollViewDidEndZooming:(UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
     if ([scrollView isEqual:self.scroller]) {
         
         CGFloat scaleWithScreen = scale * self.scroller.traitCollection.displayScale;
@@ -914,6 +913,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     }
     
     [self adjustContextOffsetForOpenPopover];
+}
+
+- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
+    [self handledScrollViewDidEndZooming:scrollView withView:view atScale:scale];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

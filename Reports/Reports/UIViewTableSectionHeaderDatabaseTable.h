@@ -16,7 +16,7 @@
 
 @interface UIViewTableSectionHeaderDatabaseTable : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate;
 - (void)toggleOpenWithUserAction:(BOOL)userAction;
 
 @end

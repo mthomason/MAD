@@ -25,7 +25,7 @@
 
 - (instancetype)initWithDocument:(MADocument *)document
                       pageNumber:(NSUInteger)pageNumber
-                         ofPages:(NSUInteger)numberOfPages NS_DESIGNATED_INITIALIZER;
+                         ofPages:(NSUInteger)numberOfPages;
 
 @end
 

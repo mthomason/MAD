@@ -23,7 +23,7 @@ static const CGFloat colors[] = {
 };
 
 - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position {
-    self = [super initWithFrame:frame];
+    self = [self initWithFrame:frame];
     if (self) {
 
         self.initalPoint = self.center;

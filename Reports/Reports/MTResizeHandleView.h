@@ -25,7 +25,7 @@
 @property (assign) CGPoint initalPoint;
 @property (assign, getter = isHighlighted) BOOL highlighted;
 
-- (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position;
 
 @end
 

@@ -31,7 +31,7 @@
 - (BOOL)isWobbleRunning;
 - (void)flash:(void (^)(BOOL finished))completion;
 
-- (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
 - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;

@@ -182,7 +182,7 @@ typedef struct _ColumnWidth {
     if (rowsToDisplay > self.rowCount) rowsToDisplay = self.rowCount;
     if (columnsToDisplay > self.columnCount) columnsToDisplay = self.columnCount;
     
-    NSInteger firstRow = fabsf((CGPointZero.y - rect.origin.y)  / self.heightRow);
+    NSInteger firstRow = fabs((CGPointZero.y - rect.origin.y)  / self.heightRow);
     
     if (firstRow > self.rowCount) firstRow = self.rowCount;
     if (firstColumn > self.columnCount) firstColumn = self.columnCount;

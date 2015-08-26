@@ -18,7 +18,7 @@
 @implementation MADPromptManager
 
 - (instancetype)initWithDefaultPrompt:(NSString *)defaultPrompt {
-    self = [super init];
+    self = [self init];
     if (self) {
         
         NSMutableArray *promptItems = [[NSMutableArray alloc] init];
