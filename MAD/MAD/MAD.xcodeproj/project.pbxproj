@@ -245,6 +245,7 @@
 		4C1847EB1B8DF03300FA7872 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../../DataStructures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
 		4C1847EC1B8DF03300FA7872 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../../DataStructures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
 		4C1847ED1B8DF03300FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
+		4C1847F61B8DF2C600FA7872 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = ../../Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -471,7 +472,6 @@
 		4C8CDB001AD24D3E00B7B9EA /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDatabase+Extras.m"; path = "rptq/RptqDatabase+Extras.m"; sourceTree = "<group>"; };
 		4C8CDB021AD24D7A00B7B9EA /* MADLinkType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLinkType.h; path = MAD/MADLinkType.h; sourceTree = "<group>"; };
 		4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBarcodes.a; path = "../../Reports/Barcodes/build/Debug-iphoneos/libBarcodes.a"; sourceTree = "<group>"; };
-		4C8CDB061AD24DEA00B7B9EA /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = ../../Reports/Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C8CDB091AD24E7100B7B9EA /* RptqUserCredentals+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqUserCredentals+Extras.h"; path = "rptq/RptqUserCredentals+Extras.h"; sourceTree = "<group>"; };
 		4C8CDB0A1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqUserCredentals+Extras.m"; path = "rptq/RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
 		4C8CDB0C1AD24E8400B7B9EA /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObject+Extras.h"; path = "rptq/RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
@@ -1237,7 +1237,7 @@
 		4C8CDB071AD24DEE00B7B9EA /* headers */ = {
 			isa = PBXGroup;
 			children = (
-				4C8CDB061AD24DEA00B7B9EA /* MTBarcode.h */,
+				4C1847F61B8DF2C600FA7872 /* MTBarcode.h */,
 			);
 			name = headers;
 			sourceTree = "<group>";

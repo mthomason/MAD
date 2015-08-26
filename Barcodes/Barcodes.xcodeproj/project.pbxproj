@@ -339,7 +339,7 @@
 				4C5CB71C189D1A1700BB5AF8 /* libpng.a */,
 			);
 			name = libpng;
-			path = ../../Compressor/library/libpng;
+			path = ../Compressor/library/libpng;
 			sourceTree = "<group>";
 		};
 		4C5CB714189D1A1700BB5AF8 /* include */ = {
