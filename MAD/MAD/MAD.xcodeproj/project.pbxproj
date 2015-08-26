@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C0F89351B280A2300D75AF6 /* MADSectionLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */; };
 		4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */; };
+		4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */; };
 		4C8CD96A1AD1CDC800B7B9EA /* libMAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */; };
 		4C8CD98A1AD1CEAF00B7B9EA /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */; };
 		4C8CD9981AD1D1AD00B7B9EA /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */; };
@@ -45,7 +46,6 @@
 		4C8CDA051AD1D72E00B7B9EA /* RptqQueryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9E91AD1D72E00B7B9EA /* RptqQueryTable.m */; };
 		4C8CDA061AD1D72E00B7B9EA /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9EB1AD1D72E00B7B9EA /* RptqRelationship.m */; };
 		4C8CDA071AD1D72E00B7B9EA /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */; };
-		4C8CDA0A1AD1D9CD00B7B9EA /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDA091AD1D9CD00B7B9EA /* liblibTdsClient.a */; };
 		4C8CDA6D1AD1DCC100B7B9EA /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA2A1AD1DCC100B7B9EA /* MTQuery.m */; };
 		4C8CDA6E1AD1DCC100B7B9EA /* MTQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA2C1AD1DCC100B7B9EA /* MTQueryCache.m */; };
 		4C8CDA6F1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDA2E1AD1DCC100B7B9EA /* MTQueryCacheAddColumn.m */; };
@@ -232,6 +232,7 @@
 		4C0F893D1B29146C00D75AF6 /* MADSectionLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionLayoutAttributes.h; sourceTree = "<group>"; };
 		4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutAttributes.m; sourceTree = "<group>"; };
 		4C111C181B1EDED2005CA4DD /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CloudManager/CloudManager/NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
 		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -314,7 +315,6 @@
 		4C8CD9EC1AD1D72E00B7B9EA /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqUserCredentals.h; path = rptq/autogen/RptqUserCredentals.h; sourceTree = "<group>"; };
 		4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqUserCredentals.m; path = rptq/autogen/RptqUserCredentals.m; sourceTree = "<group>"; };
 		4C8CDA081AD1D75500B7B9EA /* rptq.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rptq.h; path = rptq/rptq.h; sourceTree = "<group>"; };
-		4C8CDA091AD1D9CD00B7B9EA /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../../Reports/libTdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
 		4C8CDA0C1AD1DA5E00B7B9EA /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
 		4C8CDA0D1AD1DA5E00B7B9EA /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
 		4C8CDA0E1AD1DA5E00B7B9EA /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
@@ -778,7 +778,7 @@
 				4C8CDB041AD24DC300B7B9EA /* libBarcodes.a in Frameworks */,
 				4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */,
 				4C8CDAAD1AD1E06A00B7B9EA /* libMTDataStrutures.a in Frameworks */,
-				4C8CDA0A1AD1D9CD00B7B9EA /* liblibTdsClient.a in Frameworks */,
+				4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */,
 				4C8CD9A21AD1D2ED00B7B9EA /* libCloudManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1092,8 +1092,8 @@
 		4C8CDA0B1AD1D9D800B7B9EA /* libTDS */ = {
 			isa = PBXGroup;
 			children = (
+				4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */,
 				4C8CDA191AD1DA5E00B7B9EA /* freetds */,
-				4C8CDA091AD1D9CD00B7B9EA /* liblibTdsClient.a */,
 			);
 			name = libTDS;
 			sourceTree = "<group>";

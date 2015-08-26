@@ -856,7 +856,6 @@
 		4C2F27871B53FA1C004DFAEC /* odbcss.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7B7189E2A7D00BB5AF8 /* odbcss.h */; };
 		4C2F27881B53FA1C004DFAEC /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2B21AC909E0005CA75C /* UIImagePatternBeigeWithWhiteFlecks@2x.png */; };
 		4C2F27891B53FA1C004DFAEC /* MTBarcodeAztec.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C80A5DE183145F600242703 /* MTBarcodeAztec.h */; };
-		4C2F278A1B53FA1C004DFAEC /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
 		4C2F278B1B53FA1C004DFAEC /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4C2F278C1B53FA1C004DFAEC /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C2F278D1B53FA1C004DFAEC /* UIImagePatternGreenAndBlack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B2D61AC909E0005CA75C /* UIImagePatternGreenAndBlack@2x.png */; };
@@ -1034,8 +1033,6 @@
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
-		4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
-		4C6DAA941761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
 		4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
@@ -1260,7 +1257,6 @@
 		4C92954318C4CD740010AAEF /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4C92954418C4CD840010AAEF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C92954618C4CDB20010AAEF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
-		4C92954818C4CDCB0010AAEF /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */; };
 		4C92954A18C4CDFC0010AAEF /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4C92954B18C4CE240010AAEF /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76FB1825E8D500E462F6 /* libBarcodes.a */; };
 		4C92954D18C4CE360010AAEF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
@@ -1894,13 +1890,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4C2F254E1B53FA1C004DFAEC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CEBFA061760EF8B00FFA4F4;
-			remoteInfo = libTdsClient;
-		};
 		4C2F25501B53FA1C004DFAEC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
@@ -1921,13 +1910,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4CDA76CB1825E8D400E462F6;
 			remoteInfo = Barcodes;
-		};
-		4C359D8A1B07CBF100B3E9E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CEBFA061760EF8B00FFA4F4;
-			remoteInfo = libTdsClient;
 		};
 		4C359D8C1B07CBF100B3E9E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1991,20 +1973,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4CDA76CC1825E8D400E462F6;
 			remoteInfo = Barcodes;
-		};
-		4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CEBFA071760EF8B00FFA4F4;
-			remoteInfo = libTdsClient;
-		};
-		4CFFD9F219D5CC54001D0B02 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CFFD91A19D5C5E4001D0B02;
-			remoteInfo = "Tds Tests";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -2158,6 +2126,8 @@
 		4C1847BB1B8D65AB00FA7872 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../Sqlite3/Sqlite/sqlite3.h; sourceTree = "<group>"; };
 		4C1847BC1B8D65AB00FA7872 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../Sqlite3/Sqlite/sqlite3ext.h; sourceTree = "<group>"; };
 		4C1847BD1B8D65AB00FA7872 /* Sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sqlite.h; path = ../Sqlite3/Sqlite/Sqlite.h; sourceTree = "<group>"; };
+		4C1847BE1B8DEA8100FA7872 /* MTTdsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTdsClient.h; path = ../TdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
+		4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
@@ -2454,7 +2424,6 @@
 		4C5CB7BB189E2A7D00BB5AF8 /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
 		4C5CB7BC189E2A7D00BB5AF8 /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
 		4C5CB7BD189E2A7D00BB5AF8 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
-		4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
 		4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
 		4C6268D919F5DBF400DCCC2E /* MADVibrantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVibrantTableViewCell.h; path = Reports/MADVibrantTableViewCell.h; sourceTree = "<group>"; };
@@ -2480,7 +2449,6 @@
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4C6DAA921761AF7500FF770A /* MTTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MTTdsClient.h; path = libTdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
 		4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellDocument.h; sourceTree = "<group>"; };
 		4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTCollectionViewCellDocument.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animations.h"; sourceTree = "<group>"; };
@@ -3230,7 +3198,6 @@
 		4CEA5CD91B3A89EE00163ED4 /* UIButton+FollowTwitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+FollowTwitter.h"; sourceTree = "<group>"; };
 		4CEA5CDA1B3A89EE00163ED4 /* UIButton+FollowTwitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+FollowTwitter.m"; sourceTree = "<group>"; };
 		4CEA5CDD1B3A8F1700163ED4 /* MADSizeGeneral.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADSizeGeneral.h; sourceTree = "<group>"; };
-		4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libTdsClient.xcodeproj; path = libTdsClient/libTdsClient.xcodeproj; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF1335316CD1FE200FD0F0B /* MADQueryVisualizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationViewController.h; sourceTree = "<group>"; };
 		4CF1335416CD1FE300FD0F0B /* MADQueryVisualizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADQueryVisualizationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -3384,7 +3351,6 @@
 				4C92954B18C4CE240010AAEF /* libBarcodes.a in Frameworks */,
 				4C5CD39C181EBCB6005FC6DD /* CoreText.framework in Frameworks */,
 				4C92954A18C4CDFC0010AAEF /* Accelerate.framework in Frameworks */,
-				4C92954818C4CDCB0010AAEF /* liblibTdsClient.a in Frameworks */,
 				4C92954618C4CDB20010AAEF /* MessageUI.framework in Frameworks */,
 				4C92954418C4CD840010AAEF /* QuartzCore.framework in Frameworks */,
 				4C92954318C4CD740010AAEF /* libxml2.dylib in Frameworks */,
@@ -3779,6 +3745,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */,
 				4C1847B91B8D656E00FA7872 /* libSqlite.a */,
 				4CE84D8C1B396F3800BB3A0A /* Accounts.framework */,
 				4CE84D8A1B396F3200BB3A0A /* Social.framework */,
@@ -3863,7 +3830,6 @@
 		4C3A969D189F7DCF007AF476 /* libSybdb */ = {
 			isa = PBXGroup;
 			children = (
-				4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */,
 				4C6DAA411761AEBA00FF770A /* TdsClient */,
 			);
 			name = libSybdb;
@@ -4255,7 +4221,6 @@
 			isa = PBXGroup;
 			children = (
 				4C5CB7BE189E2A7D00BB5AF8 /* include */,
-				4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */,
 			);
 			name = freetds;
 			path = libTdsClient;
@@ -4444,8 +4409,8 @@
 		4C6DAA411761AEBA00FF770A /* TdsClient */ = {
 			isa = PBXGroup;
 			children = (
+				4C1847BE1B8DEA8100FA7872 /* MTTdsClient.h */,
 				4C5CB7C0189E2A7D00BB5AF8 /* freetds */,
-				4C6DAA921761AF7500FF770A /* MTTdsClient.h */,
 			);
 			name = TdsClient;
 			sourceTree = "<group>";
@@ -5289,15 +5254,6 @@
 			name = "Table View Cells";
 			sourceTree = "<group>";
 		};
-		4CEBFA331760EF8B00FFA4F4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */,
-				4CFFD9F319D5CC54001D0B02 /* Tds Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4CF1329416CA1E4900FD0F0B /* Report Desinger */ = {
 			isa = PBXGroup;
 			children = (
@@ -5487,7 +5443,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C2F254D1B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F254F1B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F25511B53FA1C004DFAEC /* PBXTargetDependency */,
 				4C2F25531B53FA1C004DFAEC /* PBXTargetDependency */,
@@ -5510,7 +5465,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C359D8B1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D8D1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D8F1B07CBF100B3E9E0 /* PBXTargetDependency */,
 				4C359D911B07CBF100B3E9E0 /* PBXTargetDependency */,
@@ -5673,10 +5627,6 @@
 					ProjectRef = 4C8394E11AC8F0220055EDE9 /* libMTDataStrutures.xcodeproj */;
 				},
 				{
-					ProductGroup = 4CEBFA331760EF8B00FFA4F4 /* Products */;
-					ProjectRef = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
-				},
-				{
 					ProductGroup = 4CB56DC71AC6835000756775 /* Products */;
 					ProjectRef = 4CB56DC61AC6835000756775 /* MysqlClientObjC.xcodeproj */;
 				},
@@ -5727,20 +5677,6 @@
 			fileType = archive.ar;
 			path = libBarcodes.a;
 			remoteRef = 4CDA76FA1825E8D500E462F6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = liblibTdsClient.a;
-			remoteRef = 4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CFFD9F319D5CC54001D0B02 /* Tds Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "Tds Tests.xctest";
-			remoteRef = 4CFFD9F219D5CC54001D0B02 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -6065,7 +6001,6 @@
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4C5CB7CA189E2A7D00BB5AF8 /* odbcss.h in Resources */,
 				4C80A6071831F28200242703 /* MTBarcodePdf417Iso15438.h in Resources */,
-				4C6DAA941761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4CD0B3341AC909E0005CA75C /* UIImagePatternBuffTextured.png in Resources */,
 				4CD0B33E1AC909E0005CA75C /* UIImagePatternCharcoalFlecks@2x.png in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
@@ -6406,7 +6341,6 @@
 				4C2F27871B53FA1C004DFAEC /* odbcss.h in Resources */,
 				4C2F27881B53FA1C004DFAEC /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
 				4C2F27891B53FA1C004DFAEC /* MTBarcodeAztec.h in Resources */,
-				4C2F278A1B53FA1C004DFAEC /* MTTdsClient.h in Resources */,
 				4C2F278B1B53FA1C004DFAEC /* UIImageExportTypeSqlServer.png in Resources */,
 				4C2F278C1B53FA1C004DFAEC /* MADImageIconInfo@2x.png in Resources */,
 				4C2F278D1B53FA1C004DFAEC /* UIImagePatternGreenAndBlack@2x.png in Resources */,
@@ -6751,7 +6685,6 @@
 				4C5CB7C9189E2A7D00BB5AF8 /* odbcss.h in Resources */,
 				4CD0B31D1AC909E0005CA75C /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
 				4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */,
-				4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4C08B30D1AB679BE00B54D3A /* MADImageIconInfo@2x.png in Resources */,
 				4CD0B3651AC909E0005CA75C /* UIImagePatternGreenAndBlack@2x.png in Resources */,
@@ -7673,11 +7606,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4C2F254D1B53FA1C004DFAEC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libTdsClient;
-			targetProxy = 4C2F254E1B53FA1C004DFAEC /* PBXContainerItemProxy */;
-		};
 		4C2F254F1B53FA1C004DFAEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = libMTDataStrutures;
@@ -7692,11 +7620,6 @@
 			isa = PBXTargetDependency;
 			name = Barcodes;
 			targetProxy = 4C2F25541B53FA1C004DFAEC /* PBXContainerItemProxy */;
-		};
-		4C359D8B1B07CBF100B3E9E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libTdsClient;
-			targetProxy = 4C359D8A1B07CBF100B3E9E0 /* PBXContainerItemProxy */;
 		};
 		4C359D8D1B07CBF100B3E9E0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

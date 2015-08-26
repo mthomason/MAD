@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:TdsClient/libTdsClient.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Sqlite3/Sqlite.xcodeproj">
    </FileRef>
    <FileRef
