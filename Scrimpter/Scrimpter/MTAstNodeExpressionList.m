@@ -25,11 +25,11 @@
 }
 
 - (MTAbstractSyntaxTree *)expression {
-    return [self leftAST];
+    return self.leftAST;
 }
 
 - (MTAbstractSyntaxTree *)expressionList {
-    return  [self rightAST];
+    return self.rightAST;
 }
 
 - (MADValue *)evaluate {
@@ -37,7 +37,6 @@
     if (self.expression.nodetype != SCNodeTypeResult) {
         result = [[self expressionList] evaluate];
     }
-    NSLog(@"Function\t%s\nResult  \t%@\n\n", __PRETTY_FUNCTION__, result);
     return result;
 }
 

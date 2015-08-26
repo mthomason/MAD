@@ -118,6 +118,11 @@
     script = @"return 2*2/2+2;";
     success = [self testScript:script forValue:@(4) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+    
+    script = @"return (2+3)*2/(6-4);";
+    success = [self testScript:script forValue:@(5) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
 }
 
 - (void)testComparson {

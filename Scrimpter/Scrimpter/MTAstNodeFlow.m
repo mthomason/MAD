@@ -65,9 +65,9 @@
             MADValue *conditionValue = [[self condition] evaluate];
             BOOL condition = [[conditionValue value] boolValue];
             if (condition) {
-                result = [[self leftAST] evaluate];
+                result = [self.leftAST evaluate];
             } else {
-                result = [[self rightAST] evaluate];
+                result = [self.rightAST evaluate];
             }
             
             break;
@@ -93,11 +93,11 @@
 }
 
 - (MTAbstractSyntaxTree *)thenList {
-    return [self leftAST];
+    return self.leftAST;
 }
 
 - (MTAbstractSyntaxTree *)elseList {
-    return [self rightAST];
+    return self.rightAST;
 }
 
 @end

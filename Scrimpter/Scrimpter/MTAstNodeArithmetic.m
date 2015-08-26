@@ -26,8 +26,8 @@
 }
 
 - (MADValue *)evaluate {
-    MADValue *left = [[self leftAST] evaluate];
-    MADValue *right = [[self rightAST] evaluate];
+    MADValue *left = [self.leftAST evaluate];
+    MADValue *right = [self.rightAST evaluate];
     double leftValue = [[left value] doubleValue];
     double rightValue = [[right value] doubleValue];
     double result;
