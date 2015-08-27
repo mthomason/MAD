@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Feedback/Feedback.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:MySQLClientObjC/MysqlClientObjC.xcodeproj">
    </FileRef>
    <FileRef
