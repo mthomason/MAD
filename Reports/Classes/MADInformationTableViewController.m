@@ -16,7 +16,6 @@
 #import "UIButton+FollowTwitter.h"
 #import "UIAlertController+Constructors.h"
 #import "NSAttributedString+Common.h"
-//#import "NSError+Constructors.h"
 
 @interface MADInformationTableViewController ()
     <MFMailComposeViewControllerDelegate>

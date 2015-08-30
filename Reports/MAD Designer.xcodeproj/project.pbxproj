@@ -225,6 +225,8 @@
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
 		4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C1848091B8EEC4300FA7872 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C009F821B01BBFC00F22BFF /* libmysqlclient.a */; };
+		4C196F2E1B91092B0036D8A8 /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */; };
+		4C196F2F1B91092B0036D8A8 /* MADFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1A585D14DE348200184445 /* MTQueryBuilderSortTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* MTQueryBuilderSortTypeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1A586614E23DDB00184445 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
@@ -1104,6 +1106,7 @@
 		4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4C8D2A241B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C8D2A251B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */; };
+		4C8DCFB61B90CA240078563C /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB51B90CA240078563C /* MADFeedback.framework */; };
 		4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1848,6 +1851,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4C196F301B91092C0036D8A8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C196F2F1B91092B0036D8A8 /* MADFeedback.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C2F27A01B53FA1C004DFAEC /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2032,6 +2046,7 @@
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
+		4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = MADFeedback.framework; path = "/Users/mthomason/Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFeedback.framework"; sourceTree = "<absolute>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
 		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
@@ -2538,6 +2553,7 @@
 		4C8CDD0A1AD2F4BD00B7B9EA /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqFieldSelectorManager.h; path = ../MAD/MAD/MAD/rptq/RptqFieldSelectorManager.h; sourceTree = "<group>"; };
 		4C8D2A221B45307200237C20 /* UIMotionEffectGroup+HoverEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMotionEffectGroup+HoverEffects.h"; sourceTree = "<group>"; };
 		4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
+		4C8DCFB51B90CA240078563C /* MADFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFeedback.framework; path = "../Feedback/build/Debug-iphoneos/MADFeedback.framework"; sourceTree = "<group>"; };
 		4C8F7CE114CEC12B006171A7 /* MTQueryBuilderAddTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddTableViewController.h; sourceTree = "<group>"; };
 		4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddTableViewController.m; sourceTree = "<group>"; };
 		4C8F7CE514CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstTableViewController.h; sourceTree = "<group>"; };
@@ -3165,6 +3181,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8DCFB61B90CA240078563C /* MADFeedback.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
 				4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */,
 				4C359E231B082E7E00B3E9E0 /* libssl.a in Frameworks */,
@@ -3178,6 +3195,7 @@
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
+				4C196F2E1B91092B0036D8A8 /* MADFeedback.framework in Frameworks */,
 				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
@@ -3571,6 +3589,8 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C8DCFB51B90CA240078563C /* MADFeedback.framework */,
+				4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */,
 				4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */,
 				4C1847B91B8D656E00FA7872 /* libSqlite.a */,
 				4CE84D8C1B396F3800BB3A0A /* Accounts.framework */,
@@ -5246,6 +5266,7 @@
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
+				4C196F301B91092C0036D8A8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7661,6 +7682,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7682,6 +7704,7 @@
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/system",
 					"$(PROJECT_DIR)/../Compressor/library",
@@ -7690,7 +7713,6 @@
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
 					"$(PROJECT_DIR)/../Compressor/library/openssl",
 					"$(PROJECT_DIR)/../Reports/Reports",
-					"$(PROJECT_DIR)/libMysqlClient/MysqlClient",
 					"$(PROJECT_DIR/libSqlite3/Sqlite3",
 					"$(PROJECT_DIR)/libCocoaExtentions",
 					"$(PROJECT_DIR)/libCocoaExtension/CocoaExtentions",
@@ -7723,6 +7745,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7742,6 +7765,7 @@
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/system",
 					"$(PROJECT_DIR)/../Compressor/library",
@@ -7750,7 +7774,6 @@
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
 					"$(PROJECT_DIR)/../Compressor/library/openssl",
 					"$(PROJECT_DIR)/../Reports/Reports",
-					"$(PROJECT_DIR)/libMysqlClient/MysqlClient",
 					"$(PROJECT_DIR/libSqlite3/Sqlite3",
 					"$(PROJECT_DIR)/libCocoaExtentions",
 					"$(PROJECT_DIR)/libCocoaExtension/CocoaExtentions",

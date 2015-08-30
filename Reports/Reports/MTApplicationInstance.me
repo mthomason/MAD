@@ -69,9 +69,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.18";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.18";
-NSString * const MTGlobalBundleRev                                  = @"1960";
+NSString * const MTGlobalBundleVersion                              = @"8.0.19";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.19";
+NSString * const MTGlobalBundleRev                                  = @"1961";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -92,11 +92,8 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
                                                                     //documents array.
 
 @property (nonatomic, strong, readwrite) MADFileManager *fileManager;
-
 @property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
-
 @property (nonatomic, readonly, getter=isFirstLaunch) BOOL firstLaunch;
-
 @property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
 
 @end
@@ -123,7 +120,6 @@ static MTApplicationInstance *mainInstance;
 + (instancetype)allocWithZone:(NSZone *)zone {
     return [super allocWithZone:zone];
 }
-
 
 + (MTApplicationInstance *)mainInstance {
     static dispatch_once_t onceToken;

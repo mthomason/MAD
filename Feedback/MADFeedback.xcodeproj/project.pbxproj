@@ -7,9 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C8DCF991B8FCD4D0078563C /* Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8DCF981B8FCD4D0078563C /* Feedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C8DCFA01B8FCD4D0078563C /* Feedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCF951B8FCD4D0078563C /* Feedback.framework */; };
+		4C8DCF991B8FCD4D0078563C /* MADFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8DCF981B8FCD4D0078563C /* MADFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C8DCFA01B8FCD4D0078563C /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */; };
 		4C8DCFA51B8FCD4D0078563C /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DCFA41B8FCD4D0078563C /* FeedbackTests.m */; };
+		4C8DCFB11B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8DCFAF1B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C8DCFB21B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DCFB01B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m */; };
+		4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB31B90C9F50078563C /* UIKit.framework */; };
+		4CC035D91B90F50C001A3CC5 /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CC035DA1B90F50C001A3CC5 /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */; };
+		4CC035DF1B90F7F8001A3CC5 /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC035DE1B90F7F8001A3CC5 /* libCocoaExtensions.a */; };
+		4CC035E11B90F813001A3CC5 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */; };
+		4CC035E41B90FC0E001A3CC5 /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */; };
+		4CC035E51B90FC0E001A3CC5 /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */; };
+		4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC035E61B90FF99001A3CC5 /* MessageUI.framework */; };
+		4CC035EA1B9102DC001A3CC5 /* UIAlertController+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +34,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C8DCF951B8FCD4D0078563C /* Feedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Feedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C8DCF981B8FCD4D0078563C /* Feedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Feedback.h; sourceTree = "<group>"; };
+		4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8DCF981B8FCD4D0078563C /* MADFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADFeedback.h; sourceTree = "<group>"; };
 		4C8DCF9A1B8FCD4D0078563C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C8DCF9F1B8FCD4D0078563C /* FeedbackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedbackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8DCF9F1B8FCD4D0078563C /* MADFeedback.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADFeedback.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8DCFA41B8FCD4D0078563C /* FeedbackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedbackTests.m; sourceTree = "<group>"; };
 		4C8DCFA61B8FCD4D0078563C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C8DCFAF1B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackUncaughtExceptionHandler.h; sourceTree = "<group>"; };
+		4C8DCFB01B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackUncaughtExceptionHandler.m; sourceTree = "<group>"; };
+		4C8DCFB31B90C9F50078563C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackFrustration.h; sourceTree = "<group>"; };
+		4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackFrustration.m; sourceTree = "<group>"; };
+		4CC035DE1B90F7F8001A3CC5 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
+		4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Utilities.h"; path = "../CocoaExtensions/CocoaExtensions/UIViewController+Utilities.h"; sourceTree = "<group>"; };
+		4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Feedback.h"; sourceTree = "<group>"; };
+		4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Feedback.m"; sourceTree = "<group>"; };
+		4CC035E61B90FF99001A3CC5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */,
+				4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */,
+				4CC035DF1B90F7F8001A3CC5 /* libCocoaExtensions.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DCFA01B8FCD4D0078563C /* Feedback.framework in Frameworks */,
+				4C8DCFA01B8FCD4D0078563C /* MADFeedback.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +80,7 @@
 			children = (
 				4C8DCF971B8FCD4D0078563C /* Feedback */,
 				4C8DCFA31B8FCD4D0078563C /* FeedbackTests */,
+				4C8DCFFC1B90DF1E0078563C /* Frameworks */,
 				4C8DCF961B8FCD4D0078563C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,8 +88,8 @@
 		4C8DCF961B8FCD4D0078563C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4C8DCF951B8FCD4D0078563C /* Feedback.framework */,
-				4C8DCF9F1B8FCD4D0078563C /* FeedbackTests.xctest */,
+				4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */,
+				4C8DCF9F1B8FCD4D0078563C /* MADFeedback.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -71,8 +97,14 @@
 		4C8DCF971B8FCD4D0078563C /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
-				4C8DCF981B8FCD4D0078563C /* Feedback.h */,
+				4C8DCF981B8FCD4D0078563C /* MADFeedback.h */,
 				4C8DCF9A1B8FCD4D0078563C /* Info.plist */,
+				4C8DCFAF1B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h */,
+				4C8DCFB01B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m */,
+				4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */,
+				4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */,
+				4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */,
+				4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */,
 			);
 			path = Feedback;
 			sourceTree = "<group>";
@@ -86,6 +118,26 @@
 			path = FeedbackTests;
 			sourceTree = "<group>";
 		};
+		4C8DCFFC1B90DF1E0078563C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4CC035E81B90FFAD001A3CC5 /* CocoaExtensions */,
+				4C8DCFB31B90C9F50078563C /* UIKit.framework */,
+				4CC035E61B90FF99001A3CC5 /* MessageUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CC035E81B90FFAD001A3CC5 /* CocoaExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */,
+				4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */,
+				4CC035DE1B90F7F8001A3CC5 /* libCocoaExtensions.a */,
+			);
+			name = CocoaExtensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -93,16 +145,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DCF991B8FCD4D0078563C /* Feedback.h in Headers */,
+				4C8DCF991B8FCD4D0078563C /* MADFeedback.h in Headers */,
+				4CC035D91B90F50C001A3CC5 /* MADFeedbackFrustration.h in Headers */,
+				4C8DCFB11B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h in Headers */,
+				4CC035EA1B9102DC001A3CC5 /* UIAlertController+Constructors.h in Headers */,
+				4CC035E11B90F813001A3CC5 /* UIViewController+Utilities.h in Headers */,
+				4CC035E41B90FC0E001A3CC5 /* UIAlertController+Feedback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4C8DCF941B8FCD4D0078563C /* Feedback */ = {
+		4C8DCF941B8FCD4D0078563C /* MADFeedback */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C8DCFA91B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "Feedback" */;
+			buildConfigurationList = 4C8DCFA91B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "MADFeedback" */;
 			buildPhases = (
 				4C8DCF901B8FCD4D0078563C /* Sources */,
 				4C8DCF911B8FCD4D0078563C /* Frameworks */,
@@ -113,14 +170,14 @@
 			);
 			dependencies = (
 			);
-			name = Feedback;
+			name = MADFeedback;
 			productName = Feedback;
-			productReference = 4C8DCF951B8FCD4D0078563C /* Feedback.framework */;
+			productReference = 4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		4C8DCF9E1B8FCD4D0078563C /* FeedbackTests */ = {
+		4C8DCF9E1B8FCD4D0078563C /* MADFeedbackTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C8DCFAC1B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "FeedbackTests" */;
+			buildConfigurationList = 4C8DCFAC1B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "MADFeedbackTests" */;
 			buildPhases = (
 				4C8DCF9B1B8FCD4D0078563C /* Sources */,
 				4C8DCF9C1B8FCD4D0078563C /* Frameworks */,
@@ -131,9 +188,9 @@
 			dependencies = (
 				4C8DCFA21B8FCD4D0078563C /* PBXTargetDependency */,
 			);
-			name = FeedbackTests;
+			name = MADFeedbackTests;
 			productName = FeedbackTests;
-			productReference = 4C8DCF9F1B8FCD4D0078563C /* FeedbackTests.xctest */;
+			productReference = 4C8DCF9F1B8FCD4D0078563C /* MADFeedback.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -153,7 +210,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4C8DCF8F1B8FCD4D0078563C /* Build configuration list for PBXProject "Feedback" */;
+			buildConfigurationList = 4C8DCF8F1B8FCD4D0078563C /* Build configuration list for PBXProject "MADFeedback" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -165,8 +222,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4C8DCF941B8FCD4D0078563C /* Feedback */,
-				4C8DCF9E1B8FCD4D0078563C /* FeedbackTests */,
+				4C8DCF941B8FCD4D0078563C /* MADFeedback */,
+				4C8DCF9E1B8FCD4D0078563C /* MADFeedbackTests */,
 			);
 		};
 /* End PBXProject section */
@@ -193,6 +250,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8DCFB21B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m in Sources */,
+				4CC035DA1B90F50C001A3CC5 /* MADFeedbackFrustration.m in Sources */,
+				4CC035E51B90FC0E001A3CC5 /* UIAlertController+Feedback.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +269,7 @@
 /* Begin PBXTargetDependency section */
 		4C8DCFA21B8FCD4D0078563C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 4C8DCF941B8FCD4D0078563C /* Feedback */;
+			target = 4C8DCF941B8FCD4D0078563C /* MADFeedback */;
 			targetProxy = 4C8DCFA11B8FCD4D0078563C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -225,6 +285,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -233,7 +294,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -252,7 +313,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -272,6 +333,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -280,7 +342,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -293,7 +355,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -314,7 +376,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.Feedback;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MADFeedback;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -330,7 +392,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.Feedback;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MADFeedback;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -341,7 +403,7 @@
 				INFOPLIST_FILE = FeedbackTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.FeedbackTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MADFeedback;
 			};
 			name = Debug;
 		};
@@ -351,14 +413,14 @@
 				INFOPLIST_FILE = FeedbackTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.FeedbackTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MADFeedback;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4C8DCF8F1B8FCD4D0078563C /* Build configuration list for PBXProject "Feedback" */ = {
+		4C8DCF8F1B8FCD4D0078563C /* Build configuration list for PBXProject "MADFeedback" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C8DCFA71B8FCD4D0078563C /* Debug */,
@@ -367,21 +429,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C8DCFA91B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "Feedback" */ = {
+		4C8DCFA91B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "MADFeedback" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C8DCFAA1B8FCD4D0078563C /* Debug */,
 				4C8DCFAB1B8FCD4D0078563C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		4C8DCFAC1B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "FeedbackTests" */ = {
+		4C8DCFAC1B8FCD4D0078563C /* Build configuration list for PBXNativeTarget "MADFeedbackTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C8DCFAD1B8FCD4D0078563C /* Debug */,
 				4C8DCFAE1B8FCD4D0078563C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

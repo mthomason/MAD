@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>
+#import <MADFeedback/MADFeedback.h>
 #import "MADConstants.h"
 
 #import "MTNavigationController.h"
@@ -74,15 +75,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
 };*/
 
-#if DEBUG
-
-    //static void uncaughtExceptionHandler(NSException *exception);
-    //static void uncaughtExceptionHandler(NSException *exception) {
-    //    MTLogStatic(@"%@", exception);
-    //}
-
-#endif
-
 + (MTApplicationInstance *)app {
     return [MTApplicationInstance mainInstance];
 }
@@ -117,6 +109,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    MADUncaughtExceptionHandlerInstaller();
+    
     [AppDelegate registerForNotifications:application];
 
     [self addObservers];
@@ -139,6 +133,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         });
     }];
     
+    [MADFeedbackFrustration sharedInstance];
     
     return YES;
 }
