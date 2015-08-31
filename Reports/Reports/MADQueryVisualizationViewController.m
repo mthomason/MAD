@@ -101,38 +101,8 @@ typedef void(^MTBlockResultVoid)(void);
     [self removeViewControllers:setToRemove];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    
-    NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
-    self.viewControllers = viewControllers;
-    
-    NSMutableSet *tableObjectIds = [[NSMutableSet alloc] init];
-    self.tableIds = tableObjectIds;
-    
-    NSMutableDictionary *controllersForTableIds = [[NSMutableDictionary alloc] init];
-    self.controllersForObjectIds = controllersForTableIds;
-    
-    NSMutableDictionary *controllersForObjectIdsLink = [[NSMutableDictionary alloc] init];
-    self.controllersForObjectIdsLink = controllersForObjectIdsLink;
-    
-    NSMutableDictionary *attachmentBehaviors = [[NSMutableDictionary alloc] init];
-    self.attachmentBehaviors = attachmentBehaviors;
-    
-    NSMutableArray *tableStartingPoints = [[NSMutableArray alloc] init];
-    self.tableStartingPoints = tableStartingPoints;
-    
-    NSMutableDictionary *pushBehaviors = [[NSMutableDictionary alloc] init];
-    self.pushBehaviors = pushBehaviors;
-    
-    self.tableDisplayCounter = 0;
-    
-    CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
-    UIColor *borderColor = [UIColor lightGrayColor];
-    self.backgroundContainer.layer.borderWidth = borderWidth;
-    self.backgroundContainer.layer.borderColor = [borderColor CGColor];
-
+- (void)loadView {
+    [super loadView];
     UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
     
     containerView.contentMode = UIViewContentModeScaleAspectFit;
@@ -156,7 +126,7 @@ typedef void(^MTBlockResultVoid)(void);
     scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [scrollView addSubview:containerView];
-
+    
     [self.backgroundContainer addSubview:scrollView];
     
     NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0.0000f constant:self.backgroundContainer.frame.size.height];
@@ -194,6 +164,41 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.scrollView = scrollView;
     self.contentView = containerView;
+    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    
+    NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
+    self.viewControllers = viewControllers;
+    
+    NSMutableSet *tableObjectIds = [[NSMutableSet alloc] init];
+    self.tableIds = tableObjectIds;
+    
+    NSMutableDictionary *controllersForTableIds = [[NSMutableDictionary alloc] init];
+    self.controllersForObjectIds = controllersForTableIds;
+    
+    NSMutableDictionary *controllersForObjectIdsLink = [[NSMutableDictionary alloc] init];
+    self.controllersForObjectIdsLink = controllersForObjectIdsLink;
+    
+    NSMutableDictionary *attachmentBehaviors = [[NSMutableDictionary alloc] init];
+    self.attachmentBehaviors = attachmentBehaviors;
+    
+    NSMutableArray *tableStartingPoints = [[NSMutableArray alloc] init];
+    self.tableStartingPoints = tableStartingPoints;
+    
+    NSMutableDictionary *pushBehaviors = [[NSMutableDictionary alloc] init];
+    self.pushBehaviors = pushBehaviors;
+    
+    self.tableDisplayCounter = 0;
+    
+    CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+    UIColor *borderColor = [UIColor lightGrayColor];
+    self.backgroundContainer.layer.borderWidth = borderWidth;
+    self.backgroundContainer.layer.borderColor = [borderColor CGColor];
+
     
     NSMutableArray *toolbarButtons = [self.toolbarBottom.items mutableCopy];
     [self.toolbarBottom setItems:toolbarButtons animated:NO];
