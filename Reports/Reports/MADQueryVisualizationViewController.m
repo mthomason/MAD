@@ -42,10 +42,13 @@
 #import "MTLinkedList.h"
 #import "MTGraph.h"
 
+#import "RptqDocument+Extras.h"
+
 #import "MTQueryTest.h"
 #import "NSError+Constructors.h"
 #import "UIViewController+Designer.h"
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
+#import "NSLayoutConstraint+QueryVisulization.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -101,8 +104,47 @@ typedef void(^MTBlockResultVoid)(void);
     [self removeViewControllers:setToRemove];
 }
 
-- (void)loadView {
-    [super loadView];
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
+    self.viewControllers = viewControllers;
+    
+    NSMutableSet *tableObjectIds = [[NSMutableSet alloc] init];
+    self.tableIds = tableObjectIds;
+    
+    NSMutableDictionary *controllersForTableIds = [[NSMutableDictionary alloc] init];
+    self.controllersForObjectIds = controllersForTableIds;
+    
+    NSMutableDictionary *controllersForObjectIdsLink = [[NSMutableDictionary alloc] init];
+    self.controllersForObjectIdsLink = controllersForObjectIdsLink;
+    
+    NSMutableDictionary *attachmentBehaviors = [[NSMutableDictionary alloc] init];
+    self.attachmentBehaviors = attachmentBehaviors;
+    
+    NSMutableArray *tableStartingPoints = [[NSMutableArray alloc] init];
+    self.tableStartingPoints = tableStartingPoints;
+    
+    NSMutableDictionary *pushBehaviors = [[NSMutableDictionary alloc] init];
+    self.pushBehaviors = pushBehaviors;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tableDisplayCounter = 0;
+    
+    CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+    UIColor *borderColor = [UIColor lightGrayColor];
+    self.backgroundContainer.layer.borderWidth = borderWidth;
+    self.backgroundContainer.layer.borderColor = [borderColor CGColor];
+
+    
     UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
     
     containerView.contentMode = UIViewContentModeScaleAspectFit;
@@ -164,58 +206,28 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.scrollView = scrollView;
     self.contentView = containerView;
-    
-}
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    
-    NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
-    self.viewControllers = viewControllers;
-    
-    NSMutableSet *tableObjectIds = [[NSMutableSet alloc] init];
-    self.tableIds = tableObjectIds;
-    
-    NSMutableDictionary *controllersForTableIds = [[NSMutableDictionary alloc] init];
-    self.controllersForObjectIds = controllersForTableIds;
-    
-    NSMutableDictionary *controllersForObjectIdsLink = [[NSMutableDictionary alloc] init];
-    self.controllersForObjectIdsLink = controllersForObjectIdsLink;
-    
-    NSMutableDictionary *attachmentBehaviors = [[NSMutableDictionary alloc] init];
-    self.attachmentBehaviors = attachmentBehaviors;
-    
-    NSMutableArray *tableStartingPoints = [[NSMutableArray alloc] init];
-    self.tableStartingPoints = tableStartingPoints;
-    
-    NSMutableDictionary *pushBehaviors = [[NSMutableDictionary alloc] init];
-    self.pushBehaviors = pushBehaviors;
-    
-    self.tableDisplayCounter = 0;
-    
-    CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
-    UIColor *borderColor = [UIColor lightGrayColor];
-    self.backgroundContainer.layer.borderWidth = borderWidth;
-    self.backgroundContainer.layer.borderColor = [borderColor CGColor];
-
-    
     NSMutableArray *toolbarButtons = [self.toolbarBottom.items mutableCopy];
     [self.toolbarBottom setItems:toolbarButtons animated:NO];
+    
+    
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
+    
     NSArray *emptyArray = @[];
+    
     UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:emptyArray];
-    [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
-    [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
-    [collisionBehavior setCollisionDelegate:self];
+    collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
+    collisionBehavior.collisionMode = UICollisionBehaviorModeItems;
+    collisionBehavior.collisionDelegate = self;
+    
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:emptyArray];
-    gravity.magnitude = 0.3000f;
+    gravity.magnitude = 1.0000f;
     gravity.gravityDirection = CGVectorMake(1.0000f, 0.0000f);
 
     UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
     dynamicItemBehavior.allowsRotation = NO;
-    dynamicItemBehavior.elasticity = 0.4000f;
-    dynamicItemBehavior.resistance = 0.1000f;
+    dynamicItemBehavior.elasticity = 0.0000f;
+    dynamicItemBehavior.resistance = 1.0000f;
     
     [animator addBehavior:dynamicItemBehavior];
     [animator addBehavior:collisionBehavior];
@@ -226,12 +238,8 @@ typedef void(^MTBlockResultVoid)(void);
     self.gravityBeahvior = gravity;
     self.collisionBehavior = collisionBehavior;
     
-    [self reloadDocument:self.document animated:YES];
+    [self reloadDocument:self.document animated:NO];
     
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -267,28 +275,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { }
-
-/*
- 
- // TEMPLATE METHOD
- 
- - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    if (shouldAutorotateToInterfaceOrientation) {
-
-        [self localWillRotate];
-        __weak UIViewController *weakself = self;
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself localWillAnimateRotation];
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            [weakself localDidRotate];
-        }];
- 
-    }
-}
- 
- */
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -715,7 +701,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Reload document view controllers
 
 - (void)redraw {
-    [self reloadDocument:self.document animated:YES];
+    [self reloadDocument:self.document animated:NO];
 }
 
 - (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated {
@@ -733,9 +719,8 @@ typedef void(^MTBlockResultVoid)(void);
         [self.controllersForObjectIds removeAllObjects];     //Tables and links
         [self.controllersForObjectIdsLink removeAllObjects];
         
-        RptqDocument *document = [documentReport activeDocumentModel];
-        RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-        RptqQuery *query = [database.hasQueries anyObject];
+        RptqQuery *query = documentReport.activeDocumentModel.query;
+        
         [self displayQuery:query animated:animated];
     }
     
@@ -842,7 +827,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     // Display links
     for (RptqQueryLinks *queryLink in [query hasQueryLinks]) {
-        [self addLinkViewControllerForQueryLink:queryLink animated:YES];
+        [self addLinkViewControllerForQueryLink:queryLink animated:animated];
     }
 }
 
@@ -1305,26 +1290,12 @@ typedef void(^MTBlockResultVoid)(void);
     CGRect viewControllerBounds = self.contentView.bounds;
     desiredFrame = [MADQueryVisualizationViewController rectForDesiredRect:subviewRect inBounds:viewControllerBounds];
     
-    NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:viewController.view
-                                                             attribute:NSLayoutAttributeWidth
-                                                             relatedBy:NSLayoutRelationEqual
-                                                                toItem:nil
-                                                             attribute:NSLayoutAttributeNotAnAttribute
-                                                            multiplier:1.0000f
-                                                              constant:desiredFrame.size.width];
+    NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:viewController.view
+                                                                  andWidth:desiredFrame.size.width];
     
-    NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:viewController.view
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:nil
-                                                              attribute:NSLayoutAttributeNotAnAttribute
-                                                             multiplier:1.0000f
-                                                               constant:desiredFrame.size.height];
-    width.priority = UILayoutPriorityDefaultHigh;
-    height.priority = UILayoutPriorityDefaultHigh;
-    
+    NSLayoutConstraint *height = [NSLayoutConstraint schemaViewHeightForView:viewController.view
+                                                                   andHeight:desiredFrame.size.height];
     viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    
     constraints = @[width, height];
     
     [self addChildViewController:viewController];
@@ -1345,6 +1316,8 @@ typedef void(^MTBlockResultVoid)(void);
     return viewController;
     
 }
+
+
 
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
     NSManagedObjectID *objectId = [link objectID];

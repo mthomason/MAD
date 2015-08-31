@@ -311,6 +311,11 @@
     return [section producesFormFeed];
 }
 
+- (RptqQuery *)query {
+    RptqDatabase *database = self.hasDatabaseSchemas.anyObject;
+    return database.hasQueries.anyObject;
+}
+
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *status, CGFloat progress))status
          completion:(void (^)(BOOL success, MTErrorContainer *error))completion {

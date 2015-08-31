@@ -21,6 +21,7 @@
 + (instancetype)documentFactory:(NSManagedObjectContext *)objectContext;
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
+@property (readonly) RptqQuery *query;  //Default... works for one query reports.
 - (RptqQuery *)defaultQuery;
 - (RptqDatabase *)defaultDatabase;
 

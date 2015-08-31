@@ -1263,6 +1263,7 @@
 		4CAD103319C009C000983B9E /* MADBackgroundScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAD103119C009C000983B9E /* MADBackgroundScrollView.m */; };
 		4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4CAE00CD1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
+		4CB074F81B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074F71B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.m */; };
 		4CB0FF6D16F501ED00B88626 /* MADToolboxFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */; };
 		4CB0FF6E16F501ED00B88626 /* MADToolboxFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */; };
 		4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2620,6 +2621,8 @@
 		4CAD103119C009C000983B9E /* MADBackgroundScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundScrollView.m; sourceTree = "<group>"; };
 		4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationControllerHideBottomBarUnlicensed.h; sourceTree = "<group>"; };
 		4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationControllerHideBottomBarUnlicensed.m; sourceTree = "<group>"; };
+		4CB074F61B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+QueryVisulization.h"; sourceTree = "<group>"; };
+		4CB074F71B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+QueryVisulization.m"; sourceTree = "<group>"; };
 		4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTToolboxViewControllerProtocol.h; path = Reports/MTToolboxViewControllerProtocol.h; sourceTree = "<group>"; };
 		4CB0FF6B16F501ED00B88626 /* MADToolboxFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxFormatViewController.h; sourceTree = "<group>"; };
 		4CB0FF6C16F501ED00B88626 /* MADToolboxFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxFormatViewController.m; sourceTree = "<group>"; };
@@ -5032,6 +5035,8 @@
 				4CEA5CD91B3A89EE00163ED4 /* UIButton+FollowTwitter.h */,
 				4CEA5CDA1B3A89EE00163ED4 /* UIButton+FollowTwitter.m */,
 				4CEA5CDD1B3A8F1700163ED4 /* MADSizeGeneral.h */,
+				4CB074F61B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.h */,
+				4CB074F71B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -7032,6 +7037,7 @@
 				4C23FAEA18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */,
 				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
+				4CB074F81B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.m in Sources */,
 				4CC96A5B1AC90D220044C157 /* MADVibrantTableViewCellBase.m in Sources */,
 				4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */,
 				4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
