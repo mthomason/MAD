@@ -10,6 +10,8 @@
 
 @interface NSLayoutConstraint (QueryVisulization)
 
++ (instancetype)heightForView:(UIView *)view andHeight:(CGFloat)height;
++ (instancetype)widthForView:(UIView *)view andWidth:(CGFloat)width;
 + (instancetype)schemaViewWidthForView:(UIView *)view andWidth:(CGFloat)width;
 + (instancetype)schemaViewHeightForView:(UIView *)view andHeight:(CGFloat)height;
 

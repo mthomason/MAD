@@ -171,10 +171,12 @@ typedef void(^MTBlockResultVoid)(void);
     
     [self.backgroundContainer addSubview:scrollView];
     
-    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0.0000f constant:self.backgroundContainer.frame.size.height];
-    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0.0000f constant:self.backgroundContainer.frame.size.width];
-    [containerView addConstraint:layoutConstraintSizeHeight];
-    [containerView addConstraint:layoutConstraintSizeWidth];
+    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:containerView
+                                                                             andHeight:self.backgroundContainer.frame.size.height];
+    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:containerView
+                                                                            andWidth:self.backgroundContainer.frame.size.width];
+    NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
+    [containerView addConstraints:containerViewConstraints];
     
     self.layoutConstraintSizeHeight = layoutConstraintSizeHeight;
     self.layoutConstraintSizeWidth = layoutConstraintSizeWidth;
@@ -182,6 +184,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSDictionary *viewDictionary = @{@"sv" : scrollView,
                                      @"cv" : containerView,
                                      @"bg" : self.backgroundContainer};
+    
     NSMutableArray *constraints = [NSMutableArray new];
     NSArray *constraints5 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary];
     NSArray *constraints6 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|" options:0 metrics:0 views:viewDictionary];
@@ -221,7 +224,7 @@ typedef void(^MTBlockResultVoid)(void);
     collisionBehavior.collisionDelegate = self;
     
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:emptyArray];
-    gravity.magnitude = 1.0000f;
+    gravity.magnitude = 100.0000f;
     gravity.gravityDirection = CGVectorMake(1.0000f, 0.0000f);
 
     UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
