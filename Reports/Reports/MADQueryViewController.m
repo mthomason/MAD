@@ -13,7 +13,6 @@
 #import "MADQueryViewController.h"
 
 #import "MADNavigationBarTitleView.h"
-#import "AppDelegate.h"
 #import "MADocument.h"
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"

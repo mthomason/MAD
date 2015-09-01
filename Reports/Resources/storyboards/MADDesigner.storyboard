@@ -1985,16 +1985,16 @@
                                 <rect key="frame" x="10" y="10" width="520" height="600"/>
                                 <subviews>
                                     <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOi-BF-VzE">
-                                        <rect key="frame" x="0.0" y="0.0" width="520" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="520" height="22"/>
                                         <color key="backgroundColor" red="0.086274512110000007" green="0.41568627949999998" blue="0.5411764979" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="a09-W0-mb1"/>
+                                            <constraint firstAttribute="height" constant="22" id="a09-W0-mb1"/>
                                         </constraints>
                                         <items>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="HKu-ve-maU"/>
                                             <barButtonItem style="plain" id="TQO-M5-ZFI">
                                                 <view key="customView" contentMode="scaleToFill" id="OIP-Z8-kxy" customClass="MTTitleView">
-                                                    <rect key="frame" x="185" y="6" width="150" height="33"/>
+                                                    <rect key="frame" x="185" y="-6" width="150" height="33"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                                 </view>
@@ -2005,7 +2005,7 @@
                                         <color key="barTintColor" red="0.086274512112140656" green="0.41568627953529358" blue="0.54117649793624878" alpha="1" colorSpace="calibratedRGB"/>
                                     </toolbar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8TZ-dQ-78r">
-                                        <rect key="frame" x="0.0" y="44" width="520" height="556"/>
+                                        <rect key="frame" x="0.0" y="22" width="520" height="578"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MTSchemaFieldCellIdentifier" rowHeight="22" id="dBI-d3-jvF" customClass="MTSchemaFieldCell">

@@ -17,7 +17,6 @@
 #import "MTReportViewerReportPageView.h"
 
 #import "UIDevice+Hack.h"
-#import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "UIApplication+Extras.h"
 #import "MADocument.h"

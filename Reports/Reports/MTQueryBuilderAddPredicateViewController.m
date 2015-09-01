@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderAddPredicateViewController.h"
-#import "AppDelegate.h"
 #import "MADocument.h"
 #import <CoreData/CoreData.h>
 #import "RptqQueryField.h"

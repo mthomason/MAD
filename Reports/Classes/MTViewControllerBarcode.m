@@ -19,7 +19,6 @@
 #import "MTBarcodePdf417Iso15438.h"
 
 #import "UIDevice+Hack.h"
-#import "AppDelegate.h"
 #import "MTQuery.h"
 
 #import "RptqQueryField.h"

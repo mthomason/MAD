@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderLinkBuilderViewController.h"
-#import "AppDelegate.h"
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 

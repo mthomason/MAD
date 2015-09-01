@@ -33,7 +33,6 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDatabaseSchemaField.h"
-#import "AppDelegate.h"
 #import "MTDataTable.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 

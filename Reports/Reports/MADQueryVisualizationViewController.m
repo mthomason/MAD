@@ -11,7 +11,6 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
-#import "AppDelegate.h"
 #import "MADocument.h"
 #import "MTApplicationInstance.h"
 #import "MADViewControllerSQL.h"
@@ -250,10 +249,6 @@ typedef void(^MTBlockResultVoid)(void);
     if (animated) {
         [self.scrollView flashScrollIndicators];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -1269,7 +1264,7 @@ typedef void(^MTBlockResultVoid)(void);
     CGFloat originX = 10.0000f + CGPointZero.x;
     BOOL ud = table.identifier.integerValue % 2;
     CGFloat originY = CGPointZero.y + self.scrollView.frame.size.height - (ud ? 200.0000f : - 600.0000f) - 20.0000f;
-    subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
+    subviewRect = CGRectMake(originX, originY, 120.0000f, 140.0000f);
 
     NSNumber *sizeHeight = @(subviewRect.size.height);
     NSNumber *sizeWidth = @(subviewRect.size.width);
@@ -1395,7 +1390,7 @@ typedef void(^MTBlockResultVoid)(void);
 
     UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID];
     MTConnectorView *connectorView = (MTConnectorView *)controller.view;
-    const CGFloat paddingLeft = 75.0000f;
+    const CGFloat paddingLeft = 44.0000f;
     
     MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[queryLink.hasLeftField.inQueryTable.objectID];
     MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[queryLink.hasRightField.inQueryTable.objectID];

@@ -15,8 +15,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MADocument.h"
 
-#import "AppDelegate.h"
-#import "MTApplicationInstance.h"
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
 
@@ -44,6 +42,8 @@
 @property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
 @property (nonatomic, strong) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSArray *sortDescriptorsFields;
+@property (nonatomic, strong) UIFont *titleFont;
+@property (nonatomic, strong) UIFont *detailFont;
 
 @end
 
@@ -93,6 +93,13 @@
 }
 
 - (void)commonInit {
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    UIFont *detalFont = [font fontWithSize:8.0000f];
+    UIFont *headLineFont = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    UIFont *titleFont = [headLineFont fontWithSize:12.0000f];
+    self.detailFont = detalFont;
+    self.titleFont = detalFont;
+    
     NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
     self.hasFieldsObjectIds = hasFieldsObjectIds;
     
@@ -139,7 +146,7 @@
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
                                               managedObjectContext: self.document.managedObjectContext];
     self.titleView.label.text = [table alias];
-    self.titleView.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    self.titleView.label.font = self.titleFont;
     [self.schemaTableViewController reloadData];
 }
 
@@ -165,7 +172,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 22.0000f;
+    return 16.0000f;
 }
 
 #pragma mark - Table view datasource
@@ -178,7 +185,7 @@
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
     result.detailLabel.text = field.databaseSchemaField.name;
-    result.detailLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    result.detailLabel.font = self.detailFont;
     return result;
 }
 

@@ -121,98 +121,102 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    rect = CGRectInset(rect, 10.0000f, 10.0000f);
-    
-    CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetShadow(currentContext, [self shadowSize], 5.0000f);
-    CGContextSetLineWidth(currentContext, 3.0000f);
-
-    CGRect connectorNobRectOrigin;
-    CGRect connectorNobRectDestination;
-
-    CGFloat largeCircleRadius = 3.0000f;
-    CGSize smallCircleSize = [self smallCircleSize];
-    CGFloat smallCircleRadius = 2.0000f;
-
-    CGPoint origin, destination;
-    CGPoint tangent[2];
-
-    [[self forgroundColor] set];
-
-    if (self.topLeftToBottomRight.boolValue) {
+    if (rect.size.width != CGSizeZero.width && rect.size.height != CGSizeZero.height) {
+        rect = CGRectInset(rect, 10.0000f, 10.0000f);
         
+        CGContextRef currentContext = UIGraphicsGetCurrentContext();
+        CGContextSetShadow(currentContext, self.shadowSize, 5.0000f);
+        CGContextSetLineWidth(currentContext, 3.0000f);
         
-        origin = CGPointMake(rect.origin.x, rect.origin.y);
-        destination = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+        CGRect connectorNobRectOrigin;
+        CGRect connectorNobRectDestination;
         
-        if ([self leftViewIsInital]) {   //origin is the back point of the arrow
-            connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+        CGFloat largeCircleRadius = 3.0000f;
+        CGSize smallCircleSize = self.smallCircleSize;
+        CGFloat smallCircleRadius = 2.0000f;
+        
+        CGPoint origin, destination;
+        CGPoint tangent[2];
+        
+        [self.forgroundColor set];
+        
+        if (self.topLeftToBottomRight.boolValue) {
+            
+            
+            origin = CGPointMake(rect.origin.x, rect.origin.y);
+            destination = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+            
+            if (self.leftViewIsInital) {   //origin is the back point of the arrow
+                connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+                connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+            } else {
+                connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+                connectorNobRectDestination = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+            }
+            tangent[0] = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
+            tangent[1] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
+            
         } else {
-            connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            connectorNobRectDestination = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+            
+            origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
+            destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
+            
+            if ([self leftViewIsInital]) {   //Origin is the front part of the arrow
+                connectorNobRectDestination = CGRectMake(origin.x - largeCircleRadius, origin.y - largeCircleRadius, smallCircleSize.width, smallCircleSize.height);
+                connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+            } else {
+                connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+                connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+            }
+            tangent[0] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+            tangent[1] = CGPointMake(rect.origin.x, rect.origin.y);
         }
-        tangent[0] = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
-        tangent[1] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
-
-    } else {
-    
-        origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
-        destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
-
-        if ([self leftViewIsInital]) {   //Origin is the front part of the arrow
-            connectorNobRectDestination = CGRectMake(origin.x - largeCircleRadius, origin.y - largeCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-        } else {
-            connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-            connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
+        
+        CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
+        CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
+        
+        if (fpclassify(tangent[0].x) == FP_NORMAL &&
+            fpclassify(tangent[0].y) == FP_NORMAL &&
+            fpclassify(tangent[1].x) == FP_NORMAL &&
+            fpclassify(tangent[1].y) == FP_NORMAL) {
+            
+            CGContextMoveToPoint(currentContext, origin.x, origin.y);
+            CGContextAddCurveToPoint(currentContext, tangent[0].x, tangent[0].y, tangent[1].x, tangent[1].y, destination.x, destination.y);
+            
+            CGFloat arrowRadius = 5.0000f;
+            UIBezierPath *path = [UIBezierPath bezierPath];
+            CGPoint pathOrigin = connectorNobRectDestination.origin;
+            pathOrigin.y += 3.0000f;
+            if (self.topLeftToBottomRight.boolValue) {
+                if (self.leftViewIsInital) {
+                    pathOrigin.x -= 5.0000f;
+                    [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
+                } else {
+                    pathOrigin.x += 10.0000f;
+                    [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
+                }
+            } else {
+                if (self.leftViewIsInital) {
+                    pathOrigin.x -= 5.0000f;
+                    [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
+                } else {
+                    pathOrigin.x += 10.0000f;
+                    [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
+                    [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
+                }
+            }
+            
+            [path setLineWidth:3.0000f];
+            [path stroke];
         }
-        tangent[0] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
-        tangent[1] = CGPointMake(rect.origin.x, rect.origin.y);
     }
-
-    CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
-    CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
-
-    CGContextMoveToPoint(currentContext, origin.x, origin.y);
-    CGContextAddCurveToPoint(currentContext, tangent[0].x, tangent[0].y, tangent[1].x, tangent[1].y, destination.x, destination.y);
-
-    //CGContextStrokePath(currentContext);
-    
-
-    CGFloat arrowRadius = 5.0000f;
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    CGPoint pathOrigin = connectorNobRectDestination.origin;
-    pathOrigin.y += 3.0000f;
-    if (self.topLeftToBottomRight.boolValue) {
-        if ([self leftViewIsInital]) {
-            pathOrigin.x -= 5.0000f;
-            [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
-        } else {
-            pathOrigin.x += 10.0000f;
-            [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
-        }
-    } else {
-        if ([self leftViewIsInital]) {
-            pathOrigin.x -= 5.0000f;
-            [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
-        } else {
-            pathOrigin.x += 10.0000f;
-            [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
-            [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
-        }
-    }
-    
-    [path setLineWidth:3.0000f];
-    [path stroke];
-
 }
 
 @end
