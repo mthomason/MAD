@@ -223,13 +223,13 @@ typedef void(^MTBlockResultVoid)(void);
     collisionBehavior.collisionDelegate = self;
     
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:emptyArray];
-    gravity.magnitude = 100.0000f;
+    gravity.magnitude = 1.0000f;
     gravity.gravityDirection = CGVectorMake(1.0000f, 0.0000f);
 
     UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
     dynamicItemBehavior.allowsRotation = NO;
-    dynamicItemBehavior.elasticity = 0.0000f;
-    dynamicItemBehavior.resistance = 1.0000f;
+    dynamicItemBehavior.elasticity = 0.3000f;
+    dynamicItemBehavior.resistance = CGFLOAT_MAX;
     
     [animator addBehavior:dynamicItemBehavior];
     [animator addBehavior:collisionBehavior];
@@ -415,18 +415,18 @@ typedef void(^MTBlockResultVoid)(void);
                 for (RptqQueryTable *queryTable in self.tableStartingPoints) {
                     CGFloat attachmentPointY = segHeight * (counter + 1);
                     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY - 22.0000f);
-                    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[[queryTable objectID]];
+                    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[queryTable.objectID.URIRepresentation];
                     [attachmentBehavior setAnchorPoint:attachmentPoint];
                     counter++;
                 }
                 
                 // FIXME: Maybe block this and move it off screen.
-                UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[updatedTable.objectID];
+                UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[updatedTable.objectID.URIRepresentation];
                 [self.dynamicAnimator removeBehavior:attachmentBehavior];
                 [self.gravityBeahvior removeItem:(MADQueryVisualizationSchemaViewController *)viewController];
                 [self.collisionBehavior removeItem:(MADQueryVisualizationSchemaViewController *)viewController];
                 [self.dynamicItemBehavior removeItem:(MADQueryVisualizationSchemaViewController *)viewController];
-                [self.attachmentBehaviors removeObjectForKey:updatedTable.objectID];
+                [self.attachmentBehaviors removeObjectForKey:updatedTable.objectID.URIRepresentation];
                 
                 // FIXME: do give time for animations... Can't imagine this will work.
                 [viewController willMoveToParentViewController:nil];
@@ -508,7 +508,7 @@ typedef void(^MTBlockResultVoid)(void);
 
     MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag];
     CGPoint newOrigin = [window convertPoint:gestureLocation toView:self.contentView];
-    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag];
+    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag.URIRepresentation];
     RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:gestureRecognizer.view.objectIdTag];
     
     if ([self.tableStartingPoints containsObject:table]) {
@@ -618,11 +618,9 @@ typedef void(^MTBlockResultVoid)(void);
 
         RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:controller.tableObjectId
                                                        managedObjectContext:self.document.managedObjectContext];
-        for (RptqQueryLinks *queryLink in [[queryTable inQuery] hasQueryLinks]) {
-            RptqQueryTable *leftTable = [queryLink.hasLeftField inQueryTable];
-            RptqQueryTable *rightTable = [queryLink.hasRightField inQueryTable];
-            if ([leftTable isEqualTo:queryTable] ||
-                [rightTable isEqualTo:queryTable]) {
+        for (RptqQueryLinks *queryLink in queryTable.inQuery.hasQueryLinks) {
+            if ([queryLink.hasLeftField.inQueryTable isEqualTo:queryTable] ||
+                [queryLink.hasRightField.inQueryTable isEqualTo:queryTable]) {
                 [self layoutQueryLinkViewController:queryLink animated:animated];
             }
         }
@@ -636,9 +634,9 @@ typedef void(^MTBlockResultVoid)(void);
     for (UIViewController *viewController in self.viewControllers) {
         Class schemaTableClass = [MADQueryVisualizationSchemaViewController class];
         if ([viewController isKindOfClass:schemaTableClass]) {
-            UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviors[[viewController.view objectIdTag]];
+            UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviors[viewController.view.objectIdTag.URIRepresentation];
             [self.dynamicAnimator removeBehavior:attachmentBehaviorForObjectId];
-            [self.attachmentBehaviors removeObjectForKey:[viewController.view objectIdTag]];
+            [self.attachmentBehaviors removeObjectForKey:viewController.view.objectIdTag.URIRepresentation];
             MADQueryVisualizationSchemaViewController *controller = (MADQueryVisualizationSchemaViewController *)viewController;
             [self.collisionBehavior removeItem:controller];
             [self.gravityBeahvior removeItem:controller];
@@ -654,7 +652,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (MTLinkedList *)tableObjectIDsSortedTopologicallyForQuery:(RptqQuery *)query {
 
     MTGraph *graph = [[MTGraph alloc] init];
-    NSSet *hasTables = [query hasQueryTables];
+    NSSet *hasTables = query.hasQueryTables;
     
     //Add a vertex to the graph for each table.
     for (RptqDatabaseSchemaTable *table in hasTables) {
@@ -782,7 +780,7 @@ typedef void(^MTBlockResultVoid)(void);
                     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY);
                     UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
                     [self.dynamicAnimator addBehavior:attachmentBehavior];
-                    self.attachmentBehaviors[objectIDView] = attachmentBehavior;
+                    self.attachmentBehaviors[objectIDView.URIRepresentation] = attachmentBehavior;
                     [self.tableStartingPoints addObject:table];
                     topLevelTableCounter++;
                     
@@ -799,7 +797,7 @@ typedef void(^MTBlockResultVoid)(void);
                                 UIAttachmentBehavior *attachmentBehaviorLeft = [MADQueryVisualizationViewController attachmentBehaviorLinkWithLeftViewController: leftTableViewController
                                                                                                                                           andRightViewController: viewController];
                                 [self.dynamicAnimator addBehavior:attachmentBehaviorLeft];
-                                self.attachmentBehaviors[link.objectID] = attachmentBehaviorLeft;
+                                self.attachmentBehaviors[link.objectID.URIRepresentation] = attachmentBehaviorLeft;
                             }
                             
                         }
@@ -827,7 +825,7 @@ typedef void(^MTBlockResultVoid)(void);
     BOOL startingPointTable = [self.tableStartingPoints containsObject:objectId];
     if (startingPointTable) {
         CGPoint offScreen = CGPointMakeRandomOffscreen();
-        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[objectId];
+        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[objectId.URIRepresentation];
         [attachmentBehavior setAnchorPoint:offScreen];
     }
     
@@ -870,7 +868,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSManagedObjectID *deletedLinkObjectId = [deletedQueryLinks objectID];
     RptqQueryLinks *deletedLink = (RptqQueryLinks *)[self.document.managedObjectContext objectWithID:deletedLinkObjectId];
-    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[deletedLinkObjectId];
+    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[deletedLinkObjectId.URIRepresentation];
     
     for (RptqQueryTable *table in orphanedQueryTables) {
         
@@ -886,7 +884,7 @@ typedef void(^MTBlockResultVoid)(void);
  
         UIAttachmentBehavior *anchorBehaviorNew = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
         [self.dynamicAnimator addBehavior:anchorBehaviorNew];
-        self.attachmentBehaviors[[tableRightDeletedLink objectID]] = anchorBehaviorNew;
+        self.attachmentBehaviors[tableRightDeletedLink.objectID.URIRepresentation] = anchorBehaviorNew;
         [self.tableStartingPoints addObject: tableRightDeletedLink];
         
         // Disable collision behaviors before reposition
@@ -896,7 +894,7 @@ typedef void(^MTBlockResultVoid)(void);
         for (RptqQueryTable *queryTable in self.tableStartingPoints) {
             CGFloat attachmentPointY = segHeight * (counter + 1);
             CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY - 22.0000f);
-            UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[[queryTable objectID]];
+            UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[queryTable.objectID.URIRepresentation];
             [attachmentBehavior setAnchorPoint:attachmentPoint];
             counter++;
         }
@@ -905,7 +903,7 @@ typedef void(^MTBlockResultVoid)(void);
     [self.dynamicAnimator removeBehavior:attachmentBehavior];
     [self.attachmentBehaviors removeObjectForKey:deletedLinkObjectId];
     
-    UIViewController *linkViewController = self.controllersForObjectIdsLink[[deletedLink objectID]];
+    UIViewController *linkViewController = self.controllersForObjectIdsLink[deletedLink.objectID.URIRepresentation];
     if (linkViewController != nil) {
         [self removeViewController:linkViewController];
     }
@@ -913,7 +911,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)insertQueryTable:(RptqQueryTable *)insertedQueryTable {
     
-    CGFloat segHeight = (self.contentView.bounds.size.height / ([self.tableStartingPoints count] + 2));
+    CGFloat segHeight = self.contentView.bounds.size.height / (self.tableStartingPoints.count + 2);
     
     // Reposition existing tables
     // FIXME: Good place for block iterate?
@@ -921,12 +919,12 @@ typedef void(^MTBlockResultVoid)(void);
     for (RptqQueryTable *queryTable in self.tableStartingPoints) {
         CGFloat attachmentPointY = segHeight * (counter + 1);
         CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY - 22.0000f);
-        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[[queryTable objectID]];
+        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[queryTable.objectID.URIRepresentation];
         [attachmentBehavior setAnchorPoint:attachmentPoint];
         counter++;
     }
     
-    CGFloat attachmentPointY = segHeight * ([self.tableStartingPoints count] + 1);
+    CGFloat attachmentPointY = segHeight * (self.tableStartingPoints.count + 1);
     CGPoint insertTableAnchorPoint = CGPointMake(CGPointZero.x, attachmentPointY - 22.0000f);
     
     // Insert new and unlinked query table
@@ -941,7 +939,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:insertTableAnchorPoint];
 
     [self.dynamicAnimator addBehavior:attachmentBehavior];
-    self.attachmentBehaviors[objectIDView] = attachmentBehavior;
+    self.attachmentBehaviors[objectIDView.URIRepresentation] = attachmentBehavior;
     
     self.tableDisplayCounter++;
     
@@ -1013,9 +1011,9 @@ typedef void(^MTBlockResultVoid)(void);
         }
         if (removeableTable) {
             queryTableRemoved = queryTable;
-            UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[[removeableTable objectID]];
+            UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[removeableTable.objectID.URIRepresentation];
             [self.dynamicAnimator removeBehavior:attachmentBehavior];
-            [self.attachmentBehaviors removeObjectForKey:[removeableTable objectID]];
+            [self.attachmentBehaviors removeObjectForKey:removeableTable.objectID.URIRepresentation];
             startingPointRemoved = YES;
             startingPointsRemovedCounter++;
             if (startingPointsRemovedCounter == 2) {
@@ -1033,7 +1031,7 @@ typedef void(^MTBlockResultVoid)(void);
         for (RptqQueryTable *queryTable in self.tableStartingPoints) {
             CGFloat attachmentPointY = segHeight * (counter + 1);
             CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY - 22.0000f);
-            UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[[queryTable objectID]];
+            UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[queryTable.objectID.URIRepresentation];
             [attachmentBehavior setAnchorPoint:attachmentPoint];
             counter++;
         }
@@ -1044,7 +1042,7 @@ typedef void(^MTBlockResultVoid)(void);
         UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorLinkWithLeftViewController: leftTableViewController
                                                                                                               andRightViewController: rightTableViewController];
         [self.dynamicAnimator addBehavior:attachmentBehavior];
-        self.attachmentBehaviors[insertedQueryLinks.objectID] = attachmentBehavior;
+        self.attachmentBehaviors[insertedQueryLinks.objectID.URIRepresentation] = attachmentBehavior;
         
         //Add animation layer
         [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];
@@ -1067,9 +1065,9 @@ typedef void(^MTBlockResultVoid)(void);
     // FIXME: Make sure they are not the same, or crash, lolz
 
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerRight attachedToItem:viewControllerLeft];
-    [behavior setFrequency:1.000f];
-    [behavior setDamping:1.200f];
-    [behavior setLength:7.0000f];
+    behavior.frequency = 0.000f;
+    behavior.damping = 1.000f;
+    behavior.length = 175.0000f;
     
     return behavior;
 }
@@ -1201,10 +1199,10 @@ typedef void(^MTBlockResultVoid)(void);
         Class schemaTableClass = [MADQueryVisualizationSchemaViewController class];
         if ([viewController isKindOfClass:schemaTableClass]) {
             MADQueryVisualizationSchemaViewController *controller = (MADQueryVisualizationSchemaViewController *)viewController;
-            UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviors[[viewController.view objectIdTag]];
+            UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviors[viewController.view.objectIdTag.URIRepresentation];
             [self.dynamicAnimator removeBehavior:attachmentBehaviorForObjectId];
 
-            [self.attachmentBehaviors removeObjectForKey:[viewController.view objectIdTag]];
+            [self.attachmentBehaviors removeObjectForKey:viewController.view.objectIdTag.URIRepresentation];
             [self.collisionBehavior removeItem:controller];
             [self.gravityBeahvior removeItem:controller];
         }

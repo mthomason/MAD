@@ -98,7 +98,7 @@
     UIFont *headLineFont = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
     UIFont *titleFont = [headLineFont fontWithSize:12.0000f];
     self.detailFont = detalFont;
-    self.titleFont = detalFont;
+    self.titleFont = titleFont;
     
     NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
     self.hasFieldsObjectIds = hasFieldsObjectIds;
@@ -115,6 +115,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.toolbar.backgroundColor = [UIColor darkGrayColor];
     self.schemaTableViewController.dataSource = self;
     self.schemaTableViewController.delegate = self;
     self.containerView.layer.cornerRadius =  25.0000f;
@@ -145,8 +146,9 @@
     
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
                                               managedObjectContext: self.document.managedObjectContext];
-    self.titleView.label.text = [table alias];
+    self.titleView.label.text = table.alias;
     self.titleView.label.font = self.titleFont;
+    self.titleView.label.textColor = [UIColor whiteColor];
     [self.schemaTableViewController reloadData];
 }
 
