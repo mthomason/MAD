@@ -473,17 +473,10 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Handle deleted objects
 
     for (id deletedObject in deletedObjects) {
-        
         if ([deletedObject isKindOfClass:[RptqQueryTable class]]) {
-            
-            RptqQueryTable *deletedTable = deletedObject;
-            [self deleteQueryTable:deletedTable];
-            
+            [self deleteQueryTable:deletedObject];
         } else if ([deletedObject isKindOfClass:[RptqQueryLinks class]]) {
-            
-            RptqQueryLinks *deletedLink = deletedObject;
-            [self deleteQueryLink:deletedLink];
-            
+            [self deleteQueryLink:deletedObject];
         }
     }
 }
@@ -509,43 +502,41 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+    
     UIWindow *window = [[UIApplication sharedApplication] windows][0];
     CGPoint gestureLocation = [gestureRecognizer locationInView:window];
-    NSManagedObjectID *tableId = [[gestureRecognizer view] objectIdTag];
 
-    MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[tableId];
+    MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag];
+    CGPoint newOrigin = [window convertPoint:gestureLocation toView:self.contentView];
+    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag];
+    RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:gestureRecognizer.view.objectIdTag];
     
-    CGPoint location = [window convertPoint:gestureLocation toView:self.contentView];
-    
-    CGPoint newOrigin = location; // [gestureRecognizer locationInView:self.contentView];
-    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[tableId];
-    
-    RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableId];
     if ([self.tableStartingPoints containsObject:table]) {
-        [attachmentBehavior setAnchorPoint:newOrigin];
+        attachmentBehavior.anchorPoint = newOrigin;
     }
-    [viewController.view setCenter:newOrigin];
+    
+    viewController.view.center = newOrigin;
 
-        switch ([gestureRecognizer state]) {
-                
-            case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-                [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-            }
-            case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-                [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-                break;
-            }
-            case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
-                break;
-            case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
-            case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
-            case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-                [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-                break;
-            }
-            default:
-                break;
+    switch (gestureRecognizer.state) {
+            
+        case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
+            [self.dynamicAnimator updateItemUsingCurrentState:viewController];
         }
+        case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
+            [self.dynamicAnimator updateItemUsingCurrentState:viewController];
+            break;
+        }
+        case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
+            break;
+        case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
+        case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
+        case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
+            [self.dynamicAnimator updateItemUsingCurrentState:viewController];
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (void)pushPiece:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -769,16 +760,16 @@ typedef void(^MTBlockResultVoid)(void);
     // Display tables
     for (MTPair *pair in tableIds) {
         
-        MTVertex *tableIdVertext = [pair former];
-        NSManagedObjectID *objectId = [tableIdVertext object];
+        MTVertex *tableIdVertext = pair.former;
+        NSManagedObjectID *objectId = tableIdVertext.object;
 
         if (objectId != nil) {
             
             RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:objectId];
             
-            NSDictionary *layout = layoutDetails[[tableIdVertext object]];
+            NSDictionary *layout = layoutDetails[tableIdVertext.object];
             BOOL topLevel = [layout[MTKeyIsTopLevel] boolValue];
-            
+
             MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:table animated:animated];
             
             if (animated) {
@@ -798,10 +789,8 @@ typedef void(^MTBlockResultVoid)(void);
                 } else {
                     
                     for (RptqQueryLinks *link in [query hasQueryLinks]) {
-                        RptqQueryField *rightField = [link hasRightField];
-                        RptqQueryTable *rightTable = [rightField inQueryTable];
-                        RptqQueryField *leftField = [link hasLeftField];
-                        RptqQueryTable *leftTable = [leftField inQueryTable];
+                        RptqQueryTable *rightTable = link.hasRightField.inQueryTable;
+                        RptqQueryTable *leftTable = link.hasLeftField.inQueryTable;
                         if (rightTable.objectID == table.objectID) {
                             
                             MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[leftTable.objectID];
@@ -1165,13 +1154,13 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)addGesturesToViewController:(UIViewController *)viewController {
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPiece:)];
-    [tapGesture setDelegate:self];
-    [tapGesture setNumberOfTapsRequired:1];
+    tapGesture .delegate = self;
+    tapGesture.numberOfTapsRequired = 1;
     [viewController.view addGestureRecognizer:tapGesture];
     
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pushPiece:)];
-    [panGesture setDelegate:self];
-    [[self.scrollView panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
+    panGesture.delegate = self;
+    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
     [tapGesture requireGestureRecognizerToFail:panGesture];
     [viewController.view addGestureRecognizer:panGesture];
 }
@@ -1180,8 +1169,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)resizeScrollViewContentArea {
     if (self.scrollView.isZooming == NO) {
-        CGFloat maxX = CGPointZero.x;
-        CGFloat maxY = CGPointZero.y;
+        CGFloat maxX = CGPointZero.x, maxY = CGPointZero.y;
         
         for (UIViewController *viewController in [self childViewControllers]) {
             Class schemaClass = [MADQueryVisualizationSchemaViewController class];
