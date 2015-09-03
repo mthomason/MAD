@@ -97,6 +97,7 @@ typedef void(^MTBlockResultVoid)(void);
 @implementation MADQueryVisualizationViewController
 
 - (void)dealloc {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     RptqDocument *document = [self.document activeDocumentModel];
     [MADQueryVisualizationViewController removeNotificationsFromObserver:self forObjectContext:[document managedObjectContext]];
     NSSet *setToRemove = [NSSet setWithArray:_viewControllers];
@@ -104,6 +105,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
     }
@@ -111,6 +113,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)commonInit {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
     self.viewControllers = viewControllers;
     
@@ -134,6 +137,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewDidLoad {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewDidLoad];
     
     self.tableDisplayCounter = 0;
@@ -224,6 +228,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewDidAppear:animated];
     if (animated) {
         [self.scrollView flashScrollIndicators];
@@ -231,13 +236,14 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewWillLayoutSubviews {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewWillLayoutSubviews];
-
+    
     if (self.scrollView.contentSize.height < self.contentView.bounds.size.height) {
         self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.contentView.bounds.size.height);
     }
     
-    if ([self.scrollView contentSize].width < self.contentView.bounds.size.width) {
+    if (self.scrollView.contentSize.width < self.contentView.bounds.size.width) {
         self.scrollView.contentSize = CGSizeMake(self.contentView.bounds.size.width, self.scrollView.contentSize.height);
     }
     
@@ -248,12 +254,14 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     
@@ -297,15 +305,19 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return YES;
 }
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+}
 
 #pragma mark - Setup Notifications
 
 + (void)removeNotificationsFromObserver:(id<MADQueryVisualizationSchemaDelegate>)observer forObjectContext:(NSManagedObjectContext *)objectContext {
-    
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+ 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [defaultCenter removeObserver: observer
@@ -319,7 +331,8 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 + (void)addNotificationsToObserver:(id<MADQueryVisualizationSchemaDelegate>)observer forObjectContext:(NSManagedObjectContext *)objectContext {
-    
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+   
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [MADQueryVisualizationViewController removeNotificationsFromObserver:observer forObjectContext:objectContext];
@@ -339,11 +352,13 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - NSManagedObjectContext observer
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
@@ -463,16 +478,19 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark View Controller Container Custom Handlers
 
 - (void)viewControllerDidFinish:(id)sender {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 #pragma mark - UIDynamicAnimatorDelegate
 
 - (void)dynamicAnimatorWillResume:(UIDynamicAnimator *)animator {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
 }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     
 }
@@ -480,6 +498,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Gesture recognizer actions
 
 - (void)tapPiece:(UITapGestureRecognizer *)gestureRecognizer {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
         UIView *gestureRecognizerView = [gestureRecognizer view];
         [self.contentView bringSubviewToFront:gestureRecognizerView];
@@ -492,6 +511,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     UIWindow *window = [[UIApplication sharedApplication] windows][0];
     CGPoint gestureLocation = [gestureRecognizer locationInView:window];
@@ -499,14 +519,14 @@ typedef void(^MTBlockResultVoid)(void);
     MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag];
     CGPoint newOrigin = [window convertPoint:gestureLocation toView:self.contentView];
     UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag.URIRepresentation];
+
     RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:gestureRecognizer.view.objectIdTag];
     
     if ([self.tableStartingPoints containsObject:table]) {
         attachmentBehavior.anchorPoint = newOrigin;
+    } else {
+        viewController.view.center = newOrigin;
     }
-    
-    viewController.view.center = newOrigin;
-
     switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
@@ -530,6 +550,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)pushPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
     UIPushBehavior *pushBehavior = [self pushBehaviorForItem:[gestureRecognizer view]];
     [pushBehavior setActive:YES];
@@ -549,48 +570,64 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+}
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return NO;
 }
 
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView { }
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self resizeScrollViewContentArea];
 }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset { }
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+}
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return self.contentView;
 }
 
@@ -599,27 +636,11 @@ typedef void(^MTBlockResultVoid)(void);
 //- (void)collisionBehavior:(UICollisionBehavior *)behavior endedContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier {
 
 //}
-
-#pragma mark - MTQueryBuilderAdvancedSchemaViewControllerDelegate
-
-- (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
-    if ([sender isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
-        MADQueryVisualizationSchemaViewController *controller = (MADQueryVisualizationSchemaViewController *)sender;
-
-        RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:controller.tableObjectId
-                                                       managedObjectContext:self.document.managedObjectContext];
-        for (RptqQueryLinks *queryLink in queryTable.inQuery.hasQueryLinks) {
-            if ([queryLink.hasLeftField.inQueryTable isEqualTo:queryTable] ||
-                [queryLink.hasRightField.inQueryTable isEqualTo:queryTable]) {
-                [self layoutQueryLinkViewController:queryLink animated:animated];
-            }
-        }
-    }
-}
     
 #pragma mark - Change UI on IR Diagram
 
 - (void)clearScreen {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     for (UIViewController *viewController in self.viewControllers) {
         Class schemaTableClass = [MADQueryVisualizationSchemaViewController class];
@@ -640,6 +661,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (MTLinkedList *)tableObjectIDsSortedTopologicallyForQuery:(RptqQuery *)query {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
     MTGraph *graph = [[MTGraph alloc] init];
     NSSet *hasTables = query.hasQueryTables;
@@ -673,10 +695,12 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Reload document view controllers
 
 - (void)redraw {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self reloadDocument:self.document animated:NO];
 }
 
 - (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if (documentReport) {
         
         NSManagedObjectContext *objectContext = [documentReport managedObjectContext];
@@ -699,6 +723,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     NSInteger numberOfStartingPoints = 0;
     
@@ -799,6 +824,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)deleteQueryTable:(RptqQueryTable *)deletedQueryTable {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
     NSManagedObjectID *objectId = [deletedQueryTable objectID];
     
@@ -824,6 +850,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)deleteQueryLink:(RptqQueryLinks *)deletedQueryLinks {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
     NSMutableSet *orphanedQueryTables = [[NSMutableSet alloc] init];
     
@@ -888,6 +915,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)insertQueryTable:(RptqQueryTable *)insertedQueryTable {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     CGFloat segHeight = self.contentView.bounds.size.height / (self.tableStartingPoints.count + 2);
     
@@ -923,6 +951,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
     RptqQuery *query = insertedQueryLinks.inQuery;
     RptqQueryTable *leftTable = insertedQueryLinks.hasLeftField.inQueryTable;
@@ -1024,6 +1053,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - UI Items
 
 + (UIAttachmentBehavior *)attachmentBehaviorAnchorWithItem:(id<UIDynamicItem>)item attachedToPoint:(CGPoint)anchorPoint {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, anchorPoint.y - 22.0000f);
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:item attachedToAnchor:attachmentPoint];
     [behavior setLength:100.0000f];
@@ -1033,6 +1063,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 + (UIAttachmentBehavior *)attachmentBehaviorLinkWithLeftViewController:(MADQueryVisualizationSchemaViewController *)viewControllerLeft
                                                 andRightViewController:(MADQueryVisualizationSchemaViewController *)viewControllerRight {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     // FIXME: Make sure they are not the same, or crash, lolz
 
@@ -1046,6 +1077,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 //Pass the view controller to create an push behavior... can be recovered with multiple types
 - (UIPushBehavior *)pushBehaviorForItem:(id<UIDynamicItem>)item {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     UIPushBehavior *pushBehavior = nil;
     if ([item isKindOfClass:[UIViewController class]]) {
         
@@ -1076,6 +1108,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Helper functions
 
 + (CGPoint)randomPointInRect:(CGRect)rect {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     CGFloat maxWidth = rect.origin.x + rect.size.width;
     CGFloat maxHeight = rect.origin.y + rect.size.height;
     if (maxWidth == 0) {
@@ -1090,6 +1123,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 + (CGRect)rectForDesiredRect:(CGRect)desiredFrame inBounds:(CGRect)viewControllerBounds {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     BOOL goodSpot = CGRectContainsRect(viewControllerBounds, desiredFrame);
     if (goodSpot == NO) {
         
@@ -1122,7 +1156,8 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)addGesturesToViewController:(UIViewController *)viewController {
-    
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+   
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPiece:)];
     tapGesture .delegate = self;
     tapGesture.numberOfTapsRequired = 1;
@@ -1138,6 +1173,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Scroll view helper
 
 - (void)resizeScrollViewContentArea {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if (self.scrollView.isZooming == NO) {
         CGFloat maxX = CGPointZero.x, maxY = CGPointZero.y;
         
@@ -1160,11 +1196,13 @@ typedef void(^MTBlockResultVoid)(void);
         self.layoutConstraintSizeHeight.constant = MAX(maxY, self.view.bounds.size.height);
         self.layoutConstraintSizeWidth.constant = MAX(maxX, self.view.bounds.size.width);
     }
+    [self.contentView layoutIfNeeded];
 }
 
 #pragma mark - View Controller Container Data
 
 - (void)removeViewControllers:(NSSet *)viewControllers {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     for (UIViewController *viewController in viewControllers) {
         [self removeViewController:viewController];
         
@@ -1182,6 +1220,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)removeViewController:(UIViewController *)viewController {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     CGFloat animationDuration = 0.3000f;
     CGAffineTransform swingTransform = CGAffineTransformSwing();
     
@@ -1209,6 +1248,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController advancedSchemaViewController];
     viewController.document = self.document;
@@ -1276,6 +1316,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
+    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     NSManagedObjectID *objectId = [link objectID];
     MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 100.0000f)];
     connectorView.userInteractionEnabled = NO;
@@ -1344,7 +1385,24 @@ typedef void(^MTBlockResultVoid)(void);
     
 }
 
+- (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
+    //NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+    if ([sender isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
+        MADQueryVisualizationSchemaViewController *controller = (MADQueryVisualizationSchemaViewController *)sender;
+        
+        RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:controller.tableObjectId
+                                                       managedObjectContext:self.document.managedObjectContext];
+        for (RptqQueryLinks *queryLink in queryTable.inQuery.hasQueryLinks) {
+            if ([queryLink.hasLeftField.inQueryTable isEqualTo:queryTable] ||
+                [queryLink.hasRightField.inQueryTable isEqualTo:queryTable]) {
+                [self layoutQueryLinkViewController:queryLink animated:animated];
+            }
+        }
+    }
+}
+
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink animated:(BOOL)animated {
+    //NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
     UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID];
     MTConnectorView *connectorView = (MTConnectorView *)controller.view;
