@@ -41,8 +41,6 @@
 #import "MTLinkedList.h"
 #import "MTGraph.h"
 
-#import "UIFlexableSizeView.h"
-
 #import "RptqDocument+Extras.h"
 
 #import "MTQueryTest.h"
@@ -65,7 +63,6 @@ typedef void(^MTBlockResultVoid)(void);
         UIScrollViewDelegate,
         UIPopoverControllerDelegate,
         UICollisionBehaviorDelegate,
-        UIDynamicAnimatorDelegate,
         MADQueryVisualizationSchemaDelegate,
         MTViewControllerProtocol>
 
@@ -89,7 +86,6 @@ typedef void(^MTBlockResultVoid)(void);
     @property (nonatomic, strong) UIDynamicItemBehavior *dynamicItemBehavior;
     @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviors;
     @property (nonatomic, strong) NSMutableDictionary *pushBehaviors;
-    @property (nonatomic, strong) NSMutableDictionary *schemaAnchors;
 
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeWidth;
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
@@ -135,10 +131,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSMutableDictionary *pushBehaviors = [[NSMutableDictionary alloc] init];
     self.pushBehaviors = pushBehaviors;
-
-    NSMutableDictionary *schemaAnchors = [[NSMutableDictionary alloc] init];
-    self.schemaAnchors = schemaAnchors;
-
 }
 
 - (void)viewDidLoad {
@@ -150,7 +142,6 @@ typedef void(^MTBlockResultVoid)(void);
     UIColor *borderColor = [UIColor lightGrayColor];
     self.backgroundContainer.layer.borderWidth = borderWidth;
     self.backgroundContainer.layer.borderColor = borderColor.CGColor;
-
     
     UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
     
@@ -202,12 +193,8 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.scrollView = scrollView;
     self.contentView = containerView;
-
-    //NSMutableArray *toolbarButtons = self.toolbarBottom.items.mutableCopy;
-    //[self.toolbarBottom setItems:toolbarButtons animated:NO];
-
+    
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
-    animator.delegate = self;
     
     NSArray *emptyArray = @[];
     
@@ -233,8 +220,6 @@ typedef void(^MTBlockResultVoid)(void);
     self.dynamicAnimator = animator;
     self.gravityBeahvior = gravity;
     self.collisionBehavior = collisionBehavior;
-    
-    //[self reloadDocument:self.document animated:NO];
     
 }
 
@@ -485,7 +470,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)dynamicAnimatorWillResume:(UIDynamicAnimator *)animator {
 
-    
 }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator {
@@ -514,29 +498,22 @@ typedef void(^MTBlockResultVoid)(void);
 
     MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag];
     CGPoint newOrigin = [window convertPoint:gestureLocation toView:self.contentView];
-    NSURL *url = gestureRecognizer.view.objectIdTag.URIRepresentation;
-    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[url];
+    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag.URIRepresentation];
     RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:gestureRecognizer.view.objectIdTag];
     
     if ([self.tableStartingPoints containsObject:table]) {
         attachmentBehavior.anchorPoint = newOrigin;
     }
     
-    UIAttachmentBehavior *anchor = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag.URIRepresentation];
-    anchor.anchorPoint = newOrigin;
-    
     viewController.view.center = newOrigin;
-    //[self.dynamicAnimator updateItemUsingCurrentState:viewController];
-    
+
     switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-            //[self.dynamicAnimator updateItemUsingCurrentState:viewController];
+            [self.dynamicAnimator updateItemUsingCurrentState:viewController];
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-            
-            //[self.dynamicAnimator updateItemUsingCurrentState:viewController];
-                //[self.view setNeedsUpdateConstraints];
+            [self.dynamicAnimator updateItemUsingCurrentState:viewController];
             break;
         }
         case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
@@ -544,8 +521,7 @@ typedef void(^MTBlockResultVoid)(void);
         case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
         case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-            //[self.dynamicAnimator updateItemUsingCurrentState:viewController];
-                //[self.view setNeedsUpdateConstraints];
+            [self.dynamicAnimator updateItemUsingCurrentState:viewController];
             break;
         }
         default:
@@ -556,7 +532,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)pushPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     UIPushBehavior *pushBehavior = [self pushBehaviorForItem:[gestureRecognizer view]];
-    pushBehavior.active = YES;
+    [pushBehavior setActive:YES];
     
     // If we're starting the gesture then create a drag force
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) { }
@@ -573,27 +549,27 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
@@ -605,7 +581,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView { }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    //[self resizeScrollViewContentArea];
+    [self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
@@ -617,6 +593,12 @@ typedef void(^MTBlockResultVoid)(void);
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.contentView;
 }
+
+#pragma mark - UICollisionBehaviorDelegate
+
+//- (void)collisionBehavior:(UICollisionBehavior *)behavior endedContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier {
+
+//}
 
 #pragma mark - MTQueryBuilderAdvancedSchemaViewControllerDelegate
 
@@ -775,7 +757,7 @@ typedef void(^MTBlockResultVoid)(void);
             
             if (animated) {
                 
-                NSManagedObjectID *objectIDView = viewController.view.objectIdTag;
+                NSManagedObjectID *objectIDView = [viewController.view objectIdTag];
                 if (topLevel) {
                     
                     CGFloat attachmentPointY = segHeight * (topLevelTableCounter + 1);
@@ -943,7 +925,6 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
 
     RptqQuery *query = insertedQueryLinks.inQuery;
- 
     RptqQueryTable *leftTable = insertedQueryLinks.hasLeftField.inQueryTable;
     MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[leftTable.objectID];
     
@@ -1045,8 +1026,7 @@ typedef void(^MTBlockResultVoid)(void);
 + (UIAttachmentBehavior *)attachmentBehaviorAnchorWithItem:(id<UIDynamicItem>)item attachedToPoint:(CGPoint)anchorPoint {
     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, anchorPoint.y - 22.0000f);
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:item attachedToAnchor:attachmentPoint];
-    behavior.damping = 1.6;
-    behavior.frequency = 10;
+    [behavior setLength:100.0000f];
     return behavior;
 
 }
@@ -1057,7 +1037,7 @@ typedef void(^MTBlockResultVoid)(void);
     // FIXME: Make sure they are not the same, or crash, lolz
 
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerRight attachedToItem:viewControllerLeft];
-    behavior.frequency = 0.600f;
+    behavior.frequency = 0.000f;
     behavior.damping = 1.000f;
     behavior.length = 175.0000f;
     
@@ -1158,28 +1138,28 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Scroll view helper
 
 - (void)resizeScrollViewContentArea {
-    [self.view setNeedsUpdateConstraints];
-}
-
-- (void)updateViewConstraints {
-    [super updateViewConstraints];
-    CGFloat maxX = CGPointZero.x, maxY = CGPointZero.y;
-    Class schemaClass = [MADQueryVisualizationSchemaViewController class];
-
-    for (UIViewController *viewController in self.childViewControllers) {
-        if ([viewController isKindOfClass:schemaClass]) {
-            CGFloat tmaxX = viewController.view.frame.origin.x + viewController.view.frame.size.width;
-            CGFloat tmaxY = viewController.view.frame.origin.y + viewController.view.frame.size.height;
-            tmaxX += viewController.view.frame.origin.x < CGPointZero.x ? fabs(viewController.view.frame.origin.x) : CGSizeZero.width;
-            tmaxX += viewController.view.frame.origin.y < CGPointZero.y ? fabs(viewController.view.frame.origin.y) : CGSizeZero.height;
-            maxX = MAX(maxX, tmaxX);
-            maxY = MAX(maxY, tmaxY);
+    if (self.scrollView.isZooming == NO) {
+        CGFloat maxX = CGPointZero.x, maxY = CGPointZero.y;
+        
+        for (UIViewController *viewController in [self childViewControllers]) {
+            Class schemaClass = [MADQueryVisualizationSchemaViewController class];
+            if ([viewController isKindOfClass:schemaClass]) {
+                UIView *view = viewController.view;
+                CGRect frame = view.frame;//[self.contentView convertRect:view.frame fromView:view];
+                CGFloat tmaxX = frame.origin.x + frame.size.width;
+                CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
+                CGFloat tmaxY = frame.origin.y + frame.size.height;
+                CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
+                tmaxX += tminX;
+                tmaxX += tminY;
+                maxX = MAX(maxX, tmaxX);
+                maxY = MAX(maxY, tmaxY);
+            }
         }
+        
+        self.layoutConstraintSizeHeight.constant = MAX(maxY, self.view.bounds.size.height);
+        self.layoutConstraintSizeWidth.constant = MAX(maxX, self.view.bounds.size.width);
     }
-    
-    self.layoutConstraintSizeHeight.constant = MAX(maxY, self.view.bounds.size.height);
-    self.layoutConstraintSizeWidth.constant = MAX(maxX, self.view.bounds.size.width);
-    [self.contentView setNeedsLayout];
 }
 
 #pragma mark - View Controller Container Data
@@ -1243,16 +1223,6 @@ typedef void(^MTBlockResultVoid)(void);
     BOOL ud = table.identifier.integerValue % 2;
     CGFloat originY = CGPointZero.y + self.scrollView.frame.size.height - (ud ? 200.0000f : - 600.0000f) - 20.0000f;
     subviewRect = CGRectMake(originX, originY, 120.0000f, 140.0000f);
-
-    
-    
-    subviewRect = CGRectMake(50.0000f, 50.0000f, 120.0000f, 140.0000f);
-
-    
-    
-    //UIAttachmentBehavior *anchor = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToAnchor:CGPointMake(originX, originY)];
-    //[self.dynamicAnimator addBehavior:anchor];
-    //[self.schemaAnchors setObject:anchor forKey:table.objectID.URIRepresentation];
 /*
     NSNumber *sizeHeight = @(subviewRect.size.height);
     NSNumber *sizeWidth = @(subviewRect.size.width);
@@ -1272,7 +1242,9 @@ typedef void(^MTBlockResultVoid)(void);
     [self addGesturesToViewController:viewController];
     
     NSArray *constraints = nil;
-    CGRect desiredFrame = [MADQueryVisualizationViewController rectForDesiredRect:subviewRect inBounds:self.contentView.bounds];
+    CGRect desiredFrame;
+    CGRect viewControllerBounds = self.contentView.bounds;
+    desiredFrame = [MADQueryVisualizationViewController rectForDesiredRect:subviewRect inBounds:viewControllerBounds];
     
     NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:viewController.view
                                                                   andWidth:desiredFrame.size.width];
@@ -1292,7 +1264,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     [self.contentView addConstraints:constraints];
     
-    //[self pushBehaviorForItem: viewController];
+    [self pushBehaviorForItem: viewController];
     [self.collisionBehavior addItem:viewController];
     [self.gravityBeahvior addItem:viewController];
     [self.dynamicItemBehavior addItem:viewController];
@@ -1300,6 +1272,8 @@ typedef void(^MTBlockResultVoid)(void);
     return viewController;
     
 }
+
+
 
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
     NSManagedObjectID *objectId = [link objectID];
