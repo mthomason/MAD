@@ -1241,6 +1241,7 @@
 		4C94ADFB17C3514200037FCB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADFA17C3514200037FCB /* Default@2x.png */; };
 		4C94ADFD17C3514200037FCB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADFC17C3514200037FCB /* Default-568h@2x.png */; };
 		4C94AE0617C3514200037FCB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C94AE0517C3514200037FCB /* ViewController.m */; };
+		4C98601D1B97D5AA0082A12D /* UIFlexableSizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C98601C1B97D5AA0082A12D /* UIFlexableSizeView.m */; };
 		4C9E445718D88D7000F0F578 /* MTTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E445618D88D7000F0F578 /* MTTableLayout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E445818D88D7000F0F578 /* MTTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E445618D88D7000F0F578 /* MTTableLayout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2595,6 +2596,8 @@
 		4C94AE0417C3514200037FCB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4C94AE0517C3514200037FCB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
+		4C98601B1B97D5AA0082A12D /* UIFlexableSizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIFlexableSizeView.h; sourceTree = "<group>"; };
+		4C98601C1B97D5AA0082A12D /* UIFlexableSizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIFlexableSizeView.m; sourceTree = "<group>"; };
 		4C9E445518D88D7000F0F578 /* MTTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableLayout.h; sourceTree = "<group>"; };
 		4C9E445618D88D7000F0F578 /* MTTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableLayout.m; sourceTree = "<group>"; };
 		4C9E446518D8AADE00F0F578 /* MTTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableController.h; sourceTree = "<group>"; };
@@ -5165,6 +5168,8 @@
 				4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */,
 				4C3138E8184331500019ED4C /* MTViewControllerDynamicItem.h */,
 				4C3138E9184331500019ED4C /* MTViewControllerDynamicItem.m */,
+				4C98601B1B97D5AA0082A12D /* UIFlexableSizeView.h */,
+				4C98601C1B97D5AA0082A12D /* UIFlexableSizeView.m */,
 			);
 			name = "Query Builder";
 			sourceTree = "<group>";
@@ -6959,6 +6964,7 @@
 				4C23FB3918FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C76F0B114B4F132005DCE49 /* MADDesignerViewController.m in Sources */,
 				4C7B0B081B374A0A005DC0CE /* MADFeature.m in Sources */,
+				4C98601D1B97D5AA0082A12D /* UIFlexableSizeView.m in Sources */,
 				4CC96A5F1AC90D220044C157 /* MADVibrantTableViewCellImage.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
 				4C0A077319C95F360059E1D9 /* MTStoreKitController.m in Sources */,

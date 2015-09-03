@@ -139,6 +139,21 @@ NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-Conden
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self commonInit];
+        self.showsHorizontalScrollIndicator = YES;
+        self.showsVerticalScrollIndicator = YES;
+        self.contentOffset = CGPointZero;
+        self.maximumZoomScale = 1.0000f;
+        self.minimumZoomScale = 1.0000f;
+        self.zoomScale = 1.0000f;
+        self.scrollEnabled = YES;
+        self.bounces = YES;
+        self.alwaysBounceHorizontal = YES;
+        self.alwaysBounceVertical = YES;
+        self.bouncesZoom = NO;
+        self.delaysContentTouches = YES;
+        self.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+
     }
     return self;
 }
