@@ -85,7 +85,6 @@ typedef void(^MTBlockResultVoid)(void);
     @property (nonatomic, strong) UIGravityBehavior *gravityBeahvior;
     @property (nonatomic, strong) UIDynamicItemBehavior *dynamicItemBehavior;
     @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviors;
-    @property (nonatomic, strong) NSMutableDictionary *pushBehaviors;
 
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeWidth;
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
@@ -131,9 +130,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSMutableArray *tableStartingPoints = [[NSMutableArray alloc] init];
     self.tableStartingPoints = tableStartingPoints;
-    
-    NSMutableDictionary *pushBehaviors = [[NSMutableDictionary alloc] init];
-    self.pushBehaviors = pushBehaviors;
 }
 
 - (void)viewDidLoad {
@@ -549,24 +545,6 @@ typedef void(^MTBlockResultVoid)(void);
     }
 }
 
-- (void)pushPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-
-    UIPushBehavior *pushBehavior = [self pushBehaviorForItem:[gestureRecognizer view]];
-    [pushBehavior setActive:YES];
-    
-    // If we're starting the gesture then create a drag force
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) { }
-    
-    // Set the force to be proportional to distance the gesture has moved
-    CGPoint velocity = [gestureRecognizer velocityInView:self.contentView];
-    pushBehavior.pushDirection = CGVectorMake(velocity.x/100, velocity.y/100);
-    
-    // If we're finishing then cancel the behavior to 'let-go' of the ball
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) { }
-    
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -709,7 +687,6 @@ typedef void(^MTBlockResultVoid)(void);
         [self clearScreen];
         
         [self.tableStartingPoints removeAllObjects];
-        [self.pushBehaviors removeAllObjects];
         [self.viewControllers removeAllObjects];  //May track child view controllers since iOS 7.
         [self.tableIds removeAllObjects];
         [self.controllersForObjectIds removeAllObjects];     //Tables and links
@@ -739,21 +716,18 @@ typedef void(^MTBlockResultVoid)(void);
             
             //Is the table joined to another table from the left?
             BOOL topLevel = YES;
-            
-            for (RptqQueryLinks *link in [query hasQueryLinks]) {
-                RptqQueryField *rightField = [link hasRightField];
-                RptqQueryTable *rightQueryTable = [rightField inQueryTable];
+            for (RptqQueryLinks *link in query.hasQueryLinks) {
+                RptqQueryTable *rightQueryTable = link.hasRightField.inQueryTable;
                 if ([rightQueryTable isEqualTo:table]) {
                     topLevel = NO;
                     break;
                 }
             }
             
-            NSDictionary *layout = @{
-                                     MTKeyIsTopLevel : @(topLevel)
-                                     };
+            NSNumber *topLevelObject = @(topLevel);
+            NSDictionary *layout = @{MTKeyIsTopLevel : topLevelObject};
             
-            layoutDetails[[tableIdVertext object]] = layout;
+            layoutDetails[tableIdVertext.object] = layout;
             
             if (topLevel) {
                 numberOfStartingPoints++;
@@ -885,9 +859,8 @@ typedef void(^MTBlockResultVoid)(void);
         // Is there a link still pointing to the view controller after the delete, or
         //   do we need to make it top level?
         
-        CGFloat x = CGPointZero.x + self.contentView.frame.size.width;
-        CGFloat y = CGPointZero.y + self.contentView.frame.size.height / 2.0000f;
-        CGPoint attachmentPoint = CGPointMake(x, y);
+        CGPoint attachmentPoint = CGPointMake(CGPointZero.x + self.contentView.frame.size.width,
+                                              CGPointZero.y + self.contentView.frame.size.height / 2.0000f);
  
         UIAttachmentBehavior *anchorBehaviorNew = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
         [self.dynamicAnimator addBehavior:anchorBehaviorNew];
@@ -896,7 +869,7 @@ typedef void(^MTBlockResultVoid)(void);
         
         // Disable collision behaviors before reposition
         // Reposition existing tables
-        CGFloat segHeight = (self.contentView.bounds.size.height / ([self.tableStartingPoints count] + 1));
+        CGFloat segHeight = (self.contentView.bounds.size.height / (self.tableStartingPoints.count + 1));
         NSUInteger counter = 0;
         for (RptqQueryTable *queryTable in self.tableStartingPoints) {
             UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[queryTable.objectID.URIRepresentation];
@@ -923,8 +896,7 @@ typedef void(^MTBlockResultVoid)(void);
     // FIXME: Good place for block iterate?
     NSUInteger counter = 0;
     for (RptqQueryTable *queryTable in self.tableStartingPoints) {
-        CGFloat attachmentPointY = segHeight * (counter + 1);
-        CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY - 22.0000f);
+        CGPoint attachmentPoint = CGPointMake(CGPointZero.x, segHeight * (counter + 1) - 22.0000f);
         UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[queryTable.objectID.URIRepresentation];
         [attachmentBehavior setAnchorPoint:attachmentPoint];
         counter++;
@@ -1027,7 +999,7 @@ typedef void(^MTBlockResultVoid)(void);
     if (startingPointRemoved) {
         [self.tableStartingPoints removeObject:queryTableRemoved];
         
-        CGFloat segHeight = (self.contentView.bounds.size.height / ([self.tableStartingPoints count] + 2));
+        CGFloat segHeight = (self.contentView.bounds.size.height / (self.tableStartingPoints.count + 2));
         NSUInteger counter = 0;
         for (RptqQueryTable *queryTable in self.tableStartingPoints) {
             CGFloat attachmentPointY = segHeight * (counter + 1);
@@ -1073,36 +1045,6 @@ typedef void(^MTBlockResultVoid)(void);
     behavior.length = 175.0000f;
     
     return behavior;
-}
-
-//Pass the view controller to create an push behavior... can be recovered with multiple types
-- (UIPushBehavior *)pushBehaviorForItem:(id<UIDynamicItem>)item {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    UIPushBehavior *pushBehavior = nil;
-    if ([item isKindOfClass:[UIViewController class]]) {
-        
-         //Creating it
-        NSManagedObjectID *objectId = [[(UIViewController *)item view] objectIdTag];
-        UIPushBehavior *behavior = [self pushBehaviors][objectId];
-        if (behavior == nil) {
-            pushBehavior = [[UIPushBehavior alloc] initWithItems:@[item] mode:UIPushBehaviorModeInstantaneous];
-            [self.dynamicAnimator addBehavior:pushBehavior];
-            [self pushBehaviors][objectId] = pushBehavior;
-        } else {
-            pushBehavior = behavior;
-        }
-
-    } else if ([item isKindOfClass:[UIView class]]) {
-        
-        NSManagedObjectID *objectId = [(UIView *)item objectIdTag];
-        pushBehavior = [self pushBehaviors][objectId];
-        
-    } else if ([item isKindOfClass:[NSManagedObjectID class]]) {
-
-        pushBehavior = [self pushBehaviors][item];
-    
-    }
-    return pushBehavior;
 }
 
 #pragma mark - Helper functions
@@ -1304,7 +1246,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     [self.contentView addConstraints:constraints];
     
-    [self pushBehaviorForItem: viewController];
     [self.collisionBehavior addItem:viewController];
     [self.gravityBeahvior addItem:viewController];
     [self.dynamicItemBehavior addItem:viewController];
