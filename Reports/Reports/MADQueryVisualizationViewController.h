@@ -17,7 +17,6 @@
 
 @property (nonatomic, weak) MADocument *document;
 
-- (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated;
 - (void)redraw;
 
 @end

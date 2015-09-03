@@ -119,8 +119,8 @@ typedef void(^MTBlockResultVoid)(void);
     NSMutableSet *tableObjectIds = [[NSMutableSet alloc] init];
     self.tableIds = tableObjectIds;
     
-    NSMutableDictionary *controllersForTableIds = [[NSMutableDictionary alloc] init];
-    self.controllersForObjectIds = controllersForTableIds;
+    NSMutableDictionary *controllersForObjectIds = [[NSMutableDictionary alloc] init];
+    self.controllersForObjectIds = controllersForObjectIds;
     
     NSMutableDictionary *controllersForObjectIdsLink = [[NSMutableDictionary alloc] init];
     self.controllersForObjectIdsLink = controllersForObjectIdsLink;
@@ -136,6 +136,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewDidLoad];
     
+    self.document = [MTApplicationInstance mainInstance].openDocument;
     self.tableDisplayCounter = 0;
     
     CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
@@ -159,6 +160,7 @@ typedef void(^MTBlockResultVoid)(void);
                                                                              andHeight:self.backgroundContainer.frame.size.height];
     NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:containerView
                                                                             andWidth:self.backgroundContainer.frame.size.width];
+    
     NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
     [containerView addConstraints:containerViewConstraints];
     
@@ -229,6 +231,8 @@ typedef void(^MTBlockResultVoid)(void);
     if (animated) {
         [self.scrollView flashScrollIndicators];
     }
+    [self reloadDocument:self.document animated:YES];
+
 }
 
 - (void)viewWillLayoutSubviews {
@@ -393,7 +397,7 @@ typedef void(^MTBlockResultVoid)(void);
             // FIXME: Allow user to edit table.
         } else {
 
-            UIViewController *viewController = self.controllersForObjectIds[[updatedTable objectID]];
+            UIViewController *viewController = self.controllersForObjectIds[updatedTable.objectID.URIRepresentation];
             
             if ([viewController isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
 
@@ -424,10 +428,10 @@ typedef void(^MTBlockResultVoid)(void);
                 [viewController removeFromParentViewController];
                 
                 for (RptqQueryLinks *link in [updatedQuery hasQueryLinks]) {
-                    if (link.hasLeftField.inQueryTable.objectID == updatedTable.objectID ||
-                        link.hasRightField.inQueryTable.objectID == updatedTable.objectID) {
+                    if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
+                        [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
                         
-                        UIViewController *linkViewController = self.controllersForObjectIdsLink[link.objectID];
+                        UIViewController *linkViewController = self.controllersForObjectIdsLink[link.objectID.URIRepresentation];
                         if (linkViewController != nil) {
                             [self removeViewController:linkViewController];
                         }
@@ -440,7 +444,7 @@ typedef void(^MTBlockResultVoid)(void);
 
             } else if ([viewController.view isKindOfClass:[MTConnectorView class]]) {
                 
-                UIViewController *viewController = self.controllersForObjectIds[[updatedTable objectID]];
+                UIViewController *viewController = self.controllersForObjectIds[updatedTable.objectID.URIRepresentation];
                 CGAffineTransform swingTransform = CGAffineTransformSwing();
                 CGPoint center = viewController.view.center;
                 CGFloat animationDuration = 0.3000f;
@@ -512,7 +516,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIWindow *window = [[UIApplication sharedApplication] windows][0];
     CGPoint gestureLocation = [gestureRecognizer locationInView:window];
 
-    MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag];
+    MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag.URIRepresentation];
     CGPoint newOrigin = [window convertPoint:gestureLocation toView:self.contentView];
     UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[gestureRecognizer.view.objectIdTag.URIRepresentation];
 
@@ -681,9 +685,6 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if (documentReport) {
         
-        NSManagedObjectContext *objectContext = [documentReport managedObjectContext];
-        [MADQueryVisualizationViewController addNotificationsToObserver:self forObjectContext:objectContext];
-        
         [self clearScreen];
         
         [self.tableStartingPoints removeAllObjects];
@@ -703,16 +704,15 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     NSInteger numberOfStartingPoints = 0;
-    
     MTLinkedList *tableIds = [self tableObjectIDsSortedTopologicallyForQuery:query];
-    NSMutableDictionary *layoutDetails = [[NSMutableDictionary alloc] initWithCapacity:[tableIds count]];
+    NSMutableDictionary *layoutDetails = [[NSMutableDictionary alloc] initWithCapacity:tableIds.count];
     
     for (MTPair *tableObjectIdContainer in tableIds) {
-        MTVertex *tableIdVertext = [tableObjectIdContainer former];
-        NSManagedObjectID *objectId = [tableIdVertext object];
-        if (objectId != nil) {
+        MTVertex *tableIdVertext = tableObjectIdContainer.former;
+
+        if (tableIdVertext.object != nil) {
             
-            RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:objectId];
+            RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
             
             //Is the table joined to another table from the left?
             BOOL topLevel = YES;
@@ -743,36 +743,35 @@ typedef void(^MTBlockResultVoid)(void);
     for (MTPair *pair in tableIds) {
         
         MTVertex *tableIdVertext = pair.former;
-        NSManagedObjectID *objectId = tableIdVertext.object;
 
-        if (objectId != nil) {
+        if (tableIdVertext.object != nil) {
             
-            RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:objectId];
+            RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
             
             NSDictionary *layout = layoutDetails[tableIdVertext.object];
-            BOOL topLevel = [layout[MTKeyIsTopLevel] boolValue];
+            NSNumber *topLevel = layout[MTKeyIsTopLevel];
+            //BOOL topLevel = topLevelProperty.boolValue;
 
             MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:table animated:animated];
             
             if (animated) {
                 
-                NSManagedObjectID *objectIDView = [viewController.view objectIdTag];
-                if (topLevel) {
+                if (topLevel.boolValue) {
                     
                     CGFloat attachmentPointY = segHeight * (topLevelTableCounter + 1);
                     
                     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY);
                     UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
                     [self.dynamicAnimator addBehavior:attachmentBehavior];
-                    self.attachmentBehaviors[objectIDView.URIRepresentation] = attachmentBehavior;
+                    self.attachmentBehaviors[viewController.view.objectIdTag.URIRepresentation] = attachmentBehavior;
                     [self.tableStartingPoints addObject:table];
                     topLevelTableCounter++;
                     
                 } else {
                     
-                    for (RptqQueryLinks *link in [query hasQueryLinks]) {
-                        if (link.hasRightField.inQueryTable.objectID == table.objectID) {
-                            MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[link.hasLeftField.inQueryTable.objectID];
+                    for (RptqQueryLinks *link in query.hasQueryLinks) {
+                        if ([link.hasRightField.inQueryTable.objectID isEqual: table.objectID]) {
+                            MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[link.hasLeftField.inQueryTable.objectID.URIRepresentation];
                             if (leftTableViewController != viewController) {
                                 
                                 UIAttachmentBehavior *attachmentBehaviorLeft = [MADQueryVisualizationViewController attachmentBehaviorLinkWithLeftViewController: leftTableViewController
@@ -792,7 +791,7 @@ typedef void(^MTBlockResultVoid)(void);
     }
     
     // Display links
-    for (RptqQueryLinks *queryLink in [query hasQueryLinks]) {
+    for (RptqQueryLinks *queryLink in query.hasQueryLinks) {
         [self addLinkViewControllerForQueryLink:queryLink animated:animated];
     }
 }
@@ -800,26 +799,20 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)deleteQueryTable:(RptqQueryTable *)deletedQueryTable {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
-    NSManagedObjectID *objectId = [deletedQueryTable objectID];
     
-    //If top level table, then move it off screen, and move the others in place.
-    
-    BOOL startingPointTable = [self.tableStartingPoints containsObject:objectId];
+    BOOL startingPointTable = [self.tableStartingPoints containsObject:deletedQueryTable.objectID];
     if (startingPointTable) {
         CGPoint offScreen = CGPointMakeRandomOffscreen();
-        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[objectId.URIRepresentation];
+        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviors[deletedQueryTable.objectID.URIRepresentation];
         [attachmentBehavior setAnchorPoint:offScreen];
     }
     
-    if ([deletedQueryTable inQuery] != nil &&
-        [self.tableIds containsObject: objectId]) {
-        
-        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[objectId];
-        // FIXME: do give time for animations... Can't imagine this will work.
+    if (deletedQueryTable.inQuery != nil &&
+        [self.tableIds containsObject: deletedQueryTable.objectID.URIRepresentation]) {
+        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[deletedQueryTable.objectID.URIRepresentation];
         [viewController willMoveToParentViewController:nil];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
-        
     }
 }
 
@@ -854,7 +847,7 @@ typedef void(^MTBlockResultVoid)(void);
     for (RptqQueryTable *table in orphanedQueryTables) {
         
         RptqQueryTable *tableRightDeletedLink = table;
-        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[tableRightDeletedLink.objectID];
+        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[tableRightDeletedLink.objectID.URIRepresentation];
         
         // Is there a link still pointing to the view controller after the delete, or
         //   do we need to make it top level?
@@ -927,16 +920,16 @@ typedef void(^MTBlockResultVoid)(void);
 
     RptqQuery *query = insertedQueryLinks.inQuery;
     RptqQueryTable *leftTable = insertedQueryLinks.hasLeftField.inQueryTable;
-    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[leftTable.objectID];
+    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[leftTable.objectID.URIRepresentation];
     
     RptqQueryTable *rightTable = insertedQueryLinks.hasRightField.inQueryTable;
-    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[rightTable.objectID];
+    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[rightTable.objectID.URIRepresentation];
     
     MTLinkedList *tableIds = [self tableObjectIDsSortedTopologicallyForQuery:query];
     
     NSInteger numberOfStartingPoints = 0;
     
-    NSMutableDictionary *layoutDetails = [[NSMutableDictionary alloc] initWithCapacity:[tableIds count]];
+    NSMutableDictionary *layoutDetails = [[NSMutableDictionary alloc] initWithCapacity:tableIds.count];
     
     for (MTPair *pair in tableIds) {
         MTVertex *tableIdVertext = pair.former;
@@ -973,12 +966,12 @@ typedef void(^MTBlockResultVoid)(void);
 
         RptqQueryTable *removeableTable = nil;
 
-        NSDictionary *layout = layoutDetails[[queryTable objectID]];
+        NSDictionary *layout = layoutDetails[queryTable.objectID];
         NSNumber *isTopLevel = layout[MTKeyIsTopLevel];
-        if ([isTopLevel boolValue] == NO) {
-            if ([[leftTable objectID] isEqual:[queryTable objectID]]) {
+        if (isTopLevel.boolValue == NO) {
+            if ([leftTable.objectID isEqual:queryTable.objectID]) {
                 removeableTable = queryTable;
-            } else if ([[rightTable objectID] isEqual:[queryTable objectID]]) {
+            } else if ([rightTable.objectID isEqual:queryTable.objectID]) {
                 removeableTable = queryTable;
             }
         }
@@ -1028,7 +1021,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, anchorPoint.y - 22.0000f);
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:item attachedToAnchor:attachmentPoint];
-    [behavior setLength:100.0000f];
+    behavior.length = 100.0000f;
     return behavior;
 
 }
@@ -1040,7 +1033,7 @@ typedef void(^MTBlockResultVoid)(void);
     // FIXME: Make sure they are not the same, or crash, lolz
 
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerRight attachedToItem:viewControllerLeft];
-    behavior.frequency = 0.000f;
+    behavior.frequency = 0.0000f;
     behavior.damping = 1.000f;
     behavior.length = 175.0000f;
     
@@ -1199,26 +1192,12 @@ typedef void(^MTBlockResultVoid)(void);
     
     CGRect subviewRect = CGRectZero;
     
-    [self.tableIds addObject:table.objectID];
-    self.controllersForObjectIds[table.objectID] = viewController;
+    [self.tableIds addObject:table.objectID.URIRepresentation];
+    self.controllersForObjectIds[table.objectID.URIRepresentation] = viewController;
     CGFloat originX = 10.0000f + CGPointZero.x;
     BOOL ud = table.identifier.integerValue % 2;
     CGFloat originY = CGPointZero.y + self.scrollView.frame.size.height - (ud ? 200.0000f : - 600.0000f) - 20.0000f;
     subviewRect = CGRectMake(originX, originY, 120.0000f, 140.0000f);
-/*
-    NSNumber *sizeHeight = @(subviewRect.size.height);
-    NSNumber *sizeWidth = @(subviewRect.size.width);
-    NSNumber *originXs = @(subviewRect.origin.x);
-    NSNumber *originYs = @(subviewRect.origin.y);
-    NSNumber *designerInitalLayout = @(NO);
-    table.designerSizeHeight = sizeHeight;
-    table.designerSizeWidth = sizeWidth;
-    table.designerOriginY = originYs;
-    table.designerOriginX = originXs;
-    table.designerInitalLayout = designerInitalLayout;
-    
-    [self.document.managedObjectContext save:nil];
-*/
     viewController.view.frame = subviewRect;
     
     [self addGesturesToViewController:viewController];
@@ -1255,7 +1234,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 
-
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     NSManagedObjectID *objectId = [link objectID];
@@ -1266,8 +1244,8 @@ typedef void(^MTBlockResultVoid)(void);
     UIViewController *connectorViewController = [[UIViewController alloc] init];
     connectorViewController.view = connectorView;
     
-    self.controllersForObjectIds[objectId] = connectorViewController;
-    self.controllersForObjectIdsLink[objectId] = connectorViewController;
+    self.controllersForObjectIds[objectId.URIRepresentation] = connectorViewController;
+    self.controllersForObjectIdsLink[objectId.URIRepresentation] = connectorViewController;
     
     if (animated == NO) {
         [self layoutQueryLinkViewController:link animated:animated];
@@ -1345,12 +1323,12 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink animated:(BOOL)animated {
     //NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
-    UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID];
+    UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID.URIRepresentation];
     MTConnectorView *connectorView = (MTConnectorView *)controller.view;
     const CGFloat paddingLeft = 44.0000f;
     
-    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[queryLink.hasLeftField.inQueryTable.objectID];
-    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[queryLink.hasRightField.inQueryTable.objectID];
+    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[queryLink.hasLeftField.inQueryTable.objectID.URIRepresentation];
+    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[queryLink.hasRightField.inQueryTable.objectID.URIRepresentation];
     
     CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:queryLink.hasLeftField.objectID
                                                                              inView:leftTableViewController.view];

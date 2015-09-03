@@ -131,9 +131,6 @@
     [super viewWillAppear:animated];
 
     [self.queryBuilderController reloadMainDocumentAnimated: YES];
-    if (animated) {
-        [self.queryBuilderControllerAdvanced reloadDocument:[MTApplicationInstance mainInstance].openDocument animated:YES];
-    }
     
     __block MTQueryBuilderContainerController *blockSelf = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
