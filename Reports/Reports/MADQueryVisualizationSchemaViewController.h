@@ -22,6 +22,7 @@
     <UIDynamicItem>
 
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
+@property (nonatomic, strong) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 @property (nonatomic, weak) MADocument *document;

@@ -30,15 +30,12 @@
 }
 
 - (void)initalize {
-    self.backgroundColor = [UIColor clearColor];
-    CGRect bounds = [self bounds];
-    CGRect labelBounds = CGRectMake(CGPointZero.x, CGPointZero.y, bounds.size.width, bounds.size.height - 4.0000f);
-    UILabel *label = [[UILabel alloc] initWithFrame:labelBounds];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.bounds.size.width, self.bounds.size.height - 4.0000f)];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"";
     [self addSubview:label];
     self.label = label;
-    self.backgroundColor = [UIColor lightGrayColor];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 @end

@@ -33,11 +33,12 @@
 
 #import "MTSchemaFieldCell.h"
 
+#import "UIColor+EverydayApps.h"
+
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
 @property (nonatomic, strong) IBOutlet MTTitleView *titleView;
-@property (nonatomic, strong) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, strong) NSMutableArray *hasFieldsObjectIds;
 @property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
 @property (nonatomic, strong) IBOutlet UIView *containerView;
@@ -115,14 +116,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.toolbar.backgroundColor = [UIColor darkGrayColor];
     self.schemaTableViewController.dataSource = self;
     self.schemaTableViewController.delegate = self;
-    self.containerView.layer.cornerRadius =  25.0000f;
+    self.containerView.layer.cornerRadius =  3.0000f;
     self.containerView.clipsToBounds = YES;
-    self.view.layer.shadowColor = [[UIColor grayColor] CGColor];
+    self.toolbar.backgroundColor = [UIColor darkGrayColor];
+    self.view.layer.shadowColor = [[UIColor edaBlueDark] CGColor];
     self.view.layer.shadowOpacity = 1.0000f;
-    self.view.layer.shadowRadius = 5.0000f;
+    self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
 }
 

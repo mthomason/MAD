@@ -97,7 +97,6 @@ typedef void(^MTBlockResultVoid)(void);
 @implementation MADQueryVisualizationViewController
 
 - (void)dealloc {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     RptqDocument *document = [self.document activeDocumentModel];
     [MADQueryVisualizationViewController removeNotificationsFromObserver:self forObjectContext:[document managedObjectContext]];
     NSSet *setToRemove = [NSSet setWithArray:_viewControllers];
@@ -105,7 +104,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
     }
@@ -113,7 +111,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)commonInit {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
     self.viewControllers = viewControllers;
     
@@ -155,7 +152,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewDidLoad {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewDidLoad];
     
     self.document = [MTApplicationInstance mainInstance].openDocument;
@@ -181,9 +177,9 @@ typedef void(^MTBlockResultVoid)(void);
     [self.backgroundContainer addSubview:scrollView];
     
     NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:containerView
-                                                                             andHeight:2400.0000f /*self.backgroundContainer.frame.size.height*/];
+                                                                             andHeight:2400.0000f];
     NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:containerView
-                                                                            andWidth:2400.0000f/*self.backgroundContainer.frame.size.width*/];
+                                                                            andWidth:2400.0000f];
     
     NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
     [containerView addConstraints:containerViewConstraints];
@@ -224,7 +220,6 @@ typedef void(^MTBlockResultVoid)(void);
     [animator addBehavior:self.dynamicItemBehavior];
     [animator addBehavior:self.collisionBehavior];
     [animator addBehavior:self.gravityBeahvior];
-    
     self.dynamicAnimator = animator;
     
 }
@@ -827,7 +822,7 @@ typedef void(^MTBlockResultVoid)(void);
             RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
             
             BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
-            MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:table animated:animated];
+            MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:table root:topLevel animated:animated];
             
             if (animated) {
                 
@@ -977,7 +972,7 @@ typedef void(^MTBlockResultVoid)(void);
     [self.rootTables addObject:insertedQueryTable];
     
     // Insert table
-    MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:insertedQueryTable animated:YES];
+    MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:insertedQueryTable root:YES animated:YES];
 
     NSManagedObjectID *objectIDView = [viewController.view objectIdTag];
     UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:insertTableAnchorPoint];
@@ -1123,13 +1118,14 @@ typedef void(^MTBlockResultVoid)(void);
     }
 }
 
-- (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
+- (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table root:(BOOL)root animated:(BOOL)animated {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController advancedSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
     viewController.tableObjectId = table.objectID;
+    if (root) viewController.toolbar.backgroundColor = [UIColor blueColor];
     
     CGRect subviewRect = CGRectZero;
     
