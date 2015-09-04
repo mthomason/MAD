@@ -69,14 +69,13 @@ typedef void(^MTBlockResultVoid)(void);
         MADQueryVisualizationSchemaDelegate,
         MTViewControllerProtocol>
 
-
-    @property (nonatomic, strong) NSMutableArray *rootTables;
-
     @property (nonatomic, strong) IBOutlet UIToolbar *toolbarBottom;
     @property (nonatomic, strong) IBOutlet UIView *backgroundContainer;
 
     @property (nonatomic, strong) MADWatermarkScrollView *scrollView;
     @property (nonatomic, strong) UIView *contentView;
+
+    @property (nonatomic, strong) NSMutableArray *rootTables;
 
     @property (nonatomic, strong) NSMutableArray *viewControllers;  //May track child view controllers since iOS 7.
     @property (nonatomic, strong) NSMutableSet *tableIds;
@@ -92,8 +91,6 @@ typedef void(^MTBlockResultVoid)(void);
 
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeWidth;
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
-
-    @property (nonatomic, assign) NSUInteger tableDisplayCounter;
 
 @end
 
@@ -134,6 +131,27 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSMutableArray *rootTables = [[NSMutableArray alloc] init];
     self.rootTables = rootTables;
+    
+    NSArray *gravityItems = @[];
+    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:gravityItems];
+    gravity.magnitude = 1.0000f;
+    gravity.gravityDirection = CGVectorMake(1.0000f, 0.0000f);
+    self.gravityBeahvior = gravity;
+    
+    NSArray *dynamicItems = @[];
+    UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:dynamicItems];
+    dynamicItemBehavior.allowsRotation = NO;
+    dynamicItemBehavior.elasticity = 0.6000f;
+    dynamicItemBehavior.resistance = 1.0000f;
+    self.dynamicItemBehavior = dynamicItemBehavior;
+
+    NSArray *collisionItems = @[];
+    UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:collisionItems];
+    collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
+    collisionBehavior.collisionMode = UICollisionBehaviorModeItems;
+    collisionBehavior.collisionDelegate = self;
+    self.collisionBehavior = collisionBehavior;
+    
 }
 
 - (void)viewDidLoad {
@@ -141,7 +159,6 @@ typedef void(^MTBlockResultVoid)(void);
     [super viewDidLoad];
     
     self.document = [MTApplicationInstance mainInstance].openDocument;
-    self.tableDisplayCounter = 0;
     
     CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
     UIColor *borderColor = [UIColor lightGrayColor];
@@ -149,21 +166,24 @@ typedef void(^MTBlockResultVoid)(void);
     self.backgroundContainer.layer.borderColor = borderColor.CGColor;
     
     UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
-    
     containerView.contentMode = UIViewContentModeScaleAspectFit;
     containerView.autoresizesSubviews = NO;
     containerView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    containerView.backgroundColor = [UIColor greenColor];
+    self.backgroundContainer.backgroundColor = [UIColor redColor];
     
     MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
     scrollView.delegate = self;
     [scrollView addSubview:containerView];
     
+    
     [self.backgroundContainer addSubview:scrollView];
     
     NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:containerView
-                                                                             andHeight:self.backgroundContainer.frame.size.height];
+                                                                             andHeight:2400.0000f /*self.backgroundContainer.frame.size.height*/];
     NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:containerView
-                                                                            andWidth:self.backgroundContainer.frame.size.width];
+                                                                            andWidth:2400.0000f/*self.backgroundContainer.frame.size.width*/];
     
     NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
     [containerView addConstraints:containerViewConstraints];
@@ -201,31 +221,11 @@ typedef void(^MTBlockResultVoid)(void);
     self.contentView = containerView;
     
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
+    [animator addBehavior:self.dynamicItemBehavior];
+    [animator addBehavior:self.collisionBehavior];
+    [animator addBehavior:self.gravityBeahvior];
     
-    NSArray *emptyArray = @[];
-    
-    UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:emptyArray];
-    collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
-    collisionBehavior.collisionMode = UICollisionBehaviorModeItems;
-    collisionBehavior.collisionDelegate = self;
-    
-    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:emptyArray];
-    gravity.magnitude = 1.0000f;
-    gravity.gravityDirection = CGVectorMake(1.0000f, 0.0000f);
-
-    UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
-    dynamicItemBehavior.allowsRotation = NO;
-    dynamicItemBehavior.elasticity = 0.6000f;
-    dynamicItemBehavior.resistance = 1.0000f;
-    
-    [animator addBehavior:dynamicItemBehavior];
-    [animator addBehavior:collisionBehavior];
-    [animator addBehavior:gravity];
-    
-    self.dynamicItemBehavior = dynamicItemBehavior;
     self.dynamicAnimator = animator;
-    self.gravityBeahvior = gravity;
-    self.collisionBehavior = collisionBehavior;
     
 }
 
@@ -242,15 +242,9 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewWillLayoutSubviews {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewWillLayoutSubviews];
-    
-    if (self.scrollView.contentSize.height < self.contentView.bounds.size.height) {
-        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.contentView.bounds.size.height);
-    }
-    
-    if (self.scrollView.contentSize.width < self.contentView.bounds.size.width) {
-        self.scrollView.contentSize = CGSizeMake(self.contentView.bounds.size.width, self.scrollView.contentSize.height);
-    }
-    
+    self.scrollView.contentSize = CGSizeMake(2400.0000f, 2400.0000f);
+    self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.height);
+
 }
 
 - (void)viewDidLayoutSubviews {
@@ -268,10 +262,8 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    
     for (UIViewController *subviewController in [self childViewControllers]) {
-        [self didMoveFieldRect: subviewController
-                          animated: YES];
+        [self didMoveFieldRect: subviewController animated: YES];
     }
     
     [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryBottom];
@@ -307,6 +299,51 @@ typedef void(^MTBlockResultVoid)(void);
                                             fromPoint: fromPoint
                                               toPoint: toPoint];
 }
+
+
+#pragma mark Scroll view helper
+
+- (void)resizeScrollViewContentArea {
+    /*NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+     if (self.scrollView.isZooming == NO) {
+     CGFloat maxX = CGPointZero.x, maxY = CGPointZero.y;
+     
+     for (UIViewController *viewController in [self childViewControllers]) {
+     Class schemaClass = [MADQueryVisualizationSchemaViewController class];
+     if ([viewController isKindOfClass:schemaClass]) {
+     UIView *view = viewController.view;
+     CGRect frame = view.frame;//[self.contentView convertRect:view.frame fromView:view];
+     CGFloat tmaxX = frame.origin.x + frame.size.width;
+     CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
+     CGFloat tmaxY = frame.origin.y + frame.size.height;
+     CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
+     tmaxX += tminX;
+     tmaxX += tminY;
+     maxX = MAX(maxX, tmaxX);
+     maxY = MAX(maxY, tmaxY);
+     }
+     }
+     
+     CGSize s = CGSizeMake(MAX(maxX, self.view.bounds.size.width) , MAX(maxY, self.view.bounds.size.height));
+     
+     self.layoutConstraintSizeHeight.constant = s.height;
+     self.layoutConstraintSizeWidth.constant = s.width;
+     self.scrollView.contentSize = s;
+     
+     }
+     //[self.contentView layoutIfNeeded];
+     */
+    
+    /*
+     if (self.scrollView.contentSize.height < self.contentView.bounds.size.height) {
+     self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.contentView.bounds.size.height);
+     }
+     
+     if (self.scrollView.contentSize.width < self.contentView.bounds.size.width) {
+     self.scrollView.contentSize = CGSizeMake(self.contentView.bounds.size.width, self.scrollView.contentSize.height);
+     }*/
+}
+
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
@@ -529,6 +566,7 @@ typedef void(^MTBlockResultVoid)(void);
     } else {
         viewController.view.center = newOrigin;
     }
+    NSLog(@"(%@)", NSStringFromCGPoint(newOrigin));
     switch (gestureRecognizer.state) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
@@ -560,17 +598,17 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
+    //[self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
+    //[self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
+    //[self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -580,7 +618,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
+    //[self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
@@ -598,12 +636,12 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
+    //[self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
+    //[self resizeScrollViewContentArea];
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
@@ -640,7 +678,6 @@ typedef void(^MTBlockResultVoid)(void);
 
     NSSet *viewControllers = [NSSet setWithArray:self.viewControllers];
     [self removeViewControllers:viewControllers];
-    [self setTableDisplayCounter:0];
     
 }
 
@@ -713,9 +750,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     RptqQueryTable *rightTable = insertedQueryLinks.hasRightField.inQueryTable;
     MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[rightTable.objectID.URIRepresentation];
-    
-    
-    //NSMutableDictionary *layoutDetails = [[NSMutableDictionary alloc] initWithCapacity:queryDef.topologicallySortedTables.count];
     
     // Remove starting point connection if one of the tables is in the link.
     BOOL startingPointRemoved = NO;
@@ -827,7 +861,6 @@ typedef void(^MTBlockResultVoid)(void);
                 }
                 tableCounter++;
             }
-            self.tableDisplayCounter++;
         }
     }
     
@@ -950,9 +983,6 @@ typedef void(^MTBlockResultVoid)(void);
     UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:insertTableAnchorPoint];
     [self.dynamicAnimator addBehavior:attachmentBehavior];
     self.attachmentBehaviors[objectIDView.URIRepresentation] = attachmentBehavior;
-    
-    self.tableDisplayCounter++;
-    
 }
 
 #pragma mark - UI Items
@@ -1043,35 +1073,6 @@ typedef void(^MTBlockResultVoid)(void);
     [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
     [tapGesture requireGestureRecognizerToFail:panGesture];
     [viewController.view addGestureRecognizer:panGesture];
-}
-
-#pragma mark Scroll view helper
-
-- (void)resizeScrollViewContentArea {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    if (self.scrollView.isZooming == NO) {
-        CGFloat maxX = CGPointZero.x, maxY = CGPointZero.y;
-        
-        for (UIViewController *viewController in [self childViewControllers]) {
-            Class schemaClass = [MADQueryVisualizationSchemaViewController class];
-            if ([viewController isKindOfClass:schemaClass]) {
-                UIView *view = viewController.view;
-                CGRect frame = view.frame;//[self.contentView convertRect:view.frame fromView:view];
-                CGFloat tmaxX = frame.origin.x + frame.size.width;
-                CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
-                CGFloat tmaxY = frame.origin.y + frame.size.height;
-                CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
-                tmaxX += tminX;
-                tmaxX += tminY;
-                maxX = MAX(maxX, tmaxX);
-                maxY = MAX(maxY, tmaxY);
-            }
-        }
-        
-        self.layoutConstraintSizeHeight.constant = MAX(maxY, self.view.bounds.size.height);
-        self.layoutConstraintSizeWidth.constant = MAX(maxX, self.view.bounds.size.width);
-    }
-    [self.contentView layoutIfNeeded];
 }
 
 #pragma mark - View Controller Container Data
