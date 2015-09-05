@@ -303,36 +303,52 @@ CGCenterOfRect(CGRect rect) {
     return CGPointMake(rect.origin.x + (rect.size.width / 2.0000f), rect.origin.y + (rect.size.height / 2.0000f));
 }
 
-CG_INLINE CGPoint CGPointMakeRandomOffscreen();
+CG_INLINE CGPoint CGRandomPointInRect(CGRect rect);
+CG_INLINE
+CGPoint CGRandomPointInRect(CGRect rect) {
+    return CGPointMake((random() % (int)fabsf(rect.origin.x + rect.size.width + 1.0000f)) + (int)rect.origin.x,
+                       (random() % (int)fabsf(rect.origin.y + rect.size.height + 1.0000f)) + (int)rect.origin.y);
+}
+
+CG_INLINE CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds);
+CG_INLINE
+CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds) {
+    if (CGRectContainsRect(viewControllerBounds, desiredFrame) == NO) {
+        
+        //Is it to the left?
+        if (desiredFrame.origin.x < viewControllerBounds.origin.x) {
+            desiredFrame.origin.x = viewControllerBounds.origin.x + 20.0000f;
+        }
+        
+        //Is it to the right?
+        if (desiredFrame.origin.x + desiredFrame.size.width > viewControllerBounds.origin.x + viewControllerBounds.size.width) {
+            desiredFrame.origin.x = viewControllerBounds.origin.x + viewControllerBounds.size.width - desiredFrame.size.width - 20.0000f;
+        }
+        
+        //Are you too high?
+        if (desiredFrame.origin.y < viewControllerBounds.origin.y) {
+            desiredFrame.origin.y = viewControllerBounds.origin.y + 20.0000f;
+        }
+        
+        //Is it too low?
+        if (desiredFrame.origin.y + desiredFrame.size.height > viewControllerBounds.origin.y + viewControllerBounds.size.height) {
+            desiredFrame.origin.y = viewControllerBounds.origin.y + viewControllerBounds.size.height - desiredFrame.size.height - 20.0000f;
+        }
+    }
+    return desiredFrame;
+}
+
+CG_INLINE CGPoint CGPointMakeRandomOffscreen(CGFloat offSetSize);
 CG_INLINE CGPoint
-CGPointMakeRandomOffscreen() {
-	CGPoint offScreen;
-	CGFloat offSetSize = 200.0000f * 2;
-	if (rand()%2 == 0) {
-		if (rand()%2 == 0) {
-			//offscreen top
-			offScreen = CGPointMake(rand() % (int)MADFloat_1024, 0.0000f - offSetSize);
-		} else {
-			//offscreen left
-			offScreen = CGPointMake(0.0000f - offSetSize, rand() % (int)MADFloat_1024);
-		}
-		
-	} else {
-		if (rand()%2 == 0) {
-			//offscreen bottom
-			offScreen = CGPointMake(rand() % (int)MADFloat_1024, MADFloat_1024 + offSetSize);
-		} else {
-			//offscreen right
-			offScreen = CGPointMake(MADFloat_1024 + offSetSize, rand() % (int)MADFloat_1024);
-		}
-	}
-	return offScreen;
+CGPointMakeRandomOffscreen(CGFloat offSetSize) {
+        return rand()%2 == 0 ? (rand()%2 == 0 ? CGPointMake(rand() % (int)MADFloat_1024, 0.0000f - offSetSize) : CGPointMake(0.0000f - offSetSize, rand() % (int)MADFloat_1024)) :
+                                rand()%2 == 0 ? CGPointMake(rand() % (int)MADFloat_1024, MADFloat_1024 + offSetSize) : CGPointMake(MADFloat_1024 + offSetSize, rand() % (int)MADFloat_1024);
 }
 
 CG_INLINE CGRect CGRectFrameAtRandomOffscreenLocation(CGSize size);
 CG_INLINE CGRect
 CGRectFrameAtRandomOffscreenLocation(CGSize size) {
-    CGPoint offScreen = CGPointMakeRandomOffscreen();
+    CGPoint offScreen = CGPointMakeRandomOffscreen(400.0000f);
 	return CGRectMake(offScreen.x, offScreen.y, size.width, size.height);
 }
 
