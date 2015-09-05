@@ -634,32 +634,11 @@ MTViewControllerProtocol>
             }
         }];
         [attachmentBehaviorLinksWithGestureOnRight enumerateObjectsUsingBlock:^(UIAttachmentBehavior *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            obj.length = CGDistance(((id<UIDynamicItem>)obj.items[0]).center, newOrigin/*((id<UIDynamicItem>)obj.items[1]).center*/);
+            obj.length = CGDistance(((id<UIDynamicItem>)obj.items[0]).center, newOrigin);
         }];
         
         viewController.view.center = newOrigin;
         [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-
-        /*
-        switch (gestureRecognizer.state) {
-            case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-                [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-            }
-            case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-                [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-                break;
-            }
-            case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
-                break;
-            case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
-            case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
-            case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-                [self.dynamicAnimator updateItemUsingCurrentState:viewController];
-                break;
-            }
-            default:
-                break;
-        }*/
     }
 }
 
