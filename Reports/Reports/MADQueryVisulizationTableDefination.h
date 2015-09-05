@@ -15,6 +15,6 @@
 @property (nonatomic, assign) BOOL isRoot;
 @property (nonatomic, strong) NSURL *tableID;
 
-- (instancetype)initWithRect:(CGRect)rect andDepth:(NSUInteger)depth;
+- (instancetype)initWithAnchorPoint:(CGPoint)point andDepth:(NSUInteger)depth;
 
 @end

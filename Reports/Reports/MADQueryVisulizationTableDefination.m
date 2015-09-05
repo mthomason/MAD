@@ -13,10 +13,10 @@ static NSString * const keyDepth = @"d";
 
 @implementation MADQueryVisulizationTableDefination
 
-- (instancetype)initWithRect:(CGRect)rect andDepth:(NSUInteger)depth {
+- (instancetype)initWithAnchorPoint:(CGPoint)point andDepth:(NSUInteger)depth {
     if (self = [super init]) {
         _depth = depth;
-        _center = CGPointMake(rect.origin.x + (rect.size.width / 2.0000f), 100.0000f * (depth + 1));
+        _center = point;
     }
     return self;
 }
