@@ -30,9 +30,10 @@
 }
 
 - (void)initalize {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.bounds.size.width, self.bounds.size.height - 4.0000f)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y + 2.0000f, self.bounds.size.width, self.bounds.size.height - 2.0000f)];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"";
+
     [self addSubview:label];
     self.label = label;
     self.backgroundColor = [UIColor clearColor];
