@@ -493,17 +493,15 @@ typedef void(^MTBlockResultVoid)(void);
                 UIViewController *viewController = self.controllersForObjectIds[updatedTable.objectID.URIRepresentation];
                 CGAffineTransform swingTransform = CGAffineTransformSwing();
                 CGPoint center = viewController.view.center;
-                CGFloat animationDuration = 0.3000f;
                 
-                __weak UIViewController *weakViewController = viewController;
-                [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    weakViewController.view.bounds = CGRectZero;
-                    weakViewController.view.center = center;
-                    weakViewController.view.transform = swingTransform;
+                [UIView animateWithDuration:0.3000f delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    viewController.view.bounds = CGRectZero;
+                    viewController.view.center = center;
+                    viewController.view.transform = swingTransform;
                 } completion:^(BOOL finished) {
-                    [weakViewController willMoveToParentViewController:nil];
-                    [weakViewController.view removeFromSuperview];
-                    [weakViewController removeFromParentViewController];
+                    [viewController willMoveToParentViewController:nil];
+                    [viewController.view removeFromSuperview];
+                    [viewController removeFromParentViewController];
                 }];
             }
             
@@ -564,74 +562,36 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
-}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //[self resizeScrollViewContentArea];
-}
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate { }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //[self resizeScrollViewContentArea];
-}
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //[self resizeScrollViewContentArea];
-}
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale { }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    [self resizeScrollViewContentArea];
-}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //[self resizeScrollViewContentArea];
-}
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-}
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return NO;
 }
 
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-}
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView { }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //[self resizeScrollViewContentArea];
-}
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView { }
 
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //[self resizeScrollViewContentArea];
-}
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view { }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-}
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset { }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return self.contentView;
 }
 
-#pragma mark - UICollisionBehaviorDelegate
-
-//- (void)collisionBehavior:(UICollisionBehavior *)behavior endedContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier {
-
-//}
-    
 #pragma mark - Change UI on IR Diagram
 
 - (void)clearScreen {
@@ -653,38 +613,6 @@ typedef void(^MTBlockResultVoid)(void);
     
 }
 
-- (MTLinkedList *)tableObjectIDsSortedTopologicallyForQuery:(RptqQuery *)query {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-
-    MTGraph *graph = [[MTGraph alloc] init];
-    NSSet *hasTables = query.hasQueryTables;
-    
-    //Add a vertex to the graph for each table.
-    for (RptqDatabaseSchemaTable *table in hasTables) {
-        [graph addVertexWithObject:table.objectID];
-    }
-    
-    //Create an edge in the graph for each query link.
-    NSNumber *weight = @(1);
-    for (RptqQueryLinks *queryLink in query.hasQueryLinks) {
-        
-        MTVertex *vertexOrigin =        [graph vertexForObject:(MTObject *)queryLink.hasLeftField.inQueryTable.objectID];
-        MTVertex *vertexDestination =   [graph vertexForObject:(MTObject *)queryLink.hasRightField.inQueryTable.objectID];
-        
-        [graph addEdgeWithOrigin: vertexOrigin
-                     destination: vertexDestination
-                          object: queryLink.objectID
-                       andWeight: weight];
-        
-    }
-    
-    NSError *error = nil;
-    BOOL isDirectedAcyclicGraph;
-    MTLinkedList *tableIds = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
-    return tableIds;
-
-}
-
 #pragma mark Reload document view controllers
 
 - (void)redraw {
@@ -694,21 +622,16 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated {
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+
     if (documentReport) {
-        
         [self clearScreen];
-        
         [self.rootTables removeAllObjects];
         [self.viewControllers removeAllObjects];  //May track child view controllers since iOS 7.
         [self.tableIds removeAllObjects];
         [self.controllersForObjectIds removeAllObjects];     //Tables and links
         [self.controllersForObjectIdsLink removeAllObjects];
-        
-        RptqQuery *query = documentReport.activeDocumentModel.query;
-        
-        [self displayQuery:query animated:animated];
+        [self displayQuery:documentReport.activeDocumentModel.query animated:animated];
     }
-    
 }
 
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
@@ -731,8 +654,6 @@ typedef void(^MTBlockResultVoid)(void);
         
         RptqQueryTable *removeableTable = nil;
         
-        //NSDictionary *layout = layoutDetails[queryTable.objectID];
-        //NSNumber *isTopLevel = layout[MTKeyIsTopLevel];
         if ([queryDef.startingPoints containsObject: queryTable.objectID.URIRepresentation] == NO) {
             if ([leftTable.objectID isEqual:queryTable.objectID]) {
                 removeableTable = queryTable;
