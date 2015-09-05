@@ -634,7 +634,7 @@ MTViewControllerProtocol>
             }
         }];
         [attachmentBehaviorLinksWithGestureOnRight enumerateObjectsUsingBlock:^(UIAttachmentBehavior *_Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            obj.length = CGDistance(((id<UIDynamicItem>)obj.items[0]).center, ((id<UIDynamicItem>)obj.items[1]).center);
+            obj.length = CGDistance(((id<UIDynamicItem>)obj.items[0]).center, newOrigin/*((id<UIDynamicItem>)obj.items[1]).center*/);
         }];
         
         viewController.view.center = newOrigin;
@@ -857,7 +857,7 @@ MTViewControllerProtocol>
     
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerLeft attachedToItem:viewControllerRight];
     behavior.frequency = 0.0000f;
-    //behavior.damping = 1.0000f;
+    behavior.damping = 1.0000f;
     behavior.length = 200.0000f;
     return behavior;
 }
