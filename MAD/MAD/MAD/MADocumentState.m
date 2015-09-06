@@ -10,7 +10,7 @@
 
 @implementation MADocumentState
 
-- (id)init {
+- (instancetype)init {
     if (self = [super init]) {
         self.saveInProgress = NO;
         self.needsSave = NO;

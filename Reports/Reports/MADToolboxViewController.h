@@ -15,7 +15,7 @@
 @interface MADToolboxViewController : MADViewController
     <MADToolboxDisplayProtocol>
 
-@property (nonatomic, strong) MADocument *document;
+@property (nonatomic, weak) MADocument *document;
 @property (nonatomic, copy) NSSet *selectedObjectIds;
 
 @property (nonatomic, assign) BOOL clearsBackground;

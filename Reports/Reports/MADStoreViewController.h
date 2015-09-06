@@ -13,6 +13,6 @@
 @interface MADStoreViewController : MADCollectionViewController
     <MTViewControllerProtocol, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, assign) id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
 
 @end

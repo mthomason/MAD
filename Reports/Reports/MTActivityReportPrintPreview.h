@@ -20,7 +20,7 @@
 
 @interface MTActivityReportPrintPreview : UIActivity
 
-@property (nonatomic, assign) id <MTActivityReportPrintPreviewDelegate> delegate;
+@property (nonatomic, weak) id <MTActivityReportPrintPreviewDelegate> delegate;
 
 @end
 

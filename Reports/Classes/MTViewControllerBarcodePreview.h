@@ -16,7 +16,7 @@
 
 @interface MTViewControllerBarcodePreview : UIViewController
 
-@property (nonatomic, assign) id <MTViewControllerBarcodePreviewDelegate> delegate;
+@property (nonatomic, weak) id <MTViewControllerBarcodePreviewDelegate> delegate;
 
 - (void)setBarcodeToPreview:(MTBarcode *)barcode;
 - (void)update;

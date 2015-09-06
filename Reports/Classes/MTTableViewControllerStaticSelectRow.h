@@ -20,7 +20,7 @@
 @interface MTTableViewControllerStaticSelectRow : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, assign) id <MTTableViewControllerStaticSelectRowDelegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerStaticSelectRowDelegate> delegate;
 
 @end
 

@@ -18,7 +18,7 @@
 @interface MTViewControllerBarcodeType : UIViewController
     <UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic, assign) id <MTViewControllerBarcodeTypeDelegate> delegate;
+@property (nonatomic, weak) id <MTViewControllerBarcodeTypeDelegate> delegate;
 @property (nonatomic, assign) NSInteger initalKey;
 
 @end

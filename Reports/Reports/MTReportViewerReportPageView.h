@@ -15,7 +15,7 @@
 
 @interface MTReportViewerReportPageView : UIView
 
-@property (nonatomic, assign) id <MTPrintingProtocol> delegate;
+@property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 @property (nonatomic, assign) BOOL drawBlankPage;
 
 @end

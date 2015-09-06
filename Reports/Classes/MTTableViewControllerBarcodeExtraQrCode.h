@@ -23,7 +23,7 @@
 
 @interface MTTableViewControllerBarcodeExtraQrCode : UITableViewController
 
-@property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
 
 @end
 

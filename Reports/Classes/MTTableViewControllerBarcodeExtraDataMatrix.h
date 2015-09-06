@@ -20,7 +20,7 @@
 
 @interface MTTableViewControllerBarcodeExtraDataMatrix : UITableViewController
 
-@property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
 
 @end
 

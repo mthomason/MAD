@@ -25,7 +25,7 @@
         MTReportDesignerFontSelectorDelegate>
 
 @property (nonatomic, weak) id <MTReportDesignerFontSettingsDelegate> delegate;
-@property (nonatomic, strong) MADocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
 @property (nonatomic, assign) BOOL clearsBackground;

@@ -23,7 +23,7 @@
 
 @interface MTTableViewControllerBarcodeExtraAztec : UITableViewController
 
-@property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraAztecDelegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraAztecDelegate> delegate;
 
 @end
 

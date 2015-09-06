@@ -11,6 +11,6 @@
 
 @interface MADReceiptViewController : UITableViewController
 
-@property (nonatomic, assign) id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
 
 @end

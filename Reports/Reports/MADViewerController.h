@@ -19,7 +19,7 @@
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
-@property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
+@property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
 - (void)reload;
 

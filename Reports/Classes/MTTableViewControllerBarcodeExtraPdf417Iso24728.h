@@ -28,7 +28,7 @@
 
 @interface MTTableViewControllerBarcodeExtraPdf417Iso24728 : UITableViewController
 
-@property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate> delegate;
 
 @end
 

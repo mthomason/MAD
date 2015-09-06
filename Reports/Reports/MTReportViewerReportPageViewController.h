@@ -18,7 +18,7 @@
 @interface MTReportViewerReportPageViewController : UIViewController
     <MTPrintingProtocol>
 
-@property (nonatomic, assign) id <MTPrintingProtocol> delegate;
+@property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 
 @property (nonatomic, assign, readonly) NSUInteger pageNumber;
 @property (nonatomic, strong) NSDate *lastCacheDate;
