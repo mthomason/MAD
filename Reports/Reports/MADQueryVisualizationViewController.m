@@ -12,6 +12,7 @@
 
 #import "MADQueryVisualizationViewController.h"
 #import "MADocument.h"
+#import "MADConstants.h"
 #import "MTApplicationInstance.h"
 #import "MADViewControllerSQL.h"
 
@@ -51,6 +52,8 @@
 #import "MADQueryVisulizationTableDefination.h"
 
 #import "MADQueryVisulizationDefination.h"
+#import "NSFileManager+Common.h"
+#import "MADQueryVisualizationCacheData.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -64,6 +67,8 @@ static const CGFloat contentViewHeight = 1024.0000f;
 static const CGFloat schemaViewWidth = 120.0000f;
 static const CGFloat schemaViewHeight = 140.0000f;
 
+static NSString * const CacheExt = @"qvvc";
+
 typedef void(^MTBlockResultVoid)(void);
 
 @interface MADQueryVisualizationViewController ()
@@ -71,6 +76,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIScrollViewDelegate,
     UIPopoverControllerDelegate,
     UICollisionBehaviorDelegate,
+    UIDynamicAnimatorDelegate,
     MADQueryVisualizationSchemaDelegate,
     MTViewControllerProtocol>
 
@@ -82,8 +88,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 @property (nonatomic, strong) NSMutableArray *rootTables;
 
-@property (nonatomic, strong) NSMutableArray *viewControllersTables;  //May track child view controllers since iOS 7.
-@property (nonatomic, strong) NSMutableArray *viewControllersLinks;  //May track child view controllers since iOS 7.
+@property (nonatomic, strong) NSMutableArray *viewControllersTables;
+@property (nonatomic, strong) NSMutableArray *viewControllersLinks;
 @property (nonatomic, strong) NSMutableSet *tableIds;
 
 @property (nonatomic, strong) NSMutableDictionary *controllersForObjectIds;     //Tables and links
@@ -97,6 +103,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeWidth;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
+
+@property (nonatomic, strong) NSURL *localCacheFileUrl;
 
 @end
 
@@ -149,10 +157,20 @@ typedef void(^MTBlockResultVoid)(void);
     
 }
 
+- (NSString *)cacheFileName {
+    NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)self.document.activeDocumentModel.objectID.URIRepresentation.absoluteString.hash];
+    return [fileName stringByAppendingPathExtension:CacheExt];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.document = [MTApplicationInstance mainInstance].openDocument;
+
+    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSString *cacheFileName = [self cacheFileName];
+    NSURL *cacheFileUrl = [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
+    self.localCacheFileUrl = cacheFileUrl;
     
     CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
     UIColor *borderColor = [UIColor lightGrayColor];
@@ -214,6 +232,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
     [animator addBehavior:self.dynamicItemBehavior];
     [animator addBehavior:self.collisionBehavior];
+    animator.delegate = self;
     self.dynamicAnimator = animator;
     
 }
@@ -233,7 +252,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+    [self cacheState];
     [self clearScreen];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -246,7 +265,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewDidAppear:animated];
     if (animated) {
         [self.scrollView flashScrollIndicators];
@@ -256,7 +274,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewWillLayoutSubviews {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewWillLayoutSubviews];
     self.scrollView.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);
     self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.height);
@@ -268,14 +285,12 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     for (UIViewController *subviewController in [self childViewControllers]) {
@@ -326,13 +341,9 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - NSManagedObjectContext observer
 
-- (void)managedObjectContextWillSave:(NSNotification *)notification {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
-}
+- (void)managedObjectContextWillSave:(NSNotification *)notification { }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
@@ -531,7 +542,7 @@ typedef void(^MTBlockResultVoid)(void);
             counter++;
         }
     }
-    
+
     //Add connections between MTQueryBuilderAdvancedSchemaViewController
     if ([leftTableViewController isEqual:rightTableViewController] == NO) {
         UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorLinkWithLeftViewController: leftTableViewController
@@ -547,28 +558,52 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark View Controller Container Custom Handlers
 
 - (void)viewControllerDidFinish:(id)sender {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 #pragma mark - UIDynamicAnimatorDelegate
 
-- (void)dynamicAnimatorWillResume:(UIDynamicAnimator *)animator {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
+- (void)dynamicAnimatorWillResume:(UIDynamicAnimator *)animator { }
+
+- (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator { }
+
+- (void)cacheState {
+    MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
+    MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
+    for (MTPair *pair in queryDef.topologicallySortedTables) {
+        MTVertex *tableIdVertext = pair.former;
+        if (tableIdVertext.object != nil) {
+            
+            MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
+
+            MADQueryVisulizationTableDefination *tableDef = [[MADQueryVisulizationTableDefination alloc] init];
+            tableDef.center = viewController.view.center;
+            tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
+            [cacheData addTableDefination:tableDef forObjectID:tableIdVertext.object];
+        }
+    }
+    cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
+    cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
+    NSError *error = nil;
+    NSData *d = [NSKeyedArchiver archivedDataWithRootObject:cacheData];
+    [d writeToURL:self.localCacheFileUrl options:NSDataWritingAtomic error:&error];
 }
 
-- (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-
-    NSMutableArray *rootTables = [[NSMutableArray alloc] initWithCapacity:self.rootTables.count];
-    for (NSURL *table in self.viewControllersTables) {
-        UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[table];
-        MADQueryVisulizationTableDefination *tableDef = [[MADQueryVisulizationTableDefination alloc] initWithAnchorPoint:attachmentBehavior.anchorPoint andDepth:0];
-        [rootTables addObject: tableDef];
+- (MADQueryVisualizationCacheData *)loadCache {
+    NSError * _Nullable __autoreleasing * _Nullable error = nil;
+    NSData *data = [[NSData alloc] initWithContentsOfURL:self.localCacheFileUrl options:NSDataReadingUncached error:error];
+    if (error != nil) {
+        [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
+        return nil;
+    } else {
+        id result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if ([result isKindOfClass:[MADQueryVisualizationCacheData class]]) {
+            return result;
+        } else {
+            [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
+            return nil;
+        }
     }
-    
-    
 }
 
 #pragma mark - Gesture recognizer actions
@@ -591,6 +626,13 @@ typedef void(^MTBlockResultVoid)(void);
     CGPoint gestureLocation = [gestureRecognizer locationInView:window];
     UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[gestureRecognizer.view.objectIdTag.URIRepresentation];
     attachmentBehavior.anchorPoint = [window convertPoint:gestureLocation toView:self.contentView];
+     MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag.URIRepresentation];
+    viewController.view.center = attachmentBehavior.anchorPoint;
+    [self.dynamicAnimator updateItemUsingCurrentState:viewController];
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        
+    }
+
 }
 
 #pragma mark - Change UI on IR Diagram
@@ -622,12 +664,51 @@ typedef void(^MTBlockResultVoid)(void);
     if (documentReport) {
         [self clearScreen];
         [self.rootTables removeAllObjects];
-        [self.viewControllersTables removeAllObjects];  //May track child view controllers since iOS 7.
-        [self.viewControllersLinks removeAllObjects];  //May track child view controllers since iOS 7.
+        [self.viewControllersTables removeAllObjects];
+        [self.viewControllersLinks removeAllObjects];
         [self.tableIds removeAllObjects];
         [self.controllersForObjectIds removeAllObjects];     //Tables and links
         [self.controllersForObjectIdsLink removeAllObjects];
-        [self displayQuery:documentReport.activeDocumentModel.query animated:animated];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.localCacheFileUrl.path]) {
+            MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
+            [self displayQuery:documentReport.activeDocumentModel.query withSchemaHints:schemaLocations animated:animated];
+        } else {
+            [self displayQuery:documentReport.activeDocumentModel.query animated:animated];
+        }
+    }
+}
+
+- (void)displayQuery:(RptqQuery *)query withSchemaHints:(MADQueryVisualizationCacheData *)cacheData animated:(BOOL)animated {
+    if (cacheData != nil) {
+        MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:query];
+        for (MTPair *pair in queryDef.topologicallySortedTables) {
+            MTVertex *tableIdVertext = pair.former;
+            if (tableIdVertext.object != nil) {
+                RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
+                BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
+                MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:table root:topLevel animated:animated];
+                MADQueryVisulizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:table.objectID];
+                viewController.view.center = tableDef.center;
+                UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToAnchor:tableDef.center];
+                attachmentBehavior.length = 0.0000f;
+                [self.dynamicAnimator addBehavior:attachmentBehavior];
+                self.attachmentBehaviorsTables[viewController.view.objectIdTag.URIRepresentation] = attachmentBehavior;
+                if (topLevel) {
+                    [self.rootTables addObject:table.objectID.URIRepresentation];
+                }
+            }
+        }
+        
+        for (RptqQueryLinks *queryLink in query.hasQueryLinks) {
+            [self addLinkViewControllerForQueryLink:queryLink animated:animated];
+        }
+        
+        self.scrollView.contentOffset = cacheData.scrollViewContentOffset;
+        self.scrollView.zoomScale = cacheData.scrollViewZoomScale;
+        
+    } else {
+        [self displayQuery:query animated:animated];
     }
 }
 
@@ -635,10 +716,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:query];
-    
     NSInteger tableCounter = 0;
-    NSInteger topLevelTableCounter = 0;
-    
     for (MTPair *pair in queryDef.topologicallySortedTables) {
         MTVertex *tableIdVertext = pair.former;
         if (tableIdVertext.object != nil) {
@@ -653,7 +731,6 @@ typedef void(^MTBlockResultVoid)(void);
             if (topLevel) {
                 [self.rootTables addObject:table.objectID.URIRepresentation];
             }
-            topLevelTableCounter++;
             tableCounter++;
         }
     }

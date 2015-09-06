@@ -62,8 +62,10 @@
                 }
             }
         }
+
         self.startingPoints = [NSArray arrayWithArray:startingPoints];
         self.directedAcyclicGraph = isDirectedAcyclicGraph;
+        
     }
     return self;
 }

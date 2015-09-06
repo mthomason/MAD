@@ -9,12 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface MADQueryVisulizationTableDefination : NSObject
+    <NSCoding, NSCopying>
 
 @property (nonatomic, assign) CGPoint center;
-@property (nonatomic, assign) NSUInteger depth;
-@property (nonatomic, assign) BOOL isRoot;
-@property (nonatomic, strong) NSURL *tableID;
-
-- (instancetype)initWithAnchorPoint:(CGPoint)point andDepth:(NSUInteger)depth;
+@property (nonatomic, assign, getter=isRoot) BOOL root;
 
 @end

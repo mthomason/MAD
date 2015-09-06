@@ -9,29 +9,28 @@
 #import "MADQueryVisulizationTableDefination.h"
 
 static NSString * const keyCenter = @"c";
-static NSString * const keyDepth = @"d";
+static NSString * const keyRoot = @"r";
 
 @implementation MADQueryVisulizationTableDefination
 
-- (instancetype)initWithAnchorPoint:(CGPoint)point andDepth:(NSUInteger)depth {
+- (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
-        _depth = depth;
-        _center = point;
-    }
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super init]) {
-        _center = [coder decodeCGPointForKey:keyCenter];
-        _depth = [coder decodeIntegerForKey:keyDepth];
+        _center = [decoder decodeCGPointForKey:keyCenter];
+        _root = [decoder decodeIntegerForKey:keyRoot];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeCGPoint:_center forKey:keyCenter];
-    [coder encodeInteger:_depth forKey:keyDepth];
+    [coder encodeInteger:_root forKey:keyRoot];
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+    MADQueryVisulizationTableDefination *result = [[[self class] allocWithZone:zone] init];
+    result.center = self.center;
+    result.root = self.root;
+    return result;
 }
 
 @end
