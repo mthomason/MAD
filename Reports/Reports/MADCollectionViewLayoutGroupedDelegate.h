@@ -33,7 +33,7 @@ extern NSString * const MADImageToolbarCloudDownload;
 @interface MADCollectionViewLayoutGroupedDelegate : NSObject
     <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, assign) id <MADCollectionViewLayoutFilesDelegate> delegate;
+@property (nonatomic, weak) id <MADCollectionViewLayoutFilesDelegate> delegate;
 
 @end
 

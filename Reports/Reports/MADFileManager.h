@@ -16,8 +16,9 @@
 @interface MADFileManager : NSObject
 
 @property (nonatomic, strong, readonly) NSURL *openUrl;
-@property (nonatomic, strong) UIManagedDocument *openDocument;
+@property (readonly) UIManagedDocument *openDocument;
 
+- (void)setOpenDocument:(UIManagedDocument *)document;
 - (void)removeDocumentWithUrl:(NSURL *)url;
 
 @end

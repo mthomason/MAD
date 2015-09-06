@@ -15,7 +15,7 @@
             RptqDocument, RptqDatabase, RptqQuery;
 
 @interface AppDelegate : UIResponder
-<UIApplicationDelegate>
+    <UIApplicationDelegate>
 
 + (MTApplicationInstance *)app;
 

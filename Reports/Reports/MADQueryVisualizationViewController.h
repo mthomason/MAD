@@ -19,6 +19,8 @@
 
 - (void)redraw;
 
++ (NSString *)cacheFileNameForFileName:(NSString *)filename;
+
 @end
 
 #endif

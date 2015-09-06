@@ -101,20 +101,36 @@ typedef void(^MTBlockResultVoid)(void);
 @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviorsTables;
 @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviorsLinks;
 
-@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeWidth;
-@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
-
 @property (nonatomic, strong) NSURL *localCacheFileUrl;
 
 @end
 
 @implementation MADQueryVisualizationViewController
 
+- (void)dealloc {
+    NSLog(@"%s\n%s", __FILE__, __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"%s\n%s", __FILE__, __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
     }
     return self;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+
+    [self.dynamicAnimator removeAllBehaviors];
+    [self.viewControllersTables removeAllObjects];
+    [self.viewControllersLinks removeAllObjects];
+    [self.tableIds removeAllObjects];
+    [self.controllersForObjectIds removeAllObjects];
+    [self.controllersForObjectIdsLink removeAllObjects];
+    [self.attachmentBehaviorsTables removeAllObjects];
+    [self.attachmentBehaviorsLinks removeAllObjects];
+    [self.rootTables removeAllObjects];
 }
 
 - (void)commonInit {
@@ -158,7 +174,15 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (NSString *)cacheFileName {
-    NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)self.document.activeDocumentModel.objectID.URIRepresentation.absoluteString.hash];
+    return [MADQueryVisualizationViewController cacheFileNameForDocument:self.document];
+}
+
++ (NSString *)cacheFileNameForDocument:(MADocument *)document {
+    return [self cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
+}
+
++ (NSString *)cacheFileNameForFileName:(NSString *)filename {
+    NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)filename.hash];
     return [fileName stringByAppendingPathExtension:CacheExt];
 }
 
@@ -197,8 +221,6 @@ typedef void(^MTBlockResultVoid)(void);
     NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
     [containerView addConstraints:containerViewConstraints];
     
-    self.layoutConstraintSizeHeight = layoutConstraintSizeHeight;
-    self.layoutConstraintSizeWidth = layoutConstraintSizeWidth;
     
     NSDictionary *viewDictionary = @{@"sv" : scrollView,
                                      @"cv" : containerView,
@@ -590,20 +612,22 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (MADQueryVisualizationCacheData *)loadCache {
+    MADQueryVisualizationCacheData *result;
     NSError * _Nullable __autoreleasing * _Nullable error = nil;
     NSData *data = [[NSData alloc] initWithContentsOfURL:self.localCacheFileUrl options:NSDataReadingUncached error:error];
     if (error != nil) {
         [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
-        return nil;
+        result = nil;
     } else {
-        id result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        if ([result isKindOfClass:[MADQueryVisualizationCacheData class]]) {
-            return result;
+        id r = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if ([r isKindOfClass:[MADQueryVisualizationCacheData class]]) {
+            result = r;
         } else {
             [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
-            return nil;
+            result = nil;
         }
     }
+    return result;
 }
 
 #pragma mark - Gesture recognizer actions
@@ -638,18 +662,27 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Change UI on IR Diagram
 
 - (void)clearScreen {
-
-    [self.viewControllersLinks enumerateObjectsUsingBlock:^(UIViewController *  _Nonnull viewController, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (UIViewController *viewController in self.viewControllersLinks) {
         [self removeViewController:viewController];
-    }];
+    }
+    /*[self.viewControllersLinks enumerateObjectsUsingBlock:^(UIViewController *  _Nonnull viewController, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self removeViewController:viewController];
+    }];*/
 
-    [self.viewControllersTables enumerateObjectsUsingBlock:^(MADQueryVisualizationSchemaViewController *  _Nonnull viewController, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (MADQueryVisualizationSchemaViewController *  _Nonnull viewController in self.viewControllersTables) {
+        [self removeViewController:viewController];
+        UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviorsTables[viewController.view.objectIdTag.URIRepresentation];
+        [self.dynamicAnimator removeBehavior:attachmentBehaviorForObjectId];
+        [self.attachmentBehaviorsTables removeObjectForKey:viewController.view.objectIdTag.URIRepresentation];
+        [self dynamicsRemoveItem:viewController];
+    }
+    /*[self.viewControllersTables enumerateObjectsUsingBlock:^(MADQueryVisualizationSchemaViewController *  _Nonnull viewController, NSUInteger idx, BOOL * _Nonnull stop) {
         [self removeViewController:viewController];
         UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviorsTables[viewController.view.objectIdTag.URIRepresentation];
         [self.dynamicAnimator removeBehavior:attachmentBehaviorForObjectId];
         [self.attachmentBehaviorsTables removeObjectForKey:viewController.view.objectIdTag.URIRepresentation];
         [self.collisionBehavior removeItem:viewController];
-    }];
+    }];*/
 
 }
 

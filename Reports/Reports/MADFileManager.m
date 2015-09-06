@@ -50,6 +50,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 
 - (void)removeDocumentWithUrl:(NSURL *)url {
     [self.openFiles removeObjectForKey:url.absoluteString];
+    self.openUrl = nil;
 }
 
 @end

@@ -32,7 +32,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 #import "MTNavigationController.h"
 #import "MTNavigationControllerHideBottomBarUnlicensed.h"
-#import "MADNavigationControllerSplitParentViewController.h"
 
 #import "MADFilesController.h"
 #import "MADLocalFileCoordinator.h"
@@ -69,9 +68,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.44";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.44";
-NSString * const MTGlobalBundleRev                                  = @"1986";
+NSString * const MTGlobalBundleVersion                              = @"8.0.45";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.45";
+NSString * const MTGlobalBundleRev                                  = @"1987";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -550,23 +549,15 @@ static MTApplicationInstance *mainInstance;
     
     [[self openDocument] regenThumbnailWithTraits:traitCollectionForThumbnail];
     __weak MADocument *activeDocument = [self openDocument];
-    if (activeDocument) {
-        
-        if (activeDocument.documentState != UIDocumentStateClosed) {
-            __weak MTApplicationInstance *weakself = self;
-            [activeDocument saveToURL: activeDocument.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-                if (success) {
-                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            weakself.reportState = MTReportStateClosed;
-                            [weakself.fileManager removeDocumentWithUrl:weakself.fileManager.openUrl];
-                        }
-                        completion(success);
-                    }];
-                    
-                }
-            }];
-        }
+    if (activeDocument && activeDocument.documentState != UIDocumentStateClosed) {
+        __weak MTApplicationInstance *weakself = self;
+        [activeDocument closeWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                weakself.reportState = MTReportStateClosed;
+                [weakself.fileManager removeDocumentWithUrl:weakself.fileManager.openUrl];
+            }
+            completion(success);
+        }];
     }
 }
 

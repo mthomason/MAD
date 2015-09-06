@@ -12,7 +12,7 @@
 @interface MADInterfaceControllerKPI()
 
 @property (nonatomic, strong) NSURL *madFile;
-@property (nonatomic, strong) MADocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @end
 
