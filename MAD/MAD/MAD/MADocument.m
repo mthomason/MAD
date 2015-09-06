@@ -161,6 +161,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @property (nonatomic, strong, readwrite) NSString *fileName;
 
+@property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
+
 @end
 
 @implementation MADocument
@@ -421,25 +423,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark UIManagedDocument
 
-- (BOOL)configurePersistentStoreCoordinatorForURL: (NSURL *)storeURL
-                                           ofType: (NSString *)fileType
-                               modelConfiguration: (NSString *)configuration
-                                     storeOptions: (NSDictionary *)storeOptions
-                                            error: (NSError **)error {
-    
-    return [super configurePersistentStoreCoordinatorForURL: storeURL
-                                                     ofType: fileType
-                                         modelConfiguration: configuration
-                                               storeOptions: storeOptions
-                                                      error: error];
-}
-
 - (NSManagedObjectModel *)managedObjectModel {
-    NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
-                                                          ofType: MADManagedObjectModelExtention];
-    NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
-    NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return mom;
+    if (self.objectModel == nil) {
+        
+        NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
+                                                              ofType: MADManagedObjectModelExtention];
+        NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
+        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+        self.objectModel = mom;
+        
+    }
+    return self.objectModel;
 }
 
 + (NSString *)persistentStoreName {
@@ -450,11 +444,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     NSError *readError = nil;
     NSData *imageData = nil;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.urlThumbnail path]]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath: self.urlThumbnail.path]) {
         imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
-        if (readError != nil) {
-            imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
-        }
     }
     
     if (imageData != nil) {
@@ -466,11 +457,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         }
     }
     
-    NSURL *metaUrl = [self urlMetaPlaylist];
-    
-    NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:metaUrl];
-    NSString *lastGenerator = dicionary[MTDocumentInfoKeyGenerator];
-    NSNumber *lastVersion = dicionary[MTDocumentInfoKeyGenerator];
+    NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:self.urlMetaPlaylist];
+    NSString *lastGenerator = [NSString stringWithString: dicionary[MTDocumentInfoKeyGenerator]];
+    NSNumber *lastVersion = ((NSNumber *)dicionary[MTDocumentInfoKeyVersion]).copy;
     
     if (lastGenerator == nil) lastGenerator = @"MAD Designer";
     if (lastVersion == nil) lastVersion = @(1.0);
