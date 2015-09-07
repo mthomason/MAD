@@ -614,7 +614,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)archiveCache {
-    NSAssert(self.document != nil, @"Needs a document.");
     NSError *error = nil;
     NSData *d = [NSKeyedArchiver archivedDataWithRootObject:self.cacheData];
     [d writeToURL:self.localCacheFileUrl options:NSDataWritingAtomic error:&error];
@@ -674,9 +673,6 @@ typedef void(^MTBlockResultVoid)(void);
     for (UIViewController *viewController in self.viewControllersLinks) {
         [self removeViewController:viewController];
     }
-    /*[self.viewControllersLinks enumerateObjectsUsingBlock:^(UIViewController *  _Nonnull viewController, NSUInteger idx, BOOL * _Nonnull stop) {
-        [self removeViewController:viewController];
-    }];*/
 
     for (MADQueryVisualizationSchemaViewController *  _Nonnull viewController in self.viewControllersTables) {
         [self removeViewController:viewController];
@@ -685,14 +681,6 @@ typedef void(^MTBlockResultVoid)(void);
         [self.attachmentBehaviorsTables removeObjectForKey:viewController.view.objectIdTag.URIRepresentation];
         [self dynamicsRemoveItem:viewController];
     }
-    /*[self.viewControllersTables enumerateObjectsUsingBlock:^(MADQueryVisualizationSchemaViewController *  _Nonnull viewController, NSUInteger idx, BOOL * _Nonnull stop) {
-        [self removeViewController:viewController];
-        UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviorsTables[viewController.view.objectIdTag.URIRepresentation];
-        [self.dynamicAnimator removeBehavior:attachmentBehaviorForObjectId];
-        [self.attachmentBehaviorsTables removeObjectForKey:viewController.view.objectIdTag.URIRepresentation];
-        [self.collisionBehavior removeItem:viewController];
-    }];*/
-
 }
 
 #pragma mark Reload document view controllers
@@ -714,6 +702,7 @@ typedef void(^MTBlockResultVoid)(void);
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.localCacheFileUrl.path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
+            self.cacheData = schemaLocations;
             [self displayQuery:documentReport.activeDocumentModel.query withSchemaHints:schemaLocations animated:animated];
         } else {
             [self displayQuery:documentReport.activeDocumentModel.query animated:animated];

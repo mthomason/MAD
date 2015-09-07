@@ -20,6 +20,10 @@ static NSString * const keyTables                   = @"3";
 
 @implementation MADQueryVisualizationCacheData
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)init {
     if (self = [super init]) {
         NSMutableDictionary *tableDefinations = [[NSMutableDictionary alloc] init];
@@ -45,12 +49,12 @@ static NSString * const keyTables                   = @"3";
 }
 
 - (void)addTableDefination:(MADQueryVisulizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID {
-    NSNumber *hash = @(objectID.URIRepresentation.hash);
+    NSString *hash = objectID.URIRepresentation.absoluteString;
     self.tableDefinations[hash] = tableDef;
 }
 
 - (MADQueryVisulizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
-    NSNumber *hash = @(objectID.URIRepresentation.hash);
+    NSString *hash = objectID.URIRepresentation.absoluteString;
     return self.tableDefinations[hash];
 }
 
