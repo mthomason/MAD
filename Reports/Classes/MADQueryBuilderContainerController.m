@@ -54,6 +54,10 @@
 
 @implementation MADQueryBuilderContainerController
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
 - (NSString *)title {
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
@@ -132,7 +136,7 @@
     self.queryBuilderControllerAdvanced = queryVisualizationViewController;
 
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
-    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderContainerController class], nil].tintColor                        = [UIColor tintColorWhite];
+    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderContainerController class], nil].tintColor = [UIColor tintColorWhite];
 
 }
 
