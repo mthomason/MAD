@@ -30,6 +30,8 @@
 #import "MADQueryNavigationController.h"
 #import "UIColor+EverydayApps.h"
 
+#import "MADQueryVisualizationViewController+Designer.h"
+
 @interface MADQueryBuilderContainerController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
@@ -62,6 +64,12 @@
     
     if (self) {
         
+        NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
+        MADQueryVisualizationViewController *queryVisualizationViewController = [MADQueryVisualizationViewController QueryVisualizationViewController];
+        viewControllers[1] = queryVisualizationViewController;
+        self.viewControllers = viewControllers;
+        
+
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
         self.navigationController.navigationItem.titleView.tintColor = [UIColor whiteColor];
         
@@ -102,6 +110,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = [MTApplicationInstance madQuery];
@@ -287,8 +296,7 @@
 #pragma mark - UISplitViewControllerDelegate
 
 // This method allows a client to update any bar button items etc.
-- (void)splitViewController:(UISplitViewController *)svc
-    willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+- (void)splitViewController:(UISplitViewController *)svc willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
 
     switch (displayMode) {
 
@@ -310,14 +318,11 @@
 }
 
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
-
     return UISplitViewControllerDisplayModeAllVisible;
 
 }
 
-- (BOOL)splitViewController: (UISplitViewController *)splitViewController
-         showViewController: (UIViewController *)vc
-                     sender: (id)sender {
+- (BOOL)splitViewController: (UISplitViewController *)splitViewController showViewController: (UIViewController *)vc sender: (id)sender {
     [self.navigationController pushViewController:vc animated:YES];
     return YES;
 }

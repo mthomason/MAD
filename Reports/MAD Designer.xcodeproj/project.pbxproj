@@ -1088,6 +1088,8 @@
 		4C8394DF1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C8394E01AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C85C6AA14FF72F3003785AC /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MADViewerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C85D8BF1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C85D8BE1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard */; settings = {ASSET_TAGS = (); }; };
+		4C85D8C21B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85D8C11B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m */; settings = {ASSET_TAGS = (); }; };
 		4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C860AB3167ED98900AC1904 /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C87407A15052D3D007FC473 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
@@ -2450,6 +2452,9 @@
 		4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@3x.png"; path = "Resources/Images/MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
 		4C85C6A814FF72F3003785AC /* MADViewerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewerController.h; sourceTree = "<group>"; };
 		4C85C6A914FF72F3003785AC /* MADViewerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADViewerController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4C85D8BE1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryVisualization.storyboard; sourceTree = "<group>"; };
+		4C85D8C01B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADQueryVisualizationViewController+Designer.h"; sourceTree = "<group>"; };
+		4C85D8C11B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADQueryVisualizationViewController+Designer.m"; sourceTree = "<group>"; };
 		4C860AB0167ED98900AC1904 /* NSString+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MTProtocol.h"; sourceTree = "<group>"; };
 		4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MTProtocol.m"; sourceTree = "<group>"; };
 		4C87407815052D3D007FC473 /* MTClipboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTClipboardView.h; sourceTree = "<group>"; };
@@ -3463,6 +3468,7 @@
 				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
 				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
 				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
+				4C85D8BE1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -5082,6 +5088,8 @@
 				4CB074F71B941C5C00F0C302 /* NSLayoutConstraint+QueryVisulization.m */,
 				4C5AA6811B992AD800E405A1 /* MTGraph+RptqQuery.h */,
 				4C5AA6821B992AD800E405A1 /* MTGraph+RptqQuery.m */,
+				4C85D8C01B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.h */,
+				4C85D8C11B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -6236,6 +6244,7 @@
 				4CD0B26F1AC90273005CA75C /* MADImageCaratOpen.png in Resources */,
 				4CD0B3951AC909E0005CA75C /* UIImagePatternMarbled@2x.png in Resources */,
 				4CD0B3811AC909E0005CA75C /* UIImagePatternKraftWaffle@2x.png in Resources */,
+				4C85D8BF1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard in Resources */,
 				4C08B2EF1AB6791F00B54D3A /* MADImageToolbarCloud.png in Resources */,
 				4CD0B35F1AC909E0005CA75C /* UIImagePatternGrayGranite.png in Resources */,
 				4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
@@ -7083,6 +7092,7 @@
 				4C23FB0C18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
 				4C0F89641B2E4D9A00D75AF6 /* MTQueryBuilderChooseFieldViewController+Designer.m in Sources */,
 				4CA1500018B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
+				4C85D8C21B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m in Sources */,
 				4C23FAEA18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */,
 				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,

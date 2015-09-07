@@ -16,7 +16,7 @@ static NSString * const NewDocument             = @"MADStoryboardNewDocument";
 static NSString * const DocumentInfo            = @"MADStoryboardDocumentInformation";
 static NSString * const InformationTable        = @"MADStoryboardInformationTable";
 static NSString * const About                   = @"MADStoryboardAboutTable";
-
+static NSString * const QueryVisualization      = @"MADQueryVisualization";
 @implementation UIStoryboard (Designer)
 
 + (instancetype)Designer {
@@ -24,31 +24,35 @@ static NSString * const About                   = @"MADStoryboardAboutTable";
 }
 
 + (instancetype)Licensing {
-    return [UIStoryboard storyboardWithName: Licensing bundle:nil];
+    return [self storyboardWithName: Licensing bundle:nil];
 }
 
 + (instancetype)About {
-    return [UIStoryboard storyboardWithName: About bundle:[NSBundle mainBundle]];
+    return [self storyboardWithName: About bundle:[NSBundle mainBundle]];
 }
 
 + (instancetype)InformationTable {
-    return [UIStoryboard storyboardWithName: InformationTable bundle:[NSBundle mainBundle]];
+    return [self storyboardWithName: InformationTable bundle:[NSBundle mainBundle]];
 }
 
 + (instancetype)DocumentInfo {
-    return [UIStoryboard storyboardWithName: DocumentInfo bundle:[NSBundle mainBundle]];
+    return [self storyboardWithName: DocumentInfo bundle:[NSBundle mainBundle]];
 }
 
 + (instancetype)NewDocument {
-    return [UIStoryboard storyboardWithName: NewDocument bundle:[NSBundle mainBundle]];
+    return [self storyboardWithName: NewDocument bundle:[NSBundle mainBundle]];
 }
 
 + (instancetype)Toolbox {
-    return [UIStoryboard storyboardWithName: Toolbox bundle: [NSBundle mainBundle]];
+    return [self storyboardWithName: Toolbox bundle: [NSBundle mainBundle]];
 }
 
 + (instancetype)ObjectSelector {
-    return [UIStoryboard storyboardWithName: ObjectSelector bundle: [NSBundle mainBundle]];
+    return [self storyboardWithName: ObjectSelector bundle: [NSBundle mainBundle]];
+}
+
++ (instancetype)QueryVisualization {
+    return [self storyboardWithName: QueryVisualization bundle: [NSBundle mainBundle]];
 }
 
 @end

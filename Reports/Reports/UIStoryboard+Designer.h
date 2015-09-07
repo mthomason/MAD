@@ -21,6 +21,7 @@
 + (instancetype)Licensing;
 + (instancetype)Toolbox;
 + (instancetype)ObjectSelector;
++ (instancetype)QueryVisualization;
 
 @end
 
