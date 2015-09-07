@@ -196,7 +196,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 - (void)initalize {
-    //self.restorationClass = self;
     
     self.activityExporting = NO;
     self.didRefreshBeforeReaload = NO;

@@ -46,10 +46,10 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
         for (NSInteger rowCtr = 0; rowCtr < numberOfRows; rowCtr++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCtr inSection:sectionCtr];
             UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:indexPath];
-            if ([tableViewCell tag] == [self selectedFunctionType]) {
+            if (tableViewCell.tag == [self selectedFunctionType]) {
                 [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
             } else {
-                [tableViewCell setAccessoryType:UITableViewCellAccessoryNone];
+                tableViewCell.accessoryType = UITableViewCellAccessoryNone;
             }
         }
     }
