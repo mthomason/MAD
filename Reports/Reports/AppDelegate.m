@@ -17,10 +17,6 @@
 #import "MADConstants.h"
 
 #import "MADNavigationController.h"
-#import "MADQueryViewController.h"
-#import "MADDesignerViewController.h"
-#import "MADViewerController.h"
-#import "MADQueryBuilderContainerController.h"
 
 #import "MADFileManager.h"
 
