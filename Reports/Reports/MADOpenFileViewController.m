@@ -48,7 +48,7 @@
 #import "UIColor+EverydayApps.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
-#import "MTNavigationController.h"
+#import "MADNavigationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDocumentInformationTableViewController.h"
 #import "MADFilesController.h"
@@ -130,7 +130,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
 @property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
 
-@property (nonatomic, strong) MTNavigationController *aboutNavigationController;
+@property (nonatomic, strong) MADNavigationController *aboutNavigationController;
 
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
 @property (nonatomic, strong) UIPopoverController *licensingPopoverController;

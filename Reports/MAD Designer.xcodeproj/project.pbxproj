@@ -101,7 +101,7 @@
 		4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
+		4C0E7774163B5AEC003B951E /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; };
 		4C0E7779163B5AEC003B951E /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E777A163B5AEC003B951E /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E7790163B5AEC003B951E /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MADViewerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -386,7 +386,7 @@
 		4C2F25AD1B53FA1C004DFAEC /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25AE1B53FA1C004DFAEC /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25AF1B53FA1C004DFAEC /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C2F25B01B53FA1C004DFAEC /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2F25B01B53FA1C004DFAEC /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25B11B53FA1C004DFAEC /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
 		4C2F25B21B53FA1C004DFAEC /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25B31B53FA1C004DFAEC /* UIViewController+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8251541948AC9800C32335 /* UIViewController+UI.m */; };
@@ -1000,7 +1000,7 @@
 		4C6268DD19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
 		4C6268DE19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */; };
 		4C6268DF19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */; };
-		4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C6362BE14E6278D005DBBFF /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
 		4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */; };
 		4C65D4691ADC428800279B4D /* MADToolboxNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2E31A12D54A004B5228 /* MADToolboxNavigationController.m */; };
@@ -1131,7 +1131,7 @@
 		4C92947618C4CBE60010AAEF /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C92947E18C4CBF40010AAEF /* MADQueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MADQueryViewController.m */; };
 		4C92947F18C4CBF40010AAEF /* MADQueryVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MADQueryVisualizationViewController.m */; };
-		4C92948018C4CBF40010AAEF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
+		4C92948018C4CBF40010AAEF /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; };
 		4C92948118C4CBF40010AAEF /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4C92948218C4CBF40010AAEF /* MADQueryVisualizationSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m */; };
 		4C92948318C4CBF40010AAEF /* MTQueryBuilderAddGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */; };
@@ -2361,8 +2361,8 @@
 		4C6268D919F5DBF400DCCC2E /* MADVibrantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVibrantTableViewCell.h; path = Reports/MADVibrantTableViewCell.h; sourceTree = "<group>"; };
 		4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADVibrantTableViewCell.m; path = Reports/MADVibrantTableViewCell.m; sourceTree = "<group>"; };
 		4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MADVibrantTableViewCell.xib; path = Reports/MADVibrantTableViewCell.xib; sourceTree = "<group>"; };
-		4C6362BC14E6278D005DBBFF /* MTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationController.h; sourceTree = "<group>"; };
-		4C6362BD14E6278D005DBBFF /* MTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationController.m; sourceTree = "<group>"; };
+		4C6362BC14E6278D005DBBFF /* MADNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationController.h; sourceTree = "<group>"; };
+		4C6362BD14E6278D005DBBFF /* MADNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationController.m; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
 		4C65D47B1ADCC67C00279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
@@ -4952,8 +4952,8 @@
 				4CF1329516CA1E5200FD0F0B /* Report Viewer */,
 				4CF1329416CA1E4900FD0F0B /* Report Desinger */,
 				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
-				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
-				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
+				4C6362BC14E6278D005DBBFF /* MADNavigationController.h */,
+				4C6362BD14E6278D005DBBFF /* MADNavigationController.m */,
 				4CFC3DE216714A260016E1E8 /* MADViewControllerSQL.h */,
 				4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */,
 				4C8BA98B174533CF00B646E2 /* MTViewControllerValueBasedOnField.h */,
@@ -6635,7 +6635,7 @@
 				4C1E89831B33CD0600B26B5E /* MADBackgroundView.m in Sources */,
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C0F899F1B31590E00D75AF6 /* MADPreferencesManager.m in Sources */,
-				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
+				4C0E7774163B5AEC003B951E /* MADNavigationController.m in Sources */,
 				4C7B0B3A1B391A61005DC0CE /* MADTableViewCellAboutTitle.m in Sources */,
 				4CC96A5C1AC90D220044C157 /* MADVibrantTableViewCellBase.m in Sources */,
 				4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */,
@@ -6859,7 +6859,7 @@
 				4C2F25AD1B53FA1C004DFAEC /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C2F25AE1B53FA1C004DFAEC /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C2F25AF1B53FA1C004DFAEC /* MTPageCaching.m in Sources */,
-				4C2F25B01B53FA1C004DFAEC /* MTNavigationController.m in Sources */,
+				4C2F25B01B53FA1C004DFAEC /* MADNavigationController.m in Sources */,
 				4C2F25B11B53FA1C004DFAEC /* MADVibrantTableViewCell.m in Sources */,
 				4C2F25B21B53FA1C004DFAEC /* MADDesignerElementView.m in Sources */,
 				4C2F25B31B53FA1C004DFAEC /* UIViewController+UI.m in Sources */,
@@ -7092,7 +7092,7 @@
 				4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C590B28191BC3A400C4E211 /* MTPageCaching.m in Sources */,
-				4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */,
+				4C6362BE14E6278D005DBBFF /* MADNavigationController.m in Sources */,
 				4C6268DC19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */,
 				4C88A9B014ECDE560069A0AF /* MADDesignerElementView.m in Sources */,
 				4C8251551948AC9800C32335 /* UIViewController+UI.m in Sources */,
@@ -7329,7 +7329,7 @@
 				4C92952318C4CC890010AAEF /* UIView+NSObjectIdTag.m in Sources */,
 				4C92946418C4CBA70010AAEF /* MTConnectionViewController.m in Sources */,
 				4C9294A318C4CBFF0010AAEF /* MTReportViewerReportPageViewController.m in Sources */,
-				4C92948018C4CBF40010AAEF /* MTNavigationController.m in Sources */,
+				4C92948018C4CBF40010AAEF /* MADNavigationController.m in Sources */,
 				4C9294BA18C4CC150010AAEF /* UITableViewCellOverride.m in Sources */,
 				4C9294A018C4CBF90010AAEF /* MTReportDesignerSectionDecorationView.m in Sources */,
 				4C0F89981B2FF9FC00D75AF6 /* MADSalesReceipt.m in Sources */,

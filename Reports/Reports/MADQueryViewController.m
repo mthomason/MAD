@@ -44,7 +44,7 @@
 #import "MTViewTableHeader.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
-#import "MTNavigationController.h"
+#import "MADNavigationController.h"
 #import "MADViewControllerSQL.h"
 
 #import "UIDevice+Hack.h"

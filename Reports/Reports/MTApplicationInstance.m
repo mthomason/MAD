@@ -30,7 +30,7 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 #import "MADFileManager.h"
 
-#import "MTNavigationController.h"
+#import "MADNavigationController.h"
 #import "MTNavigationControllerHideBottomBarUnlicensed.h"
 
 #import "MADFilesController.h"
@@ -46,7 +46,7 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 #ifndef MADWATCHKIT
     #import "MADToolboxNavigationController.h"
-    #import "MTNavigationController.h"
+    #import "MADNavigationController.h"
     #import "MADTransparentPresentationController.h"
     #import "MADNavigationBarFixedSize.h"
 #endif
@@ -68,9 +68,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.47";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.47";
-NSString * const MTGlobalBundleRev                                  = @"1989";
+NSString * const MTGlobalBundleVersion                              = @"8.0.48";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.48";
+NSString * const MTGlobalBundleRev                                  = @"1990";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

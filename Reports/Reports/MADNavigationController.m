@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTNavigationController.h"
+#import "MADNavigationController.h"
 #import "MADTransparentPresentationController.h"
 #import "UIColor+EverydayApps.h"
 
-@implementation MTNavigationController
+@implementation MADNavigationController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

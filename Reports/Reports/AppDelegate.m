@@ -16,7 +16,7 @@
 #import <MADFeedback/MADFeedback.h>
 #import "MADConstants.h"
 
-#import "MTNavigationController.h"
+#import "MADNavigationController.h"
 #import "MADQueryViewController.h"
 #import "MADDesignerViewController.h"
 #import "MADViewerController.h"
@@ -55,7 +55,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 @property (nonatomic, strong) UIApplication *application;
 
-@property (nonatomic, strong) MTNavigationController *navigationController;
+@property (nonatomic, strong) MADNavigationController *navigationController;
 @property (nonatomic, strong) MADOpenFileViewController *openFileViewController;
 
 /*!
@@ -254,7 +254,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         
         vc = (UITabBarController *)[UIViewController queryNavigationController];
         vc.restorationIdentifier = [identifierComponents lastObject];
-        vc.restorationClass = [MTNavigationController class];
+        vc.restorationClass = [MADNavigationController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryNavigationController"]) {
         
@@ -272,7 +272,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         
         vc = (UITabBarController *)[UIViewController viewerNavigationController];
         vc.restorationIdentifier = [identifierComponents lastObject];
-        vc.restorationClass = [MTNavigationController class];
+        vc.restorationClass = [MADNavigationController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationViewerViewController"]) {
         
@@ -284,7 +284,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         
         vc = (UITabBarController *)[UIViewController designerNavigationController];
         vc.restorationIdentifier = [identifierComponents lastObject];
-        vc.restorationClass = [MTNavigationController class];
+        vc.restorationClass = [MADNavigationController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationDesignerViewController"]) {
         
@@ -515,7 +515,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
     
     //window.rootViewController = initViewController;
-    MTNavigationController *navigationController = (MTNavigationController *)window.rootViewController;
+    MADNavigationController *navigationController = (MADNavigationController *)window.rootViewController;
     self.navigationController = navigationController;
     
     NSAssert([self.navigationController.topViewController isKindOfClass:@class([MADOpenFileViewController class])] == NO, @"%s Can't find MADOpenFileViewController.", __PRETTY_FUNCTION__);
