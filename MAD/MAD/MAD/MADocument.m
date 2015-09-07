@@ -11,7 +11,6 @@
 #endif
 
 #import "MADocument.h"
-#import <CoreData/CoreData.h>
 
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
