@@ -775,31 +775,35 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                 // MARK: Reporting feature (number of results in main query)
                 [AppDelegate app].openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-                UITabBarController *tabBarController = [UITabBarController mainTabBarController];
-                
-                tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-                tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-                
-                UINavigationController *navController = (UINavigationController *)tabBarController.viewControllers[0];
-                UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
-                UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
-                
-                MADQueryBuilderContainerController * queryBuilderViewController = (MADQueryBuilderContainerController *)navController.topViewController;
-                queryBuilderViewController.viewControllerDelegate = self;
-                
-                MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
-                reportDesignerViewController.delegate = self;
-                
-                MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
-                reportViewerViewController.viewControllerDelegate = self ;
-                
-                [self presentViewController:tabBarController animated:YES completion:nil];
+                [self performSelectorOnMainThread:@selector(showMainViewController:) withObject:self waitUntilDone:NO];
             }
         }
         
         [self reenable];
         
     }];
+}
+
+- (void)showMainViewController:(id)sender {
+    UITabBarController *tabBarController = [UITabBarController mainTabBarController];
+    
+    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    
+    UINavigationController *navController = (UINavigationController *)tabBarController.viewControllers[0];
+    UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
+    UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
+    
+    MADQueryBuilderContainerController * queryBuilderViewController = (MADQueryBuilderContainerController *)navController.topViewController;
+    queryBuilderViewController.viewControllerDelegate = self;
+    
+    MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
+    reportDesignerViewController.delegate = self;
+    
+    MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
+    reportViewerViewController.viewControllerDelegate = self ;
+    
+    [self presentViewController:tabBarController animated:YES completion:nil];
 }
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
