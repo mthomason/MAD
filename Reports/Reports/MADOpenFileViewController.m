@@ -367,16 +367,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self configureViewControllerWithLaunchContext:launchContext];
 }
 
-#pragma mark - UIStateRestoring
-
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super decodeRestorableStateWithCoder:coder];
-}
-
 - (void)applicationFinishedRestoringState {
     if ([MTApplicationInstance isMadDesigner]) {
         [self performSegueWithIdentifier: MTSegueShowOpenDocument sender: self];
