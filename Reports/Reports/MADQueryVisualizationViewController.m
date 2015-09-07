@@ -103,6 +103,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 @property (nonatomic, strong) NSURL *localCacheFileUrl;
 
+@property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
+
 @end
 
 @implementation MADQueryVisualizationViewController
@@ -274,7 +276,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self cacheState];
+    [self archiveCache];
     [self clearScreen];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -589,26 +591,32 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator { }
 
-- (void)cacheState {
-    NSAssert(self.document != nil, @"Needs a document.");
-    MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
-    MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
-    for (MTPair *pair in queryDef.topologicallySortedTables) {
-        MTVertex *tableIdVertext = pair.former;
-        if (tableIdVertext.object != nil) {
-            
-            MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
-
-            MADQueryVisulizationTableDefination *tableDef = [[MADQueryVisulizationTableDefination alloc] init];
-            tableDef.center = viewController.view.center;
-            tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
-            [cacheData addTableDefination:tableDef forObjectID:tableIdVertext.object];
+- (void)updateCache {
+    if (self.document != nil) {
+        MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
+        MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
+        for (MTPair *pair in queryDef.topologicallySortedTables) {
+            MTVertex *tableIdVertext = pair.former;
+            if (tableIdVertext.object != nil) {
+                
+                MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
+                
+                MADQueryVisulizationTableDefination *tableDef = [[MADQueryVisulizationTableDefination alloc] init];
+                tableDef.center = viewController.view.center;
+                tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
+                [cacheData addTableDefination:tableDef forObjectID:tableIdVertext.object];
+            }
         }
+        cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
+        cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
+        self.cacheData = cacheData;
     }
-    cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
-    cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
+}
+
+- (void)archiveCache {
+    NSAssert(self.document != nil, @"Needs a document.");
     NSError *error = nil;
-    NSData *d = [NSKeyedArchiver archivedDataWithRootObject:cacheData];
+    NSData *d = [NSKeyedArchiver archivedDataWithRootObject:self.cacheData];
     [d writeToURL:self.localCacheFileUrl options:NSDataWritingAtomic error:&error];
 }
 
@@ -655,7 +663,7 @@ typedef void(^MTBlockResultVoid)(void);
     viewController.view.center = attachmentBehavior.anchorPoint;
     [self.dynamicAnimator updateItemUsingCurrentState:viewController];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        
+        [self updateCache];
     }
 
 }

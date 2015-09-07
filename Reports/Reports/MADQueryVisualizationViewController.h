@@ -15,7 +15,7 @@
 
 @interface MADQueryVisualizationViewController : UIViewController
 
-@property (nonatomic, strong) MADocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (void)redraw;
 
