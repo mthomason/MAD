@@ -34,7 +34,7 @@
 #import "MADDesignerViewController.h"
 #import "MADWatermarkView.h"
 
-#import "MTQueryBuilderContainerController.h"
+#import "MADQueryBuilderContainerController.h"
 
 #import "MADAboutTableViewController.h"
 
@@ -564,7 +564,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             tabBarController.view.tintColor = [UIColor tintColorRed];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-            MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
+            MADQueryBuilderContainerController *queryBuilderContainerController = (MADQueryBuilderContainerController *)[navController topViewController];
             queryBuilderContainerController.viewControllerDelegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
@@ -583,7 +583,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
 
-            MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
+            MADQueryBuilderContainerController *queryBuilderContainerController = (MADQueryBuilderContainerController *)[navController topViewController];
             queryBuilderContainerController.viewControllerDelegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
@@ -596,7 +596,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
         }
         
-    } else if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderContainerController class]]) {
+    } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderContainerController class]]) {
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
         MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
@@ -784,7 +784,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                 UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
                 UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
                 
-                MTQueryBuilderContainerController * queryBuilderViewController = (MTQueryBuilderContainerController *)navController.topViewController;
+                MADQueryBuilderContainerController * queryBuilderViewController = (MADQueryBuilderContainerController *)navController.topViewController;
                 queryBuilderViewController.viewControllerDelegate = self;
                 
                 MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;

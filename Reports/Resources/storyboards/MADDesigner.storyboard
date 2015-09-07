@@ -2142,7 +2142,7 @@
         <!--Query Builder Container Controller-->
         <scene sceneID="H8u-lx-f3W">
             <objects>
-                <splitViewController id="Hcs-Qh-Ddc" customClass="MTQueryBuilderContainerController" sceneMemberID="viewController">
+                <splitViewController id="Hcs-Qh-Ddc" customClass="MADQueryBuilderContainerController" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="EIU-KQ-pJF"/>
                         <barButtonItem title="SQL" id="bhA-2Z-ta5">

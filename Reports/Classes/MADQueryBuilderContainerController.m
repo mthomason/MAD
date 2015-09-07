@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderContainerController.h"
+#import "MADQueryBuilderContainerController.h"
 #import "MADConstants.h"
 #import <CoreData/CoreData.h>
 
@@ -30,7 +30,7 @@
 #import "MADQueryNavigationController.h"
 #import "UIColor+EverydayApps.h"
 
-@interface MTQueryBuilderContainerController ()
+@interface MADQueryBuilderContainerController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
@@ -50,7 +50,7 @@
 
 @end
 
-@implementation MTQueryBuilderContainerController
+@implementation MADQueryBuilderContainerController
 
 - (NSString *)title {
     return NSLocalizedString(@"MAD Query", "MAD Query");
@@ -123,7 +123,7 @@
     self.queryBuilderControllerAdvanced = queryVisualizationViewController;
 
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
-    [UIBarButtonItem appearanceWhenContainedIn:[MTQueryBuilderContainerController class], nil].tintColor                        = [UIColor tintColorWhite];
+    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderContainerController class], nil].tintColor                        = [UIColor tintColorWhite];
 
 }
 
@@ -132,7 +132,7 @@
 
     [self.queryBuilderController reloadMainDocumentAnimated: YES];
     
-    __block MTQueryBuilderContainerController *blockSelf = self;
+    __block MADQueryBuilderContainerController *blockSelf = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
             NSArray *items = [self toolbarItems];
@@ -258,7 +258,7 @@
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    __weak MTQueryBuilderContainerController *weakSelf = self;
+    __weak MADQueryBuilderContainerController *weakSelf = self;
     BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
     [self dismissViewControllerAnimated:YES completion:^{
         if (procDelegateFunction) {

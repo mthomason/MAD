@@ -20,7 +20,7 @@
 #import "MADQueryViewController.h"
 #import "MADDesignerViewController.h"
 #import "MADViewerController.h"
-#import "MTQueryBuilderContainerController.h"
+#import "MADQueryBuilderContainerController.h"
 
 #import "MADFileManager.h"
 
@@ -266,7 +266,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         
         vc = (UITabBarController *)[UIViewController queryContainerController];
         vc.restorationIdentifier = [identifierComponents lastObject];
-        vc.restorationClass = [MTQueryBuilderContainerController class];
+        vc.restorationClass = [MADQueryBuilderContainerController class];
     
     } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationViewerNavigationController"]) {
         

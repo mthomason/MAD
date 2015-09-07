@@ -68,9 +68,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.48";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.48";
-NSString * const MTGlobalBundleRev                                  = @"1990";
+NSString * const MTGlobalBundleVersion                              = @"8.0.49";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.49";
+NSString * const MTGlobalBundleRev                                  = @"1991";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -311,7 +311,7 @@ static MTApplicationInstance *mainInstance;
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
     
     #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil].barTintColor                = [UIColor tintColorBlue];
+        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor                = [UIColor tintColorBlue];
         [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
         [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
     #endif
@@ -320,7 +320,7 @@ static MTApplicationInstance *mainInstance;
     [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor               = [UIColor tintColorAnalogous4];
     
     #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MTNavigationController class], nil].tintColor                   = tintColorWhite;
+        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                   = tintColorWhite;
     #endif
     
     [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = tintColorWhite;
