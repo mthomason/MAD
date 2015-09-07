@@ -209,9 +209,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
         NSMutableArray *batchUpdates = [[NSMutableArray alloc] init];
         self.batchUpdates = batchUpdates;
-                
-        //UIMotionEffectGroup *hoverEffects = [UIMotionEffectGroup HoverEffects];
-        //self.hoverEffects = hoverEffects;
 
     }
     return self;
@@ -968,8 +965,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             [allpopovers addObject:self.openDocumentPopoverController];
         if (self.licensingPopoverController != nil)
             [allpopovers addObject:self.licensingPopoverController];
-        if (self.aboutPopoverController != nil)
-            [allpopovers addObject:self.aboutPopoverController];
         
         for (UIPopoverController *popoverController in allpopovers) {
             if ([popoverController isPopoverVisible]) {

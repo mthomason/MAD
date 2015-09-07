@@ -17,7 +17,6 @@
 @interface MADOpenFileViewController : MADCollectionViewController
 
 @property (nonatomic, weak) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
-@property (nonatomic, strong, readonly) UIPopoverController *aboutPopoverController;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
 
 @property (nonatomic, strong) MADFilesController *filesController;
