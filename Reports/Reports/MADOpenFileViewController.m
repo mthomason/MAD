@@ -77,7 +77,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollection
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
-static NSString * const sNotDownloaded                          = @"Not Downloaded";
+static NSString * const NotDownloaded                          = @"Not Downloaded";
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUtiPublicData                               = @"public.data";
 
@@ -787,7 +787,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (NSString *)subtitleForMetadata:(MADMetaData *)metadata {
     NSString *result;
     if ([metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = NSLocalizedString(sNotDownloaded, sNotDownloaded);;
+        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
     } else {
         NSNumber *systemFileSizeMB =  [MTMath systemFileSizeToMB: metadata.fileSystemFileSize];
         NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
