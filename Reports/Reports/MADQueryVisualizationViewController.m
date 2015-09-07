@@ -590,6 +590,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator { }
 
 - (void)cacheState {
+    NSAssert(self.document != nil, @"Needs a document.");
     MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
     MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
     for (MTPair *pair in queryDef.topologicallySortedTables) {
