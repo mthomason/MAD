@@ -11,8 +11,6 @@
 #endif
 
 #import "MADQueryVisualizationSchemaViewController.h"
-#import <CoreData/CoreData.h>
-#import <QuartzCore/QuartzCore.h>
 #import "MADocument.h"
 
 #import "MTConnectorView.h"
