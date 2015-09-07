@@ -155,6 +155,16 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 @implementation MADQueryViewController
 
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+}
+
 #pragma mark - Exit
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }

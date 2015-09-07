@@ -322,6 +322,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return self;
 }
 
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+}
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     BOOL animate = previousTraitCollection != nil;

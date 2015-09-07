@@ -147,6 +147,20 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     }
 }
 
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+}
+
+- (void)applicationFinishedRestoringState {
+    [super applicationFinishedRestoringState];
+}
+
 #pragma mark - Initalize
 
 - (instancetype)init {
