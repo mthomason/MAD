@@ -12,17 +12,11 @@
 
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
-#import <CoreData/CoreData.h>
-#import <MADFeedback/MADFeedback.h>
 #import "MADConstants.h"
 
 #import "MADNavigationController.h"
 
-#import "MADFileManager.h"
-
 #import "MADOpenFileViewController.h"
-
-#import "MTLog.h"
 
 #import "MADFilesController.h"
 #import "MADFileUtilities.h"
@@ -30,7 +24,6 @@
 #import "MADUpgradeManager.h"
 
 #import "UIAlertController+Constructors.h"
-#import "NSString+Encryption.h"
 #import "UIViewController+Designer.h"
 #import "UITabBarController+Shared.h"
 #import "MTVerificationController.h"
@@ -49,15 +42,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, strong) UIApplication *application;
-
-@property (nonatomic, strong) MADNavigationController *navigationController;
-@property (nonatomic, strong) MADOpenFileViewController *openFileViewController;
-
-/*!
- * @return A private, local queue used to ensure serialized access to Cloud containers during application
- * startup.
- */
+@property (readonly) MADNavigationController *navigationController;
+@property (readonly) MADOpenFileViewController *openFileViewController;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueue;
 
 @end
@@ -94,12 +80,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #pragma mark - Application Lifecycle
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    if (MADStateRestorationSupportEnabled) {
-        [self loadAndDisplayWindow];
-    }
-    
-    self.application = application;
     return YES;
 }
 
@@ -110,10 +90,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [AppDelegate registerForNotifications:application];
 
     [self addObservers];
-    
-    if (MADStateRestorationSupportEnabled == NO) {
-        [self loadAndDisplayWindow];
-    }
     
     [[MTApplicationInstance mainInstance] initalizeAppearance];
     [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
@@ -390,24 +366,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
 }
 
-- (void)loadAndDisplayWindow {
-    
-    UIWindow *window = [UIApplication sharedApplication].windows.firstObject;//[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    //id initViewController = [MTApplicationInstance initalViewController];
-    
-    NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
-    
-    //window.rootViewController = initViewController;
-    MADNavigationController *navigationController = (MADNavigationController *)window.rootViewController;
-    self.navigationController = navigationController;
-    
-    NSAssert([self.navigationController.topViewController isKindOfClass:@class([MADOpenFileViewController class])] == NO, @"%s Can't find MADOpenFileViewController.", __PRETTY_FUNCTION__);
-    
-    self.openFileViewController = (MADOpenFileViewController *)self.navigationController.topViewController;
-    //[window makeKeyAndVisible];
-    
-    
-    self.window = window;
+- (MADNavigationController *)navigationController {
+    return (MADNavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+}
+
+- (MADOpenFileViewController *)openFileViewController {
+    return (MADOpenFileViewController *)self.navigationController.topViewController;
 }
 
 - (NSString *)ubiquityIdentifier {

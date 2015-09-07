@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_AppDelegate_h
-#define Reports_AppDelegate_h
+#ifndef MAD_Designer_AppDelegate_h
+#define MAD_Designer_AppDelegate_h
 
 #import <UIKit/UIKit.h>
+#import <MADFeedback/MADFeedback.h>
 
-@class MTApplicationInstance,
-            RptqDocument, RptqDatabase, RptqQuery;
+@class MTApplicationInstance;
 
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate>
