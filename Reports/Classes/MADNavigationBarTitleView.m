@@ -8,6 +8,7 @@
 
 #import "MADNavigationBarTitleView.h"
 #import "NSParagraphStyle+CommonStyles.h"
+#import "NSAttributedString+Logo.h"
 
 @implementation MADNavigationBarTitleView
 
@@ -30,54 +31,10 @@
 }
 
 - (void)setText:(NSString *)text {
-    NSAttributedString *attributedText = [self logoForTitle:text];
+    NSAttributedString *attributedText = [NSAttributedString logoForTitle:text];
     super.text = text;
     self.attributedText = attributedText;
     [self sizeToFit];
-}
-
-- (NSAttributedString *)logoForTitle:(NSString *)title {
-    
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
-    NSInteger length = [[attributedStringMadDesigner string] length];
-    
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
-    NSRange range = NSMakeRange(0, length);
-    UIColor *foregroundColor = [UIColor whiteColor];
-    NSArray *components = [title componentsSeparatedByString:@" "];
-    NSRange firstRange;
-    NSRange secondRange;
-    
-    if (components.count == 2) {
-        firstRange = [title rangeOfString:components[0]];
-        secondRange = [title rangeOfString:components[1]];
-    } else {
-        firstRange = range; secondRange = range;
-    }
-    
-    [attributedStringMadDesigner addAttribute: NSFontAttributeName
-                                        value: fonta
-                                        range: firstRange];
-    
-    [attributedStringMadDesigner addAttribute: NSFontAttributeName
-                                        value: fontb
-                                        range: secondRange];
-    
-    [attributedStringMadDesigner addAttribute: NSParagraphStyleAttributeName
-                                        value: paragraphStyle
-                                        range: range];
-    
-    [attributedStringMadDesigner addAttribute: NSForegroundColorAttributeName
-                                        value: foregroundColor
-                                        range: range];
-    
-    [attributedStringMadDesigner addAttribute: NSKernAttributeName
-                                        value: [NSNull null]
-                                        range: range];
-    
-    return attributedStringMadDesigner;
 }
 
 @end

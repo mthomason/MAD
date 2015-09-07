@@ -26,12 +26,8 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
-#import "NSParagraphStyle+CommonStyles.h"
 
 #import "MADFileManager.h"
-
-#import "MADNavigationController.h"
-#import "MTNavigationControllerHideBottomBarUnlicensed.h"
 
 #import "MADFilesController.h"
 #import "MADLocalFileCoordinator.h"
@@ -68,9 +64,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.52";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.52";
-NSString * const MTGlobalBundleRev                                  = @"1994";
+NSString * const MTGlobalBundleVersion                              = @"8.0.66";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.66";
+NSString * const MTGlobalBundleRev                                  = @"2008";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -85,14 +81,8 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 @interface MTApplicationInstance ()
     <NSCoding>
 
-@property (nonatomic, strong) NSURL *currentDocument;           //To support opening multiple documents
-                                                                    //change this url to the url of the open
-                                                                    //document.  This url will be key for the
-                                                                    //documents array.
-
 @property (nonatomic, strong, readwrite) MADFileManager *fileManager;
 @property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
-@property (nonatomic, readonly, getter=isFirstLaunch) BOOL firstLaunch;
 @property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
 
 @end
@@ -244,65 +234,6 @@ static MTApplicationInstance *mainInstance;
 
 + (NSString *)bundleVersion {
     return MTGlobalBundleVersion;
-}
-
-+ (NSAttributedString *)localizedAttributedApplicationNameMadDesigner {
-    NSString *title = [MTApplicationInstance madDesigner];
-    return [MTApplicationInstance logoForTitle:title];
-}
-
-+ (NSAttributedString *)localizedAttributedApplicationNameMadViewer {
-    NSString *title = [MTApplicationInstance madViewer];
-    return [MTApplicationInstance logoForTitle:title];
-}
-
-+ (NSAttributedString *)localizedAttributedApplicationNameMadQuery {
-    NSString *title = [MTApplicationInstance madQuery];
-    return [MTApplicationInstance logoForTitle:title];
-}
-            
-+ (NSAttributedString *)logoForTitle:(NSString *)title {
-    
-    
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
-    NSInteger length = [[attributedStringMadDesigner string] length];
-    
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
-    NSRange range = NSMakeRange(0, length);
-    UIColor *foregroundColor = [UIColor whiteColor];
-    NSArray *components = [title componentsSeparatedByString:@" "];
-    NSRange firstRange;
-    NSRange secondRange;
-    
-    if (components.count == 2) {
-        firstRange = [title rangeOfString:components[0]];
-        secondRange = [title rangeOfString:components[1]];
-    } else {
-        firstRange = range; secondRange = range;
-    }
-    
-    [attributedStringMadDesigner addAttribute: NSFontAttributeName
-                                        value: fonta
-                                        range: firstRange];
-    
-    [attributedStringMadDesigner addAttribute: NSFontAttributeName
-                                        value: fontb
-                                        range: secondRange];
-    
-    [attributedStringMadDesigner addAttribute: NSParagraphStyleAttributeName
-                                        value: paragraphStyle
-                                        range: range];
-    
-    [attributedStringMadDesigner addAttribute: NSForegroundColorAttributeName
-                                        value: foregroundColor
-                                        range: range];
-    
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName
-                                        value:[NSNull null]
-                                        range:range];
-    return attributedStringMadDesigner;
 }
 
 - (void)initalizeAppearance {

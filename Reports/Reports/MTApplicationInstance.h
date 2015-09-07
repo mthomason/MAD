@@ -73,9 +73,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 - (void)cleanupBeforeTerminate;
 
 + (NSString *)applicationName;
-+ (NSAttributedString *)localizedAttributedApplicationNameMadDesigner;
-+ (NSAttributedString *)localizedAttributedApplicationNameMadViewer;
-+ (NSAttributedString *)localizedAttributedApplicationNameMadQuery;
 
 + (NSString *)applicationNameSufixPart;
 

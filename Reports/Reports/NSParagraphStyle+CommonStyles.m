@@ -12,9 +12,9 @@
 
 + (NSParagraphStyle *)titleBarStyle {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
     return paragraphStyle;
 }
 
