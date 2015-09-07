@@ -9,11 +9,13 @@
 #import "UITabBarController+Shared.h"
 #import "UIStoryboard+Designer.h"
 
+static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
+
 @implementation UITabBarController (Shared)
 
 + (instancetype)mainTabBarController {
     UIStoryboard *designer = [UIStoryboard Designer];
-    return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
+    return [designer instantiateViewControllerWithIdentifier:TabBar];
 }
 
 @end
