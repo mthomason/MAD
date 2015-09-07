@@ -10,16 +10,15 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import "MADViewController.h"
 
-@class MTCollectionViewCellDocument, MADFilesController;
+@class MADFilesController;
 
 @interface MADOpenFileViewController : MADCollectionViewController
 
-@property (nonatomic, weak) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
-
-@property (nonatomic, strong) MADFilesController *filesController;
+@property (nonatomic, weak) MADFilesController *filesController;
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;

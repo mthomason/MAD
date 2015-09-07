@@ -1806,6 +1806,7 @@
 		4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4CE3143716952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE3143816952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CE7B64D1B9E2CDE000BDC0D /* NSAttributedString+Logo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B64C1B9E2CDE000BDC0D /* NSAttributedString+Logo.m */; settings = {ASSET_TAGS = (); }; };
 		4CE84D7D1B3969C300BB3A0A /* NSAttributedString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE84D7C1B3969C300BB3A0A /* NSAttributedString+Common.m */; };
 		4CE84D7E1B3969C300BB3A0A /* NSAttributedString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE84D7C1B3969C300BB3A0A /* NSAttributedString+Common.m */; };
 		4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
@@ -3084,6 +3085,8 @@
 		4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignBottom20@2x.png"; path = "Reports/UIImageAlignBottom20@2x.png"; sourceTree = "<group>"; };
 		4CE3143516952E3B00114431 /* MTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTextView.h; sourceTree = "<group>"; };
 		4CE3143616952E3B00114431 /* MTTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTextView.m; sourceTree = "<group>"; };
+		4CE7B64B1B9E2CDE000BDC0D /* NSAttributedString+Logo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Logo.h"; sourceTree = "<group>"; };
+		4CE7B64C1B9E2CDE000BDC0D /* NSAttributedString+Logo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Logo.m"; sourceTree = "<group>"; };
 		4CE7B77314C2D168007D0148 /* MADDesignerElementPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementPickerViewController.h; sourceTree = "<group>"; };
 		4CE7B77414C2D168007D0148 /* MADDesignerElementPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADDesignerElementPickerViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CE84D7B1B3969C300BB3A0A /* NSAttributedString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Common.h"; sourceTree = "<group>"; };
@@ -5090,6 +5093,8 @@
 				4C5AA6821B992AD800E405A1 /* MTGraph+RptqQuery.m */,
 				4C85D8C01B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.h */,
 				4C85D8C11B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m */,
+				4CE7B64B1B9E2CDE000BDC0D /* NSAttributedString+Logo.h */,
+				4CE7B64C1B9E2CDE000BDC0D /* NSAttributedString+Logo.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -7074,6 +7079,7 @@
 				4C4A68BD17E945C800FD6A73 /* MTBlurView.m in Sources */,
 				4C507B1414D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
+				4CE7B64D1B9E2CDE000BDC0D /* NSAttributedString+Logo.m in Sources */,
 				4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */,
 				4C5AA67C1B98C4AA00E405A1 /* MTQueryVisulizationLinkDefination.m in Sources */,
 				4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */,

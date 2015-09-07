@@ -1,5 +1,5 @@
 //
-//  MTViewControllerOpenDocument
+//  MADOpenFileViewController
 //  MAD Designer
 //
 //  Created by Michael Thomason on 1/2/12.
@@ -11,8 +11,7 @@
 #endif
 
 #import "MADOpenFileViewController.h"
-#import "MADConstants.h"
-#import <MessageUI/MessageUI.h>
+#import "MADViewerController.h"
 
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -26,8 +25,6 @@
 #import "MADOpenFileSectionHeaderView.h"
 #import "MTCollectionViewCellDocument.h"
 
-#import "MADViewerController.h"
-
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
@@ -36,17 +33,13 @@
 
 #import "MADQueryBuilderContainerController.h"
 
-#import "MADAboutTableViewController.h"
-
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 
 #import "MADFileManager.h"
-#import "MADUpgradeManager.h"
 #import "MADBarButtonItem.h"
 
 #import "UIColor+EverydayApps.h"
-#import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "MADNavigationController.h"
 #import "MADNavigationBarTitleView.h"
@@ -62,14 +55,12 @@
 #import "UIAlertController+Constructors.h"
 #import "MFMailComposeViewController+Constructors.h"
 #import "UIBarButtonItem+Constructors.h"
-#import "UILabel+Constructors.h"
 #import "NSError+Constructors.h"
 #import "UIView+Animations.h"
 
 #import "MTMath.h"
 
 #import "NSNumberFormatter+Constructors.h"
-#import "MFMailComposeViewController+FileManager.h"
 
 #import "UITabBarController+Shared.h"
 #import "UINavigationController+Designer.h"
@@ -78,8 +69,6 @@
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
-
-#import "UIMotionEffectGroup+HoverEffects.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -142,7 +131,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readwrite) BOOL rightBarButtonItemActivityIndicatorVisible;
 
 @property (nonatomic, strong) MADSearchBar *searchBar;
-@property (nonatomic, strong) UILabel *labelMadDesigner;
+@property (readonly) UILabel *labelMadDesigner;
 
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
@@ -162,8 +151,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
 
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
-
-@property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
 
 @end
 
@@ -217,11 +204,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:[MADOpenFileViewController keySubviews]]) {
         if ([object isKindOfClass:[UITextField class]]) {
-            
-            
             for (UIView *view in ((UITextField *)object).subviews) {
                 if ([view isKindOfClass:[UIButton class]]) {
-                    
                     UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     ((UIButton *)view).tintColor = [UIColor whiteColor];
                     [((UIButton *)view) setImage:image forState:UIControlStateNormal];
@@ -275,8 +259,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = [MTApplicationInstance applicationName];
     self.navigationItem.titleView = titleView;
-    self.labelMadDesigner = titleView;
-    
     self.navigationItem.hidesBackButton = YES;
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
@@ -328,10 +310,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.pendingLaunchContext = nil;
     
     for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
-        
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
         [cell performDeselectionAnimations];
-        
     }
     
     for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
@@ -532,7 +512,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
-        id tvc = [navControl topViewController];
+        id tvc = navControl.topViewController;
         [tvc setDelegate: self];
     }
     [segue.destinationViewController setDelegate: self];
@@ -575,20 +555,20 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         } else {
             
             UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
-            [[tabBarController view] setTintColor:[UIColor greenColor]];
-            [[UITabBar appearance] setTintColor:[UIColor redColor]];
+            tabBarController.view.tintColor = [UIColor greenColor];
+            [UITabBar appearance].tintColor = [UIColor redColor];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
 
-            MADQueryBuilderContainerController *queryBuilderContainerController = (MADQueryBuilderContainerController *)[navController topViewController];
+            MADQueryBuilderContainerController *queryBuilderContainerController = (MADQueryBuilderContainerController *)navController.topViewController;
             queryBuilderContainerController.viewControllerDelegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
+            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
             reportDesignerViewController.delegate = self;
             
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
+            MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
             reportViewerViewController.viewControllerDelegate = self;
 
         }
@@ -625,21 +605,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - UIPopoverPresentationControllerDelegate
 
-- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController {
-    
-}
+- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController { }
 
-- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
-    return YES;
-}
+- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController { return YES; }
 
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
     self.aboutViewControllerOnScreen = NO;
 }
 
-- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view {
-    
-}
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view { }
 
 #pragma mark - UIGestureRecognizerDelegate
 
@@ -697,8 +671,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)addActionItemToToolbar:(BOOL)animated {
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
-        [toolbarButtons insertObject: self.barButtonItemAction
-                             atIndex: 1];
+        [toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
         [self setToolbarItems:toolbarButtons animated:animated];
     }
 }
@@ -706,13 +679,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - MFMailComposeViewController delegate protocol
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-
-    [NSError presentError: error
-         onViewController: self
-               completion:^(BOOL success) {
-                   [self dismissViewControllerAnimated:YES completion:nil];
+    [NSError presentError: error onViewController: self completion:^(BOOL success) {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }];
-
 }
 
 #pragma mark -  NSFileManager delegate protocol
@@ -955,6 +924,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark UI Helpers
 
+- (UILabel *)labelMadDesigner {
+    return (UILabel *)self.navigationItem.titleView;
+}
+
 - (BOOL)dismissAllPopovers {
 
     BOOL result = NO;
@@ -1142,22 +1115,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }];
 }
 
-- (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
+- (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
 
-}
+- (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
 
-- (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
-
-}
-
-- (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error {
-
-}
+- (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
 
 #pragma mark - Actions
 
 - (IBAction)addDocument:(id)sender {
-    
     UINavigationController *navControl = [UINavigationController NewDocument];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
     
@@ -1253,9 +1219,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
 }
 
-- (BOOL)isFileViewEditing {
-    return self.editing;
-}
+- (BOOL)isFileViewEditing { return self.editing; }
 
 - (void)done:(id)sender {
     self.editing = NO;
@@ -1312,12 +1276,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     UINavigationController *infoViewController = [UINavigationController AppInformation];
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
     ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
-    
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
     self.infoPopoverPresentationController = ppc;
-    
     [self showViewController:infoViewController sender:self];
     
 }
@@ -1335,13 +1297,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         UITableViewController *aboutViewController = [UITableViewController About];
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
         ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
-        
         ppc.backgroundColor = [UIColor clearColor];
         ppc.delegate = self;
         ppc.barButtonItem = sender;
         self.aboutPopoverPresentationController = ppc;
-        
-        
         [self showViewController:aboutViewController sender:self];
         
     }
@@ -1374,16 +1333,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:wrappedUrls applicationActivities:@[]];
     [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo]];
-    
-    
-    MADOpenFileViewController *weakSelf = self;
-    
     [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
         NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
         for (NSInteger i=0; i<numberOfItemsInSection; i++) {
             NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
-            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[weakSelf.collectionView cellForItemAtIndexPath:path];
+            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
             if (documentCell != nil) {
                 [documentCell normalizeTint];
             }
@@ -1415,11 +1370,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
     
     MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformation];
-    
     documentInformation.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
     ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
-    
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
@@ -1427,7 +1380,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     documentInformation.metadataItems = metadataItems;
     [self showViewController:documentInformation sender:self];
-    
     [self done:sender];
 }
 
@@ -1597,14 +1549,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     if ([self.navigationController.topViewController isKindOfClass:[UINavigationController class]]) {
         [self.navigationController popToRootViewControllerAnimated:NO];
         self.pendingLaunchContext = launchContext;
-        
         return;
     }
-    
-    //MADFileInfo *activityListInfo = [[MADFileInfo alloc] initWithURL:launchContext.fileURL];
-    //activityListInfo.color = launchContext.listColor;
-    
-    //[self performSegueWithIdentifier:AAPLAppDelegateMainStoryboardListDocumentsViewControllerContinueUserActivity sender:activityListInfo];
 }
 
 - (void)addObservers {
