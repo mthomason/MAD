@@ -694,7 +694,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)saveContext {
     NSError *error;
-    if (self.managedObjectContext != nil) [self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error];
+    if (self.managedObjectContext != nil) {
+        if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
+            [self.managedObjectContext save:nil];
+        }
+    }
 }
 
 - (void)addConnection:(MTDatabaseConnection *)connection
