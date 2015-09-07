@@ -29,6 +29,12 @@
         [self setMaximumTrackImage:blank forState:UIControlStateNormal];
         
         [self setDisplayEnabled];
+        self.maximumValue = 0.0000f;
+        self.minimumValue = 0.0000f;
+        self.continuous = YES;
+        self.tintColor = [UIColor tintColorRed];
+        self.value = 0.0000f;
+
     }
     return self;
 }

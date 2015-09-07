@@ -203,27 +203,25 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     self.lineReturnString = lineReturnString;
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
-    [self initalizeStatusMessages];
-    [self initalizeProgressBar];
-    [self.toolbarSideRight addSubview:self.pageSlider];
-}
 
-- (void)initalizeProgressBar {
+    NSAttributedString *statusMessage1 = [NSAttributedString new];
+    NSAttributedString *statusMessage2 = [NSAttributedString new];
+    NSAttributedString *statusMessage3 = [NSAttributedString new];
+    self.statusMessage1 = statusMessage1;
+    self.statusMessage2 = statusMessage2;
+    self.statusMessage3 = statusMessage3;
+    
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     progressView.trackTintColor = [UIColor tintColorRed];
     progressView.tintColor = [UIColor tintColorBlue];
     progressView.progress = 0.0000f;
     self.progressView = progressView;
+
+    [self.toolbarSideRight addSubview:self.pageSlider];
 }
 
 - (void)initializeVerticalSlider {
-    MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
-    vertSlider.maximumValue = 0.0000f;
-    vertSlider.minimumValue = 0.0000f;
-    vertSlider.continuous = YES;
-    vertSlider.tintColor = [UIColor tintColorRed];
-    vertSlider.value = 0.0000f;
-    
+    MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];    
     [vertSlider addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
     [vertSlider addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -237,7 +235,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
     self.pageSlider = vertSlider;
     self.toolbarSideRight = vertToolbar;
-
 }
 
 - (void)initalizeLabelStatus {
@@ -248,15 +245,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
     self.barButtonLabelStatus = barButtonLabelStatus;
     self.labelStatus = labelStatus;
-}
-
-- (void)initalizeStatusMessages {
-    NSAttributedString *statusMessage1 = [NSAttributedString new];
-    NSAttributedString *statusMessage2 = [NSAttributedString new];
-    NSAttributedString *statusMessage3 = [NSAttributedString new];
-    self.statusMessage1 = statusMessage1;
-    self.statusMessage2 = statusMessage2;
-    self.statusMessage3 = statusMessage3;
 }
 
 #pragma mark - UIViewController Standard Callbacks
