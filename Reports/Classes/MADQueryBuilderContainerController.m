@@ -105,15 +105,8 @@
     return self;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    
-
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = [MTApplicationInstance madQuery];
@@ -127,16 +120,20 @@
     UINavigationController *navigationController = self.viewControllers[0];
     navigationController.navigationBarHidden = NO;
     
-    MADQueryViewController *queryViewController = (MADQueryViewController *)navigationController.topViewController;
-    self.queryBuilderController = queryViewController;
-    
     MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
     queryVisualizationViewController.document = [MTApplicationInstance mainInstance].openDocument;
-    self.queryBuilderControllerAdvanced = queryVisualizationViewController;
 
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
     [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderContainerController class], nil].tintColor = [UIColor tintColorWhite];
 
+}
+
+- (MADQueryViewController *)queryBuilderController {
+    return (MADQueryViewController *)((UINavigationController *)self.viewControllers[0]).topViewController;
+}
+
+- (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
+    return self.viewControllers[1];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

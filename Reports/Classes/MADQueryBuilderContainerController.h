@@ -22,8 +22,8 @@
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
-@property (nonatomic, weak) MADQueryViewController *queryBuilderController;
-@property (nonatomic, weak) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
+@property (readonly) MADQueryViewController *queryBuilderController;
+@property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
 
 @end
 
