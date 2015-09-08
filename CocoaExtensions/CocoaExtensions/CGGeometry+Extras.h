@@ -306,8 +306,8 @@ CGCenterOfRect(CGRect rect) {
 CG_INLINE CGPoint CGRandomPointInRect(CGRect rect);
 CG_INLINE
 CGPoint CGRandomPointInRect(CGRect rect) {
-    return CGPointMake((random() % (int)fabsf(rect.origin.x + rect.size.width + 1.0000f)) + (int)rect.origin.x,
-                       (random() % (int)fabsf(rect.origin.y + rect.size.height + 1.0000f)) + (int)rect.origin.y);
+    return CGPointMake((random() % (int)fabs(rect.origin.x + rect.size.width + 1.0000f)) + (int)rect.origin.x,
+                       (random() % (int)fabs(rect.origin.y + rect.size.height + 1.0000f)) + (int)rect.origin.y);
 }
 
 CG_INLINE CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds);
