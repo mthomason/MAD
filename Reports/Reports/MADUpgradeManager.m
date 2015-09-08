@@ -79,8 +79,6 @@ const NSInteger currentMajorVersion = 8;
     } else {
         completion (YES, nil, NO);
     }
-    
-    NSAssert(chinookInstalling == NO, @"%s", __PRETTY_FUNCTION__);
 
 }
 

@@ -13,6 +13,7 @@
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import "MADViewController.h"
+#import "MADocumentProtocol.h"
 
 @protocol MADQueryVisualizationSchemaDelegate
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
@@ -21,13 +22,12 @@
 @class MTSchemaFieldCell, NSManagedObjectID, MADocument;
 
 @interface MADQueryVisualizationSchemaViewController : MADViewController
-    <UIDynamicItem>
+    <UIDynamicItem, MADocumentProtocol>
 
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, strong) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
-@property (nonatomic, weak) MADocument *document;
 
 - (void)setCenter:(CGPoint)center;
 - (void)setBounds:(CGRect)bounds;

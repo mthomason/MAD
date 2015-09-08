@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MADConstants.h"
@@ -84,8 +85,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    MADUncaughtExceptionHandlerInstaller();
+    //MADUncaughtExceptionHandlerInstaller();
     
     [AppDelegate registerForNotifications:application];
 
@@ -132,7 +132,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [[MTApplicationInstance mainInstance] cleanupBeforeTerminate];
+    // Fix me... close open applications by calling delegate method from openFileViewController.
+    //[[MTApplicationInstance mainInstance] cleanupBeforeTerminate];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url

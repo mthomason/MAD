@@ -22,6 +22,21 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    [super viewDidLoad];
+    for (UIViewController *viewController in self.viewControllers) {
+        if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+            NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+            ((id <MADocumentProtocol>)self.topViewController).document = self.document;
+        }
+    }
+
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }

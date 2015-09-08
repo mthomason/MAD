@@ -17,4 +17,4 @@
 
 @end
 
-void MADUncaughtExceptionHandlerInstaller();
+//void MADUncaughtExceptionHandlerInstaller();

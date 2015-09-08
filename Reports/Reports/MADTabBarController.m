@@ -18,6 +18,8 @@ const NSInteger MADIndexViewer = 2;
 
 @implementation MADTabBarController
 
+@synthesize document;
+
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
@@ -25,13 +27,25 @@ const NSInteger MADIndexViewer = 2;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) {
+        
     }
     return self;
 }
 
+- (void)viewDidLoad {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    [super viewDidLoad];
+    for (UIViewController *viewController in self.viewControllers) {
+        if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+            ((id <MADocumentProtocol>)viewController).document = self.document;
+        }
+    }
+    NSLog(@"\t%s\n%@\n%lu", __PRETTY_FUNCTION__, self.viewControllers, self.viewControllers.count);
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [self.selectedViewController.view setNeedsLayout];
 }
 
 - (void)viewDidLayoutSubviews {

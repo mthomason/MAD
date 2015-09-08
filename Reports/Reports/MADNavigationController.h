@@ -10,9 +10,10 @@
 #define Reports_MTNavigationController_h
 
 #import <UIKit/UIKit.h>
+#import "MADocumentProtocol.h"
 
 @interface MADNavigationController : UINavigationController
-    <UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
+    <MADocumentProtocol, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
 
 - (IBAction)done:(id)sender;
 

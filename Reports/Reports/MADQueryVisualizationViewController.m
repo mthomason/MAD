@@ -109,6 +109,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 @implementation MADQueryVisualizationViewController
 
+@synthesize document;
+
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
@@ -189,10 +191,11 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)viewDidLoad {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+
     [super viewDidLoad];
     
-    self.document = [MTApplicationInstance mainInstance].openDocument;
-
     NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup];
     NSString *cacheFileName = [self cacheFileName];
     NSURL *cacheFileUrl = [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
@@ -279,7 +282,6 @@ typedef void(^MTBlockResultVoid)(void);
     [self archiveCache];
     [self clearScreen];
     
-    NSAssert(self.document != nil, @"We need a document.");
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextWillSaveNotification
                                                   object: self.document.activeDocumentModel.managedObjectContext];

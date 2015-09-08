@@ -10,7 +10,33 @@
 #import "MADTransparentPresentationController.h"
 #import "UIColor+EverydayApps.h"
 
+
 @implementation MADNavigationController
+
+@synthesize document;
+
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    if (self = [super initWithCoder:aDecoder]) {
+        
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    [super viewDidLoad];
+    NSLog(@"\tVC: %@", self.viewControllers);
+    NSLog(@"\tTV: %@", self.topViewController);
+    if ([self.topViewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+        NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+        ((id <MADocumentProtocol>)self.topViewController).document = self.document;
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

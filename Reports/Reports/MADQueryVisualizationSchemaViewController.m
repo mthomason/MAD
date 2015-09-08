@@ -48,6 +48,8 @@
 
 @implementation MADQueryVisualizationSchemaViewController
 
+@synthesize document;
+
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }

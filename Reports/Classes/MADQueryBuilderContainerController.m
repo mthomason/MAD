@@ -42,6 +42,8 @@
 
 @implementation MADQueryBuilderContainerController
 
+@synthesize document = _document;
+
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
@@ -66,13 +68,13 @@
     
     if (self) {
         
-        NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
-        MADQueryVisualizationViewController *queryVisualizationViewController = [MADQueryVisualizationViewController QueryVisualizationViewController];
-        viewControllers[1] = queryVisualizationViewController;
+        //NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
+        //MADQueryVisualizationViewController *queryVisualizationViewController = [MADQueryVisualizationViewController QueryVisualizationViewController];
+        //viewControllers[1] = queryVisualizationViewController;
         //UIViewController *vc0 = viewControllers[0];
-        self.viewControllers = viewControllers;
+        //self.viewControllers = viewControllers;
         
-
+        
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
         self.navigationController.navigationItem.titleView.tintColor = [UIColor whiteColor];
         
@@ -105,14 +107,27 @@
     return self;
 }
 
+- (void)setDocument:(MADocument *)document {
+    if (document != _document) {
+        _document = document;
+        for (UIViewController *viewController in self.viewControllers) {
+            if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+                ((id <MADocumentProtocol>) viewController).document = document;
+            }
+        }
+    }
+}
+
 - (void)viewDidLoad {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = [MTApplicationInstance madQuery];
     self.navigationItem.titleView = titleView;
     
-    self.navigationItem.prompt = [MTApplicationInstance mainInstance].openDocument.fileURL.lastPathComponent;
+    self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
 
     self.delegate = self;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
@@ -121,7 +136,7 @@
     navigationController.navigationBarHidden = NO;
     
     MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
-    queryVisualizationViewController.document = [MTApplicationInstance mainInstance].openDocument;
+    queryVisualizationViewController.document = self.document;
 
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
     [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderContainerController class], nil].tintColor = [UIColor tintColorWhite];
@@ -168,10 +183,10 @@
             viewController = segue.destinationViewController;
         }
         viewController.delegate = self;
-        viewController.query = [MTApplicationInstance mainInstance].openDocument.mainQuery;
+        viewController.query = self.document.mainQuery;
         
     } else if (sender == self) {
-        [segue.destinationViewController setDocument:[MTApplicationInstance mainInstance].openDocument];
+        [segue.destinationViewController setDocument:self.document];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
     } else {
         if (self.popover != nil) {
@@ -200,9 +215,9 @@
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
+    [self.document.managedObjectContext save:&error];
     if (error != nil) {
-        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
+        [self.document.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish:self];
     //[self dismissViewControllerAnimated:YES completion:^{
@@ -240,7 +255,7 @@
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [MTApplicationInstance mainInstance].openDocument.fileURL.lastPathComponent;
+        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

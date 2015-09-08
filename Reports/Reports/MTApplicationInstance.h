@@ -14,11 +14,6 @@
 @class MADFilesController, UITraitCollection, UIViewController;
 @protocol MADFileCoordinator;
 
-typedef NS_ENUM(NSUInteger, MTReportState) {
-	MTReportStateOpen = 0,
-	MTReportStateClosed
-};
-
 typedef NS_ENUM(NSUInteger, MADAppStorage) {
     MADAppStorageNotSet = 0,
     MADAppStorageCloud,
@@ -42,7 +37,7 @@ extern NSString * const MTGlobalBundleRev;
 extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUpgradeInstalledSamples;
 
-@class MADocument, MADFileManager;
+@class MADocument;
 
 @interface MTApplicationInstance : NSObject
 
@@ -54,23 +49,18 @@ extern NSString * const MADUpgradeInstalledSamples;
              subsquientLaunches:(void (^)(void))subsequentLaunch
                     everyLaunch:(void (^)(void))everyLaunch;
 
-@property (nonatomic, assign) MTReportState reportState;
 @property (nonatomic, strong) MADFilesController *filesController;
-@property (nonatomic, strong, readonly) MADFileManager *fileManager;
 
 @property (nonatomic, readonly) MADAppStorageState storageState;
 @property (nonatomic, assign) MADAppStorage storageOption;
 
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
-@property (readonly) MADocument *openDocument;
 
 - (void)initalizeAppearance;
 - (void)registerDefaultsFromSettingsBundle;
 
 - (BOOL)sampleInstalled;
 - (void)installedSample;
-
-- (void)cleanupBeforeTerminate;
 
 + (NSString *)applicationName;
 
@@ -87,8 +77,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 + (NSString *)madQuery;
 
 + (NSString *)bundleDisplayName;
-
-- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;

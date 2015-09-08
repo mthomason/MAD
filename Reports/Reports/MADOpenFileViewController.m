@@ -69,6 +69,8 @@
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
+#import "MADFileManager.h"
+#import "MADocumentProtocol.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -151,9 +153,30 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
+@property (nonatomic, strong, readwrite) MADFileManager *fileManager;
+
 @end
 
 @implementation MADOpenFileViewController
+
+#pragma mark - Helper functions
+
+- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
+    MADocument *activeDocument = self.openDocument;
+    [activeDocument regenThumbnailWithTraits:traitCollectionForThumbnail];
+    if (activeDocument && activeDocument.documentState != UIDocumentStateClosed) {
+        self.reportState = MTReportStateClosed;
+        [self.fileManager removeDocumentWithUrl:self.fileManager.openUrl];
+        [activeDocument closeWithCompletionHandler:^(BOOL success) {
+            completion(success);
+        }];
+    }
+}
+
+- (MADocument *)openDocument {
+    if (self.reportState == MTReportStateOpen) return (MADocument *)self.fileManager.openDocument;
+    else return nil;
+}
 
 #pragma mark - Static Functions
 
@@ -184,6 +207,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         
+        MADFileManager *openFiles = [[MADFileManager alloc] init];
+        self.fileManager = openFiles;
+
         MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
         self.progressViewFileManager = progressView;
         
@@ -367,7 +393,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
+        [self closeReport:self.traitCollection completion:^(BOOL success) {
             [self reenable];
         }];
     }
@@ -638,7 +664,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = YES;
 
-    [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
+    [self closeReport:self.traitCollection completion:^(BOOL success) {
         [self reenable];
         [UIView performWithoutAnimation:^{
             [self.collectionView.backgroundView setNeedsDisplay];
@@ -716,26 +742,25 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)openFileWithUrl:(NSURL *)url { //completion:(void (^)(BOOL success))completion {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    [AppDelegate app].fileManager.openDocument = document;
+    self.fileManager.openDocument = document;
     
     [document openWithCompletionHandler:^(BOOL success) {
         
         if (success) {
             
-            [AppDelegate app].reportState = MTReportStateOpen;
+            self.reportState = MTReportStateOpen;
             
             if ([MTApplicationInstance isMadViewer]) {
                 
-                MTApplicationInstance *app = [AppDelegate app];
-                [[app openDocument] activeDocumentModel];
+                [self.openDocument activeDocumentModel];
                 [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
                 
             } else if ([MTApplicationInstance isMadDesigner]) {
                 
-                [[AppDelegate app].openDocument activeDocumentModel];
+                [self.openDocument activeDocumentModel];
 
                 // MARK: Reporting feature (number of results in main query)
-                [AppDelegate app].openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+                self.openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
                 [self performSelectorOnMainThread:@selector(showMainViewController:) withObject:self waitUntilDone:NO];
             }
@@ -748,7 +773,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)showMainViewController:(id)sender {
     UITabBarController *tabBarController = [UITabBarController mainTabBarController];
-    
+    NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
+    ((id <MADocumentProtocol>)tabBarController).document = self.openDocument;
+
     tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     
@@ -756,13 +783,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
     UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
     
-    MADQueryBuilderContainerController * queryBuilderViewController = (MADQueryBuilderContainerController *)navController.topViewController;
+    __weak MADQueryBuilderContainerController * queryBuilderViewController = (MADQueryBuilderContainerController *)navController.topViewController;
     queryBuilderViewController.viewControllerDelegate = self;
     
-    MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
+    __weak MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
     reportDesignerViewController.delegate = self;
     
-    MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
+    __weak MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
     reportViewerViewController.viewControllerDelegate = self ;
     
     [self presentViewController:tabBarController animated:YES completion:nil];

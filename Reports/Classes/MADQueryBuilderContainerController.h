@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderContainerController_h
 
 #import <UIKit/UIKit.h>
+#import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
 
@@ -18,7 +19,7 @@
         MADocument;
 
 @interface MADQueryBuilderContainerController : MADSplitViewController
-    <MTViewControllerProtocol>
+    <MTViewControllerProtocol, MADocumentProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 

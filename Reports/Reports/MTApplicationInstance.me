@@ -27,8 +27,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 
-#import "MADFileManager.h"
-
 #import "MADFilesController.h"
 #import "MADLocalFileCoordinator.h"
 #import "MADCloudFileCoordinator.h"
@@ -64,9 +62,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.82";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.82";
-NSString * const MTGlobalBundleRev                                  = @"2024";
+NSString * const MTGlobalBundleVersion                              = @"8.0.83";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.83";
+NSString * const MTGlobalBundleRev                                  = @"2025";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -81,7 +79,6 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 @interface MTApplicationInstance ()
     <NSCoding>
 
-@property (nonatomic, strong, readwrite) MADFileManager *fileManager;
 @property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
 @property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
 
@@ -139,9 +136,6 @@ static MTApplicationInstance *mainInstance;
         self.applicationUserDefaults = defaults;
     
         [self registerDefaults];
-        
-        MADFileManager *openFiles = [[MADFileManager alloc] init];
-        self.fileManager = openFiles;
         
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
@@ -242,7 +236,7 @@ static MTApplicationInstance *mainInstance;
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
     
     #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor                = [UIColor tintColorBlue];
+        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [UIColor tintColorBlue];
         [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
         [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
     #endif
@@ -322,10 +316,6 @@ static MTApplicationInstance *mainInstance;
         .accountDidChange = [self hasUbiquityIdentityChanged],
         .cloudAvailable = [MADFilesController isCloudAvailable]
     };
-}
-
-- (void)cleanupBeforeTerminate {
-    [self.openDocument closeWithCompletionHandler:nil];
 }
 
 - (BOOL)sampleInstalled {
@@ -475,27 +465,6 @@ static MTApplicationInstance *mainInstance;
 }
 
 #pragma mark - Document Operations
-
-- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
-    
-    [[self openDocument] regenThumbnailWithTraits:traitCollectionForThumbnail];
-    __weak MADocument *activeDocument = [self openDocument];
-    if (activeDocument && activeDocument.documentState != UIDocumentStateClosed) {
-        __weak MTApplicationInstance *weakself = self;
-        [activeDocument closeWithCompletionHandler:^(BOOL success) {
-            if (success) {
-                weakself.reportState = MTReportStateClosed;
-                [weakself.fileManager removeDocumentWithUrl:weakself.fileManager.openUrl];
-            }
-            completion(success);
-        }];
-    }
-}
-
-- (MADocument *)openDocument {
-    if (self.reportState == MTReportStateOpen) return (MADocument *)self.fileManager.openDocument;
-    else return nil;
-}
 
 + (void)deleteCoreDataCache {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];

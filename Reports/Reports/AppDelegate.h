@@ -10,6 +10,7 @@
 #define MAD_Designer_AppDelegate_h
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <MADFeedback/MADFeedback.h>
 
 @class MTApplicationInstance;

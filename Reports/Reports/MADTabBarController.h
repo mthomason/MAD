@@ -10,12 +10,16 @@
 #define Reports_MADTabBarController_h
 
 #import <UIKit/UIKit.h>
+#import "MADocumentProtocol.h"
 
 extern const NSInteger MADIndexQuery;
 extern const NSInteger MADIndexDesigner;
 extern const NSInteger MADIndexViewer;
 
+@class MADocument;
+
 @interface MADTabBarController : UITabBarController
+    <MADocumentProtocol>
 
 @end
 

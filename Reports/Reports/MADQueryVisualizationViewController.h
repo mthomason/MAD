@@ -10,12 +10,10 @@
 #define Reports_MTQueryBuilderVisualizationViewController_h
 
 #import <UIKit/UIKit.h>
-
-@class MADocument;
+#import "MADocumentProtocol.h"
 
 @interface MADQueryVisualizationViewController : UIViewController
-
-@property (nonatomic, weak) MADocument *document;
+    <MADocumentProtocol>
 
 - (void)redraw;
 

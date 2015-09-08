@@ -20,6 +20,7 @@
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+@property (nonatomic, weak) MADocument *document;
 
 - (void)reload;
 

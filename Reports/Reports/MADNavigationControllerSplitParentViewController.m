@@ -27,13 +27,15 @@
 }
 
 - (void)viewDidLoad {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     self.navigationBar.hidden = YES;
     self.hidesBarsWhenVerticallyCompact = YES;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Navigation

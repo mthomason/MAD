@@ -13,7 +13,12 @@
 #import <MessageUI/MessageUI.h>
 #import "MADViewController.h"
 
-@class MADFilesController;
+typedef NS_ENUM(NSUInteger, MTReportState) {
+    MTReportStateOpen = 0,
+    MTReportStateClosed
+};
+
+@class MADocument, MADFileManager, MADFilesController;
 
 @interface MADOpenFileViewController : MADCollectionViewController
 
@@ -26,6 +31,12 @@
 
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
+
+
+@property (nonatomic, strong, readonly) MADFileManager *fileManager;
+@property (nonatomic, assign) MTReportState reportState;
+@property (readonly) MADocument *openDocument;
+- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
 
 @end
 
