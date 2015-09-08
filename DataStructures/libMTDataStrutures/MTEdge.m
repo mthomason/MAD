@@ -43,21 +43,21 @@
         [self setIsDirected:YES];
         
         MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLatter:vertex2];
-        [self setVertices:pair];
+        self.vertices = pair;
 
-        [self setObject: object];
-        [self setWeight:weight];
-        [self setUniqueIdForStructure:uniqueID];
+        self.object = object;
+        self.weight = weight;
+        self.uniqueIdForStructure = uniqueID;
     }
     return self;
 }
 
 - (MTVertex *)origin {
-    return [[self vertices] former];
+    return self.vertices.former;
 }
 
 - (MTVertex *)destination {
-    return [[self vertices] latter];
+    return self.vertices.latter;
 }
 
 #pragma mark - MTProtocolCompare
@@ -67,8 +67,7 @@
     if (self == sender) {
         result = YES;
     } else {
-        MTEdge *e = sender;
-        result = [[self uniqueIdForStructure] isEqualToNumber:[e uniqueIdForStructure]];
+        result = [self.uniqueIdForStructure isEqualToNumber:((MTEdge *)sender).uniqueIdForStructure];
     }
     return result;
 }

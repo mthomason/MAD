@@ -21,7 +21,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self setObject:nil];
+        self.object = nil;
     }
     return self;
 }
@@ -29,7 +29,7 @@
 - (instancetype)initWithObject:(id)object {
     self = [super init];
     if (self) {
-        [self setObject:object];
+        self.object = object;
     }
     return self;
 }
@@ -42,10 +42,10 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([[self object] conformsToProtocol:@protocol(MTProtocolCompare)]) {
-        result = [[self object] isEqualTo:sender];
+    if ([self.object conformsToProtocol:@protocol(MTProtocolCompare)]) {
+        result = [self.object isEqualTo:sender];
     } else {
-        result = [[self object] isEqual:sender];
+        result = [self.object isEqual:sender];
     }
     return result;
 }
@@ -53,15 +53,15 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [[self object] toStringHumanReadable];
+    return [self.object toStringHumanReadable];
 }
 
 - (NSString *)toString {
-    return [[self object] toString];
+    return [self.object toString];
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", [self object]];
+    return [NSString stringWithFormat:@"%@", self.object];
 }
 
 @end

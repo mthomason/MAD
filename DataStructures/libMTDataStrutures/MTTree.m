@@ -11,7 +11,7 @@
 @implementation MTTree
 
 - (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right {
-    self = [super init];
+    self = [self init];
     if (self) {
         [self setLeftNode:left];
         [self setRightNode:right];

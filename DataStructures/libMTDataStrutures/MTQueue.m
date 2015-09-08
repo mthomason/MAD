@@ -25,8 +25,8 @@
     self = [super init];
     if (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] init];
-        [self setQueue:queue];
-        [self setCounter: 0];
+        self.queue = queue;
+        self.counter = 0;
     }
     return self;
 }
@@ -35,40 +35,40 @@
     self = [super init];
     if (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] initWithCapacity:capacity];
-        [self setQueue:queue];
-        [self setCounter: 0];
+        self.queue = queue;
+        self.counter = 0;
     }
     return self;
 }
 
 - (void)enqueue:(id)object {
     @synchronized(self) {
-        [[self queue] addObject:object];
+        [self.queue addObject:object];
         self.counter++;
     }
 }
 
 - (void)enqueueObjectsFromArray:(NSArray *)objects {
-    [[self queue] addObjectsFromArray:objects];
-    [self setCounter:([self counter] + [objects count])];
+    [self.queue addObjectsFromArray:objects];
+    self.counter = self.counter + objects.count;
 }
 
 - (id)dequeue {
     id result;
     @synchronized(self) {
-        [self setCounter:([self counter] - 1)];
-        result = [[self queue] objectAtIndex:[self counter]];
-        [[self queue] removeObjectAtIndex:[self counter]];
+        self.counter = self.counter - 1;
+        result = [self.queue objectAtIndex:self.counter];
+        [self.queue removeObjectAtIndex:self.counter];
     }
     return result;
 }
 
 - (NSUInteger)count {
-    return [self counter];
+    return self.counter;
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
-    return [[self queue] countByEnumeratingWithState:state objects:stackbuf count:len];
+    return [self.queue countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
 - (NSString *)toStringHumanReadable {

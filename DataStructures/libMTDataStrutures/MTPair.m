@@ -13,10 +13,6 @@
 #import "MTPair.h"
 #import "MTObject.h"
 
-@interface MTPair ()
-
-@end
-
 @implementation MTPair
 
 - (instancetype)init {
@@ -28,10 +24,10 @@
     if (self) {
 
         id f = former;
-        [self setFormer:f];
+        self.former = f;
         
         id l = latter;
-        [self setLatter:l];
+        self.latter = l;
         
     }
     return self;
@@ -53,19 +49,19 @@
 
 - (NSString *)toStringHumanReadable {
     Protocol *protocolLog = @protocol(MTProtocolLog);
-    BOOL formerConfirmsToLoggingProtocol = [[self former] conformsToProtocol: protocolLog];
-    BOOL latterConfirmsToLoggingProtocol = [[self latter] conformsToProtocol: protocolLog];
-    NSString *formerToString = formerConfirmsToLoggingProtocol ? [[self former] toStringHumanReadable] : [NSString stringWithFormat:@"%@", [self former]];
-    NSString *latterToString = latterConfirmsToLoggingProtocol ? [[self latter] toStringHumanReadable] : [NSString stringWithFormat:@"%@", [self latter]];
+    BOOL formerConfirmsToLoggingProtocol = [self.former conformsToProtocol: protocolLog];
+    BOOL latterConfirmsToLoggingProtocol = [self.latter conformsToProtocol: protocolLog];
+    NSString *formerToString = formerConfirmsToLoggingProtocol ? [self.former toStringHumanReadable] : [NSString stringWithFormat:@"%@", self.former];
+    NSString *latterToString = latterConfirmsToLoggingProtocol ? [self.latter toStringHumanReadable] : [NSString stringWithFormat:@"%@", self.latter];
     return [NSString stringWithFormat:@"(%@, %@)", formerToString, latterToString];
 }
 
 - (id)left {
-    return [self former];
+    return self.former;
 }
 
 - (id)right {
-    return [self latter];
+    return self.latter;
 }
 
 - (NSString *)toString {

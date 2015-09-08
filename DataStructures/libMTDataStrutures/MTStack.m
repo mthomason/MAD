@@ -25,7 +25,7 @@
     self = [super init];
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] init];
-        [self setStack:stack];
+        self.stack = stack;
     }
     return self;
 }
@@ -34,7 +34,7 @@
     self = [super initWithObject:object];
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] init];
-        [self setStack:stack];
+        self.stack = stack;
     }
     return self;
 }
@@ -43,31 +43,31 @@
     self = [super init];
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];
-        [self setStack:stack];
+        self.stack = stack;
     }
     return self;
 }
 
 - (void)push:(id)object {
-    [[self stack] addObject:object];
+    [self.stack addObject:object];
     self.counter++;
 }
 
 - (id)pop {
-    NSAssert([self counter] > 0, @"Underflow error.  Nothing to pop.");
-    id result = [[self stack] lastObject];
-    [[self stack] removeLastObject];
+    NSAssert(self.counter > 0, @"Underflow error.  Nothing to pop.");
+    id result = self.stack.lastObject;
+    [self.stack removeLastObject];
     self.counter--;
     return result;
 }
 
 - (BOOL)isEmpty {
-    return [self counter] <= 0;
+    return self.counter <= 0;
 }
 
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
-    return [[self stack] countByEnumeratingWithState:state objects:stackbuf count:len];
+    return [self.stack countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
 - (NSString *)toStringHumanReadable {

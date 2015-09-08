@@ -35,32 +35,32 @@
     if (self) {
         
         NSNumber *number = [[NSNumber alloc] initWithInteger:idnumber];
-        [self setUniqueIdForStructure:number];
+        self.uniqueIdForStructure = number;
 
         NSMutableArray *array = [[NSMutableArray alloc] init];
-        [self setEdges:array];
-        
-        [self setObject: object];
+        self.edges = array;
+
+        self.object = object;
 
     }
     return self;
 }
 
 - (NSUInteger)numberOfIncidentEdges {
-    return [[self edges] count];
+    return self.edges.count;
 }
 
 - (NSArray *)incidentEdges {
     NSArray *results;
     @synchronized(self) {
-        results = [self edges];
+        results = self.edges;
     }
     return results;
 }
 
 - (void)addEdge:(MTEdge *)edge {
-    if ([self edges]) {
-        [[self edges] addObject:edge];
+    if (self.edges) {
+        [self.edges addObject:edge];
     } else {
         NSMutableArray *arrayEmpty = [[NSMutableArray alloc] initWithObjects:edge, nil];
         [self setEdges:arrayEmpty];
@@ -69,7 +69,7 @@
 
 - (BOOL)isAdjacentToVertex:(MTVertex *)vertex {
     BOOL result = NO;
-    for (MTEdge *edge in [self edges]) {
+    for (MTEdge *edge in self.edges) {
         if ([[edge destination] isEqual:vertex]) {
             result = YES;
         }
@@ -78,7 +78,7 @@
 }
 
 - (void)removeEdge:(MTEdge *)edge {
-    [[self edges] removeObject: edge];
+    [self.edges removeObject: edge];
 }
 
 #pragma mark - MTProtocolCompare
@@ -88,8 +88,7 @@
     if (self == sender) {
         result = YES;
     } else {
-        MTVertex *v = sender;
-        result = [[self uniqueIdForStructure] isEqualToNumber:[v uniqueIdForStructure]];
+        result = [self.uniqueIdForStructure isEqualToNumber:((MTVertex *)sender).uniqueIdForStructure];
     }
     return result;
 }
@@ -98,13 +97,13 @@
 
 - (NSString *)toStringHumanReadable {
     NSString *humanReadableVector;
-    if ([[self object] respondsToSelector:@selector(toStringHumanReadable)]) {
-        humanReadableVector = [[self object] toStringHumanReadable];
+    if ([self.object respondsToSelector:@selector(toStringHumanReadable)]) {
+        humanReadableVector = [self.object toStringHumanReadable];
     } else {
         humanReadableVector = [self toStringDebug];
     }
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", humanReadableVector];
-    for (MTEdge *edge in [self edges]) {
+    for (MTEdge *edge in self.edges) {
         [result appendString:@"->"];
         MTVertex *destination = [edge destination];
         id destinationObject = [destination object];
@@ -121,7 +120,7 @@
 
 - (NSString *)toString {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", self];
-    for (MTEdge *edge in [self edges]) {
+    for (MTEdge *edge in self.edges) {
         [result appendString:@"\tEdge->"];
         [result appendString:[edge toStringDebug]];
     }

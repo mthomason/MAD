@@ -24,7 +24,7 @@
 @property (nonatomic, strong) MTTree *leftNode;
 @property (nonatomic, strong) MTTree *rightNode;
 
-- (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right;
 
 @end
 
