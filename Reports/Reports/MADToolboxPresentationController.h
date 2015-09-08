@@ -12,7 +12,7 @@
 
 @interface MADToolboxPresentationController : UIPresentationController
 
-@property (nonatomic, assign) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
+@property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
 @property (nonatomic, strong) MADDimmingView *dimmingView;
 @property (nonatomic, weak) UIView *container;
 @property (nonatomic, strong) UIView *passthroughContainer;

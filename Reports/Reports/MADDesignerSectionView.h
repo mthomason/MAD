@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 @interface MADDesignerSectionView : UICollectionView
     <UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign) id <MTDocumentSectionViewDelegate> sectionDelegate;
+@property (nonatomic, weak) id <MTDocumentSectionViewDelegate> sectionDelegate;
 
 @property (nonatomic, assign) BOOL visible;
 @property (nonatomic, assign) BOOL selected;

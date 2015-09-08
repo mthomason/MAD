@@ -37,6 +37,6 @@
     @property (nonatomic, strong) NSSet *passthoughContainers;
     @property (nonatomic, strong) NSSet *passthroughViews;
 
-    @property (nonatomic, assign) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
+    @property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
 
 @end
