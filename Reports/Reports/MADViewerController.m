@@ -44,8 +44,6 @@
 #import "UIColor+EverydayApps.h"
 #import "NSDate+Extras.h"
 
-#import "MADModelNavigationController.h"
-
 #import "MTKeyChain.h"
 #import "MTDatabaseConnection.h"
 #import "MTStoreKitController+Features.h"
