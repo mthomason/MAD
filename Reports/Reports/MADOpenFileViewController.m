@@ -366,8 +366,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     
     NSString *actionIdentifier = [action identifier];
-    if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
-        [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
+    if ([actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
         [[AppDelegate app] closeReport:self.traitCollection completion:^(BOOL success) {
             [self reenable];
         }];
