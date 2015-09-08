@@ -13,7 +13,6 @@
 #import "MADNavigationController.h"
 
 @interface MADQueryNavigationController : MADNavigationController
-    <UINavigationControllerDelegate>
 
 @end
 
