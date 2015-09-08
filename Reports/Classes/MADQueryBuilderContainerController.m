@@ -50,14 +50,14 @@
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
-- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion {
-    NSLog(@"View Contoller %@", viewControllerToPresent);
-    [super presentViewController:viewControllerToPresent animated:flag completion:completion];
-}
+//- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion {
+//    NSLog(@"View Contoller %@", viewControllerToPresent);
+//    [super presentViewController:viewControllerToPresent animated:flag completion:completion];
+//}
 
-- (void)addChildViewController:(UIViewController *)childController {
-    [super addChildViewController:childController];
-}
+//- (void)addChildViewController:(UIViewController *)childController {
+//    [super addChildViewController:childController];
+//}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
@@ -69,7 +69,7 @@
         NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
         MADQueryVisualizationViewController *queryVisualizationViewController = [MADQueryVisualizationViewController QueryVisualizationViewController];
         viewControllers[1] = queryVisualizationViewController;
-        UIViewController *vc0 = viewControllers[0];
+        //UIViewController *vc0 = viewControllers[0];
         self.viewControllers = viewControllers;
         
 
@@ -205,9 +205,9 @@
         [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish:self];
-    [self dismissViewControllerAnimated:YES completion:^{
+    //[self dismissViewControllerAnimated:YES completion:^{
         
-    }];
+    //}];
 
 }
 - (IBAction)redrawQueryVisualization:(id)sender {

@@ -48,6 +48,10 @@
 
 @implementation MADQueryVisualizationSchemaViewController
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
 - (void)setCenter:(CGPoint)center {
     self.view.center = center;
     [self.delegate didMoveFieldRect:self animated:NO];
@@ -76,6 +80,7 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self commonInit];

@@ -226,7 +226,6 @@
 		4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C1848091B8EEC4300FA7872 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C009F821B01BBFC00F22BFF /* libmysqlclient.a */; };
 		4C196F2E1B91092B0036D8A8 /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */; };
-		4C196F2F1B91092B0036D8A8 /* MADFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1A585D14DE348200184445 /* MTQueryBuilderSortTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* MTQueryBuilderSortTypeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1A586614E23DDB00184445 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
@@ -1112,7 +1111,6 @@
 		4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4C8D2A241B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C8D2A251B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */; };
-		4C8DCFB61B90CA240078563C /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB51B90CA240078563C /* MADFeedback.framework */; };
 		4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1867,7 +1865,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4C196F2F1B91092B0036D8A8 /* MADFeedback.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2574,7 +2571,6 @@
 		4C8CDD0A1AD2F4BD00B7B9EA /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqFieldSelectorManager.h; path = ../MAD/MAD/MAD/rptq/RptqFieldSelectorManager.h; sourceTree = "<group>"; };
 		4C8D2A221B45307200237C20 /* UIMotionEffectGroup+HoverEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMotionEffectGroup+HoverEffects.h"; sourceTree = "<group>"; };
 		4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
-		4C8DCFB51B90CA240078563C /* MADFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFeedback.framework; path = "../Feedback/build/Debug-iphoneos/MADFeedback.framework"; sourceTree = "<group>"; };
 		4C8F7CE114CEC12B006171A7 /* MTQueryBuilderAddTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddTableViewController.h; sourceTree = "<group>"; };
 		4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddTableViewController.m; sourceTree = "<group>"; };
 		4C8F7CE514CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstTableViewController.h; sourceTree = "<group>"; };
@@ -3210,7 +3206,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DCFB61B90CA240078563C /* MADFeedback.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
 				4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */,
 				4C359E231B082E7E00B3E9E0 /* libssl.a in Frameworks */,
@@ -3619,8 +3614,6 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C8DCFB51B90CA240078563C /* MADFeedback.framework */,
-				4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */,
 				4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */,
 				4C1847B91B8D656E00FA7872 /* libSqlite.a */,
 				4CE84D8C1B396F3800BB3A0A /* Accounts.framework */,
@@ -7699,7 +7692,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7736,7 +7729,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -7794,10 +7787,7 @@
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/MAD/MAD/build/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/libmysqlclient,
 					/Users/mthomason/Documents/libmysqlclient/lib/iOS,
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
@@ -7855,10 +7845,7 @@
 					"/Users/mthomason/Desktop/Reports/CocoaExtensions/CocoaExtensions/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
 					"/Users/mthomason/Desktop/Reports/MAD/MAD/build/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/libmysqlclient,
 					/Users/mthomason/Documents/libmysqlclient/lib/iOS,
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;

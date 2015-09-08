@@ -110,11 +110,11 @@ typedef void(^MTBlockResultVoid)(void);
 @implementation MADQueryVisualizationViewController
 
 - (void)dealloc {
-    NSLog(@"%s\n%s", __FILE__, __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"%s\n%s", __FILE__, __PRETTY_FUNCTION__);
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
     }
@@ -279,6 +279,7 @@ typedef void(^MTBlockResultVoid)(void);
     [self archiveCache];
     [self clearScreen];
     
+    NSAssert(self.document != nil, @"We need a document.");
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextWillSaveNotification
                                                   object: self.document.activeDocumentModel.managedObjectContext];
@@ -482,7 +483,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)insertQueryTable:(RptqQueryTable *)insertedQueryTable {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
     
     CGFloat segHeight = self.contentView.bounds.size.height / (self.rootTables.count + 2);
     
@@ -514,7 +515,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     //RptqQuery *query = insertedQueryLinks.inQuery;
     MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:insertedQueryLinks.inQuery];
@@ -641,7 +641,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Gesture recognizer actions
 
 - (void)tapPiece:(UITapGestureRecognizer *)gestureRecognizer {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
         UIView *gestureRecognizerView = [gestureRecognizer view];
         [self.contentView bringSubviewToFront:gestureRecognizerView];
@@ -686,7 +685,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Reload document view controllers
 
 - (void)redraw {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     [self reloadDocument:self.document animated:NO];
 }
 
@@ -744,7 +742,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:query];
     NSInteger tableCounter = 0;
@@ -773,7 +770,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)deleteQueryTable:(RptqQueryTable *)deletedQueryTable {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     
     BOOL startingPointTable = [self.rootTables containsObject:deletedQueryTable.objectID.URIRepresentation];
     if (startingPointTable) {
@@ -792,8 +788,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)deleteQueryLink:(RptqQueryLinks *)deletedQueryLinks {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
     NSMutableSet *orphanedQueryTables = [[NSMutableSet alloc] init];
     
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
@@ -858,8 +852,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 + (UIAttachmentBehavior *)attachmentBehaviorLinkWithLeftViewController:(MADQueryVisualizationSchemaViewController *)viewControllerLeft
                                                 andRightViewController:(MADQueryVisualizationSchemaViewController *)viewControllerRight {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerLeft attachedToItem:viewControllerRight];
     behavior.frequency = 0.0000f;
     behavior.damping = 1.0000f;
@@ -870,8 +862,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Helper functions
 
 - (void)addGesturesToViewController:(UIViewController *)viewController {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPiece:)];
     tapGesture .delegate = self;
     tapGesture.numberOfTapsRequired = 1;
@@ -887,7 +877,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - View Controller Container Data
 
 - (void)removeViewController:(UIViewController *)viewController {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     CGFloat animationDuration = 0.3000f;
     CGAffineTransform swingTransform = CGAffineTransformSwing();
     
@@ -917,8 +906,6 @@ typedef void(^MTBlockResultVoid)(void);
 - (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table
                                                                           root:(BOOL)root
                                                                       animated:(BOOL)animated {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
     MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController advancedSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
@@ -962,9 +949,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
-    NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    //NSManagedObjectID *objectId = link.objectID;
-    
     MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;
     connectorView.objectIdTag = link.objectID;
@@ -1023,7 +1007,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
-    //NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
     if ([sender isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
         MADQueryVisualizationSchemaViewController *controller = (MADQueryVisualizationSchemaViewController *)sender;
         
@@ -1039,8 +1022,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink animated:(BOOL)animated {
-    //NSLog(@"%s %s %d", __FILE__, __PRETTY_FUNCTION__, __LINE__);
-    
     UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID.URIRepresentation];
     MTConnectorView *connectorView = (MTConnectorView *)controller.view;
     const CGFloat paddingLeft = 44.0000f;
@@ -1137,7 +1118,9 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate { }
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [self updateCache];
+}
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
 
