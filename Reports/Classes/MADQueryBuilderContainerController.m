@@ -11,24 +11,19 @@
 #endif
 
 #import "MADQueryBuilderContainerController.h"
-#import "MADConstants.h"
-#import <CoreData/CoreData.h>
-
 #import "MADocument.h"
 #import "MADNavigationBarTitleView.h"
 
 #import "MTApplicationInstance.h"
-#import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
-#import "MADQueryVisualizationViewController.h"
 #import "MADViewControllerSQL.h"
 
-#import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIViewController+UI.h"
 
 #import "UIColor+EverydayApps.h"
 
+#import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
 
 @interface MADQueryBuilderContainerController ()
@@ -37,14 +32,8 @@
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
 
-@property (nonatomic, weak) UIBarButtonItem *barButtonItemEditDone;
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemRevealQuery;
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemDone;
-
-@property (nonatomic, strong) NSArray *toolbarItemsEditing;
-@property (nonatomic, strong) NSArray *toolbarItemsEditingNot;
-
-@property (nonatomic, strong) NSArray *constraintsViewWillAppear;
 
 @property (nonatomic, strong) UIPopoverController *popover;
 @property (nonatomic, assign) BOOL localEditing;
@@ -62,6 +51,7 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
 
     self = [super initWithCoder:aDecoder];
     
@@ -155,7 +145,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.view removeConstraints:self.constraintsViewWillAppear];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -175,9 +164,9 @@
         [segue.destinationViewController setDocument:[MTApplicationInstance mainInstance].openDocument];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
     } else {
-        if ([self popover] != nil) {
-            if ([[self popover] isPopoverVisible]) {
-                [[self popover] dismissPopoverAnimated:YES];
+        if (self.popover != nil) {
+            if ([self.popover isPopoverVisible]) {
+                [self.popover dismissPopoverAnimated:YES];
             }
         }
         Class popoverSegueClass = [UIStoryboardPopoverSegue class];
@@ -189,43 +178,10 @@
     }
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    BOOL leftIsGo = YES, rightIsGo = YES;
-    NSString *segueCloseDesignerId = @"MTSegueCloseDesigner";
-    if ([identifier isEqualToString:segueCloseDesignerId]) {
-        leftIsGo = self.leftViewController == nil ? YES :
-                        [self.leftViewController shouldPerformSegueWithIdentifier:identifier sender:sender];
-        rightIsGo = self.rightViewController == nil ? YES :
-                        [self.rightViewController shouldPerformSegueWithIdentifier:identifier sender:sender];
-    }
-    return leftIsGo && rightIsGo;
-}
-
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     [self.navigationItem.titleView sizeToFit];
-
-    /*
-    UIViewController *primaryViewController = self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
-    UIViewController *secondaryViewController = self.viewControllers.count > 1 ? self.viewControllers[1] : nil;
-    if (primaryViewController) {
-        NSMutableArray *subviews = [[NSMutableArray alloc] initWithArray:[primaryViewController.view subviews]];
-        if (secondaryViewController) {
-            [subviews addObjectsFromArray:[secondaryViewController.view subviews]];
-            for (UIView *view in subviews) {
-                if ([view isKindOfClass:[UIScrollView class]]) {
-                    [(UIScrollView *)view setContentInset: UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)];
-                    [(UIScrollView *)view setScrollIndicatorInsets: [(UIScrollView *)view contentInset]];
-                }
-            }
-        }
-    }*/
 }
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-}
-
 
 - (id)leftViewController {
     return self.queryBuilderController;
@@ -367,12 +323,5 @@
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
 }
-
-#pragma mark - Actions
-
-//- (IBAction)showSQL:(id)sender {
-//    [self.queryBuilderController performSegueWithIdentifier:self sender:];
-//}
-
 
 @end
