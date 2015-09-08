@@ -7,14 +7,24 @@
 //
 
 #import "MADNavigationControllerSplitParentViewController.h"
-#import "MADQueryViewController.h"
-#import "UIColor+EverydayApps.h"
 
 @interface MADNavigationControllerSplitParentViewController ()
 
 @end
 
 @implementation MADNavigationControllerSplitParentViewController
+
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    if (self = [super initWithCoder:aDecoder]) {
+        
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

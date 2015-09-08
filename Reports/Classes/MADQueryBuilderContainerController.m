@@ -50,6 +50,15 @@
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion {
+    NSLog(@"View Contoller %@", viewControllerToPresent);
+    [super presentViewController:viewControllerToPresent animated:flag completion:completion];
+}
+
+- (void)addChildViewController:(UIViewController *)childController {
+    [super addChildViewController:childController];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 
@@ -60,6 +69,7 @@
         NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
         MADQueryVisualizationViewController *queryVisualizationViewController = [MADQueryVisualizationViewController QueryVisualizationViewController];
         viewControllers[1] = queryVisualizationViewController;
+        UIViewController *vc0 = viewControllers[0];
         self.viewControllers = viewControllers;
         
 
@@ -183,21 +193,9 @@
     [self.navigationItem.titleView sizeToFit];
 }
 
-- (id)leftViewController {
-    return self.queryBuilderController;
-}
-
-- (id)rightViewController {
-    return self.queryBuilderControllerAdvanced;
-}
-
 - (IBAction)showReportDocumentList:(id)sender {
     [self.viewControllerDelegate viewControllerDidFinish:self];
 }
-
-- (IBAction)showReportDesigner:(id)sender { }
-
-- (IBAction)revealQuery:(id)sender { }
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;

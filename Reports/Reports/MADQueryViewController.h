@@ -13,8 +13,6 @@
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
 
-@class MADocument;
-
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 extern NSString * const MADSegueShowSql;
@@ -23,14 +21,9 @@ extern NSString * const MADSegueShowSql;
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
-@property BOOL debug;
-
 - (void)reloadMainDocumentAnimated:(BOOL)animated;
 
 - (IBAction)edit:(id)sender;
-- (IBAction)done:(id)sender;
-
-- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action;
 
 @end
 

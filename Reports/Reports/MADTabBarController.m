@@ -18,6 +18,17 @@ const NSInteger MADIndexViewer = 2;
 
 @implementation MADTabBarController
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    if (self = [super initWithCoder:aDecoder]) {
+    }
+    return self;
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     [self.selectedViewController.view setNeedsLayout];

@@ -11,9 +11,13 @@
 
 @implementation MADTabBar
 
+- (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    if (self = [super initWithCoder:aDecoder]) {
         [self setup];
     }
     return self;

@@ -25,15 +25,11 @@
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "MTQueryBuilderPredicateFormatViewController.h"
 
-#import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
-#import "UITableViewCellOverride.h"
-#import "UITableViewCellQueryInput.h"
 #import "UITableViewCellQueryGroup.h"
 #import "MTTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
-#import "MTTableLayout.h"
 
 #import "MTDataFormatter.h"
 #import "MTDatabaseDriverSelectorViewController.h"
@@ -85,9 +81,6 @@
 #import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
 
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectAggregate.h"
-
 #import "UIViewController+tabBarItem.h"
 
 #import "MTQueryTest.h"
@@ -97,13 +90,9 @@
 
 #import "UIViewController+UI.h"
 
-#import "MADNavigationBarTitleView.h"
-
-
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
-NSString * const MTSegueCloseDesigner                               = @"MTSegueCloseDesigner";
 NSString * const MADSegueShowSql                                    = @"MADSegueShowSql";
 NSString * const MTTableHeaderSectionKey                            = @"MTTableHeaderSectionKey";
 NSString * const MTTableSectionRowKey                               = @"MTTableSectionRowKey";
@@ -155,16 +144,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 @implementation MADQueryViewController
 
-#pragma mark - UIStateRestore
-
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super decodeRestorableStateWithCoder:coder];
-}
-
 #pragma mark - Exit
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
@@ -189,6 +168,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - NSObject
 
 - (void)dealloc {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [MTApplicationInstance deleteCoreDataCache];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -197,6 +177,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     self = [super initWithCoder:aDecoder];
     if (self) {
         
@@ -299,14 +280,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                      name: UIDocumentStateChangedNotification
                                                    object: [MTApplicationInstance mainInstance].openDocument];
     }
-
-    //UIColor *barTintColor = [UIColor tintColorBlue];
-    //UIColor *tintColor = [UIColor tintColorWhite];
-    //self.navigationController.toolbar.barTintColor = barTintColor;
-    //self.navigationController.toolbar.tintColor = tintColor;
-
     [self enableTabBarItems];
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -435,20 +409,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     }
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    BOOL shouldPerformSegueWithIdentifier = [super shouldPerformSegueWithIdentifier:identifier sender:sender];
-    if ([identifier isEqualToString:MTSegueCloseDesigner]) {
-        NSError *error = nil;
-        [[MTApplicationInstance mainInstance].openDocument.managedObjectContext save:&error];
-    }
-    return shouldPerformSegueWithIdentifier;
-}
-
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    UIViewController *weakself = self;
-    [super dismissViewControllerAnimated:YES completion:^(){
-        [weakself enableTabBarItems];
-    }];
+    [self enableTabBarItems];
+    [super dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - MTQueryBuilderPredicateFormatDelegate
