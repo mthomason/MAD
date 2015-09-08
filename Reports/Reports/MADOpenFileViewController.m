@@ -72,7 +72,6 @@
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
-NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
@@ -356,7 +355,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)applicationFinishedRestoringState {
     if ([MTApplicationInstance isMadDesigner]) {
-        [self performSegueWithIdentifier: MTSegueShowOpenDocument sender: self];
+
     } else if ([MTApplicationInstance isMadViewer]) {
         [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
     }
@@ -501,8 +500,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             self.shouldShowAddDocumentPopover = NO;
             self.barButtonItemAddNewDocument.enabled = NO;
         }
-    } else if ([identifier isEqualToString:MTSegueShowOpenDocument]) {
-        shouldPerformSegueWithIdentifier = !self.isEditing;
     } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
         shouldPerformSegueWithIdentifier = !self.isEditing;
     }
