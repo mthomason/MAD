@@ -18,13 +18,10 @@
         MADQueryVisualizationViewController,
         MADocument;
 
-@interface MADQueryBuilderContainerController : MADSplitViewController
+@interface MADQueryBuilderSplitViewController : MADSplitViewController
     <MTViewControllerProtocol, MADocumentProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
-
-@property (readonly) MADQueryViewController *queryBuilderController;
-@property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
 
 @end
 

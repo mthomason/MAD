@@ -31,7 +31,7 @@
 #import "MADDesignerViewController.h"
 #import "MADWatermarkView.h"
 
-#import "MADQueryBuilderContainerController.h"
+#import "MADQueryBuilderSplitViewController.h"
 
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
@@ -563,7 +563,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             tabBarController.view.tintColor = [UIColor tintColorRed];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-            MADQueryBuilderContainerController *queryBuilderContainerController = (MADQueryBuilderContainerController *)[navController topViewController];
+            MADQueryBuilderSplitViewController *queryBuilderContainerController = (MADQueryBuilderSplitViewController *)[navController topViewController];
             queryBuilderContainerController.viewControllerDelegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
@@ -582,7 +582,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
 
-            MADQueryBuilderContainerController *queryBuilderContainerController = (MADQueryBuilderContainerController *)navController.topViewController;
+            MADQueryBuilderSplitViewController *queryBuilderContainerController = (MADQueryBuilderSplitViewController *)navController.topViewController;
             queryBuilderContainerController.viewControllerDelegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
@@ -595,7 +595,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
         }
         
-    } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderContainerController class]]) {
+    } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderSplitViewController class]]) {
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
         MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
@@ -661,15 +661,20 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Delegates
 
+- (void)finishCloseReport:(MADOpenFileViewController *)sender {
+    [sender reenable];
+    [UIView performWithoutAnimation:^{
+        [sender.collectionView.backgroundView setNeedsDisplay];
+        [sender.collectionView reloadItemsAtIndexPaths:sender.collectionView.indexPathsForVisibleItems];
+    }];
+}
+
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = YES;
 
+    __weak MADOpenFileViewController *weakself = self;
     [self closeReport:self.traitCollection completion:^(BOOL success) {
-        [self reenable];
-        [UIView performWithoutAnimation:^{
-            [self.collectionView.backgroundView setNeedsDisplay];
-            [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
-        }];
+        [weakself performSelectorOnMainThread:@selector(finishCloseReport:) withObject:weakself waitUntilDone:NO];
     }];
 
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -744,31 +749,34 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     self.fileManager.openDocument = document;
     
+    __weak MADOpenFileViewController *weakself = self;
     [document openWithCompletionHandler:^(BOOL success) {
         
         if (success) {
-            
-            self.reportState = MTReportStateOpen;
-            
-            if ([MTApplicationInstance isMadViewer]) {
-                
-                [self.openDocument activeDocumentModel];
-                [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
-                
-            } else if ([MTApplicationInstance isMadDesigner]) {
-                
-                [self.openDocument activeDocumentModel];
-
-                // MARK: Reporting feature (number of results in main query)
-                self.openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-
-                [self performSelectorOnMainThread:@selector(showMainViewController:) withObject:self waitUntilDone:NO];
-            }
+            [weakself performSelectorOnMainThread:@selector(handleFileOpenCompletion:) withObject:self waitUntilDone:YES];
         }
         
-        [self reenable];
+        [weakself reenable];
         
     }];
+}
+
+- (void)handleFileOpenCompletion:(id)sender {
+    self.reportState = MTReportStateOpen;
+    
+    if ([MTApplicationInstance isMadViewer]) {
+        
+        [self.openDocument activeDocumentModel];
+        [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
+        
+    } else if ([MTApplicationInstance isMadDesigner]) {
+        
+        [self.openDocument activeDocumentModel];
+        
+        // MARK: Reporting feature (number of results in main query)
+        self.openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+        [self showMainViewController:self];
+    }
 }
 
 - (void)showMainViewController:(id)sender {
@@ -783,7 +791,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
     UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
     
-    __weak MADQueryBuilderContainerController * queryBuilderViewController = (MADQueryBuilderContainerController *)navController.topViewController;
+    __weak MADQueryBuilderSplitViewController * queryBuilderViewController = (MADQueryBuilderSplitViewController *)navController.topViewController;
     queryBuilderViewController.viewControllerDelegate = self;
     
     __weak MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;

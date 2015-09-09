@@ -1,4 +1,4 @@
-//
+         //
 //  MADocument.m
 //  Reports
 //
@@ -211,13 +211,16 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
         NSNumber *inferMappingModelAutomaticallyOption = @(YES);
         NSDictionary *options = @{
-                                  //NSPersistentStoreUbiquitousContentNameKey : @"schema",
                                   NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
                                   NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
                                   };
         
-        [self setPersistentStoreOptions: options];
+        self.persistentStoreOptions = options;
         
+        //NSPersistentStoreCoordinator *psc = [self.managedObjectContext persistentStoreCoordinator];
+        //[psc metadataForPersistentStore:psc];
+        //NSURL *oldURL = [psc URLForPersistentStore:[[psc persistentStores]objectAtIndex:0]];
+
         NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         self.urlMetaPlaylist = urlMetaPlaylist;
@@ -266,6 +269,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
     return self;
 }
+
 
 - (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
     __weak MADocument *weakself = self;

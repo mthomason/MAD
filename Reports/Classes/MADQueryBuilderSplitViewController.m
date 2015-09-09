@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADQueryBuilderContainerController.h"
+#import "MADQueryBuilderSplitViewController.h"
 #import "MADocument.h"
 #import "MADNavigationBarTitleView.h"
 
@@ -26,7 +26,7 @@
 #import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
 
-@interface MADQueryBuilderContainerController ()
+@interface MADQueryBuilderSplitViewController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
@@ -40,7 +40,7 @@
 
 @end
 
-@implementation MADQueryBuilderContainerController
+@implementation MADQueryBuilderSplitViewController
 
 @synthesize document = _document;
 
@@ -129,7 +129,8 @@
     
     self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
 
-    self.delegate = self;
+    __weak id<UISplitViewControllerDelegate> delegate = self;
+    self.delegate = delegate;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
     UINavigationController *navigationController = self.viewControllers[0];
@@ -139,12 +140,17 @@
     queryVisualizationViewController.document = self.document;
 
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
-    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderContainerController class], nil].tintColor = [UIColor tintColorWhite];
+    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [UIColor tintColorWhite];
 
 }
 
+- (UINavigationController *)detailNavigationController {
+    return (UINavigationController *)self.viewControllers[0];
+}
+
 - (MADQueryViewController *)queryBuilderController {
-    return (MADQueryViewController *)((UINavigationController *)self.viewControllers[0]).topViewController;
+    UINavigationController *navigationController = [self detailNavigationController];
+    return (MADQueryViewController *)navigationController.topViewController;
 }
 
 - (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
@@ -156,7 +162,7 @@
 
     [self.queryBuilderController reloadMainDocumentAnimated: YES];
     
-    __block MADQueryBuilderContainerController *blockSelf = self;
+    __block MADQueryBuilderSplitViewController *blockSelf = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
             NSArray *items = [self toolbarItems];
@@ -170,6 +176,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    self.delegate = nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -219,6 +226,9 @@
     if (error != nil) {
         [self.document.managedObjectContext save:&error];
     }
+    [self.navigationController removeFromParentViewController];
+    [self.queryBuilderControllerAdvanced removeFromParentViewController];
+    [self.queryBuilderController removeFromParentViewController];
     [self.viewControllerDelegate viewControllerDidFinish:self];
     //[self dismissViewControllerAnimated:YES completion:^{
         
@@ -236,7 +246,7 @@
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    __weak MADQueryBuilderContainerController *weakSelf = self;
+    __weak MADQueryBuilderSplitViewController *weakSelf = self;
     BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
     [self dismissViewControllerAnimated:YES completion:^{
         if (procDelegateFunction) {

@@ -28,14 +28,16 @@
 
 - (void)viewDidLoad {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     self.navigationBar.hidden = YES;
     self.hidesBarsWhenVerticallyCompact = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self popToRootViewControllerAnimated:animated];
+    [self.topViewController removeFromParentViewController];
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Navigation

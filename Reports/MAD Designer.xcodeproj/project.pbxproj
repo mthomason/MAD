@@ -276,8 +276,8 @@
 		4C23FB0D18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1018FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1118FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; };
-		4C23FB2818FADDE7009F234F /* MADQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderContainerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FB2918FADDE7009F234F /* MADQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderContainerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FB2818FADDE7009F234F /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FB2918FADDE7009F234F /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB2C18FADE46009F234F /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2B18FADE46009F234F /* MADWatermarkView.m */; };
 		4C23FB2D18FADE46009F234F /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2B18FADE46009F234F /* MADWatermarkView.m */; };
 		4C23FB3018FADE65009F234F /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -412,7 +412,7 @@
 		4C2F25C91B53FA1C004DFAEC /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CA1B53FA1C004DFAEC /* MTTableViewControllerStaticSelectRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAF318FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CB1B53FA1C004DFAEC /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
-		4C2F25CC1B53FA1C004DFAEC /* MADQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderContainerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2F25CC1B53FA1C004DFAEC /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CD1B53FA1C004DFAEC /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
 		4C2F25CE1B53FA1C004DFAEC /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C2F25CF1B53FA1C004DFAEC /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
@@ -2112,8 +2112,8 @@
 		4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTableViewControllerBarcodeExtraQrCode.m; path = Classes/MTTableViewControllerBarcodeExtraQrCode.m; sourceTree = "<group>"; };
 		4C23FB0E18FADD17009F234F /* objcmad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objcmad.h; path = Classes/objcmad.h; sourceTree = "<group>"; };
 		4C23FB0F18FADD17009F234F /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = objcmad.c; path = Classes/objcmad.c; sourceTree = "<group>"; };
-		4C23FB2618FADDE7009F234F /* MADQueryBuilderContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryBuilderContainerController.h; path = Classes/MADQueryBuilderContainerController.h; sourceTree = SOURCE_ROOT; };
-		4C23FB2718FADDE7009F234F /* MADQueryBuilderContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MADQueryBuilderContainerController.m; path = Classes/MADQueryBuilderContainerController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4C23FB2618FADDE7009F234F /* MADQueryBuilderSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryBuilderSplitViewController.h; path = Classes/MADQueryBuilderSplitViewController.h; sourceTree = SOURCE_ROOT; };
+		4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MADQueryBuilderSplitViewController.m; path = Classes/MADQueryBuilderSplitViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C23FB2A18FADE46009F234F /* MADWatermarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADWatermarkView.h; path = Classes/MADWatermarkView.h; sourceTree = SOURCE_ROOT; };
 		4C23FB2B18FADE46009F234F /* MADWatermarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MADWatermarkView.m; path = Classes/MADWatermarkView.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C23FB2E18FADE65009F234F /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTCellEnterText.h; path = Classes/MTCellEnterText.h; sourceTree = SOURCE_ROOT; };
@@ -5178,8 +5178,8 @@
 				4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */,
 				4CD0F7C214CC532A003DA079 /* MADQueryViewController.h */,
 				4CD0F7C314CC532A003DA079 /* MADQueryViewController.m */,
-				4C23FB2618FADDE7009F234F /* MADQueryBuilderContainerController.h */,
-				4C23FB2718FADDE7009F234F /* MADQueryBuilderContainerController.m */,
+				4C23FB2618FADDE7009F234F /* MADQueryBuilderSplitViewController.h */,
+				4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */,
 				4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
 				4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
 				4C12292E16CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.h */,
@@ -6668,7 +6668,7 @@
 				4C23FB2D18FADE46009F234F /* MADWatermarkView.m in Sources */,
 				4CD88D0C1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4CFFCBB119C35B2100919440 /* MADUpgradeManager.m in Sources */,
-				4C23FB2918FADDE7009F234F /* MADQueryBuilderContainerController.m in Sources */,
+				4C23FB2918FADDE7009F234F /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C359E121B082B8800B3E9E0 /* MTVerificationController.m in Sources */,
 				4C23FB0D18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
 				4C7B0B231B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */,
@@ -6889,7 +6889,7 @@
 				4C2F25C91B53FA1C004DFAEC /* MTCollectionViewCellElement.m in Sources */,
 				4C2F25CA1B53FA1C004DFAEC /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C2F25CB1B53FA1C004DFAEC /* MADSalesReceipt+Designer.m in Sources */,
-				4C2F25CC1B53FA1C004DFAEC /* MADQueryBuilderContainerController.m in Sources */,
+				4C2F25CC1B53FA1C004DFAEC /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C2F25CD1B53FA1C004DFAEC /* UIView+NSObjectIdTag.m in Sources */,
 				4C2F25CE1B53FA1C004DFAEC /* UICollectionViewCell+Reuse.m in Sources */,
 				4C2F25CF1B53FA1C004DFAEC /* MADNavigationBarFixedSize.m in Sources */,
@@ -7123,7 +7123,7 @@
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C23FAF418FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C7B0B221B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */,
-				4C23FB2818FADDE7009F234F /* MADQueryBuilderContainerController.m in Sources */,
+				4C23FB2818FADDE7009F234F /* MADQueryBuilderSplitViewController.m in Sources */,
 				4CD88D0B1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
 				4C54F2D81A12D45C004B5228 /* MADNavigationBarFixedSize.m in Sources */,
