@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
 #import "MADViewControllerProtocol.h"
@@ -20,13 +21,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeNone = 4,
 };
 
-@class MADocument;
-
 @interface MADDesignerViewController : MADViewController
-    <MADViewControllerProtocol>
+    <MADocumentProtocol, MADViewControllerProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MADocument *document;
 @property (nonatomic, assign) BOOL hidesStatusBar;
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;

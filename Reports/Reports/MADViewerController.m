@@ -128,6 +128,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 @implementation MADViewerController
 
+@synthesize document;
+
 #pragma mark - Dealloc
 
 - (void)dealloc {

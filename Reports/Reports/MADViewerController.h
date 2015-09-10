@@ -10,17 +10,15 @@
 #define Reports_MTReportViewerController_h
 
 #import <UIKit/UIKit.h>
+#import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADActivityProtocol.h"
 
-@class MADocument;
-
 @interface MADViewerController : UIPageViewController
-    <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
+    <MADocumentProtocol, UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
-@property (nonatomic, weak) MADocument *document;
 
 - (void)reload;
 
