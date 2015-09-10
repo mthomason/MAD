@@ -46,16 +46,6 @@
     return action == @selector(unwindToAbout:);
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    
-    if (self) {
-        NSAssert([self.tableView isKindOfClass:[MADVibrantTableView class]], @"Expects %@ class at %s", NSStringFromClass([MADVibrantTableView class]), __PRETTY_FUNCTION__);
-    }
-    
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.allowsSelection = YES;
