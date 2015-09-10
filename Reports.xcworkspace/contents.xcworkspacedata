@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Explorer/Explorer.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:/Users/mthomason/Desktop/Reports/Feedback/MADFeedback.xcodeproj">
    </FileRef>
    <FileRef
