@@ -13,7 +13,7 @@
 
 @implementation MADNavigationController
 
-@synthesize document;
+@synthesize document = _document;
 
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
@@ -102,6 +102,17 @@
             [viewController performSelectorOnMainThread: @selector(done:)
                                              withObject: self
                                           waitUntilDone: NO];
+        }
+    }
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (document != _document) {
+        _document = document;
+        for (UIViewController *viewController in self.viewControllers) {
+            if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+                ((id <MADocumentProtocol>) viewController).document = document;
+            }
         }
     }
 }

@@ -28,7 +28,7 @@
 
 - (void)viewDidLoad {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    //NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     self.navigationBar.hidden = YES;
     self.hidesBarsWhenVerticallyCompact = YES;
@@ -67,6 +67,5 @@
                                           self.navigationBar.frame.size.width,
                                           self.navigationBar.frame.size.height);
 }
-
 
 @end

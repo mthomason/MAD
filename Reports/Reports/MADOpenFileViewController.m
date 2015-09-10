@@ -800,6 +800,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     __weak MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
     reportViewerViewController.viewControllerDelegate = self ;
     
+    //UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:tabBarController];
+    //[self.navigationController pushViewController:tabBarController animated:YES];
     [self presentViewController:tabBarController animated:YES completion:nil];
 }
 

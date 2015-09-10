@@ -107,17 +107,6 @@
     return self;
 }
 
-- (void)setDocument:(MADocument *)document {
-    if (document != _document) {
-        _document = document;
-        for (UIViewController *viewController in self.viewControllers) {
-            if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
-                ((id <MADocumentProtocol>) viewController).document = document;
-            }
-        }
-    }
-}
-
 - (void)viewDidLoad {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
@@ -345,6 +334,19 @@
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
+}
+
+#pragma mark - Override
+
+- (void)setDocument:(MADocument *)document {
+    if (document != _document) {
+        _document = document;
+        for (UIViewController *viewController in self.viewControllers) {
+            if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+                ((id <MADocumentProtocol>) viewController).document = document;
+            }
+        }
+    }
 }
 
 @end
