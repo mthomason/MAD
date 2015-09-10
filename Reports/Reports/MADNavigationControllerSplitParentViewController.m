@@ -35,8 +35,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [self popToRootViewControllerAnimated:animated];
-    [self.topViewController removeFromParentViewController];
     [super viewWillDisappear:animated];
 }
 
