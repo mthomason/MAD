@@ -15,7 +15,7 @@ static NSString * const ObjectSelector          = @"MADStoryboardObjectSelector"
 static NSString * const NewDocument             = @"MADStoryboardNewDocument";
 static NSString * const DocumentInfo            = @"MADStoryboardDocumentInformation";
 static NSString * const InformationTable        = @"MADStoryboardInformationTable";
-static NSString * const About                   = @"MADStoryboardAboutTable";
+static NSString * const About                   = @"MADStoryboardAbout";
 static NSString * const QueryVisualization      = @"MADQueryVisualization";
 @implementation UIStoryboard (Designer)
 
@@ -28,7 +28,7 @@ static NSString * const QueryVisualization      = @"MADQueryVisualization";
 }
 
 + (instancetype)About {
-    return [self storyboardWithName: About bundle:[NSBundle mainBundle]];
+    return [self storyboardWithName: About bundle:nil];
 }
 
 + (instancetype)InformationTable {
