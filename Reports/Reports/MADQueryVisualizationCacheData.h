@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class MADQueryVisulizationTableDefination;
+@class MADQueryVisualizationTableDefination;
 
 @interface MADQueryVisualizationCacheData : NSObject
     <NSCoding>
@@ -17,7 +17,7 @@
 @property (nonatomic, assign) CGPoint scrollViewContentOffset;
 @property (nonatomic, assign) CGFloat scrollViewZoomScale;
 
-- (void)addTableDefination:(MADQueryVisulizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID;
-- (MADQueryVisulizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
+- (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID;
+- (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
 
 @end

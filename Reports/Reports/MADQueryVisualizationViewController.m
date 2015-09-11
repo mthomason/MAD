@@ -49,11 +49,13 @@
 #import "NSError+Constructors.h"
 #import "UIViewController+Designer.h"
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
-#import "NSLayoutConstraint+QueryVisulization.h"
-#import "MADQueryVisulizationTableDefination.h"
+#import "NSLayoutConstraint+QueryVisualization.h"
+#import "MADQueryVisualizationTableDefination.h"
 
-#import "MADQueryVisulizationDefination.h"
+#import "MADQueryVisualizationDefination.h"
 #import "MADQueryVisualizationCacheData.h"
+
+#import "MADOperationArchiveData.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -105,6 +107,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
 
+@property (nonatomic, strong) NSOperationQueue *operationQueueCache;
+
 @end
 
 @implementation MADQueryVisualizationViewController
@@ -113,6 +117,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    _operationQueueCache.underlyingQueue = nil;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -138,6 +143,11 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)commonInit {
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 1;
+    queue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    self.operationQueueCache = queue;
+    
     NSMutableArray *viewControllersTables = [[NSMutableArray alloc] init];
     self.viewControllersTables = viewControllersTables;
 
@@ -519,7 +529,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
     
     //RptqQuery *query = insertedQueryLinks.inQuery;
-    MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:insertedQueryLinks.inQuery];
+    MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:insertedQueryLinks.inQuery];
     
     RptqQueryTable *leftTable = insertedQueryLinks.hasLeftField.inQueryTable;
     MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[leftTable.objectID.URIRepresentation];
@@ -595,7 +605,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)updateCache {
     if (self.document != nil) {
-        MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
+        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
         MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
         for (MTPair *pair in queryDef.topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
@@ -603,7 +613,7 @@ typedef void(^MTBlockResultVoid)(void);
                 
                 MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
                 
-                MADQueryVisulizationTableDefination *tableDef = [[MADQueryVisulizationTableDefination alloc] init];
+                MADQueryVisualizationTableDefination *tableDef = [[MADQueryVisualizationTableDefination alloc] init];
                 tableDef.center = viewController.view.center;
                 tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
                 [cacheData addTableDefination:tableDef forObjectID:tableIdVertext.object];
@@ -616,9 +626,8 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)archiveCache {
-    NSError *error = nil;
-    NSData *d = [NSKeyedArchiver archivedDataWithRootObject:self.cacheData];
-    [d writeToURL:self.localCacheFileUrl options:NSDataWritingAtomic error:&error];
+    MADOperationArchiveData *operation = [[MADOperationArchiveData alloc] initWithURL:self.localCacheFileUrl andObject:self.cacheData];
+    [self.operationQueueCache addOperation:operation];
 }
 
 - (MADQueryVisualizationCacheData *)loadCache {
@@ -712,14 +721,14 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)displayQuery:(RptqQuery *)query withSchemaHints:(MADQueryVisualizationCacheData *)cacheData animated:(BOOL)animated {
     if (cacheData != nil) {
-        MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:query];
+        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
         for (MTPair *pair in queryDef.topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
                 RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
                 BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
                 MADQueryVisualizationSchemaViewController *viewController = [self addSchemaViewControllerForTable:table root:topLevel animated:animated];
-                MADQueryVisulizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:table.objectID];
+                MADQueryVisualizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:table.objectID];
                 viewController.view.center = tableDef.center;
                 UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToAnchor:tableDef.center];
                 attachmentBehavior.length = 0.0000f;
@@ -745,7 +754,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
     
-    MADQueryVisulizationDefination *queryDef = [[MADQueryVisulizationDefination alloc] initWithQuery:query];
+    MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
     NSInteger tableCounter = 0;
     for (MTPair *pair in queryDef.topologicallySortedTables) {
         MTVertex *tableIdVertext = pair.former;

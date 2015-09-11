@@ -63,9 +63,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.100";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.100";
-NSString * const MTGlobalBundleRev                                  = @"2042";
+NSString * const MTGlobalBundleVersion                              = @"8.0.102";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.102";
+NSString * const MTGlobalBundleRev                                  = @"2044";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

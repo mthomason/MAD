@@ -48,12 +48,12 @@ static NSString * const keyTables                   = @"3";
     [aCoder encodeObject:self.tableDefinations forKey:keyTables];
 }
 
-- (void)addTableDefination:(MADQueryVisulizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID {
+- (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID {
     NSString *hash = objectID.URIRepresentation.absoluteString;
     self.tableDefinations[hash] = tableDef;
 }
 
-- (MADQueryVisulizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
+- (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
     NSString *hash = objectID.URIRepresentation.absoluteString;
     return self.tableDefinations[hash];
 }
