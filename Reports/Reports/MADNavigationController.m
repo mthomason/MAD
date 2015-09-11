@@ -30,8 +30,6 @@
 - (void)viewDidLoad {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [super viewDidLoad];
-    NSLog(@"\tVC: %@", self.viewControllers);
-    NSLog(@"\tTV: %@", self.topViewController);
     if ([self.topViewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
         NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
         ((id <MADocumentProtocol>)self.topViewController).document = self.document;
@@ -105,7 +103,7 @@
         }
     }
 }
-
+/*
 - (void)setDocument:(MADocument *)document {
     if (document != _document) {
         _document = document;
@@ -116,5 +114,5 @@
         }
     }
 }
-
+*/
 @end
