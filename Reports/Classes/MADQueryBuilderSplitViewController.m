@@ -215,9 +215,9 @@
     if (error != nil) {
         [self.document.managedObjectContext save:&error];
     }
-    [self.navigationController removeFromParentViewController];
-    [self.queryBuilderControllerAdvanced removeFromParentViewController];
-    [self.queryBuilderController removeFromParentViewController];
+    //[self.navigationController removeFromParentViewController];
+    //[self.queryBuilderControllerAdvanced removeFromParentViewController];
+    //[self.queryBuilderController removeFromParentViewController];
     [self.viewControllerDelegate viewControllerDidFinish:self];
     //[self dismissViewControllerAnimated:YES completion:^{
         
