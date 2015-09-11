@@ -11,6 +11,7 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
+#import <MADFileManager/NSFileManager+Common.h>
 #import "MADocument.h"
 #import "MADConstants.h"
 #import "MTApplicationInstance.h"
@@ -52,7 +53,6 @@
 #import "MADQueryVisulizationTableDefination.h"
 
 #import "MADQueryVisulizationDefination.h"
-#import "NSFileManager+Common.h"
 #import "MADQueryVisualizationCacheData.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";

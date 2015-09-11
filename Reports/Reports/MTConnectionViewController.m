@@ -12,7 +12,8 @@
 
 #import "MTConnectionViewController.h"
 #import "MTApplicationInstance.h"
-#import "MADFilesController.h"
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADFileUtilities.h>
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MADocument.h"
@@ -28,7 +29,6 @@
 #import "MADNavigationBarTitleView.h"
 #import "MTKeyChain.h"
 #import "UIAlertController+Constructors.h"
-#import "MADFileUtilities.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";

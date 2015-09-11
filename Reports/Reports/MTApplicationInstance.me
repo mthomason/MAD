@@ -22,15 +22,14 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 #import <MessageUI/MessageUI.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADLocalFileCoordinator.h>
+#import <MADFileManager/MADCloudFileCoordinator.h>
+#import <MADFileManager/MADMetaData.h>
 #import "MAD.h"
 
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
-
-#import "MADFilesController.h"
-#import "MADLocalFileCoordinator.h"
-#import "MADCloudFileCoordinator.h"
-#import "MADMetaData.h"
 
 #if MAD_DESIGNER
     #import "UIViewController+Designer.h"

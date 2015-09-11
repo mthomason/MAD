@@ -10,6 +10,7 @@
 #define Reports_MTDataTableFast_h
 
 #import <Foundation/Foundation.h>
+#import <MADFileManager/MADFileManager.h>
 #import "MTDataTable.h"
 
 @interface MTDataTableFast : MTDataTable

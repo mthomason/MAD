@@ -19,7 +19,12 @@
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 
 #import "MADocument.h"
-#import "MADMetaData.h"
+#import <MADFileManager/MADMetaData.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADAppLaunchContext.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADFileInfo.h>
+
 #import "MADSearchBar.h"
 
 #import "MADOpenFileSectionHeaderView.h"
@@ -44,9 +49,6 @@
 #import "MADNavigationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDocumentInformationTableViewController.h"
-#import "MADFilesController.h"
-#import "MADAppLaunchContext.h"
-#import "MADFileInfo.h"
 
 #import "MTPair.h"
 

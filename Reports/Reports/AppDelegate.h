@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <MADFeedback/MADFeedback.h>
 
 @class MTApplicationInstance;
 
