@@ -24,9 +24,6 @@
 
 - (void)viewDidLoad {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     for (UIViewController *viewController in self.viewControllers) {
         if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
