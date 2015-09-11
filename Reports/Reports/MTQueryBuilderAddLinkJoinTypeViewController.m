@@ -12,7 +12,7 @@
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 #import "MADocument.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryLinks.h"

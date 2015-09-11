@@ -17,7 +17,7 @@
 
 #import "MAD.h"
 
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 
 #import "MTRulerView.h"
 #import "MADNavigationBarTitleView.h"
@@ -322,7 +322,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         self.statusLabelZoomScale = detailDisplay;
         
         MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [MTApplicationInstance madDesigner];
+        titleView.text = [MADAppConfiguration madDesigner];
         self.navigationItem.titleView = titleView;
         
     }

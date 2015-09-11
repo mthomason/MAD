@@ -14,7 +14,7 @@
 #import <MADFileManager/NSFileManager+Common.h>
 #import "MADocument.h"
 #import "MADConstants.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MADViewControllerSQL.h"
 
 #import "RptqDocument.h"

@@ -12,7 +12,7 @@
 
 
 #import "AppDelegate.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MADConstants.h"
 
 #import "MADNavigationController.h"
@@ -30,6 +30,15 @@
 #import "UITabBarController+Shared.h"
 #import "MTVerificationController.h"
 
+#import "MADQueryViewController.h"
+#import "UIColor+EverydayApps.h"
+
+#import "MADToolboxNavigationController.h"
+#import "MADNavigationController.h"
+#import "MADTransparentPresentationController.h"
+#import "MADNavigationBarFixedSize.h"
+
+
 //#import <MADFeedback/MADFeedbackFrustration.h>
 
 #if MAD_DESIGNER
@@ -46,6 +55,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
+@property (nonatomic, strong, readwrite) MADAppConfiguration *appConfiguration;
 @property (readonly) MADNavigationController *navigationController;
 @property (readonly) MADOpenFileViewController *openFileViewController;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueue;
@@ -60,10 +70,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     0xdb, 0x46, 0xa5, 0xfd, 0x1e, 0xbe, 0x91, 0x69,
     0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
 };*/
-
-+ (MTApplicationInstance *)app {
-    return [MTApplicationInstance mainInstance];
-}
 
 #pragma mark - Initialization
 
@@ -88,14 +94,14 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //MADUncaughtExceptionHandlerInstaller();
-    
+
     [AppDelegate registerForNotifications:application];
 
     [self addObservers];
     
-    [[MTApplicationInstance mainInstance] initalizeAppearance];
-    [[MTApplicationInstance mainInstance] runHandlerOnFirstLaunch:^{
+    [self initalizeAppearance];
+    MADAppConfiguration *appConfiguration = [[MADAppConfiguration alloc] init];
+    [appConfiguration runHandlerOnFirstLaunch:^{
         [self getUserCloudPrefs];
     } subsquientLaunches:^{
         [self getUserCloudPrefsSubsquient];
@@ -107,9 +113,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
            });
         });
     }];
-    
-    //[MADFeedbackFrustration sharedInstance];
-    
+    self.appConfiguration = appConfiguration;
+
     return YES;
 }
 
@@ -121,7 +126,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     });
     
     dispatch_async(self.appDelegateQueue, ^{
-        [MTApplicationInstance deleteCoreDataCache];
+        [MADQueryViewController deleteCoreDataCache];
     });
     
 }
@@ -136,13 +141,13 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Fix me... close open applications by calling delegate method from openFileViewController.
-    //[[MTApplicationInstance mainInstance] cleanupBeforeTerminate];
+    //[[MADAppConfiguration mainInstance] cleanupBeforeTerminate];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     
-    NSURL *documentsDirectory = [MTApplicationInstance mainInstance].filesController.documentDirectory;
+    NSURL *documentsDirectory = [MADAppConfiguration mainInstance].filesController.documentDirectory;
     NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
     NSError *error = nil;
     
@@ -202,32 +207,55 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #pragma mark - Notifications
 
 - (void)addObservers {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotificationKeyValueStoreDidChange:)
+                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                               object: nil];
     
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationKeyValueStoreDidChange:)
-                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(handleNotificationUbiquityIdentityDidChange:)
-                          name: NSUbiquityIdentityDidChangeNotification
-                        object: nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+                                                 name: NSUbiquityIdentityDidChangeNotification
+                                               object: nil];
 }
 
 - (void)removeObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                                  object: nil];
     
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquityIdentityDidChangeNotification
+                                                  object: nil];
+}
+
+- (void)initalizeAppearance {
+    UIColor *tintColorWhite = [UIColor tintColorWhite];
+    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
+    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
     
-    [defaultCenter removeObserver: self
-                             name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                           object: nil];
+#ifndef MADWATCHKIT
+    [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [UIColor tintColorBlue];
+    [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
+    [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
+#endif
     
-    [defaultCenter removeObserver: self
-                             name: NSUbiquityIdentityDidChangeNotification
-                           object: nil];
+    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [UIColor tintColorAnalogous4];
+    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor               = [UIColor tintColorAnalogous4];
+    
+#ifndef MADWATCHKIT
+    [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                   = tintColorWhite;
+#endif
+    
+    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = tintColorWhite;
+    [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor                       = tintColorWhite;
+    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor                          = [UIColor tintColorRed];
+    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor                  = [UIColor tintColorRed];
+    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                                    = tintColorWhite;
+    [UIBarButtonItem appearance].tintColor                                                                          = tintColorWhite;
+    [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor                           = [UIColor edaOrange];
+    [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor                      = [UIColor edaOrange];
+    [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil].tintColor                             = [UIColor edaOrange];
+    [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = tintColorWhite;
     
 }
 
@@ -255,7 +283,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
     dispatch_async(self.appDelegateQueue, ^{
 
-        MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
+        MADAppStorageState storageState = [MADAppConfiguration mainInstance].storageState;
         if (storageState.cloudAvailable) {
             
             if (storageState.storageOption == MADAppStorageCloud) {
@@ -272,7 +300,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                 };
                 
                 MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
-                    [MTApplicationInstance mainInstance].storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
+                    [MADAppConfiguration mainInstance].storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
                     [self configureFilesController: NO storageOptionChangeHandler: nil];
                     [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
                     
@@ -288,7 +316,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                        storageState.storageOption == MADAppStorageNotSet) {
                 
                 void (^handleOptionCloud)() = ^ {
-                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageCloud;
+                    [MADAppConfiguration mainInstance].storageOption = MADAppStorageCloud;
                     [self configureFilesController: NO storageOptionChangeHandler:^{
                         [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
                                                     toCloud: MADUbiquityIdentifier
@@ -297,7 +325,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                     
                 };
                 void (^handleOptionLocal)() = ^ {
-                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageLocal;
+                    [MADAppConfiguration mainInstance].storageOption = MADAppStorageLocal;
                     [self configureFilesController: NO storageOptionChangeHandler: nil];
                 };
                 UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:handleOptionLocal
@@ -308,7 +336,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
             }
         } else {
             if (storageState.storageOption == MADAppStorageCloud) {
-                [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
+                [MADAppConfiguration mainInstance].storageOption = MADAppStorageNotSet;
             }
             [self configureFilesController: NO storageOptionChangeHandler: nil];
         }
@@ -317,14 +345,14 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)getUserCloudPrefsSubsquient {
 
-    MADAppStorageState storageState = [MTApplicationInstance mainInstance].storageState;
+    MADAppStorageState storageState = [MADAppConfiguration mainInstance].storageState;
     if (storageState.accountDidChange) {
         
         switch (storageState.storageOption) {
             case MADAppStorageCloud: {
                 
                 UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-                    [MTApplicationInstance mainInstance].storageOption = MADAppStorageNotSet;
+                    [MADAppConfiguration mainInstance].storageOption = MADAppStorageNotSet;
                     [self getUserCloudPrefs];
                 }];
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -353,17 +381,17 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
     
-    if (accountChanged || [MTApplicationInstance mainInstance].filesController == nil) {
-        if (![MTApplicationInstance mainInstance].filesController) {
-            MADFilesController *filesController = [[MTApplicationInstance mainInstance] filesControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+    if (accountChanged || [MADAppConfiguration mainInstance].filesController == nil) {
+        if (![MADAppConfiguration mainInstance].filesController) {
+            MADFilesController *filesController = [[MADAppConfiguration mainInstance] filesControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
                                                                                                                               firstQueryHandler:storageOptionChangeHandler];
-            [MTApplicationInstance mainInstance].filesController = filesController;
-            self.openFileViewController.filesController = [MTApplicationInstance mainInstance].filesController;
+            [MADAppConfiguration mainInstance].filesController = filesController;
+            self.openFileViewController.filesController = [MADAppConfiguration mainInstance].filesController;
             
-            [[MTApplicationInstance mainInstance].filesController startSearching];
+            [[MADAppConfiguration mainInstance].filesController startSearching];
             
         } else if (accountChanged) {
-            [MTApplicationInstance mainInstance].filesController.fileCoordinator = [[MTApplicationInstance mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+            [MADAppConfiguration mainInstance].filesController.fileCoordinator = [[MADAppConfiguration mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
                                                                                                                                                                 firstQueryHandler:storageOptionChangeHandler];
         }
     }

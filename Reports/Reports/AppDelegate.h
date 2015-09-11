@@ -11,15 +11,15 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <QuickLook/QuickLook.h>
 
-@class MTApplicationInstance;
+@class MADAppConfiguration;
 
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate>
 
-+ (MTApplicationInstance *)app;
-
 @property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong, readonly) MADAppConfiguration *appConfiguration;
 
 @end
 

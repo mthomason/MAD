@@ -13,7 +13,7 @@
 #import "MADAboutTableViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <CoreText/CoreText.h>
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
 #import "MADOpenFileViewController.h"
 #import "UIDevice+Hack.h"

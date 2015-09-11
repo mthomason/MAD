@@ -12,7 +12,7 @@
 #import "NSFileManager+Common.h"
 #import "MADConstants.h"
 
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 
 @interface MADInterfaceControllerDocumentsLocal()
 
@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonExport;
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonMad;
 
-@property (nonatomic, strong) MTApplicationInstance *app;
+@property (nonatomic, strong) MADAppConfiguration *app;
 @property (nonatomic, strong) NSArray *filesByURL;
 
 @end

@@ -12,7 +12,7 @@
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "UIColor+EverydayApps.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "UIViewController+Designer.h"
 
 @interface MTReportDesignerSectionLayoutSettingsViewController ()

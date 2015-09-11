@@ -17,7 +17,7 @@
 #import "MTReportViewerReportPageView.h"
 
 #import "UIDevice+Hack.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
 #import "MADocument.h"
 #import "MTActivityItemProviderPdf.h"
@@ -262,7 +262,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
 
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MTApplicationInstance madViewer];
+    titleView.text = [MADAppConfiguration madViewer];
     self.navigationItem.titleView = titleView;
     
     _timerLabelTimeSinceRefreh = nil;

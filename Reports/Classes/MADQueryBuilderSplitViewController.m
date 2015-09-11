@@ -14,7 +14,7 @@
 #import "MADocument.h"
 #import "MADNavigationBarTitleView.h"
 
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MADQueryViewController.h"
 #import "MADViewControllerSQL.h"
 
@@ -113,7 +113,7 @@
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MTApplicationInstance madQuery];
+    titleView.text = [MADAppConfiguration madQuery];
     self.navigationItem.titleView = titleView;
     
     self.navigationItem.prompt = self.document.fileURL.lastPathComponent;

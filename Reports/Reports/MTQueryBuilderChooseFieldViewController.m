@@ -12,7 +12,7 @@
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MADocument.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MADNavigationBarTitleView.h"
 #import "RptqFieldSelectorManager.h"
 #import "RptqDocument.h"

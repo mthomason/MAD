@@ -39,11 +39,7 @@ extern NSString * const MADUpgradeInstalledSamples;
 
 @class MADocument;
 
-@interface MTApplicationInstance : NSObject
-
-+ (MTApplicationInstance *)mainInstance;
-
-+ (UIViewController *)initalViewController;
+@interface MADAppConfiguration : NSObject
 
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
              subsquientLaunches:(void (^)(void))subsequentLaunch
@@ -56,7 +52,7 @@ extern NSString * const MADUpgradeInstalledSamples;
 
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
 
-- (void)initalizeAppearance;
++ (MADAppConfiguration *)mainInstance;
 - (void)registerDefaultsFromSettingsBundle;
 
 - (BOOL)sampleInstalled;
@@ -70,7 +66,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 + (BOOL)isMadDesigner;
 + (NSString *)bundleId;
 + (NSString *)bundleVersion;
-+ (void)deleteCoreDataCache;
 
 + (NSString *)madDesigner;
 + (NSString *)madViewer;

@@ -14,7 +14,7 @@
 #import "MADocument.h"
 #import "RptqDocumentObject+Extras.h"
 #import "UIDevice+Hack.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MTFont.h"
 #import "NSManagedObject+Extras.h"
 #import "MADControlState.h"

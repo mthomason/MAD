@@ -61,22 +61,15 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.98";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.98";
-NSString * const MTGlobalBundleRev                                  = @"2034";
+NSString * const MTGlobalBundleVersion                              = @"8.0.99";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.99";
+NSString * const MTGlobalBundleRev                                  = @"2041";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
-
-NSString * const NSFetchedResultsCacheName                          = @"NSFetchedResultsCacheName";
-NSString * const NSFetchedResultsCacheTables                        = @"NSFetchedResultsCacheTables";
-NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
-NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
-NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
 
 const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 
 @interface MTApplicationInstance ()
-    <NSCoding>
 
 @property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
 @property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
@@ -86,15 +79,6 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 @implementation MTApplicationInstance
 
 static MTApplicationInstance *mainInstance;
-
-+ (UIViewController *)initalViewController {
-    return
-        #ifndef MADWATCHKIT
-            [UIViewController initalViewController];
-        #else
-            nil;
-        #endif
-}
 
 - (instancetype)copyWithZone:(NSZone *)zone {
     return self;
@@ -114,16 +98,6 @@ static MTApplicationInstance *mainInstance;
     return mainInstance;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super init];
-    if (self) {
-
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder { }
-
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -132,9 +106,17 @@ static MTApplicationInstance *mainInstance;
         self.appInstaceQueue = appInstaceQueue;
         
         NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
-        self.applicationUserDefaults = defaults;
-    
-        [self registerDefaults];
+        NSNumber *defaultStorage = @(MADAppStorageNotSet);
+        NSNumber *defaultSamplesInstalled = @(NO);
+        NSNumber *defaultReportsInstalled = @(NO);
+        NSNumber *defaultChinookInstalled = @(NO);
+        NSDictionary *defaultsToRegister = @{MADUpgradeInstalledChinook: defaultChinookInstalled,
+                                             MADUpgradeInstalledSamples : defaultReportsInstalled,
+                                             MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
+                                             MADAppConfigurationUserDefaultsStorageOption: defaultStorage
+                                             };
+        [defaults registerDefaults:defaultsToRegister];
+        //self.applicationUserDefaults = defaults;
         
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
@@ -229,44 +211,13 @@ static MTApplicationInstance *mainInstance;
     return MTGlobalBundleVersion;
 }
 
-- (void)initalizeAppearance {
-    UIColor *tintColorWhite = [UIColor tintColorWhite];
-    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
-    
-    #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [UIColor tintColorBlue];
-        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
-        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
-    #endif
-
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [UIColor tintColorAnalogous4];
-    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor               = [UIColor tintColorAnalogous4];
-    
-    #ifndef MADWATCHKIT
-        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                   = tintColorWhite;
-    #endif
-    
-    [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = tintColorWhite;
-    [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor                       = tintColorWhite;
-    [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].tintColor                          = [UIColor tintColorRed];
-    [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].tintColor                  = [UIColor tintColorRed];
-    [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil].tintColor                                    = tintColorWhite;
-    [UIBarButtonItem appearance].tintColor                                                                          = tintColorWhite;
-    [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor                           = [UIColor edaOrange];
-    [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor                      = [UIColor edaOrange];
-    [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil].tintColor                             = [UIColor edaOrange];
-    [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = tintColorWhite;
-    
-}
-
 - (void)registerDefaultsFromSettingsBundle {
     
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(dipatchQueue, ^{
-
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
-
+            
             dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
             dispatch_async(dipatchQueueBg, ^{
                 
@@ -281,7 +232,7 @@ static MTApplicationInstance *mainInstance;
                 NSDictionary *rootPlistSettings = [NSDictionary dictionaryWithContentsOfFile:pathRootPlist];
                 NSArray *preferences = rootPlistSettings[@"PreferenceSpecifiers"];
                 NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
-
+                
                 for (NSDictionary *prefSpecification in preferences)  {
                     NSString *key = prefSpecification[@"Key"];
                     if (key) {
@@ -345,19 +296,6 @@ static MTApplicationInstance *mainInstance;
         });
     }
     return firstLaunch;
-}
-
-- (void)registerDefaults {
-    NSUserDefaults *defaults = self.applicationUserDefaults;
-    NSNumber *defaultStorage = @(MADAppStorageNotSet);
-    NSNumber *defaultSamplesInstalled = @(NO);
-    NSNumber *defaultReportsInstalled = @(NO);
-    NSNumber *defaultChinookInstalled = @(NO);
-    [defaults registerDefaults:@{MADUpgradeInstalledChinook: defaultChinookInstalled,
-                                 MADUpgradeInstalledSamples : defaultReportsInstalled,
-                                 MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
-                                 MADAppConfigurationUserDefaultsStorageOption: defaultStorage
-                                 }];
 }
 
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
@@ -461,16 +399,6 @@ static MTApplicationInstance *mainInstance;
                                                                                    return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
                                                                                }];
     return filesController;
-}
-
-#pragma mark - Document Operations
-
-+ (void)deleteCoreDataCache {
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
 }
 
 @end

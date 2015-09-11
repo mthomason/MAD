@@ -7,7 +7,7 @@
 //
 
 #import "MADWatermarkView.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MADConstants.h"
 
 NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
@@ -16,7 +16,7 @@ NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-Conden
 
 + (NSAttributedString *)waterMarkStringMad {
     UIColor *foregroundColor = [UIColor lightTextColor];
-    CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
+    CGFloat fontSize = [MADAppConfiguration isMadDesigner] ? 100.0000f : 78.0000f;
     UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack size:fontSize];
     NSDictionary *attributes = @{
                                  NSForegroundColorAttributeName : foregroundColor,
@@ -28,9 +28,9 @@ NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-Conden
 }
 
 + (NSAttributedString *)waterMarkStringDesigner {
-    NSString *displayStringText = [[MTApplicationInstance applicationNameSufixPart] uppercaseString];
+    NSString *displayStringText = [[MADAppConfiguration applicationNameSufixPart] uppercaseString];
     UIColor *foregroundColor = [UIColor lightTextColor];
-    CGFloat fontSize =  [MTApplicationInstance isMadDesigner] ? 44.5000f : 46.0000f;
+    CGFloat fontSize =  [MADAppConfiguration isMadDesigner] ? 44.5000f : 46.0000f;
     UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack size:fontSize];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];

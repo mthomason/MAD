@@ -10,7 +10,7 @@
 #import <MADFileManager/MADFileUtilities.h>
 #import <MADFileManager/NSFileManager+Common.h>
 #import "MADConstants.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 
@@ -48,7 +48,7 @@ const NSInteger currentMajorVersion = 8;
         installChinook = NO;
     }
     
-    if ([MTApplicationInstance isMadDesigner]) {
+    if ([MADAppConfiguration isMadDesigner]) {
         NSNumber *samplesInstalled = [standardUserDefault objectForKey:MADUpgradeInstalledSamples];
         if (samplesInstalled == nil) {
             installSamples = YES;
@@ -167,7 +167,7 @@ const NSInteger currentMajorVersion = 8;
                 [standardUserDefaults setBool:YES forKey:MADUpgradeInstalledSamples];
                 [standardUserDefaults synchronize];
                 
-                //MADFilesController *fileController = [MTApplicationInstance mainInstance].filesController;
+                //MADFilesController *fileController = [MADAppConfiguration mainInstance].filesController;
                 //if (fileController != nil) {
                 //    MADMetaData *metadataLondon = [[MADMetaData alloc] initWithURL:londonUrl];
                 //    MADMetaData *metadataMusic = [[MADMetaData alloc] initWithURL:musicUrl];
@@ -181,14 +181,14 @@ const NSInteger currentMajorVersion = 8;
 }
 
 + (void)installSamples {
-    if ([[MTApplicationInstance mainInstance] sampleInstalled] == NO) {
+    if ([[MADAppConfiguration mainInstance] sampleInstalled] == NO) {
         dispatch_queue_t queue = dispatch_queue_create(queueUpgrade, DISPATCH_QUEUE_SERIAL);
         dispatch_async(queue, ^{
             NSError *error = nil;
             BOOL installedDocs = [MADUpgradeManager installSamplesDocuments:&error];
             BOOL installedDB = [MADUpgradeManager installSampleDatabase:&error];
             if (installedDocs && installedDB) {
-                [[MTApplicationInstance mainInstance] installedSample];
+                [[MADAppConfiguration mainInstance] installedSample];
             }
         });
     }

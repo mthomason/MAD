@@ -14,7 +14,7 @@
 #import "MADocument.h"
 #import "MTReportViewerReportPageView.h"
 #import "NSDate+Extras.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "MTPair.h"
 #import "UIColor+EverydayApps.h"
 

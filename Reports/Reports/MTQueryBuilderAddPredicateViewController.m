@@ -15,7 +15,7 @@
 #import <CoreData/CoreData.h>
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 #import "RptqDatabaseSchemaField.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 

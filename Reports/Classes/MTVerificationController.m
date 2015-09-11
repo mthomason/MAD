@@ -13,7 +13,7 @@
 //#import "asn_application.h"
 #import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 
 @interface MTVerificationController() <SKRequestDelegate>
 
@@ -67,8 +67,8 @@ static MTVerificationController *sharedSingleton;
 
 - (void)reloadReceipt {
     MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
-    self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
-                                                     bundleVersion: [MTApplicationInstance bundleVersion]
+    self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: [MADAppConfiguration bundleId]
+                                                     bundleVersion: [MADAppConfiguration bundleVersion]
                                                        andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
     if (self.modernReceiptIsValid) {
         self.receipt = receipt;
@@ -79,8 +79,8 @@ static MTVerificationController *sharedSingleton;
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
     if ([[NSFileManager defaultManager] fileExistsAtPath:receiptUrl.path]) {
         MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
-        BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MTApplicationInstance bundleId]
-                                                   bundleVersion: [MTApplicationInstance bundleVersion]
+        BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [MADAppConfiguration bundleId]
+                                                   bundleVersion: [MADAppConfiguration bundleVersion]
                                                      andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
         if ((self.modernReceiptIsValid = isValidReceipt)) {
             self.receipt = receipt;

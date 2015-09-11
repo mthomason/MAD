@@ -17,7 +17,7 @@
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
@@ -104,6 +104,12 @@ NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddG
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
 NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 
+static NSString * const NSFetchedResultsCacheName                          = @"NSFetchedResultsCacheName";
+static NSString * const NSFetchedResultsCacheTables                        = @"NSFetchedResultsCacheTables";
+static NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
+static NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
+static NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
+
 #pragma mark - Private Category
 
 @interface MADQueryViewController()
@@ -167,11 +173,21 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                        withSender: sender];
 }
 
+#pragma mark - Static
+
++ (void)deleteCoreDataCache {
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    [MTApplicationInstance deleteCoreDataCache];
+    [MADQueryViewController deleteCoreDataCache];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIContentSizeCategoryDidChangeNotification

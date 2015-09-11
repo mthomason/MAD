@@ -11,7 +11,7 @@
 #endif
 
 #import "UIApplication+Extras.h"
-#import "MTApplicationInstance.h"
+#import "MADAppConfiguration.h"
 
 @implementation UIApplication (Extras)
 
@@ -26,11 +26,11 @@
 }
 
 + (BOOL)isMadDesigner {
-    return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadDesigner];
+    return [[MADAppConfiguration bundleId] isEqualToString:MTBundleIdMadDesigner];
 }
 
 + (BOOL)isMadViewer {
-    return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadViewer];
+    return [[MADAppConfiguration bundleId] isEqualToString:MTBundleIdMadViewer];
 }
 
 - (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible {
