@@ -6,12 +6,12 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADQueryVisulizationTableDefination.h"
+#import "MADQueryVisualizationTableDefination.h"
 
 static NSString * const keyCenter = @"c";
 static NSString * const keyRoot = @"r";
 
-@implementation MADQueryVisulizationTableDefination
+@implementation MADQueryVisualizationTableDefination
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
@@ -27,7 +27,7 @@ static NSString * const keyRoot = @"r";
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MADQueryVisulizationTableDefination *result = [[[self class] allocWithZone:zone] init];
+    MADQueryVisualizationTableDefination *result = [[[self class] allocWithZone:zone] init];
     result.center = self.center;
     result.root = self.root;
     return result;

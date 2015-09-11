@@ -6,9 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSLayoutConstraint+QueryVisulization.h"
+#import "NSLayoutConstraint+QueryVisualization.h"
 
-@implementation NSLayoutConstraint (QueryVisulization)
+@implementation NSLayoutConstraint (QueryVisualization)
 
 + (instancetype)schemaViewHeightForView:(UIView *)view andHeight:(CGFloat)height {
     NSLayoutConstraint *constraint = [self heightForView:view andHeight:height];

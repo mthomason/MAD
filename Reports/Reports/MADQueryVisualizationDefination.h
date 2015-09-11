@@ -10,7 +10,7 @@
 
 @class RptqQuery, MTGraph, MTLinkedList;
 
-@interface MADQueryVisulizationDefination : NSObject
+@interface MADQueryVisualizationDefination : NSObject
 
 - (instancetype)initWithQuery:(RptqQuery *)query;
 

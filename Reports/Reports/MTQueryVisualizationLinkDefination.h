@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MTPair.h"
 
-@interface MTQueryVisulizationLinkDefination : NSObject
+@interface MTQueryVisualizationLinkDefination : NSObject
 
 @property (nonatomic, strong) NSURL *linkID;
 @property (nonatomic, strong) MTPair *fieldsIDs;

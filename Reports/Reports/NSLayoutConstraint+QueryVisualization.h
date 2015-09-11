@@ -1,5 +1,5 @@
 //
-//  NSLayoutConstraint+QueryVisulization.h
+//  NSLayoutConstraint+QueryVisualization.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 8/31/15.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NSLayoutConstraint (QueryVisulization)
+@interface NSLayoutConstraint (QueryVisualization)
 
 + (instancetype)heightForView:(UIView *)view andHeight:(CGFloat)height;
 + (instancetype)widthForView:(UIView *)view andWidth:(CGFloat)width;

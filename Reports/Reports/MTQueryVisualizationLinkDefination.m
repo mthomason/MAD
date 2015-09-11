@@ -6,8 +6,8 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQueryVisulizationLinkDefination.h"
+#import "MTQueryVisualizationLinkDefination.h"
 
-@implementation MTQueryVisulizationLinkDefination
+@implementation MTQueryVisualizationLinkDefination
 
 @end

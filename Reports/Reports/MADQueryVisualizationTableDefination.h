@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MADQueryVisulizationTableDefination : NSObject
+@interface MADQueryVisualizationTableDefination : NSObject
     <NSCoding, NSCopying>
 
 @property (nonatomic, assign) CGPoint center;
