@@ -284,7 +284,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MADAppConfiguration applicationName];
+    titleView.text = [[MADAppConfiguration mainInstance] applicationName];
     self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;
     
@@ -382,9 +382,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)applicationFinishedRestoringState {
-    if ([MADAppConfiguration isMadDesigner]) {
+    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
 
-    } else if ([MADAppConfiguration isMadViewer]) {
+    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
         [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
     }
 }
@@ -402,9 +402,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
     
-    if ([MADAppConfiguration isMadViewer] && self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+    if ([[MADAppConfiguration mainInstance] isMadViewer] && self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 
-    } else if ([MADAppConfiguration isMadViewer] && self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+    } else if ([[MADAppConfiguration mainInstance] isMadViewer] && self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
     
     } else {
         [self.openDocumentPopoverController dismissPopoverAnimated:YES];
@@ -766,12 +766,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)handleFileOpenCompletion:(id)sender {
     self.reportState = MTReportStateOpen;
     
-    if ([MADAppConfiguration isMadViewer]) {
+    if ([[MADAppConfiguration mainInstance] isMadViewer]) {
         
         [self.openDocument activeDocumentModel];
         [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
         
-    } else if ([MADAppConfiguration isMadDesigner]) {
+    } else if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
         
         [self.openDocument activeDocumentModel];
         

@@ -25,14 +25,6 @@
     return version;
 }
 
-+ (BOOL)isMadDesigner {
-    return [[MADAppConfiguration bundleId] isEqualToString:MTBundleIdMadDesigner];
-}
-
-+ (BOOL)isMadViewer {
-    return [[MADAppConfiguration bundleId] isEqualToString:MTBundleIdMadViewer];
-}
-
 - (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible {
     static NSInteger setVisibleCounter = 0;
     if (networkActivityIndicatorVisible)

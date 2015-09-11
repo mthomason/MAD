@@ -262,7 +262,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
 
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MADAppConfiguration madViewer];
+    titleView.text = [[MADAppConfiguration mainInstance] madViewer];
     self.navigationItem.titleView = titleView;
     
     _timerLabelTimeSinceRefreh = nil;

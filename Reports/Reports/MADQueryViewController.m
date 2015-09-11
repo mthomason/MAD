@@ -1756,9 +1756,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
     
     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-    RptqDocument *document = self.document.activeDocumentModel;
-    RptqDatabase *database = [document defaultDatabase];
-    RptqQuery *query = [database defaultQuery];
+    RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
     NSInteger numberOfTables = [query numberOfTables];
     
     NSDictionary *oldTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];

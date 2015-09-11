@@ -113,7 +113,7 @@
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [MADAppConfiguration madQuery];
+    titleView.text = [[MADAppConfiguration mainInstance] madQuery];
     self.navigationItem.titleView = titleView;
     
     self.navigationItem.prompt = self.document.fileURL.lastPathComponent;

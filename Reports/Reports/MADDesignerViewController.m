@@ -322,7 +322,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         self.statusLabelZoomScale = detailDisplay;
         
         MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [MADAppConfiguration madDesigner];
+        titleView.text = [[MADAppConfiguration  mainInstance] madDesigner];
         self.navigationItem.titleView = titleView;
         
     }
@@ -2297,8 +2297,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [detailSection performBatchUpdates:^{
         
-        RptqDocument *document = [self.document activeDocumentModel];
-        RptqDocumentObject *documentObject = [document addDocumentObject:documentObjectDefination];
+        RptqDocumentObject *documentObject = [self.document.activeDocumentModel addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
         
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
@@ -2859,8 +2858,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (UIView *)detailSectionView {
-    RptqDocument *document = [self.document activeDocumentModel];
-    return (UIView *)[self.sectionControlViews objectForKey:document.hasDetailSection.objectID.key];
+    return (UIView *)[self.sectionControlViews objectForKey:self.document.activeDocumentModel.hasDetailSection.objectID.key];
 }
 
 - (void)adjustSettingsLocation {

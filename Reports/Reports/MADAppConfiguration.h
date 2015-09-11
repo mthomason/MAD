@@ -58,23 +58,20 @@ extern NSString * const MADUpgradeInstalledSamples;
 - (BOOL)sampleInstalled;
 - (void)installedSample;
 
-+ (NSString *)applicationName;
+- (NSString *)applicationName;
+- (NSString *)applicationNameSufixPart;
 
-+ (NSString *)applicationNameSufixPart;
+- (BOOL)isMadViewer;
+- (BOOL)isMadDesigner;
+- (NSString *)bundleId;
+- (NSString *)bundleVersion;
 
-+ (BOOL)isMadViewer;
-+ (BOOL)isMadDesigner;
-+ (NSString *)bundleId;
-+ (NSString *)bundleVersion;
+- (NSString *)madDesigner;
+- (NSString *)madViewer;
+- (NSString *)madQuery;
 
-+ (NSString *)madDesigner;
-+ (NSString *)madViewer;
-+ (NSString *)madQuery;
-
-+ (NSString *)bundleDisplayName;
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
+- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
+- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
 

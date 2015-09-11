@@ -14,8 +14,6 @@
 @interface UIApplication (Extras)
 
 + (NSString *)version;
-+ (BOOL)isMadDesigner;
-+ (BOOL)isMadViewer;
 
 - (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible;
 

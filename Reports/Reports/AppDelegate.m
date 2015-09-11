@@ -101,6 +101,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [self initalizeAppearance];
     MADAppConfiguration *appConfiguration = [[MADAppConfiguration alloc] init];
+    self.appConfiguration = appConfiguration;
+
     [appConfiguration runHandlerOnFirstLaunch:^{
         [self getUserCloudPrefs];
     } subsquientLaunches:^{
@@ -113,7 +115,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
            });
         });
     }];
-    self.appConfiguration = appConfiguration;
 
     return YES;
 }

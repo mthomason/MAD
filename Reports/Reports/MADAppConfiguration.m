@@ -63,9 +63,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.99";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.99";
-NSString * const MTGlobalBundleRev                                  = @"2041";
+NSString * const MTGlobalBundleVersion                              = @"8.0.100";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.100";
+NSString * const MTGlobalBundleRev                                  = @"2042";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -79,16 +79,6 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 @end
 
 @implementation MADAppConfiguration
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    return self;
-}
-
-+ (void)load { }
-
-+ (instancetype)allocWithZone:(NSZone *)zone {
-    return [super allocWithZone:zone];
-}
 
 + (MADAppConfiguration *)mainInstance {
     return ((AppDelegate *)[UIApplication sharedApplication].delegate).appConfiguration;
@@ -117,10 +107,10 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
-        NSCAssert([[MADAppConfiguration bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
+        NSCAssert([[self bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
         NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
-        NSCAssert([[MADAppConfiguration bundleId] isEqualToString:MTBundleIdMadDesigner] || [[MADAppConfiguration bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
-        NSCAssert([[MADAppConfiguration bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
+        NSCAssert([[self bundleId] isEqualToString:MTBundleIdMadDesigner] || [[self bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
+        NSCAssert([[self bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
 #endif
         
@@ -130,50 +120,51 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 
 #pragma mark - App settings
 
-+ (NSString *)applicationNamePrefixPartFormat {
+- (NSString *)applicationNamePrefixPartFormat {
     return @"MAD %@";
 }
 
-+ (NSString *)applicationNameSufixPart {
-    return [MADAppConfiguration isMadDesigner] ?  NSLocalizedString(@"Designer", @"Designer") :
-                                                    NSLocalizedString(@"Viewer", @"Viewer");
+- (NSString *)applicationNameSufixPart {
+    return [self isMadDesigner] ?
+                            NSLocalizedString(@"Designer", @"Designer") :
+                            NSLocalizedString(@"Viewer", @"Viewer");
 }
 
-+ (NSString *)applicationId {
-    return [MADAppConfiguration isMadDesigner] ?
-                                        MTApplicationIdMadDesigner :
-                                        MTApplicationIdMadViewer;
+- (NSString *)applicationId {
+    return [self isMadDesigner] ?
+                            MTApplicationIdMadDesigner :
+                            MTApplicationIdMadViewer;
 }
 
-+ (NSString *)bundleDisplayName {
+- (NSString *)bundleDisplayName {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];;
 }
 
-+ (NSString *)applicationName {
-    NSString *localizedPrefix = [MADAppConfiguration applicationNamePrefixPartFormat];
-    NSString *localizedSuffix = [MADAppConfiguration applicationNameSufixPart];
+- (NSString *)applicationName {
+    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
+    NSString *localizedSuffix = [self applicationNameSufixPart];
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
-+ (NSString *)madDesigner {
-    NSString *localizedPrefix = [MADAppConfiguration applicationNamePrefixPartFormat];
+- (NSString *)madDesigner {
+    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
-+ (NSString *)madViewer {
-    NSString *localizedPrefix = [MADAppConfiguration applicationNamePrefixPartFormat];
+- (NSString *)madViewer {
+    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
-+ (NSString *)madQuery {
-    NSString *localizedPrefix = [MADAppConfiguration applicationNamePrefixPartFormat];
+- (NSString *)madQuery {
+    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
-+ (BOOL)isMadViewer {
+- (BOOL)isMadViewer {
     static BOOL _isMadViewer;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -183,7 +174,7 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
     return _isMadViewer;
 }
 
-+ (BOOL)isMadDesigner {
+- (BOOL)isMadDesigner {
     static BOOL _isMadDesigner;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -193,17 +184,17 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
     return _isMadDesigner;
 }
 
-+ (NSString *)bundleId {
+- (NSString *)bundleId {
     static NSString *_bundleId;
-    if ([MADAppConfiguration isMadDesigner]) {
+    if ([self isMadDesigner]) {
         _bundleId = MTBundleIdMadDesigner;
-    } else if ([MADAppConfiguration isMadViewer]) {
+    } else if ([self isMadViewer]) {
         _bundleId = MTBundleIdMadViewer;
     }
     return _bundleId;
 }
 
-+ (NSString *)bundleVersion {
+- (NSString *)bundleVersion {
     return MTGlobalBundleVersion;
 }
 

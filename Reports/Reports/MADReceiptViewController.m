@@ -63,7 +63,7 @@
         if (indexPath.item == 0) {
             static NSString *reuseID = @"MADIdentifierReceiptApplicationDetails";
             cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
-            ((MADTableViewCellReceiptApplication *)cell).product.text = [MADAppConfiguration applicationName];
+            ((MADTableViewCellReceiptApplication *)cell).product.text = [[MADAppConfiguration mainInstance] applicationName];
             ((MADTableViewCellReceiptApplication *)cell).version.text = [MTVerificationController sharedInstance].receipt.version;
         } else if (indexPath.item == 1) {
             
