@@ -10,6 +10,7 @@
 #define Reports_MTDataTable_h
 
 #import <Foundation/Foundation.h>
+#import <MADFileManager/NSFileManager+Common.h>
 #import "MAD.h"
 #import "MTAggregateFunctionType.h"
 #import "MADAggregateGroupByType.h"

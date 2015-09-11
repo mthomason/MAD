@@ -11,8 +11,6 @@
 #endif
 
 #import "MTUser.h"
-#import "NSFileManager+Common.h"
-#import "MADConstants.h"
 
 @interface MTUser()
 

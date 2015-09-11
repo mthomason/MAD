@@ -12,7 +12,6 @@
 
 #import "MADArrayCaching.h"
 #import "MADConstants.h"
-#import "NSFileManager+Common.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
 #import "MTDataColumn.h"

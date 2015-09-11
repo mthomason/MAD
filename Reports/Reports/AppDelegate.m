@@ -19,8 +19,9 @@
 
 #import "MADOpenFileViewController.h"
 
-#import "MADFilesController.h"
-#import "MADFileUtilities.h"
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADFileUtilities.h>
+
 
 #import "MADUpgradeManager.h"
 
@@ -28,6 +29,8 @@
 #import "UIViewController+Designer.h"
 #import "UITabBarController+Shared.h"
 #import "MTVerificationController.h"
+
+//#import <MADFeedback/MADFeedbackFrustration.h>
 
 #if MAD_DESIGNER
 NSString *s = @"";
@@ -105,7 +108,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         });
     }];
     
-    [MADFeedbackFrustration sharedInstance];
+    //[MADFeedbackFrustration sharedInstance];
     
     return YES;
 }

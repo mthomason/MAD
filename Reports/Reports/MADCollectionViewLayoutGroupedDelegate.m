@@ -7,7 +7,7 @@
 //
 
 #import "MADCollectionViewLayoutGroupedDelegate.h"
-#import "MADMetaData.h"
+#import <MADFileManager/MADMetaData.h>
 #import "MTCollectionViewCellDocument.h"
 #import "UILabel+Constructors.h"
 #import "UIView+Animations.h"

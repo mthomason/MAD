@@ -64,7 +64,6 @@
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
 #import "NSError+Constructors.h"
-#import "NSFileManager+Common.h"
 #import "NSThread+Extras.h"
 
 #import "RptqDocumentSectionEnumerator.h"
