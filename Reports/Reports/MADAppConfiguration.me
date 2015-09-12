@@ -26,6 +26,7 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <MADFileManager/MADLocalFileCoordinator.h>
 #import <MADFileManager/MADCloudFileCoordinator.h>
 #import <MADFileManager/MADMetaData.h>
+#import <MADFileManager/MADStorageState.h>
 #import "MAD.h"
 
 #import "UIColor+EverydayApps.h"
@@ -46,8 +47,10 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 
 #import "AppDelegate.h"
 
-NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
 NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
+NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgradeInstalledSamplesLondon";
+NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
+NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
 
 NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
 NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
@@ -63,17 +66,21 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.102";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.102";
-NSString * const MTGlobalBundleRev                                  = @"2044";
+NSString * const MTGlobalBundleVersion                              = @"8.0.111";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.111";
+NSString * const MTGlobalBundleRev                                  = @"2053";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
 const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 
+NSString * const MTSampleDatabaseChinook            = @"chinook";
+NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
+
+
 @interface MADAppConfiguration ()
 
-@property (nonatomic, strong) NSUserDefaults *applicationUserDefaults;
+@property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 @property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
 
 @end
@@ -102,7 +109,7 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
                                              MADAppConfigurationUserDefaultsStorageOption: defaultStorage
                                              };
         [defaults registerDefaults:defaultsToRegister];
-        //self.applicationUserDefaults = defaults;
+        self.applicationUserDefaults = defaults;
         
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
@@ -241,18 +248,21 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
     });
 }
 
++ (NSURL *)applicationBundleSampleDatabaseChinook {
+    return [[NSBundle mainBundle] URLForResource:MTSampleDatabaseChinook
+                                   withExtension:MTDocumentExtentionSqlite3];
+}
+
++ (NSURL *)applicationSupportSampleDatabaseChinook {
+    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+    NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
+    return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+}
+
 #pragma mark - Property Overrides
 
 - (BOOL)isCloudAvailable {
     return [MADFilesController isCloudAvailable];
-}
-
-- (MADAppStorageState)storageState {
-    return (MADAppStorageState) {
-        .storageOption = self.storageOption,
-        .accountDidChange = [self hasUbiquityIdentityChanged],
-        .cloudAvailable = [MADFilesController isCloudAvailable]
-    };
 }
 
 - (BOOL)sampleInstalled {
@@ -261,16 +271,6 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 
 - (void)installedSample {
     [self.applicationUserDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
-}
-
-- (MADAppStorage)storageOption {
-    NSInteger value = [self.applicationUserDefaults integerForKey:MADAppConfigurationUserDefaultsStorageOption];
-    return (MADAppStorage)value;
-}
-
-- (void)setStorageOption:(MADAppStorage)storageOption {
-    [self.applicationUserDefaults setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
-    [self.applicationUserDefaults synchronize];
 }
 
 - (BOOL)isFirstLaunch {
@@ -294,98 +294,6 @@ const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
         subsequentLaunch();
     }
     everyLaunch();
-}
-
-#pragma mark - Ubiquity Identity Token Handling (Account Change Info)
-
-- (BOOL)hasUbiquityIdentityChanged {
-    BOOL hasChanged = NO;
-    
-    id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
-    id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
-    
-    BOOL currentTokenNilStoredNonNil = !currentToken && storedToken;
-    BOOL storedTokenNilCurrentNonNil = !storedToken && currentToken;
-    BOOL currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
-    
-    if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
-        [self persistAccount];
-        
-        hasChanged = YES;
-    }
-    
-    return hasChanged;
-}
-
-- (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
-    id<NSObject, NSCopying, NSCoding> storedToken = nil;
-    
-    // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
-    NSData *ubiquityIdentityTokenArchive = [self.applicationUserDefaults objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
-    
-    if (ubiquityIdentityTokenArchive) {
-        storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
-    }
-    
-    return storedToken;
-}
-
-- (void)persistAccount {
-    NSUserDefaults *defaults = self.applicationUserDefaults;
-    id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
-    
-    if (token) {
-        // The account has changed.
-        NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
-        
-        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
-    }
-    else {
-        // There is no signed-in account.
-        [defaults removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
-    }
-}
-
-#pragma mark - Document Operations
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    if (self.storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
-    }  else {
-        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    if (self.storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
-    } else {
-        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
-    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                                                delegateQueue:[NSOperationQueue mainQueue]
-                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                                               }];
-    return filesController;
-}
-
-- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
-    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                                                delegateQueue:[NSOperationQueue mainQueue]
-                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                                               }];
-    return filesController;
 }
 
 @end

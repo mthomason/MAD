@@ -165,11 +165,6 @@ xcuserdata
 
 *.moved-aside
 
-####
-# UNKNOWN: recommended by others, but I can't discover what these files are
-#
-# ...none. Everything is now explained.
-
 .DS_Store
 
 StaticLibraries/.DS_Store
@@ -179,5 +174,6 @@ StaticLibraries/.DS_Store
 Connectors/source/*
 Connectors/build/*
 
+# Seems to be a by product of script to increment build counter.
+MADAppConfiguration.me
 
-Reports/Reports/MADAppConfiguration.me
