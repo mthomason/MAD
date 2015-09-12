@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 
 @class MADFile;
+
 @interface MADFileUtilities : NSObject
 
 + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId;
