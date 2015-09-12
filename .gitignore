@@ -179,3 +179,5 @@ StaticLibraries/.DS_Store
 Connectors/source/*
 Connectors/build/*
 
+
+Reports/Reports/MADAppConfiguration.me
