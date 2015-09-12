@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import "MADViewController.h"
 
 typedef NS_ENUM(NSUInteger, MTReportState) {
     MTReportStateOpen = 0,
@@ -20,7 +19,7 @@ typedef NS_ENUM(NSUInteger, MTReportState) {
 
 @class MADocument, MADFileManager, MADFilesController;
 
-@interface MADOpenFileViewController : MADCollectionViewController
+@interface MADOpenFileViewController : UICollectionViewController
 
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
 @property (nonatomic, weak) MADFilesController *filesController;
@@ -32,11 +31,9 @@ typedef NS_ENUM(NSUInteger, MTReportState) {
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
 
-
-@property (nonatomic, strong, readonly) MADFileManager *fileManager;
-@property (nonatomic, assign) MTReportState reportState;
-@property (readonly) MADocument *openDocument;
 - (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
+- (void)getUserCloudPrefs;
+- (void)getUserCloudPrefsSubsquient;
 
 @end
 
