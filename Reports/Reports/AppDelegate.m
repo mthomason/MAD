@@ -38,6 +38,11 @@
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarFixedSize.h"
 
+#import "MADOperationInstallSampleDatabase.h"
+#import "MADOperationInstallSampleDocument.h"
+
+NSString * const MADIdentifierFileLondon            = @"London";
+NSString * const MADIdentifierFileMusic             = @"Music";
 
 //#import <MADFeedback/MADFeedbackFrustration.h>
 
@@ -58,7 +63,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @property (nonatomic, strong, readwrite) MADAppConfiguration *appConfiguration;
 @property (readonly) MADNavigationController *navigationController;
 @property (readonly) MADOpenFileViewController *openFileViewController;
-@property (nonatomic, strong) dispatch_queue_t appDelegateQueue;
+@property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
+@property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
 
 @end
 
@@ -74,17 +80,24 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 #pragma mark - Initialization
 
 - (instancetype)init {
-
     if (self = [super init]) {
-        dispatch_queue_t appDelegateQueue = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
-        self.appDelegateQueue = appDelegateQueue;
+        dispatch_queue_t appDelegateQueueSerial = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
+        self.appDelegateQueueSerial = appDelegateQueueSerial;
+
+        dispatch_queue_t appDelegateQueueBackground = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
+        self.appDelegateQueueBackground = appDelegateQueueBackground;
     }
-    
     return self;
 }
 
 - (void)dealloc {
-    [self removeObservers];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquityIdentityDidChangeNotification
+                                                  object: nil];
 }
 
 #pragma mark - Application Lifecycle
@@ -95,23 +108,46 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    [AppDelegate registerForNotifications:application];
-
-    [self addObservers];
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
+                                                                                             categories: nil];
+        [application registerUserNotificationSettings:notificationSettings];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotificationKeyValueStoreDidChange:)
+                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+                                                 name: NSUbiquityIdentityDidChangeNotification
+                                               object: nil];
     
     [self initalizeAppearance];
+    
+
     MADAppConfiguration *appConfiguration = [[MADAppConfiguration alloc] init];
     self.appConfiguration = appConfiguration;
-
-    [appConfiguration runHandlerOnFirstLaunch:^{
-        [self getUserCloudPrefs];
+    
+    [self.appConfiguration runHandlerOnFirstLaunch:^{
+        [self.openFileViewController getUserCloudPrefs];
     } subsquientLaunches:^{
-        [self getUserCloudPrefsSubsquient];
+        [self.openFileViewController getUserCloudPrefsSubsquient];
     } everyLaunch:^{
-        [MADUpgradeManager installSamples];
-        dispatch_async(self.appDelegateQueue, ^{
-           dispatch_sync(dispatch_get_main_queue(), ^{
-               [[MTVerificationController sharedInstance] resetReceipt];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+           dispatch_async(dispatch_get_main_queue(), ^{
+           
+               NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+               operationQueue.underlyingQueue = self.appDelegateQueueBackground;
+               MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
+               MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesLondon];
+               MADOperationInstallSampleDocument *sampleDatabaseLondon = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileMusic fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesMusic];
+               NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget:[MTVerificationController sharedInstance] selector:@selector(resetReceipt) object:NULL];
+               NSArray *addSampleData = @[sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
+               [operationQueue addOperations:addSampleData waitUntilFinished:NO];
+
            });
         });
     }];
@@ -126,7 +162,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         [MTVerificationController sharedInstance];
     });
     
-    dispatch_async(self.appDelegateQueue, ^{
+    dispatch_async(self.appDelegateQueueSerial, ^{
         [MADQueryViewController deleteCoreDataCache];
     });
     
@@ -142,13 +178,13 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Fix me... close open applications by calling delegate method from openFileViewController.
-    //[[MADAppConfiguration mainInstance] cleanupBeforeTerminate];
+    //[self.appConfiguration cleanupBeforeTerminate];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     
-    NSURL *documentsDirectory = [MADAppConfiguration mainInstance].filesController.documentDirectory;
+    NSURL *documentsDirectory = self.appConfiguration.filesController.documentDirectory;
     NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
     NSError *error = nil;
     
@@ -205,30 +241,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
 }
 
-#pragma mark - Notifications
-
-- (void)addObservers {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotificationKeyValueStoreDidChange:)
-                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotificationUbiquityIdentityDidChange:)
-                                                 name: NSUbiquityIdentityDidChangeNotification
-                                               object: nil];
-}
-
-- (void)removeObservers {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSUbiquityIdentityDidChangeNotification
-                                                  object: nil];
-}
-
 - (void)initalizeAppearance {
     UIColor *tintColorWhite = [UIColor tintColorWhite];
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
@@ -265,7 +277,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     
     UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-        [self getUserCloudPrefs];
+        [self.openFileViewController getUserCloudPrefs];
     }];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -280,125 +292,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 #pragma mark - Convenience
 
-- (void)getUserCloudPrefs {
-
-    dispatch_async(self.appDelegateQueue, ^{
-
-        MADAppStorageState storageState = [MADAppConfiguration mainInstance].storageState;
-        if (storageState.cloudAvailable) {
-            
-            if (storageState.storageOption == MADAppStorageCloud) {
-                
-                void (^activityIndicatorStart)() = ^ {
-                    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
-                };
-                void (^activityIndicatorStop)() = ^ {
-                    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
-                };
-                
-                void (^handleLongRunningCloudLookup)() = ^ {
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStart];
-                };
-                
-                MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
-                    [MADAppConfiguration mainInstance].storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-                    [self configureFilesController: NO storageOptionChangeHandler: nil];
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
-                    
-                };
-                
-                [MADFilesController getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
-                                                             groupIdentifier:MADIdentifierGroup
-                                                                       delay:handleLongRunningCloudLookup
-                                                                  completion:completion];
-                
-                
-            } else if (storageState.storageOption == MADAppStorageLocal ||
-                       storageState.storageOption == MADAppStorageNotSet) {
-                
-                void (^handleOptionCloud)() = ^ {
-                    [MADAppConfiguration mainInstance].storageOption = MADAppStorageCloud;
-                    [self configureFilesController: NO storageOptionChangeHandler:^{
-                        [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
-                                                    toCloud: MADUbiquityIdentifier
-                                                  extension: MADFileExtentionMobleApplicationDocument];
-                    }];
-                    
-                };
-                void (^handleOptionLocal)() = ^ {
-                    [MADAppConfiguration mainInstance].storageOption = MADAppStorageLocal;
-                    [self configureFilesController: NO storageOptionChangeHandler: nil];
-                };
-                UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:handleOptionLocal
-                                                                                  cloud:handleOptionCloud];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                    [self.openFileViewController presentViewController:prompt animated:YES completion:nil];
-                }];
-            }
-        } else {
-            if (storageState.storageOption == MADAppStorageCloud) {
-                [MADAppConfiguration mainInstance].storageOption = MADAppStorageNotSet;
-            }
-            [self configureFilesController: NO storageOptionChangeHandler: nil];
-        }
-    });
-}
-
-- (void)getUserCloudPrefsSubsquient {
-
-    MADAppStorageState storageState = [MADAppConfiguration mainInstance].storageState;
-    if (storageState.accountDidChange) {
-        
-        switch (storageState.storageOption) {
-            case MADAppStorageCloud: {
-                
-                UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-                    [MADAppConfiguration mainInstance].storageOption = MADAppStorageNotSet;
-                    [self getUserCloudPrefs];
-                }];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                    [self.openFileViewController presentViewController:signedOutController animated:YES completion:nil];
-                }];
-                
-                break;
-            }
-            case MADAppStorageLocal:
-            case MADAppStorageNotSet:
-            default:
-                [self getUserCloudPrefs];
-                break;
-        }
-        
-        
-    } else {
-        if (storageState.storageOption == MADAppStorageNotSet) {
-            [self getUserCloudPrefs];
-        } else {
-            [self configureFilesController: NO storageOptionChangeHandler: nil];
-        }
-    }
-
-}
-
-- (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
-    
-    if (accountChanged || [MADAppConfiguration mainInstance].filesController == nil) {
-        if (![MADAppConfiguration mainInstance].filesController) {
-            MADFilesController *filesController = [[MADAppConfiguration mainInstance] filesControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                                              firstQueryHandler:storageOptionChangeHandler];
-            [MADAppConfiguration mainInstance].filesController = filesController;
-            self.openFileViewController.filesController = [MADAppConfiguration mainInstance].filesController;
-            
-            [[MADAppConfiguration mainInstance].filesController startSearching];
-            
-        } else if (accountChanged) {
-            [MADAppConfiguration mainInstance].filesController.fileCoordinator = [[MADAppConfiguration mainInstance] listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                                                                                firstQueryHandler:storageOptionChangeHandler];
-        }
-    }
-    
-}
-
 - (MADNavigationController *)navigationController {
     return (MADNavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
 }
@@ -409,14 +302,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (NSString *)ubiquityIdentifier {
     return MADUbiquityIdentifier;
-}
-
-+ (void)registerForNotifications:(UIApplication *)application {
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
-                                                                                             categories: nil];
-        [application registerUserNotificationSettings:notificationSettings];
-    }
 }
 
 @end

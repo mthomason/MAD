@@ -14,18 +14,12 @@
 @class MADFilesController, UITraitCollection, UIViewController;
 @protocol MADFileCoordinator;
 
-typedef NS_ENUM(NSUInteger, MADAppStorage) {
-    MADAppStorageNotSet = 0,
-    MADAppStorageCloud,
-    MADAppStorageLocal
-};
+extern NSString * const MADUpgradeInstalledSamples;
+extern NSString * const MADUpgradeInstalledSamplesLondon;
+extern NSString * const MADUpgradeInstalledSamplesMusic;
+extern NSString * const MADUpgradeInstalledChinook;
 
-typedef struct MADAppStorageState {
-    MADAppStorage storageOption;
-    BOOL accountDidChange;
-    BOOL cloudAvailable;
-} MADAppStorageState;
-
+extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUbiquityIdentifier;
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
@@ -34,8 +28,11 @@ extern NSString * const MTGlobalBundleVersion;
 extern NSString * const MTGlobalBundleShortVersion;
 extern NSString * const MTGlobalBundleRev;
 
-extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUpgradeInstalledSamples;
+
+extern NSString * const MADAppConfigurationUserDefaultsStorageOption;
+extern NSString * const MADAppConfigurationUserDefaultsUbiquityToken;
+extern NSString * const MADAppConfigurationUserDefaultsSamplesInstalled;
 
 @class MADocument;
 
@@ -47,10 +44,8 @@ extern NSString * const MADUpgradeInstalledSamples;
 
 @property (nonatomic, strong) MADFilesController *filesController;
 
-@property (nonatomic, readonly) MADAppStorageState storageState;
-@property (nonatomic, assign) MADAppStorage storageOption;
-
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
+@property (nonatomic, strong, readonly) NSUserDefaults *applicationUserDefaults;
 
 + (MADAppConfiguration *)mainInstance;
 - (void)registerDefaultsFromSettingsBundle;
@@ -70,10 +65,13 @@ extern NSString * const MADUpgradeInstalledSamples;
 - (NSString *)madViewer;
 - (NSString *)madQuery;
 
-- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
+/*- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
-- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
+- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;*/
+
++ (NSURL *)applicationBundleSampleDatabaseChinook;
++ (NSURL *)applicationSupportSampleDatabaseChinook;
 
 @end
 

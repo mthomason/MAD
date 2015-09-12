@@ -11,6 +11,14 @@
 #endif
 
 #import "MADOpenFileViewController.h"
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADStorageState.h>
+#import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/MADLocalFileCoordinator.h>
+#import <MADFileManager/MADCloudFileCoordinator.h>
+#import <MADFileManager/MADMetaData.h>
+#import "MADConstants.h"
+
 #import "MADViewerController.h"
 
 #import "AppDelegate.h"
@@ -156,7 +164,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
 @property (nonatomic, strong, readwrite) MADFileManager *fileManager;
+@property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
+@property (nonatomic, assign) MTReportState reportState;
 @end
 
 @implementation MADOpenFileViewController
@@ -208,6 +218,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+        
+        dispatch_queue_t queueSerialOperations = dispatch_queue_create("MADFileManager", DISPATCH_QUEUE_SERIAL);
+        self.queueSerialOperations = queueSerialOperations;
         
         MADFileManager *openFiles = [[MADFileManager alloc] init];
         self.fileManager = openFiles;
@@ -802,8 +815,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     __weak MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
     reportViewerViewController.viewControllerDelegate = self ;
     
-    //UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:tabBarController];
-    //[self.navigationController pushViewController:tabBarController animated:YES];
     [self presentViewController:tabBarController animated:YES completion:nil];
 }
 
@@ -1663,6 +1674,239 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(actionDuplicate:)];
     }
     return _barButtonItemDuplicate;
+}
+
+#pragma mark - Ubiquity Identity Token Handling (Account Change Info)
+
+- (BOOL)hasUbiquityIdentityChanged {
+    BOOL hasChanged = NO;
+    
+    id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
+    id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
+    
+    BOOL currentTokenNilStoredNonNil = !currentToken && storedToken;
+    BOOL storedTokenNilCurrentNonNil = !storedToken && currentToken;
+    BOOL currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
+    
+    if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
+        [self persistAccount];
+        
+        hasChanged = YES;
+    }
+    
+    return hasChanged;
+}
+
+- (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
+    id<NSObject, NSCopying, NSCoding> storedToken = nil;
+    
+    // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
+    NSData *ubiquityIdentityTokenArchive = [[MADAppConfiguration mainInstance].applicationUserDefaults objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+    
+    if (ubiquityIdentityTokenArchive) {
+        storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
+    }
+    
+    return storedToken;
+}
+
+- (void)persistAccount {
+    NSUserDefaults *defaults = [MADAppConfiguration mainInstance].applicationUserDefaults;
+    id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
+    
+    if (token) {
+        // The account has changed.
+        NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
+        
+        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
+    }
+    else {
+        // There is no signed-in account.
+        [defaults removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+    }
+}
+
+#pragma mark - Overrides
+
+- (MADAppStorage)storageOption {
+    NSInteger value = [[MADAppConfiguration mainInstance].applicationUserDefaults integerForKey:MADAppConfigurationUserDefaultsStorageOption];
+    return (MADAppStorage)value;
+}
+
+- (void)setStorageOption:(MADAppStorage)storageOption {
+    [[MADAppConfiguration mainInstance].applicationUserDefaults setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
+    [[MADAppConfiguration mainInstance].applicationUserDefaults synchronize];
+}
+
+#pragma mark - Convenience
+
+- (MADStorageState *)storageState {
+    MADStorageState *storageState = [[MADStorageState alloc] init];
+    storageState.storageOption = self.storageOption;
+    storageState.accountDidChange = [self hasUbiquityIdentityChanged];
+    storageState.cloudAvailable = [MADFilesController isCloudAvailable];
+    return storageState;
+}
+
+- (void)getUserCloudPrefs {
+    
+    dispatch_async(self.queueSerialOperations, ^{
+        
+        MADStorageState *storageState = self.storageState;
+        if (storageState.cloudAvailable) {
+            
+            if (storageState.storageOption == MADAppStorageCloud) {
+                
+                void (^activityIndicatorStart)() = ^ {
+                    [self setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
+                };
+                void (^activityIndicatorStop)() = ^ {
+                    [self setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
+                };
+                
+                void (^handleLongRunningCloudLookup)() = ^ {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStart];
+                };
+                
+                MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
+                    self.storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
+                    [self configureFilesController: NO storageOptionChangeHandler: nil];
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
+                    
+                };
+                
+                [MADFilesController getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
+                                                                 groupIdentifier:MADIdentifierGroup
+                                                                           delay:handleLongRunningCloudLookup
+                                                                      completion:completion];
+                
+                
+            } else if (storageState.storageOption == MADAppStorageLocal ||
+                       storageState.storageOption == MADAppStorageNotSet) {
+                
+                void (^handleOptionCloud)() = ^ {
+                    self.storageOption = MADAppStorageCloud;
+                    [self configureFilesController: NO storageOptionChangeHandler:^{
+                        [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
+                                                    toCloud: MADUbiquityIdentifier
+                                                  extension: MADFileExtentionMobleApplicationDocument];
+                    }];
+                    
+                };
+                void (^handleOptionLocal)() = ^ {
+                    self.storageOption = MADAppStorageLocal;
+                    [self configureFilesController: NO storageOptionChangeHandler: nil];
+                };
+                UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:handleOptionLocal
+                                                                                  cloud:handleOptionCloud];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                    [self presentViewController:prompt animated:YES completion:nil];
+                }];
+            }
+        } else {
+            if (storageState.storageOption == MADAppStorageCloud) {
+                self.storageOption = MADAppStorageNotSet;
+            }
+            [self configureFilesController: NO storageOptionChangeHandler: nil];
+        }
+    });
+}
+
+- (void)getUserCloudPrefsSubsquient {
+    
+    MADStorageState *storageState = self.storageState;
+    if (storageState.accountDidChange) {
+        
+        switch (storageState.storageOption) {
+            case MADAppStorageCloud: {
+                
+                UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
+                    self.storageOption = MADAppStorageNotSet;
+                    [self getUserCloudPrefs];
+                }];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                    [self presentViewController:signedOutController animated:YES completion:nil];
+                }];
+                
+                break;
+            }
+            case MADAppStorageLocal:
+            case MADAppStorageNotSet:
+            default:
+                [self getUserCloudPrefs];
+                break;
+        }
+        
+        
+    } else {
+        if (storageState.storageOption == MADAppStorageNotSet) {
+            [self getUserCloudPrefs];
+        } else {
+            [self configureFilesController: NO storageOptionChangeHandler: nil];
+        }
+    }
+    
+}
+
+- (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
+    
+    if (accountChanged || [MADAppConfiguration mainInstance].filesController == nil) {
+        if (![MADAppConfiguration mainInstance].filesController) {
+            MADFilesController *filesController = [self filesControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                               firstQueryHandler:storageOptionChangeHandler];
+            [MADAppConfiguration mainInstance].filesController = filesController;
+            self.filesController = [MADAppConfiguration mainInstance].filesController;
+            
+            [[MADAppConfiguration mainInstance].filesController startSearching];
+            
+        } else if (accountChanged) {
+            [MADAppConfiguration mainInstance].filesController.fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                                                  firstQueryHandler:storageOptionChangeHandler];
+        }
+    }
+    
+}
+
+#pragma mark - Document Operations
+
+- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+    if (self.storageOption != MADAppStorageCloud) {
+        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
+        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
+    }  else {
+        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
+    }
+}
+
+- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+    if (self.storageOption != MADAppStorageCloud) {
+        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
+        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
+    } else {
+        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
+    }
+}
+
+- (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+    
+    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
+    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
+                                                                                delegateQueue:[NSOperationQueue mainQueue]
+                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+                                                                               }];
+    return filesController;
+}
+
+- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+    
+    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
+    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
+                                                                                delegateQueue:[NSOperationQueue mainQueue]
+                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
+                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
+                                                                               }];
+    return filesController;
 }
 
 @end

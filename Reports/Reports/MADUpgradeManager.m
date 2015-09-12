@@ -18,11 +18,6 @@ NSString * const MADUpgradeLastVersionRun           = @"MADUpgradeLastVersionRun
 NSString * const MADIdentifierSegueUpgradeComplete  = @"MTSegueUpgradeComplete";
 NSString * const MADIdentifierSegueUpgradeUnneeded  = @"MTSegueUpgradeUnneeded";
 
-NSString * const MADIdentifierFileLondon            = @"London";
-NSString * const MADIdentifierFileMusic             = @"Music";
-NSString * const MTSampleDatabaseChinook            = @"chinook";
-NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
-
 const char * queueUpgrade = "com.everdayapps.mad.upgrade";
 
 const NSInteger currentMajorVersion = 8;
@@ -31,7 +26,6 @@ const NSInteger currentMajorVersion = 8;
 
 - (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error, BOOL upgradePerformed))completion {
     BOOL upgradeRequired = NO;
-    //BOOL upgradeVersion1 = NO;
     BOOL upgradeVersion7 = NO;
     BOOL installChinook = NO;
     BOOL installSamples = NO;
@@ -39,7 +33,7 @@ const NSInteger currentMajorVersion = 8;
     NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:MADUpgradeLastVersionRun];
     
-    NSURL *chinookUrl = [MADUpgradeManager applicationSupportSampleDatabaseChinook];
+    NSURL *chinookUrl = [MADAppConfiguration applicationSupportSampleDatabaseChinook];
     BOOL isDirectory;
     BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:chinookUrl.path isDirectory:&isDirectory];
     if (gotChinook == NO) {
@@ -90,35 +84,14 @@ const NSInteger currentMajorVersion = 8;
     NSError *error = nil;
     [MADUpgradeManager installSampleDatabase:&error];
     [MADFileUtilities copyInitialFiles:MADFileExtentionMobleApplicationDocument groupId:MADIdentifierGroup];
-    /*
-    NSArray *documents = [[NSFileManager defaultManager] contentOfLocalDocumentsDirectoryWithExtention:MADFileExtentionMobleApplicationDocument];
-    if (documents.count > 0) {
-        
-        NSURL *documentsDirectoryForAppGroup = [[NSFileManager defaultManager] localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
-        //[defaultManager l]
-        BOOL success = NO;
-        NSError *error = nil;
-        NSURL *destination;
-        for (NSURL *document in documents) {
-            destination = [documentsDirectoryForAppGroup URLByAppendingPathComponent:document.lastPathComponent];
-            success = [[NSFileManager defaultManager] moveItemAtURL:document
-                                                              toURL:destination
-                                                              error:&error];
-            if (success == NO || error != nil) {    // Try again, but don't try too hard... app not yet in wide use
-                success = [[NSFileManager defaultManager] moveItemAtURL:document
-                                                                  toURL:destination
-                                                                  error:&error];
-            }
-        }
-    }*/
 }
 
 + (BOOL)installSampleDatabase:(NSError **)error {
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
     if (installed == NO) {
 
-        NSURL *fileUrl = [MADUpgradeManager applicationBundleSampleDatabaseChinook];
-        NSURL *chinookAppSupportUrl = [MADUpgradeManager applicationSupportSampleDatabaseChinook];
+        NSURL *fileUrl = [MADAppConfiguration applicationBundleSampleDatabaseChinook];
+        NSURL *chinookAppSupportUrl = [MADAppConfiguration applicationSupportSampleDatabaseChinook];
         NSFileManager *defaultManager = [NSFileManager defaultManager];
         
         if (chinookAppSupportUrl != nil) {
@@ -136,6 +109,7 @@ const NSInteger currentMajorVersion = 8;
 }
 
 + (BOOL)installSamplesDocuments:(NSError **)error {
+    /*
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledSamples];
     if (installed == NO) {
 
@@ -166,18 +140,11 @@ const NSInteger currentMajorVersion = 8;
                 NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
                 [standardUserDefaults setBool:YES forKey:MADUpgradeInstalledSamples];
                 [standardUserDefaults synchronize];
-                
-                //MADFilesController *fileController = [MADAppConfiguration mainInstance].filesController;
-                //if (fileController != nil) {
-                //    MADMetaData *metadataLondon = [[MADMetaData alloc] initWithURL:londonUrl];
-                //    MADMetaData *metadataMusic = [[MADMetaData alloc] initWithURL:musicUrl];
-                //    [fileController setFileInfoHasNewContents:metadataLondon];
-                //    [fileController setFileInfoHasNewContents:metadataMusic];
-                //}
             }
         }
     }
-    return installed;
+    return installed;*/
+    return YES;
 }
 
 + (void)installSamples {
@@ -192,21 +159,6 @@ const NSInteger currentMajorVersion = 8;
             }
         });
     }
-}
-
-+ (NSURL *)applicationSupportSampleDatabaseChinook {
-    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
-    NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
-    return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-}
-
-/*
- * Location of the sample database inside the application bundle.
- */
-
-+ (NSURL *)applicationBundleSampleDatabaseChinook {
-    return [[NSBundle mainBundle] URLForResource:MTSampleDatabaseChinook
-                                   withExtension:MTDocumentExtentionSqlite3];
 }
 
 @end
