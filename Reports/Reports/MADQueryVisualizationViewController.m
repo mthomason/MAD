@@ -638,12 +638,21 @@ typedef void(^MTBlockResultVoid)(void);
         [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
         result = nil;
     } else {
-        id r = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        if ([r isKindOfClass:[MADQueryVisualizationCacheData class]]) {
-            result = r;
-        } else {
-            [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
-            result = nil;
+        id r = nil;
+        @try {
+            r = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
+        @catch (NSException *exception) {
+            NSError *cleanup = nil;
+            [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:&cleanup];
+        }
+        @finally {
+            if ([r isKindOfClass:[MADQueryVisualizationCacheData class]]) {
+                result = r;
+            } else {
+                [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
+                result = nil;
+            }
         }
     }
     return result;
