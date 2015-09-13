@@ -49,7 +49,7 @@
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 
-#import "MADFileManager.h"
+#import "MADOpenDocumentManager.h"
 #import "MADBarButtonItem.h"
 
 #import "UIColor+EverydayApps.h"
@@ -79,9 +79,9 @@
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
-#import "MADFileManager.h"
+#import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
-#import "MADFileManagerViewController.h"
+#import "MADFileManager.h"
 #import "UIAlertController+Constructors.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
@@ -166,14 +166,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
-@property (nonatomic, strong, readwrite) MADFileManager *fileManager;
+@property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
 @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
 @property (nonatomic, assign) MTReportState reportState;
 
 @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
-@property (nonatomic, strong) MADFileManagerViewController *filesCoordnator;
+@property (nonatomic, strong) MADFileManager *filesCoordnator;
 
 @end
 
@@ -269,7 +269,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
 
-        MADFileManagerViewController *filesCoordnator = [[MADFileManagerViewController alloc] init];
+        MADFileManager *filesCoordnator = [[MADFileManager alloc] init];
         filesCoordnator.delegate = self;
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
@@ -279,7 +279,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         dispatch_queue_t queueSerialOperations = dispatch_queue_create("MADFileManager", DISPATCH_QUEUE_SERIAL);
         self.queueSerialOperations = queueSerialOperations;
         
-        MADFileManager *openFiles = [[MADFileManager alloc] init];
+        MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
         self.fileManager = openFiles;
 
         MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
