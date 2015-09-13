@@ -66,9 +66,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.111";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.111";
-NSString * const MTGlobalBundleRev                                  = @"2053";
+NSString * const MTGlobalBundleVersion                              = @"8.0.113";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.113";
+NSString * const MTGlobalBundleRev                                  = @"2055";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -260,6 +260,10 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 }
 
 #pragma mark - Property Overrides
+
+- (NSString *)ubiquityIdentifier {
+    return MADUbiquityIdentifier;
+}
 
 - (BOOL)isCloudAvailable {
     return [MADFilesController isCloudAvailable];

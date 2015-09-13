@@ -167,6 +167,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
 @property (nonatomic, assign) MTReportState reportState;
+
+@property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 @end
 
 @implementation MADOpenFileViewController
@@ -218,6 +220,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+        
+        self.getUserCloudPrefsFirstCall = YES;
         
         dispatch_queue_t queueSerialOperations = dispatch_queue_create("MADFileManager", DISPATCH_QUEUE_SERIAL);
         self.queueSerialOperations = queueSerialOperations;
@@ -1749,9 +1753,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)getUserCloudPrefs {
-    
-    dispatch_async(self.queueSerialOperations, ^{
-        
+    if ([MADAppConfiguration mainInstance].isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
+        self.getUserCloudPrefsFirstCall = NO;
         MADStorageState *storageState = self.storageState;
         if (storageState.cloudAvailable) {
             
@@ -1809,7 +1812,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             }
             [self configureFilesController: NO storageOptionChangeHandler: nil];
         }
-    });
+    } else {
+        self.getUserCloudPrefsFirstCall = NO;
+        [self getUserCloudPrefsSubsquient];
+    }
+    
 }
 
 - (void)getUserCloudPrefsSubsquient {

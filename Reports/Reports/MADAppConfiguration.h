@@ -65,6 +65,8 @@ extern NSString * const MADAppConfigurationUserDefaultsSamplesInstalled;
 - (NSString *)madViewer;
 - (NSString *)madQuery;
 
+- (BOOL)isFirstLaunch;
+
 /*- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
 - (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;

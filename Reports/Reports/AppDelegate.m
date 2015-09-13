@@ -126,31 +126,22 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [self initalizeAppearance];
     
+    NSOperationQueue *operationQueueBackground = [[NSOperationQueue alloc] init];
+    operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground;
+    
+    NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController selector:@selector(getUserCloudPrefs) object:NULL];
 
+    MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
+    MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesLondon];
+    MADOperationInstallSampleDocument *sampleDatabaseLondon = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileMusic fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesMusic];
+    
+    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget:[MTVerificationController sharedInstance] selector:@selector(resetReceipt) object:NULL];
+    NSArray *addSampleData = @[getUserCloudPreferences, sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
+    [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
+
+    
     MADAppConfiguration *appConfiguration = [[MADAppConfiguration alloc] init];
     self.appConfiguration = appConfiguration;
-    
-    [self.appConfiguration runHandlerOnFirstLaunch:^{
-        [self.openFileViewController getUserCloudPrefs];
-    } subsquientLaunches:^{
-        [self.openFileViewController getUserCloudPrefsSubsquient];
-    } everyLaunch:^{
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-           dispatch_async(dispatch_get_main_queue(), ^{
-           
-               NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
-               operationQueue.underlyingQueue = self.appDelegateQueueBackground;
-               MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
-               MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesLondon];
-               MADOperationInstallSampleDocument *sampleDatabaseLondon = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileMusic fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesMusic];
-               NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget:[MTVerificationController sharedInstance] selector:@selector(resetReceipt) object:NULL];
-               NSArray *addSampleData = @[sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
-               [operationQueue addOperations:addSampleData waitUntilFinished:NO];
-
-           });
-        });
-    }];
 
     return YES;
 }
@@ -298,10 +289,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (MADOpenFileViewController *)openFileViewController {
     return (MADOpenFileViewController *)self.navigationController.topViewController;
-}
-
-- (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
 }
 
 @end
