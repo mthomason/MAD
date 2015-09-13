@@ -30,10 +30,6 @@ extern NSString * const MTGlobalBundleRev;
 
 extern NSString * const MADUpgradeInstalledSamples;
 
-extern NSString * const MADAppConfigurationUserDefaultsStorageOption;
-extern NSString * const MADAppConfigurationUserDefaultsUbiquityToken;
-extern NSString * const MADAppConfigurationUserDefaultsSamplesInstalled;
-
 @class MADocument;
 
 @interface MADAppConfiguration : NSObject
@@ -41,8 +37,6 @@ extern NSString * const MADAppConfigurationUserDefaultsSamplesInstalled;
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
              subsquientLaunches:(void (^)(void))subsequentLaunch
                     everyLaunch:(void (^)(void))everyLaunch;
-
-@property (nonatomic, strong) MADFilesController *filesController;
 
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
 @property (nonatomic, strong, readonly) NSUserDefaults *applicationUserDefaults;
@@ -66,11 +60,6 @@ extern NSString * const MADAppConfigurationUserDefaultsSamplesInstalled;
 - (NSString *)madQuery;
 
 - (BOOL)isFirstLaunch;
-
-/*- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
-- (id <MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;
-- (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler;
-- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler;*/
 
 + (NSURL *)applicationBundleSampleDatabaseChinook;
 + (NSURL *)applicationSupportSampleDatabaseChinook;

@@ -17,10 +17,13 @@ extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
+#import "MADSaveFileProtocol.h"
 
 @interface MTDatabaseDriverSelectorViewController : MADTableViewController
+    <MADSaveFileProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MADSaveFileProtocol> saveFileDelegate;
 
 @end
 
