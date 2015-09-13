@@ -177,3 +177,5 @@ Connectors/build/*
 # Seems to be a by product of script to increment build counter.
 MADAppConfiguration.me
 
+
+Reports/Reports/MADAppConfiguration.me
