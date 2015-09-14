@@ -7,7 +7,6 @@
 //
 
 #import "MADDocumentInformationTableViewController.h"
-#import <MADFileManager/MADMetaData.h>
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
 #import "MTMath.h"

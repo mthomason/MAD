@@ -19,10 +19,6 @@
 
 #import "MADOpenFileViewController.h"
 
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileUtilities.h>
-
-
 #import "MADUpgradeManager.h"
 
 #import "UIAlertController+Constructors.h"

@@ -12,8 +12,6 @@
 
 #import "MTConnectionViewController.h"
 #import "MADAppConfiguration.h"
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileUtilities.h>
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MADocument.h"

@@ -10,6 +10,7 @@
 #define Reports_MTApplicationInstance_h
 
 #import <Foundation/Foundation.h>
+#import <MADFileManager/MADFileManager.h>
 
 @class MADFilesController, UITraitCollection, UIViewController;
 @protocol MADFileCoordinator;

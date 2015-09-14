@@ -7,12 +7,6 @@
 //
 
 #import "MADFileManager.h"
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADStorageState.h>
-#import <MADFileManager/MADFileUtilities.h>
-#import <MADFileManager/MADLocalFileCoordinator.h>
-#import <MADFileManager/MADCloudFileCoordinator.h>
-#import <MADFileManager/MADMetaData.h>
 
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";

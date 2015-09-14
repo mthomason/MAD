@@ -10,7 +10,7 @@
 #define MAD_MTArrayCached_h
 
 #import <Foundation/Foundation.h>
-#import <MADFileManager/NSFileManager+Common.h>
+#import <MADFileManager/MADFileManager.h>
 #import "MTCacheProtocol.h"
 
 @interface MADArrayCaching : NSEnumerator

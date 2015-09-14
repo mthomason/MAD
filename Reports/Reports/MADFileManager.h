@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MADFileManager/MADFileManager.h>
 
 typedef NS_ENUM(NSUInteger, MTReportState) {
     MTReportStateOpen = 0,

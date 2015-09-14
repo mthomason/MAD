@@ -11,12 +11,7 @@
 #endif
 
 #import "MADOpenFileViewController.h"
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADStorageState.h>
-#import <MADFileManager/MADFileUtilities.h>
-#import <MADFileManager/MADLocalFileCoordinator.h>
-#import <MADFileManager/MADCloudFileCoordinator.h>
-#import <MADFileManager/MADMetaData.h>
+
 #import "MADConstants.h"
 
 #import "MADViewerController.h"
@@ -27,11 +22,6 @@
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 
 #import "MADocument.h"
-#import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADAppLaunchContext.h>
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileInfo.h>
 
 #import "MADSearchBar.h"
 

@@ -10,6 +10,7 @@
 #define Reports_MTConnectionViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MADFileManager/MADFileManager.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
 #import "MADSaveFileProtocol.h"

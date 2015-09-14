@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import <MADFileManager/NSFileManager+Common.h>
+#import <MADFileManager/MADFileManager.h>
 #import "MTReportFormatterDataSource.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"
