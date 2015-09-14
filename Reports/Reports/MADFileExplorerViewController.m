@@ -1,0 +1,187 @@
+//
+//  MADFileExplorerViewController.m
+//  MAD Designer
+//
+//  Created by Michael Thomason on 9/14/15.
+//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MADFileExplorerViewController.h"
+#import "MADCollectionViewLayoutGroupedDelegate.h"
+#import "MADocument.h"
+#import "MTMath.h"
+#import "MTCollectionViewCellDocument.h"
+
+#import "NSNumberFormatter+Constructors.h"
+#import "UIView+Animations.h"
+#import "UIAlertController+Constructors.h"
+#import "NSURL+Document.h"
+
+static NSString * const NotDownloaded                           = @"Not Downloaded";
+static NSString * const Syncing                                 = @"Syncing";
+static NSString * const Downloading                             = @"Downloading";
+
+@interface MADFileExplorerViewController ()
+    <MTDocumentCellProtocol, UIGestureRecognizerDelegate>
+
+@property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+
+@end
+
+@implementation MADFileExplorerViewController
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        
+        MADFileManager *filesCoordnator = [[MADFileManager alloc] init];
+        filesCoordnator.filesController.delegate = self;
+        self.filesCoordnator = filesCoordnator;
+
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
+    delegate.delegate = self;
+    self.collectionViewDelegate = delegate;
+    self.collectionView.delegate = self.collectionViewDelegate;
+    self.collectionView.dataSource = self;
+}
+
+#pragma mark - MADCollectionViewLayoutFilesDelegate
+
+- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
+    return [MADocument fileNameForMadUrl:metadata.URL];
+}
+
+- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
+    return [self subtitleForMetadata:metadata];
+}
+
+- (NSString *)subtitleForMetadata:(MADMetaData *)metadata {
+    NSString *result;
+    if ([metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
+        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
+    } else {
+        NSNumber *systemFileSizeMB =  [MTMath systemFileSizeToMB: metadata.fileSystemFileSize];
+        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
+        result = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
+    }
+    return result;
+}
+
+- (BOOL)isFileViewEditing { return self.editing; }
+
+- (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString * MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
+    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
+    
+    if (cell.delegate == nil) {
+        ((MTCollectionViewCellDocument *)cell).delegate = self;
+    }
+    MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
+    NSString *filename = metadata.name;
+    cell.labelTitle.text = filename;
+    
+    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    
+    BOOL downloading = metadata.ubiquitousItemIsDownloading;
+    BOOL uploading = metadata.ubiquitousItemIsUploading;
+    
+    if (downloading) {
+        cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
+    } else if (uploading) {
+        cell.labelTitleSub.text = NSLocalizedString(Syncing, Syncing);
+    } else {
+        cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
+    }
+    
+    if (uploading) {
+        cell.progressViewUpload.hidden = NO;
+        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded / 100.0000f) {
+            [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded / 100.0000f animated:YES];
+        }
+    } else {
+        cell.progressViewUpload.hidden = YES;
+        [cell.progressViewUpload setProgress:0.0000f animated:YES];
+    }
+    
+    if (downloading) {
+        cell.progressViewDownload.hidden = NO;
+        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
+            [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded / 100.0000f animated:YES];
+        }
+    } else {
+        cell.progressViewDownload.hidden = YES;
+        [cell.progressViewDownload setProgress:0.0000f animated:YES];
+    }
+    
+    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading) {
+        [cell.activityIndicator startAnimating];
+    } else {
+        [cell.activityIndicator stopAnimating];
+    }
+    
+    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ? [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
+    
+    [cell.labelTitle layoutIfNeeded];
+    [cell.labelTitleSub layoutIfNeeded];
+    [cell loadPreviewImageForUrl:metadata.URL];
+    
+    [cell normalizeTint];
+    
+    if ([self isFileViewEditing]) {
+        [cell startWobble];
+    } else {
+        [cell stopWobble];
+    }
+    
+    return cell;
+}
+
+#pragma mark - MTDocumentCellProtocol
+
+- (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
+    [self.fileExplorerDelegate editFile:sender];
+}
+
+- (void)actionDuplicate:(id)sender {
+    [self.fileExplorerDelegate duplicateFile:sender];
+}
+
+- (void)rename:(id)sender {
+    [self.fileExplorerDelegate renameFile:sender];
+}
+
+- (void)email:(MTCollectionViewCellDocument *)cell {
+    [self.fileExplorerDelegate emailFile:cell];
+}
+
+#pragma mark - Property Overrides
+
+- (NSNumberFormatter *)subtitleNumberFormatter {
+    if (!_subtitleNumberFormatter) {
+        _subtitleNumberFormatter = [NSNumberFormatter twoDecimalPlaces];
+    }
+    return _subtitleNumberFormatter;
+}
+
+@end

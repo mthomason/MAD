@@ -60,8 +60,6 @@
 
 #import "MTMath.h"
 
-#import "NSNumberFormatter+Constructors.h"
-
 #import "UITabBarController+Shared.h"
 #import "UINavigationController+Designer.h"
 #import "MADDocumentInformationTableViewController+Designer.h"
@@ -76,13 +74,9 @@
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
-NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
-static NSString * const NotDownloaded                           = @"Not Downloaded";
-static NSString * const Syncing                                 = @"Syncing";
-static NSString * const Downloading                             = @"Downloading";
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUtiPublicData                               = @"public.data";
 
@@ -95,17 +89,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         UIPopoverPresentationControllerDelegate,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
-        UITextFieldDelegate,
         UIDocumentInteractionControllerDelegate,
         UIDocumentPickerDelegate,
         UISearchBarDelegate,
-        UIStateRestoring,
+        UITextFieldDelegate,
+        MADFileExplorerDelegate,
+        MADFileManagerDelegate,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
-        MADFilesControllerDelegate,
-        MADCollectionViewLayoutFilesDelegate,
-        MTViewControllerProtocol,
-        MADFileManagerViewControllerDelegate>
+        MTViewControllerProtocol>
 
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
 
@@ -154,10 +146,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) NSMutableArray *batchRemoves;
 @property (nonatomic, strong) NSMutableArray *batchUpdates;
 
-@property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
-
-@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
-
 @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
 @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
@@ -165,13 +153,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
-@property (nonatomic, strong) MADFileManager *filesCoordnator;
-
 @end
 
 @implementation MADOpenFileViewController
 
-#pragma mark - MADFileManagerViewControllerDelegate
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
+
+#pragma mark - MADFileManagerDelegate
 
 - (NSString *)groupIdentifier {
     return MADIdentifierGroup;
@@ -261,10 +251,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
 
-        MADFileManager *filesCoordnator = [[MADFileManager alloc] init];
-        filesCoordnator.delegate = self;
-        filesCoordnator.filesController.delegate = self;
-        self.filesCoordnator = filesCoordnator;
+        self.filesCoordnator.delegate = self;
 
         self.getUserCloudPrefsFirstCall = YES;
         
@@ -315,10 +302,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
-    delegate.delegate = self;
-    self.collectionViewDelegate = delegate;
-    self.collectionView.delegate = self.collectionViewDelegate;
+    self.fileExplorerDelegate = self;
     
     [self addObservers];
     
@@ -334,7 +318,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
-    self.collectionView.dataSource = self;
     
     [self setEditing:NO animated:NO];
     
@@ -787,12 +770,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
 }
 
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    return YES;
-}
-
 #pragma mark - UIMenuController required methods
 
 - (BOOL)canBecomeFirstResponder {
@@ -869,32 +846,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
 
-- (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
-    return [MADocument fileNameForMadUrl:metadata.URL];
-}
-
-- (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
-    return [self subtitleForMetadata:metadata];
-}
-
-- (NSString *)subtitleForMetadata:(MADMetaData *)metadata {
-    NSString *result;
-    if ([metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
-        result = NSLocalizedString(NotDownloaded, NotDownloaded);;
-    } else {
-        NSNumber *systemFileSizeMB =  [MTMath systemFileSizeToMB: metadata.fileSystemFileSize];
-        NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
-        result = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
-    }
-    return result;
-}
-
-- (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
-}
-
 - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
     
     MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
@@ -915,96 +866,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [self.collectionView setUserInteractionEnabled: NO];
         [self openFileWithUrl:metadata.URL];
         [cell normalizeTint];
-    }
-}
-
-#pragma mark - UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
-
-    if (cell.delegate == nil) {
-        ((MTCollectionViewCellDocument *)cell).delegate = self;
-    }
-    MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
-    NSString *filename = metadata.name;
-    cell.labelTitle.text = filename;
-    
-    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-
-    BOOL downloading = metadata.ubiquitousItemIsDownloading;
-    BOOL uploading = metadata.ubiquitousItemIsUploading;
-    
-    if (downloading) {
-        cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
-    } else if (uploading) {
-        cell.labelTitleSub.text = NSLocalizedString(Syncing, Syncing);
-    } else {
-        cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
-    }
-    
-    if (uploading) {
-        cell.progressViewUpload.hidden = NO;
-        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded / 100.0000f) {
-            [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded / 100.0000f animated:YES];
-        }
-    } else {
-        cell.progressViewUpload.hidden = YES;
-        [cell.progressViewUpload setProgress:0.0000f animated:YES];
-    }
-    
-    if (downloading) {
-        cell.progressViewDownload.hidden = NO;
-        if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
-            [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded / 100.0000f animated:YES];
-        }
-    } else {
-        cell.progressViewDownload.hidden = YES;
-        [cell.progressViewDownload setProgress:0.0000f animated:YES];
-    }
-    
-    if (metadata.ubiquitousItemIsDownloading || metadata.ubiquitousItemIsUploading) {
-        [cell.activityIndicator startAnimating];
-    } else {
-        [cell.activityIndicator stopAnimating];
-    }
-    
-    cell.imageCloudIndicator.image = notDownloaded && metadata.isUbiquitous ? [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
-    
-    [cell.labelTitle layoutIfNeeded];
-    [cell.labelTitleSub layoutIfNeeded];
-    [cell loadPreviewImageForUrl:metadata.URL];
-    
-    [cell normalizeTint];
-    
-    if ([self isFileViewEditing]) {
-        [cell startWobble];
-    } else {
-        [cell stopWobble];
-    }
-    
-    return cell;
-}
-
-#pragma mark - MTDocumentCellProtocol
-
-- (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateBegan) {
-        
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
-        if (self.isEditing == NO) {
-            [self edit:self];
-        }
-        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-        [self selectionsUpdated];
     }
 }
 
@@ -1213,6 +1074,22 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
 
+- (void)editFile:(id)sender {
+    [self activateEditMode:sender];
+}
+
+- (void)emailFile:(id)sender {
+    [self email:sender];
+}
+
+- (void)renameFile:(id)sender {
+    [self rename:sender];
+}
+
+- (void)duplicateFile:(id)sender {
+    [self actionDuplicate:sender];
+}
+
 #pragma mark - Actions
 
 - (IBAction)addDocument:(id)sender {
@@ -1310,8 +1187,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [self done:sender];
     }
 }
-
-- (BOOL)isFileViewEditing { return self.editing; }
 
 - (void)done:(id)sender {
     self.editing = NO;
@@ -1490,7 +1365,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         alertController.popoverPresentationController.barButtonItem = sender;
     }
     [self presentViewController:alertController animated:YES completion:NULL];
-    
 }
 
 - (void)actionDuplicate:(id)sender {
@@ -1567,7 +1441,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
         MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
-
+        
         MADocument *documentReport = [[MADocument alloc] initWithFileURL:metadata.URL];
         
         if (documentReport.documentState != UIDocumentStateClosed) {
@@ -1590,7 +1464,18 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             [self showViewController:mailComposer sender:self];
         }
     }
-    
+}
+
+- (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
+    if ([sender state] == UIGestureRecognizerStateBegan) {
+        
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
+        if (self.isEditing == NO) {
+            [self edit:self];
+        }
+        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self selectionsUpdated];
+    }
 }
 
 #pragma mark - Notification Handlers
@@ -1683,15 +1568,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)removeProgressViewFromView {
     [self.progressViewFileManager removeFromSuperview];
-}
-
-#pragma mark - Property Overrides
-
-- (NSNumberFormatter *)subtitleNumberFormatter {
-    if (!_subtitleNumberFormatter) {
-        _subtitleNumberFormatter = [NSNumberFormatter twoDecimalPlaces];
-    }
-    return _subtitleNumberFormatter;
 }
 
 #pragma mark - Lazy Load

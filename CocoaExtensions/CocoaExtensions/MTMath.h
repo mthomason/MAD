@@ -14,7 +14,6 @@
 @interface MTMath : NSObject
 
 + (NSInteger)getRandomNumberBetween:(NSInteger)from to:(NSInteger)to;
-
 + (NSNumber *)systemFileSizeToMB:(unsigned long long)sfs;
 
 @end

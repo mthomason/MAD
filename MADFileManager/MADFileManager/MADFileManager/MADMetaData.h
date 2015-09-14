@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong, readonly) NSString  *fileSystemName;
 @property (nonatomic, strong, readonly) NSString  *name;
+@property (nonatomic, strong, readonly) NSString  *subtitle;
 @property (nonatomic, strong, readonly) NSURL     *URL;
 
 @property (nonatomic, assign, readonly) unsigned long long fileSystemFileSize;
@@ -59,7 +60,7 @@
 - (instancetype)initWithMetadataItem:(NSMetadataItem *)item;
 
 - (BOOL)isSyncing;
-//- (unsigned long long)st_ino;
+
 - (unsigned long long)fileSystemFileNumber;
 - (unsigned long long)fileSystemNumber;
 

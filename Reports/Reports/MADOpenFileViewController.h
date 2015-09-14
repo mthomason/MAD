@@ -12,10 +12,11 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MADFileManager/MADFileManager.h>
+#import "MADFileExplorerViewController.h"
 
 @class MADocument, MADFileManager, MADFilesController;
 
-@interface MADOpenFileViewController : UICollectionViewController
+@interface MADOpenFileViewController : MADFileExplorerViewController
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;

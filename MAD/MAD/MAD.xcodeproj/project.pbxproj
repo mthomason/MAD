@@ -169,7 +169,6 @@
 		4C8CDBB11AD2514700B7B9EA /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB01AD2514700B7B9EA /* MADArrayCaching.m */; };
 		4C8CDBB41AD2519300B7B9EA /* MTNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */; };
 		4C8CDBB91AD252B400B7B9EA /* MTErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */; };
-		4C8CDBBA1AD252B400B7B9EA /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBB81AD252B400B7B9EA /* MTMath.m */; };
 		4C8CDBC21AD2546300B7B9EA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBC11AD2546300B7B9EA /* RptqQueryGroup+Extras.m */; };
 		4C8CDBC61AD2552C00B7B9EA /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDBC51AD2552C00B7B9EA /* MTFont.m */; };
 		4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */; };
@@ -591,8 +590,6 @@
 		4C8CDBB31AD2519300B7B9EA /* MTNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNotificationDidFormatPage.m; sourceTree = "<group>"; };
 		4C8CDBB51AD252B400B7B9EA /* MTErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTErrorContainer.h; sourceTree = "<group>"; };
 		4C8CDBB61AD252B400B7B9EA /* MTErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTErrorContainer.m; sourceTree = "<group>"; };
-		4C8CDBB71AD252B400B7B9EA /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMath.h; sourceTree = "<group>"; };
-		4C8CDBB81AD252B400B7B9EA /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMath.m; sourceTree = "<group>"; };
 		4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Border.h"; path = "../../CocoaExtensions/CocoaExtensions/UIImage+Border.h"; sourceTree = "<group>"; };
 		4C8CDBBF1AD253C500B7B9EA /* MTAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAggregateFunctionInputType.h; path = MAD/MTAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4C8CDBC01AD2546300B7B9EA /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryGroup+Extras.h"; path = "rptq/RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
@@ -766,6 +763,7 @@
 		4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuerySort+Extras.m"; path = "rptq/RptqQuerySort+Extras.m"; sourceTree = "<group>"; };
 		4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqRelationship+Extras.h"; path = "rptq/RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
+		4CC641451BA74E6600F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../../CocoaExtensions/CocoaExtensions/MTMath.h; sourceTree = "<group>"; };
 		4CCC3CE81B4BC33F00350F3F /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DebugDescription.h"; sourceTree = "<group>"; };
 		4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DebugDescription.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -808,8 +806,6 @@
 				4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */,
 				4C8CDC951AD26EEB00B7B9EA /* MTActivityIndicator.h */,
 				4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */,
-				4C8CDBB71AD252B400B7B9EA /* MTMath.h */,
-				4C8CDBB81AD252B400B7B9EA /* MTMath.m */,
 				4C8CDADF1AD247F900B7B9EA /* MTDatabaseDataBinding.h */,
 				4C8CDAE01AD247F900B7B9EA /* MTDatabaseDataBinding.m */,
 				4C8CDBC41AD2552C00B7B9EA /* MTFont.h */,
@@ -947,6 +943,7 @@
 		4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4CC641451BA74E6600F3ECCE /* MTMath.h */,
 				4C65D4781ADCC4F100279B4D /* BDHost.h */,
 				4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */,
 				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
@@ -1716,7 +1713,6 @@
 				4C8CDAA21AD1DF3E00B7B9EA /* MTDatabaseField.m in Sources */,
 				4C8CDB7F1AD2500800B7B9EA /* MTPaperA4.m in Sources */,
 				4C8CDC7E1AD2657000B7B9EA /* NSString+MysqlEscape.m in Sources */,
-				4C8CDBBA1AD252B400B7B9EA /* MTMath.m in Sources */,
 				4C8CD9FA1AD1D72E00B7B9EA /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C8CDABE1AD1E1A300B7B9EA /* MTNotificationDidReadRows.m in Sources */,
 				4C8CDBF91AD2648700B7B9EA /* MysqlFetchField.m in Sources */,

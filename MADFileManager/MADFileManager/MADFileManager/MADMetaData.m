@@ -10,6 +10,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <UIKit/UIKit.h>
 #import <sys/stat.h>
+#import "MTMath.h"
 
 @interface MADMetaData ()
 

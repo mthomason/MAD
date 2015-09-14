@@ -24,6 +24,7 @@
 		4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC801AD2667000B7B9EA /* NSThread+Extras.m */; };
 		4C8CDC851AD2687800B7B9EA /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */; };
 		4CC035DD1B90F71F001A3CC5 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035DC1B90F71F001A3CC5 /* UIViewController+Utilities.m */; };
+		4CC641441BA74E5100F3ECCE /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641431BA74E5100F3ECCE /* MTMath.m */; settings = {ASSET_TAGS = (); }; };
 		4CE84D861B396A2100BB3A0A /* UIColor+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE84D851B396A2100BB3A0A /* UIColor+Social.m */; };
 		4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */; };
 /* End PBXBuildFile section */
@@ -86,6 +87,8 @@
 		4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EverydayApps.m"; sourceTree = "<group>"; };
 		4CC035DB1B90F71F001A3CC5 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utilities.h"; sourceTree = "<group>"; };
 		4CC035DC1B90F71F001A3CC5 /* UIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utilities.m"; sourceTree = "<group>"; };
+		4CC641421BA74E5100F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMath.h; sourceTree = "<group>"; };
+		4CC641431BA74E5100F3ECCE /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMath.m; sourceTree = "<group>"; };
 		4CE84D841B396A2100BB3A0A /* UIColor+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Social.h"; sourceTree = "<group>"; };
 		4CE84D851B396A2100BB3A0A /* UIColor+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Social.m"; sourceTree = "<group>"; };
 		4CE84D871B396A5A00BB3A0A /* MacroVendColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroVendColor.h; sourceTree = "<group>"; };
@@ -135,6 +138,8 @@
 		4C37E10F1ACC864500B4BC0D /* CocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4CC641421BA74E5100F3ECCE /* MTMath.h */,
+				4CC641431BA74E5100F3ECCE /* MTMath.m */,
 				4C65D4751ADCC3F100279B4D /* BDHost.h */,
 				4C65D4761ADCC3F100279B4D /* BDHost.m */,
 				4C4AC1C21AD1125000D4C461 /* CGGeometry+Extras.h */,
@@ -293,6 +298,7 @@
 				4CE84D861B396A2100BB3A0A /* UIColor+Social.m in Sources */,
 				4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */,
 				4C8CDC811AD2667000B7B9EA /* NSThread+Extras.m in Sources */,
+				4CC641441BA74E5100F3ECCE /* MTMath.m in Sources */,
 				4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */,
 				4C111BF61B1C268C005CA4DD /* NSNumberFormatter+Constructors.m in Sources */,
 				4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */,

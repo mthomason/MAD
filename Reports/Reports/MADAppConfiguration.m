@@ -59,15 +59,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-<<<<<<< HEAD
-NSString * const MTGlobalBundleVersion                              = @"8.0.125";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.125";
-NSString * const MTGlobalBundleRev                                  = @"2067";
-=======
-NSString * const MTGlobalBundleVersion                              = @"8.0.119";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.119";
-NSString * const MTGlobalBundleRev                                  = @"2061";
->>>>>>> parent of 9cbf3ee... Get rid of unneeded files.
+NSString * const MTGlobalBundleVersion                              = @"8.0.127";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.127";
+NSString * const MTGlobalBundleRev                                  = @"2069";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

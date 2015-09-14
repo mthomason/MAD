@@ -52,15 +52,6 @@
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
-//- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion {
-//    NSLog(@"View Contoller %@", viewControllerToPresent);
-//    [super presentViewController:viewControllerToPresent animated:flag completion:completion];
-//}
-
-//- (void)addChildViewController:(UIViewController *)childController {
-//    [super addChildViewController:childController];
-//}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 
@@ -210,19 +201,11 @@
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;
-    
     [self.document.managedObjectContext save:&error];
     if (error != nil) {
         [self.document.managedObjectContext save:&error];
     }
-    //[self.navigationController removeFromParentViewController];
-    //[self.queryBuilderControllerAdvanced removeFromParentViewController];
-    //[self.queryBuilderController removeFromParentViewController];
     [self.viewControllerDelegate viewControllerDidFinish:self];
-    //[self dismissViewControllerAnimated:YES completion:^{
-        
-    //}];
-
 }
 - (IBAction)redrawQueryVisualization:(id)sender {
     [self.queryBuilderControllerAdvanced redraw];
