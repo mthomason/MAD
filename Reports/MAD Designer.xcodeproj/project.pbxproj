@@ -407,6 +407,7 @@
 		4C2F25C51B53FA1C004DFAEC /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25C61B53FA1C004DFAEC /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C2F25C71B53FA1C004DFAEC /* MTStoreKitController+NonRenewableLicensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3E18FAE0CA009F234F /* MTStoreKitController+NonRenewableLicensing.m */; };
+		4C2F25C81B53FA1C004DFAEC /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C2F25C91B53FA1C004DFAEC /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CA1B53FA1C004DFAEC /* MTTableViewControllerStaticSelectRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAF318FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CB1B53FA1C004DFAEC /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
@@ -1304,6 +1305,7 @@
 		4C67FA4A1BA1043B001C9D5A /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA4B1BA1043B001C9D5A /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C67FA4C1BA1043B001C9D5A /* MTStoreKitController+NonRenewableLicensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3E18FAE0CA009F234F /* MTStoreKitController+NonRenewableLicensing.m */; };
+		4C67FA4D1BA1043B001C9D5A /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C67FA4E1BA1043B001C9D5A /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA4F1BA1043B001C9D5A /* MTTableViewControllerStaticSelectRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAF318FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA501BA1043B001C9D5A /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
@@ -1880,6 +1882,7 @@
 		4C67FC971BA1183D001C9D5A /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC981BA1183D001C9D5A /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C67FC991BA1183D001C9D5A /* MTStoreKitController+NonRenewableLicensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3E18FAE0CA009F234F /* MTStoreKitController+NonRenewableLicensing.m */; };
+		4C67FC9A1BA1183D001C9D5A /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C67FC9B1BA1183D001C9D5A /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC9C1BA1183D001C9D5A /* MTTableViewControllerStaticSelectRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAF318FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC9D1BA1183D001C9D5A /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
@@ -2457,6 +2460,7 @@
 		4C67FEE61BA133AB001C9D5A /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEE71BA133AB001C9D5A /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C67FEE81BA133AB001C9D5A /* MTStoreKitController+NonRenewableLicensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3E18FAE0CA009F234F /* MTStoreKitController+NonRenewableLicensing.m */; };
+		4C67FEE91BA133AB001C9D5A /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C67FEEA1BA133AB001C9D5A /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEEB1BA133AB001C9D5A /* MTTableViewControllerStaticSelectRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAF318FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEEC1BA133AB001C9D5A /* MADSalesReceipt+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B211B37F4C6005DC0CE /* MADSalesReceipt+Designer.m */; };
@@ -2816,6 +2820,8 @@
 		4C85C6AA14FF72F3003785AC /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MADViewerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C85D8BF1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C85D8BE1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C85D8C21B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85D8C11B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m */; settings = {ASSET_TAGS = (); }; };
+		4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
+		4C860AB3167ED98900AC1904 /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C87407A15052D3D007FC473 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4C88A9B014ECDE560069A0AF /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C88A9C714EE23D00069A0AF /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2932,6 +2938,7 @@
 		4C92952118C4CC890010AAEF /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
 		4C92952218C4CC890010AAEF /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
 		4C92952318C4CC890010AAEF /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
+		4C92952B18C4CC890010AAEF /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
 		4C92952D18C4CC890010AAEF /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
 		4C92953018C4CC890010AAEF /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C92953118C4CC890010AAEF /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727C1168A402A007DA7C3 /* UICollectionReusableView+Reuse.m */; };
@@ -3835,6 +3842,7 @@
 		4C1847D61B8DEF2E00FA7872 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../DataStructures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
 		4C1847D71B8DEF2E00FA7872 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../DataStructures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
 		4C1847D81B8DEF2E00FA7872 /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../DataStructures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
+		4C1847D91B8DEF2E00FA7872 /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+MTProtocol.h"; path = "../DataStructures/libMTDataStrutures/NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
 		4C1847DA1B8DEF2E00FA7872 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../DataStructures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C1847DB1B8DEF2E00FA7872 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../DataStructures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
 		4C1847DC1B8DEF2E00FA7872 /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = ../DataStructures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
@@ -4275,6 +4283,8 @@
 		4C85D8BE1B9D22EB00F4EA42 /* MADQueryVisualization.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryVisualization.storyboard; sourceTree = "<group>"; };
 		4C85D8C01B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADQueryVisualizationViewController+Designer.h"; sourceTree = "<group>"; };
 		4C85D8C11B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADQueryVisualizationViewController+Designer.m"; sourceTree = "<group>"; };
+		4C860AB0167ED98900AC1904 /* NSString+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MTProtocol.h"; sourceTree = "<group>"; };
+		4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MTProtocol.m"; sourceTree = "<group>"; };
 		4C87407815052D3D007FC473 /* MTClipboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTClipboardView.h; sourceTree = "<group>"; };
 		4C87407915052D3D007FC473 /* MTClipboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTClipboardView.m; sourceTree = "<group>"; };
 		4C88A9AE14ECDE560069A0AF /* MADDesignerElementView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementView.h; sourceTree = "<group>"; };
@@ -5943,6 +5953,7 @@
 				4C1847D61B8DEF2E00FA7872 /* MTProtocolCompare.h */,
 				4C1847D71B8DEF2E00FA7872 /* MTProtocolLog.h */,
 				4C1847D81B8DEF2E00FA7872 /* MTTree.h */,
+				4C1847D91B8DEF2E00FA7872 /* NSNumber+MTProtocol.h */,
 				4C1847DA1B8DEF2E00FA7872 /* MTEdge.h */,
 				4C1847DB1B8DEF2E00FA7872 /* MTGraph.h */,
 				4C1847DC1B8DEF2E00FA7872 /* MTLinkedList.h */,
@@ -7007,6 +7018,8 @@
 				4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */,
 				4CD88D091689175200683C01 /* UIView+NSObjectIdTag.h */,
 				4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */,
+				4C860AB0167ED98900AC1904 /* NSString+MTProtocol.h */,
+				4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */,
 				4CCD8DB6150386CB002B9E77 /* UIColor+PaperPatterns.h */,
 				4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */,
 				4C3727B2168A38A7007DA7C3 /* UICollectionViewCell+Reuse.h */,
@@ -9763,6 +9776,7 @@
 				4C9E446818D8AADE00F0F578 /* MTTableController.m in Sources */,
 				4CC96A371AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4CFC3DE516714A270016E1E8 /* MADViewControllerSQL.m in Sources */,
+				4C860AB3167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D421168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C23FB2D18FADE46009F234F /* MADWatermarkView.m in Sources */,
 				4CD88D0C1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
@@ -9984,6 +9998,7 @@
 				4C2F25C51B53FA1C004DFAEC /* MADViewControllerSQL.m in Sources */,
 				4C2F25C61B53FA1C004DFAEC /* MADUpgradeManager.m in Sources */,
 				4C2F25C71B53FA1C004DFAEC /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4C2F25C81B53FA1C004DFAEC /* NSString+MTProtocol.m in Sources */,
 				4C2F25C91B53FA1C004DFAEC /* MTCollectionViewCellElement.m in Sources */,
 				4C2F25CA1B53FA1C004DFAEC /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C2F25CB1B53FA1C004DFAEC /* MADSalesReceipt+Designer.m in Sources */,
@@ -10220,6 +10235,7 @@
 				4CFC3DE416714A270016E1E8 /* MADViewControllerSQL.m in Sources */,
 				4CFFCBB019C35B2100919440 /* MADUpgradeManager.m in Sources */,
 				4C0A077519C95F390059E1D9 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C23FAF418FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C7B0B221B37F4C6005DC0CE /* MADSalesReceipt+Designer.m in Sources */,
@@ -10459,6 +10475,7 @@
 				4C67FA4A1BA1043B001C9D5A /* MADViewControllerSQL.m in Sources */,
 				4C67FA4B1BA1043B001C9D5A /* MADUpgradeManager.m in Sources */,
 				4C67FA4C1BA1043B001C9D5A /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4C67FA4D1BA1043B001C9D5A /* NSString+MTProtocol.m in Sources */,
 				4C67FA4E1BA1043B001C9D5A /* MTCollectionViewCellElement.m in Sources */,
 				4C67FA4F1BA1043B001C9D5A /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C67FA501BA1043B001C9D5A /* MADSalesReceipt+Designer.m in Sources */,
@@ -10695,6 +10712,7 @@
 				4C67FC971BA1183D001C9D5A /* MADViewControllerSQL.m in Sources */,
 				4C67FC981BA1183D001C9D5A /* MADUpgradeManager.m in Sources */,
 				4C67FC991BA1183D001C9D5A /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4C67FC9A1BA1183D001C9D5A /* NSString+MTProtocol.m in Sources */,
 				4C67FC9B1BA1183D001C9D5A /* MTCollectionViewCellElement.m in Sources */,
 				4C67FC9C1BA1183D001C9D5A /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C67FC9D1BA1183D001C9D5A /* MADSalesReceipt+Designer.m in Sources */,
@@ -10931,6 +10949,7 @@
 				4C67FEE61BA133AB001C9D5A /* MADViewControllerSQL.m in Sources */,
 				4C67FEE71BA133AB001C9D5A /* MADUpgradeManager.m in Sources */,
 				4C67FEE81BA133AB001C9D5A /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4C67FEE91BA133AB001C9D5A /* NSString+MTProtocol.m in Sources */,
 				4C67FEEA1BA133AB001C9D5A /* MTCollectionViewCellElement.m in Sources */,
 				4C67FEEB1BA133AB001C9D5A /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C67FEEC1BA133AB001C9D5A /* MADSalesReceipt+Designer.m in Sources */,
@@ -11171,6 +11190,7 @@
 				4C9294D118C4CC340010AAEF /* MTConnectorView.m in Sources */,
 				4C92953318C4CC890010AAEF /* UIImage+Resizable.m in Sources */,
 				4C94AE0617C3514200037FCB /* ViewController.m in Sources */,
+				4C92952B18C4CC890010AAEF /* NSString+MTProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
