@@ -10,8 +10,10 @@
 #define Reports_MTConnectionViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MADFileManager/MADFileManager.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
+#import "MADSaveFileProtocol.h"
 
 @interface MTConnectionViewController : MADTableViewController
     <UITableViewDelegate,
@@ -20,6 +22,7 @@
         UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MADSaveFileProtocol> saveFileDelegate;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;

@@ -1,26 +1,45 @@
 //
-//  MADOpenFileViewController.h
-//  Reports
+//  MADFileManagerViewController.h
+//  MAD Designer
 //
-//  Created by Michael Thomason on 9/11/14.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Created by Michael Thomason on 9/12/15.
+//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
-
-#ifndef Reports_MADFileManager_h
-#define Reports_MADFileManager_h
 
 #import <UIKit/UIKit.h>
+#import <MADFileManager/MADFileManager.h>
 
-@class MADocument;
+typedef NS_ENUM(NSUInteger, MTReportState) {
+    MTReportStateOpen = 0,
+    MTReportStateClosed
+};
 
-@interface MADFileManager : NSObject
+@class MADFilesController;
 
-@property (nonatomic, strong, readonly) NSURL *openUrl;
-@property (readonly) UIManagedDocument *openDocument;
+@protocol MADFileManagerViewControllerDelegate <NSObject>
 
-- (void)setOpenDocument:(UIManagedDocument *)document;
-- (void)removeDocumentWithUrl:(NSURL *)url;
+    @required
+        - (NSString *)groupIdentifier;
+        - (NSString *)ubiquityIdentifier;
+        - (NSString *)fileExtention;
+
+        - (void)didConfigureFilesController:(MADFilesController *)filesController;
+
+        - (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
+                                                  cloud:(void (^)())handlerCloud;
+        - (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler;
+
+    @optional
+        - (void)startLongRunningActivity;
+        - (void)completedLongRunningActivity;
 
 @end
 
-#endif
+@interface MADFileManager : NSObject
+
+    @property (nonatomic, weak) UIViewController <MADFileManagerViewControllerDelegate> *delegate;
+    @property (nonatomic, strong, readonly) MADFilesController *filesController;
+
+    - (void)getUserCloudPrefs;
+
+@end

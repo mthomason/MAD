@@ -11,12 +11,7 @@
 #endif
 
 #import "MADOpenFileViewController.h"
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADStorageState.h>
-#import <MADFileManager/MADFileUtilities.h>
-#import <MADFileManager/MADLocalFileCoordinator.h>
-#import <MADFileManager/MADCloudFileCoordinator.h>
-#import <MADFileManager/MADMetaData.h>
+
 #import "MADConstants.h"
 
 #import "MADViewerController.h"
@@ -27,11 +22,6 @@
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 
 #import "MADocument.h"
-#import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADAppLaunchContext.h>
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileInfo.h>
 
 #import "MADSearchBar.h"
 
@@ -49,7 +39,7 @@
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 
-#import "MADFileManager.h"
+#import "MADOpenDocumentManager.h"
 #import "MADBarButtonItem.h"
 
 #import "UIColor+EverydayApps.h"
@@ -79,8 +69,10 @@
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
-#import "MADFileManager.h"
+#import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
+#import "MADFileManager.h"
+#import "UIAlertController+Constructors.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -110,7 +102,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         MTDocumentCellProtocol,
         MADFilesControllerDelegate,
         MADCollectionViewLayoutFilesDelegate,
-        MTViewControllerProtocol>
+        MTViewControllerProtocol,
+        MADFileManagerViewControllerDelegate>
 
 @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
@@ -163,15 +156,54 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
-@property (nonatomic, strong, readwrite) MADFileManager *fileManager;
+@property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
 @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
 @property (nonatomic, assign) MTReportState reportState;
 
 @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
+
+@property (nonatomic, strong) MADFileManager *filesCoordnator;
+
 @end
 
 @implementation MADOpenFileViewController
+
+#pragma mark - MADFileManagerViewControllerDelegate
+
+- (NSString *)groupIdentifier {
+    return MADIdentifierGroup;
+}
+- (NSString *)ubiquityIdentifier {
+    return MADUbiquityIdentifier;
+}
+
+- (NSString *)fileExtention {
+    return MADFileExtentionMobleApplicationDocument;
+}
+
+- (void)didConfigureFilesController:(MADFilesController *)filesController {
+    filesController.delegate = self;
+}
+
+- (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
+                                          cloud:(void (^)())handlerCloud {
+    UIAlertController *alert = [UIAlertController promotStorageOptionLocal:handlerLocal cloud:handlerCloud];
+    return alert;
+}
+
+- (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
+    UIAlertController *alert = [UIAlertController promotCloudSignOut:handler];
+    return alert;
+}
+
+- (void)startLongRunningActivity {
+    
+}
+
+- (void)completedLongRunningActivity {
+    
+}
 
 #pragma mark - Helper functions
 
@@ -212,6 +244,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return queue;
 }
 
+#pragma mark - Public
+
+- (void)getUserCloudPrefs {
+    [self.filesCoordnator getUserCloudPrefs];
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc {
@@ -220,13 +258,18 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        
+
+        MADFileManager *filesCoordnator = [[MADFileManager alloc] init];
+        filesCoordnator.delegate = self;
+        filesCoordnator.filesController.delegate = self;
+        self.filesCoordnator = filesCoordnator;
+
         self.getUserCloudPrefsFirstCall = YES;
         
         dispatch_queue_t queueSerialOperations = dispatch_queue_create("MADFileManager", DISPATCH_QUEUE_SERIAL);
         self.queueSerialOperations = queueSerialOperations;
         
-        MADFileManager *openFiles = [[MADFileManager alloc] init];
+        MADOpenDocumentManager *openFiles = [[MADOpenDocumentManager alloc] init];
         self.fileManager = openFiles;
 
         MADProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
@@ -764,7 +807,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)openFileWithUrl:(NSURL *)url { //completion:(void (^)(BOOL success))completion {
+- (void)openFileWithUrl:(NSURL *)url {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     self.fileManager.openDocument = document;
     
@@ -825,12 +868,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - MADCollectionViewLayoutFilesDelegate
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
     return [MADocument fileNameForMadUrl:metadata.URL];
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript: indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
     return [self subtitleForMetadata:metadata];
 }
 
@@ -847,12 +890,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.filesController objectAtIndexedSubscript: indexPath.item];
+    return [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
 }
 
 - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
@@ -880,7 +923,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.filesController ? self.filesController.count : 0;
+    return self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1157,9 +1200,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }
     } completion:^(BOOL finished) {
         if (finished) {
-            //[UIView performWithoutAnimation:^{
-                [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
-            //}];
+            [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
             completion(YES, nil);
         }
     }];
@@ -1367,7 +1408,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)activity:(id)sender {
     
-    NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.filesController ? self.filesController.count : 0];
+    NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0];
     for (NSIndexPath *selectedCellLocation in self.collectionView.indexPathsForSelectedItems) {
         NSURL *fileUrl = [self documentForIndexPath:selectedCellLocation];
         [wrappedUrls addObject:fileUrl];
@@ -1415,7 +1456,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     NSIndexPath *indexPath;
     NSMutableArray *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
     for (indexPath in selectedItems) {
-        metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+        metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
         [metadataItems addObject:metadata];
     }
     
@@ -1438,8 +1479,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     UIAlertController *alertController = [UIAlertController deleteItems:selectedItems.count
                                                                 confirm:^(UIAlertAction *action) {
                                                                     for (NSIndexPath *selectedItem in selectedItems) {
-                                                                        MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:selectedItem.item];
-                                                                        [self.filesController removeFileInfo:metaData];
+                                                                        MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:selectedItem.item];
+                                                                        [self.filesCoordnator.filesController removeFileInfo:metaData];
                                                                     }
                                                                 } cancel:^(UIAlertAction *action) {
                                                                     
@@ -1453,8 +1494,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)actionDuplicate:(id)sender {
     for (NSIndexPath *selectedItem in self.collectionView.indexPathsForSelectedItems) {
-        MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:selectedItem.item];
-        [self.filesController duplicateFileInfo:metaData];
+        MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:selectedItem.item];
+        [self.filesCoordnator.filesController duplicateFileInfo:metaData];
     }
 }
 
@@ -1471,7 +1512,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
     
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    MADMetaData *metaData = [self.filesController objectAtIndexedSubscript:indexPath.item];
+    MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
     
     UIAlertController *alert = [UIAlertController renameDocument:^(UITextField *textField) {
         
@@ -1491,13 +1532,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                         if (success) {
                             [doc closeWithCompletionHandler:^(BOOL success) {
                                 if (success) {
-                                    [self.filesController renameFileInfo:metaData toName:text];
+                                    [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                                 }
                             }];
                         }
                     }];
                 } else {
-                    [self.filesController renameFileInfo:metaData toName:text];
+                    [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                 }
             } else {
                 UIAlertController *alert = [UIAlertController errorFileExist];
@@ -1524,7 +1565,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     } else {
         
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
-        MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+        MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
 
         MADocument *documentReport = [[MADocument alloc] initWithFileURL:metadata.URL];
         
@@ -1587,7 +1628,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesController objectAtIndexedSubscript:indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
     return metadata.URL;
 }
 
@@ -1657,13 +1698,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return _subtitleNumberFormatter;
 }
 
-- (void)setFilesController:(MADFilesController *)filesController {
-    if (filesController != _filesController) {
-        _filesController = filesController;
-        _filesController.delegate = self;
-    }
-}
-
 #pragma mark - Lazy Load
 
 - (UIBarButtonItem *)barButtonItemEditDone {
@@ -1678,242 +1712,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(actionDuplicate:)];
     }
     return _barButtonItemDuplicate;
-}
-
-#pragma mark - Ubiquity Identity Token Handling (Account Change Info)
-
-- (BOOL)hasUbiquityIdentityChanged {
-    BOOL hasChanged = NO;
-    
-    id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
-    id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
-    
-    BOOL currentTokenNilStoredNonNil = !currentToken && storedToken;
-    BOOL storedTokenNilCurrentNonNil = !storedToken && currentToken;
-    BOOL currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
-    
-    if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
-        [self persistAccount];
-        
-        hasChanged = YES;
-    }
-    
-    return hasChanged;
-}
-
-- (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
-    id<NSObject, NSCopying, NSCoding> storedToken = nil;
-    
-    // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
-    NSData *ubiquityIdentityTokenArchive = [[MADAppConfiguration mainInstance].applicationUserDefaults objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
-    
-    if (ubiquityIdentityTokenArchive) {
-        storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
-    }
-    
-    return storedToken;
-}
-
-- (void)persistAccount {
-    NSUserDefaults *defaults = [MADAppConfiguration mainInstance].applicationUserDefaults;
-    id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
-    
-    if (token) {
-        // The account has changed.
-        NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
-        
-        [defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
-    }
-    else {
-        // There is no signed-in account.
-        [defaults removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
-    }
-}
-
-#pragma mark - Overrides
-
-- (MADAppStorage)storageOption {
-    NSInteger value = [[MADAppConfiguration mainInstance].applicationUserDefaults integerForKey:MADAppConfigurationUserDefaultsStorageOption];
-    return (MADAppStorage)value;
-}
-
-- (void)setStorageOption:(MADAppStorage)storageOption {
-    [[MADAppConfiguration mainInstance].applicationUserDefaults setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
-    [[MADAppConfiguration mainInstance].applicationUserDefaults synchronize];
-}
-
-#pragma mark - Convenience
-
-- (MADStorageState *)storageState {
-    MADStorageState *storageState = [[MADStorageState alloc] init];
-    storageState.storageOption = self.storageOption;
-    storageState.accountDidChange = [self hasUbiquityIdentityChanged];
-    storageState.cloudAvailable = [MADFilesController isCloudAvailable];
-    return storageState;
-}
-
-- (void)getUserCloudPrefs {
-    if ([MADAppConfiguration mainInstance].isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
-        self.getUserCloudPrefsFirstCall = NO;
-        MADStorageState *storageState = self.storageState;
-        if (storageState.cloudAvailable) {
-            
-            if (storageState.storageOption == MADAppStorageCloud) {
-                
-                void (^activityIndicatorStart)() = ^ {
-                    [self setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
-                };
-                void (^activityIndicatorStop)() = ^ {
-                    [self setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
-                };
-                
-                void (^handleLongRunningCloudLookup)() = ^ {
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStart];
-                };
-                
-                MADBlockCompletionFileStorageLocation completion = ^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
-                    self.storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-                    [self configureFilesController: NO storageOptionChangeHandler: nil];
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:activityIndicatorStop];
-                    
-                };
-                
-                [MADFilesController getFileStorageLocationsForUbiquityIdentifier:MADUbiquityIdentifier
-                                                                 groupIdentifier:MADIdentifierGroup
-                                                                           delay:handleLongRunningCloudLookup
-                                                                      completion:completion];
-                
-                
-            } else if (storageState.storageOption == MADAppStorageLocal ||
-                       storageState.storageOption == MADAppStorageNotSet) {
-                
-                void (^handleOptionCloud)() = ^ {
-                    self.storageOption = MADAppStorageCloud;
-                    [self configureFilesController: NO storageOptionChangeHandler:^{
-                        [MADFileUtilities migrateLocalFiles: MADIdentifierGroup
-                                                    toCloud: MADUbiquityIdentifier
-                                                  extension: MADFileExtentionMobleApplicationDocument];
-                    }];
-                    
-                };
-                void (^handleOptionLocal)() = ^ {
-                    self.storageOption = MADAppStorageLocal;
-                    [self configureFilesController: NO storageOptionChangeHandler: nil];
-                };
-                UIAlertController *prompt = [UIAlertController promotStorageOptionLocal:handleOptionLocal
-                                                                                  cloud:handleOptionCloud];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                    [self presentViewController:prompt animated:YES completion:nil];
-                }];
-            }
-        } else {
-            if (storageState.storageOption == MADAppStorageCloud) {
-                self.storageOption = MADAppStorageNotSet;
-            }
-            [self configureFilesController: NO storageOptionChangeHandler: nil];
-        }
-    } else {
-        self.getUserCloudPrefsFirstCall = NO;
-        [self getUserCloudPrefsSubsquient];
-    }
-    
-}
-
-- (void)getUserCloudPrefsSubsquient {
-    
-    MADStorageState *storageState = self.storageState;
-    if (storageState.accountDidChange) {
-        
-        switch (storageState.storageOption) {
-            case MADAppStorageCloud: {
-                
-                UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
-                    self.storageOption = MADAppStorageNotSet;
-                    [self getUserCloudPrefs];
-                }];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                    [self presentViewController:signedOutController animated:YES completion:nil];
-                }];
-                
-                break;
-            }
-            case MADAppStorageLocal:
-            case MADAppStorageNotSet:
-            default:
-                [self getUserCloudPrefs];
-                break;
-        }
-        
-        
-    } else {
-        if (storageState.storageOption == MADAppStorageNotSet) {
-            [self getUserCloudPrefs];
-        } else {
-            [self configureFilesController: NO storageOptionChangeHandler: nil];
-        }
-    }
-    
-}
-
-- (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
-    
-    if (accountChanged || [MADAppConfiguration mainInstance].filesController == nil) {
-        if (![MADAppConfiguration mainInstance].filesController) {
-            MADFilesController *filesController = [self filesControllerForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                               firstQueryHandler:storageOptionChangeHandler];
-            [MADAppConfiguration mainInstance].filesController = filesController;
-            self.filesController = [MADAppConfiguration mainInstance].filesController;
-            
-            [[MADAppConfiguration mainInstance].filesController startSearching];
-            
-        } else if (accountChanged) {
-            [MADAppConfiguration mainInstance].filesController.fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:MADFileExtentionMobleApplicationDocument
-                                                                                                                                  firstQueryHandler:storageOptionChangeHandler];
-        }
-    }
-    
-}
-
-#pragma mark - Document Operations
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    if (self.storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
-    }  else {
-        return [[MADCloudFileCoordinator alloc] initWithPathExtension:pathExtension identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    if (self.storageOption != MADAppStorageCloud) {
-        // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
-        return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADIdentifierGroup firstQueryUpdateHandler:firstQueryHandler];
-    } else {
-        return [[MADCloudFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:MADUbiquityIdentifier firstQueryUpdateHandler:firstQueryHandler];
-    }
-}
-
-- (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
-    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                                                delegateQueue:[NSOperationQueue mainQueue]
-                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                                               }];
-    return filesController;
-}
-
-- (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
-    MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
-                                                                                delegateQueue:[NSOperationQueue mainQueue]
-                                                                               sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
-                                                                                   return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
-                                                                               }];
-    return filesController;
 }
 
 @end

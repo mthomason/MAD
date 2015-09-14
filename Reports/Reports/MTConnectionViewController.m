@@ -12,8 +12,6 @@
 
 #import "MTConnectionViewController.h"
 #import "MADAppConfiguration.h"
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileUtilities.h>
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MADocument.h"
@@ -177,7 +175,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     NSAssert(sender == nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-    NSURL *desiredUrl = [[MADAppConfiguration mainInstance].filesController.documentDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent:filename isDirectory:NO];
     NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL:desiredUrl];
     
     MADocument *doc = [[MADocument alloc] initWithFileURL:uniqueURL];

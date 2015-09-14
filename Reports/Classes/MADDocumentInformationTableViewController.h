@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MADFileManager/MADFileManager.h>
 
 @interface MADDocumentInformationTableViewController : UITableViewController
 

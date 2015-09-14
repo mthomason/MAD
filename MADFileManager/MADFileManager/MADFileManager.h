@@ -15,3 +15,12 @@ FOUNDATION_EXPORT double MADFileManagerVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADFileManagerVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADFileManager/PublicHeader.h>
+#import <MADFileManager/MADFileUtilities.h>
+#import <MADFileManager/MADStorageState.h>
+#import <MADFileManager/MADCloudFileCoordinator.h>
+#import <MADFileManager/MADLocalFileCoordinator.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADFileManager/MADMetaData.h>
+#import <MADFileManager/MADAppLaunchContext.h>
+#import <MADFileManager/MADFileInfo.h>
+#import <MADFileManager/NSFileManager+Common.h>

@@ -9,6 +9,6 @@
 #import "MADConstants.h"
 
 NSString * const MADIdentifierGroup                                 = @"group.everydayapps.mad";
-NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
+NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADTrademark                                       = @"MAD";

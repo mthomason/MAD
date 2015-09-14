@@ -11,7 +11,6 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
-#import <MADFileManager/NSFileManager+Common.h>
 #import "MADocument.h"
 #import "MADConstants.h"
 #import "MADAppConfiguration.h"

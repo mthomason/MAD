@@ -19,10 +19,6 @@
 
 #import "MADOpenFileViewController.h"
 
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADFileUtilities.h>
-
-
 #import "MADUpgradeManager.h"
 
 #import "UIAlertController+Constructors.h"
@@ -174,7 +170,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    
+/*
     NSURL *documentsDirectory = self.appConfiguration.filesController.documentDirectory;
     NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
     NSError *error = nil;
@@ -196,7 +192,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         }];
         
     }
-    return success;
+    return success;*/
+    // FIXME: Open a fucking file, YO!!!
+    return NO;
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {

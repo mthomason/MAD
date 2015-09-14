@@ -22,11 +22,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 #import <MessageUI/MessageUI.h>
-#import <MADFileManager/MADFilesController.h>
-#import <MADFileManager/MADLocalFileCoordinator.h>
-#import <MADFileManager/MADCloudFileCoordinator.h>
-#import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADStorageState.h>
 #import "MAD.h"
 
 #import "UIColor+EverydayApps.h"
@@ -52,8 +47,6 @@ NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgra
 NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
 NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
 
-NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
-NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
 
 NSString * const MADIDUser                                          = @"MADIDUser";
@@ -66,9 +59,15 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
+<<<<<<< HEAD
 NSString * const MTGlobalBundleVersion                              = @"8.0.116";
 NSString * const MTGlobalBundleShortVersion                         = @"8.0.116";
 NSString * const MTGlobalBundleRev                                  = @"2058";
+=======
+NSString * const MTGlobalBundleVersion                              = @"8.0.118";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.118";
+NSString * const MTGlobalBundleRev                                  = @"2060";
+>>>>>>> FileViewController
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -99,14 +98,12 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
         self.appInstaceQueue = appInstaceQueue;
         
         NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
-        NSNumber *defaultStorage = @(MADAppStorageNotSet);
         NSNumber *defaultSamplesInstalled = @(NO);
         NSNumber *defaultReportsInstalled = @(NO);
         NSNumber *defaultChinookInstalled = @(NO);
         NSDictionary *defaultsToRegister = @{MADUpgradeInstalledChinook: defaultChinookInstalled,
                                              MADUpgradeInstalledSamples : defaultReportsInstalled,
                                              MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
-                                             MADAppConfigurationUserDefaultsStorageOption: defaultStorage
                                              };
         [defaults registerDefaults:defaultsToRegister];
         self.applicationUserDefaults = defaults;

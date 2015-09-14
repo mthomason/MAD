@@ -7,8 +7,6 @@
 //
 
 #import "MADUpgradeManager.h"
-#import <MADFileManager/MADFileUtilities.h>
-#import <MADFileManager/NSFileManager+Common.h>
 #import "MADConstants.h"
 #import "MADAppConfiguration.h"
 

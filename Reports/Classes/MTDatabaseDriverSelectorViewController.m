@@ -39,6 +39,11 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 @implementation MTDatabaseDriverSelectorViewController
 
+- (NSURL *)documentDirectory {
+    NSURL *url = [self.saveFileDelegate documentDirectory].copy;
+    return  url;
+}
+
 #pragma mark - MADVibrantTableViewCellDelegate
 
 - (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {

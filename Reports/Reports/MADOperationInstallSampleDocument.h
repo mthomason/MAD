@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MADFileManager/MADFileManager.h>
 
 @interface MADOperationInstallSampleDocument : NSOperation
 
