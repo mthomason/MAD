@@ -60,6 +60,7 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 NSString * const MTGlobalBundleVersion                              = @"8.0.116";
 NSString * const MTGlobalBundleShortVersion                         = @"8.0.116";
 NSString * const MTGlobalBundleRev                                  = @"2058";
@@ -67,6 +68,11 @@ NSString * const MTGlobalBundleRev                                  = @"2058";
 NSString * const MTGlobalBundleVersion                              = @"8.0.118";
 NSString * const MTGlobalBundleShortVersion                         = @"8.0.118";
 NSString * const MTGlobalBundleRev                                  = @"2060";
+>>>>>>> FileViewController
+=======
+NSString * const MTGlobalBundleVersion                              = @"8.0.119";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.119";
+NSString * const MTGlobalBundleRev                                  = @"2061";
 >>>>>>> FileViewController
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";

@@ -48,6 +48,7 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<string>8.0.116</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
@@ -59,14 +60,21 @@
 	<string>2058</string>
 =======
 	<string>8.0.118</string>
+=======
+	<string>8.0.119</string>
+>>>>>>> FileViewController
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.118</string>
+	<string>8.0.119</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADRev</key>
+<<<<<<< HEAD
 	<string>2060</string>
+>>>>>>> FileViewController
+=======
+	<string>2061</string>
 >>>>>>> FileViewController
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 EVERYDAY APPS LLC.  All rights reserved.</string>

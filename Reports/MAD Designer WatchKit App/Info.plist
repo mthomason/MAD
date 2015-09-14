@@ -16,6 +16,7 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<string>8.0.116</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
@@ -27,6 +28,13 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>8.0.118</string>
+>>>>>>> FileViewController
+=======
+	<string>8.0.119</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>8.0.119</string>
 >>>>>>> FileViewController
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
