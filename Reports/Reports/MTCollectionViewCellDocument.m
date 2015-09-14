@@ -18,7 +18,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 #import "UIColor+EverydayApps.h"
 #import "MADocument.h"
 #import "MADBackgroundViewSelected.h"
-#import "UIMotionEffectGroup+HoverEffects.h"
 
 @interface MTCollectionViewCellDocument ()
 

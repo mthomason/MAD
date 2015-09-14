@@ -80,7 +80,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollection
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
-static NSString * const NotDownloaded                          = @"Not Downloaded";
+static NSString * const NotDownloaded                           = @"Not Downloaded";
+static NSString * const Syncing                                 = @"Syncing";
+static NSString * const Downloading                             = @"Downloading";
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUtiPublicData                               = @"public.data";
 
@@ -104,6 +106,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         MADCollectionViewLayoutFilesDelegate,
         MTViewControllerProtocol,
         MADFileManagerViewControllerDelegate>
+
+@property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
 
 @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
@@ -131,8 +135,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (atomic, assign) BOOL aboutViewControllerOnScreen;
-
-@property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readwrite) BOOL rightBarButtonItemActivityIndicatorVisible;
 
 @property (nonatomic, strong) MADSearchBar *searchBar;
 @property (readonly) UILabel *labelMadDesigner;
@@ -942,9 +944,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     BOOL uploading = metadata.ubiquitousItemIsUploading;
     
     if (downloading) {
-        cell.labelTitleSub.text = NSLocalizedString(@"Downloading", @"Downloading");
+        cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
     } else if (uploading) {
-        cell.labelTitleSub.text = NSLocalizedString(@"Syncing", @"Syncing");
+        cell.labelTitleSub.text = NSLocalizedString(Syncing, Syncing);
     } else {
         cell.labelTitleSub.text = [self subtitleForMetadata:metadata];
     }
@@ -1099,7 +1101,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - UIDocumentPickerDelegate
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
-    
     [controller removeFromParentViewController];
 }
 
@@ -1620,11 +1621,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (NSArray *)defaultPassthoughViews {
     return @[self.navigationController.navigationBar, self.navigationController.toolbar];
-}
-
-- (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    return [self documentForIndexPath:indexPath];
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {

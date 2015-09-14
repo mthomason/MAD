@@ -13,16 +13,9 @@
 #import <MessageUI/MessageUI.h>
 #import <MADFileManager/MADFileManager.h>
 
-/*typedef NS_ENUM(NSUInteger, MTReportState) {
-    MTReportStateOpen = 0,
-    MTReportStateClosed
-};*/
-
 @class MADocument, MADFileManager, MADFilesController;
 
 @interface MADOpenFileViewController : UICollectionViewController
-
-@property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;
