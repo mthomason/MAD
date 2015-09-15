@@ -15,7 +15,6 @@
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
-#import "MTBarcode.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqDocumentSection.h"

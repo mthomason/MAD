@@ -55,8 +55,6 @@
 #import "MTDatabase.h"
 #import "MTDataTable.h"
 
-#import "MTBarcode.h"
-
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
 

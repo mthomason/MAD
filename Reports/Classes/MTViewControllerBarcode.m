@@ -11,12 +11,6 @@
 #endif
 
 #import "MTViewControllerBarcode.h"
-#import "MTBarcodeAztec.h"
-#import "MTBarcodeQrCodeIso18004.h"
-#import "MTBarcodeMicroQrCode.h"
-#import "MTBarcodeGridMatrix.h"
-#import "MTBarcodeMaxicodeIso16023.h"
-#import "MTBarcodePdf417Iso15438.h"
 
 #import "MTQuery.h"
 

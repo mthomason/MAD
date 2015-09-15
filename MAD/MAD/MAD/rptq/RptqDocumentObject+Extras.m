@@ -17,7 +17,6 @@
 
 #import "MTFont.h"
 
-#import "MTBarcode.h"
 #import "RptqDocument.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"

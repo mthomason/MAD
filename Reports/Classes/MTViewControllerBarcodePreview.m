@@ -11,8 +11,6 @@
 #endif
 
 #import "MTViewControllerBarcodePreview.h"
-#import "MTBarcodeView.h"
-#import "MTBarcode.h"
 
 @interface MTViewControllerBarcodePreview ()
 

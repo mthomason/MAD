@@ -7,7 +7,6 @@
 //
 
 #import "MTElementCanvas.h"
-#import "MTBarcode.h"
 
 @implementation MTElementCanvas
 

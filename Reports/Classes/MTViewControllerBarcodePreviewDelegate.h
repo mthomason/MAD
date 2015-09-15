@@ -9,7 +9,7 @@
 #ifndef MAD_MTViewControllerBarcodePreviewDelegate_h
 #define MAD_MTViewControllerBarcodePreviewDelegate_h
 
-#import "MADBarcodeType.h"
+#import <MADBarcodes/MADBarcodes.h>
 
 @protocol MTViewControllerBarcodePreviewDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)type;

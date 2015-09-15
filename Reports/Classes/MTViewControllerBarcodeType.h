@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTViewControllerBarcodeType_h
 #define Barcodes_MTViewControllerBarcodeType_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MADBarcodes.h>
 
 @protocol MTViewControllerBarcodeTypeDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;

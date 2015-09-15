@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "MTBarcodeProtocol.h"
 #import "MADBarcodeType.h"
+#import "zint.h"
 
 typedef NS_ENUM(NSUInteger, MTBarcodeSizingMode) {
     MTBarcodeSizingModeAutomaticResizing     = 1,

@@ -14,21 +14,6 @@
 #import <CoreData/CoreData.h>
 #import "MTDatabase.h"
 
-#import "MTBarcodeAztec.h"
-#import "MTBarcodeGridMatrix.h"
-#import "MTBarcodeMicroQrCode.h"
-#import "MTBarcodeQrCodeIso18004.h"
-#import "MTBarcodeCodeOne.h"
-#import "MTBarcodeMsiPlessey.h"
-#import "MTBarcodeDatabarExpandedStacked.h"
-#import "MTBarcodeMicroPdf417Iso24728.h"
-#import "MTBarcodeMaxicodeIso16023.h"
-#import "MTBarcodeChannelCode.h"
-#import "MTBarcodeCode39Iso16388.h"
-#import "MTBarcodeCode39Extended.h"
-#import "MTBarcodeDataMatrixIso16022.h"
-#import "MTBarcodePdf417Iso15438.h"
-
 #import "MTQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"

@@ -10,7 +10,7 @@
 #define Barcodes_MTViewControllerBarcodeOptions_h
 
 #import <UIKit/UIKit.h>
-#import "MTBarcode.h"
+
 #import "MTViewControllerBarcodeType.h"
 #import "MTTableViewControllerBarcodeExtraAztec.h"
 #import "MTTableViewControllerBarcodeExtraGridMatrix.h"

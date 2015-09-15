@@ -10,6 +10,7 @@
 #define Reports_RptqDocument_Extras_h
 
 #import <Foundation/Foundation.h>
+#import <MADBarcodes/MADBarcodes.h>
 #import "RptqDocument.h"
 #import "MTProtocolCompare.h"
 #import "RptqDocumentSection+Extras.h"

@@ -13,7 +13,6 @@
 #import "RptqDocumentObjectBarcode+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
-#import "MTBarcode.h"
 #import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectBarcode (Extras)

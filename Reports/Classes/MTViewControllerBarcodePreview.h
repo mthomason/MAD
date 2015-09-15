@@ -10,6 +10,7 @@
 #define Barcodes_MTViewControllerBarcodePreview_h
 
 #import <UIKit/UIKit.h>
+#import <MADBarcodes/MADBarcodes.h>
 #import "MTViewControllerBarcodePreviewDelegate.h"
 
 @class MTBarcode;

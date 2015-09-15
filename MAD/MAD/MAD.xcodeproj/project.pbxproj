@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C0F89351B280A2300D75AF6 /* MADSectionLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */; };
 		4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */; };
+		4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B0A1BA808BE0022665F /* MADBarcodes.framework */; };
 		4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */; };
 		4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */; };
 		4C5205DC1BA7E81C000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */; };
@@ -111,7 +112,6 @@
 		4C8CDAFD1AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAF91AD24D2A00B7B9EA /* RptqQueryLinks+Extras.m */; };
 		4C8CDAFE1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDAFB1AD24D2A00B7B9EA /* RptqQueryTable+Extras.m */; };
 		4C8CDB011AD24D3E00B7B9EA /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB001AD24D3E00B7B9EA /* RptqDatabase+Extras.m */; };
-		4C8CDB041AD24DC300B7B9EA /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */; };
 		4C8CDB0B1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB0A1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m */; };
 		4C8CDB211AD24E8400B7B9EA /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB0D1AD24E8400B7B9EA /* RptqDocumentObject+Extras.m */; };
 		4C8CDB221AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDB0F1AD24E8400B7B9EA /* RptqDocumentObjectAggregate+Extras.m */; };
@@ -231,6 +231,7 @@
 		4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutManager.m; sourceTree = "<group>"; };
 		4C0F893D1B29146C00D75AF6 /* MADSectionLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionLayoutAttributes.h; sourceTree = "<group>"; };
 		4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutAttributes.m; sourceTree = "<group>"; };
+		4C130B0A1BA808BE0022665F /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../../MADBarcodes/build/Debug-iphoneos/MADBarcodes.framework"; sourceTree = "<group>"; };
 		4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
 		4C1847E21B8DF03300FA7872 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
 		4C1847E31B8DF03300FA7872 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
@@ -244,7 +245,6 @@
 		4C1847EB1B8DF03300FA7872 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../../DataStructures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
 		4C1847EC1B8DF03300FA7872 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../../DataStructures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
 		4C1847ED1B8DF03300FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
-		4C1847F61B8DF2C600FA7872 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = ../../Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../MADFileManager/build/Debug-iphoneos/MADFileManager.framework"; sourceTree = "<group>"; };
 		4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../MADCocoaExtensions/build/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -467,7 +467,6 @@
 		4C8CDAFF1AD24D3E00B7B9EA /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDatabase+Extras.h"; path = "rptq/RptqDatabase+Extras.h"; sourceTree = "<group>"; };
 		4C8CDB001AD24D3E00B7B9EA /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDatabase+Extras.m"; path = "rptq/RptqDatabase+Extras.m"; sourceTree = "<group>"; };
 		4C8CDB021AD24D7A00B7B9EA /* MADLinkType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLinkType.h; path = MAD/MADLinkType.h; sourceTree = "<group>"; };
-		4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBarcodes.a; path = "../../Reports/Barcodes/build/Debug-iphoneos/libBarcodes.a"; sourceTree = "<group>"; };
 		4C8CDB091AD24E7100B7B9EA /* RptqUserCredentals+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqUserCredentals+Extras.h"; path = "rptq/RptqUserCredentals+Extras.h"; sourceTree = "<group>"; };
 		4C8CDB0A1AD24E7100B7B9EA /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqUserCredentals+Extras.m"; path = "rptq/RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
 		4C8CDB0C1AD24E8400B7B9EA /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObject+Extras.h"; path = "rptq/RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
@@ -761,11 +760,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */,
 				4C5205DC1BA7E81C000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 				4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */,
 				4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */,
 				4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */,
-				4C8CDB041AD24DC300B7B9EA /* libBarcodes.a in Frameworks */,
 				4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */,
 				4C8CDAAD1AD1E06A00B7B9EA /* libMTDataStrutures.a in Frameworks */,
 				4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */,
@@ -830,9 +829,10 @@
 		4C5205DA1BA7E7F6000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C130B0A1BA808BE0022665F /* MADBarcodes.framework */,
 				4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */,
-				4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */,
 				4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */,
+				4C8CDBC71AD2553F00B7B9EA /* CoreText.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -935,7 +935,6 @@
 			children = (
 				4C8CDCFC1AD2805600B7B9EA /* libSqlite */,
 				4C8CDC011AD2649C00B7B9EA /* libMySQL */,
-				4C8CDB051AD24DCE00B7B9EA /* libBarcodes */,
 				4C8CDAAB1AD1E05D00B7B9EA /* libDataStructures */,
 				4C8CDA0B1AD1D9D800B7B9EA /* libTDS */,
 				4C8CD9A31AD1D2F700B7B9EA /* libCloudManager */,
@@ -1217,23 +1216,6 @@
 				4C8CDAAC1AD1E06A00B7B9EA /* libMTDataStrutures.a */,
 			);
 			name = libDataStructures;
-			sourceTree = "<group>";
-		};
-		4C8CDB051AD24DCE00B7B9EA /* libBarcodes */ = {
-			isa = PBXGroup;
-			children = (
-				4C8CDB071AD24DEE00B7B9EA /* headers */,
-				4C8CDB031AD24DC300B7B9EA /* libBarcodes.a */,
-			);
-			name = libBarcodes;
-			sourceTree = "<group>";
-		};
-		4C8CDB071AD24DEE00B7B9EA /* headers */ = {
-			isa = PBXGroup;
-			children = (
-				4C1847F61B8DF2C600FA7872 /* MTBarcode.h */,
-			);
-			name = headers;
 			sourceTree = "<group>";
 		};
 		4C8CDB081AD24DFB00B7B9EA /* headers */ = {

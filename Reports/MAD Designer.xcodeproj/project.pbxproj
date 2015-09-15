@@ -209,6 +209,7 @@
 		4C12293F16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */; };
 		4C122AEA16D0066B00B69763 /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
 		4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
+		4C130B0D1BA8090D0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B0C1BA8090D0022665F /* MADBarcodes.framework */; };
 		4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
@@ -3787,6 +3788,7 @@
 		4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+AnchorPoint.m"; sourceTree = "<group>"; };
 		4C122AE816D0066B00B69763 /* MTConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectorView.h; sourceTree = "<group>"; };
 		4C122AE916D0066B00B69763 /* MTConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTConnectorView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4C130B0C1BA8090D0022665F /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../MADBarcodes/build/Debug-iphoneos/MADBarcodes.framework"; sourceTree = "<group>"; };
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C138D5B197E254000BABB0C /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = "Resources/Sample Reports/London.mad"; sourceTree = "<group>"; };
@@ -3813,24 +3815,6 @@
 		4C1847DF1B8DEF2E00FA7872 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../DataStructures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
 		4C1847E01B8DEF2E00FA7872 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../DataStructures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
 		4C1847E11B8DEF2E00FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
-		4C1847EE1B8DF12D00FA7872 /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = ../Barcodes/Barcodes/zint.h; sourceTree = "<group>"; };
-		4C1847EF1B8DF13A00FA7872 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeView.h; path = ../Barcodes/Barcodes/MTBarcodeView.h; sourceTree = "<group>"; };
-		4C1847F01B8DF14400FA7872 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = ../Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
-		4C1847F11B8DF16800FA7872 /* MADBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeType.h; path = ../Barcodes/Barcodes/MADBarcodeType.h; sourceTree = "<group>"; };
-		4C1847F71B8DF3F300FA7872 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = ../Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
-		4C1847F81B8DF3F300FA7872 /* MTBarcodeQrCodeIso18004.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeQrCodeIso18004.h; path = ../Barcodes/Barcodes/MTBarcodeQrCodeIso18004.h; sourceTree = "<group>"; };
-		4C1847F91B8DF42200FA7872 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = ../Barcodes/Barcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
-		4C1847FA1B8DF43B00FA7872 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = ../Barcodes/Barcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
-		4C1847FB1B8DF45600FA7872 /* MTBarcodeMaxicodeIso16023.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMaxicodeIso16023.h; path = ../Barcodes/Barcodes/MTBarcodeMaxicodeIso16023.h; sourceTree = "<group>"; };
-		4C1847FC1B8DF45600FA7872 /* MTBarcodePdf417Iso15438.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePdf417Iso15438.h; path = ../Barcodes/Barcodes/MTBarcodePdf417Iso15438.h; sourceTree = "<group>"; };
-		4C1847FD1B8DF4B500FA7872 /* MTBarcodeCodeOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCodeOne.h; path = ../Barcodes/Barcodes/MTBarcodeCodeOne.h; sourceTree = "<group>"; };
-		4C1847FE1B8DF4B500FA7872 /* MTBarcodeDatabarExpandedStacked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabarExpandedStacked.h; path = ../Barcodes/Barcodes/MTBarcodeDatabarExpandedStacked.h; sourceTree = "<group>"; };
-		4C1847FF1B8DF4B500FA7872 /* MTBarcodeMsiPlessey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMsiPlessey.h; path = ../Barcodes/Barcodes/MTBarcodeMsiPlessey.h; sourceTree = "<group>"; };
-		4C1848001B8DF4C900FA7872 /* MTBarcodeMicroPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroPdf417Iso24728.h; path = ../Barcodes/Barcodes/MTBarcodeMicroPdf417Iso24728.h; sourceTree = "<group>"; };
-		4C1848011B8DF4F500FA7872 /* MTBarcodeChannelCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeChannelCode.h; path = ../Barcodes/Barcodes/MTBarcodeChannelCode.h; sourceTree = "<group>"; };
-		4C1848021B8DF4F500FA7872 /* MTBarcodeCode39Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Extended.h; path = ../Barcodes/Barcodes/MTBarcodeCode39Extended.h; sourceTree = "<group>"; };
-		4C1848031B8DF52D00FA7872 /* MTBarcodeCode39Iso16388.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Iso16388.h; path = ../Barcodes/Barcodes/MTBarcodeCode39Iso16388.h; sourceTree = "<group>"; };
-		4C1848041B8DF56600FA7872 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = ../Barcodes/Barcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -4982,6 +4966,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C130B0D1BA8090D0022665F /* MADBarcodes.framework in Frameworks */,
 				4C5205DE1BA7F21B000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 				4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */,
 				4C52054F1BA7ACAB000E6A59 /* MADFileManager.framework in Frameworks */,
@@ -5493,6 +5478,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C130B0C1BA8090D0022665F /* MADBarcodes.framework */,
 				4C5205DD1BA7F21B000E6A59 /* MADCocoaExtensions.framework */,
 				4C52054D1BA7AC80000E6A59 /* libCocoaExtensions.a */,
 				4CB2D3E71BA47AF400AA473B /* MADFileManager.xcodeproj */,
@@ -5591,39 +5577,6 @@
 				4C1847BD1B8D65AB00FA7872 /* Sqlite.h */,
 			);
 			name = libSqlite3;
-			sourceTree = "<group>";
-		};
-		4C3A969F189F7E30007AF476 /* libBarcodes */ = {
-			isa = PBXGroup;
-			children = (
-				4C3A96A0189F7E5A007AF476 /* includes */,
-			);
-			name = libBarcodes;
-			sourceTree = "<group>";
-		};
-		4C3A96A0189F7E5A007AF476 /* includes */ = {
-			isa = PBXGroup;
-			children = (
-				4C1848041B8DF56600FA7872 /* MTBarcodeDataMatrixIso16022.h */,
-				4C1848031B8DF52D00FA7872 /* MTBarcodeCode39Iso16388.h */,
-				4C1847F71B8DF3F300FA7872 /* MTBarcodeAztec.h */,
-				4C1847F81B8DF3F300FA7872 /* MTBarcodeQrCodeIso18004.h */,
-				4C1847FA1B8DF43B00FA7872 /* MTBarcodeGridMatrix.h */,
-				4C1847F91B8DF42200FA7872 /* MTBarcodeMicroQrCode.h */,
-				4C1847FB1B8DF45600FA7872 /* MTBarcodeMaxicodeIso16023.h */,
-				4C1847FC1B8DF45600FA7872 /* MTBarcodePdf417Iso15438.h */,
-				4C1847FD1B8DF4B500FA7872 /* MTBarcodeCodeOne.h */,
-				4C1847FE1B8DF4B500FA7872 /* MTBarcodeDatabarExpandedStacked.h */,
-				4C1847FF1B8DF4B500FA7872 /* MTBarcodeMsiPlessey.h */,
-				4C1848001B8DF4C900FA7872 /* MTBarcodeMicroPdf417Iso24728.h */,
-				4C1848011B8DF4F500FA7872 /* MTBarcodeChannelCode.h */,
-				4C1848021B8DF4F500FA7872 /* MTBarcodeCode39Extended.h */,
-				4C1847EE1B8DF12D00FA7872 /* zint.h */,
-				4C1847EF1B8DF13A00FA7872 /* MTBarcodeView.h */,
-				4C1847F01B8DF14400FA7872 /* MTBarcode.h */,
-				4C1847F11B8DF16800FA7872 /* MADBarcodeType.h */,
-			);
-			name = includes;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
@@ -7138,7 +7091,6 @@
 				4C3A969D189F7DCF007AF476 /* libSybdb */,
 				4C3A969C189F7D51007AF476 /* libDataStructures */,
 				4C3A969B189F7D10007AF476 /* libMySqlClient */,
-				4C3A969F189F7E30007AF476 /* libBarcodes */,
 				4C434AD518B5F3E800750B6B /* libSsl */,
 			);
 			name = libraries;

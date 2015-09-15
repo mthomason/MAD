@@ -1,0 +1,1236 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C13096E1BA8068B0022665F /* MADBarcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13096D1BA8068B0022665F /* MADBarcodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1309751BA8068B0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C13096A1BA8068B0022665F /* MADBarcodes.framework */; settings = {ASSET_TAGS = (); }; };
+		4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309791BA8068B0022665F /* MADBarcodesTests.m */; };
+		4C130A3C1BA8075B0022665F /* 2of5.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309851BA8075B0022665F /* 2of5.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A3D1BA8075B0022665F /* auspost.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309861BA8075B0022665F /* auspost.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A3E1BA8075B0022665F /* aztec.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309871BA8075B0022665F /* aztec.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A3F1BA8075B0022665F /* aztec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309881BA8075B0022665F /* aztec.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A401BA8075B0022665F /* Barcodes-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309891BA8075B0022665F /* Barcodes-Prefix.pch */; settings = {ASSET_TAGS = (); }; };
+		4C130A411BA8075B0022665F /* code.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098A1BA8075B0022665F /* code.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A421BA8075B0022665F /* code1.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098B1BA8075B0022665F /* code1.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A431BA8075B0022665F /* code1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13098C1BA8075B0022665F /* code1.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A441BA8075B0022665F /* code16k.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098D1BA8075B0022665F /* code16k.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A451BA8075B0022665F /* code49.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098E1BA8075B0022665F /* code49.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A461BA8075B0022665F /* code49.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13098F1BA8075B0022665F /* code49.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A471BA8075B0022665F /* code128.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309901BA8075B0022665F /* code128.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A481BA8075B0022665F /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309911BA8075B0022665F /* common.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A491BA8075B0022665F /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309921BA8075B0022665F /* common.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A4A1BA8075B0022665F /* composite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309931BA8075B0022665F /* composite.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A4B1BA8075B0022665F /* composite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309941BA8075B0022665F /* composite.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A4C1BA8075B0022665F /* DEVELOPER in Resources */ = {isa = PBXBuildFile; fileRef = 4C1309951BA8075B0022665F /* DEVELOPER */; settings = {ASSET_TAGS = (); }; };
+		4C130A4D1BA8075B0022665F /* dllversion.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309961BA8075B0022665F /* dllversion.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A4E1BA8075B0022665F /* dmatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309971BA8075B0022665F /* dmatrix.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A4F1BA8075B0022665F /* dmatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309981BA8075B0022665F /* dmatrix.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A501BA8075B0022665F /* font.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309991BA8075B0022665F /* font.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A511BA8075B0022665F /* gb2312.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13099A1BA8075B0022665F /* gb2312.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A521BA8075B0022665F /* gridmtx.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13099B1BA8075B0022665F /* gridmtx.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A531BA8075B0022665F /* gridmtx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13099C1BA8075B0022665F /* gridmtx.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A541BA8075B0022665F /* gs1.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13099D1BA8075B0022665F /* gs1.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A551BA8075B0022665F /* gs1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13099E1BA8075B0022665F /* gs1.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A561BA8075B0022665F /* imail.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13099F1BA8075B0022665F /* imail.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A571BA8075B0022665F /* large.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A01BA8075B0022665F /* large.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A581BA8075B0022665F /* large.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A11BA8075B0022665F /* large.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A591BA8075B0022665F /* library.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A21BA8075B0022665F /* library.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A5A1BA8075B0022665F /* MADBarcodeType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A31BA8075B0022665F /* MADBarcodeType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A5B1BA8075B0022665F /* maxicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A41BA8075B0022665F /* maxicode.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A5C1BA8075B0022665F /* maxicode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A51BA8075B0022665F /* maxicode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A5D1BA8075B0022665F /* maxipng.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A61BA8075B0022665F /* maxipng.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A5E1BA8075B0022665F /* medical.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A71BA8075B0022665F /* medical.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130A5F1BA8075B0022665F /* ms_stdint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A81BA8075B0022665F /* ms_stdint.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A601BA8075B0022665F /* MTBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A91BA8075B0022665F /* MTBarcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A611BA8075B0022665F /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AA1BA8075B0022665F /* MTBarcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C130A621BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309AB1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A631BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AC1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A641BA8075B0022665F /* MTBarcodeAusreDirect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309AD1BA8075B0022665F /* MTBarcodeAusreDirect.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A651BA8075B0022665F /* MTBarcodeAusreDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AE1BA8075B0022665F /* MTBarcodeAusreDirect.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A661BA8075B0022665F /* MTBarcodeAusreply.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309AF1BA8075B0022665F /* MTBarcodeAusreply.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A671BA8075B0022665F /* MTBarcodeAusreply.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309B01BA8075B0022665F /* MTBarcodeAusreply.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A681BA8075B0022665F /* MTBarcodeAusRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309B11BA8075B0022665F /* MTBarcodeAusRoute.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A691BA8075B0022665F /* MTBarcodeAusRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309B21BA8075B0022665F /* MTBarcodeAusRoute.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A6A1BA8075B0022665F /* MTBarcodeAztec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309B31BA8075B0022665F /* MTBarcodeAztec.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A6B1BA8075B0022665F /* MTBarcodeAztec.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309B41BA8075B0022665F /* MTBarcodeAztec.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A6C1BA8075B0022665F /* MTBarcodeAztecRunes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309B51BA8075B0022665F /* MTBarcodeAztecRunes.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A6D1BA8075B0022665F /* MTBarcodeAztecRunes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309B61BA8075B0022665F /* MTBarcodeAztecRunes.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A6E1BA8075B0022665F /* MTBarcodeChannelCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309B71BA8075B0022665F /* MTBarcodeChannelCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A6F1BA8075B0022665F /* MTBarcodeChannelCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309B81BA8075B0022665F /* MTBarcodeChannelCode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A701BA8075B0022665F /* MTBarcodeCodabar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309B91BA8075B0022665F /* MTBarcodeCodabar.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A711BA8075B0022665F /* MTBarcodeCodabar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309BA1BA8075B0022665F /* MTBarcodeCodabar.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A721BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309BB1BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A731BA8075B0022665F /* MTBarcodeCode2of5DataLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309BC1BA8075B0022665F /* MTBarcodeCode2of5DataLogic.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A741BA8075B0022665F /* MTBarcodeCode2of5Iata.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309BD1BA8075B0022665F /* MTBarcodeCode2of5Iata.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A751BA8075B0022665F /* MTBarcodeCode2of5Iata.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309BE1BA8075B0022665F /* MTBarcodeCode2of5Iata.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A761BA8075B0022665F /* MTBarcodeCode2of5Industrial.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309BF1BA8075B0022665F /* MTBarcodeCode2of5Industrial.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A771BA8075B0022665F /* MTBarcodeCode2of5Industrial.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309C01BA8075B0022665F /* MTBarcodeCode2of5Industrial.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A781BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309C11BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A791BA8075B0022665F /* MTBarcodeCode2of5Interleaved.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309C21BA8075B0022665F /* MTBarcodeCode2of5Interleaved.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A7A1BA8075B0022665F /* MTBarcodeCode2of5Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309C31BA8075B0022665F /* MTBarcodeCode2of5Matrix.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A7B1BA8075B0022665F /* MTBarcodeCode2of5Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309C41BA8075B0022665F /* MTBarcodeCode2of5Matrix.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A7C1BA8075B0022665F /* MTBarcodeCode11.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309C51BA8075B0022665F /* MTBarcodeCode11.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A7D1BA8075B0022665F /* MTBarcodeCode11.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309C61BA8075B0022665F /* MTBarcodeCode11.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A7E1BA8075B0022665F /* MTBarcodeCode16k.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309C71BA8075B0022665F /* MTBarcodeCode16k.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A7F1BA8075B0022665F /* MTBarcodeCode16k.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309C81BA8075B0022665F /* MTBarcodeCode16k.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A801BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309C91BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A811BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309CA1BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A821BA8075B0022665F /* MTBarcodeCode39Extended.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309CB1BA8075B0022665F /* MTBarcodeCode39Extended.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A831BA8075B0022665F /* MTBarcodeCode39Extended.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309CC1BA8075B0022665F /* MTBarcodeCode39Extended.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A841BA8075B0022665F /* MTBarcodeCode39Iso16388.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309CD1BA8075B0022665F /* MTBarcodeCode39Iso16388.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A851BA8075B0022665F /* MTBarcodeCode39Iso16388.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309CE1BA8075B0022665F /* MTBarcodeCode39Iso16388.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A861BA8075B0022665F /* MTBarcodeCode49.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309CF1BA8075B0022665F /* MTBarcodeCode49.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A871BA8075B0022665F /* MTBarcodeCode49.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309D01BA8075B0022665F /* MTBarcodeCode49.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A881BA8075B0022665F /* MTBarcodeCode93.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309D11BA8075B0022665F /* MTBarcodeCode93.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A891BA8075B0022665F /* MTBarcodeCode93.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309D21BA8075B0022665F /* MTBarcodeCode93.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A8A1BA8075B0022665F /* MTBarcodeCode128Iso15417.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309D31BA8075B0022665F /* MTBarcodeCode128Iso15417.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A8B1BA8075B0022665F /* MTBarcodeCode128Iso15417.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309D41BA8075B0022665F /* MTBarcodeCode128Iso15417.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A8C1BA8075B0022665F /* MTBarcodeCodeOne.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309D51BA8075B0022665F /* MTBarcodeCodeOne.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A8D1BA8075B0022665F /* MTBarcodeCodeOne.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309D61BA8075B0022665F /* MTBarcodeCodeOne.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A8E1BA8075B0022665F /* MTBarcodeDatabar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309D71BA8075B0022665F /* MTBarcodeDatabar.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A8F1BA8075B0022665F /* MTBarcodeDatabar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309D81BA8075B0022665F /* MTBarcodeDatabar.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A901BA8075B0022665F /* MTBarcodeDatabarExpanded.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309D91BA8075B0022665F /* MTBarcodeDatabarExpanded.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A911BA8075B0022665F /* MTBarcodeDatabarExpanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309DA1BA8075B0022665F /* MTBarcodeDatabarExpanded.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A921BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309DB1BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A931BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309DC1BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A941BA8075B0022665F /* MTBarcodeDatabarLimited.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309DD1BA8075B0022665F /* MTBarcodeDatabarLimited.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A951BA8075B0022665F /* MTBarcodeDatabarLimited.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309DE1BA8075B0022665F /* MTBarcodeDatabarLimited.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A961BA8075B0022665F /* MTBarcodeDatabarStacked.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309DF1BA8075B0022665F /* MTBarcodeDatabarStacked.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A971BA8075B0022665F /* MTBarcodeDatabarStacked.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309E01BA8075B0022665F /* MTBarcodeDatabarStacked.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A981BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309E11BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A991BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309E21BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A9A1BA8075B0022665F /* MTBarcodeDataMatrixIso16022.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309E31BA8075B0022665F /* MTBarcodeDataMatrixIso16022.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130A9B1BA8075B0022665F /* MTBarcodeDataMatrixIso16022.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309E41BA8075B0022665F /* MTBarcodeDataMatrixIso16022.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A9C1BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309E51BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A9D1BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309E61BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130A9E1BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309E71BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130A9F1BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309E81BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AA01BA8075B0022665F /* MTBarcodeDutchPostKix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309E91BA8075B0022665F /* MTBarcodeDutchPostKix.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AA11BA8075B0022665F /* MTBarcodeDutchPostKix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309EA1BA8075B0022665F /* MTBarcodeDutchPostKix.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AA21BA8075B0022665F /* MTBarcodeEan14.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309EB1BA8075B0022665F /* MTBarcodeEan14.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AA31BA8075B0022665F /* MTBarcodeEan14.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309EC1BA8075B0022665F /* MTBarcodeEan14.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AA41BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309ED1BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AA51BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309EE1BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AA61BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309EF1BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AA71BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309F01BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AA81BA8075B0022665F /* MTBarcodeFlattermarken.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309F11BA8075B0022665F /* MTBarcodeFlattermarken.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AA91BA8075B0022665F /* MTBarcodeFlattermarken.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309F21BA8075B0022665F /* MTBarcodeFlattermarken.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AAA1BA8075B0022665F /* MTBarcodeGridMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309F31BA8075B0022665F /* MTBarcodeGridMatrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130AAB1BA8075B0022665F /* MTBarcodeGridMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309F41BA8075B0022665F /* MTBarcodeGridMatrix.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AAC1BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309F51BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AAD1BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309F61BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AAE1BA8075B0022665F /* MTBarcodeItf14.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309F71BA8075B0022665F /* MTBarcodeItf14.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AAF1BA8075B0022665F /* MTBarcodeItf14.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309F81BA8075B0022665F /* MTBarcodeItf14.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AB01BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309F91BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AB11BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309FA1BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AB21BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309FB1BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AB31BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309FC1BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AB41BA8075B0022665F /* MTBarcodeLogmars.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309FD1BA8075B0022665F /* MTBarcodeLogmars.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AB51BA8075B0022665F /* MTBarcodeLogmars.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309FE1BA8075B0022665F /* MTBarcodeLogmars.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AB61BA8075B0022665F /* MTBarcodeMaxicodeIso16023.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309FF1BA8075B0022665F /* MTBarcodeMaxicodeIso16023.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130AB71BA8075B0022665F /* MTBarcodeMaxicodeIso16023.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A001BA8075B0022665F /* MTBarcodeMaxicodeIso16023.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AB81BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A011BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130AB91BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A021BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ABA1BA8075B0022665F /* MTBarcodeMicroQrCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A031BA8075B0022665F /* MTBarcodeMicroQrCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130ABB1BA8075B0022665F /* MTBarcodeMicroQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A041BA8075B0022665F /* MTBarcodeMicroQrCode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ABC1BA8075B0022665F /* MTBarcodeMsiPlessey.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A051BA8075B0022665F /* MTBarcodeMsiPlessey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130ABD1BA8075B0022665F /* MTBarcodeMsiPlessey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A061BA8075B0022665F /* MTBarcodeMsiPlessey.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ABE1BA8075B0022665F /* MTBarcodeNve18.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A071BA8075B0022665F /* MTBarcodeNve18.h */; settings = {ASSET_TAGS = (); }; };
+		4C130ABF1BA8075B0022665F /* MTBarcodeNve18.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A081BA8075B0022665F /* MTBarcodeNve18.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AC01BA8075B0022665F /* MTBarcodePdf417Iso15438.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A091BA8075B0022665F /* MTBarcodePdf417Iso15438.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130AC11BA8075B0022665F /* MTBarcodePdf417Iso15438.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A0A1BA8075B0022665F /* MTBarcodePdf417Iso15438.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AC21BA8075B0022665F /* MTBarcodePharmacode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A0B1BA8075B0022665F /* MTBarcodePharmacode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AC31BA8075B0022665F /* MTBarcodePharmacode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A0C1BA8075B0022665F /* MTBarcodePharmacode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AC41BA8075B0022665F /* MTBarcodePharmacode2Track.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A0D1BA8075B0022665F /* MTBarcodePharmacode2Track.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AC51BA8075B0022665F /* MTBarcodePharmacode2Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A0E1BA8075B0022665F /* MTBarcodePharmacode2Track.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AC61BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A0F1BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AC71BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A101BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AC81BA8075B0022665F /* MTBarcodePlanet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A111BA8075B0022665F /* MTBarcodePlanet.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AC91BA8075B0022665F /* MTBarcodePlanet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A121BA8075B0022665F /* MTBarcodePlanet.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ACA1BA8075B0022665F /* MTBarcodePostnet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A131BA8075B0022665F /* MTBarcodePostnet.h */; settings = {ASSET_TAGS = (); }; };
+		4C130ACB1BA8075B0022665F /* MTBarcodePostnet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A141BA8075B0022665F /* MTBarcodePostnet.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ACC1BA8075B0022665F /* MTBarcodeProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A151BA8075B0022665F /* MTBarcodeProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130ACD1BA8075B0022665F /* MTBarcodeQrCodeIso18004.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A161BA8075B0022665F /* MTBarcodeQrCodeIso18004.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130ACE1BA8075B0022665F /* MTBarcodeQrCodeIso18004.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A171BA8075B0022665F /* MTBarcodeQrCodeIso18004.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ACF1BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A181BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AD01BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A191BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AD11BA8075B0022665F /* MTBarcodeTelepen.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A1A1BA8075B0022665F /* MTBarcodeTelepen.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AD21BA8075B0022665F /* MTBarcodeTelepen.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A1B1BA8075B0022665F /* MTBarcodeTelepen.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AD31BA8075B0022665F /* MTBarcodeTelepenNumeric.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A1C1BA8075B0022665F /* MTBarcodeTelepenNumeric.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AD41BA8075B0022665F /* MTBarcodeTelepenNumeric.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A1D1BA8075B0022665F /* MTBarcodeTelepenNumeric.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AD51BA8075B0022665F /* MTBarcodeUkPlessey.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A1E1BA8075B0022665F /* MTBarcodeUkPlessey.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AD61BA8075B0022665F /* MTBarcodeUkPlessey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A1F1BA8075B0022665F /* MTBarcodeUkPlessey.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AD71BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A201BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AD81BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A211BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.m */; settings = {ASSET_TAGS = (); }; };
+		4C130AD91BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A221BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h */; settings = {ASSET_TAGS = (); }; };
+		4C130ADA1BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A231BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ADB1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A241BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h */; settings = {ASSET_TAGS = (); }; };
+		4C130ADC1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A251BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m */; settings = {ASSET_TAGS = (); }; };
+		4C130ADD1BA8075B0022665F /* MTBarcodeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A261BA8075B0022665F /* MTBarcodeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130ADE1BA8075B0022665F /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A271BA8075B0022665F /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C130ADF1BA8075B0022665F /* pdf417.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A281BA8075B0022665F /* pdf417.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE01BA8075B0022665F /* pdf417.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A291BA8075B0022665F /* pdf417.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AE11BA8075B0022665F /* plessey.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2A1BA8075B0022665F /* plessey.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE21BA8075B0022665F /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2B1BA8075B0022665F /* png.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE31BA8075B0022665F /* postal.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2C1BA8075B0022665F /* postal.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE41BA8075B0022665F /* ps.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2D1BA8075B0022665F /* ps.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE51BA8075B0022665F /* qr.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2E1BA8075B0022665F /* qr.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE61BA8075B0022665F /* qr.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A2F1BA8075B0022665F /* qr.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AE71BA8075B0022665F /* reedsol.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A301BA8075B0022665F /* reedsol.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AE81BA8075B0022665F /* reedsol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A311BA8075B0022665F /* reedsol.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AE91BA8075B0022665F /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A321BA8075B0022665F /* render.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AEA1BA8075B0022665F /* rss.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A331BA8075B0022665F /* rss.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AEB1BA8075B0022665F /* rss.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A341BA8075B0022665F /* rss.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AEC1BA8075B0022665F /* sjis.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A351BA8075B0022665F /* sjis.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AED1BA8075B0022665F /* svg.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A361BA8075B0022665F /* svg.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AEE1BA8075B0022665F /* telepen.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A371BA8075B0022665F /* telepen.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AEF1BA8075B0022665F /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A381BA8075B0022665F /* upcean.c */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C130AF11BA8075B0022665F /* UIColor+Expanded.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A3A1BA8075B0022665F /* UIColor+Expanded.h */; settings = {ASSET_TAGS = (); }; };
+		4C130AF21BA8075B0022665F /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A3B1BA8075B0022665F /* UIColor+Expanded.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130AF41BA807FE0022665F /* MobileCoreServices.framework */; };
+		4C130AF71BA808150022665F /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130AF61BA808150022665F /* libpng.a */; };
+		4C130B001BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF81BA8085D0022665F /* png.h */; settings = {ASSET_TAGS = (); }; };
+		4C130B011BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF91BA8085D0022665F /* pngconf.h */; settings = {ASSET_TAGS = (); }; };
+		4C130B021BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFA1BA8085D0022665F /* pnglibconf.h */; settings = {ASSET_TAGS = (); }; };
+		4C130B031BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFC1BA8085D0022665F /* png.h */; settings = {ASSET_TAGS = (); }; };
+		4C130B041BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFD1BA8085D0022665F /* pngconf.h */; settings = {ASSET_TAGS = (); }; };
+		4C130B051BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFE1BA8085D0022665F /* pnglibconf.h */; settings = {ASSET_TAGS = (); }; };
+		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
+		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
+		4C66C1381BA814A400663575 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1371BA814A400663575 /* libpng16.a */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C1309761BA8068B0022665F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C1309611BA8068B0022665F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C1309691BA8068B0022665F;
+			remoteInfo = MADBarcodes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C13096A1BA8068B0022665F /* MADBarcodes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADBarcodes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C13096D1BA8068B0022665F /* MADBarcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADBarcodes.h; sourceTree = "<group>"; };
+		4C13096F1BA8068B0022665F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C1309741BA8068B0022665F /* MADBarcodesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADBarcodesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C1309791BA8068B0022665F /* MADBarcodesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodesTests.m; sourceTree = "<group>"; };
+		4C13097B1BA8068B0022665F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C1309851BA8075B0022665F /* 2of5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = 2of5.c; path = MADBarcodes/2of5.c; sourceTree = "<group>"; };
+		4C1309861BA8075B0022665F /* auspost.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auspost.c; path = MADBarcodes/auspost.c; sourceTree = "<group>"; };
+		4C1309871BA8075B0022665F /* aztec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aztec.c; path = MADBarcodes/aztec.c; sourceTree = "<group>"; };
+		4C1309881BA8075B0022665F /* aztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aztec.h; path = MADBarcodes/aztec.h; sourceTree = "<group>"; };
+		4C1309891BA8075B0022665F /* Barcodes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Barcodes-Prefix.pch"; path = "MADBarcodes/Barcodes-Prefix.pch"; sourceTree = "<group>"; };
+		4C13098A1BA8075B0022665F /* code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code.c; path = MADBarcodes/code.c; sourceTree = "<group>"; };
+		4C13098B1BA8075B0022665F /* code1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code1.c; path = MADBarcodes/code1.c; sourceTree = "<group>"; };
+		4C13098C1BA8075B0022665F /* code1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = code1.h; path = MADBarcodes/code1.h; sourceTree = "<group>"; };
+		4C13098D1BA8075B0022665F /* code16k.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code16k.c; path = MADBarcodes/code16k.c; sourceTree = "<group>"; };
+		4C13098E1BA8075B0022665F /* code49.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code49.c; path = MADBarcodes/code49.c; sourceTree = "<group>"; };
+		4C13098F1BA8075B0022665F /* code49.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = code49.h; path = MADBarcodes/code49.h; sourceTree = "<group>"; };
+		4C1309901BA8075B0022665F /* code128.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code128.c; path = MADBarcodes/code128.c; sourceTree = "<group>"; };
+		4C1309911BA8075B0022665F /* common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = common.c; path = MADBarcodes/common.c; sourceTree = "<group>"; };
+		4C1309921BA8075B0022665F /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = MADBarcodes/common.h; sourceTree = "<group>"; };
+		4C1309931BA8075B0022665F /* composite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = composite.c; path = MADBarcodes/composite.c; sourceTree = "<group>"; };
+		4C1309941BA8075B0022665F /* composite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = composite.h; path = MADBarcodes/composite.h; sourceTree = "<group>"; };
+		4C1309951BA8075B0022665F /* DEVELOPER */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = DEVELOPER; path = MADBarcodes/DEVELOPER; sourceTree = "<group>"; };
+		4C1309961BA8075B0022665F /* dllversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dllversion.c; path = MADBarcodes/dllversion.c; sourceTree = "<group>"; };
+		4C1309971BA8075B0022665F /* dmatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dmatrix.c; path = MADBarcodes/dmatrix.c; sourceTree = "<group>"; };
+		4C1309981BA8075B0022665F /* dmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dmatrix.h; path = MADBarcodes/dmatrix.h; sourceTree = "<group>"; };
+		4C1309991BA8075B0022665F /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = font.h; path = MADBarcodes/font.h; sourceTree = "<group>"; };
+		4C13099A1BA8075B0022665F /* gb2312.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gb2312.h; path = MADBarcodes/gb2312.h; sourceTree = "<group>"; };
+		4C13099B1BA8075B0022665F /* gridmtx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gridmtx.c; path = MADBarcodes/gridmtx.c; sourceTree = "<group>"; };
+		4C13099C1BA8075B0022665F /* gridmtx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gridmtx.h; path = MADBarcodes/gridmtx.h; sourceTree = "<group>"; };
+		4C13099D1BA8075B0022665F /* gs1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gs1.c; path = MADBarcodes/gs1.c; sourceTree = "<group>"; };
+		4C13099E1BA8075B0022665F /* gs1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gs1.h; path = MADBarcodes/gs1.h; sourceTree = "<group>"; };
+		4C13099F1BA8075B0022665F /* imail.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = imail.c; path = MADBarcodes/imail.c; sourceTree = "<group>"; };
+		4C1309A01BA8075B0022665F /* large.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = large.c; path = MADBarcodes/large.c; sourceTree = "<group>"; };
+		4C1309A11BA8075B0022665F /* large.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = large.h; path = MADBarcodes/large.h; sourceTree = "<group>"; };
+		4C1309A21BA8075B0022665F /* library.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = library.c; path = MADBarcodes/library.c; sourceTree = "<group>"; };
+		4C1309A31BA8075B0022665F /* MADBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeType.h; path = MADBarcodes/MADBarcodeType.h; sourceTree = "<group>"; };
+		4C1309A41BA8075B0022665F /* maxicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = maxicode.c; path = MADBarcodes/maxicode.c; sourceTree = "<group>"; };
+		4C1309A51BA8075B0022665F /* maxicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maxicode.h; path = MADBarcodes/maxicode.h; sourceTree = "<group>"; };
+		4C1309A61BA8075B0022665F /* maxipng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maxipng.h; path = MADBarcodes/maxipng.h; sourceTree = "<group>"; };
+		4C1309A71BA8075B0022665F /* medical.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = medical.c; path = MADBarcodes/medical.c; sourceTree = "<group>"; };
+		4C1309A81BA8075B0022665F /* ms_stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ms_stdint.h; path = MADBarcodes/ms_stdint.h; sourceTree = "<group>"; };
+		4C1309A91BA8075B0022665F /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = MADBarcodes/MTBarcode.h; sourceTree = "<group>"; };
+		4C1309AA1BA8075B0022665F /* MTBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcode.m; path = MADBarcodes/MTBarcode.m; sourceTree = "<group>"; };
+		4C1309AB1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAusPostStandardCustomer.h; path = MADBarcodes/MTBarcodeAusPostStandardCustomer.h; sourceTree = "<group>"; };
+		4C1309AC1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeAusPostStandardCustomer.m; path = MADBarcodes/MTBarcodeAusPostStandardCustomer.m; sourceTree = "<group>"; };
+		4C1309AD1BA8075B0022665F /* MTBarcodeAusreDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAusreDirect.h; path = MADBarcodes/MTBarcodeAusreDirect.h; sourceTree = "<group>"; };
+		4C1309AE1BA8075B0022665F /* MTBarcodeAusreDirect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeAusreDirect.m; path = MADBarcodes/MTBarcodeAusreDirect.m; sourceTree = "<group>"; };
+		4C1309AF1BA8075B0022665F /* MTBarcodeAusreply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAusreply.h; path = MADBarcodes/MTBarcodeAusreply.h; sourceTree = "<group>"; };
+		4C1309B01BA8075B0022665F /* MTBarcodeAusreply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeAusreply.m; path = MADBarcodes/MTBarcodeAusreply.m; sourceTree = "<group>"; };
+		4C1309B11BA8075B0022665F /* MTBarcodeAusRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAusRoute.h; path = MADBarcodes/MTBarcodeAusRoute.h; sourceTree = "<group>"; };
+		4C1309B21BA8075B0022665F /* MTBarcodeAusRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeAusRoute.m; path = MADBarcodes/MTBarcodeAusRoute.m; sourceTree = "<group>"; };
+		4C1309B31BA8075B0022665F /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = MADBarcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
+		4C1309B41BA8075B0022665F /* MTBarcodeAztec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeAztec.m; path = MADBarcodes/MTBarcodeAztec.m; sourceTree = "<group>"; };
+		4C1309B51BA8075B0022665F /* MTBarcodeAztecRunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztecRunes.h; path = MADBarcodes/MTBarcodeAztecRunes.h; sourceTree = "<group>"; };
+		4C1309B61BA8075B0022665F /* MTBarcodeAztecRunes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeAztecRunes.m; path = MADBarcodes/MTBarcodeAztecRunes.m; sourceTree = "<group>"; };
+		4C1309B71BA8075B0022665F /* MTBarcodeChannelCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeChannelCode.h; path = MADBarcodes/MTBarcodeChannelCode.h; sourceTree = "<group>"; };
+		4C1309B81BA8075B0022665F /* MTBarcodeChannelCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeChannelCode.m; path = MADBarcodes/MTBarcodeChannelCode.m; sourceTree = "<group>"; };
+		4C1309B91BA8075B0022665F /* MTBarcodeCodabar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCodabar.h; path = MADBarcodes/MTBarcodeCodabar.h; sourceTree = "<group>"; };
+		4C1309BA1BA8075B0022665F /* MTBarcodeCodabar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCodabar.m; path = MADBarcodes/MTBarcodeCodabar.m; sourceTree = "<group>"; };
+		4C1309BB1BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode2of5DataLogic.h; path = MADBarcodes/MTBarcodeCode2of5DataLogic.h; sourceTree = "<group>"; };
+		4C1309BC1BA8075B0022665F /* MTBarcodeCode2of5DataLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode2of5DataLogic.m; path = MADBarcodes/MTBarcodeCode2of5DataLogic.m; sourceTree = "<group>"; };
+		4C1309BD1BA8075B0022665F /* MTBarcodeCode2of5Iata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode2of5Iata.h; path = MADBarcodes/MTBarcodeCode2of5Iata.h; sourceTree = "<group>"; };
+		4C1309BE1BA8075B0022665F /* MTBarcodeCode2of5Iata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode2of5Iata.m; path = MADBarcodes/MTBarcodeCode2of5Iata.m; sourceTree = "<group>"; };
+		4C1309BF1BA8075B0022665F /* MTBarcodeCode2of5Industrial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode2of5Industrial.h; path = MADBarcodes/MTBarcodeCode2of5Industrial.h; sourceTree = "<group>"; };
+		4C1309C01BA8075B0022665F /* MTBarcodeCode2of5Industrial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode2of5Industrial.m; path = MADBarcodes/MTBarcodeCode2of5Industrial.m; sourceTree = "<group>"; };
+		4C1309C11BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode2of5Interleaved.h; path = MADBarcodes/MTBarcodeCode2of5Interleaved.h; sourceTree = "<group>"; };
+		4C1309C21BA8075B0022665F /* MTBarcodeCode2of5Interleaved.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode2of5Interleaved.m; path = MADBarcodes/MTBarcodeCode2of5Interleaved.m; sourceTree = "<group>"; };
+		4C1309C31BA8075B0022665F /* MTBarcodeCode2of5Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode2of5Matrix.h; path = MADBarcodes/MTBarcodeCode2of5Matrix.h; sourceTree = "<group>"; };
+		4C1309C41BA8075B0022665F /* MTBarcodeCode2of5Matrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode2of5Matrix.m; path = MADBarcodes/MTBarcodeCode2of5Matrix.m; sourceTree = "<group>"; };
+		4C1309C51BA8075B0022665F /* MTBarcodeCode11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode11.h; path = MADBarcodes/MTBarcodeCode11.h; sourceTree = "<group>"; };
+		4C1309C61BA8075B0022665F /* MTBarcodeCode11.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode11.m; path = MADBarcodes/MTBarcodeCode11.m; sourceTree = "<group>"; };
+		4C1309C71BA8075B0022665F /* MTBarcodeCode16k.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode16k.h; path = MADBarcodes/MTBarcodeCode16k.h; sourceTree = "<group>"; };
+		4C1309C81BA8075B0022665F /* MTBarcodeCode16k.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode16k.m; path = MADBarcodes/MTBarcodeCode16k.m; sourceTree = "<group>"; };
+		4C1309C91BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode32ItalianPharmacode.h; path = MADBarcodes/MTBarcodeCode32ItalianPharmacode.h; sourceTree = "<group>"; };
+		4C1309CA1BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode32ItalianPharmacode.m; path = MADBarcodes/MTBarcodeCode32ItalianPharmacode.m; sourceTree = "<group>"; };
+		4C1309CB1BA8075B0022665F /* MTBarcodeCode39Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Extended.h; path = MADBarcodes/MTBarcodeCode39Extended.h; sourceTree = "<group>"; };
+		4C1309CC1BA8075B0022665F /* MTBarcodeCode39Extended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode39Extended.m; path = MADBarcodes/MTBarcodeCode39Extended.m; sourceTree = "<group>"; };
+		4C1309CD1BA8075B0022665F /* MTBarcodeCode39Iso16388.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Iso16388.h; path = MADBarcodes/MTBarcodeCode39Iso16388.h; sourceTree = "<group>"; };
+		4C1309CE1BA8075B0022665F /* MTBarcodeCode39Iso16388.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode39Iso16388.m; path = MADBarcodes/MTBarcodeCode39Iso16388.m; sourceTree = "<group>"; };
+		4C1309CF1BA8075B0022665F /* MTBarcodeCode49.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode49.h; path = MADBarcodes/MTBarcodeCode49.h; sourceTree = "<group>"; };
+		4C1309D01BA8075B0022665F /* MTBarcodeCode49.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode49.m; path = MADBarcodes/MTBarcodeCode49.m; sourceTree = "<group>"; };
+		4C1309D11BA8075B0022665F /* MTBarcodeCode93.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode93.h; path = MADBarcodes/MTBarcodeCode93.h; sourceTree = "<group>"; };
+		4C1309D21BA8075B0022665F /* MTBarcodeCode93.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode93.m; path = MADBarcodes/MTBarcodeCode93.m; sourceTree = "<group>"; };
+		4C1309D31BA8075B0022665F /* MTBarcodeCode128Iso15417.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode128Iso15417.h; path = MADBarcodes/MTBarcodeCode128Iso15417.h; sourceTree = "<group>"; };
+		4C1309D41BA8075B0022665F /* MTBarcodeCode128Iso15417.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCode128Iso15417.m; path = MADBarcodes/MTBarcodeCode128Iso15417.m; sourceTree = "<group>"; };
+		4C1309D51BA8075B0022665F /* MTBarcodeCodeOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCodeOne.h; path = MADBarcodes/MTBarcodeCodeOne.h; sourceTree = "<group>"; };
+		4C1309D61BA8075B0022665F /* MTBarcodeCodeOne.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeCodeOne.m; path = MADBarcodes/MTBarcodeCodeOne.m; sourceTree = "<group>"; };
+		4C1309D71BA8075B0022665F /* MTBarcodeDatabar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabar.h; path = MADBarcodes/MTBarcodeDatabar.h; sourceTree = "<group>"; };
+		4C1309D81BA8075B0022665F /* MTBarcodeDatabar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDatabar.m; path = MADBarcodes/MTBarcodeDatabar.m; sourceTree = "<group>"; };
+		4C1309D91BA8075B0022665F /* MTBarcodeDatabarExpanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabarExpanded.h; path = MADBarcodes/MTBarcodeDatabarExpanded.h; sourceTree = "<group>"; };
+		4C1309DA1BA8075B0022665F /* MTBarcodeDatabarExpanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDatabarExpanded.m; path = MADBarcodes/MTBarcodeDatabarExpanded.m; sourceTree = "<group>"; };
+		4C1309DB1BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabarExpandedStacked.h; path = MADBarcodes/MTBarcodeDatabarExpandedStacked.h; sourceTree = "<group>"; };
+		4C1309DC1BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDatabarExpandedStacked.m; path = MADBarcodes/MTBarcodeDatabarExpandedStacked.m; sourceTree = "<group>"; };
+		4C1309DD1BA8075B0022665F /* MTBarcodeDatabarLimited.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabarLimited.h; path = MADBarcodes/MTBarcodeDatabarLimited.h; sourceTree = "<group>"; };
+		4C1309DE1BA8075B0022665F /* MTBarcodeDatabarLimited.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDatabarLimited.m; path = MADBarcodes/MTBarcodeDatabarLimited.m; sourceTree = "<group>"; };
+		4C1309DF1BA8075B0022665F /* MTBarcodeDatabarStacked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabarStacked.h; path = MADBarcodes/MTBarcodeDatabarStacked.h; sourceTree = "<group>"; };
+		4C1309E01BA8075B0022665F /* MTBarcodeDatabarStacked.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDatabarStacked.m; path = MADBarcodes/MTBarcodeDatabarStacked.m; sourceTree = "<group>"; };
+		4C1309E11BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDatabarStackedOmnidirectional.h; path = MADBarcodes/MTBarcodeDatabarStackedOmnidirectional.h; sourceTree = "<group>"; };
+		4C1309E21BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDatabarStackedOmnidirectional.m; path = MADBarcodes/MTBarcodeDatabarStackedOmnidirectional.m; sourceTree = "<group>"; };
+		4C1309E31BA8075B0022665F /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = MADBarcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
+		4C1309E41BA8075B0022665F /* MTBarcodeDataMatrixIso16022.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDataMatrixIso16022.m; path = MADBarcodes/MTBarcodeDataMatrixIso16022.m; sourceTree = "<group>"; };
+		4C1309E51BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDeutschePostIdentcode.h; path = MADBarcodes/MTBarcodeDeutschePostIdentcode.h; sourceTree = "<group>"; };
+		4C1309E61BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDeutschePostIdentcode.m; path = MADBarcodes/MTBarcodeDeutschePostIdentcode.m; sourceTree = "<group>"; };
+		4C1309E71BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDeutschePostLeitcode.h; path = MADBarcodes/MTBarcodeDeutschePostLeitcode.h; sourceTree = "<group>"; };
+		4C1309E81BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDeutschePostLeitcode.m; path = MADBarcodes/MTBarcodeDeutschePostLeitcode.m; sourceTree = "<group>"; };
+		4C1309E91BA8075B0022665F /* MTBarcodeDutchPostKix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDutchPostKix.h; path = MADBarcodes/MTBarcodeDutchPostKix.h; sourceTree = "<group>"; };
+		4C1309EA1BA8075B0022665F /* MTBarcodeDutchPostKix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeDutchPostKix.m; path = MADBarcodes/MTBarcodeDutchPostKix.m; sourceTree = "<group>"; };
+		4C1309EB1BA8075B0022665F /* MTBarcodeEan14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeEan14.h; path = MADBarcodes/MTBarcodeEan14.h; sourceTree = "<group>"; };
+		4C1309EC1BA8075B0022665F /* MTBarcodeEan14.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeEan14.m; path = MADBarcodes/MTBarcodeEan14.m; sourceTree = "<group>"; };
+		4C1309ED1BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeEuropeanArticleNumberEan.h; path = MADBarcodes/MTBarcodeEuropeanArticleNumberEan.h; sourceTree = "<group>"; };
+		4C1309EE1BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeEuropeanArticleNumberEan.m; path = MADBarcodes/MTBarcodeEuropeanArticleNumberEan.m; sourceTree = "<group>"; };
+		4C1309EF1BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeFacingIdentificationMarkFim.h; path = MADBarcodes/MTBarcodeFacingIdentificationMarkFim.h; sourceTree = "<group>"; };
+		4C1309F01BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeFacingIdentificationMarkFim.m; path = MADBarcodes/MTBarcodeFacingIdentificationMarkFim.m; sourceTree = "<group>"; };
+		4C1309F11BA8075B0022665F /* MTBarcodeFlattermarken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeFlattermarken.h; path = MADBarcodes/MTBarcodeFlattermarken.h; sourceTree = "<group>"; };
+		4C1309F21BA8075B0022665F /* MTBarcodeFlattermarken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeFlattermarken.m; path = MADBarcodes/MTBarcodeFlattermarken.m; sourceTree = "<group>"; };
+		4C1309F31BA8075B0022665F /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeGridMatrix.h; path = MADBarcodes/MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
+		4C1309F41BA8075B0022665F /* MTBarcodeGridMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeGridMatrix.m; path = MADBarcodes/MTBarcodeGridMatrix.m; sourceTree = "<group>"; };
+		4C1309F51BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeInternationalStandardBookNumberIsbn.h; path = MADBarcodes/MTBarcodeInternationalStandardBookNumberIsbn.h; sourceTree = "<group>"; };
+		4C1309F61BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeInternationalStandardBookNumberIsbn.m; path = MADBarcodes/MTBarcodeInternationalStandardBookNumberIsbn.m; sourceTree = "<group>"; };
+		4C1309F71BA8075B0022665F /* MTBarcodeItf14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeItf14.h; path = MADBarcodes/MTBarcodeItf14.h; sourceTree = "<group>"; };
+		4C1309F81BA8075B0022665F /* MTBarcodeItf14.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeItf14.m; path = MADBarcodes/MTBarcodeItf14.m; sourceTree = "<group>"; };
+		4C1309F91BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeJapanesePostalBarcode.h; path = MADBarcodes/MTBarcodeJapanesePostalBarcode.h; sourceTree = "<group>"; };
+		4C1309FA1BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeJapanesePostalBarcode.m; path = MADBarcodes/MTBarcodeJapanesePostalBarcode.m; sourceTree = "<group>"; };
+		4C1309FB1BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeKoreanPostalBarcode.h; path = MADBarcodes/MTBarcodeKoreanPostalBarcode.h; sourceTree = "<group>"; };
+		4C1309FC1BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeKoreanPostalBarcode.m; path = MADBarcodes/MTBarcodeKoreanPostalBarcode.m; sourceTree = "<group>"; };
+		4C1309FD1BA8075B0022665F /* MTBarcodeLogmars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeLogmars.h; path = MADBarcodes/MTBarcodeLogmars.h; sourceTree = "<group>"; };
+		4C1309FE1BA8075B0022665F /* MTBarcodeLogmars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeLogmars.m; path = MADBarcodes/MTBarcodeLogmars.m; sourceTree = "<group>"; };
+		4C1309FF1BA8075B0022665F /* MTBarcodeMaxicodeIso16023.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMaxicodeIso16023.h; path = MADBarcodes/MTBarcodeMaxicodeIso16023.h; sourceTree = "<group>"; };
+		4C130A001BA8075B0022665F /* MTBarcodeMaxicodeIso16023.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeMaxicodeIso16023.m; path = MADBarcodes/MTBarcodeMaxicodeIso16023.m; sourceTree = "<group>"; };
+		4C130A011BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroPdf417Iso24728.h; path = MADBarcodes/MTBarcodeMicroPdf417Iso24728.h; sourceTree = "<group>"; };
+		4C130A021BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeMicroPdf417Iso24728.m; path = MADBarcodes/MTBarcodeMicroPdf417Iso24728.m; sourceTree = "<group>"; };
+		4C130A031BA8075B0022665F /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroQrCode.h; path = MADBarcodes/MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
+		4C130A041BA8075B0022665F /* MTBarcodeMicroQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeMicroQrCode.m; path = MADBarcodes/MTBarcodeMicroQrCode.m; sourceTree = "<group>"; };
+		4C130A051BA8075B0022665F /* MTBarcodeMsiPlessey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMsiPlessey.h; path = MADBarcodes/MTBarcodeMsiPlessey.h; sourceTree = "<group>"; };
+		4C130A061BA8075B0022665F /* MTBarcodeMsiPlessey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeMsiPlessey.m; path = MADBarcodes/MTBarcodeMsiPlessey.m; sourceTree = "<group>"; };
+		4C130A071BA8075B0022665F /* MTBarcodeNve18.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeNve18.h; path = MADBarcodes/MTBarcodeNve18.h; sourceTree = "<group>"; };
+		4C130A081BA8075B0022665F /* MTBarcodeNve18.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeNve18.m; path = MADBarcodes/MTBarcodeNve18.m; sourceTree = "<group>"; };
+		4C130A091BA8075B0022665F /* MTBarcodePdf417Iso15438.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePdf417Iso15438.h; path = MADBarcodes/MTBarcodePdf417Iso15438.h; sourceTree = "<group>"; };
+		4C130A0A1BA8075B0022665F /* MTBarcodePdf417Iso15438.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodePdf417Iso15438.m; path = MADBarcodes/MTBarcodePdf417Iso15438.m; sourceTree = "<group>"; };
+		4C130A0B1BA8075B0022665F /* MTBarcodePharmacode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePharmacode.h; path = MADBarcodes/MTBarcodePharmacode.h; sourceTree = "<group>"; };
+		4C130A0C1BA8075B0022665F /* MTBarcodePharmacode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodePharmacode.m; path = MADBarcodes/MTBarcodePharmacode.m; sourceTree = "<group>"; };
+		4C130A0D1BA8075B0022665F /* MTBarcodePharmacode2Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePharmacode2Track.h; path = MADBarcodes/MTBarcodePharmacode2Track.h; sourceTree = "<group>"; };
+		4C130A0E1BA8075B0022665F /* MTBarcodePharmacode2Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodePharmacode2Track.m; path = MADBarcodes/MTBarcodePharmacode2Track.m; sourceTree = "<group>"; };
+		4C130A0F1BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePharmaZentralnummerPzn.h; path = MADBarcodes/MTBarcodePharmaZentralnummerPzn.h; sourceTree = "<group>"; };
+		4C130A101BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodePharmaZentralnummerPzn.m; path = MADBarcodes/MTBarcodePharmaZentralnummerPzn.m; sourceTree = "<group>"; };
+		4C130A111BA8075B0022665F /* MTBarcodePlanet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePlanet.h; path = MADBarcodes/MTBarcodePlanet.h; sourceTree = "<group>"; };
+		4C130A121BA8075B0022665F /* MTBarcodePlanet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodePlanet.m; path = MADBarcodes/MTBarcodePlanet.m; sourceTree = "<group>"; };
+		4C130A131BA8075B0022665F /* MTBarcodePostnet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePostnet.h; path = MADBarcodes/MTBarcodePostnet.h; sourceTree = "<group>"; };
+		4C130A141BA8075B0022665F /* MTBarcodePostnet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodePostnet.m; path = MADBarcodes/MTBarcodePostnet.m; sourceTree = "<group>"; };
+		4C130A151BA8075B0022665F /* MTBarcodeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeProtocol.h; path = MADBarcodes/MTBarcodeProtocol.h; sourceTree = "<group>"; };
+		4C130A161BA8075B0022665F /* MTBarcodeQrCodeIso18004.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeQrCodeIso18004.h; path = MADBarcodes/MTBarcodeQrCodeIso18004.h; sourceTree = "<group>"; };
+		4C130A171BA8075B0022665F /* MTBarcodeQrCodeIso18004.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeQrCodeIso18004.m; path = MADBarcodes/MTBarcodeQrCodeIso18004.m; sourceTree = "<group>"; };
+		4C130A181BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeRoyalMail4StateBarcode.h; path = MADBarcodes/MTBarcodeRoyalMail4StateBarcode.h; sourceTree = "<group>"; };
+		4C130A191BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeRoyalMail4StateBarcode.m; path = MADBarcodes/MTBarcodeRoyalMail4StateBarcode.m; sourceTree = "<group>"; };
+		4C130A1A1BA8075B0022665F /* MTBarcodeTelepen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeTelepen.h; path = MADBarcodes/MTBarcodeTelepen.h; sourceTree = "<group>"; };
+		4C130A1B1BA8075B0022665F /* MTBarcodeTelepen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeTelepen.m; path = MADBarcodes/MTBarcodeTelepen.m; sourceTree = "<group>"; };
+		4C130A1C1BA8075B0022665F /* MTBarcodeTelepenNumeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeTelepenNumeric.h; path = MADBarcodes/MTBarcodeTelepenNumeric.h; sourceTree = "<group>"; };
+		4C130A1D1BA8075B0022665F /* MTBarcodeTelepenNumeric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeTelepenNumeric.m; path = MADBarcodes/MTBarcodeTelepenNumeric.m; sourceTree = "<group>"; };
+		4C130A1E1BA8075B0022665F /* MTBarcodeUkPlessey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeUkPlessey.h; path = MADBarcodes/MTBarcodeUkPlessey.h; sourceTree = "<group>"; };
+		4C130A1F1BA8075B0022665F /* MTBarcodeUkPlessey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeUkPlessey.m; path = MADBarcodes/MTBarcodeUkPlessey.m; sourceTree = "<group>"; };
+		4C130A201BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeUniversalProductCodeUpca.h; path = MADBarcodes/MTBarcodeUniversalProductCodeUpca.h; sourceTree = "<group>"; };
+		4C130A211BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeUniversalProductCodeUpca.m; path = MADBarcodes/MTBarcodeUniversalProductCodeUpca.m; sourceTree = "<group>"; };
+		4C130A221BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeUniversalProductCodeUpce.h; path = MADBarcodes/MTBarcodeUniversalProductCodeUpce.h; sourceTree = "<group>"; };
+		4C130A231BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeUniversalProductCodeUpce.m; path = MADBarcodes/MTBarcodeUniversalProductCodeUpce.m; sourceTree = "<group>"; };
+		4C130A241BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeUspsIntelligentMail.h; path = MADBarcodes/MTBarcodeUspsIntelligentMail.h; sourceTree = "<group>"; };
+		4C130A251BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeUspsIntelligentMail.m; path = MADBarcodes/MTBarcodeUspsIntelligentMail.m; sourceTree = "<group>"; };
+		4C130A261BA8075B0022665F /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeView.h; path = MADBarcodes/MTBarcodeView.h; sourceTree = "<group>"; };
+		4C130A271BA8075B0022665F /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeView.m; path = MADBarcodes/MTBarcodeView.m; sourceTree = "<group>"; };
+		4C130A281BA8075B0022665F /* pdf417.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pdf417.c; path = MADBarcodes/pdf417.c; sourceTree = "<group>"; };
+		4C130A291BA8075B0022665F /* pdf417.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pdf417.h; path = MADBarcodes/pdf417.h; sourceTree = "<group>"; };
+		4C130A2A1BA8075B0022665F /* plessey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = plessey.c; path = MADBarcodes/plessey.c; sourceTree = "<group>"; };
+		4C130A2B1BA8075B0022665F /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = MADBarcodes/png.c; sourceTree = "<group>"; };
+		4C130A2C1BA8075B0022665F /* postal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = postal.c; path = MADBarcodes/postal.c; sourceTree = "<group>"; };
+		4C130A2D1BA8075B0022665F /* ps.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ps.c; path = MADBarcodes/ps.c; sourceTree = "<group>"; };
+		4C130A2E1BA8075B0022665F /* qr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = qr.c; path = MADBarcodes/qr.c; sourceTree = "<group>"; };
+		4C130A2F1BA8075B0022665F /* qr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qr.h; path = MADBarcodes/qr.h; sourceTree = "<group>"; };
+		4C130A301BA8075B0022665F /* reedsol.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = reedsol.c; path = MADBarcodes/reedsol.c; sourceTree = "<group>"; };
+		4C130A311BA8075B0022665F /* reedsol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reedsol.h; path = MADBarcodes/reedsol.h; sourceTree = "<group>"; };
+		4C130A321BA8075B0022665F /* render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = render.c; path = MADBarcodes/render.c; sourceTree = "<group>"; };
+		4C130A331BA8075B0022665F /* rss.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rss.c; path = MADBarcodes/rss.c; sourceTree = "<group>"; };
+		4C130A341BA8075B0022665F /* rss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rss.h; path = MADBarcodes/rss.h; sourceTree = "<group>"; };
+		4C130A351BA8075B0022665F /* sjis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sjis.h; path = MADBarcodes/sjis.h; sourceTree = "<group>"; };
+		4C130A361BA8075B0022665F /* svg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = svg.c; path = MADBarcodes/svg.c; sourceTree = "<group>"; };
+		4C130A371BA8075B0022665F /* telepen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = telepen.c; path = MADBarcodes/telepen.c; sourceTree = "<group>"; };
+		4C130A381BA8075B0022665F /* upcean.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upcean.c; path = MADBarcodes/upcean.c; sourceTree = "<group>"; };
+		4C130A391BA8075B0022665F /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = MADBarcodes/zint.h; sourceTree = "<group>"; };
+		4C130A3A1BA8075B0022665F /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Expanded.h"; path = "MADBarcodes/UIColor+Expanded.h"; sourceTree = "<group>"; };
+		4C130A3B1BA8075B0022665F /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Expanded.m"; path = "MADBarcodes/UIColor+Expanded.m"; sourceTree = "<group>"; };
+		4C130AF41BA807FE0022665F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		4C130AF61BA808150022665F /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../Compressor/library/libpng/libpng.a; sourceTree = "<group>"; };
+		4C130AF81BA8085D0022665F /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		4C130AF91BA8085D0022665F /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		4C130AFA1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
+		4C130AFC1BA8085D0022665F /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		4C130AFD1BA8085D0022665F /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		4C130AFE1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
+		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4C66C1371BA814A400663575 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Compressor/library/libpng/libpng16.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C1309661BA8068B0022665F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
+				4C66C1381BA814A400663575 /* libpng16.a in Frameworks */,
+				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
+				4C130B151BA80D240022665F /* libz.tbd in Frameworks */,
+				4C130AF71BA808150022665F /* libpng.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1309711BA8068B0022665F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C1309751BA8068B0022665F /* MADBarcodes.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C1309601BA8068B0022665F = {
+			isa = PBXGroup;
+			children = (
+				4C130B061BA808660022665F /* Resouces */,
+				4C13096C1BA8068B0022665F /* MADBarcodes */,
+				4C1309781BA8068B0022665F /* MADBarcodesTests */,
+				4C13096B1BA8068B0022665F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C13096B1BA8068B0022665F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C13096A1BA8068B0022665F /* MADBarcodes.framework */,
+				4C1309741BA8068B0022665F /* MADBarcodesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C13096C1BA8068B0022665F /* MADBarcodes */ = {
+			isa = PBXGroup;
+			children = (
+				4C13096D1BA8068B0022665F /* MADBarcodes.h */,
+				4C13096F1BA8068B0022665F /* Info.plist */,
+				4C1309841BA8073E0022665F /* MADBarcodes */,
+			);
+			path = MADBarcodes;
+			sourceTree = "<group>";
+		};
+		4C1309781BA8068B0022665F /* MADBarcodesTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C1309791BA8068B0022665F /* MADBarcodesTests.m */,
+				4C13097B1BA8068B0022665F /* Info.plist */,
+			);
+			path = MADBarcodesTests;
+			sourceTree = "<group>";
+		};
+		4C1309841BA8073E0022665F /* MADBarcodes */ = {
+			isa = PBXGroup;
+			children = (
+				4C130AF31BA807840022665F /* zint */,
+				4C1309A31BA8075B0022665F /* MADBarcodeType.h */,
+				4C1309A91BA8075B0022665F /* MTBarcode.h */,
+				4C1309AA1BA8075B0022665F /* MTBarcode.m */,
+				4C1309AB1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h */,
+				4C1309AC1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.m */,
+				4C1309AD1BA8075B0022665F /* MTBarcodeAusreDirect.h */,
+				4C1309AE1BA8075B0022665F /* MTBarcodeAusreDirect.m */,
+				4C1309AF1BA8075B0022665F /* MTBarcodeAusreply.h */,
+				4C1309B01BA8075B0022665F /* MTBarcodeAusreply.m */,
+				4C1309B11BA8075B0022665F /* MTBarcodeAusRoute.h */,
+				4C1309B21BA8075B0022665F /* MTBarcodeAusRoute.m */,
+				4C1309B31BA8075B0022665F /* MTBarcodeAztec.h */,
+				4C1309B41BA8075B0022665F /* MTBarcodeAztec.m */,
+				4C1309B51BA8075B0022665F /* MTBarcodeAztecRunes.h */,
+				4C1309B61BA8075B0022665F /* MTBarcodeAztecRunes.m */,
+				4C1309B71BA8075B0022665F /* MTBarcodeChannelCode.h */,
+				4C1309B81BA8075B0022665F /* MTBarcodeChannelCode.m */,
+				4C1309B91BA8075B0022665F /* MTBarcodeCodabar.h */,
+				4C1309BA1BA8075B0022665F /* MTBarcodeCodabar.m */,
+				4C1309BB1BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h */,
+				4C1309BC1BA8075B0022665F /* MTBarcodeCode2of5DataLogic.m */,
+				4C1309BD1BA8075B0022665F /* MTBarcodeCode2of5Iata.h */,
+				4C1309BE1BA8075B0022665F /* MTBarcodeCode2of5Iata.m */,
+				4C1309BF1BA8075B0022665F /* MTBarcodeCode2of5Industrial.h */,
+				4C1309C01BA8075B0022665F /* MTBarcodeCode2of5Industrial.m */,
+				4C1309C11BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h */,
+				4C1309C21BA8075B0022665F /* MTBarcodeCode2of5Interleaved.m */,
+				4C1309C31BA8075B0022665F /* MTBarcodeCode2of5Matrix.h */,
+				4C1309C41BA8075B0022665F /* MTBarcodeCode2of5Matrix.m */,
+				4C1309C51BA8075B0022665F /* MTBarcodeCode11.h */,
+				4C1309C61BA8075B0022665F /* MTBarcodeCode11.m */,
+				4C1309C71BA8075B0022665F /* MTBarcodeCode16k.h */,
+				4C1309C81BA8075B0022665F /* MTBarcodeCode16k.m */,
+				4C1309C91BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.h */,
+				4C1309CA1BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.m */,
+				4C1309CB1BA8075B0022665F /* MTBarcodeCode39Extended.h */,
+				4C1309CC1BA8075B0022665F /* MTBarcodeCode39Extended.m */,
+				4C1309CD1BA8075B0022665F /* MTBarcodeCode39Iso16388.h */,
+				4C1309CE1BA8075B0022665F /* MTBarcodeCode39Iso16388.m */,
+				4C1309CF1BA8075B0022665F /* MTBarcodeCode49.h */,
+				4C1309D01BA8075B0022665F /* MTBarcodeCode49.m */,
+				4C1309D11BA8075B0022665F /* MTBarcodeCode93.h */,
+				4C1309D21BA8075B0022665F /* MTBarcodeCode93.m */,
+				4C1309D31BA8075B0022665F /* MTBarcodeCode128Iso15417.h */,
+				4C1309D41BA8075B0022665F /* MTBarcodeCode128Iso15417.m */,
+				4C1309D51BA8075B0022665F /* MTBarcodeCodeOne.h */,
+				4C1309D61BA8075B0022665F /* MTBarcodeCodeOne.m */,
+				4C1309D71BA8075B0022665F /* MTBarcodeDatabar.h */,
+				4C1309D81BA8075B0022665F /* MTBarcodeDatabar.m */,
+				4C1309D91BA8075B0022665F /* MTBarcodeDatabarExpanded.h */,
+				4C1309DA1BA8075B0022665F /* MTBarcodeDatabarExpanded.m */,
+				4C1309DB1BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h */,
+				4C1309DC1BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.m */,
+				4C1309DD1BA8075B0022665F /* MTBarcodeDatabarLimited.h */,
+				4C1309DE1BA8075B0022665F /* MTBarcodeDatabarLimited.m */,
+				4C1309DF1BA8075B0022665F /* MTBarcodeDatabarStacked.h */,
+				4C1309E01BA8075B0022665F /* MTBarcodeDatabarStacked.m */,
+				4C1309E11BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.h */,
+				4C1309E21BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.m */,
+				4C1309E31BA8075B0022665F /* MTBarcodeDataMatrixIso16022.h */,
+				4C1309E41BA8075B0022665F /* MTBarcodeDataMatrixIso16022.m */,
+				4C1309E51BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.h */,
+				4C1309E61BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.m */,
+				4C1309E71BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.h */,
+				4C1309E81BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.m */,
+				4C1309E91BA8075B0022665F /* MTBarcodeDutchPostKix.h */,
+				4C1309EA1BA8075B0022665F /* MTBarcodeDutchPostKix.m */,
+				4C1309EB1BA8075B0022665F /* MTBarcodeEan14.h */,
+				4C1309EC1BA8075B0022665F /* MTBarcodeEan14.m */,
+				4C1309ED1BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h */,
+				4C1309EE1BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.m */,
+				4C1309EF1BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h */,
+				4C1309F01BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.m */,
+				4C1309F11BA8075B0022665F /* MTBarcodeFlattermarken.h */,
+				4C1309F21BA8075B0022665F /* MTBarcodeFlattermarken.m */,
+				4C1309F31BA8075B0022665F /* MTBarcodeGridMatrix.h */,
+				4C1309F41BA8075B0022665F /* MTBarcodeGridMatrix.m */,
+				4C1309F51BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.h */,
+				4C1309F61BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.m */,
+				4C1309F71BA8075B0022665F /* MTBarcodeItf14.h */,
+				4C1309F81BA8075B0022665F /* MTBarcodeItf14.m */,
+				4C1309F91BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h */,
+				4C1309FA1BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.m */,
+				4C1309FB1BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h */,
+				4C1309FC1BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.m */,
+				4C1309FD1BA8075B0022665F /* MTBarcodeLogmars.h */,
+				4C1309FE1BA8075B0022665F /* MTBarcodeLogmars.m */,
+				4C1309FF1BA8075B0022665F /* MTBarcodeMaxicodeIso16023.h */,
+				4C130A001BA8075B0022665F /* MTBarcodeMaxicodeIso16023.m */,
+				4C130A011BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.h */,
+				4C130A021BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.m */,
+				4C130A031BA8075B0022665F /* MTBarcodeMicroQrCode.h */,
+				4C130A041BA8075B0022665F /* MTBarcodeMicroQrCode.m */,
+				4C130A051BA8075B0022665F /* MTBarcodeMsiPlessey.h */,
+				4C130A061BA8075B0022665F /* MTBarcodeMsiPlessey.m */,
+				4C130A071BA8075B0022665F /* MTBarcodeNve18.h */,
+				4C130A081BA8075B0022665F /* MTBarcodeNve18.m */,
+				4C130A091BA8075B0022665F /* MTBarcodePdf417Iso15438.h */,
+				4C130A0A1BA8075B0022665F /* MTBarcodePdf417Iso15438.m */,
+				4C130A0B1BA8075B0022665F /* MTBarcodePharmacode.h */,
+				4C130A0C1BA8075B0022665F /* MTBarcodePharmacode.m */,
+				4C130A0D1BA8075B0022665F /* MTBarcodePharmacode2Track.h */,
+				4C130A0E1BA8075B0022665F /* MTBarcodePharmacode2Track.m */,
+				4C130A0F1BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h */,
+				4C130A101BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.m */,
+				4C130A111BA8075B0022665F /* MTBarcodePlanet.h */,
+				4C130A121BA8075B0022665F /* MTBarcodePlanet.m */,
+				4C130A131BA8075B0022665F /* MTBarcodePostnet.h */,
+				4C130A141BA8075B0022665F /* MTBarcodePostnet.m */,
+				4C130A151BA8075B0022665F /* MTBarcodeProtocol.h */,
+				4C130A161BA8075B0022665F /* MTBarcodeQrCodeIso18004.h */,
+				4C130A171BA8075B0022665F /* MTBarcodeQrCodeIso18004.m */,
+				4C130A181BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h */,
+				4C130A191BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.m */,
+				4C130A1A1BA8075B0022665F /* MTBarcodeTelepen.h */,
+				4C130A1B1BA8075B0022665F /* MTBarcodeTelepen.m */,
+				4C130A1C1BA8075B0022665F /* MTBarcodeTelepenNumeric.h */,
+				4C130A1D1BA8075B0022665F /* MTBarcodeTelepenNumeric.m */,
+				4C130A1E1BA8075B0022665F /* MTBarcodeUkPlessey.h */,
+				4C130A1F1BA8075B0022665F /* MTBarcodeUkPlessey.m */,
+				4C130A201BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h */,
+				4C130A211BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.m */,
+				4C130A221BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h */,
+				4C130A231BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.m */,
+				4C130A241BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h */,
+				4C130A251BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m */,
+				4C130A261BA8075B0022665F /* MTBarcodeView.h */,
+				4C130A271BA8075B0022665F /* MTBarcodeView.m */,
+				4C130A3A1BA8075B0022665F /* UIColor+Expanded.h */,
+				4C130A3B1BA8075B0022665F /* UIColor+Expanded.m */,
+			);
+			name = MADBarcodes;
+			sourceTree = "<group>";
+		};
+		4C130AF31BA807840022665F /* zint */ = {
+			isa = PBXGroup;
+			children = (
+				4C130A281BA8075B0022665F /* pdf417.c */,
+				4C130A291BA8075B0022665F /* pdf417.h */,
+				4C130A2A1BA8075B0022665F /* plessey.c */,
+				4C130A2B1BA8075B0022665F /* png.c */,
+				4C130A2C1BA8075B0022665F /* postal.c */,
+				4C130A2D1BA8075B0022665F /* ps.c */,
+				4C130A2E1BA8075B0022665F /* qr.c */,
+				4C130A2F1BA8075B0022665F /* qr.h */,
+				4C130A301BA8075B0022665F /* reedsol.c */,
+				4C130A311BA8075B0022665F /* reedsol.h */,
+				4C130A321BA8075B0022665F /* render.c */,
+				4C130A331BA8075B0022665F /* rss.c */,
+				4C130A341BA8075B0022665F /* rss.h */,
+				4C130A351BA8075B0022665F /* sjis.h */,
+				4C130A361BA8075B0022665F /* svg.c */,
+				4C130A371BA8075B0022665F /* telepen.c */,
+				4C130A381BA8075B0022665F /* upcean.c */,
+				4C130A391BA8075B0022665F /* zint.h */,
+				4C1309A41BA8075B0022665F /* maxicode.c */,
+				4C1309A51BA8075B0022665F /* maxicode.h */,
+				4C1309A61BA8075B0022665F /* maxipng.h */,
+				4C1309A71BA8075B0022665F /* medical.c */,
+				4C1309A81BA8075B0022665F /* ms_stdint.h */,
+				4C1309851BA8075B0022665F /* 2of5.c */,
+				4C1309861BA8075B0022665F /* auspost.c */,
+				4C1309881BA8075B0022665F /* aztec.h */,
+				4C1309871BA8075B0022665F /* aztec.c */,
+				4C1309891BA8075B0022665F /* Barcodes-Prefix.pch */,
+				4C13098A1BA8075B0022665F /* code.c */,
+				4C13098C1BA8075B0022665F /* code1.h */,
+				4C13098B1BA8075B0022665F /* code1.c */,
+				4C13098D1BA8075B0022665F /* code16k.c */,
+				4C13098F1BA8075B0022665F /* code49.h */,
+				4C13098E1BA8075B0022665F /* code49.c */,
+				4C1309901BA8075B0022665F /* code128.c */,
+				4C1309921BA8075B0022665F /* common.h */,
+				4C1309911BA8075B0022665F /* common.c */,
+				4C1309941BA8075B0022665F /* composite.h */,
+				4C1309931BA8075B0022665F /* composite.c */,
+				4C1309951BA8075B0022665F /* DEVELOPER */,
+				4C1309961BA8075B0022665F /* dllversion.c */,
+				4C1309981BA8075B0022665F /* dmatrix.h */,
+				4C1309971BA8075B0022665F /* dmatrix.c */,
+				4C1309991BA8075B0022665F /* font.h */,
+				4C13099A1BA8075B0022665F /* gb2312.h */,
+				4C13099B1BA8075B0022665F /* gridmtx.c */,
+				4C13099C1BA8075B0022665F /* gridmtx.h */,
+				4C13099D1BA8075B0022665F /* gs1.c */,
+				4C13099E1BA8075B0022665F /* gs1.h */,
+				4C13099F1BA8075B0022665F /* imail.c */,
+				4C1309A01BA8075B0022665F /* large.c */,
+				4C1309A11BA8075B0022665F /* large.h */,
+				4C1309A21BA8075B0022665F /* library.c */,
+			);
+			name = zint;
+			sourceTree = "<group>";
+		};
+		4C130AFB1BA8085D0022665F /* libpng16 */ = {
+			isa = PBXGroup;
+			children = (
+				4C130AF81BA8085D0022665F /* png.h */,
+				4C130AF91BA8085D0022665F /* pngconf.h */,
+				4C130AFA1BA8085D0022665F /* pnglibconf.h */,
+			);
+			path = libpng16;
+			sourceTree = "<group>";
+		};
+		4C130AFF1BA8085D0022665F /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C130AFB1BA8085D0022665F /* libpng16 */,
+				4C130AFC1BA8085D0022665F /* png.h */,
+				4C130AFD1BA8085D0022665F /* pngconf.h */,
+				4C130AFE1BA8085D0022665F /* pnglibconf.h */,
+			);
+			name = include;
+			path = ../Compressor/library/libpng/include;
+			sourceTree = "<group>";
+		};
+		4C130B061BA808660022665F /* Resouces */ = {
+			isa = PBXGroup;
+			children = (
+				4C130B091BA808970022665F /* Frameworks */,
+				4C130B071BA808710022665F /* Libraries */,
+			);
+			name = Resouces;
+			sourceTree = "<group>";
+		};
+		4C130B071BA808710022665F /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4C130B081BA8087B0022665F /* libpng */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		4C130B081BA8087B0022665F /* libpng */ = {
+			isa = PBXGroup;
+			children = (
+				4C130AFF1BA8085D0022665F /* include */,
+				4C130AF61BA808150022665F /* libpng.a */,
+				4C66C1371BA814A400663575 /* libpng16.a */,
+			);
+			name = libpng;
+			sourceTree = "<group>";
+		};
+		4C130B091BA808970022665F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C130B141BA80D240022665F /* libz.tbd */,
+				4C130B121BA80C1A0022665F /* Foundation.framework */,
+				4C130AF41BA807FE0022665F /* MobileCoreServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4C1309671BA8068B0022665F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C13096E1BA8068B0022665F /* MADBarcodes.h in Headers */,
+				4C130A601BA8075B0022665F /* MTBarcode.h in Headers */,
+				4C130ACC1BA8075B0022665F /* MTBarcodeProtocol.h in Headers */,
+				4C130A841BA8075B0022665F /* MTBarcodeCode39Iso16388.h in Headers */,
+				4C130A9A1BA8075B0022665F /* MTBarcodeDataMatrixIso16022.h in Headers */,
+				4C130ACD1BA8075B0022665F /* MTBarcodeQrCodeIso18004.h in Headers */,
+				4C130A6A1BA8075B0022665F /* MTBarcodeAztec.h in Headers */,
+				4C130ABA1BA8075B0022665F /* MTBarcodeMicroQrCode.h in Headers */,
+				4C130AC01BA8075B0022665F /* MTBarcodePdf417Iso15438.h in Headers */,
+				4C130ABC1BA8075B0022665F /* MTBarcodeMsiPlessey.h in Headers */,
+				4C130AB81BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.h in Headers */,
+				4C130A961BA8075B0022665F /* MTBarcodeDatabarStacked.h in Headers */,
+				4C130A6E1BA8075B0022665F /* MTBarcodeChannelCode.h in Headers */,
+				4C130AB61BA8075B0022665F /* MTBarcodeMaxicodeIso16023.h in Headers */,
+				4C130ADD1BA8075B0022665F /* MTBarcodeView.h in Headers */,
+				4C130A5A1BA8075B0022665F /* MADBarcodeType.h in Headers */,
+				4C130A821BA8075B0022665F /* MTBarcodeCode39Extended.h in Headers */,
+				4C130A8C1BA8075B0022665F /* MTBarcodeCodeOne.h in Headers */,
+				4C130AAA1BA8075B0022665F /* MTBarcodeGridMatrix.h in Headers */,
+				4C130A921BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h in Headers */,
+				4C130AF01BA8075B0022665F /* zint.h in Headers */,
+				4C130A4F1BA8075B0022665F /* dmatrix.h in Headers */,
+				4C130ADB1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h in Headers */,
+				4C130A981BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.h in Headers */,
+				4C130A9E1BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.h in Headers */,
+				4C130A531BA8075B0022665F /* gridmtx.h in Headers */,
+				4C130AB21BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h in Headers */,
+				4C130A881BA8075B0022665F /* MTBarcodeCode93.h in Headers */,
+				4C130ACF1BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h in Headers */,
+				4C130AB41BA8075B0022665F /* MTBarcodeLogmars.h in Headers */,
+				4C130AD71BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h in Headers */,
+				4C130A901BA8075B0022665F /* MTBarcodeDatabarExpanded.h in Headers */,
+				4C130AC41BA8075B0022665F /* MTBarcodePharmacode2Track.h in Headers */,
+				4C130A5D1BA8075B0022665F /* maxipng.h in Headers */,
+				4C130AD51BA8075B0022665F /* MTBarcodeUkPlessey.h in Headers */,
+				4C130AEB1BA8075B0022665F /* rss.h in Headers */,
+				4C130A3F1BA8075B0022665F /* aztec.h in Headers */,
+				4C130B051BA8085D0022665F /* pnglibconf.h in Headers */,
+				4C130AD91BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h in Headers */,
+				4C130A501BA8075B0022665F /* font.h in Headers */,
+				4C130A701BA8075B0022665F /* MTBarcodeCodabar.h in Headers */,
+				4C130AC81BA8075B0022665F /* MTBarcodePlanet.h in Headers */,
+				4C130A741BA8075B0022665F /* MTBarcodeCode2of5Iata.h in Headers */,
+				4C130A681BA8075B0022665F /* MTBarcodeAusRoute.h in Headers */,
+				4C130A861BA8075B0022665F /* MTBarcodeCode49.h in Headers */,
+				4C130A5C1BA8075B0022665F /* maxicode.h in Headers */,
+				4C130B011BA8085D0022665F /* pngconf.h in Headers */,
+				4C130AA01BA8075B0022665F /* MTBarcodeDutchPostKix.h in Headers */,
+				4C130A761BA8075B0022665F /* MTBarcodeCode2of5Industrial.h in Headers */,
+				4C130AA61BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h in Headers */,
+				4C130A491BA8075B0022665F /* common.h in Headers */,
+				4C130A781BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h in Headers */,
+				4C130A431BA8075B0022665F /* code1.h in Headers */,
+				4C130A551BA8075B0022665F /* gs1.h in Headers */,
+				4C130A8A1BA8075B0022665F /* MTBarcodeCode128Iso15417.h in Headers */,
+				4C130B001BA8085D0022665F /* png.h in Headers */,
+				4C130A7A1BA8075B0022665F /* MTBarcodeCode2of5Matrix.h in Headers */,
+				4C130AA81BA8075B0022665F /* MTBarcodeFlattermarken.h in Headers */,
+				4C130A941BA8075B0022665F /* MTBarcodeDatabarLimited.h in Headers */,
+				4C130A801BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.h in Headers */,
+				4C130AF11BA8075B0022665F /* UIColor+Expanded.h in Headers */,
+				4C130AEC1BA8075B0022665F /* sjis.h in Headers */,
+				4C130A461BA8075B0022665F /* code49.h in Headers */,
+				4C130AE81BA8075B0022665F /* reedsol.h in Headers */,
+				4C130A4B1BA8075B0022665F /* composite.h in Headers */,
+				4C130B031BA8085D0022665F /* png.h in Headers */,
+				4C130A401BA8075B0022665F /* Barcodes-Prefix.pch in Headers */,
+				4C130AA41BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h in Headers */,
+				4C130AD31BA8075B0022665F /* MTBarcodeTelepenNumeric.h in Headers */,
+				4C130AAC1BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.h in Headers */,
+				4C130ABE1BA8075B0022665F /* MTBarcodeNve18.h in Headers */,
+				4C130A7E1BA8075B0022665F /* MTBarcodeCode16k.h in Headers */,
+				4C130A7C1BA8075B0022665F /* MTBarcodeCode11.h in Headers */,
+				4C130AC21BA8075B0022665F /* MTBarcodePharmacode.h in Headers */,
+				4C130A9C1BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.h in Headers */,
+				4C130AE01BA8075B0022665F /* pdf417.h in Headers */,
+				4C130AE61BA8075B0022665F /* qr.h in Headers */,
+				4C130AC61BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h in Headers */,
+				4C130A8E1BA8075B0022665F /* MTBarcodeDatabar.h in Headers */,
+				4C130A6C1BA8075B0022665F /* MTBarcodeAztecRunes.h in Headers */,
+				4C130B041BA8085D0022665F /* pngconf.h in Headers */,
+				4C130ACA1BA8075B0022665F /* MTBarcodePostnet.h in Headers */,
+				4C130AA21BA8075B0022665F /* MTBarcodeEan14.h in Headers */,
+				4C130AAE1BA8075B0022665F /* MTBarcodeItf14.h in Headers */,
+				4C130A661BA8075B0022665F /* MTBarcodeAusreply.h in Headers */,
+				4C130A5F1BA8075B0022665F /* ms_stdint.h in Headers */,
+				4C130A721BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h in Headers */,
+				4C130AB01BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h in Headers */,
+				4C130B021BA8085D0022665F /* pnglibconf.h in Headers */,
+				4C130A641BA8075B0022665F /* MTBarcodeAusreDirect.h in Headers */,
+				4C130A511BA8075B0022665F /* gb2312.h in Headers */,
+				4C130A621BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h in Headers */,
+				4C130A581BA8075B0022665F /* large.h in Headers */,
+				4C130AD11BA8075B0022665F /* MTBarcodeTelepen.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4C1309691BA8068B0022665F /* MADBarcodes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C13097E1BA8068C0022665F /* Build configuration list for PBXNativeTarget "MADBarcodes" */;
+			buildPhases = (
+				4C1309651BA8068B0022665F /* Sources */,
+				4C1309661BA8068B0022665F /* Frameworks */,
+				4C1309671BA8068B0022665F /* Headers */,
+				4C1309681BA8068B0022665F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MADBarcodes;
+			productName = MADBarcodes;
+			productReference = 4C13096A1BA8068B0022665F /* MADBarcodes.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4C1309731BA8068B0022665F /* MADBarcodesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C1309811BA8068C0022665F /* Build configuration list for PBXNativeTarget "MADBarcodesTests" */;
+			buildPhases = (
+				4C1309701BA8068B0022665F /* Sources */,
+				4C1309711BA8068B0022665F /* Frameworks */,
+				4C1309721BA8068B0022665F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C1309771BA8068B0022665F /* PBXTargetDependency */,
+			);
+			name = MADBarcodesTests;
+			productName = MADBarcodesTests;
+			productReference = 4C1309741BA8068B0022665F /* MADBarcodesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C1309611BA8068B0022665F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+				TargetAttributes = {
+					4C1309691BA8068B0022665F = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					4C1309731BA8068B0022665F = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 4C1309641BA8068B0022665F /* Build configuration list for PBXProject "MADBarcodes" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4C1309601BA8068B0022665F;
+			productRefGroup = 4C13096B1BA8068B0022665F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C1309691BA8068B0022665F /* MADBarcodes */,
+				4C1309731BA8068B0022665F /* MADBarcodesTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C1309681BA8068B0022665F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C130A4C1BA8075B0022665F /* DEVELOPER in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1309721BA8068B0022665F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C1309651BA8068B0022665F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C130A521BA8075B0022665F /* gridmtx.c in Sources */,
+				4C130ABF1BA8075B0022665F /* MTBarcodeNve18.m in Sources */,
+				4C130A5E1BA8075B0022665F /* medical.c in Sources */,
+				4C130A591BA8075B0022665F /* library.c in Sources */,
+				4C130A651BA8075B0022665F /* MTBarcodeAusreDirect.m in Sources */,
+				4C130A671BA8075B0022665F /* MTBarcodeAusreply.m in Sources */,
+				4C130AC51BA8075B0022665F /* MTBarcodePharmacode2Track.m in Sources */,
+				4C130A471BA8075B0022665F /* code128.c in Sources */,
+				4C130A3E1BA8075B0022665F /* aztec.c in Sources */,
+				4C130ADC1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m in Sources */,
+				4C130A851BA8075B0022665F /* MTBarcodeCode39Iso16388.m in Sources */,
+				4C130A871BA8075B0022665F /* MTBarcodeCode49.m in Sources */,
+				4C130AC31BA8075B0022665F /* MTBarcodePharmacode.m in Sources */,
+				4C130AE91BA8075B0022665F /* render.c in Sources */,
+				4C130AA31BA8075B0022665F /* MTBarcodeEan14.m in Sources */,
+				4C130AC11BA8075B0022665F /* MTBarcodePdf417Iso15438.m in Sources */,
+				4C130AAB1BA8075B0022665F /* MTBarcodeGridMatrix.m in Sources */,
+				4C130A771BA8075B0022665F /* MTBarcodeCode2of5Industrial.m in Sources */,
+				4C130AED1BA8075B0022665F /* svg.c in Sources */,
+				4C130A691BA8075B0022665F /* MTBarcodeAusRoute.m in Sources */,
+				4C130AC91BA8075B0022665F /* MTBarcodePlanet.m in Sources */,
+				4C130A9F1BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.m in Sources */,
+				4C130A571BA8075B0022665F /* large.c in Sources */,
+				4C130AEF1BA8075B0022665F /* upcean.c in Sources */,
+				4C130AC71BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.m in Sources */,
+				4C130A891BA8075B0022665F /* MTBarcodeCode93.m in Sources */,
+				4C130AE11BA8075B0022665F /* plessey.c in Sources */,
+				4C130A6D1BA8075B0022665F /* MTBarcodeAztecRunes.m in Sources */,
+				4C130A3C1BA8075B0022665F /* 2of5.c in Sources */,
+				4C130A9B1BA8075B0022665F /* MTBarcodeDataMatrixIso16022.m in Sources */,
+				4C130ADF1BA8075B0022665F /* pdf417.c in Sources */,
+				4C130ADE1BA8075B0022665F /* MTBarcodeView.m in Sources */,
+				4C130A971BA8075B0022665F /* MTBarcodeDatabarStacked.m in Sources */,
+				4C130A8D1BA8075B0022665F /* MTBarcodeCodeOne.m in Sources */,
+				4C130AF21BA8075B0022665F /* UIColor+Expanded.m in Sources */,
+				4C130A611BA8075B0022665F /* MTBarcode.m in Sources */,
+				4C130AE31BA8075B0022665F /* postal.c in Sources */,
+				4C130A6B1BA8075B0022665F /* MTBarcodeAztec.m in Sources */,
+				4C130A991BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.m in Sources */,
+				4C130A4A1BA8075B0022665F /* composite.c in Sources */,
+				4C130AD41BA8075B0022665F /* MTBarcodeTelepenNumeric.m in Sources */,
+				4C130AD21BA8075B0022665F /* MTBarcodeTelepen.m in Sources */,
+				4C130AEA1BA8075B0022665F /* rss.c in Sources */,
+				4C130A481BA8075B0022665F /* common.c in Sources */,
+				4C130A8F1BA8075B0022665F /* MTBarcodeDatabar.m in Sources */,
+				4C130AA71BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.m in Sources */,
+				4C130A421BA8075B0022665F /* code1.c in Sources */,
+				4C130AD61BA8075B0022665F /* MTBarcodeUkPlessey.m in Sources */,
+				4C130A631BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.m in Sources */,
+				4C130A751BA8075B0022665F /* MTBarcodeCode2of5Iata.m in Sources */,
+				4C130AD01BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.m in Sources */,
+				4C130ADA1BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.m in Sources */,
+				4C130A441BA8075B0022665F /* code16k.c in Sources */,
+				4C130A831BA8075B0022665F /* MTBarcodeCode39Extended.m in Sources */,
+				4C130AD81BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.m in Sources */,
+				4C130A951BA8075B0022665F /* MTBarcodeDatabarLimited.m in Sources */,
+				4C130A791BA8075B0022665F /* MTBarcodeCode2of5Interleaved.m in Sources */,
+				4C130A4E1BA8075B0022665F /* dmatrix.c in Sources */,
+				4C130AA11BA8075B0022665F /* MTBarcodeDutchPostKix.m in Sources */,
+				4C130A9D1BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.m in Sources */,
+				4C130A541BA8075B0022665F /* gs1.c in Sources */,
+				4C130AEE1BA8075B0022665F /* telepen.c in Sources */,
+				4C130A451BA8075B0022665F /* code49.c in Sources */,
+				4C130A811BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.m in Sources */,
+				4C130AAD1BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.m in Sources */,
+				4C130AE71BA8075B0022665F /* reedsol.c in Sources */,
+				4C130ACB1BA8075B0022665F /* MTBarcodePostnet.m in Sources */,
+				4C130A7D1BA8075B0022665F /* MTBarcodeCode11.m in Sources */,
+				4C130AE21BA8075B0022665F /* png.c in Sources */,
+				4C130A731BA8075B0022665F /* MTBarcodeCode2of5DataLogic.m in Sources */,
+				4C130AB91BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.m in Sources */,
+				4C130AE51BA8075B0022665F /* qr.c in Sources */,
+				4C130A5B1BA8075B0022665F /* maxicode.c in Sources */,
+				4C130A711BA8075B0022665F /* MTBarcodeCodabar.m in Sources */,
+				4C130A411BA8075B0022665F /* code.c in Sources */,
+				4C130A7B1BA8075B0022665F /* MTBarcodeCode2of5Matrix.m in Sources */,
+				4C130AB71BA8075B0022665F /* MTBarcodeMaxicodeIso16023.m in Sources */,
+				4C130A6F1BA8075B0022665F /* MTBarcodeChannelCode.m in Sources */,
+				4C130A911BA8075B0022665F /* MTBarcodeDatabarExpanded.m in Sources */,
+				4C130A561BA8075B0022665F /* imail.c in Sources */,
+				4C130A8B1BA8075B0022665F /* MTBarcodeCode128Iso15417.m in Sources */,
+				4C130ACE1BA8075B0022665F /* MTBarcodeQrCodeIso18004.m in Sources */,
+				4C130AB11BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.m in Sources */,
+				4C130AB31BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.m in Sources */,
+				4C130AE41BA8075B0022665F /* ps.c in Sources */,
+				4C130A931BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.m in Sources */,
+				4C130ABD1BA8075B0022665F /* MTBarcodeMsiPlessey.m in Sources */,
+				4C130A4D1BA8075B0022665F /* dllversion.c in Sources */,
+				4C130AA91BA8075B0022665F /* MTBarcodeFlattermarken.m in Sources */,
+				4C130AB51BA8075B0022665F /* MTBarcodeLogmars.m in Sources */,
+				4C130AA51BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.m in Sources */,
+				4C130A3D1BA8075B0022665F /* auspost.c in Sources */,
+				4C130AAF1BA8075B0022665F /* MTBarcodeItf14.m in Sources */,
+				4C130A7F1BA8075B0022665F /* MTBarcodeCode16k.m in Sources */,
+				4C130ABB1BA8075B0022665F /* MTBarcodeMicroQrCode.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1309701BA8068B0022665F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C1309771BA8068B0022665F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C1309691BA8068B0022665F /* MADBarcodes */;
+			targetProxy = 4C1309761BA8068B0022665F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4C13097C1BA8068C0022665F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4C13097D1BA8068C0022665F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4C13097F1BA8068C0022665F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = MADBarcodes/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = /Users/mthomason/Desktop/Reports/Compressor/library/libpng;
+				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADBarcodes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4C1309801BA8068C0022665F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = MADBarcodes/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = /Users/mthomason/Desktop/Reports/Compressor/library/libpng;
+				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADBarcodes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4C1309821BA8068C0022665F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MADBarcodesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADBarcodesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4C1309831BA8068C0022665F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MADBarcodesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADBarcodesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C1309641BA8068B0022665F /* Build configuration list for PBXProject "MADBarcodes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C13097C1BA8068C0022665F /* Debug */,
+				4C13097D1BA8068C0022665F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C13097E1BA8068C0022665F /* Build configuration list for PBXNativeTarget "MADBarcodes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C13097F1BA8068C0022665F /* Debug */,
+				4C1309801BA8068C0022665F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C1309811BA8068C0022665F /* Build configuration list for PBXNativeTarget "MADBarcodesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C1309821BA8068C0022665F /* Debug */,
+				4C1309831BA8068C0022665F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C1309611BA8068B0022665F /* Project object */;
+}

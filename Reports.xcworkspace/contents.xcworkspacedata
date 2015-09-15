@@ -5,6 +5,9 @@
       location = "container:"
       name = "Frameworks">
       <FileRef
+         location = "group:MADBarcodes/MADBarcodes.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MADCocoaExtensions/MADCocoaExtensions.xcodeproj">
       </FileRef>
       <FileRef
@@ -19,9 +22,6 @@
    </Group>
    <FileRef
       location = "group:MySQLClientObjC/MysqlClientObjC.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Barcodes/Barcodes.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:DataStructures/libMTDataStrutures.xcodeproj">

@@ -13,7 +13,6 @@
 #import "MADResizeHandles.h"
 #import "UIView+NSObjectIdTag.h"
 #import "MTAlignment.h"
-#import "MTBarcode.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectBarcode.h"
