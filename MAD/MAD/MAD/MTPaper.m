@@ -49,16 +49,25 @@
 #import "MTPaperC9.h"
 #import "MTPaperC10.h"
 
-#import "CGGeometry+Extras.h"
+@interface MTPaper ()
+
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+@end
 
 @implementation MTPaper
 
-//- (instancetype)init {
-//    return [self initWithType:MTPaperLetter];
-//}
+- (instancetype)init {
+    if (self = [super init]) {
+        self.paperSize = CGSizeMake(CGFloatPointsForInches(8.5000f),
+                                    CGFloatPointsForInches(11.0000f));
+        self.paperType = MTPaperTypeLetter;
+    }
+    return self;
+}
 
 - (instancetype)initWithType:(MTPaperType)papertype {
-    id result = nil;
+    MTPaper *result = nil;
     switch (papertype) {
         
         case MTPaperTypeLetter:
@@ -212,6 +221,9 @@
         default:
             result = self = [super init];
             break;
+    }
+    if (result) {
+        result.paperType = papertype;
     }
     return result;
 }

@@ -10,6 +10,7 @@
 #define MAD_MTTableController_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADViewController.h"
 
 @class MTDataFormatter, MTQuery;

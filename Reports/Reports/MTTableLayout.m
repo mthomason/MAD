@@ -11,7 +11,6 @@
 #endif
 
 #import "MTTableLayout.h"
-#import "UIColor+EverydayApps.h"
 
 @interface MTTableLayout ()
     <UICollectionViewDelegate>

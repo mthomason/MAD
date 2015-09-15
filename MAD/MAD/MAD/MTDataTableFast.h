@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MTDataTable.h"
 
 @interface MTDataTableFast : MTDataTable

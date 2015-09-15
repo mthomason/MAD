@@ -18,8 +18,6 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseField.h"
 
-#import "CGGeometry+Extras.h"
-
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
@@ -49,7 +47,6 @@
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectImage.h"
 
-#import "UIDevice+Hack.h"
 #import "MTPaper.h"
 #import "RptqQuery+Extras.h"
 
@@ -59,12 +56,9 @@
 #import "MTDataTable.h"
 
 #import "MTBarcode.h"
-#import "MTMath.h"
 
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
-
-#import "UIImage+Border.h"
 
 @interface MTReportViewerPrintPageRenderer ()
 

@@ -18,10 +18,8 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "MTQuery.h"
-#import "NSError+Constructors.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDataTable.h"
-#import "UIDevice+Hack.h"
 #import "MTKeyChain.h"
 #import "MTDatabaseConnection.h"
 

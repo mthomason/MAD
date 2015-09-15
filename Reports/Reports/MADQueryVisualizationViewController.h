@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADocumentProtocol.h"
 
 @interface MADQueryVisualizationViewController : UIViewController

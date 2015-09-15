@@ -16,10 +16,6 @@
 #import "MTDatabaseField.h"
 #import "MTQuery.h"
 
-#import "NSError+Constructors.h"
-
-#import "MTLog.h"
-
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
 

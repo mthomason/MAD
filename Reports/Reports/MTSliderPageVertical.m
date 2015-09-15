@@ -7,8 +7,6 @@
 //
 
 #import "MTSliderPageVertical.h"
-#import "UIColor+EverydayApps.h"
-#import <CoreGraphics/CoreGraphics.h>
 #import "UIImage+ImageEffects.h"
 
 @interface MTSliderPageVertical ()

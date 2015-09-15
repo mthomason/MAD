@@ -11,7 +11,6 @@
 #endif
 
 #import "MTActivityReportPrintPreview.h"
-#import "UIDevice+Hack.h"
 
 @interface MTActivityReportPrintPreview()
     <UIDocumentInteractionControllerDelegate>

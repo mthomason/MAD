@@ -10,6 +10,7 @@
 #define MAD_MTTableCellHeader_Extras_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MTTableCellHeader : UICollectionReusableView
 

@@ -8,8 +8,6 @@
 
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MTCollectionViewCellDocument.h"
-#import "UILabel+Constructors.h"
-#import "UIView+Animations.h"
 
 NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
 

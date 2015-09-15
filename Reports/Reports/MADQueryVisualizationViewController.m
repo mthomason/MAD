@@ -33,10 +33,7 @@
 #import "RptqQuery+Extras.h"
 #import "RptqQueryTable+Extras.h"
 
-#import "CGGeometry+Extras.h"
 #import "CGAffineTransform+Common.h"
-#import "UIDevice+Hack.h"
-
 #import "UIView+NSObjectIdTag.h"
 
 #import "MTLinkedList.h"
@@ -45,7 +42,6 @@
 #import "RptqDocument+Extras.h"
 
 #import "MTQueryTest.h"
-#import "NSError+Constructors.h"
 #import "UIViewController+Designer.h"
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
@@ -55,7 +51,6 @@
 #import "MADQueryVisualizationCacheData.h"
 
 #import "MADOperationArchiveData.h"
-#import "NSFileManager+Common.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

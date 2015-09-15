@@ -7,7 +7,6 @@
 //
 
 #import "MADSectionLayoutAttributes.h"
-#import "CGGeometry+extras.h"
 
 @implementation MADSectionLayoutAttributes
 

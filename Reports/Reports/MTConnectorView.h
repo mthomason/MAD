@@ -10,6 +10,8 @@
 #define Reports_MTConnectorView_h
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 typedef NS_ENUM(NSUInteger, MNSConnectorPosition) {
 	MNSConnectorPositionA = 1,

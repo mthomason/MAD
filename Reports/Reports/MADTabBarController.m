@@ -41,7 +41,7 @@ const NSInteger MADIndexViewer = 2;
             ((id <MADocumentProtocol>)viewController).document = self.document;
         }
     }
-    NSLog(@"\t%s\n%@\n%lu", __PRETTY_FUNCTION__, self.viewControllers, self.viewControllers.count);
+    NSLog(@"\t%s\n%@\n%u", __PRETTY_FUNCTION__, self.viewControllers, self.viewControllers.count);
 }
 
 - (void)viewWillLayoutSubviews {

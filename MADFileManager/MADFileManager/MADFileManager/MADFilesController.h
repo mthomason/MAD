@@ -10,6 +10,7 @@
 #define MADDesigner_MADFilesController_h
 
 #import <Foundation/Foundation.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MADFilesController, MADMetaData, MADFile;
 

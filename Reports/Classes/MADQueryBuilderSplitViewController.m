@@ -21,8 +21,6 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIViewController+UI.h"
 
-#import "UIColor+EverydayApps.h"
-
 #import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
 

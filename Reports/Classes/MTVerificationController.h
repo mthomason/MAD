@@ -5,8 +5,6 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 #import "NSData+Base64.h"
-#import "MTLog.h"
-#import "NSError+Constructors.h"
 
 #define IS_IOS6_AWARE (__IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_1)
 

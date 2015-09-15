@@ -14,7 +14,6 @@
 #import "MTDataColumn.h"
 #import "sqlite3.h"
 #import "MTQuery.h"
-#import "MTLog.h"
 #import "MTDatabaseSqlite3.h"
 
 @interface MTDataTableFastObjectEnumerator ()

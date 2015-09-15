@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:MADCocoaExtensions/MADCocoaExtensions.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:MADFileManager/MADFileManager.xcodeproj">
    </FileRef>
    <FileRef
@@ -30,9 +33,6 @@
    </FileRef>
    <FileRef
       location = "group:CloudManager/CloudManager.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:CocoaExtensions/CocoaExtensions.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:MAD/MAD/MAD.xcodeproj">

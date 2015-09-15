@@ -7,7 +7,6 @@
 //
 
 #import "ACAccountStore+Social.h"
-#import "NSError+Constructors.h"
 
 @implementation ACAccountStore (Social)
 

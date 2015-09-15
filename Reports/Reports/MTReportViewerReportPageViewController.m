@@ -16,7 +16,6 @@
 #import "NSDate+Extras.h"
 #import "MADAppConfiguration.h"
 #import "MTPair.h"
-#import "UIColor+EverydayApps.h"
 
 @interface MTReportViewerReportPageViewController ()
 

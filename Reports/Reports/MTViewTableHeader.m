@@ -7,11 +7,6 @@
 //
 
 #import "MTViewTableHeader.h"
-#import "UIColor+EverydayApps.h"
-
-@interface MTViewTableHeader ()
-
-@end
 
 @implementation MTViewTableHeader
 

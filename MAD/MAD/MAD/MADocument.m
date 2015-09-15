@@ -61,20 +61,11 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
-#import "CGGeometry+Extras.h"
-#import "NSURL+Document.h"
-#import "UIDevice+Hack.h"
-#import "NSError+Constructors.h"
-#import "NSThread+Extras.h"
-
 #import "RptqDocumentSectionEnumerator.h"
 #import "MADSectionLayoutManager.h"
 
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
-
-#import "UIDocument+thumbnailURL.h"
-#import "NSFileManager+Common.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 

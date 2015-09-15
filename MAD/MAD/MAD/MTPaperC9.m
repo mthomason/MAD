@@ -11,7 +11,6 @@
 #endif
 
 #import "MTPaperC9.h"
-#import "CGGeometry+Extras.h"
 
 @implementation MTPaperC9
 

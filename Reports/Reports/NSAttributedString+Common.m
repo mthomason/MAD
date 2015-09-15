@@ -7,7 +7,6 @@
 //
 
 #import "NSAttributedString+Common.h"
-#import "UIColor+Social.h"
 
 @implementation NSAttributedString (Common)
 

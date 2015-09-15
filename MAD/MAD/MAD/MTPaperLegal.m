@@ -11,7 +11,6 @@
 #endif
 
 #import "MTPaperLegal.h"
-#import "CGGeometry+Extras.h"
 
 @implementation MTPaperLegal
 

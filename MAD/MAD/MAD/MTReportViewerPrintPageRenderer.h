@@ -10,6 +10,7 @@
 #define Reports_MTPrintPageRendererReport_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MTReportFormatter, MTDataTable;
 

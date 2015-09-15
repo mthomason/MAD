@@ -8,7 +8,6 @@
 
 #import "MADSectionLayoutManager.h"
 #import "MADSectionLayoutAttributes.h"
-#import "CGGeometry+Extras.h"
 #import "MTPair.h"
 
 #import "RptqDocumentObject.h"

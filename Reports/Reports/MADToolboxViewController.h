@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADToolboxDisplayProtocol.h"
 #import "MADViewController.h"
 

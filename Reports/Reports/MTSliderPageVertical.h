@@ -10,6 +10,8 @@
 #define MAD_MTSliderPageVertical_h
 
 #import <UIKit/UIKit.h>
+#import <CoreGraphics/CoreGraphics.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MTSliderPageVertical : UISlider
 

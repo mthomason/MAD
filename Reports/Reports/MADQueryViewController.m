@@ -43,9 +43,6 @@
 #import "MADNavigationController.h"
 #import "MADViewControllerSQL.h"
 
-#import "UIDevice+Hack.h"
-#import "UIColor+EverydayApps.h"
-
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 

@@ -939,6 +939,7 @@
 		4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C52054F1BA7ACAB000E6A59 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3ED1BA47AF400AA473B /* MADFileManager.framework */; };
 		4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3E31BA47A9200AA473B /* MADExplorer.framework */; };
+		4C5205DE1BA7F21B000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205DD1BA7F21B000E6A59 /* MADCocoaExtensions.framework */; };
 		4C54F2D81A12D45C004B5228 /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
 		4C54F2D91A12D45C004B5228 /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
 		4C54F2E41A12D54A004B5228 /* MADToolboxNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2E31A12D54A004B5228 /* MADToolboxNavigationController.m */; };
@@ -3765,7 +3766,6 @@
 		4C0F899D1B31590E00D75AF6 /* MADPreferencesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPreferencesManager.m; sourceTree = "<group>"; };
 		4C0F89A01B31592400D75AF6 /* MADPreference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPreference.h; sourceTree = "<group>"; };
 		4C0F89A11B31592400D75AF6 /* MADPreference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPreference.m; sourceTree = "<group>"; };
-		4C111BF71B1C2715005CA4DD /* NSNumberFormatter+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/NSNumberFormatter+Constructors.h"; sourceTree = "<group>"; };
 		4C111C1D1B2030E1005CA4DD /* NSLayoutConstraint+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+Designer.h"; sourceTree = "<group>"; };
 		4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+Designer.m"; sourceTree = "<group>"; };
 		4C111C201B2172F9005CA4DD /* UITapGestureRecognizer+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+Designer.h"; sourceTree = "<group>"; };
@@ -3848,11 +3848,6 @@
 		4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderChooseFieldViewController.m; sourceTree = "<group>"; };
 		4C1AD32E1B11BD5B00839504 /* MADProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADProgressView.h; sourceTree = "<group>"; };
 		4C1AD32F1B11BD5B00839504 /* MADProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADProgressView.m; sourceTree = "<group>"; };
-		4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
-		4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "../CocoaExtensions/CocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
-		4C1AD3481B18296F00839504 /* MFMailComposeViewController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MFMailComposeViewController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/MFMailComposeViewController+Constructors.h"; sourceTree = "<group>"; };
-		4C1AD34D1B183A1500839504 /* UILabel+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UILabel+Constructors.h"; sourceTree = "<group>"; };
-		4C1AD3511B1841A200839504 /* UIBarButtonItem+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIBarButtonItem+Constructors.h"; sourceTree = "<group>"; };
 		4C1E89741B328AF000B26B5E /* MADStoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreViewController.h; sourceTree = "<group>"; };
 		4C1E89751B328AF000B26B5E /* MADStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreViewController.m; sourceTree = "<group>"; };
 		4C1E89771B328ED100B26B5E /* MADCollectionViewCellProductFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewCellProductFeature.h; sourceTree = "<group>"; };
@@ -4100,6 +4095,7 @@
 		4C50DF8D16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageViewController.h; sourceTree = "<group>"; };
 		4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTReportViewerReportPageViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C52054D1BA7AC80000E6A59 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
+		4C5205DD1BA7F21B000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../MADCocoaExtensions/build/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C54F2D61A12D45C004B5228 /* MADNavigationBarFixedSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationBarFixedSize.h; sourceTree = "<group>"; };
 		4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationBarFixedSize.m; sourceTree = "<group>"; };
 		4C54F2E21A12D54A004B5228 /* MADToolboxNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxNavigationController.h; sourceTree = "<group>"; };
@@ -4145,7 +4141,6 @@
 		4C6362BD14E6278D005DBBFF /* MADNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationController.m; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
-		4C65D47B1ADCC67C00279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C6700BB1BA133AB001C9D5A /* MAD Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Barcodes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6700BC1BA133AB001C9D5A /* madb-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madb-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madb-Info.plist"; sourceTree = "<absolute>"; };
 		4C67B75119475A88006B4D5B /* UIPageViewController+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPageViewController+Extras.h"; sourceTree = "<group>"; };
@@ -4259,12 +4254,9 @@
 		4C8CD98C1AD1CF3700B7B9EA /* MAD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAD.h; path = ../MAD/MAD/MAD/MAD.h; sourceTree = "<group>"; };
 		4C8CD9A81AD1D3B500B7B9EA /* libMAD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMAD.a; path = "../MAD/MAD/build/Debug-iphoneos/libMAD.a"; sourceTree = "<group>"; };
 		4C8CD9AA1AD1D3BD00B7B9EA /* libMAD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMAD.a; path = "../MAD/MAD/build/Debug-iphoneos/libMAD.a"; sourceTree = "<group>"; };
-		4C8CDC981AD2710D00B7B9EA /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+EverydayApps.h"; path = "../CocoaExtensions/CocoaExtensions/UIColor+EverydayApps.h"; sourceTree = "<group>"; };
 		4C8CDC991AD2714A00B7B9EA /* MADConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADConstants.h; path = ../MAD/MAD/MAD/MADConstants.h; sourceTree = "<group>"; };
 		4C8CDC9B1AD274B400B7B9EA /* MADActivityProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADActivityProtocol.h; path = ../MAD/MAD/MAD/MADActivityProtocol.h; sourceTree = "<group>"; };
 		4C8CDC9C1AD274D100B7B9EA /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocument.h; path = ../MAD/MAD/MAD/MADocument.h; sourceTree = "<group>"; };
-		4C8CDC9D1AD274F800B7B9EA /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLog.h; path = ../CocoaExtensions/CocoaExtensions/MTLog.h; sourceTree = "<group>"; };
-		4C8CDC9E1AD2751200B7B9EA /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
 		4C8CDC9F1AD275DE00B7B9EA /* NSManagedObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObject+Extras.h"; path = "../MAD/MAD/MAD/NSManagedObject+Extras.h"; sourceTree = "<group>"; };
 		4C8CDCA01AD275DE00B7B9EA /* NSManagedObjectID+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectID+Extras.h"; path = "../MAD/MAD/MAD/NSManagedObjectID+Extras.h"; sourceTree = "<group>"; };
 		4C8CDCA11AD2760600B7B9EA /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTFont.h; path = ../MAD/MAD/MAD/MTFont.h; sourceTree = "<group>"; };
@@ -4576,9 +4568,6 @@
 		4CC39D62175E4A4800865CCA /* MTDocumentStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTDocumentStatusView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CC39D6A175FEBFA00865CCA /* NSDate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extras.h"; sourceTree = "<group>"; };
 		4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extras.m"; sourceTree = "<group>"; };
-		4CC641461BA74E7E00F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../CocoaExtensions/CocoaExtensions/MTMath.h; sourceTree = "<group>"; };
-		4CC6418A1BA78CE800F3ECCE /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "/Users/mthomason/Desktop/Reports/MAD/MAD/../../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<absolute>"; };
-		4CC6418D1BA7903C00F3ECCE /* UIDocument+thumbnailURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDocument+thumbnailURL.h"; path = "../CocoaExtensions/CocoaExtensions/UIDocument+thumbnailURL.h"; sourceTree = "<group>"; };
 		4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBorderedView.h; sourceTree = "<group>"; };
 		4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBorderedView.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageBolt20.png; path = Reports/UIImageBolt20.png; sourceTree = "<group>"; };
@@ -4879,7 +4868,6 @@
 		4CE7B77414C2D168007D0148 /* MADDesignerElementPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADDesignerElementPickerViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CE84D7B1B3969C300BB3A0A /* NSAttributedString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Common.h"; sourceTree = "<group>"; };
 		4CE84D7C1B3969C300BB3A0A /* NSAttributedString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Common.m"; sourceTree = "<group>"; };
-		4CE84D891B396C2F00BB3A0A /* UIColor+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Social.h"; path = "../CocoaExtensions/CocoaExtensions/UIColor+Social.h"; sourceTree = "<group>"; };
 		4CE84D8A1B396F3200BB3A0A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		4CE84D8C1B396F3800BB3A0A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MAD.xcdatamodel; sourceTree = "<group>"; };
@@ -4920,9 +4908,6 @@
 		4CF889241AD1BED800ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
 		4CF889261AD1BEE300ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
 		4CF889281AD1BEED00ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
-		4CF889321AD1C28E00ED21FC /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hack.h"; path = "../CocoaExtensions/CocoaExtensions/UIDevice+Hack.h"; sourceTree = "<group>"; };
-		4CF889331AD1C28E00ED21FC /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
-		4CF889351AD1C28E00ED21FC /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
 		4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCollectionViewCellElement.xib; sourceTree = "<group>"; };
 		4CF8D41E168502D700357B1E /* MTCollectionViewCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellElement.h; sourceTree = "<group>"; };
 		4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellElement.m; sourceTree = "<group>"; };
@@ -4997,6 +4982,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C5205DE1BA7F21B000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 				4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */,
 				4C52054F1BA7ACAB000E6A59 /* MADFileManager.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
@@ -5507,6 +5493,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C5205DD1BA7F21B000E6A59 /* MADCocoaExtensions.framework */,
 				4C52054D1BA7AC80000E6A59 /* libCocoaExtensions.a */,
 				4CB2D3E71BA47AF400AA473B /* MADFileManager.xcodeproj */,
 				4CB2D3DD1BA47A9100AA473B /* MADExplorer.xcodeproj */,
@@ -7160,23 +7147,6 @@
 		4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				4CC6418D1BA7903C00F3ECCE /* UIDocument+thumbnailURL.h */,
-				4CC6418A1BA78CE800F3ECCE /* NSFileManager+Common.h */,
-				4CC641461BA74E7E00F3ECCE /* MTMath.h */,
-				4C111BF71B1C2715005CA4DD /* NSNumberFormatter+Constructors.h */,
-				4C65D47B1ADCC67C00279B4D /* BDHost.h */,
-				4CF889331AD1C28E00ED21FC /* CGGeometry+Extras.h */,
-				4C1AD3481B18296F00839504 /* MFMailComposeViewController+Constructors.h */,
-				4C8CDC9D1AD274F800B7B9EA /* MTLog.h */,
-				4C8CDC9E1AD2751200B7B9EA /* NSError+Constructors.h */,
-				4CF889351AD1C28E00ED21FC /* NSURL+Document.h */,
-				4C1AD3431B126AF600839504 /* UIAlertController+Constructors.h */,
-				4C1AD3441B12D64600839504 /* UIApplication+Helpers.h */,
-				4C1AD3511B1841A200839504 /* UIBarButtonItem+Constructors.h */,
-				4C8CDC981AD2710D00B7B9EA /* UIColor+EverydayApps.h */,
-				4CE84D891B396C2F00BB3A0A /* UIColor+Social.h */,
-				4CF889321AD1C28E00ED21FC /* UIDevice+Hack.h */,
-				4C1AD34D1B183A1500839504 /* UILabel+Constructors.h */,
 			);
 			name = libCocoaExtensions;
 			sourceTree = "<group>";

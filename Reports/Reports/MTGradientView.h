@@ -10,6 +10,7 @@
 #define Reports_MTGradientView_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MTGradientView : UIView
 

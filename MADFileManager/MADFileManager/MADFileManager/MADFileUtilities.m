@@ -8,7 +8,6 @@
 
 #import "MADFileUtilities.h"
 #import <UIKit/UIKit.h>
-#import "NSFileManager+Common.h"
 
 @implementation MADFileUtilities
 

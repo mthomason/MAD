@@ -31,8 +31,6 @@
 #import "MADDocumentObjectType.h"
 #import "MADDesignerViewController.h"
 
-#import "UIColor+EverydayApps.h"
-
 #import "MADObjectIdentifier.h"
 
 #import "MTStoreKitController.h"

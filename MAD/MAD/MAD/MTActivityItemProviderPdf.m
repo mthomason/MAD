@@ -18,7 +18,6 @@
 #import "MTPaper.h"
 #import "MTDataTable.h"
 #import "MTNotificationDidFormatPage.h"
-#import "UIDevice+Hack.h"
 
 @interface  MTActivityItemProviderPdf ()
 

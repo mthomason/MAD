@@ -12,6 +12,7 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/Foundation.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 extern NSString * const MTSqlFrom;
 

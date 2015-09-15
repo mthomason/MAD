@@ -7,7 +7,6 @@
 //
 
 #import "UIScrollView+Extras.h"
-#import "CGGeometry+Extras.h"
 
 @implementation UIScrollView (Extras)
 

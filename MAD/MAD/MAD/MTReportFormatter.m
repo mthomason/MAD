@@ -36,7 +36,6 @@
 #import "MTNotificationDidFormatPage.h"
 #import "MTReportFormatterPageDefinition.h"
 
-#import "CGGeometry+Extras.h"
 #import "NSData+Comparson.h"
 
 NSString * const MTNullIdentifier = @"(null)";

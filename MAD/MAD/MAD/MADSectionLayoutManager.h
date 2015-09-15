@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADSectionLayoutAttributes.h"
 
 @class MADSectionLayoutManager, RptqDocumentSection;

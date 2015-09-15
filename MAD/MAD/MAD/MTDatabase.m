@@ -18,7 +18,6 @@
 #import "MTDatabaseTable.h"
 #import "MTKeyChain.h"
 #import "MTNotificationDidReadRows.h"
-#import "NSError+Constructors.h"
 
 NSString * const MTSqlFrom = @"\nFROM\n";
 

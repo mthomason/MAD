@@ -8,7 +8,6 @@
 
 #import "UIButton+FollowTwitter.h"
 #import "NSAttributedString+Common.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation UIButton (FollowTwitter)
 

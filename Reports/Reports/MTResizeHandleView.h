@@ -10,7 +10,7 @@
 #define Reports_MTResizeHandleView_h
 
 #import <UIKit/UIKit.h>
-#import "CGGeometry+Extras.h"
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MTResizeHandleView;
 

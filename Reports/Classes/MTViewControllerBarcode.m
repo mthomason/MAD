@@ -18,7 +18,6 @@
 #import "MTBarcodeMaxicodeIso16023.h"
 #import "MTBarcodePdf417Iso15438.h"
 
-#import "UIDevice+Hack.h"
 #import "MTQuery.h"
 
 #import "RptqQueryField.h"
@@ -31,7 +30,6 @@
 #import "MTDatabaseConnection.h"
 
 #import "MADNavigationBarTitleView.h"
-#import "NSError+Constructors.h"
 #import "MTKeyChain.h"
 
 NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";

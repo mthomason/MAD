@@ -11,7 +11,6 @@
 #endif
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
-#import "UIColor+EverydayApps.h"
 #import "MADAppConfiguration.h"
 #import "UIViewController+Designer.h"
 

@@ -10,11 +10,8 @@
 #import "MADTableViewCellAuto.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
-#import "UIAlertController+Constructors.h"
-#import "MFMailComposeViewController+Constructors.h"
 #import "ACAccountStore+Social.h"
 #import "UIButton+FollowTwitter.h"
-#import "UIAlertController+Constructors.h"
 #import "NSAttributedString+Common.h"
 
 @interface MADInformationTableViewController ()

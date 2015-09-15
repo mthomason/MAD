@@ -15,17 +15,27 @@
 
 @interface MTDatabaseDataBinding ()
 
-@property (nonatomic, strong, readwrite) id value;
-@property (nonatomic, assign, readwrite) MTDataType datatype;
-@property (nonatomic, assign, readwrite) NSUInteger fieldIndex;
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+    @property (nonatomic, strong, readwrite) id value;
+    @property (nonatomic, assign, readwrite) MTDataType datatype;
+    @property (nonatomic, assign, readwrite) NSUInteger fieldIndex;
 
 @end
 
 @implementation MTDatabaseDataBinding
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.value = nil;
+        self.datatype = MTDataTypeNull;
+        self.fieldIndex = 0;
+    }
+    return self;
+}
+
 - (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         if (value == nil || value == [NSNull null]) {
             datatype = MTDataTypeNull;
@@ -78,9 +88,9 @@
                 }
             }
         }
-        [self setDatatype:datatype];
-        [self setFieldIndex:fieldIndex];
-        [self setValue:value];
+        self.datatype = datatype;
+        self.fieldIndex = fieldIndex;
+        self.value = value;
     }
     return self;
 }

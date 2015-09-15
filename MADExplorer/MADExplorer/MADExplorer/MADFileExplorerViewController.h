@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 
 @class MADFileLocationManager;

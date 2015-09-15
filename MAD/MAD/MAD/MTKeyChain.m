@@ -11,11 +11,6 @@
 #endif
 
 #import "MTKeyChain.h"
-#import "UIApplication+Helpers.h"
-#import "NSThread+Extras.h"
-#import "UIColor+EverydayApps.h"
-#import "NSError+Constructors.h"
-#import "UIAlertController+Constructors.h"
 
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
 typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);

@@ -10,6 +10,7 @@
 #define Reports_MTDatabaseSqlServer_h
 
 #import "MTDatabase.h"
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 extern NSString * const MTDatabaseConnectionUsername;
 extern NSString * const MTDatabaseConnectionPassword;

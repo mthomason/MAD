@@ -31,8 +31,6 @@
 
 #import "MTSchemaFieldCell.h"
 
-#import "UIColor+EverydayApps.h"
-
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 

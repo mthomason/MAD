@@ -10,6 +10,7 @@
 #define Reports_MTPaperGovernmentLegal_h
 
 #import "MTPaper.h"
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MTPaperGovernmentLegal : MTPaper
 

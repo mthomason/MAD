@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MTDocumentCellProtocol.h"
 
 @class MTCollectionViewCellDocument;

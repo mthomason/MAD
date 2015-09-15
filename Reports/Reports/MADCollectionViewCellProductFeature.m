@@ -8,7 +8,6 @@
 
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADBackgroundView.h"
-#import "UIColor+EverydayApps.h"
 
 @interface MADCollectionViewCellProductFeature ()
 

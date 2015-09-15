@@ -8,7 +8,6 @@
 
 #import "MADCloudFileCoordinator.h"
 #import "MADFileUtilities.h"
-#import "NSFileManager+Common.h"
 #import "MADMetaData.h"
 
 NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";

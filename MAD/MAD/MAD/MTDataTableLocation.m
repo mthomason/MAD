@@ -14,6 +14,7 @@
 
 @interface MTDataTableLocation ()
 
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column NS_DESIGNATED_INITIALIZER;
 
@@ -21,24 +22,28 @@
 
 @implementation MTDataTableLocation
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.row = 0;
+        self.column = 0;
+    }
+    return self;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
-    [encoder encodeInteger: [self row]
+    [encoder encodeInteger: self.row
                     forKey: [MTDataTableLocation keyRow]];
     
-    [encoder encodeInteger: [self column]
+    [encoder encodeInteger: self.column
                     forKey: [MTDataTableLocation keyColumn]];
     
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-    self = [super init];
-    if(self) {
-        
-        NSUInteger row = [decoder decodeIntegerForKey: [MTDataTableLocation keyRow]];
-        NSUInteger column = [decoder decodeIntegerForKey: [MTDataTableLocation keyColumn]];
-        [self setRow: row];
-        [self setColumn: column];
+    if (self = [super init]) {
+        self.row = [decoder decodeIntegerForKey: [MTDataTableLocation keyRow]];
+        self.column = [decoder decodeIntegerForKey: [MTDataTableLocation keyColumn]];
     }
     
     return self;
@@ -47,8 +52,8 @@
 - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column {
     self = [super init];
     if (self) {
-        [self setRow:row];
-        [self setColumn:column];
+        self.row = row;
+        self.column = column;
     }
     return self;
 }
@@ -59,13 +64,11 @@
 }
 
 + (NSString *)keyRow {
-    SEL sel = @selector(identifier);
-    return NSStringFromSelector(sel);
+    return NSStringFromSelector(@selector(identifier));
 }
 
 + (NSString *)keyColumn {
-    SEL sel = @selector(column);
-    return NSStringFromSelector(sel);
+    return NSStringFromSelector(@selector(column));
 }
 
 @end

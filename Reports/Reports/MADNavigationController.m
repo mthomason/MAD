@@ -8,8 +8,6 @@
 
 #import "MADNavigationController.h"
 #import "MADTransparentPresentationController.h"
-#import "UIColor+EverydayApps.h"
-
 
 @implementation MADNavigationController
 

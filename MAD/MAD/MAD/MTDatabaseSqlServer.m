@@ -31,7 +31,6 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
-#import "UIApplication+Helpers.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

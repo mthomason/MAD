@@ -7,8 +7,6 @@
 //
 
 #import "MTConnectorView.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIColor+EverydayApps.h"
 
 @interface MTConnectorView ()
 

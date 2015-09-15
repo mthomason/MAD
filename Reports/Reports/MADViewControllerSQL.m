@@ -12,7 +12,6 @@
 
 #import "MADViewControllerSQL.h"
 #import "MTQuery.h"
-#import "UIAlertController+Constructors.h"
 
 @implementation MADViewControllerSQL
 

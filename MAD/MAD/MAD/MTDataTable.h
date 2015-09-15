@@ -14,6 +14,7 @@
 #import "MAD.h"
 #import "MTAggregateFunctionType.h"
 #import "MADAggregateGroupByType.h"
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,

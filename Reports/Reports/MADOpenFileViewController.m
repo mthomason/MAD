@@ -39,8 +39,6 @@
 #import "MADOpenDocumentManager.h"
 #import "MADBarButtonItem.h"
 
-#import "UIColor+EverydayApps.h"
-#import "NSURL+Document.h"
 #import "MADNavigationController.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDocumentInformationTableViewController.h"
@@ -48,12 +46,6 @@
 #import "MTPair.h"
 
 #import "MADProgressView.h"
-
-#import "UIAlertController+Constructors.h"
-#import "MFMailComposeViewController+Constructors.h"
-#import "UIBarButtonItem+Constructors.h"
-#import "NSError+Constructors.h"
-#import "MTMath.h"
 
 #import "UITabBarController+Shared.h"
 #import "UINavigationController+Designer.h"
@@ -64,9 +56,6 @@
 #import "MTStoreKitController+Features.h"
 #import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
-
-#import "UIAlertController+Constructors.h"
-#import "UIDocument+thumbnailURL.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";

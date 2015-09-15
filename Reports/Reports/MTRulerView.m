@@ -7,8 +7,6 @@
 //
 
 #import "MTRulerView.h"
-#import "UIDevice+Hack.h"
-#import "UIColor+EverydayApps.h"
 #import "UIView+Extras.h"
 
 const CGFloat MTReportDesignerRulerHeight           = 20.0000f;

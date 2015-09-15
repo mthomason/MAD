@@ -10,6 +10,7 @@
 #define MAD_MTErrorContainer_h
 
 #import <Foundation/Foundation.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MTErrorContainer : NSObject
 

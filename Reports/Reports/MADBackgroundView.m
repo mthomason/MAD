@@ -7,7 +7,6 @@
 //
 
 #import "MADBackgroundView.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation MADBackgroundView
 

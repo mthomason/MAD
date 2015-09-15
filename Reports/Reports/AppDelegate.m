@@ -19,13 +19,11 @@
 
 #import "MADUpgradeManager.h"
 
-#import "UIAlertController+Constructors.h"
 #import "UIViewController+Designer.h"
 #import "UITabBarController+Shared.h"
 #import "MTVerificationController.h"
 
 #import "MADQueryViewController.h"
-#import "UIColor+EverydayApps.h"
 
 #import "MADToolboxNavigationController.h"
 #import "MADNavigationController.h"

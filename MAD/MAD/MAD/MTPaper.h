@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 typedef NS_ENUM(NSUInteger, MTPaperType) {
     MTPaperTypeLetter = 2,
@@ -56,7 +57,7 @@ typedef NS_ENUM(NSUInteger, MTPaperType) {
 
 - (instancetype)initWithType:(MTPaperType)papertype NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, assign) CGSize paperType;
+@property (nonatomic, assign) MTPaperType paperType;
 @property (nonatomic, assign) CGSize paperSize;
 
 + (CGRect)rectLetter;

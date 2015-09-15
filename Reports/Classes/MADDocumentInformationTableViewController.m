@@ -9,8 +9,6 @@
 #import "MADDocumentInformationTableViewController.h"
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
-#import "MTMath.h"
-#import "NSNumberFormatter+Constructors.h"
 
 @interface MADDocumentInformationTableViewController ()
     <MADVibrantTableViewCellDelegate>

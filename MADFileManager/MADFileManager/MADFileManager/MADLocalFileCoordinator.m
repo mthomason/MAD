@@ -9,7 +9,6 @@
 #import "MADLocalFileCoordinator.h"
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
-#import "NSFileManager+Common.h"
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
 NSString * const MADPredicateFormatComparsonPathExtension       = @"(pathExtension = %@)";

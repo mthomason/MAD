@@ -26,16 +26,12 @@
 		4C41DA8C1BA22C5700FF63EC /* MADLocalFileCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C41DA771BA22C5700FF63EC /* MADLocalFileCoordinator.m */; settings = {ASSET_TAGS = (); }; };
 		4C41DA8D1BA22C5700FF63EC /* MADCloudFileCoordinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C41DA781BA22C5700FF63EC /* MADCloudFileCoordinator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C41DA8E1BA22C5700FF63EC /* MADCloudFileCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C41DA791BA22C5700FF63EC /* MADCloudFileCoordinator.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205D31BA7E337000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205D21BA7E337000E6A59 /* MADCocoaExtensions.framework */; };
 		4C6701131BA20683001C9D5A /* MADFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6701121BA20683001C9D5A /* MADFileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C67011A1BA20684001C9D5A /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C67010F1BA20683001C9D5A /* MADFileManager.framework */; settings = {ASSET_TAGS = (); }; };
 		4C67011F1BA20684001C9D5A /* MADFileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67011E1BA20684001C9D5A /* MADFileManagerTests.m */; };
-		4C67015B1BA20885001C9D5A /* CGGeometry+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6701591BA20885001C9D5A /* CGGeometry+Extras.h */; settings = {ASSET_TAGS = (); }; };
-		4C67015C1BA20885001C9D5A /* NSURL+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C67015A1BA20885001C9D5A /* NSURL+Document.h */; settings = {ASSET_TAGS = (); }; };
 		4CB2D3D01BA407FB00AA473B /* MADStorageState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB2D3CE1BA407FB00AA473B /* MADStorageState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB2D3D11BA407FB00AA473B /* MADStorageState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */; settings = {ASSET_TAGS = (); }; };
-		4CC641481BA74EB900F3ECCE /* MTMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641471BA74EB900F3ECCE /* MTMath.h */; settings = {ASSET_TAGS = (); }; };
-		4CC6414A1BA74F1A00F3ECCE /* NSNumberFormatter+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641491BA74F1A00F3ECCE /* NSNumberFormatter+Constructors.h */; settings = {ASSET_TAGS = (); }; };
-		4CC6417E1BA7806100F3ECCE /* NSFileManager+Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC6417D1BA7806100F3ECCE /* NSFileManager+Common.h */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,19 +64,15 @@
 		4C41DA771BA22C5700FF63EC /* MADLocalFileCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLocalFileCoordinator.m; path = MADFileManager/MADLocalFileCoordinator.m; sourceTree = "<group>"; };
 		4C41DA781BA22C5700FF63EC /* MADCloudFileCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCloudFileCoordinator.h; path = MADFileManager/MADCloudFileCoordinator.h; sourceTree = "<group>"; };
 		4C41DA791BA22C5700FF63EC /* MADCloudFileCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCloudFileCoordinator.m; path = MADFileManager/MADCloudFileCoordinator.m; sourceTree = "<group>"; };
+		4C5205D21BA7E337000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../MADCocoaExtensions/build/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C67010F1BA20683001C9D5A /* MADFileManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFileManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6701121BA20683001C9D5A /* MADFileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADFileManager.h; sourceTree = "<group>"; };
 		4C6701141BA20683001C9D5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C6701191BA20684001C9D5A /* MADFileManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADFileManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C67011E1BA20684001C9D5A /* MADFileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFileManagerTests.m; sourceTree = "<group>"; };
 		4C6701201BA20684001C9D5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C6701591BA20885001C9D5A /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
-		4C67015A1BA20885001C9D5A /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
 		4CB2D3CE1BA407FB00AA473B /* MADStorageState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADStorageState.h; path = MADFileManager/MADStorageState.h; sourceTree = "<group>"; };
 		4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADStorageState.m; path = MADFileManager/MADStorageState.m; sourceTree = "<group>"; };
-		4CC641471BA74EB900F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../CocoaExtensions/CocoaExtensions/MTMath.h; sourceTree = "<group>"; };
-		4CC641491BA74F1A00F3ECCE /* NSNumberFormatter+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/NSNumberFormatter+Constructors.h"; sourceTree = "<group>"; };
-		4CC6417D1BA7806100F3ECCE /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C5205D31BA7E337000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +95,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C5205D41BA7E340000E6A59 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C5205D21BA7E337000E6A59 /* MADCocoaExtensions.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4C6701051BA20683001C9D5A = {
 			isa = PBXGroup;
 			children = (
@@ -143,6 +144,7 @@
 		4C6701561BA2083E001C9D5A /* Resouces */ = {
 			isa = PBXGroup;
 			children = (
+				4C5205D41BA7E340000E6A59 /* Frameworks */,
 				4C6701571BA2084D001C9D5A /* Libraries */,
 			);
 			name = Resouces;
@@ -159,11 +161,6 @@
 		4C6701581BA20861001C9D5A /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				4CC6417D1BA7806100F3ECCE /* NSFileManager+Common.h */,
-				4CC641491BA74F1A00F3ECCE /* NSNumberFormatter+Constructors.h */,
-				4CC641471BA74EB900F3ECCE /* MTMath.h */,
-				4C6701591BA20885001C9D5A /* CGGeometry+Extras.h */,
-				4C67015A1BA20885001C9D5A /* NSURL+Document.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -203,7 +200,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CC6414A1BA74F1A00F3ECCE /* NSNumberFormatter+Constructors.h in Headers */,
 				4C41DA861BA22C5700FF63EC /* MADFileUtilities.h in Headers */,
 				4CB2D3D01BA407FB00AA473B /* MADStorageState.h in Headers */,
 				4C41DA8D1BA22C5700FF63EC /* MADCloudFileCoordinator.h in Headers */,
@@ -211,15 +207,11 @@
 				4C41DA811BA22C5700FF63EC /* MADMetaData.h in Headers */,
 				4C41DA841BA22C5700FF63EC /* MADFilesController.h in Headers */,
 				4C41DA8A1BA22C5700FF63EC /* MADFileCoordinator.h in Headers */,
-				4CC6417E1BA7806100F3ECCE /* NSFileManager+Common.h in Headers */,
 				4C41DA7A1BA22C5700FF63EC /* MADAppLaunchContext.h in Headers */,
-				4CC641481BA74EB900F3ECCE /* MTMath.h in Headers */,
 				4C41DA821BA22C5700FF63EC /* MADFileInfo.h in Headers */,
 				4C6701131BA20683001C9D5A /* MADFileManager.h in Headers */,
 				4C41DA881BA22C5700FF63EC /* MADDirectoryMonitor.h in Headers */,
-				4C67015C1BA20885001C9D5A /* NSURL+Document.h in Headers */,
 				4C41DA7C1BA22C5700FF63EC /* MADFile.h in Headers */,
-				4C67015B1BA20885001C9D5A /* CGGeometry+Extras.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

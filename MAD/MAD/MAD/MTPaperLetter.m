@@ -11,7 +11,6 @@
 #endif
 
 #import "MTPaperLetter.h"
-#import "CGGeometry+Extras.h"
 
 @implementation MTPaperLetter
 
@@ -19,10 +18,8 @@
     self = [super init];
     if (self) {
         
-        CGFloat width = CGFloatPointsForInches(8.5000f);
-        CGFloat height = CGFloatPointsForInches(11.0000f);
-        CGSize letter = CGSizeMake(width, height);
-        [self setPaperSize:letter];
+        self.paperSize = CGSizeMake(CGFloatPointsForInches(8.5000f),
+                                    CGFloatPointsForInches(11.0000f));
         
     }
     return self;

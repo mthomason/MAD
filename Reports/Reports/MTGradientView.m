@@ -7,7 +7,6 @@
 //
 
 #import "MTGradientView.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation MTGradientView
 

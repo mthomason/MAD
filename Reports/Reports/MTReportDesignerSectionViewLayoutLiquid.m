@@ -11,7 +11,6 @@
 #import "RptqDocumentSectionEnumerator.h"
 #import "MTReportDesignerSectionDecorationView.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
-#import "CGGeometry+Extras.h"
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 

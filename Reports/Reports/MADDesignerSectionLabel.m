@@ -7,10 +7,7 @@
 //
 
 #import "MADDesignerSectionLabel.h"
-#import "UIDevice+Hack.h"
-#import "UIColor+EverydayApps.h"
 #import "RptqDocumentSection+Extras.h"
-#import <CoreData/CoreData.h>
 
 const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 

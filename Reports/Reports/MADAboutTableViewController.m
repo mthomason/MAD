@@ -11,26 +11,20 @@
 #endif
 
 #import "MADAboutTableViewController.h"
-#import <MessageUI/MessageUI.h>
-#import <CoreText/CoreText.h>
 #import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
 #import "MADOpenFileViewController.h"
-#import "UIDevice+Hack.h"
-#import "NSError+Constructors.h"
-#import "UIColor+EverydayApps.h"
 #import "MADVibrantTableView.h"
 #import "MADTableViewCellBase.h"
 #import "MADocument.h"
 #import "MADConstants.h"
 #import "UIButton+FollowTwitter.h"
 #import "ACAccountStore+Social.h"
-#import "UIAlertController+Constructors.h"
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
-    UITableViewDelegate,
-    UITableViewDataSource>
+        UITableViewDelegate,
+        UITableViewDataSource>
 
 @end
 

@@ -24,8 +24,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <MessageUI/MessageUI.h>
 #import "MAD.h"
 
-#import "UIColor+EverydayApps.h"
-#import "UIDevice+Hack.h"
 
 #if MAD_DESIGNER
     #import "UIViewController+Designer.h"
@@ -41,7 +39,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #endif
 
 #import "AppDelegate.h"
-#import "NSFileManager+Common.h"
 
 NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
 NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgradeInstalledSamplesLondon";
@@ -60,9 +57,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.128";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.128";
-NSString * const MTGlobalBundleRev                                  = @"2070";
+NSString * const MTGlobalBundleVersion                              = @"8.0.129";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.129";
+NSString * const MTGlobalBundleRev                                  = @"2071";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

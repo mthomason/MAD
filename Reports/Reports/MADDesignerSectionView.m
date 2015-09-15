@@ -13,9 +13,6 @@
 #import "MTCollectionReuseableViewDefault.h"
 #import "MTCollectionViewCellElement.h"
 #import "MTReportDesignerSectionBackgroundView.h"
-#import "CGGeometry+Extras.h"
-#import "UIColor+EverydayApps.h"
-
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {

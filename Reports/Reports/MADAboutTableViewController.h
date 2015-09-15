@@ -10,6 +10,7 @@
 #define Reports_MTTableViewControllerAbout_h
 
 #import <UIKit/UIKit.h>
+#import <CoreText/CoreText.h>
 #import "MUIViewControllerDelegate.h"
 
 @interface MADAboutTableViewController : UITableViewController

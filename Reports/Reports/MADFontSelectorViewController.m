@@ -11,9 +11,7 @@
 #endif
 
 #import "MADFontSelectorViewController.h"
-#import "UIColor+EverydayApps.h"
 #import "MTFont.h"
-#import "MTLog.h"
 #import "UIViewController+UI.h"
 
 @interface MADFontSelectorViewController()

@@ -15,6 +15,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MTReportFormatterDataSource.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"

@@ -7,7 +7,6 @@
 //
 
 #import "MFMailComposeViewController+FileManager.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation MFMailComposeViewController (FileManager)
 

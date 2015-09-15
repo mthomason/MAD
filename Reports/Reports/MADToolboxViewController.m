@@ -8,7 +8,6 @@
 
 #import "MADToolboxViewController.h"
 #import "MTToolboxViewControllerProtocol.h"
-#import "UIColor+EverydayApps.h"
 #import "UIStoryboard+Designer.h"
 #import "UINavigationController+Designer.h"
 

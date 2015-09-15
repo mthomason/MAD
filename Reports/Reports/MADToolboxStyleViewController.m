@@ -13,7 +13,6 @@
 #import "MADToolboxStyleViewController.h"
 #import "MADocument.h"
 #import "RptqDocumentObject+Extras.h"
-#import "UIDevice+Hack.h"
 #import "MADAppConfiguration.h"
 #import "MTFont.h"
 #import "NSManagedObject+Extras.h"

@@ -13,12 +13,10 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MADVibrantTableViewCellImage.h"
 #import "MTConnectionViewController.h"
-#import "UIDevice+Hack.h"
 #import "MTDatabaseConnection.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
-#import "UIColor+EverydayApps.h"
 
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";

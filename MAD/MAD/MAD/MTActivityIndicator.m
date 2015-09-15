@@ -7,7 +7,6 @@
 //
 
 #import "MTActivityIndicator.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation MTActivityIndicator
 

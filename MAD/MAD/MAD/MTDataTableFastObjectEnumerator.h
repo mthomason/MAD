@@ -10,6 +10,7 @@
 #define Reports_MTDataTableFastObjectEnumerator_h
 
 #import <Foundation/Foundation.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MTDatabaseConnection, MTQuery;
 

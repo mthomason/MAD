@@ -276,7 +276,7 @@
     [description appendFormat:@"Fields:             %@\n", self.hasFields];
     [description appendFormat:@"Query cache:        %@\n", self.hasQueryCache];
     [description appendFormat:@"Database:           %@\n", self.inDatabase];
-    [description appendFormat:@"Query tables (%lu): %@\n", self.hasQueryTables.count, self.hasQueryTables];
+    [description appendFormat:@"Query tables (%lu): %@\n", (unsigned long)self.hasQueryTables.count, self.hasQueryTables];
     [description appendFormat:@"Query groups (%lu): %@\n", (unsigned long)self.hasQueryGroups.count, self.hasQueryGroups];
     
     NSArray *sortedQueryGroups = [self sortedQueryGroups];

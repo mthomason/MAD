@@ -43,7 +43,6 @@
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 
 #import "MTDatabaseConnection.h"
-#import "NSError+Constructors.h"
 #import "MTKeyChain.h"
 
 @interface MTViewControllerBarcodeOptions ()

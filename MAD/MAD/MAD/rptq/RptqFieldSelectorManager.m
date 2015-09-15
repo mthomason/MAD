@@ -15,7 +15,21 @@
 #import "RptqQueryField.h"
 #import "RptqDatabaseSchemaTable.h"
 
+@interface RptqDatabaseSchemaFieldSelectorManager ()
+
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+@end
+
 @implementation RptqDatabaseSchemaFieldSelectorManager
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+
+    }
+    return self;
+}
 
 - (instancetype)initWithTable:(RptqQueryTable *)sectionTable {
 	self = [super init];
@@ -30,7 +44,7 @@
         NSArray *sortDescriptors = @[namesAccending];
         NSArray *fieldsArray = [self.table.hasQueryFields sortedArrayUsingDescriptors:sortDescriptors];
         NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];
-        [self setFields: sectionFields];
+        self.fields = sectionFields;
 	}
 	return self;
 }

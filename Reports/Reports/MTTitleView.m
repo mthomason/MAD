@@ -7,11 +7,8 @@
 //
 
 #import "MTTitleView.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIDevice+Hack.h"
 
 @implementation MTTitleView
-
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];

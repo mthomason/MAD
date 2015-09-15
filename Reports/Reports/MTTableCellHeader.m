@@ -11,7 +11,6 @@
 #endif
 
 #import "MTTableCellHeader.h"
-#import "UIColor+EverydayApps.h"
 
 @interface MTTableCellHeader ()
 

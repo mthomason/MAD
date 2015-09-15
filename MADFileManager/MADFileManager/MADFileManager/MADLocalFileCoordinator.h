@@ -10,6 +10,7 @@
 #define MADDesigner_MADLocalFileCoordinator_h
 
 #import <Foundation/Foundation.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADFileCoordinator.h"
 
 @interface MADLocalFileCoordinator : NSObject <MADFileCoordinator>

@@ -18,7 +18,6 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "MTDataTable.h"
-#import "NSError+Constructors.h"
 #import "MTKeyChain.h"
 #import "MTDatabaseConnection.h"
 

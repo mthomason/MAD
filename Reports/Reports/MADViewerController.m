@@ -16,7 +16,6 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportViewerReportPageView.h"
 
-#import "UIDevice+Hack.h"
 #import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
 #import "MADocument.h"
@@ -24,7 +23,6 @@
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
-#import "NSError+Constructors.h"
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
 #import "MTPaper.h"
@@ -41,7 +39,6 @@
 
 #import "MTNotificationDidFormatPage.h"
 #import "MTNotificationDidReadRows.h"
-#import "UIColor+EverydayApps.h"
 #import "NSDate+Extras.h"
 
 #import "MTKeyChain.h"

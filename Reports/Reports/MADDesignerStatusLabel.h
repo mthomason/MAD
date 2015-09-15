@@ -10,6 +10,7 @@
 #define Reports_MADDesignerStatusLabel_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MADDesignerStatusLabel : UIView
 

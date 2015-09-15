@@ -15,18 +15,13 @@
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MADocument.h"
-#import "UIDevice+Hack.h"
 #import "MTDatabaseSqlServer.h"
-#import "NSURL+Document.h"
-#import "NSError+Constructors.h"
 #import "MTActivityIndicator.h"
-#import "UIColor+EverydayApps.h"
 #import "UIApplication+Extras.h"
 #import "MTErrorContainer.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MTKeyChain.h"
-#import "UIAlertController+Constructors.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";

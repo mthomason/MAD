@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MTTableFormatter.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"

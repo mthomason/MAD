@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MADSectionLayoutManager;
 @protocol MADReportDesignerSectionElementLayoutManagerDelegate;

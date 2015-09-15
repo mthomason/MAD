@@ -7,7 +7,6 @@
 //
 
 #import "MTErrorContainer.h"
-#import "NSError+Constructors.h"
 
 @interface MTErrorContainer ()
 

@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 

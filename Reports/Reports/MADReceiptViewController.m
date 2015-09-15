@@ -12,7 +12,6 @@
 #import "MADTableViewCellReceiptCharterMember.h"
 #import "MTVerificationController.h"
 #import "MADSalesReceipt.h"
-#import "UIAlertController+Constructors.h"
 #import "MADFeatures.h"
 #import "MADFeature.h"
 #import "NSDateFormatter+RFC_3339.h"
