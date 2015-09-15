@@ -13,6 +13,9 @@
 
 @interface UIColor (PaperPatterns)
 
++ (instancetype)paperHomemade;
+
+/*
 + (instancetype)paperAqua;
 + (instancetype)paperBeigeWithWhiteFlecks;
 + (instancetype)paperBlackWeave;
@@ -34,7 +37,6 @@
 + (instancetype)paperGreenAndBlack;
 + (instancetype)paperGreenWithFibers;
 + (instancetype)paperGreyVellum;
-+ (instancetype)paperHomemade;
 + (instancetype)paperKraft;
 + (instancetype)paperKraft2;
 + (instancetype)paperKraftWaffle;
@@ -64,6 +66,7 @@
 + (instancetype)paperWhiteTextured;
 + (instancetype)paperWhiteWithWoodFibers;
 + (instancetype)paperYellowLined;
+*/
 
 @end
 

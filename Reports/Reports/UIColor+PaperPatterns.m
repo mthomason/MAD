@@ -10,6 +10,11 @@
 
 @implementation UIColor (PaperPatterns)
 
++ (instancetype)paperHomemade {
+    UIImage *image = [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
+    return [UIColor colorWithPatternImage:image];
+}
+/*
 + (instancetype)paperAqua {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternAqua"]];
 }
@@ -72,9 +77,6 @@
 }
 + (instancetype)paperGreyVellum {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreyVellum"]];
-}
-+ (instancetype)paperHomemade {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternHomemadePaper"]];
 }
 + (instancetype)paperKraft {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaper"]];
@@ -163,5 +165,6 @@
 + (instancetype)paperYellowLined {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternYellowLined"]];
 }
+*/
 
 @end
