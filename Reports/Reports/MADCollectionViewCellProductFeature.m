@@ -7,7 +7,6 @@
 //
 
 #import "MADCollectionViewCellProductFeature.h"
-#import "MADBackgroundViewSelected.h"
 #import "MADBackgroundView.h"
 #import "UIColor+EverydayApps.h"
 

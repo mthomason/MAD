@@ -19,14 +19,11 @@
 #import "AppDelegate.h"
 #import "MADAppConfiguration.h"
 
-#import "MADCollectionViewLayoutGroupedDelegate.h"
-
 #import "MADocument.h"
 
 #import "MADSearchBar.h"
 
 #import "MADOpenFileSectionHeaderView.h"
-#import "MTCollectionViewCellDocument.h"
 
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
@@ -56,8 +53,6 @@
 #import "MFMailComposeViewController+Constructors.h"
 #import "UIBarButtonItem+Constructors.h"
 #import "NSError+Constructors.h"
-#import "UIView+Animations.h"
-
 #import "MTMath.h"
 
 #import "UITabBarController+Shared.h"
@@ -69,8 +64,9 @@
 #import "MTStoreKitController+Features.h"
 #import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
-#import "MADFileManager.h"
+
 #import "UIAlertController+Constructors.h"
+#import "UIDocument+thumbnailURL.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -94,7 +90,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         UISearchBarDelegate,
         UITextFieldDelegate,
         MADFileExplorerDelegate,
-        MADFileManagerDelegate,
+        MADFileLocationManagerDelegate,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
         MTViewControllerProtocol>
@@ -161,7 +157,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
 
-#pragma mark - MADFileManagerDelegate
+#pragma mark - MADFileManagerLocationDelegate
 
 - (NSString *)groupIdentifier {
     return MADIdentifierGroup;

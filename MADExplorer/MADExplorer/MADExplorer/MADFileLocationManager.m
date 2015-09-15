@@ -6,13 +6,13 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileManager.h"
+#import "MADFileLocationManager.h"
 
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
 static NSString * const MADFirstLaunch                                     = @"MADFirstLaunch";
 
-@interface MADFileManager ()
+@interface MADFileLocationManager ()
 
     @property (nonatomic, strong, readwrite) MADFilesController *filesController;
     @property (nonatomic, assign) MTReportState reportState;
@@ -24,7 +24,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 
 @end
 
-@implementation MADFileManager
+@implementation MADFileLocationManager
 
 - (instancetype)init {
     if (self = [super init]) {

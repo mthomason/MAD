@@ -10,11 +10,8 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MADExplorer/MADExplorer.h>
 #import <MessageUI/MessageUI.h>
-#import <MADFileManager/MADFileManager.h>
-#import "MADFileExplorerViewController.h"
-
-@class MADocument, MADFileManager, MADFilesController;
 
 @interface MADOpenFileViewController : MADFileExplorerViewController
 

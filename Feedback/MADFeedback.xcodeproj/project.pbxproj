@@ -15,7 +15,6 @@
 		4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB31B90C9F50078563C /* UIKit.framework */; };
 		4CC035D91B90F50C001A3CC5 /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC035DA1B90F50C001A3CC5 /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */; };
-		4CC035DF1B90F7F8001A3CC5 /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC035DE1B90F7F8001A3CC5 /* libCocoaExtensions.a */; };
 		4CC035E11B90F813001A3CC5 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */; };
 		4CC035E41B90FC0E001A3CC5 /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */; };
 		4CC035E51B90FC0E001A3CC5 /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */; };
@@ -45,7 +44,6 @@
 		4C8DCFB31B90C9F50078563C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackFrustration.h; sourceTree = "<group>"; };
 		4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackFrustration.m; sourceTree = "<group>"; };
-		4CC035DE1B90F7F8001A3CC5 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Utilities.h"; path = "../CocoaExtensions/CocoaExtensions/UIViewController+Utilities.h"; sourceTree = "<group>"; };
 		4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Feedback.h"; sourceTree = "<group>"; };
 		4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Feedback.m"; sourceTree = "<group>"; };
@@ -60,7 +58,6 @@
 			files = (
 				4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */,
 				4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */,
-				4CC035DF1B90F7F8001A3CC5 /* libCocoaExtensions.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,7 +130,6 @@
 			children = (
 				4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */,
 				4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */,
-				4CC035DE1B90F7F8001A3CC5 /* libCocoaExtensions.a */,
 			);
 			name = CocoaExtensions;
 			sourceTree = "<group>";

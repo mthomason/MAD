@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, MTReportState) {
 
 @class MADFilesController;
 
-@protocol MADFileManagerDelegate <NSObject>
+@protocol MADFileLocationManagerDelegate <NSObject>
 
     @required
         - (NSString *)groupIdentifier;
@@ -35,9 +35,9 @@ typedef NS_ENUM(NSUInteger, MTReportState) {
 
 @end
 
-@interface MADFileManager : NSObject
+@interface MADFileLocationManager : NSObject
 
-    @property (nonatomic, weak) UIViewController <MADFileManagerDelegate> *delegate;
+    @property (nonatomic, weak) UIViewController <MADFileLocationManagerDelegate> *delegate;
     @property (nonatomic, strong, readonly) MADFilesController *filesController;
 
     - (void)getUserCloudPrefs;

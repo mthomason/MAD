@@ -37,7 +37,6 @@ extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MTDocumentInfoKeyThumbnail;
-extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
@@ -83,7 +82,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (NSURL *)cachedDataUrl;
 - (UIImage *)fullyRenderedThumbnail;
 
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;

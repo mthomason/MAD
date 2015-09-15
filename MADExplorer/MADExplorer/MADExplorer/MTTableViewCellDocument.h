@@ -10,6 +10,7 @@
 #define Reports_MTTableViewCellDocument_h
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "MTDocumentCellProtocol.h"
 
 @interface MTTableViewCellDocument : UITableViewCell

@@ -73,6 +73,9 @@
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
+#import "UIDocument+thumbnailURL.h"
+#import "NSFileManager+Common.h"
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 /*
@@ -92,8 +95,6 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 NSString * const MTDocumentAdditionalContentKey         = @"additionalContent";
 NSString * const MTDocumentFileTypeKey                  = @"fileType";
 NSString * const MTDocumentParentContextKey             = @"parentContext";
-
-NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 
 NSString * const MTDocumentAdditionalContentFileName    = @"sup";
 NSString * const MTDocumentGeneratorFileName            = @"gen";
@@ -154,7 +155,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
 @property (nonatomic, strong, readwrite) NSURL *urlGuts;
-@property (nonatomic, strong, readwrite) NSURL *urlThumbnail;
 @property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
 @property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
 
@@ -226,9 +226,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         self.urlMetaPlaylist = urlMetaPlaylist;
         self.urlGuts = urlGuts;
         
-        NSURL *urlThumbnail = [MADocument thumbnailUrlForMadUrl:url];
-        self.urlThumbnail = urlThumbnail;
-
         NSString *filename = [MADocument fileNameForMadUrl:url];
         NSURL *urlCachedFilesDirectory = [MADocument cacheFilesDirectoryForFilename:filename];
         self.urlCachedFilesDirectory = urlCachedFilesDirectory;
@@ -447,8 +444,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     NSError *readError = nil;
     NSData *imageData = nil;
-    if ([[NSFileManager defaultManager] fileExistsAtPath: self.urlThumbnail.path]) {
-        imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
+    if ([[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path]) {
+        imageData = [NSData dataWithContentsOfURL: self.thumbnailURL options:NSDataReadingUncached error:&readError];
     }
     
     if (imageData != nil) {
@@ -944,7 +941,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSString *)fileHandle {
-    return self.urlThumbnail.path.lastPathComponent;
+    return self.thumbnailURL.path.lastPathComponent;
 }
 
 + (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
@@ -1007,12 +1004,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)regenThumbnailWithTraits:(UITraitCollection *)traits {
-    [[NSFileManager defaultManager] fileExistsAtPath: self.urlThumbnail.path];
+    [[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path];
     BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned == YES || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
-    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.urlThumbnail.path] == NO) {
+    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.thumbnailURL.path] == NO) {
         UIImage *thumbnail = [self fullyRenderedThumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-        [pngImage writeToURL:self.urlThumbnail atomically:YES];
+        [pngImage writeToURL:self.thumbnailURL atomically:YES];
     }
 }
 
@@ -1183,7 +1180,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
-    return [madUrl.lastPathComponent stringByDeletingPathExtension];
+    return madUrl.lastPathComponent.stringByDeletingPathExtension;
 }
 
 @end

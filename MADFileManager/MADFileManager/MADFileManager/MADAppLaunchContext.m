@@ -7,7 +7,6 @@
 //
 
 #import "MADAppLaunchContext.h"
-#import <UIKit/UIKit.h>
 
 NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey = @"MADUserInfoKeyFileURL";
 

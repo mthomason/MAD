@@ -10,6 +10,7 @@
 #define Reports_MTCollectionViewCellDocument_h
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "MTDocumentCellProtocol.h"
 
 @class MTCollectionViewCellDocument;

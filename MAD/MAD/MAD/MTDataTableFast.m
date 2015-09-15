@@ -11,7 +11,7 @@
 #endif
 
 #import "MTDataTableFast.h"
-//#import "NSFileManager+Common.h"
+#import "NSFileManager+Common.h"
 #import "MTQuery.h"
 #import "MTDataColumn.h"
 #import "MTDataTableFastObjectEnumerator.h"

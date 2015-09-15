@@ -11,7 +11,7 @@
 		4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */; };
 		4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */; };
 		4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */; };
-		4C41DA921BA232F800FF63EC /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C41DA911BA232F800FF63EC /* libCocoaExtensions.a */; };
+		4C52054C1BA7AC5D000E6A59 /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52054B1BA7AC5D000E6A59 /* libCocoaExtensions.a */; };
 		4C8CD96A1AD1CDC800B7B9EA /* libMAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */; };
 		4C8CD98A1AD1CEAF00B7B9EA /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */; };
 		4C8CD9981AD1D1AD00B7B9EA /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */; };
@@ -247,7 +247,7 @@
 		4C1847F61B8DF2C600FA7872 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = ../../Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../MADFileManager/build/Debug-iphoneos/MADFileManager.framework"; sourceTree = "<group>"; };
-		4C41DA911BA232F800FF63EC /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
+		4C52054B1BA7AC5D000E6A59 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4C65D4781ADCC4F100279B4D /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = ../../CocoaExtensions/CocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -764,6 +764,10 @@
 		4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqRelationship+Extras.h"; path = "rptq/RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
 		4CC641451BA74E6600F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../../CocoaExtensions/CocoaExtensions/MTMath.h; sourceTree = "<group>"; };
+		4CC6417B1BA7800600F3ECCE /* UIDocument+thumbnailURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDocument+thumbnailURL.h"; path = "../../CocoaExtensions/CocoaExtensions/UIDocument+thumbnailURL.h"; sourceTree = "<group>"; };
+		4CC641811BA786F100F3ECCE /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4CC641881BA78B2A00F3ECCE /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Animations.h"; path = "../../CocoaExtensions/CocoaExtensions/UIView+Animations.h"; sourceTree = "<group>"; };
+		4CC641891BA78C6000F3ECCE /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "../../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
 		4CCC3CE81B4BC33F00350F3F /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DebugDescription.h"; sourceTree = "<group>"; };
 		4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DebugDescription.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -773,7 +777,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C41DA921BA232F800FF63EC /* libCocoaExtensions.a in Frameworks */,
+				4C52054C1BA7AC5D000E6A59 /* libCocoaExtensions.a in Frameworks */,
 				4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */,
 				4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */,
 				4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */,
@@ -861,7 +865,7 @@
 		4C8CD9551AD1CDC800B7B9EA = {
 			isa = PBXGroup;
 			children = (
-				4C41DA911BA232F800FF63EC /* libCocoaExtensions.a */,
+				4C52054B1BA7AC5D000E6A59 /* libCocoaExtensions.a */,
 				4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */,
 				4C8CD99B1AD1D1EB00B7B9EA /* libraries */,
 				4C8CD9601AD1CDC800B7B9EA /* MAD */,
@@ -943,18 +947,7 @@
 		4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				4CC641451BA74E6600F3ECCE /* MTMath.h */,
-				4C65D4781ADCC4F100279B4D /* BDHost.h */,
-				4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */,
-				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
-				4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */,
-				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
-				4C8CDACA1AD243C300B7B9EA /* MTLog.h */,
-				4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */,
-				4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */,
-				4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */,
-				4C8CDB2C1AD24F3400B7B9EA /* UIDevice+Hack.h */,
-				4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */,
+				4CC6417C1BA7800C00F3ECCE /* Headers */,
 			);
 			name = libCocoaExtensions;
 			sourceTree = "<group>";
@@ -1598,6 +1591,29 @@
 				4C8CDBA51AD2507200B7B9EA /* MTReportFormatterPageDefinition.m */,
 			);
 			name = Formatters;
+			sourceTree = "<group>";
+		};
+		4CC6417C1BA7800C00F3ECCE /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				4CC641891BA78C6000F3ECCE /* NSFileManager+Common.h */,
+				4CC641881BA78B2A00F3ECCE /* UIView+Animations.h */,
+				4CC641811BA786F100F3ECCE /* NSFileManager+Common.h */,
+				4CC6417B1BA7800600F3ECCE /* UIDocument+thumbnailURL.h */,
+				4CC641451BA74E6600F3ECCE /* MTMath.h */,
+				4C65D4781ADCC4F100279B4D /* BDHost.h */,
+				4C8CD99D1AD1D21400B7B9EA /* CGGeometry+Extras.h */,
+				4C8CDAC81AD2435300B7B9EA /* NSError+Constructors.h */,
+				4C8CDC821AD2667900B7B9EA /* NSThread+Extras.h */,
+				4C8CDC8B1AD269DC00B7B9EA /* NSURL+Document.h */,
+				4C8CDACA1AD243C300B7B9EA /* MTLog.h */,
+				4C8CDC8A1AD269C200B7B9EA /* UIApplication+Helpers.h */,
+				4C1AD3421B126AE300839504 /* UIAlertController+Constructors.h */,
+				4C8CDC861AD268A600B7B9EA /* UIColor+EverydayApps.h */,
+				4C8CDB2C1AD24F3400B7B9EA /* UIDevice+Hack.h */,
+				4C8CDBBE1AD2534A00B7B9EA /* UIImage+Border.h */,
+			);
+			name = Headers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

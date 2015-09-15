@@ -8,6 +8,7 @@
 
 #import "MADOperationInstallSampleDocument.h"
 #import "MADAppConfiguration.h"
+#import "NSFileManager+Common.h"
 
 @interface MADOperationInstallSampleDocument ()
 

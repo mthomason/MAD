@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4CF46F701AC64BA5007C0A82 /* libCloudManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF46F641AC64BA5007C0A82 /* libCloudManager.a */; };
 		4CF46FB61AC65520007C0A82 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46FB51AC65520007C0A82 /* Test_Cloud.m */; };
-		4CF8892E1AD1C22600ED21FC /* libCocoaExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,12 +35,10 @@
 
 /* Begin PBXFileReference section */
 		4C2831861B1AFC8100511D2D /* libsystem_stats.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_stats.dylib; path = usr/lib/system/libsystem_stats.dylib; sourceTree = SDKROOT; };
-		4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4CF46F641AC64BA5007C0A82 /* libCloudManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF46F6F1AC64BA5007C0A82 /* CloudManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloudManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF46F751AC64BA5007C0A82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CF46FB51AC65520007C0A82 /* Test_Cloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
-		4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4CF8892F1AD1C26400ED21FC /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "../CocoaExtensions/CocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4CF889311AD1C26400ED21FC /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "../CocoaExtensions/CocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -51,7 +48,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF8892E1AD1C22600ED21FC /* libCocoaExtensions.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,8 +75,6 @@
 			children = (
 				4CF8892F1AD1C26400ED21FC /* CGGeometry+Extras.h */,
 				4CF889311AD1C26400ED21FC /* NSURL+Document.h */,
-				4CF8892D1AD1C22600ED21FC /* libCocoaExtensions.a */,
-				4CA27EE21ACCECC400697AB6 /* libCocoaExtensions.a */,
 			);
 			name = libCocoaExtentions;
 			sourceTree = "<group>";

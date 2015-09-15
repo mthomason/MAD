@@ -10,6 +10,7 @@
 #define MADDesigner_MADAppLaunchContext_h
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 extern NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey;
 

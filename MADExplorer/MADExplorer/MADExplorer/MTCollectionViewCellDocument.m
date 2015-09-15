@@ -10,14 +10,13 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-NSString * const MTImageBlank = @"UIImageDocumentBlank";
-
 #import "MTCollectionViewCellDocument.h"
-#import "UIDevice+Hack.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIColor+EverydayApps.h"
-#import "MADocument.h"
 #import "MADBackgroundViewSelected.h"
+#import "UIDevice+Hack.h"
+#import "UIDocument+thumbnailURL.h"
+#import "UIColor+EverydayApps.h"
+
+NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 @interface MTCollectionViewCellDocument ()
 
@@ -172,7 +171,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 - (void)loadPreviewImageForUrl:(NSURL *)url {
     dispatch_async([MTCollectionViewCellDocument queue], ^{
-        NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];
+        NSURL *thumbnailUrl = [UIDocument thumbnailUrlForMadUrl:url];
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             [self updatePreviewImageUIForImage:image];

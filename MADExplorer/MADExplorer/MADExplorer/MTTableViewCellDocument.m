@@ -7,7 +7,6 @@
 //
 
 #import "MTTableViewCellDocument.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation MTTableViewCellDocument
 

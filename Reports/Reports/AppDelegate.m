@@ -17,8 +17,6 @@
 
 #import "MADNavigationController.h"
 
-#import "MADOpenFileViewController.h"
-
 #import "MADUpgradeManager.h"
 
 #import "UIAlertController+Constructors.h"
@@ -36,6 +34,8 @@
 
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"
+
+#import "MADOpenFileViewController.h"
 
 NSString * const MADIdentifierFileLondon            = @"London";
 NSString * const MADIdentifierFileMusic             = @"Music";

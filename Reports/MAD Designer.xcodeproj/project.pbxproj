@@ -71,7 +71,6 @@
 		4C0E7727163B5AEC003B951E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E7728163B5AEC003B951E /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E772B163B5AEC003B951E /* MADFontSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* MADFontSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C0E772F163B5AEC003B951E /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4C0E773D163B5AEC003B951E /* MADOpenFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MADOpenFileViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E773F163B5AEC003B951E /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -234,8 +233,6 @@
 		4C1AD33A1B11BEAD00839504 /* MADProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1AD32F1B11BD5B00839504 /* MADProgressView.m */; };
 		4C1E89761B328AF000B26B5E /* MADStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89751B328AF000B26B5E /* MADStoreViewController.m */; };
 		4C1E89791B328ED100B26B5E /* MADCollectionViewCellProductFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89781B328ED100B26B5E /* MADCollectionViewCellProductFeature.m */; };
-		4C1E897E1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
-		4C1E897F1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
 		4C1E89821B33CD0600B26B5E /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C1E89831B33CD0600B26B5E /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C1E89861B340AB100B26B5E /* MADInfinity64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E89841B340AB100B26B5E /* MADInfinity64.png */; };
@@ -287,8 +284,6 @@
 		4C23FB3A18FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3718FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FBEC18FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBE918FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FBED18FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBE918FAE5C5009F234F /* MTDatabaseDriverSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C2831821B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
-		4C2831831B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
@@ -308,7 +303,6 @@
 		4C2F25611B53FA1C004DFAEC /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */; };
 		4C2F25621B53FA1C004DFAEC /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25631B53FA1C004DFAEC /* MADFontSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* MADFontSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C2F25641B53FA1C004DFAEC /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
 		4C2F25651B53FA1C004DFAEC /* MADReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89911B36912500B26B5E /* MADReceiptViewController.m */; };
 		4C2F25661B53FA1C004DFAEC /* MTArrayDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */; };
 		4C2F25671B53FA1C004DFAEC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -344,7 +338,6 @@
 		4C2F25851B53FA1C004DFAEC /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25861B53FA1C004DFAEC /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25871B53FA1C004DFAEC /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */; };
-		4C2F25881B53FA1C004DFAEC /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
 		4C2F25891B53FA1C004DFAEC /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4C2F258B1B53FA1C004DFAEC /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */; };
 		4C2F258C1B53FA1C004DFAEC /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */; };
@@ -399,7 +392,6 @@
 		4C2F25BD1B53FA1C004DFAEC /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
 		4C2F25BE1B53FA1C004DFAEC /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25BF1B53FA1C004DFAEC /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
-		4C2F25C01B53FA1C004DFAEC /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
 		4C2F25C11B53FA1C004DFAEC /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C2F25C21B53FA1C004DFAEC /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C2F25C31B53FA1C004DFAEC /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE418FADC68009F234F /* MTViewControllerBarcodePreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -446,9 +438,7 @@
 		4C2F25EC1B53FA1C004DFAEC /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C359D931B081EE300B3E9E0 /* NSString+Encryption.m */; };
 		4C2F25ED1B53FA1C004DFAEC /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
 		4C2F25EE1B53FA1C004DFAEC /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFE119AB113600A55780 /* UIView+Extras.m */; };
-		4C2F25EF1B53FA1C004DFAEC /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25F01B53FA1C004DFAEC /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
-		4C2F25F11B53FA1C004DFAEC /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C2F25F21B53FA1C004DFAEC /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4C2F25F31B53FA1C004DFAEC /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
 		4C2F25F41B53FA1C004DFAEC /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD2438193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m */; };
@@ -908,7 +898,6 @@
 		4C38E9C619F232FC000E0B2F /* MADQueryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */; };
 		4C38E9E019F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */; };
 		4C38E9E119F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */; };
-		4C4037D51BA73FB70067DFB4 /* MADThumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -948,6 +937,8 @@
 		4C507B1414D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C50DF8F16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C52054F1BA7ACAB000E6A59 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3ED1BA47AF400AA473B /* MADFileManager.framework */; };
+		4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3E31BA47A9200AA473B /* MADExplorer.framework */; };
 		4C54F2D81A12D45C004B5228 /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
 		4C54F2D91A12D45C004B5228 /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
 		4C54F2E41A12D54A004B5228 /* MADToolboxNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2E31A12D54A004B5228 /* MADToolboxNavigationController.m */; };
@@ -1201,7 +1192,6 @@
 		4C67F9E21BA1043B001C9D5A /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */; };
 		4C67F9E31BA1043B001C9D5A /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67F9E41BA1043B001C9D5A /* MADFontSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* MADFontSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67F9E51BA1043B001C9D5A /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
 		4C67F9E61BA1043B001C9D5A /* MADReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89911B36912500B26B5E /* MADReceiptViewController.m */; };
 		4C67F9E71BA1043B001C9D5A /* MTArrayDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */; };
 		4C67F9E81BA1043B001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -1238,7 +1228,6 @@
 		4C67FA071BA1043B001C9D5A /* MADQueryVisualizationTableDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C98601F1B98C2F10082A12D /* MADQueryVisualizationTableDefination.m */; };
 		4C67FA081BA1043B001C9D5A /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA091BA1043B001C9D5A /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */; };
-		4C67FA0A1BA1043B001C9D5A /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
 		4C67FA0B1BA1043B001C9D5A /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4C67FA0C1BA1043B001C9D5A /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */; };
 		4C67FA0D1BA1043B001C9D5A /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */; };
@@ -1297,7 +1286,6 @@
 		4C67FA421BA1043B001C9D5A /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
 		4C67FA431BA1043B001C9D5A /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA441BA1043B001C9D5A /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
-		4C67FA451BA1043B001C9D5A /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
 		4C67FA461BA1043B001C9D5A /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C67FA471BA1043B001C9D5A /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C67FA481BA1043B001C9D5A /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE418FADC68009F234F /* MTViewControllerBarcodePreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1345,9 +1333,7 @@
 		4C67FA721BA1043B001C9D5A /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C67FA731BA1043B001C9D5A /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
 		4C67FA741BA1043B001C9D5A /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFE119AB113600A55780 /* UIView+Extras.m */; };
-		4C67FA751BA1043B001C9D5A /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA761BA1043B001C9D5A /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
-		4C67FA771BA1043B001C9D5A /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C67FA781BA1043B001C9D5A /* MADQueryVisualizationDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5AA67F1B98C7C400E405A1 /* MADQueryVisualizationDefination.m */; };
 		4C67FA791BA1043B001C9D5A /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4C67FA7A1BA1043B001C9D5A /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
@@ -1778,7 +1764,6 @@
 		4C67FC2F1BA1183D001C9D5A /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */; };
 		4C67FC301BA1183D001C9D5A /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC311BA1183D001C9D5A /* MADFontSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* MADFontSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FC321BA1183D001C9D5A /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
 		4C67FC331BA1183D001C9D5A /* MADReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89911B36912500B26B5E /* MADReceiptViewController.m */; };
 		4C67FC341BA1183D001C9D5A /* MTArrayDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */; };
 		4C67FC351BA1183D001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -1815,7 +1800,6 @@
 		4C67FC541BA1183D001C9D5A /* MADQueryVisualizationTableDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C98601F1B98C2F10082A12D /* MADQueryVisualizationTableDefination.m */; };
 		4C67FC551BA1183D001C9D5A /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC561BA1183D001C9D5A /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */; };
-		4C67FC571BA1183D001C9D5A /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
 		4C67FC581BA1183D001C9D5A /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4C67FC591BA1183D001C9D5A /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */; };
 		4C67FC5A1BA1183D001C9D5A /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */; };
@@ -1874,7 +1858,6 @@
 		4C67FC8F1BA1183D001C9D5A /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
 		4C67FC901BA1183D001C9D5A /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC911BA1183D001C9D5A /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
-		4C67FC921BA1183D001C9D5A /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
 		4C67FC931BA1183D001C9D5A /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C67FC941BA1183D001C9D5A /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C67FC951BA1183D001C9D5A /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE418FADC68009F234F /* MTViewControllerBarcodePreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1922,9 +1905,7 @@
 		4C67FCBF1BA1183D001C9D5A /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C67FCC01BA1183D001C9D5A /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
 		4C67FCC11BA1183D001C9D5A /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFE119AB113600A55780 /* UIView+Extras.m */; };
-		4C67FCC21BA1183D001C9D5A /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCC31BA1183D001C9D5A /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
-		4C67FCC41BA1183D001C9D5A /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C67FCC51BA1183D001C9D5A /* MADQueryVisualizationDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5AA67F1B98C7C400E405A1 /* MADQueryVisualizationDefination.m */; };
 		4C67FCC61BA1183D001C9D5A /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4C67FCC71BA1183D001C9D5A /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
@@ -2356,7 +2337,6 @@
 		4C67FE7E1BA133AB001C9D5A /* MADNavigationControllerSplitParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */; };
 		4C67FE7F1BA133AB001C9D5A /* MADToolboxStyleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MADToolboxStyleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FE801BA133AB001C9D5A /* MADFontSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* MADFontSelectorViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FE811BA133AB001C9D5A /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
 		4C67FE821BA133AB001C9D5A /* MADReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89911B36912500B26B5E /* MADReceiptViewController.m */; };
 		4C67FE831BA133AB001C9D5A /* MTArrayDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */; };
 		4C67FE841BA133AB001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -2393,7 +2373,6 @@
 		4C67FEA31BA133AB001C9D5A /* MADQueryVisualizationTableDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C98601F1B98C2F10082A12D /* MADQueryVisualizationTableDefination.m */; };
 		4C67FEA41BA133AB001C9D5A /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEA51BA133AB001C9D5A /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0B1B374B2B005DC0CE /* MADFeatures.m */; };
-		4C67FEA61BA133AB001C9D5A /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */; };
 		4C67FEA71BA133AB001C9D5A /* MADToolboxPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF531991A08092F00511BEF /* MADToolboxPresentationController.m */; };
 		4C67FEA81BA133AB001C9D5A /* NSLayoutConstraint+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C1E1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m */; };
 		4C67FEA91BA133AB001C9D5A /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB48C11ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m */; };
@@ -2452,7 +2431,6 @@
 		4C67FEDE1BA133AB001C9D5A /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
 		4C67FEDF1BA133AB001C9D5A /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEE01BA133AB001C9D5A /* MADCollectionViewLayoutGrouped.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */; };
-		4C67FEE11BA133AB001C9D5A /* MADCollectionViewLayoutGroupedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */; };
 		4C67FEE21BA133AB001C9D5A /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C67FEE31BA133AB001C9D5A /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C67FEE41BA133AB001C9D5A /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE418FADC68009F234F /* MTViewControllerBarcodePreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2500,9 +2478,7 @@
 		4C67FF0E1BA133AB001C9D5A /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C67FF0F1BA133AB001C9D5A /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
 		4C67FF101BA133AB001C9D5A /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFE119AB113600A55780 /* UIView+Extras.m */; };
-		4C67FF111BA133AB001C9D5A /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FF121BA133AB001C9D5A /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B2A1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m */; };
-		4C67FF131BA133AB001C9D5A /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C67FF141BA133AB001C9D5A /* MADQueryVisualizationDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5AA67F1B98C7C400E405A1 /* MADQueryVisualizationDefination.m */; };
 		4C67FF151BA133AB001C9D5A /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4C67FF161BA133AB001C9D5A /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
@@ -2747,14 +2723,9 @@
 		4C6C9B2417318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B2217318965000E1161 /* MTReportDesignerSectionBackgroundView.m */; };
 		4C6C9B271733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B251733681B000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m */; };
 		4C6C9B281733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B251733681B000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C6CDFC414B85BFD00DABF86 /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
-		4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
-		4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C70C17519E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */; };
@@ -2896,7 +2867,6 @@
 		4C9294A218C4CBFF0010AAEF /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MADViewerController.m */; };
 		4C9294A318C4CBFF0010AAEF /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */; };
 		4C9294A418C4CBFF0010AAEF /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
-		4C9294A618C4CC030010AAEF /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; };
 		4C9294A718C4CC060010AAEF /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; };
 		4C9294AC18C4CC0F0010AAEF /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
 		4C9294B118C4CC0F0010AAEF /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
@@ -2920,7 +2890,6 @@
 		4C9294C718C4CC340010AAEF /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
 		4C9294C818C4CC340010AAEF /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
 		4C9294C918C4CC340010AAEF /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; };
-		4C9294CA18C4CC340010AAEF /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
 		4C9294CC18C4CC340010AAEF /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */; };
 		4C9294CD18C4CC340010AAEF /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4C9294CE18C4CC340010AAEF /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
@@ -2945,7 +2914,6 @@
 		4C92953218C4CC890010AAEF /* UIColor+Gradients.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78BF16960C23000ADD1D /* UIColor+Gradients.m */; };
 		4C92953318C4CC890010AAEF /* UIImage+Resizable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */; };
 		4C92953418C4CC890010AAEF /* UIGestureRecognizer+AnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */; };
-		4C92953518C4CC890010AAEF /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C92953718C4CC890010AAEF /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C92953918C4CC890010AAEF /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C92953E18C4CD390010AAEF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
@@ -3012,9 +2980,6 @@
 		4CB2D3C61BA34CF700AA473B /* MADOperationRegisterDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3C51BA34CF700AA473B /* MADOperationRegisterDefaults.m */; settings = {ASSET_TAGS = (); }; };
 		4CB2D3CA1BA3C0F600AA473B /* MADOperationInstallSampleDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3C91BA3C0F600AA473B /* MADOperationInstallSampleDocument.m */; settings = {ASSET_TAGS = (); }; };
 		4CB2D3CD1BA3C10C00AA473B /* MADOperationInstallSampleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3CC1BA3C10C00AA473B /* MADOperationInstallSampleDatabase.m */; settings = {ASSET_TAGS = (); }; };
-		4CB2D3E61BA47AA200AA473B /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3E31BA47A9200AA473B /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CB2D3F01BA47B0000AA473B /* MADFileManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3ED1BA47AF400AA473B /* MADFileManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CB2D3F31BA5283D00AA473B /* MADFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3F21BA5283D00AA473B /* MADFileManager.m */; settings = {ASSET_TAGS = (); }; };
 		4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB43ADE19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB43ADD19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m */; };
@@ -3042,7 +3007,6 @@
 		4CC24AA51503E3AB00C4EE98 /* MTGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */; };
 		4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
-		4CC641411BA745C200F3ECCE /* MADFileExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641401BA745C200F3ECCE /* MADFileExplorerViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
@@ -3631,8 +3595,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4CB2D3F01BA47B0000AA473B /* MADFileManager.framework in Embed Frameworks */,
-				4CB2D3E61BA47AA200AA473B /* MADExplorer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3895,8 +3857,6 @@
 		4C1E89751B328AF000B26B5E /* MADStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreViewController.m; sourceTree = "<group>"; };
 		4C1E89771B328ED100B26B5E /* MADCollectionViewCellProductFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewCellProductFeature.h; sourceTree = "<group>"; };
 		4C1E89781B328ED100B26B5E /* MADCollectionViewCellProductFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewCellProductFeature.m; sourceTree = "<group>"; };
-		4C1E897C1B33C7B500B26B5E /* MADBackgroundViewSelected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundViewSelected.h; sourceTree = "<group>"; };
-		4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundViewSelected.m; sourceTree = "<group>"; };
 		4C1E89801B33CD0600B26B5E /* MADBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundView.h; sourceTree = "<group>"; };
 		4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundView.m; sourceTree = "<group>"; };
 		4C1E89841B340AB100B26B5E /* MADInfinity64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADInfinity64.png; path = Resources/Images/icons/MADInfinity64.png; sourceTree = "<group>"; };
@@ -3956,8 +3916,6 @@
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C26FE4D1B9F4F8E00C18EBA /* MADocumentProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADocumentProtocol.h; sourceTree = "<group>"; };
-		4C2831801B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewLayoutGroupedDelegate.h; sourceTree = "<group>"; };
-		4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewLayoutGroupedDelegate.m; sourceTree = "<group>"; };
 		4C2831841B1AFC5500511D2D /* libsystem_stats.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_stats.dylib; path = usr/lib/system/libsystem_stats.dylib; sourceTree = SDKROOT; };
 		4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
 		4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
@@ -4022,7 +3980,6 @@
 		4C38E9DF19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerSplitParentViewController.m; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
-		4C41DA931BA2330C00FF63EC /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
 		4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationCacheData.m; sourceTree = "<group>"; };
 		4C434AD818B5F3E800750B6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -4142,12 +4099,12 @@
 		4C507B1014D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkSecondTableViewController.m; sourceTree = "<group>"; };
 		4C50DF8D16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageViewController.h; sourceTree = "<group>"; };
 		4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTReportViewerReportPageViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4C52054D1BA7AC80000E6A59 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4C54F2D61A12D45C004B5228 /* MADNavigationBarFixedSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationBarFixedSize.h; sourceTree = "<group>"; };
 		4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationBarFixedSize.m; sourceTree = "<group>"; };
 		4C54F2E21A12D54A004B5228 /* MADToolboxNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxNavigationController.h; sourceTree = "<group>"; };
 		4C54F2E31A12D54A004B5228 /* MADToolboxNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxNavigationController.m; sourceTree = "<group>"; };
 		4C54F2E61A1302CF004B5228 /* MADViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerProtocol.h; sourceTree = "<group>"; };
-		4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentCellProtocol.h; sourceTree = "<group>"; };
 		4C5625E51759730100433E88 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		4C5625E61759730100433E88 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
@@ -4206,15 +4163,9 @@
 		4C6C9B2217318965000E1161 /* MTReportDesignerSectionBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionBackgroundView.m; sourceTree = "<group>"; };
 		4C6C9B251733681B000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLiquid.m; sourceTree = "<group>"; };
 		4C6C9B261733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLiquid.h; sourceTree = "<group>"; };
-		4C6CDFC214B85BFC00DABF86 /* MTTableViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellDocument.h; sourceTree = "<group>"; };
-		4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTTableViewCellDocument.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellDocument.h; sourceTree = "<group>"; };
-		4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTCollectionViewCellDocument.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animations.h"; sourceTree = "<group>"; };
-		4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animations.m"; sourceTree = "<group>"; };
 		4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGAffineTransform+Common.h"; sourceTree = "<group>"; };
 		4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGAffineTransform+Common.m"; sourceTree = "<group>"; };
 		4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTViewTableHeader.xib; sourceTree = "<group>"; };
@@ -4458,7 +4409,6 @@
 		4CA1E5A21B4E712000434D98 /* MADObjectIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADObjectIdentifier.m; sourceTree = "<group>"; };
 		4CA226A516C963CC00315EA2 /* MADDesignerSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionView.h; sourceTree = "<group>"; };
 		4CA226A616C963CC00315EA2 /* MADDesignerSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionView.m; sourceTree = "<group>"; };
-		4CA27EE71ACCEDAF00697AB6 /* libCocoaExtensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCocoaExtensions.a; path = "../CocoaExtensions/CocoaExtensions/build/Debug-iphoneos/libCocoaExtensions.a"; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -4492,8 +4442,6 @@
 		4CB2D3CC1BA3C10C00AA473B /* MADOperationInstallSampleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationInstallSampleDatabase.m; sourceTree = "<group>"; };
 		4CB2D3DD1BA47A9100AA473B /* MADExplorer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADExplorer.xcodeproj; path = ../MADExplorer/MADExplorer.xcodeproj; sourceTree = "<group>"; };
 		4CB2D3E71BA47AF400AA473B /* MADFileManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADFileManager.xcodeproj; path = ../MADFileManager/MADFileManager.xcodeproj; sourceTree = "<group>"; };
-		4CB2D3F11BA5283D00AA473B /* MADFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileManager.h; sourceTree = "<group>"; };
-		4CB2D3F21BA5283D00AA473B /* MADFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileManager.m; sourceTree = "<group>"; };
 		4CB2D3F41BA541DA00AA473B /* MADSaveFileProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADSaveFileProtocol.h; sourceTree = "<group>"; };
 		4CB3C2281922A43600F3213E /* MTSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSliderPageVertical.h; sourceTree = "<group>"; };
 		4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSliderPageVertical.m; sourceTree = "<group>"; };
@@ -4628,9 +4576,9 @@
 		4CC39D62175E4A4800865CCA /* MTDocumentStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTDocumentStatusView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CC39D6A175FEBFA00865CCA /* NSDate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extras.h"; sourceTree = "<group>"; };
 		4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extras.m"; sourceTree = "<group>"; };
-		4CC6413F1BA745C200F3ECCE /* MADFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerViewController.h; sourceTree = "<group>"; };
-		4CC641401BA745C200F3ECCE /* MADFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerViewController.m; sourceTree = "<group>"; };
 		4CC641461BA74E7E00F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = ../CocoaExtensions/CocoaExtensions/MTMath.h; sourceTree = "<group>"; };
+		4CC6418A1BA78CE800F3ECCE /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "/Users/mthomason/Desktop/Reports/MAD/MAD/../../CocoaExtensions/CocoaExtensions/NSFileManager+Common.h"; sourceTree = "<absolute>"; };
+		4CC6418D1BA7903C00F3ECCE /* UIDocument+thumbnailURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDocument+thumbnailURL.h"; path = "../CocoaExtensions/CocoaExtensions/UIDocument+thumbnailURL.h"; sourceTree = "<group>"; };
 		4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBorderedView.h; sourceTree = "<group>"; };
 		4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBorderedView.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageBolt20.png; path = Reports/UIImageBolt20.png; sourceTree = "<group>"; };
@@ -5049,6 +4997,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */,
+				4C52054F1BA7ACAB000E6A59 /* MADFileManager.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
 				4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */,
 				4C359E231B082E7E00B3E9E0 /* libssl.a in Frameworks */,
@@ -5246,8 +5196,6 @@
 				4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */,
 				4CF8D41E168502D700357B1E /* MTCollectionViewCellElement.h */,
 				4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */,
-				4C6CDFC214B85BFC00DABF86 /* MTTableViewCellDocument.h */,
-				4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */,
 				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
 				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
 				4C88A9C514EE23CF0069A0AF /* MTResizeHandleView.h */,
@@ -5291,8 +5239,6 @@
 				4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */,
 				4C1AD32E1B11BD5B00839504 /* MADProgressView.h */,
 				4C1AD32F1B11BD5B00839504 /* MADProgressView.m */,
-				4C1E897C1B33C7B500B26B5E /* MADBackgroundViewSelected.h */,
-				4C1E897D1B33C7B500B26B5E /* MADBackgroundViewSelected.m */,
 				4C1E89801B33CD0600B26B5E /* MADBackgroundView.h */,
 				4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */,
 			);
@@ -5561,9 +5507,9 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C52054D1BA7AC80000E6A59 /* libCocoaExtensions.a */,
 				4CB2D3E71BA47AF400AA473B /* MADFileManager.xcodeproj */,
 				4CB2D3DD1BA47A9100AA473B /* MADExplorer.xcodeproj */,
-				4C41DA931BA2330C00FF63EC /* libCocoaExtensions.a */,
 				4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */,
 				4C1847B91B8D656E00FA7872 /* libSqlite.a */,
 				4C2831841B1AFC5500511D2D /* libsystem_stats.dylib */,
@@ -5575,7 +5521,6 @@
 				4CF889281AD1BEED00ED21FC /* libCloudManager.a */,
 				4CF889261AD1BEE300ED21FC /* libCloudManager.a */,
 				4CF889241AD1BED800ED21FC /* libCloudManager.a */,
-				4CA27EE71ACCEDAF00697AB6 /* libCocoaExtensions.a */,
 				4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
 				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
@@ -6268,19 +6213,12 @@
 		4C6DF38E16D5F5D500BDC0C1 /* Open Document */ = {
 			isa = PBXGroup;
 			children = (
-				4CC6413F1BA745C200F3ECCE /* MADFileExplorerViewController.h */,
-				4CC641401BA745C200F3ECCE /* MADFileExplorerViewController.m */,
 				4C384E4314B29789007B4F48 /* MADOpenFileViewController.h */,
 				4CE8A04214C01ABB007C8345 /* MADOpenFileViewController.m */,
 				4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */,
 				4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */,
-				4CB2D3F11BA5283D00AA473B /* MADFileManager.h */,
-				4CB2D3F21BA5283D00AA473B /* MADFileManager.m */,
 				4C38E0D219C203F600AB9789 /* MADOpenDocumentManager.h */,
 				4C38E0CF19C203B400AB9789 /* MADOpenDocumentManager.m */,
-				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
-				4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */,
-				4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */,
 				4C8D2A221B45307200237C20 /* UIMotionEffectGroup+HoverEffects.h */,
 				4C8D2A231B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m */,
 				4CB2D3F41BA541DA00AA473B /* MADSaveFileProtocol.h */,
@@ -7036,8 +6974,6 @@
 				4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */,
 				4C12293C16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.h */,
 				4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */,
-				4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */,
-				4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */,
 				4C5626011759865900433E88 /* NSData+AES256.h */,
 				4C5626021759865A00433E88 /* NSData+AES256.m */,
 				4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */,
@@ -7140,8 +7076,6 @@
 				4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */,
 				4C47408E19FEDA7200B11434 /* MADPopoverBackgroundView.h */,
 				4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */,
-				4C2831801B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.h */,
-				4C2831811B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m */,
 			);
 			name = "Report Desinger";
 			sourceTree = "<group>";
@@ -7226,6 +7160,8 @@
 		4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4CC6418D1BA7903C00F3ECCE /* UIDocument+thumbnailURL.h */,
+				4CC6418A1BA78CE800F3ECCE /* NSFileManager+Common.h */,
 				4CC641461BA74E7E00F3ECCE /* MTMath.h */,
 				4C111BF71B1C2715005CA4DD /* NSNumberFormatter+Constructors.h */,
 				4C65D47B1ADCC67C00279B4D /* BDHost.h */,
@@ -9688,7 +9624,6 @@
 				4C0A077219C95F350059E1D9 /* MTStoreKitController.m in Sources */,
 				4C38E9E119F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4C0E772B163B5AEC003B951E /* MADFontSelectorViewController.m in Sources */,
-				4C0E772F163B5AEC003B951E /* MTTableViewCellDocument.m in Sources */,
 				4C2F6E6C194C3450009D192B /* MTArrayDataSource.m in Sources */,
 				4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */,
 				4C1AD3391B11BEAD00839504 /* MADProgressView.m in Sources */,
@@ -9726,7 +9661,6 @@
 				4C23FB0918FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C0E775E163B5AEC003B951E /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C0E775F163B5AEC003B951E /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
-				4C1E897F1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */,
 				4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4CF5319C1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
 				4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */,
@@ -9826,10 +9760,7 @@
 				4C23FB0B18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C174CDF18B13760007A88B3 /* MADAppConfiguration.m in Sources */,
 				4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */,
-				4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
-				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4C23FB0718FADCE4009F234F /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
-				4C2831831B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C8BAFE319AB113600A55780 /* UIView+Extras.m in Sources */,
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
@@ -9904,7 +9835,6 @@
 				4C2F25611B53FA1C004DFAEC /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4C2F25621B53FA1C004DFAEC /* MADToolboxStyleViewController.m in Sources */,
 				4C2F25631B53FA1C004DFAEC /* MADFontSelectorViewController.m in Sources */,
-				4C2F25641B53FA1C004DFAEC /* MTTableViewCellDocument.m in Sources */,
 				4C2F25651B53FA1C004DFAEC /* MADReceiptViewController.m in Sources */,
 				4C2F25661B53FA1C004DFAEC /* MTArrayDataSource.m in Sources */,
 				4C2F25671B53FA1C004DFAEC /* MAD.xcdatamodeld in Sources */,
@@ -9940,7 +9870,6 @@
 				4C2F25851B53FA1C004DFAEC /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C2F25861B53FA1C004DFAEC /* UITableViewControllerCoreDataResults.m in Sources */,
 				4C2F25871B53FA1C004DFAEC /* MADFeatures.m in Sources */,
-				4C2F25881B53FA1C004DFAEC /* MADBackgroundViewSelected.m in Sources */,
 				4C2F25891B53FA1C004DFAEC /* MADToolboxPresentationController.m in Sources */,
 				4C2F258B1B53FA1C004DFAEC /* NSLayoutConstraint+Designer.m in Sources */,
 				4C2F258C1B53FA1C004DFAEC /* NSMetadataQueryResultGroup+Description.m in Sources */,
@@ -9995,7 +9924,6 @@
 				4C2F25BD1B53FA1C004DFAEC /* MTRulerView.m in Sources */,
 				4C2F25BE1B53FA1C004DFAEC /* MTTableController.m in Sources */,
 				4C2F25BF1B53FA1C004DFAEC /* MADCollectionViewLayoutGrouped.m in Sources */,
-				4C2F25C01B53FA1C004DFAEC /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4C2F25C11B53FA1C004DFAEC /* CGAffineTransform+Common.m in Sources */,
 				4C2F25C21B53FA1C004DFAEC /* MADTransparentPresentationController.m in Sources */,
 				4C2F25C31B53FA1C004DFAEC /* MTViewControllerBarcodePreview.m in Sources */,
@@ -10042,9 +9970,7 @@
 				4C2F25EC1B53FA1C004DFAEC /* NSString+Encryption.m in Sources */,
 				4C2F25ED1B53FA1C004DFAEC /* MTConnectorView.m in Sources */,
 				4C2F25EE1B53FA1C004DFAEC /* UIView+Extras.m in Sources */,
-				4C2F25EF1B53FA1C004DFAEC /* MTCollectionViewCellDocument.m in Sources */,
 				4C2F25F01B53FA1C004DFAEC /* MADTableViewCellReceiptApplication.m in Sources */,
-				4C2F25F11B53FA1C004DFAEC /* UIView+Animations.m in Sources */,
 				4C2F25F21B53FA1C004DFAEC /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C2F25F31B53FA1C004DFAEC /* MTTitleView.m in Sources */,
 				4C2F25F41B53FA1C004DFAEC /* NSParagraphStyle+CommonStyles.m in Sources */,
@@ -10133,7 +10059,6 @@
 				4C38E9E019F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4CE9985F14B69AA80015C8D1 /* MADToolboxStyleViewController.m in Sources */,
 				4C00818114B6D158003DF437 /* MADFontSelectorViewController.m in Sources */,
-				4C6CDFC414B85BFD00DABF86 /* MTTableViewCellDocument.m in Sources */,
 				4C1E89921B36912500B26B5E /* MADReceiptViewController.m in Sources */,
 				4C2F6E6B194C3450009D192B /* MTArrayDataSource.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
@@ -10171,7 +10096,6 @@
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
 				4C7B0B0C1B374B2B005DC0CE /* MADFeatures.m in Sources */,
 				4CB2D3C31BA3394600AA473B /* MADOperationArchiveData.m in Sources */,
-				4C1E897E1B33C7B500B26B5E /* MADBackgroundViewSelected.m in Sources */,
 				4CF5319B1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
 				4C111C1F1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m in Sources */,
 				4CDB48C21ABFCFF700E76879 /* NSMetadataQueryResultGroup+Description.m in Sources */,
@@ -10232,7 +10156,6 @@
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
 				4CB2D3CA1BA3C0F600AA473B /* MADOperationInstallSampleDocument.m in Sources */,
 				4C90D47E19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */,
-				4C2831821B1ABD9100511D2D /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4CC96A361AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4C23FAEC18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
@@ -10280,14 +10203,11 @@
 				4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */,
 				4C122AEA16D0066B00B69763 /* MTConnectorView.m in Sources */,
 				4C8BAFE219AB113600A55780 /* UIView+Extras.m in Sources */,
-				4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C7B0B2B1B3803B9005DC0CE /* MADTableViewCellReceiptApplication.m in Sources */,
-				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4C5AA6801B98C7C400E405A1 /* MADQueryVisualizationDefination.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,
 				4CCD2439193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m in Sources */,
-				4CC641411BA745C200F3ECCE /* MADFileExplorerViewController.m in Sources */,
 				4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
 				4C4740D31A0170B100B11434 /* MADToolboxStyleLayoutViewController.m in Sources */,
 				4C8D2A241B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */,
@@ -10300,7 +10220,6 @@
 				4C0F89431B2D73B600D75AF6 /* UIStoryboard+Designer.m in Sources */,
 				4C44DC6819B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */,
 				4CAD103219C009C000983B9E /* MADBackgroundScrollView.m in Sources */,
-				4C4037D51BA73FB70067DFB4 /* MADThumbnail.m in Sources */,
 				4CB0FF6D16F501ED00B88626 /* MADToolboxFormatViewController.m in Sources */,
 				4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C08B31D1AB680CC00B54D3A /* MADDocumentInformationTableViewController.m in Sources */,
@@ -10321,7 +10240,6 @@
 				4CB2937419FCB3F700C0171D /* MADTabBarController.m in Sources */,
 				4C5AA6831B992AD800E405A1 /* MTGraph+RptqQuery.m in Sources */,
 				4C7F2F931B3D30880002226E /* MTStoreKitController+Features.m in Sources */,
-				4CB2D3F31BA5283D00AA473B /* MADFileManager.m in Sources */,
 				4C0F89951B2FF47E00D75AF6 /* MADSalesReceipt.m in Sources */,
 				4C54F2E41A12D54A004B5228 /* MADToolboxNavigationController.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,
@@ -10377,7 +10295,6 @@
 				4C67F9E21BA1043B001C9D5A /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4C67F9E31BA1043B001C9D5A /* MADToolboxStyleViewController.m in Sources */,
 				4C67F9E41BA1043B001C9D5A /* MADFontSelectorViewController.m in Sources */,
-				4C67F9E51BA1043B001C9D5A /* MTTableViewCellDocument.m in Sources */,
 				4C67F9E61BA1043B001C9D5A /* MADReceiptViewController.m in Sources */,
 				4C67F9E71BA1043B001C9D5A /* MTArrayDataSource.m in Sources */,
 				4C67F9E81BA1043B001C9D5A /* MAD.xcdatamodeld in Sources */,
@@ -10414,7 +10331,6 @@
 				4C67FA071BA1043B001C9D5A /* MADQueryVisualizationTableDefination.m in Sources */,
 				4C67FA081BA1043B001C9D5A /* UITableViewControllerCoreDataResults.m in Sources */,
 				4C67FA091BA1043B001C9D5A /* MADFeatures.m in Sources */,
-				4C67FA0A1BA1043B001C9D5A /* MADBackgroundViewSelected.m in Sources */,
 				4C67FA0B1BA1043B001C9D5A /* MADToolboxPresentationController.m in Sources */,
 				4C67FA0C1BA1043B001C9D5A /* NSLayoutConstraint+Designer.m in Sources */,
 				4C67FA0D1BA1043B001C9D5A /* NSMetadataQueryResultGroup+Description.m in Sources */,
@@ -10473,7 +10389,6 @@
 				4C67FA421BA1043B001C9D5A /* MTRulerView.m in Sources */,
 				4C67FA431BA1043B001C9D5A /* MTTableController.m in Sources */,
 				4C67FA441BA1043B001C9D5A /* MADCollectionViewLayoutGrouped.m in Sources */,
-				4C67FA451BA1043B001C9D5A /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4C67FA461BA1043B001C9D5A /* CGAffineTransform+Common.m in Sources */,
 				4C67FA471BA1043B001C9D5A /* MADTransparentPresentationController.m in Sources */,
 				4C67FA481BA1043B001C9D5A /* MTViewControllerBarcodePreview.m in Sources */,
@@ -10521,9 +10436,7 @@
 				4C67FA721BA1043B001C9D5A /* MADQueryVisualizationCacheData.m in Sources */,
 				4C67FA731BA1043B001C9D5A /* MTConnectorView.m in Sources */,
 				4C67FA741BA1043B001C9D5A /* UIView+Extras.m in Sources */,
-				4C67FA751BA1043B001C9D5A /* MTCollectionViewCellDocument.m in Sources */,
 				4C67FA761BA1043B001C9D5A /* MADTableViewCellReceiptApplication.m in Sources */,
-				4C67FA771BA1043B001C9D5A /* UIView+Animations.m in Sources */,
 				4C67FA781BA1043B001C9D5A /* MADQueryVisualizationDefination.m in Sources */,
 				4C67FA791BA1043B001C9D5A /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C67FA7A1BA1043B001C9D5A /* MTTitleView.m in Sources */,
@@ -10614,7 +10527,6 @@
 				4C67FC2F1BA1183D001C9D5A /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4C67FC301BA1183D001C9D5A /* MADToolboxStyleViewController.m in Sources */,
 				4C67FC311BA1183D001C9D5A /* MADFontSelectorViewController.m in Sources */,
-				4C67FC321BA1183D001C9D5A /* MTTableViewCellDocument.m in Sources */,
 				4C67FC331BA1183D001C9D5A /* MADReceiptViewController.m in Sources */,
 				4C67FC341BA1183D001C9D5A /* MTArrayDataSource.m in Sources */,
 				4C67FC351BA1183D001C9D5A /* MAD.xcdatamodeld in Sources */,
@@ -10651,7 +10563,6 @@
 				4C67FC541BA1183D001C9D5A /* MADQueryVisualizationTableDefination.m in Sources */,
 				4C67FC551BA1183D001C9D5A /* UITableViewControllerCoreDataResults.m in Sources */,
 				4C67FC561BA1183D001C9D5A /* MADFeatures.m in Sources */,
-				4C67FC571BA1183D001C9D5A /* MADBackgroundViewSelected.m in Sources */,
 				4C67FC581BA1183D001C9D5A /* MADToolboxPresentationController.m in Sources */,
 				4C67FC591BA1183D001C9D5A /* NSLayoutConstraint+Designer.m in Sources */,
 				4C67FC5A1BA1183D001C9D5A /* NSMetadataQueryResultGroup+Description.m in Sources */,
@@ -10710,7 +10621,6 @@
 				4C67FC8F1BA1183D001C9D5A /* MTRulerView.m in Sources */,
 				4C67FC901BA1183D001C9D5A /* MTTableController.m in Sources */,
 				4C67FC911BA1183D001C9D5A /* MADCollectionViewLayoutGrouped.m in Sources */,
-				4C67FC921BA1183D001C9D5A /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4C67FC931BA1183D001C9D5A /* CGAffineTransform+Common.m in Sources */,
 				4C67FC941BA1183D001C9D5A /* MADTransparentPresentationController.m in Sources */,
 				4C67FC951BA1183D001C9D5A /* MTViewControllerBarcodePreview.m in Sources */,
@@ -10758,9 +10668,7 @@
 				4C67FCBF1BA1183D001C9D5A /* MADQueryVisualizationCacheData.m in Sources */,
 				4C67FCC01BA1183D001C9D5A /* MTConnectorView.m in Sources */,
 				4C67FCC11BA1183D001C9D5A /* UIView+Extras.m in Sources */,
-				4C67FCC21BA1183D001C9D5A /* MTCollectionViewCellDocument.m in Sources */,
 				4C67FCC31BA1183D001C9D5A /* MADTableViewCellReceiptApplication.m in Sources */,
-				4C67FCC41BA1183D001C9D5A /* UIView+Animations.m in Sources */,
 				4C67FCC51BA1183D001C9D5A /* MADQueryVisualizationDefination.m in Sources */,
 				4C67FCC61BA1183D001C9D5A /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C67FCC71BA1183D001C9D5A /* MTTitleView.m in Sources */,
@@ -10851,7 +10759,6 @@
 				4C67FE7E1BA133AB001C9D5A /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4C67FE7F1BA133AB001C9D5A /* MADToolboxStyleViewController.m in Sources */,
 				4C67FE801BA133AB001C9D5A /* MADFontSelectorViewController.m in Sources */,
-				4C67FE811BA133AB001C9D5A /* MTTableViewCellDocument.m in Sources */,
 				4C67FE821BA133AB001C9D5A /* MADReceiptViewController.m in Sources */,
 				4C67FE831BA133AB001C9D5A /* MTArrayDataSource.m in Sources */,
 				4C67FE841BA133AB001C9D5A /* MAD.xcdatamodeld in Sources */,
@@ -10888,7 +10795,6 @@
 				4C67FEA31BA133AB001C9D5A /* MADQueryVisualizationTableDefination.m in Sources */,
 				4C67FEA41BA133AB001C9D5A /* UITableViewControllerCoreDataResults.m in Sources */,
 				4C67FEA51BA133AB001C9D5A /* MADFeatures.m in Sources */,
-				4C67FEA61BA133AB001C9D5A /* MADBackgroundViewSelected.m in Sources */,
 				4C67FEA71BA133AB001C9D5A /* MADToolboxPresentationController.m in Sources */,
 				4C67FEA81BA133AB001C9D5A /* NSLayoutConstraint+Designer.m in Sources */,
 				4C67FEA91BA133AB001C9D5A /* NSMetadataQueryResultGroup+Description.m in Sources */,
@@ -10947,7 +10853,6 @@
 				4C67FEDE1BA133AB001C9D5A /* MTRulerView.m in Sources */,
 				4C67FEDF1BA133AB001C9D5A /* MTTableController.m in Sources */,
 				4C67FEE01BA133AB001C9D5A /* MADCollectionViewLayoutGrouped.m in Sources */,
-				4C67FEE11BA133AB001C9D5A /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4C67FEE21BA133AB001C9D5A /* CGAffineTransform+Common.m in Sources */,
 				4C67FEE31BA133AB001C9D5A /* MADTransparentPresentationController.m in Sources */,
 				4C67FEE41BA133AB001C9D5A /* MTViewControllerBarcodePreview.m in Sources */,
@@ -10995,9 +10900,7 @@
 				4C67FF0E1BA133AB001C9D5A /* MADQueryVisualizationCacheData.m in Sources */,
 				4C67FF0F1BA133AB001C9D5A /* MTConnectorView.m in Sources */,
 				4C67FF101BA133AB001C9D5A /* UIView+Extras.m in Sources */,
-				4C67FF111BA133AB001C9D5A /* MTCollectionViewCellDocument.m in Sources */,
 				4C67FF121BA133AB001C9D5A /* MADTableViewCellReceiptApplication.m in Sources */,
-				4C67FF131BA133AB001C9D5A /* UIView+Animations.m in Sources */,
 				4C67FF141BA133AB001C9D5A /* MADQueryVisualizationDefination.m in Sources */,
 				4C67FF151BA133AB001C9D5A /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C67FF161BA133AB001C9D5A /* MTTitleView.m in Sources */,
@@ -11127,7 +11030,6 @@
 				4C9294B918C4CC150010AAEF /* UITableViewCellLinkName.m in Sources */,
 				4C92949918C4CBF90010AAEF /* MADToolboxStyleViewController.m in Sources */,
 				4C92948318C4CBF40010AAEF /* MTQueryBuilderAddGroupViewController.m in Sources */,
-				4C9294A618C4CC030010AAEF /* MTCollectionViewCellDocument.m in Sources */,
 				4C9294BB18C4CC150010AAEF /* UITableViewCellQueryLink.m in Sources */,
 				4C92947618C4CBE60010AAEF /* Constants.m in Sources */,
 				4C9294A118C4CBF90010AAEF /* MTReportDesignerSectionBackgroundView.m in Sources */,
@@ -11138,7 +11040,6 @@
 				4C92948C18C4CBF40010AAEF /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C92948918C4CBF40010AAEF /* MTQueryBuilderAddTableViewController.m in Sources */,
 				4C92947E18C4CBF40010AAEF /* MADQueryViewController.m in Sources */,
-				4C92953518C4CC890010AAEF /* UIView+Animations.m in Sources */,
 				4C92953218C4CC890010AAEF /* UIColor+Gradients.m in Sources */,
 				4C92948418C4CBF40010AAEF /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C92953718C4CC890010AAEF /* NSData+AES256.m in Sources */,
@@ -11179,7 +11080,6 @@
 				4C92949C18C4CBF90010AAEF /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C92952218C4CC890010AAEF /* UIImage+RoundedCorner.m in Sources */,
 				4C92949818C4CBF90010AAEF /* MADFontSelectorViewController.m in Sources */,
-				4C9294CA18C4CC340010AAEF /* MTTableViewCellDocument.m in Sources */,
 				4C92947F18C4CBF40010AAEF /* MADQueryVisualizationViewController.m in Sources */,
 				4C92949218C4CBF90010AAEF /* MADDesignerElementPickerViewController.m in Sources */,
 				4C9294C918C4CC340010AAEF /* MTCollectionViewCellElement.m in Sources */,

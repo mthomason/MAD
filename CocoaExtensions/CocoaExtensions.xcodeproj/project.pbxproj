@@ -25,6 +25,9 @@
 		4C8CDC851AD2687800B7B9EA /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC841AD2687800B7B9EA /* UIColor+EverydayApps.m */; };
 		4CC035DD1B90F71F001A3CC5 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035DC1B90F71F001A3CC5 /* UIViewController+Utilities.m */; };
 		4CC641441BA74E5100F3ECCE /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641431BA74E5100F3ECCE /* MTMath.m */; settings = {ASSET_TAGS = (); }; };
+		4CC6416F1BA77CA900F3ECCE /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6416E1BA77CA900F3ECCE /* UIView+Animations.m */; settings = {ASSET_TAGS = (); }; };
+		4CC641761BA77E5F00F3ECCE /* UIDocument+thumbnailURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641751BA77E5F00F3ECCE /* UIDocument+thumbnailURL.m */; settings = {ASSET_TAGS = (); }; };
+		4CC641791BA77F6400F3ECCE /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641781BA77F6400F3ECCE /* NSFileManager+Common.m */; settings = {ASSET_TAGS = (); }; };
 		4CE84D861B396A2100BB3A0A /* UIColor+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE84D851B396A2100BB3A0A /* UIColor+Social.m */; };
 		4CF8891E1AD1BBA700ED21FC /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8891D1AD1BBA700ED21FC /* UIDevice+Hack.m */; };
 /* End PBXBuildFile section */
@@ -89,6 +92,12 @@
 		4CC035DC1B90F71F001A3CC5 /* UIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utilities.m"; sourceTree = "<group>"; };
 		4CC641421BA74E5100F3ECCE /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMath.h; sourceTree = "<group>"; };
 		4CC641431BA74E5100F3ECCE /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMath.m; sourceTree = "<group>"; };
+		4CC6416D1BA77CA900F3ECCE /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animations.h"; sourceTree = "<group>"; };
+		4CC6416E1BA77CA900F3ECCE /* UIView+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animations.m"; sourceTree = "<group>"; };
+		4CC641741BA77E5F00F3ECCE /* UIDocument+thumbnailURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDocument+thumbnailURL.h"; sourceTree = "<group>"; };
+		4CC641751BA77E5F00F3ECCE /* UIDocument+thumbnailURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDocument+thumbnailURL.m"; sourceTree = "<group>"; };
+		4CC641771BA77F6400F3ECCE /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4CC641781BA77F6400F3ECCE /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Common.m"; sourceTree = "<group>"; };
 		4CE84D841B396A2100BB3A0A /* UIColor+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Social.h"; sourceTree = "<group>"; };
 		4CE84D851B396A2100BB3A0A /* UIColor+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Social.m"; sourceTree = "<group>"; };
 		4CE84D871B396A5A00BB3A0A /* MacroVendColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroVendColor.h; sourceTree = "<group>"; };
@@ -138,6 +147,10 @@
 		4C37E10F1ACC864500B4BC0D /* CocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4CC641771BA77F6400F3ECCE /* NSFileManager+Common.h */,
+				4CC641781BA77F6400F3ECCE /* NSFileManager+Common.m */,
+				4CC6416D1BA77CA900F3ECCE /* UIView+Animations.h */,
+				4CC6416E1BA77CA900F3ECCE /* UIView+Animations.m */,
 				4CC641421BA74E5100F3ECCE /* MTMath.h */,
 				4CC641431BA74E5100F3ECCE /* MTMath.m */,
 				4C65D4751ADCC3F100279B4D /* BDHost.h */,
@@ -175,6 +188,8 @@
 				4CE84D871B396A5A00BB3A0A /* MacroVendColor.h */,
 				4CC035DB1B90F71F001A3CC5 /* UIViewController+Utilities.h */,
 				4CC035DC1B90F71F001A3CC5 /* UIViewController+Utilities.m */,
+				4CC641741BA77E5F00F3ECCE /* UIDocument+thumbnailURL.h */,
+				4CC641751BA77E5F00F3ECCE /* UIDocument+thumbnailURL.m */,
 			);
 			path = CocoaExtensions;
 			sourceTree = "<group>";
@@ -301,9 +316,12 @@
 				4CC641441BA74E5100F3ECCE /* MTMath.m in Sources */,
 				4C1AD3411B126ABF00839504 /* UIAlertController+Constructors.m in Sources */,
 				4C111BF61B1C268C005CA4DD /* NSNumberFormatter+Constructors.m in Sources */,
+				4CC641761BA77E5F00F3ECCE /* UIDocument+thumbnailURL.m in Sources */,
 				4C65D4771ADCC3F100279B4D /* BDHost.m in Sources */,
 				4C8CDAC71AD2433D00B7B9EA /* NSError+Constructors.m in Sources */,
+				4CC641791BA77F6400F3ECCE /* NSFileManager+Common.m in Sources */,
 				4CC035DD1B90F71F001A3CC5 /* UIViewController+Utilities.m in Sources */,
+				4CC6416F1BA77CA900F3ECCE /* UIView+Animations.m in Sources */,
 				4C8CDBBD1AD2532600B7B9EA /* UIImage+Border.m in Sources */,
 				4C8CDADE1AD246A700B7B9EA /* UIApplication+Helpers.m in Sources */,
 				4C1AD3501B18413E00839504 /* UIBarButtonItem+Constructors.m in Sources */,

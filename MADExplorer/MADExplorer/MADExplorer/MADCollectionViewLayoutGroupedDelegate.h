@@ -10,7 +10,8 @@
 #define Reports_MADCollectionViewLayoutGroupedDelegate_h
 
 #import <Foundation/Foundation.h>
-#import <MADFileManager/MADFileManager.h>
+#import <UIKit/UIKit.h>
+//#import <MADFileManager/MADFileManager.h>
 
 extern NSString * const MADImageToolbarCloudDownload;
 

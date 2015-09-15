@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import "MADFileManager.h"
+#import <MADFileManager/MADFileManager.h>
 #import "MADCollectionViewLayoutGroupedDelegate.h"
+
+@class MADFileLocationManager;
 
 @protocol MADFileExplorerDelegate <NSObject>
 
@@ -26,7 +28,7 @@
 
 @property (nonatomic, weak) id <MADFileExplorerDelegate> fileExplorerDelegate;
 
-@property (nonatomic, strong) MADFileManager *filesCoordnator;
+@property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
 @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
 - (NSString *)subtitleForMetadata:(MADMetaData *)metadata;

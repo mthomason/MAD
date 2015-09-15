@@ -55,6 +55,7 @@
 #import "MADQueryVisualizationCacheData.h"
 
 #import "MADOperationArchiveData.h"
+#import "NSFileManager+Common.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

@@ -7,15 +7,17 @@
 //
 
 #import "MADFileExplorerViewController.h"
+#import "MTDocumentCellProtocol.h"
 #import "MADCollectionViewLayoutGroupedDelegate.h"
-#import "MADocument.h"
 #import "MTMath.h"
 #import "MTCollectionViewCellDocument.h"
 
 #import "NSNumberFormatter+Constructors.h"
 #import "UIView+Animations.h"
-#import "UIAlertController+Constructors.h"
-#import "NSURL+Document.h"
+#import "MADFileLocationManager.h"
+
+//#import "UIAlertController+Constructors.h"
+//#import "NSURL+Document.h"
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
@@ -33,7 +35,7 @@ static NSString * const Downloading                             = @"Downloading"
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         
-        MADFileManager *filesCoordnator = [[MADFileManager alloc] init];
+        MADFileLocationManager *filesCoordnator = [[MADFileLocationManager alloc] init];
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
 
@@ -54,7 +56,7 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
     MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
-    return [MADocument fileNameForMadUrl:metadata.URL];
+    return metadata.URL.lastPathComponent.stringByDeletingPathExtension;
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
