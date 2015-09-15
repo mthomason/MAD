@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1309481BA8057B0022665F /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1309461BA8057B0022665F /* libct.a */; settings = {ASSET_TAGS = (); }; };
+		4C1309491BA8057B0022665F /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1309471BA8057B0022665F /* libsybdb.a */; settings = {ASSET_TAGS = (); }; };
 		4C1CDB841774E53500CFD2C8 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */; };
-		4C323B821992B68F004A7762 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB72D189E173600BB5AF8 /* libsybdb.a */; };
 		4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
 		4CFFD91F19D5C5E4001D0B02 /* Tds_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFD91E19D5C5E4001D0B02 /* Tds_Tests.m */; };
 		4CFFD92519D5C605001D0B02 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */; };
 		4CFFD92619D5C61C001D0B02 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */; };
 		4CFFD92719D5C62B001D0B02 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
-		4CFFD92819D5C67D001D0B02 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB72D189E173600BB5AF8 /* libsybdb.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,20 +40,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C1309461BA8057B0022665F /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../Compressor/library/libsybdb/libct.a; sourceTree = "<group>"; };
+		4C1309471BA8057B0022665F /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
+		4C1309551BA805B50022665F /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bkpublic.h; path = ../Compressor/library/libsybdb/include/bkpublic.h; sourceTree = "<group>"; };
+		4C1309561BA805B50022665F /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cspublic.h; path = ../Compressor/library/libsybdb/include/cspublic.h; sourceTree = "<group>"; };
+		4C1309571BA805B50022665F /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cstypes.h; path = ../Compressor/library/libsybdb/include/cstypes.h; sourceTree = "<group>"; };
+		4C1309581BA805B50022665F /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ctpublic.h; path = ../Compressor/library/libsybdb/include/ctpublic.h; sourceTree = "<group>"; };
+		4C1309591BA805B50022665F /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = odbcss.h; path = ../Compressor/library/libsybdb/include/odbcss.h; sourceTree = "<group>"; };
+		4C13095A1BA805B50022665F /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqldb.h; path = ../Compressor/library/libsybdb/include/sqldb.h; sourceTree = "<group>"; };
+		4C13095B1BA805B50022665F /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlfront.h; path = ../Compressor/library/libsybdb/include/sqlfront.h; sourceTree = "<group>"; };
+		4C13095C1BA805B50022665F /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sybdb.h; path = ../Compressor/library/libsybdb/include/sybdb.h; sourceTree = "<group>"; };
+		4C13095D1BA805B50022665F /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = syberror.h; path = ../Compressor/library/libsybdb/include/syberror.h; sourceTree = "<group>"; };
+		4C13095E1BA805B50022665F /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sybfront.h; path = ../Compressor/library/libsybdb/include/sybfront.h; sourceTree = "<group>"; };
+		4C13095F1BA805B50022665F /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tds_sysdep_public.h; path = ../Compressor/library/libsybdb/include/tds_sysdep_public.h; sourceTree = "<group>"; };
 		4C1CDB821774E53500CFD2C8 /* MTTdsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTdsClient.h; sourceTree = "<group>"; };
 		4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTdsClient.m; sourceTree = "<group>"; };
-		4C5CB721189E173600BB5AF8 /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
-		4C5CB722189E173600BB5AF8 /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
-		4C5CB723189E173600BB5AF8 /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
-		4C5CB724189E173600BB5AF8 /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpublic.h; sourceTree = "<group>"; };
-		4C5CB725189E173600BB5AF8 /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
-		4C5CB726189E173600BB5AF8 /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqldb.h; sourceTree = "<group>"; };
-		4C5CB727189E173600BB5AF8 /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlfront.h; sourceTree = "<group>"; };
-		4C5CB728189E173600BB5AF8 /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
-		4C5CB729189E173600BB5AF8 /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
-		4C5CB72A189E173600BB5AF8 /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
-		4C5CB72B189E173600BB5AF8 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
-		4C5CB72D189E173600BB5AF8 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibTdsClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CEBFA0E1760EF8B00FFA4F4 /* libTdsClient-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libTdsClient-Prefix.pch"; sourceTree = "<group>"; };
@@ -67,7 +68,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C323B821992B68F004A7762 /* libsybdb.a in Frameworks */,
+				4C1309491BA8057B0022665F /* libsybdb.a in Frameworks */,
+				4C1309481BA8057B0022665F /* libct.a in Frameworks */,
 				4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,7 +79,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CFFD92719D5C62B001D0B02 /* Foundation.framework in Frameworks */,
-				4CFFD92819D5C67D001D0B02 /* libsybdb.a in Frameworks */,
 				4CFFD92619D5C61C001D0B02 /* liblibTdsClient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,25 +86,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C5CB720189E173600BB5AF8 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4C5CB721189E173600BB5AF8 /* bkpublic.h */,
-				4C5CB722189E173600BB5AF8 /* cspublic.h */,
-				4C5CB723189E173600BB5AF8 /* cstypes.h */,
-				4C5CB724189E173600BB5AF8 /* ctpublic.h */,
-				4C5CB725189E173600BB5AF8 /* odbcss.h */,
-				4C5CB726189E173600BB5AF8 /* sqldb.h */,
-				4C5CB727189E173600BB5AF8 /* sqlfront.h */,
-				4C5CB728189E173600BB5AF8 /* sybdb.h */,
-				4C5CB729189E173600BB5AF8 /* syberror.h */,
-				4C5CB72A189E173600BB5AF8 /* sybfront.h */,
-				4C5CB72B189E173600BB5AF8 /* tds_sysdep_public.h */,
-			);
-			name = include;
-			path = ../../Compressor/library/libsybdb/include;
-			sourceTree = "<group>";
-		};
 		4CEBF9FE1760EF8B00FFA4F4 = {
 			isa = PBXGroup;
 			children = (
@@ -161,8 +143,19 @@
 		4CEBFA3C1761108600FFA4F4 /* freetds */ = {
 			isa = PBXGroup;
 			children = (
-				4C5CB720189E173600BB5AF8 /* include */,
-				4C5CB72D189E173600BB5AF8 /* libsybdb.a */,
+				4C1309551BA805B50022665F /* bkpublic.h */,
+				4C1309561BA805B50022665F /* cspublic.h */,
+				4C1309571BA805B50022665F /* cstypes.h */,
+				4C1309581BA805B50022665F /* ctpublic.h */,
+				4C1309591BA805B50022665F /* odbcss.h */,
+				4C13095A1BA805B50022665F /* sqldb.h */,
+				4C13095B1BA805B50022665F /* sqlfront.h */,
+				4C13095C1BA805B50022665F /* sybdb.h */,
+				4C13095D1BA805B50022665F /* syberror.h */,
+				4C13095E1BA805B50022665F /* sybfront.h */,
+				4C13095F1BA805B50022665F /* tds_sysdep_public.h */,
+				4C1309461BA8057B0022665F /* libct.a */,
+				4C1309471BA8057B0022665F /* libsybdb.a */,
 			);
 			name = freetds;
 			sourceTree = "<group>";
