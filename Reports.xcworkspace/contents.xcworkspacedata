@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <FileRef
-      location = "group:MADTdsClient/MADTdsClient.xcodeproj">
-   </FileRef>
    <Group
       location = "container:"
       name = "Frameworks">
@@ -28,6 +25,9 @@
    </FileRef>
    <FileRef
       location = "group:DataStructures/libMTDataStrutures.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:TdsClient/libTdsClient.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Sqlite3/Sqlite.xcodeproj">

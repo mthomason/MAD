@@ -11,7 +11,6 @@
 
 #import "MTDatabase.h"
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import <MADTdsClient/MADTdsClient.h>
 
 extern NSString * const MTDatabaseConnectionUsername;
 extern NSString * const MTDatabaseConnectionPassword;
