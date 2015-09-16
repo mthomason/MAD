@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C8F995C1AC9E0ED006D3996 /* Sqlite.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C8F995B1AC9E0ED006D3996 /* Sqlite.h */; };
+		4C8F995E1AC9E0ED006D3996 /* Sqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F995D1AC9E0ED006D3996 /* Sqlite.m */; };
 		4C8F99641AC9E0EE006D3996 /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8F99581AC9E0ED006D3996 /* libSqlite.a */; };
+		4C8F99801AC9E120006D3996 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F997E1AC9E120006D3996 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +30,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				4C8F995C1AC9E0ED006D3996 /* Sqlite.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -34,8 +38,13 @@
 
 /* Begin PBXFileReference section */
 		4C8F99581AC9E0ED006D3996 /* libSqlite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSqlite.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8F995B1AC9E0ED006D3996 /* Sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sqlite.h; sourceTree = "<group>"; };
+		4C8F995D1AC9E0ED006D3996 /* Sqlite.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sqlite.m; sourceTree = "<group>"; };
 		4C8F99631AC9E0EE006D3996 /* SqliteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SqliteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8F99691AC9E0EE006D3996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C8F997B1AC9E120006D3996 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		4C8F997C1AC9E120006D3996 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		4C8F997E1AC9E120006D3996 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +87,11 @@
 		4C8F995A1AC9E0ED006D3996 /* Sqlite */ = {
 			isa = PBXGroup;
 			children = (
+				4C8F997B1AC9E120006D3996 /* sqlite3.h */,
+				4C8F997C1AC9E120006D3996 /* sqlite3ext.h */,
+				4C8F997E1AC9E120006D3996 /* sqlite3.c */,
+				4C8F995B1AC9E0ED006D3996 /* Sqlite.h */,
+				4C8F995D1AC9E0ED006D3996 /* Sqlite.m */,
 			);
 			path = Sqlite;
 			sourceTree = "<group>";
@@ -186,6 +200,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8F99801AC9E120006D3996 /* sqlite3.c in Sources */,
+				4C8F995E1AC9E0ED006D3996 /* Sqlite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +282,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "SQLITE_ENABLE_COLUMN_METADATA=1";

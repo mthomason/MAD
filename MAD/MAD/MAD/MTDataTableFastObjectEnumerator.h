@@ -10,9 +10,7 @@
 #define Reports_MTDataTableFastObjectEnumerator_h
 
 #import <Foundation/Foundation.h>
-#import <MADSqlite3/MADSqlite3.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import "MTDatabaseSqlite3.h"
 
 @class MTDatabaseConnection, MTQuery;
 

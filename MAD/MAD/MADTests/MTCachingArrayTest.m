@@ -27,7 +27,7 @@
 @end
 
 @implementation MTCachingArrayTest
-/*
+
 - (void)setUp {
     [super setUp];
     
@@ -160,5 +160,5 @@
     BOOL success = objCtr == [[self array] count];
     XCTAssert(success, @"");
 }
-*/
+
 @end
