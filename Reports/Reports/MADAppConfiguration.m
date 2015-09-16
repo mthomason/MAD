@@ -57,15 +57,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-<<<<<<< HEAD
 NSString * const MTGlobalBundleVersion                              = @"8.0.136";
 NSString * const MTGlobalBundleShortVersion                         = @"8.0.136";
 NSString * const MTGlobalBundleRev                                  = @"2078";
-=======
-NSString * const MTGlobalBundleVersion                              = @"8.0.134";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.134";
-NSString * const MTGlobalBundleRev                                  = @"2076";
->>>>>>> parent of 6ba6a52... Revert "Trying to get TDS into a framework..."
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

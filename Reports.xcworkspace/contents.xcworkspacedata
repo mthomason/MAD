@@ -2,11 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-<<<<<<< HEAD
       location = "group:MADSqlite3/MADSqlite3.xcodeproj">
-=======
-      location = "group:MADTdsClient/MADTdsClient.xcodeproj">
->>>>>>> parent of 6ba6a52... Revert "Trying to get TDS into a framework..."
    </FileRef>
    <Group
       location = "container:"
@@ -34,11 +30,7 @@
       location = "group:DataStructures/libMTDataStrutures.xcodeproj">
    </FileRef>
    <FileRef
-<<<<<<< HEAD
       location = "group:TdsClient/libTdsClient.xcodeproj">
-=======
-      location = "group:Sqlite3/Sqlite.xcodeproj">
->>>>>>> parent of 6ba6a52... Revert "Trying to get TDS into a framework..."
    </FileRef>
    <FileRef
       location = "group:Scrimpter/Scrimpter.xcodeproj">
