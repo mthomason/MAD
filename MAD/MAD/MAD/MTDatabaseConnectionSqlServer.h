@@ -10,7 +10,7 @@
 #define Reports_MTDatabaseConnectionSqlServer_h
 
 #import "MTDatabaseConnection.h"
-#import "sybdb.h"
+#import <MADTdsClient/MADTdsClient.h>
 
 @interface MTDatabaseConnectionSqlServer : MTDatabaseConnection
 
