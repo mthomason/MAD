@@ -159,6 +159,11 @@
     XCTAssert(allgood, @"Object value check failed.");
     BOOL success = objCtr == [[self array] count];
     XCTAssert(success, @"");
+<<<<<<< HEAD
 }
 */
+=======
+}*/
+
+>>>>>>> parent of 6ba6a52... Revert "Trying to get TDS into a framework..."
 @end
