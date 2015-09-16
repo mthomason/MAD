@@ -5,6 +5,9 @@
       location = "container:"
       name = "Frameworks">
       <FileRef
+         location = "group:MADTdsClient/MADTdsClient.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MADSqlite3/MADSqlite3.xcodeproj">
       </FileRef>
       <FileRef

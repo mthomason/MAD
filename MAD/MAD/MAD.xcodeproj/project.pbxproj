@@ -10,7 +10,6 @@
 		4C0F89351B280A2300D75AF6 /* MADSectionLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */; };
 		4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */; };
 		4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B0A1BA808BE0022665F /* MADBarcodes.framework */; };
-		4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */; };
 		4C2C7B911BA92B1C00C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B901BA92B1C00C9CC5E /* MADDataStructures.framework */; };
 		4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */; };
 		4C5205DC1BA7E81C000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */; };
@@ -201,6 +200,8 @@
 		4C8CDD081AD2F43600B7B9EA /* RptqQuerySort+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */; };
 		4C8CDD091AD2F43600B7B9EA /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */; };
 		4CC6BE341BA94999006899BE /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC6BE331BA94999006899BE /* MADSqlite3.framework */; };
+		4CC6BE361BA94C7A006899BE /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC6BE351BA94C7A006899BE /* MADTdsClient.framework */; };
+		4CC6BE441BA94E4E006899BE /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC6BE431BA94E4E006899BE /* libsybdb.a */; };
 		4CCC3CEA1B4BC33F00350F3F /* NSObject+DebugDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */; };
 /* End PBXBuildFile section */
 
@@ -738,6 +739,8 @@
 		4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqRelationship+Extras.h"; path = "rptq/RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
 		4CC6BE331BA94999006899BE /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../../MADSqlite3/build/Debug-iphoneos/MADSqlite3.framework"; sourceTree = "<group>"; };
+		4CC6BE351BA94C7A006899BE /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../../MADTdsClient/build/Debug-iphoneos/MADTdsClient.framework"; sourceTree = "<group>"; };
+		4CC6BE431BA94E4E006899BE /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4CCC3CE81B4BC33F00350F3F /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DebugDescription.h"; sourceTree = "<group>"; };
 		4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DebugDescription.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -747,6 +750,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CC6BE441BA94E4E006899BE /* libsybdb.a in Frameworks */,
+				4CC6BE361BA94C7A006899BE /* MADTdsClient.framework in Frameworks */,
 				4CC6BE341BA94999006899BE /* MADSqlite3.framework in Frameworks */,
 				4C2C7B911BA92B1C00C9CC5E /* MADDataStructures.framework in Frameworks */,
 				4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */,
@@ -754,7 +759,6 @@
 				4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */,
 				4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */,
 				4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */,
-				4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -857,6 +861,8 @@
 		4C8CD9551AD1CDC800B7B9EA = {
 			isa = PBXGroup;
 			children = (
+				4CC6BE431BA94E4E006899BE /* libsybdb.a */,
+				4CC6BE351BA94C7A006899BE /* MADTdsClient.framework */,
 				4C5205D91BA7E7EF000E6A59 /* Resources */,
 				4C8CD9601AD1CDC800B7B9EA /* MAD */,
 				4C8CD96D1AD1CDC800B7B9EA /* MADTests */,

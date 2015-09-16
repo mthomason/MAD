@@ -25,7 +25,7 @@
 
 #import "RptqQueryField.h"
 
-#import "sybdb.h"
+//#import "sybdb.h"
 
 #import "MTDatabaseProcessSqlServer.h"
 
