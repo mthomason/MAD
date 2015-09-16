@@ -11,13 +11,13 @@
 //#endif
 
 #import "MADArrayCaching.h"
+#import <MADDataStructures/MADDataStructures.h>
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
 #import "MTDataColumn.h"
 #import "MTQuery.h"
 #import "sqlite3.h"
-#import "MTPair.h"
 #import "MTDatabaseField.h"
 
 NSString * const MTArrayCachedTableName = @"ac";

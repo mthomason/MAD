@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <FileRef
+      location = "group:MADDataStructures/MADDataStructures.xcodeproj">
+   </FileRef>
    <Group
       location = "container:"
       name = "Frameworks">
@@ -22,9 +25,6 @@
    </Group>
    <FileRef
       location = "group:MySQLClientObjC/MysqlClientObjC.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:DataStructures/libMTDataStrutures.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:TdsClient/libTdsClient.xcodeproj">

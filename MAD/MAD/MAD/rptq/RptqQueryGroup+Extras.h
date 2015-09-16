@@ -10,7 +10,7 @@
 #define Reports_RptqQueryGroup_Extras_h
 
 #import "RptqQueryGroup.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 #import "MADSortOrder.h"
 
 @class RptqQueryField;

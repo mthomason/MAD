@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MADDataStructures/MADDataStructures.h>
 
 @class RptqQuery, MTGraph, MTLinkedList;
 

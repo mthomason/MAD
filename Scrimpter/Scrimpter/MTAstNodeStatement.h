@@ -10,6 +10,7 @@
 #define MAD_MADScrimpter_MTAstNodeStatement_h
 
 #import "MTAbstractSyntaxTree.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface MTAstNodeStatement : MTAbstractSyntaxTree
 

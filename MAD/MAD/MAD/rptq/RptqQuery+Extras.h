@@ -10,7 +10,7 @@
 #define Reports_RptqQuery_Extras_h
 
 #import "RptqQuery.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @class RptqDocument, MTDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 

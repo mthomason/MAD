@@ -10,7 +10,7 @@
 #define Reports_RptqQueryTable_Extras_h
 
 #import "RptqQueryTable.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @class RptqDocument, RptqDatabase, RptqDatabaseSchemaTable, NSManagedObjectID;
 

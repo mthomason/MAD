@@ -10,8 +10,7 @@
 #define Reports_NSString_MTProtocol_h
 
 #import <Foundation/Foundation.h>
-#import "MTProtocolCompare.h"
-#import "MTProtocolLog.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface NSString (MTProtocol) <MTProtocolCompare, MTProtocolLog>
 

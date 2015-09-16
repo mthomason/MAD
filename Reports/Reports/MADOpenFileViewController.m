@@ -43,8 +43,6 @@
 #import "MADNavigationBarTitleView.h"
 #import "MADDocumentInformationTableViewController.h"
 
-#import "MTPair.h"
-
 #import "MADProgressView.h"
 
 #import "UITabBarController+Shared.h"

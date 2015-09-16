@@ -8,7 +8,6 @@
 
 #import "MTAstNodeSymbolAsignNumber.h"
 #import "MTAbstractSyntaxTree.h"
-#import "MTPair.h"
 #import "MADSymbol.h"
 
 @interface MTAstNodeSymbolAsignNumber ()

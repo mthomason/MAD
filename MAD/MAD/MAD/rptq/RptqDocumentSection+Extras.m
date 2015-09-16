@@ -11,10 +11,10 @@
 #endif
 
 #import <objc/runtime.h>
+#import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
-#import "MTProtocolCompare.h"
 
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"

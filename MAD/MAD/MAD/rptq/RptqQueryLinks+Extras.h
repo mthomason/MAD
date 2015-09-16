@@ -10,8 +10,7 @@
 #define Reports_RptqQueryLinks_Extras_h
 
 #import "RptqQueryLinks.h"
-#import "MTProtocolLog.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 #import "MADLinkType.h"
 
 extern NSString * const MNSJoinTypeInnerJoin;

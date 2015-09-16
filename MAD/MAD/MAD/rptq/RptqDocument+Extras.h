@@ -11,8 +11,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MADBarcodes/MADBarcodes.h>
+#import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocument.h"
-#import "MTProtocolCompare.h"
 #import "RptqDocumentSection+Extras.h"
 
 @class NSManagedObjectContext, MTDatabase, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;

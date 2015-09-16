@@ -7,7 +7,6 @@
 //
 
 #import "MTAstNodeExpressionList.h"
-#import "MTPair.h"
 
 @implementation MTAstNodeExpressionList
 

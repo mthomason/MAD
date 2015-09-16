@@ -10,7 +10,7 @@
 #define Reports_RptqQueryCache_Extras_h
 
 #import "RptqQueryCache.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface RptqQueryCache (Extras) <MTProtocolCompare>
 

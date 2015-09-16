@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <MADExplorer/MADExplorer.h>
 #import <MessageUI/MessageUI.h>
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface MADOpenFileViewController : MADFileExplorerViewController
 

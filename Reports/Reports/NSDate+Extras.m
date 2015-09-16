@@ -7,7 +7,6 @@
 //
 
 #import "NSDate+Extras.h"
-#import "MTPair.h"
 
 @implementation NSDate (Extras)
 

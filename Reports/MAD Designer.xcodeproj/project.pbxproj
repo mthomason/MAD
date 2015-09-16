@@ -2926,19 +2926,6 @@
 		4C1847BD1B8D65AB00FA7872 /* Sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sqlite.h; path = ../Sqlite3/Sqlite/Sqlite.h; sourceTree = "<group>"; };
 		4C1847BE1B8DEA8100FA7872 /* MTTdsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTdsClient.h; path = ../TdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
 		4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
-		4C1847D51B8DEF2E00FA7872 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../DataStructures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
-		4C1847D61B8DEF2E00FA7872 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../DataStructures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
-		4C1847D71B8DEF2E00FA7872 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../DataStructures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
-		4C1847D81B8DEF2E00FA7872 /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = ../DataStructures/libMTDataStrutures/MTTree.h; sourceTree = "<group>"; };
-		4C1847D91B8DEF2E00FA7872 /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+MTProtocol.h"; path = "../DataStructures/libMTDataStrutures/NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
-		4C1847DA1B8DEF2E00FA7872 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../DataStructures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
-		4C1847DB1B8DEF2E00FA7872 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../DataStructures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
-		4C1847DC1B8DEF2E00FA7872 /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = ../DataStructures/libMTDataStrutures/MTLinkedList.h; sourceTree = "<group>"; };
-		4C1847DD1B8DEF2E00FA7872 /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../DataStructures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
-		4C1847DE1B8DEF2E00FA7872 /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../DataStructures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
-		4C1847DF1B8DEF2E00FA7872 /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = ../DataStructures/libMTDataStrutures/MTQueue.h; sourceTree = "<group>"; };
-		4C1847E01B8DEF2E00FA7872 /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = ../DataStructures/libMTDataStrutures/MTStack.h; sourceTree = "<group>"; };
-		4C1847E11B8DEF2E00FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -4013,9 +4000,6 @@
 		4CF8670C16D72E0900F716A8 /* MTScrollViewCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTScrollViewCenter.m; sourceTree = "<group>"; };
 		4CF8671316D8259300F716A8 /* MTTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTitleView.h; sourceTree = "<group>"; };
 		4CF8671416D8259400F716A8 /* MTTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTTitleView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		4CF889241AD1BED800ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
-		4CF889261AD1BEE300ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
-		4CF889281AD1BEED00ED21FC /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
 		4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCollectionViewCellElement.xib; sourceTree = "<group>"; };
 		4CF8D41E168502D700357B1E /* MTCollectionViewCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellElement.h; sourceTree = "<group>"; };
 		4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellElement.m; sourceTree = "<group>"; };
@@ -4615,9 +4599,6 @@
 				4C8CD9AA1AD1D3BD00B7B9EA /* libMAD.a */,
 				4C8CD9A81AD1D3B500B7B9EA /* libMAD.a */,
 				4C8CD9781AD1CDE700B7B9EA /* libMAD.a */,
-				4CF889281AD1BEED00ED21FC /* libCloudManager.a */,
-				4CF889261AD1BEE300ED21FC /* libCloudManager.a */,
-				4CF889241AD1BED800ED21FC /* libCloudManager.a */,
 				4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
 				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
@@ -4675,14 +4656,6 @@
 				4CB56EC91AC683CC00756775 /* include */,
 			);
 			name = libMySqlClient;
-			sourceTree = "<group>";
-		};
-		4C3A969C189F7D51007AF476 /* libDataStructures */ = {
-			isa = PBXGroup;
-			children = (
-				4C4C6F1C1676424C004A3B04 /* MTDataStructures */,
-			);
-			name = libDataStructures;
 			sourceTree = "<group>";
 		};
 		4C3A969D189F7DCF007AF476 /* libSybdb */ = {
@@ -4956,26 +4929,6 @@
 				4C94AA1117DCB3C9000F6FCF /* Images.xcassets */,
 			);
 			name = Designer;
-			sourceTree = "<group>";
-		};
-		4C4C6F1C1676424C004A3B04 /* MTDataStructures */ = {
-			isa = PBXGroup;
-			children = (
-				4C1847D51B8DEF2E00FA7872 /* MTProtocolEnumerator.h */,
-				4C1847D61B8DEF2E00FA7872 /* MTProtocolCompare.h */,
-				4C1847D71B8DEF2E00FA7872 /* MTProtocolLog.h */,
-				4C1847D81B8DEF2E00FA7872 /* MTTree.h */,
-				4C1847D91B8DEF2E00FA7872 /* NSNumber+MTProtocol.h */,
-				4C1847DA1B8DEF2E00FA7872 /* MTEdge.h */,
-				4C1847DB1B8DEF2E00FA7872 /* MTGraph.h */,
-				4C1847DC1B8DEF2E00FA7872 /* MTLinkedList.h */,
-				4C1847DD1B8DEF2E00FA7872 /* MTObject.h */,
-				4C1847DE1B8DEF2E00FA7872 /* MTPair.h */,
-				4C1847DF1B8DEF2E00FA7872 /* MTQueue.h */,
-				4C1847E01B8DEF2E00FA7872 /* MTStack.h */,
-				4C1847E11B8DEF2E00FA7872 /* MTVertex.h */,
-			);
-			name = MTDataStructures;
 			sourceTree = "<group>";
 		};
 		4C4EBFBE17EFC2B700D10622 /* Fonts */ = {
@@ -6213,7 +6166,6 @@
 				4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */,
 				4C3A969E189F7DFC007AF476 /* libSqlite3 */,
 				4C3A969D189F7DCF007AF476 /* libSybdb */,
-				4C3A969C189F7D51007AF476 /* libDataStructures */,
 				4C3A969B189F7D10007AF476 /* libMySqlClient */,
 				4C434AD518B5F3E800750B6B /* libSsl */,
 			);

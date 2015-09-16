@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MTPair.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface MTQueryVisualizationLinkDefination : NSObject
 

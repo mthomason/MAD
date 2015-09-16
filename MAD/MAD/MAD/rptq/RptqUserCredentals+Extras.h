@@ -10,7 +10,7 @@
 #define Reports_RptqUserCredentals_Extras_h
 
 #import "RptqUserCredentals.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface RptqUserCredentals (Extras) <MTProtocolCompare>
 

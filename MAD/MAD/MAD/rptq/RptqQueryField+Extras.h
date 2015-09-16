@@ -10,8 +10,7 @@
 #define Reports_RptqQueryField_Extras_h
 
 #import "RptqQueryField.h"
-#import "MTProtocolLog.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface RptqQueryField (Extras) <MTProtocolLog, MTProtocolCompare>
 

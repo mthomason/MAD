@@ -7,7 +7,6 @@
 //
 
 #import "MTAstNodeStatement.h"
-#import "MTPair.h"
 #import "MADValue.h"
 
 @implementation MTAstNodeStatement

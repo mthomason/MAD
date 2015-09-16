@@ -39,8 +39,6 @@
 
 #import "MTDataColumn.h"
 
-#import "MTGraph.h"
-
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"

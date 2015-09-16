@@ -1,7 +1,7 @@
 %{
     
     #import <Foundation/Foundation.h>
-    #import "MTPair.h"
+    #import <MADDataStructures/MADDataStructures.h>
     #import "MADSymbol.h"
     #import "MADSymbolReference.h"
     #import "MTAbstractSyntaxTree.h"

@@ -10,7 +10,7 @@
 #define Reports_NSManagedObjectID_Extras_h
 
 #import <CoreData/CoreData.h>
-#import "MTProtocolLog.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface NSManagedObjectID (Extras)
 

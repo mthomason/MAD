@@ -10,6 +10,7 @@
 #define Reports_NSDate_Extras_h
 
 #import <Foundation/Foundation.h>
+#import <MADDataStructures/MADDataStructures.h>
 
 typedef NS_ENUM(NSUInteger, MTDateResolution) {
 	MTDateResolutionYear = 1,

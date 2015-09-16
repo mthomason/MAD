@@ -11,7 +11,6 @@
 #import "MADSymbol.h"
 #import "MADScrimpter.h"
 #import "MADSymbolTable.h"
-#import "MTPair.h"
 
 @interface MTAstNodeSymbolReference ()
 

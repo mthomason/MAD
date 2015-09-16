@@ -7,8 +7,8 @@
 //
 
 #import "MADSectionLayoutManager.h"
+#import <MADDataStructures/MADDataStructures.h>
 #import "MADSectionLayoutAttributes.h"
-#import "MTPair.h"
 
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"

@@ -7,7 +7,6 @@
 //
 
 #import "MTAstNodeFunctionCallEmbedded.h"
-#import "MTPair.h"
 #import "MADValue.h"
 
 @interface MTAstNodeFunctionCallEmbedded ()

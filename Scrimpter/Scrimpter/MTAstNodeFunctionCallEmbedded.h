@@ -10,6 +10,7 @@
 #define MAD_MADScrimpter_MTAstNodeFunctionCallEmbedded_h
 
 #import "MTAbstractSyntaxTree.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 typedef NS_ENUM(NSUInteger, SCFunctionClass) {
     SCFunctionClassString,

@@ -10,6 +10,7 @@
 #define MAD_MADScrimpter_MTAstNodeSymbolReference_h
 
 #import "MTAbstractSyntaxTree.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @class MADSymbol, MADSymbolReference;
 

@@ -7,6 +7,7 @@
 //
 
 #import "MTAbstractSyntaxTree.h"
+#import <MADDataStructures/MADDataStructures.h>
 
 @interface MTAstNodeExpressionList : MTAbstractSyntaxTree
 

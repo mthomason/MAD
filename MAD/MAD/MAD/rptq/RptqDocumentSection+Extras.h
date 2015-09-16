@@ -10,8 +10,8 @@
 #define Reports_RptqDocumentSection_Extras_h
 
 #import <UIKit/UIKit.h>
+#import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocumentSection.h"
-#import "MTProtocolCompare.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {

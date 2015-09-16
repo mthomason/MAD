@@ -7,7 +7,6 @@
 //
 
 #import "MTAbstractSyntaxTree.h"
-#import "MTPair.h"
 #import "MTAstNodeSymbolAsignNumber.h"
 #import "MADValue.h"
 #import "MTAstNodeFlow.h"

@@ -11,9 +11,8 @@
 
 #import "RptqDocumentObject.h"
 #import <UIKit/UIKit.h>
+#import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocumentObjectFactory.h"
-#import "MTProtocolCompare.h"
-#import "MTProtocolLog.h"
 #import "MTDataType.h"
 #import "MADDocumentObjectType.h"
 

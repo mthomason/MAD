@@ -7,7 +7,6 @@
 //
 
 #import "MTAstNodeFunctionCallEmbeddedUniaryMinus.h"
-#import "MTPair.h"
 #import "MADValue.h"
 
 @interface MTAstNodeFunctionCallEmbeddedUniaryMinus ()

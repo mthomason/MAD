@@ -10,6 +10,7 @@
 #define Reports_MTQuery_h
 
 #import <Foundation/Foundation.h>
+#import <MADDataStructures/MADDataStructures.h>
 
 #pragma mark Types of queries
 

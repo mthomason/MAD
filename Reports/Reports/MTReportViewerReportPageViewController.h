@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import <MADDataStructures/MADDataStructures.h>
 #import "MTPrintingProtocol.h"
 
 @class MADocument;

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTGraph.h"
+#import <MADDataStructures/MADDataStructures.h>
 #import "RptqQuery.h"
 
 @interface MTGraph (RptqQuery)

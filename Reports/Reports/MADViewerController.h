@@ -10,6 +10,7 @@
 #define Reports_MTReportViewerController_h
 
 #import <UIKit/UIKit.h>
+#import <MADDataStructures/MADDataStructures.h>
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADActivityProtocol.h"

@@ -9,7 +9,8 @@
 #ifndef MAD_MADScrimpter_MTAbstractSyntaxTree_h
 #define MAD_MADScrimpter_MTAbstractSyntaxTree_h
 
-#import "MTTree.h"
+#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MADDataStructures.h>
 
 typedef NS_ENUM(NSUInteger, SCNodeType) {
     SCNodeTypeArithmetic,

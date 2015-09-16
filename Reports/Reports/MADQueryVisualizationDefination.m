@@ -7,10 +7,6 @@
 //
 
 #import "MADQueryVisualizationDefination.h"
-#import "MTLinkedList.h"
-#import "MTGraph.h"
-#import "MTVertex.h"
-#import "MTObject.h"
 #import "RptqQuery.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqQueryTable.h"
