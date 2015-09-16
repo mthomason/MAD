@@ -10,9 +10,9 @@
 		4C0F89351B280A2300D75AF6 /* MADSectionLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89341B280A2300D75AF6 /* MADSectionLayoutManager.m */; };
 		4C0F893F1B29146C00D75AF6 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */; };
 		4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B0A1BA808BE0022665F /* MADBarcodes.framework */; };
-		4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */; };
 		4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */; };
 		4C5205DC1BA7E81C000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */; };
+		4C66C1961BA8890700663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1951BA8890700663575 /* MADTdsClient.framework */; };
 		4C8CD96A1AD1CDC800B7B9EA /* libMAD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */; };
 		4C8CD98A1AD1CEAF00B7B9EA /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9881AD1CEAF00B7B9EA /* MADocument.m */; };
 		4C8CD9981AD1D1AD00B7B9EA /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */; };
@@ -232,7 +232,6 @@
 		4C0F893D1B29146C00D75AF6 /* MADSectionLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionLayoutAttributes.h; sourceTree = "<group>"; };
 		4C0F893E1B29146C00D75AF6 /* MADSectionLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutAttributes.m; sourceTree = "<group>"; };
 		4C130B0A1BA808BE0022665F /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../../MADBarcodes/build/Debug-iphoneos/MADBarcodes.framework"; sourceTree = "<group>"; };
-		4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
 		4C1847E21B8DF03300FA7872 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
 		4C1847E31B8DF03300FA7872 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolCompare.h; sourceTree = "<group>"; };
 		4C1847E41B8DF03300FA7872 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = ../../DataStructures/libMTDataStrutures/MTProtocolLog.h; sourceTree = "<group>"; };
@@ -247,6 +246,7 @@
 		4C1847ED1B8DF03300FA7872 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../../DataStructures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
 		4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../MADFileManager/build/Debug-iphoneos/MADFileManager.framework"; sourceTree = "<group>"; };
 		4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../MADCocoaExtensions/build/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
+		4C66C1951BA8890700663575 /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../../MADTdsClient/build/Debug-iphoneos/MADTdsClient.framework"; sourceTree = "<group>"; };
 		4C8CD95E1AD1CDC800B7B9EA /* libMAD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMAD.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CD9691AD1CDC800B7B9EA /* MADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CD96F1AD1CDC800B7B9EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -262,7 +262,6 @@
 		4C8CD9971AD1D1AD00B7B9EA /* MADConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConstants.m; sourceTree = "<group>"; };
 		4C8CD99E1AD1D28B00B7B9EA /* MADocumentState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADocumentState.h; sourceTree = "<group>"; };
 		4C8CD99F1AD1D28B00B7B9EA /* MADocumentState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADocumentState.m; sourceTree = "<group>"; };
-		4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCloudManager.a; path = "../../CloudManager/build/Debug-iphoneos/libCloudManager.a"; sourceTree = "<group>"; };
 		4C8CD9A51AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C8CD9A61AD1D37800B7B9EA /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
 		4C8CD9AC1AD1D4EA00B7B9EA /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnection.h; sourceTree = "<group>"; };
@@ -326,17 +325,6 @@
 		4C8CD9EC1AD1D72E00B7B9EA /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqUserCredentals.h; path = rptq/autogen/RptqUserCredentals.h; sourceTree = "<group>"; };
 		4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqUserCredentals.m; path = rptq/autogen/RptqUserCredentals.m; sourceTree = "<group>"; };
 		4C8CDA081AD1D75500B7B9EA /* rptq.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rptq.h; path = rptq/rptq.h; sourceTree = "<group>"; };
-		4C8CDA0C1AD1DA5E00B7B9EA /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
-		4C8CDA0D1AD1DA5E00B7B9EA /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
-		4C8CDA0E1AD1DA5E00B7B9EA /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
-		4C8CDA0F1AD1DA5E00B7B9EA /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpublic.h; sourceTree = "<group>"; };
-		4C8CDA101AD1DA5E00B7B9EA /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
-		4C8CDA111AD1DA5E00B7B9EA /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqldb.h; sourceTree = "<group>"; };
-		4C8CDA121AD1DA5E00B7B9EA /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlfront.h; sourceTree = "<group>"; };
-		4C8CDA131AD1DA5E00B7B9EA /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
-		4C8CDA141AD1DA5E00B7B9EA /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
-		4C8CDA151AD1DA5E00B7B9EA /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
-		4C8CDA161AD1DA5E00B7B9EA /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
 		4C8CDA291AD1DCC100B7B9EA /* MTQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuery.h; sourceTree = "<group>"; };
 		4C8CDA2A1AD1DCC100B7B9EA /* MTQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuery.m; sourceTree = "<group>"; };
 		4C8CDA2B1AD1DCC100B7B9EA /* MTQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCache.h; sourceTree = "<group>"; };
@@ -760,6 +748,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C66C1961BA8890700663575 /* MADTdsClient.framework in Frameworks */,
 				4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */,
 				4C5205DC1BA7E81C000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 				4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */,
@@ -767,7 +756,6 @@
 				4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */,
 				4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */,
 				4C8CDAAD1AD1E06A00B7B9EA /* libMTDataStrutures.a in Frameworks */,
-				4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +817,7 @@
 		4C5205DA1BA7E7F6000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C66C1951BA8890700663575 /* MADTdsClient.framework */,
 				4C130B0A1BA808BE0022665F /* MADBarcodes.framework */,
 				4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */,
 				4C41DA8F1BA22E4F00FF63EC /* MADFileManager.framework */,
@@ -936,27 +925,8 @@
 				4C8CDCFC1AD2805600B7B9EA /* libSqlite */,
 				4C8CDC011AD2649C00B7B9EA /* libMySQL */,
 				4C8CDAAB1AD1E05D00B7B9EA /* libDataStructures */,
-				4C8CDA0B1AD1D9D800B7B9EA /* libTDS */,
-				4C8CD9A31AD1D2F700B7B9EA /* libCloudManager */,
-				4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */,
 			);
 			name = Libraries;
-			sourceTree = "<group>";
-		};
-		4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */ = {
-			isa = PBXGroup;
-			children = (
-				4CC6417C1BA7800C00F3ECCE /* Headers */,
-			);
-			name = libCocoaExtensions;
-			sourceTree = "<group>";
-		};
-		4C8CD9A31AD1D2F700B7B9EA /* libCloudManager */ = {
-			isa = PBXGroup;
-			children = (
-				4C8CD9A11AD1D2ED00B7B9EA /* libCloudManager.a */,
-			);
-			name = libCloudManager;
 			sourceTree = "<group>";
 		};
 		4C8CD9B81AD1D70600B7B9EA /* Rptq */ = {
@@ -1080,43 +1050,6 @@
 				4C8CD9ED1AD1D72E00B7B9EA /* RptqUserCredentals.m */,
 			);
 			name = "Auto Generated";
-			sourceTree = "<group>";
-		};
-		4C8CDA0B1AD1D9D800B7B9EA /* libTDS */ = {
-			isa = PBXGroup;
-			children = (
-				4C1847C11B8DEB3100FA7872 /* liblibTdsClient.a */,
-				4C8CDA191AD1DA5E00B7B9EA /* freetds */,
-			);
-			name = libTDS;
-			sourceTree = "<group>";
-		};
-		4C8CDA171AD1DA5E00B7B9EA /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4C8CDA0C1AD1DA5E00B7B9EA /* bkpublic.h */,
-				4C8CDA0D1AD1DA5E00B7B9EA /* cspublic.h */,
-				4C8CDA0E1AD1DA5E00B7B9EA /* cstypes.h */,
-				4C8CDA0F1AD1DA5E00B7B9EA /* ctpublic.h */,
-				4C8CDA101AD1DA5E00B7B9EA /* odbcss.h */,
-				4C8CDA111AD1DA5E00B7B9EA /* sqldb.h */,
-				4C8CDA121AD1DA5E00B7B9EA /* sqlfront.h */,
-				4C8CDA131AD1DA5E00B7B9EA /* sybdb.h */,
-				4C8CDA141AD1DA5E00B7B9EA /* syberror.h */,
-				4C8CDA151AD1DA5E00B7B9EA /* sybfront.h */,
-				4C8CDA161AD1DA5E00B7B9EA /* tds_sysdep_public.h */,
-			);
-			name = include;
-			path = ../../Compressor/library/libsybdb/include;
-			sourceTree = "<group>";
-		};
-		4C8CDA191AD1DA5E00B7B9EA /* freetds */ = {
-			isa = PBXGroup;
-			children = (
-				4C8CDA171AD1DA5E00B7B9EA /* include */,
-			);
-			name = freetds;
-			path = ../../Reports/libTdsClient;
 			sourceTree = "<group>";
 		};
 		4C8CDA281AD1DCAD00B7B9EA /* Query */ = {
@@ -1575,13 +1508,6 @@
 			name = Formatters;
 			sourceTree = "<group>";
 		};
-		4CC6417C1BA7800C00F3ECCE /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Headers;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1962,15 +1888,12 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/libTdsClient/build/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/libsybdb,
-					"/Users/mthomason/Desktop/Reports/Reports/libMTDataStrutures/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/Barcodes/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
+					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Reports/Reports/libMTDataStrutures/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Reports/Reports/Barcodes/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Compressor/library/openssl",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1983,15 +1906,12 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/mthomason/Desktop/Reports/CocoaExtensions/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/CloudManager/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/libTdsClient/build/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/libsybdb,
-					"/Users/mthomason/Desktop/Reports/Reports/libMTDataStrutures/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/Barcodes/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
-					"/Users/mthomason/Desktop/Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
-					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
+					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Reports/Reports/libMTDataStrutures/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Reports/Reports/Barcodes/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Reports/Reports/libMysqlClientObjC/MysqlClientObjC/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Reports/Reports/libSqlite/Sqlite/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/../Compressor/library/openssl",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
