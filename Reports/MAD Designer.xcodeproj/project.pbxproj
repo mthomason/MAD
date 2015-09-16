@@ -3407,14 +3407,8 @@
 		4C8CDCD71AD2779500B7B9EA /* RptqDocumentObjectLabelLink+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentObjectLabelLink+Extras.h"; path = "../MAD/MAD/MAD/rptq/RptqDocumentObjectLabelLink+Extras.h"; sourceTree = "<group>"; };
 		4C8CDCD81AD277C800B7B9EA /* MTDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataType.h; path = ../MAD/MAD/MAD/MTDataType.h; sourceTree = "<group>"; };
 		4C8CDCD91AD2785500B7B9EA /* MTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabase.h; path = ../MAD/MAD/MAD/MTDatabase.h; sourceTree = "<group>"; };
-		4C8CDCDA1AD2785500B7B9EA /* MTDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseMySql.h; path = ../MAD/MAD/MAD/MTDatabaseMySql.h; sourceTree = "<group>"; };
-		4C8CDCDB1AD2785500B7B9EA /* MTDatabaseSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseSqlite3.h; path = ../MAD/MAD/MAD/MTDatabaseSqlite3.h; sourceTree = "<group>"; };
-		4C8CDCDC1AD2785500B7B9EA /* MTDatabaseSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseSqlServer.h; path = ../MAD/MAD/MAD/MTDatabaseSqlServer.h; sourceTree = "<group>"; };
 		4C8CDCDD1AD2785500B7B9EA /* MTDatabaseCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseCache.h; path = ../MAD/MAD/MAD/MTDatabaseCache.h; sourceTree = "<group>"; };
 		4C8CDCDE1AD2785500B7B9EA /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnection.h; path = ../MAD/MAD/MAD/MTDatabaseConnection.h; sourceTree = "<group>"; };
-		4C8CDCDF1AD2785500B7B9EA /* MTDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnectionMySql.h; path = ../MAD/MAD/MAD/MTDatabaseConnectionMySql.h; sourceTree = "<group>"; };
-		4C8CDCE01AD2785500B7B9EA /* MTDatabaseConnectionSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnectionSqlite3.h; path = ../MAD/MAD/MAD/MTDatabaseConnectionSqlite3.h; sourceTree = "<group>"; };
-		4C8CDCE11AD2785500B7B9EA /* MTDatabaseConnectionSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnectionSqlServer.h; path = ../MAD/MAD/MAD/MTDatabaseConnectionSqlServer.h; sourceTree = "<group>"; };
 		4C8CDCE21AD2788D00B7B9EA /* MTAggregateFunctionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAggregateFunctionType.h; path = ../MAD/MAD/MAD/MTAggregateFunctionType.h; sourceTree = "<group>"; };
 		4C8CDCE31AD2788D00B7B9EA /* MADAggregateGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAggregateGroupByType.h; path = ../MAD/MAD/MAD/MADAggregateGroupByType.h; sourceTree = "<group>"; };
 		4C8CDCE41AD2788D00B7B9EA /* MADDocumentObjectType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentObjectType.h; path = ../MAD/MAD/MAD/MADDocumentObjectType.h; sourceTree = "<group>"; };
@@ -5336,14 +5330,8 @@
 				4C8CDC9F1AD275DE00B7B9EA /* NSManagedObject+Extras.h */,
 				4C8CDCA01AD275DE00B7B9EA /* NSManagedObjectID+Extras.h */,
 				4C8CDCD91AD2785500B7B9EA /* MTDatabase.h */,
-				4C8CDCDA1AD2785500B7B9EA /* MTDatabaseMySql.h */,
-				4C8CDCDB1AD2785500B7B9EA /* MTDatabaseSqlite3.h */,
-				4C8CDCDC1AD2785500B7B9EA /* MTDatabaseSqlServer.h */,
 				4C8CDCDD1AD2785500B7B9EA /* MTDatabaseCache.h */,
 				4C8CDCDE1AD2785500B7B9EA /* MTDatabaseConnection.h */,
-				4C8CDCDF1AD2785500B7B9EA /* MTDatabaseConnectionMySql.h */,
-				4C8CDCE01AD2785500B7B9EA /* MTDatabaseConnectionSqlite3.h */,
-				4C8CDCE11AD2785500B7B9EA /* MTDatabaseConnectionSqlServer.h */,
 				4C8CDCE71AD278FE00B7B9EA /* MTErrorContainer.h */,
 				4C8CDCE51AD278B700B7B9EA /* MTAlignment.h */,
 			);
