@@ -6,17 +6,12 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-//#ifndef MAD_MTArrayCached_DEBUG
-//#define MAD_MTArrayCached_DEBUG
-//#endif
-
 #import "MADArrayCaching.h"
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
 #import "MTDataColumn.h"
 #import "MTQuery.h"
-#import "sqlite3.h"
 #import "MTPair.h"
 #import "MTDatabaseField.h"
 

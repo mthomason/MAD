@@ -199,6 +199,7 @@
 		4C111C2D1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C2B1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m */; };
 		4C113C9119A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
 		4C113C9219A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
+		4C11F16D1BA9030B00EC2C58 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11F16C1BA9030B00EC2C58 /* MADSqlite3.framework */; };
 		4C12293016CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C12293116CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C12293616CE239900B69763 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293516CE239900B69763 /* MTSchemaFieldCell.m */; };
@@ -2902,6 +2903,7 @@
 		4C111C2B1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+FileManager.m"; sourceTree = "<group>"; };
 		4C113C8F19A3D6BB00D1A3B0 /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
 		4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
+		4C11F16C1BA9030B00EC2C58 /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../MADSqlite3/build/Debug-iphoneos/MADSqlite3.framework"; sourceTree = "<group>"; };
 		4C12292E16CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaViewController.h; sourceTree = "<group>"; };
 		4C12292F16CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADQueryVisualizationSchemaViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C12293416CE239900B69763 /* MTSchemaFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSchemaFieldCell.h; sourceTree = "<group>"; };
@@ -2921,9 +2923,6 @@
 		4C174CDC18B13760007A88B3 /* MADAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAppConfiguration.h; sourceTree = "<group>"; };
 		4C174CDD18B13760007A88B3 /* MADAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAppConfiguration.m; sourceTree = "<group>"; };
 		4C1847B91B8D656E00FA7872 /* libSqlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSqlite.a; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/libSqlite.a"; sourceTree = "<group>"; };
-		4C1847BB1B8D65AB00FA7872 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../Sqlite3/Sqlite/sqlite3.h; sourceTree = "<group>"; };
-		4C1847BC1B8D65AB00FA7872 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../Sqlite3/Sqlite/sqlite3ext.h; sourceTree = "<group>"; };
-		4C1847BD1B8D65AB00FA7872 /* Sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sqlite.h; path = ../Sqlite3/Sqlite/Sqlite.h; sourceTree = "<group>"; };
 		4C1847BE1B8DEA8100FA7872 /* MTTdsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTdsClient.h; path = ../TdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
 		4C1847BF1B8DEAFE00FA7872 /* liblibTdsClient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibTdsClient.a; path = "../TdsClient/build/Debug-iphoneos/liblibTdsClient.a"; sourceTree = "<group>"; };
 		4C1847D51B8DEF2E00FA7872 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = ../DataStructures/libMTDataStrutures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
@@ -3421,7 +3420,6 @@
 		4C8CDCD81AD277C800B7B9EA /* MTDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataType.h; path = ../MAD/MAD/MAD/MTDataType.h; sourceTree = "<group>"; };
 		4C8CDCD91AD2785500B7B9EA /* MTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabase.h; path = ../MAD/MAD/MAD/MTDatabase.h; sourceTree = "<group>"; };
 		4C8CDCDA1AD2785500B7B9EA /* MTDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseMySql.h; path = ../MAD/MAD/MAD/MTDatabaseMySql.h; sourceTree = "<group>"; };
-		4C8CDCDB1AD2785500B7B9EA /* MTDatabaseSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseSqlite3.h; path = ../MAD/MAD/MAD/MTDatabaseSqlite3.h; sourceTree = "<group>"; };
 		4C8CDCDC1AD2785500B7B9EA /* MTDatabaseSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseSqlServer.h; path = ../MAD/MAD/MAD/MTDatabaseSqlServer.h; sourceTree = "<group>"; };
 		4C8CDCDD1AD2785500B7B9EA /* MTDatabaseCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseCache.h; path = ../MAD/MAD/MAD/MTDatabaseCache.h; sourceTree = "<group>"; };
 		4C8CDCDE1AD2785500B7B9EA /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnection.h; path = ../MAD/MAD/MAD/MTDatabaseConnection.h; sourceTree = "<group>"; };
@@ -4090,6 +4088,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C11F16D1BA9030B00EC2C58 /* MADSqlite3.framework in Frameworks */,
 				4C130B0D1BA8090D0022665F /* MADBarcodes.framework in Frameworks */,
 				4C5205DE1BA7F21B000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 				4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */,
@@ -4602,6 +4601,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C11F16C1BA9030B00EC2C58 /* MADSqlite3.framework */,
 				4C130B0C1BA8090D0022665F /* MADBarcodes.framework */,
 				4C5205DD1BA7F21B000E6A59 /* MADCocoaExtensions.framework */,
 				4C52054D1BA7AC80000E6A59 /* libCocoaExtensions.a */,
@@ -4691,16 +4691,6 @@
 				4C6DAA411761AEBA00FF770A /* TdsClient */,
 			);
 			name = libSybdb;
-			sourceTree = "<group>";
-		};
-		4C3A969E189F7DFC007AF476 /* libSqlite3 */ = {
-			isa = PBXGroup;
-			children = (
-				4C1847BB1B8D65AB00FA7872 /* sqlite3.h */,
-				4C1847BC1B8D65AB00FA7872 /* sqlite3ext.h */,
-				4C1847BD1B8D65AB00FA7872 /* Sqlite.h */,
-			);
-			name = libSqlite3;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
@@ -5384,7 +5374,6 @@
 				4C8CDCA01AD275DE00B7B9EA /* NSManagedObjectID+Extras.h */,
 				4C8CDCD91AD2785500B7B9EA /* MTDatabase.h */,
 				4C8CDCDA1AD2785500B7B9EA /* MTDatabaseMySql.h */,
-				4C8CDCDB1AD2785500B7B9EA /* MTDatabaseSqlite3.h */,
 				4C8CDCDC1AD2785500B7B9EA /* MTDatabaseSqlServer.h */,
 				4C8CDCDD1AD2785500B7B9EA /* MTDatabaseCache.h */,
 				4C8CDCDE1AD2785500B7B9EA /* MTDatabaseConnection.h */,
@@ -6211,7 +6200,6 @@
 			children = (
 				4C8CD98B1AD1CEEB00B7B9EA /* libMAD */,
 				4CF8891F1AD1BBD100ED21FC /* libCocoaExtensions */,
-				4C3A969E189F7DFC007AF476 /* libSqlite3 */,
 				4C3A969D189F7DCF007AF476 /* libSybdb */,
 				4C3A969C189F7D51007AF476 /* libDataStructures */,
 				4C3A969B189F7D10007AF476 /* libMySqlClient */,

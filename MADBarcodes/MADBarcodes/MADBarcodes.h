@@ -30,6 +30,7 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 #import <MADBarcodes/MTBarcodePdf417Iso15438.h>
 #import <MADBarcodes/MTBarcodeCodeOne.h>
 #import <MADBarcodes/MTBarcodeDatabarExpandedStacked.h>
+#import <MADBarcodes/MTBarcodeDatabarStacked.h>
 #import <MADBarcodes/MTBarcodeMsiPlessey.h>
 #import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
 #import <MADBarcodes/MTBarcodeChannelCode.h>

@@ -13,10 +13,7 @@
 #import "MTDataTableFast.h"
 #import "MTQuery.h"
 #import "MTDataColumn.h"
-#import "MTDataTableFastObjectEnumerator.h"
-#import "MTDatabaseSqlite3.h"
 #import "MTPair.h"
-#import "MTDatabaseConnectionSqlite3.h"
 
 @interface MTDataTableFast ()
 

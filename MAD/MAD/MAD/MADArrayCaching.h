@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MADSqlite3/MADSqlite3.h>
 #import "MTCacheProtocol.h"
 
 @interface MADArrayCaching : NSEnumerator

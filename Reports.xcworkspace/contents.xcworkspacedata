@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <FileRef
+      location = "group:MADSqlite3/MADSqlite3.xcodeproj">
+   </FileRef>
    <Group
       location = "container:"
       name = "Frameworks">
@@ -28,9 +31,6 @@
    </FileRef>
    <FileRef
       location = "group:TdsClient/libTdsClient.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Sqlite3/Sqlite.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Scrimpter/Scrimpter.xcodeproj">

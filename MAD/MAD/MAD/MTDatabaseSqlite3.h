@@ -11,7 +11,7 @@
 
 #import "MTDatabaseCache.h"
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import "sqlite3.h"
+#import <MADSqlite3/MADSqlite3.h>
 
 @class MTDatabaseDataBinding;
 
