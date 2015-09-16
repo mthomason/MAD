@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <FileRef
-      location = "group:MADDataStructures/MADDataStructures.xcodeproj">
-   </FileRef>
    <Group
       location = "container:"
       name = "Frameworks">
@@ -14,13 +11,16 @@
          location = "group:MADCocoaExtensions/MADCocoaExtensions.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:MADDataStructures/MADDataStructures.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:MADExplorer/MADExplorer.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:/Users/mthomason/Desktop/Reports/Feedback/MADFeedback.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:MADFileManager/MADFileManager.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:MADExplorer/MADExplorer.xcodeproj">
       </FileRef>
    </Group>
    <FileRef
