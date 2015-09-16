@@ -1,18 +1,19 @@
 //
-//  MADTdsClientTests.m
-//  MADTdsClientTests
+//  Tds_Tests.m
+//  Tds Tests
 //
-//  Created by Michael Thomason on 9/15/15.
-//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
+//  Created by Michael Thomason on 9/26/14.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-@interface MADTdsClientTests : XCTestCase
+@interface Tds_Tests : XCTestCase
 
 @end
 
-@implementation MADTdsClientTests
+@implementation Tds_Tests
 
 - (void)setUp {
     [super setUp];
@@ -26,7 +27,7 @@
 
 - (void)testExample {
     // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+    XCTAssert(YES, @"Pass");
 }
 
 - (void)testPerformanceExample {
