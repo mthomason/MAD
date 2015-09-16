@@ -12,7 +12,22 @@
 
 #import "MTDatabaseTable.h"
 
+@interface MTDatabaseTable ()
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+@end
+
 @implementation MTDatabaseTable
+
+- (instancetype)init {
+    if (self = [super init]) {
+        self.name = nil;
+        self.label = nil;
+        self.labelPlural = nil;
+    }
+    return self;
+}
 
 - (instancetype)initWithTableName:(NSString *)tableName {
     self = [super init];
