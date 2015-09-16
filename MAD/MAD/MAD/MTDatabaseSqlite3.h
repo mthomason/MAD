@@ -11,9 +11,10 @@
 
 #import "MTDatabaseCache.h"
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import "sqlite3.h"
 
 @class MTDatabaseDataBinding;
+
+typedef struct sqlite3_stmt sqlite3_stmt;
 
 @interface MTDatabaseSqlite3 : MTDatabaseCache
 

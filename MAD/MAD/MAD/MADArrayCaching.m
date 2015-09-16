@@ -6,10 +6,6 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-//#ifndef MAD_MTArrayCached_DEBUG
-//#define MAD_MTArrayCached_DEBUG
-//#endif
-
 #import "MADArrayCaching.h"
 #import <MADDataStructures/MADDataStructures.h>
 #import "MADConstants.h"
