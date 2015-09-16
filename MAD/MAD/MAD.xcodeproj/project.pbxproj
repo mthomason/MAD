@@ -196,11 +196,11 @@
 		4C8CDC941AD26DC700B7B9EA /* MTActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC931AD26DC700B7B9EA /* MTActivityItemProviderPdf.m */; };
 		4C8CDC971AD26EEB00B7B9EA /* MTActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */; };
 		4C8CDCF91AD27D8A00B7B9EA /* MTCachingArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */; };
-		4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */; };
 		4C8CDD061AD2F43600B7B9EA /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDCFF1AD2F43600B7B9EA /* RptqFieldSelectorManager.m */; };
 		4C8CDD071AD2F43600B7B9EA /* RptqQueryCache+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD011AD2F43600B7B9EA /* RptqQueryCache+Extras.m */; };
 		4C8CDD081AD2F43600B7B9EA /* RptqQuerySort+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */; };
 		4C8CDD091AD2F43600B7B9EA /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */; };
+		4CC6BE341BA94999006899BE /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC6BE331BA94999006899BE /* MADSqlite3.framework */; };
 		4CCC3CEA1B4BC33F00350F3F /* NSObject+DebugDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */; };
 /* End PBXBuildFile section */
 
@@ -729,7 +729,6 @@
 		4C8CDC951AD26EEB00B7B9EA /* MTActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTActivityIndicator.h; sourceTree = "<group>"; };
 		4C8CDC961AD26EEB00B7B9EA /* MTActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActivityIndicator.m; sourceTree = "<group>"; };
 		4C8CDCF81AD27D8A00B7B9EA /* MTCachingArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCachingArrayTest.m; sourceTree = "<group>"; };
-		4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSqlite.a; path = "../../Reports/libSqlite/Sqlite/build/Debug-iphoneos/libSqlite.a"; sourceTree = "<group>"; };
 		4C8CDCFE1AD2F43600B7B9EA /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqFieldSelectorManager.h; path = rptq/RptqFieldSelectorManager.h; sourceTree = "<group>"; };
 		4C8CDCFF1AD2F43600B7B9EA /* RptqFieldSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqFieldSelectorManager.m; path = rptq/RptqFieldSelectorManager.m; sourceTree = "<group>"; };
 		4C8CDD001AD2F43600B7B9EA /* RptqQueryCache+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryCache+Extras.h"; path = "rptq/RptqQueryCache+Extras.h"; sourceTree = "<group>"; };
@@ -738,6 +737,7 @@
 		4C8CDD031AD2F43600B7B9EA /* RptqQuerySort+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuerySort+Extras.m"; path = "rptq/RptqQuerySort+Extras.m"; sourceTree = "<group>"; };
 		4C8CDD041AD2F43600B7B9EA /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqRelationship+Extras.h"; path = "rptq/RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4C8CDD051AD2F43600B7B9EA /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
+		4CC6BE331BA94999006899BE /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../../MADSqlite3/build/Debug-iphoneos/MADSqlite3.framework"; sourceTree = "<group>"; };
 		4CCC3CE81B4BC33F00350F3F /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DebugDescription.h"; sourceTree = "<group>"; };
 		4CCC3CE91B4BC33F00350F3F /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DebugDescription.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -747,12 +747,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CC6BE341BA94999006899BE /* MADSqlite3.framework in Frameworks */,
 				4C2C7B911BA92B1C00C9CC5E /* MADDataStructures.framework in Frameworks */,
 				4C130B0B1BA808BE0022665F /* MADBarcodes.framework in Frameworks */,
 				4C5205DC1BA7E81C000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
 				4C41DA901BA22E4F00FF63EC /* MADFileManager.framework in Frameworks */,
 				4C8CDBC81AD2553F00B7B9EA /* CoreText.framework in Frameworks */,
-				4C8CDCFB1AD2804C00B7B9EA /* libSqlite.a in Frameworks */,
 				4C8CDC031AD264B300B7B9EA /* libMysqlClientObjC.a in Frameworks */,
 				4C1847C21B8DEB3100FA7872 /* liblibTdsClient.a in Frameworks */,
 			);
@@ -816,6 +816,7 @@
 		4C5205DA1BA7E7F6000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CC6BE331BA94999006899BE /* MADSqlite3.framework */,
 				4C2C7B901BA92B1C00C9CC5E /* MADDataStructures.framework */,
 				4C130B0A1BA808BE0022665F /* MADBarcodes.framework */,
 				4C5205DB1BA7E81C000E6A59 /* MADCocoaExtensions.framework */,
@@ -921,7 +922,6 @@
 		4C8CD99B1AD1D1EB00B7B9EA /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4C8CDCFC1AD2805600B7B9EA /* libSqlite */,
 				4C8CDC011AD2649C00B7B9EA /* libMySQL */,
 				4C8CDA0B1AD1D9D800B7B9EA /* libTDS */,
 				4C8CD99C1AD1D1F500B7B9EA /* libCocoaExtensions */,
@@ -1498,14 +1498,6 @@
 				4C8CD9B41AD1D53300B7B9EA /* MTDatabaseConnectionSqlServer.m */,
 			);
 			name = Database;
-			sourceTree = "<group>";
-		};
-		4C8CDCFC1AD2805600B7B9EA /* libSqlite */ = {
-			isa = PBXGroup;
-			children = (
-				4C8CDCFA1AD2804C00B7B9EA /* libSqlite.a */,
-			);
-			name = libSqlite;
 			sourceTree = "<group>";
 		};
 		4C8CDCFD1AD2866000B7B9EA /* Formatters */ = {

@@ -11,7 +11,6 @@
 #endif
 
 #import "MTDataTableFast.h"
-#import "sqlite3.h"
 #import "MTQuery.h"
 #import "MTDataColumn.h"
 #import "MTDataTableFastObjectEnumerator.h"

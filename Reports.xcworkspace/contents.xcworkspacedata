@@ -5,6 +5,9 @@
       location = "container:"
       name = "Frameworks">
       <FileRef
+         location = "group:MADSqlite3/MADSqlite3.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MADBarcodes/MADBarcodes.xcodeproj">
       </FileRef>
       <FileRef
@@ -28,9 +31,6 @@
    </FileRef>
    <FileRef
       location = "group:TdsClient/libTdsClient.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Sqlite3/Sqlite.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Scrimpter/Scrimpter.xcodeproj">
