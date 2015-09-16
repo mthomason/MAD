@@ -27,7 +27,7 @@
 @end
 
 @implementation MTCachingArrayTest
-/*
+
 - (void)setUp {
     [super setUp];
     
@@ -159,6 +159,6 @@
     XCTAssert(allgood, @"Object value check failed.");
     BOOL success = objCtr == [[self array] count];
     XCTAssert(success, @"");
-}*/
+}
 
 @end
