@@ -17,9 +17,10 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <MADBarcodes/PublicHeader.h>
 
 #import <MADBarcodes/zint.h>
-#import <MADBarcodes/MADBarcodeType.h>
-#import <MADBarcodes/MTBarcodeView.h>
 #import <MADBarcodes/MTBarcodeProtocol.h>
+#import <MADBarcodes/MADBarcodeType.h>
+#import <MADBarcodes/MTBarcode.h>
+#import <MADBarcodes/MTBarcodeView.h>
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
 #import <MADBarcodes/MTBarcodeAztec.h>
@@ -29,9 +30,9 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 #import <MADBarcodes/MTBarcodeMaxicodeIso16023.h>
 #import <MADBarcodes/MTBarcodePdf417Iso15438.h>
 #import <MADBarcodes/MTBarcodeCodeOne.h>
+#import <MADBarcodes/MTBarcodeDatabarStacked.h>
 #import <MADBarcodes/MTBarcodeDatabarExpandedStacked.h>
 #import <MADBarcodes/MTBarcodeMsiPlessey.h>
 #import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
 #import <MADBarcodes/MTBarcodeChannelCode.h>
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
-#import <MADBarcodes/MTBarcode.h>
