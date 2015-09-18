@@ -33,9 +33,6 @@
       location = "group:MySQLClientObjC/MysqlClientObjC.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:TdsClient/libTdsClient.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Scrimpter/Scrimpter.xcodeproj">
    </FileRef>
    <FileRef

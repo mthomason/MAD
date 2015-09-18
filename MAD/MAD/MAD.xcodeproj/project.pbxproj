@@ -811,6 +811,7 @@
 		4C5205D91BA7E7EF000E6A59 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CC6BE431BA94E4E006899BE /* libsybdb.a */,
 				4C5205DA1BA7E7F6000E6A59 /* Frameworks */,
 				4C8CD99B1AD1D1EB00B7B9EA /* Libraries */,
 			);
@@ -820,6 +821,7 @@
 		4C5205DA1BA7E7F6000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CC6BE351BA94C7A006899BE /* MADTdsClient.framework */,
 				4CC6BE331BA94999006899BE /* MADSqlite3.framework */,
 				4C2C7B901BA92B1C00C9CC5E /* MADDataStructures.framework */,
 				4C130B0A1BA808BE0022665F /* MADBarcodes.framework */,
@@ -861,8 +863,6 @@
 		4C8CD9551AD1CDC800B7B9EA = {
 			isa = PBXGroup;
 			children = (
-				4CC6BE431BA94E4E006899BE /* libsybdb.a */,
-				4CC6BE351BA94C7A006899BE /* MADTdsClient.framework */,
 				4C5205D91BA7E7EF000E6A59 /* Resources */,
 				4C8CD9601AD1CDC800B7B9EA /* MAD */,
 				4C8CD96D1AD1CDC800B7B9EA /* MADTests */,
