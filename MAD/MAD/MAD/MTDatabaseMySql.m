@@ -85,15 +85,23 @@
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
-    [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-        MysqlConnection *conn = dbconn;
-        if (conn && error == nil) {
+    [self connectWithCredentals:connectionSettings completion:^(MysqlConnection *dbconn, BOOL success, NSError *error) {
+        if (dbconn && error == nil) {
             @autoreleasepool {
+                
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                 myFetch.delegate = self;
-                NSError *error = [myFetch performQuery: query
-                                          onConnection: conn];
+                
+                NSString *queryString = [query getSqlWithError:&error];
+                if (queryString.length > 0 && error == nil) {
+                    MTDataTable *dataTable = [self dataTableForQuery:query];
+                    [myFetch fetchWithCommand:queryString dataTable:&dataTable onConnection:dbconn error:&error];
+                }
+                error = error ? [NSError errorWithDomain:error.domain code:error.code
+                                                   title:error.localizedDescription
+                                              andMessage:error.localizedFailureReason] : nil;
                 completion(error == nil, error);
+                
             }
             
         } else {

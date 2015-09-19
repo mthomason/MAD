@@ -135,7 +135,6 @@
 		4C5205531BA7E1DC000E6A59 = {
 			isa = PBXGroup;
 			children = (
-				4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */,
 				4C5205CE1BA7E2F3000E6A59 /* Resources */,
 				4C52055F1BA7E1DC000E6A59 /* MADCocoaExtensions */,
 				4C52056B1BA7E1DC000E6A59 /* MADCocoaExtensionsTests */,
@@ -227,6 +226,7 @@
 		4C5205CF1BA7E2FA000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */,
 				4C5205D01BA7E308000E6A59 /* CFNetwork.framework */,
 			);
 			name = Frameworks;

@@ -80,7 +80,7 @@
 		4C9372901BACFC9200D6BD62 = {
 			isa = PBXGroup;
 			children = (
-				4C9372B41BACFCA200D6BD62 /* Foundation.framework */,
+				4C9372E31BAD0EBC00D6BD62 /* Resouces */,
 				4C93729C1BACFC9200D6BD62 /* MADFoundation */,
 				4C9372A81BACFC9200D6BD62 /* MADFoundationTests */,
 				4C93729B1BACFC9200D6BD62 /* Products */,
@@ -118,20 +118,60 @@
 		4C9372B81BACFDB200D6BD62 /* MADFoundation */ = {
 			isa = PBXGroup;
 			children = (
-				4C9372DA1BAD087D00D6BD62 /* NSURL+Document.h */,
-				4C9372D91BAD087D00D6BD62 /* NSURL+Document.m */,
-				4C9372D31BAD07CC00D6BD62 /* NSFileManager+Common.h */,
-				4C9372D41BAD07CC00D6BD62 /* NSFileManager+Common.m */,
+				4C9372E21BAD0E5C00D6BD62 /* Categories */,
+				4C9372E11BAD0E4C00D6BD62 /* DataTable */,
+				4C9372E01BAD0E3500D6BD62 /* Types */,
+				4C9372DF1BAD0E2800D6BD62 /* Protocols */,
+			);
+			path = MADFoundation;
+			sourceTree = "<group>";
+		};
+		4C9372DF1BAD0E2800D6BD62 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				4C9372C71BACFEDA00D6BD62 /* MADDataProtocol.h */,
+				4C9372C81BACFEDA00D6BD62 /* MTCacheProtocol.h */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		4C9372E01BAD0E3500D6BD62 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				4C9372C51BACFEDA00D6BD62 /* MADAggregateGroupByType.h */,
+				4C9372C61BACFEDA00D6BD62 /* MTAggregateFunctionType.h */,
+			);
+			name = Types;
+			sourceTree = "<group>";
+		};
+		4C9372E11BAD0E4C00D6BD62 /* DataTable */ = {
+			isa = PBXGroup;
+			children = (
 				4C9372B91BACFDB200D6BD62 /* MTDataTable.h */,
 				4C9372BA1BACFDB200D6BD62 /* MTDataTable.m */,
 				4C9372CD1BACFF0F00D6BD62 /* MTDataColumn.h */,
 				4C9372CE1BACFF0F00D6BD62 /* MTDataColumn.m */,
-				4C9372C51BACFEDA00D6BD62 /* MADAggregateGroupByType.h */,
-				4C9372C61BACFEDA00D6BD62 /* MTAggregateFunctionType.h */,
-				4C9372C71BACFEDA00D6BD62 /* MADDataProtocol.h */,
-				4C9372C81BACFEDA00D6BD62 /* MTCacheProtocol.h */,
 			);
-			path = MADFoundation;
+			name = DataTable;
+			sourceTree = "<group>";
+		};
+		4C9372E21BAD0E5C00D6BD62 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				4C9372DA1BAD087D00D6BD62 /* NSURL+Document.h */,
+				4C9372D91BAD087D00D6BD62 /* NSURL+Document.m */,
+				4C9372D31BAD07CC00D6BD62 /* NSFileManager+Common.h */,
+				4C9372D41BAD07CC00D6BD62 /* NSFileManager+Common.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		4C9372E31BAD0EBC00D6BD62 /* Resouces */ = {
+			isa = PBXGroup;
+			children = (
+				4C9372B41BACFCA200D6BD62 /* Foundation.framework */,
+			);
+			name = Resouces;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,8 +187,8 @@
 				4C9372C91BACFEDA00D6BD62 /* MADAggregateGroupByType.h in Headers */,
 				4C9372CB1BACFEDA00D6BD62 /* MADDataProtocol.h in Headers */,
 				4C9372D51BAD07CC00D6BD62 /* NSFileManager+Common.h in Headers */,
-				4C9372DC1BAD087D00D6BD62 /* NSURL+Document.h in Headers */,
 				4C9372CA1BACFEDA00D6BD62 /* MTAggregateFunctionType.h in Headers */,
+				4C9372DC1BAD087D00D6BD62 /* NSURL+Document.h in Headers */,
 				4C9372CF1BACFF0F00D6BD62 /* MTDataColumn.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

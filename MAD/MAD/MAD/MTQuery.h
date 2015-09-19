@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MADDataStructures/MADDataStructures.h>
+#import <MADFoundation/MADDataProtocol.h>
 
 #pragma mark Types of queries
 
@@ -140,8 +141,6 @@ extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
 @class MTDatabase, MTDataTable, RptqQuery;
-
-#import <MADFoundation/MADDataProtocol.h>
 
 @interface MTQuery : NSObject
 

@@ -16,4 +16,8 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADFoundation/PublicHeader.h>
 #import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
+
+#import <MADFoundation/NSURL+Document.h>
+#import <MADFoundation/NSFileManager+Common.h>
 
