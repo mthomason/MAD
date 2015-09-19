@@ -20,6 +20,8 @@
 #import "RptqDocumentObjectBarcode+Extras.h"
 
 #import "MTDataTable.h"
+#import "MTDataTable+Factory.h"
+
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 

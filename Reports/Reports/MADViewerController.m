@@ -19,6 +19,7 @@
 #import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
 #import "MADocument.h"
+#import "MTDatabase.h"
 #import "MTActivityItemProviderPdf.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"

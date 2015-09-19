@@ -19,13 +19,15 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTPaper.h"
 
+#import "MTDataTable.h"
+#import "MTDataTable+Factory.h"
+
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
-#import "MTDataTable.h"
 
 #import "MTNotificationDidFormatPage.h"
 

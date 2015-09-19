@@ -3387,6 +3387,7 @@
 		4C8F99C31ACA97C9006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4C90D47C19E7892D005136B2 /* MADCollectionViewLayoutGrouped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewLayoutGrouped.h; sourceTree = "<group>"; };
 		4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewLayoutGrouped.m; sourceTree = "<group>"; };
+		4C9372891BACF8C800D6BD62 /* MTDataTable+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTDataTable+Factory.h"; path = "../MAD/MAD/MAD/MTDataTable+Factory.h"; sourceTree = "<group>"; };
 		4C94AA1117DCB3C9000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Designer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3717DCB88A000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Viewer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3A17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesPadOS7.storyboard; sourceTree = "<group>"; };
@@ -5177,6 +5178,7 @@
 		4C8CD98B1AD1CEEB00B7B9EA /* libMAD */ = {
 			isa = PBXGroup;
 			children = (
+				4C9372891BACF8C800D6BD62 /* MTDataTable+Factory.h */,
 				4C8CDCA31AD276A800B7B9EA /* rptq */,
 				4C0F89361B280A3400D75AF6 /* MADSectionLayoutManager.h */,
 				4C8CD98C1AD1CF3700B7B9EA /* MAD.h */,

@@ -12,8 +12,8 @@
 
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTCellEnterText.h"
+#import "MADocument.h"
 #import "MTDatabase.h"
-#import <CoreData/CoreData.h>
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"

@@ -10,6 +10,7 @@
 #define Reports_MTViewControllerValueBasedOnField_h
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MADocument, NSManagedObjectID;

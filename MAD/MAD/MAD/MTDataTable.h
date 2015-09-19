@@ -11,10 +11,12 @@
 
 #import <Foundation/Foundation.h>
 #import <MADFileManager/MADFileManager.h>
-#import "MAD.h"
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import "MADConstants.h"
+#import "MTCacheProtocol.h"
+#import "MADDataProtocol.h"
 #import "MTAggregateFunctionType.h"
 #import "MADAggregateGroupByType.h"
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -32,7 +34,6 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
 
-
 @property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
 @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
@@ -43,9 +44,6 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
 @property (nonatomic, assign) NSUInteger tag;
 
-+ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier;
-
-+ (instancetype)dataTableFactory:(NSDictionary *)parameters;
 - (instancetype)initWithId:(NSUInteger)objectId;
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;

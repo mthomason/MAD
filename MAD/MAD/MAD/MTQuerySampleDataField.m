@@ -15,6 +15,7 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
 #import "MTDataTable.h"
+#import "MTDataTable+Factory.h"
 #import "RptqDatabase.h"
 #import "MTDatabaseConnection.h"
 
@@ -58,7 +59,7 @@
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self datatable];
+    return self.datatable;
 }
 
 @end

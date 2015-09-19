@@ -14,6 +14,7 @@
 #import "MTDatabase.h"
 #import "RptqUserCredentals.h"
 #import "MTDataTable.h"
+#import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
 
 @interface MTQueryTest ()

@@ -20,6 +20,7 @@
 #import "RptqDatabase.h"
 #import "MTDatabaseField.h"
 #import "MTDataTable.h"
+#import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
 
 @interface MTQuerySampleDataTable ()
