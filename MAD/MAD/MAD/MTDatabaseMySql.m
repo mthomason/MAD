@@ -33,9 +33,9 @@
 
 #import "MTKeyChain.h"
 
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseTable.h"
 
 

@@ -7,8 +7,8 @@
 //
 
 #import "MTQuerySelectItemsForGroup.h"
+#import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseDataBinding.h"
-#import "MTDataColumn.h"
 
 @interface MTQuerySelectItemsForGroup ()
 

@@ -12,8 +12,6 @@
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
 		4C5205A31BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205A41BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205A51BA7E2A2000E6A59 /* NSFileManager+Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057A1BA7E2A2000E6A59 /* NSFileManager+Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205A61BA7E2A2000E6A59 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52057B1BA7E2A2000E6A59 /* NSFileManager+Common.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */; settings = {ASSET_TAGS = (); }; };
 		4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; settings = {ASSET_TAGS = (); }; };
@@ -37,12 +35,10 @@
 		4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205BE1BA7E2A2000E6A59 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205941BA7E2A2000E6A59 /* BDHost.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205C01BA7E2A2000E6A59 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205951BA7E2A2000E6A59 /* NSURL+Document.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205C31BA7E2A2000E6A59 /* UIImage+Border.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205981BA7E2A2000E6A59 /* UIImage+Border.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C41BA7E2A2000E6A59 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205991BA7E2A2000E6A59 /* UIImage+Border.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205C51BA7E2A2000E6A59 /* NSURL+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059A1BA7E2A2000E6A59 /* NSURL+Document.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059B1BA7E2A2000E6A59 /* BDHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C71BA7E2A2000E6A59 /* CGGeometry+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -53,6 +49,7 @@
 		4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205A21BA7E2A2000E6A59 /* MTMath.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205D01BA7E308000E6A59 /* CFNetwork.framework */; };
 		4C5205D61BA7E5FF000E6A59 /* UILabel+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205851BA7E2A2000E6A59 /* UILabel+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C9372D81BAD07E800D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,8 +71,6 @@
 		4C52056E1BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDocument+thumbnailURL.h"; path = "MADCocoaExtensions/UIDocument+thumbnailURL.h"; sourceTree = "<group>"; };
 		4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDocument+thumbnailURL.m"; path = "MADCocoaExtensions/UIDocument+thumbnailURL.m"; sourceTree = "<group>"; };
-		4C52057A1BA7E2A2000E6A59 /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Common.h"; path = "MADCocoaExtensions/NSFileManager+Common.h"; sourceTree = "<group>"; };
-		4C52057B1BA7E2A2000E6A59 /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+Common.m"; path = "MADCocoaExtensions/NSFileManager+Common.m"; sourceTree = "<group>"; };
 		4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Utilities.h"; path = "MADCocoaExtensions/UIViewController+Utilities.h"; sourceTree = "<group>"; };
 		4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Utilities.m"; path = "MADCocoaExtensions/UIViewController+Utilities.m"; sourceTree = "<group>"; };
 		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MacroVendColor.h; path = MADCocoaExtensions/MacroVendColor.h; sourceTree = "<group>"; };
@@ -100,12 +95,10 @@
 		4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+EverydayApps.m"; path = "MADCocoaExtensions/UIColor+EverydayApps.m"; sourceTree = "<group>"; };
 		4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hack.m"; path = "MADCocoaExtensions/UIDevice+Hack.m"; sourceTree = "<group>"; };
 		4C5205941BA7E2A2000E6A59 /* BDHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BDHost.m; path = MADCocoaExtensions/BDHost.m; sourceTree = "<group>"; };
-		4C5205951BA7E2A2000E6A59 /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+Document.m"; path = "MADCocoaExtensions/NSURL+Document.m"; sourceTree = "<group>"; };
 		4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "MADCocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
 		4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+Helpers.m"; path = "MADCocoaExtensions/UIApplication+Helpers.m"; sourceTree = "<group>"; };
 		4C5205981BA7E2A2000E6A59 /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Border.h"; path = "MADCocoaExtensions/UIImage+Border.h"; sourceTree = "<group>"; };
 		4C5205991BA7E2A2000E6A59 /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Border.m"; path = "MADCocoaExtensions/UIImage+Border.m"; sourceTree = "<group>"; };
-		4C52059A1BA7E2A2000E6A59 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "MADCocoaExtensions/NSURL+Document.h"; sourceTree = "<group>"; };
 		4C52059B1BA7E2A2000E6A59 /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = MADCocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "MADCocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "MADCocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
@@ -115,6 +108,7 @@
 		4C5205A11BA7E2A2000E6A59 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = MADCocoaExtensions/MTMath.h; sourceTree = "<group>"; };
 		4C5205A21BA7E2A2000E6A59 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTMath.m; path = MADCocoaExtensions/MTMath.m; sourceTree = "<group>"; };
 		4C5205D01BA7E308000E6A59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C9372D81BAD07E800D6BD62 /* MADFoundation.framework in Frameworks */,
 				4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +135,7 @@
 		4C5205531BA7E1DC000E6A59 = {
 			isa = PBXGroup;
 			children = (
+				4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */,
 				4C5205CE1BA7E2F3000E6A59 /* Resources */,
 				4C52055F1BA7E1DC000E6A59 /* MADCocoaExtensions */,
 				4C52056B1BA7E1DC000E6A59 /* MADCocoaExtensionsTests */,
@@ -184,11 +180,8 @@
 				4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */,
 				4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */,
 				4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */,
-				4C52057A1BA7E2A2000E6A59 /* NSFileManager+Common.h */,
-				4C52057B1BA7E2A2000E6A59 /* NSFileManager+Common.m */,
 				4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */,
 				4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */,
-				4C52059A1BA7E2A2000E6A59 /* NSURL+Document.h */,
 				4C52057F1BA7E2A2000E6A59 /* UIColor+Social.h */,
 				4C5205801BA7E2A2000E6A59 /* UIColor+Social.m */,
 				4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h */,
@@ -210,7 +203,6 @@
 				4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */,
 				4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */,
 				4C5205941BA7E2A2000E6A59 /* BDHost.m */,
-				4C5205951BA7E2A2000E6A59 /* NSURL+Document.m */,
 				4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */,
 				4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */,
 				4C5205981BA7E2A2000E6A59 /* UIImage+Border.h */,
@@ -251,7 +243,6 @@
 				4C5205D61BA7E5FF000E6A59 /* UILabel+Constructors.h in Headers */,
 				4C5205CC1BA7E2A2000E6A59 /* MTMath.h in Headers */,
 				4C5205AC1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h in Headers */,
-				4C5205C51BA7E2A2000E6A59 /* NSURL+Document.h in Headers */,
 				4C5205C71BA7E2A2000E6A59 /* CGGeometry+Extras.h in Headers */,
 				4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */,
 				4C5205CA1BA7E2A2000E6A59 /* UIDevice+Hack.h in Headers */,
@@ -267,7 +258,6 @@
 				4C5205AE1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.h in Headers */,
 				4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */,
 				4C5205AA1BA7E2A2000E6A59 /* UIColor+Social.h in Headers */,
-				4C5205A51BA7E2A2000E6A59 /* NSFileManager+Common.h in Headers */,
 				4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */,
 				4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */,
 			);
@@ -372,7 +362,6 @@
 				4C5205BC1BA7E2A2000E6A59 /* NSThread+Extras.m in Sources */,
 				4C5205B51BA7E2A2000E6A59 /* UIAlertController+Constructors.m in Sources */,
 				4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */,
-				4C5205C01BA7E2A2000E6A59 /* NSURL+Document.m in Sources */,
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
 				4C5205A41BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m in Sources */,
 				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
@@ -388,7 +377,6 @@
 				4C5205B11BA7E2A2000E6A59 /* UILabel+Constructors.m in Sources */,
 				4C5205AB1BA7E2A2000E6A59 /* UIColor+Social.m in Sources */,
 				4C5205BE1BA7E2A2000E6A59 /* UIDevice+Hack.m in Sources */,
-				4C5205A61BA7E2A2000E6A59 /* NSFileManager+Common.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

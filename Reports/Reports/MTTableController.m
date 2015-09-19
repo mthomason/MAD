@@ -21,7 +21,7 @@
 #import "MTTableCellHeader.h"
 
 #import "MTDatabase.h"
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseField.h"
 

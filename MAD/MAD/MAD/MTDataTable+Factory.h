@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 
 @interface MTDataTable (Factory)
 

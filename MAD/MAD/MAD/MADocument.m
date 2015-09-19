@@ -11,7 +11,6 @@
 #endif
 
 #import "MADocument.h"
-//#import "MADThumbnail.h"
 
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
@@ -19,7 +18,11 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTPaper.h"
 
-#import "MTDataTable.h"
+#import "MADConstants.h"
+
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/NSURL+Document.h>
+
 #import "MTDataTable+Factory.h"
 
 #import "MTQuery.h"
@@ -881,7 +884,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
-    NSURL *url = [self.mainDataTable url];
+    NSURL *url = [self.mainDataTable urlForGroupIdentifier:MADIdentifierGroup];
     return [[NSFileManager defaultManager] fileExistsAtPath:url.path];
 }
 
@@ -915,7 +918,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             
             [self.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
                 
-                [weakself.mainDataTable cache];
+                [weakself.mainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
                 weakself.didRefresh = success;
                 
                 [NSThread completeOnMainThread:^(BOOL success, id error) {
@@ -930,7 +933,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSURL *)cachedDataUrl {
-    return [self.mainDataTable url];
+    return [self.mainDataTable urlForGroupIdentifier:MADIdentifierGroup];
 }
 
 - (NSString *)fileHandle {

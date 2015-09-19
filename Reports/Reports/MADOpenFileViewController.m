@@ -54,6 +54,8 @@
 #import "MTStoreKitController+Features.h"
 #import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
+#import <MADFoundation/NSURL+Document.h>
+
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";

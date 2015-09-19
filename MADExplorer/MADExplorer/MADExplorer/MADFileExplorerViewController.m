@@ -12,9 +12,6 @@
 #import "MTCollectionViewCellDocument.h"
 #import "MADFileLocationManager.h"
 
-//#import "UIAlertController+Constructors.h"
-//#import "NSURL+Document.h"
-
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
 static NSString * const Downloading                             = @"Downloading";

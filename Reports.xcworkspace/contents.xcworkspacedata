@@ -28,6 +28,9 @@
       <FileRef
          location = "group:MADFileManager/MADFileManager.xcodeproj">
       </FileRef>
+      <FileRef
+         location = "group:MADFoundation/MADFoundation.xcodeproj">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:MySQLClientObjC/MysqlClientObjC.xcodeproj">

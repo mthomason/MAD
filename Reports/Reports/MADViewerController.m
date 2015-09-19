@@ -35,7 +35,7 @@
 #import "UIPageViewController+Extras.h"
 #import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 
 #import "MTNotificationDidFormatPage.h"
 #import "MTNotificationDidReadRows.h"

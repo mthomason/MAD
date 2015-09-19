@@ -16,8 +16,8 @@
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
 #import "MTQuery.h"
-#import "MTDataTable.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
 
 #import "MTDatabaseDataBinding.h"
 

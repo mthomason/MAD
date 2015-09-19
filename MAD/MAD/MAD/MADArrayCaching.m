@@ -10,7 +10,7 @@
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
 #import "MTQuery.h"
 #import "MTDatabaseField.h"
 

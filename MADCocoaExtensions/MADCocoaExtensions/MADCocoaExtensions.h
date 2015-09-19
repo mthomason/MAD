@@ -15,11 +15,9 @@ FOUNDATION_EXPORT double MADCocoaExtensionsVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADCocoaExtensions/PublicHeader.h>
-#import <MADCocoaExtensions/NSFileManager+Common.h>
 #import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MADCocoaExtensions/NSURL+Document.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UILabel+Constructors.h>

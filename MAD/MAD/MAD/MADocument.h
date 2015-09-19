@@ -16,9 +16,9 @@
 #import <CoreData/CoreData.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADDataProtocol.h>
 #import "MTReportFormatterDataSource.h"
-#import "MTCacheProtocol.h"
-#import "MADDataProtocol.h"
 #import "MADActivityProtocol.h"
 #import "MADSortOrder.h"
 

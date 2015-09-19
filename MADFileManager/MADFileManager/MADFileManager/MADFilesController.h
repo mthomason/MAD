@@ -10,7 +10,7 @@
 #define MADDesigner_MADFilesController_h
 
 #import <Foundation/Foundation.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MADFoundation/NSFileManager+Common.h>
 
 @class MADFilesController, MADMetaData, MADFile;
 

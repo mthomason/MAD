@@ -2280,6 +2280,7 @@
 		4C92954D18C4CE360010AAEF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4C92954E18C4CE410010AAEF /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C92954F18C4CE4A0010AAEF /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
+		4C9372D21BAD022B00D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9372D11BAD022B00D6BD62 /* MADFoundation.framework */; };
 		4C94AA1217DCB3C9000F6FCF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA1117DCB3C9000F6FCF /* Images.xcassets */; };
 		4C94AA3817DCB88A000F6FCF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3717DCB88A000F6FCF /* Images.xcassets */; };
 		4C94AA3D17DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */; };
@@ -3388,6 +3389,7 @@
 		4C90D47C19E7892D005136B2 /* MADCollectionViewLayoutGrouped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewLayoutGrouped.h; sourceTree = "<group>"; };
 		4C90D47D19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewLayoutGrouped.m; sourceTree = "<group>"; };
 		4C9372891BACF8C800D6BD62 /* MTDataTable+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTDataTable+Factory.h"; path = "../MAD/MAD/MAD/MTDataTable+Factory.h"; sourceTree = "<group>"; };
+		4C9372D11BAD022B00D6BD62 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C94AA1117DCB3C9000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Designer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3717DCB88A000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Viewer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3A17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesPadOS7.storyboard; sourceTree = "<group>"; };
@@ -4002,6 +4004,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C9372D21BAD022B00D6BD62 /* MADFoundation.framework in Frameworks */,
 				4CC6BE421BA94DC8006899BE /* MADTdsClient.framework in Frameworks */,
 				4C130B0D1BA8090D0022665F /* MADBarcodes.framework in Frameworks */,
 				4C5205DE1BA7F21B000E6A59 /* MADCocoaExtensions.framework in Frameworks */,
@@ -4515,6 +4518,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C9372D11BAD022B00D6BD62 /* MADFoundation.framework */,
 				4C130B0C1BA8090D0022665F /* MADBarcodes.framework */,
 				4C5205DD1BA7F21B000E6A59 /* MADCocoaExtensions.framework */,
 				4CC6BE391BA94DA0006899BE /* MADTdsClient.xcodeproj */,

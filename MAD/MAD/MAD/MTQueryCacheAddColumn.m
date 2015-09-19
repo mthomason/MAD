@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheAddColumn.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseConnection.h"
 
 // FIXME: Remove dependency on MTDatabaseSqlite3

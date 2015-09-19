@@ -12,8 +12,10 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
-#import "MADAggregateGroupByType.h"
-#import "MTAggregateFunctionType.h"
+
+#import <MADFoundation/MADAggregateGroupByType.h>
+#import <MADFoundation/MTAggregateFunctionType.h>
+
 #import "MTAggregateFunctionInputType.h"
 
 @class MADocument, NSManagedObjectID, RptqQueryField;

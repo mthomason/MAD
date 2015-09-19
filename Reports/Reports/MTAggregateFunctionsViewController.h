@@ -10,7 +10,7 @@
 #define Reports_MTAggregateFunctionsViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTAggregateFunctionType.h"
+#import <MADFoundation/MTAggregateFunctionType.h>
 #import "MADViewController.h"
 
 extern NSString * const MTAggregateFunctionsViewControllerIdentifier;

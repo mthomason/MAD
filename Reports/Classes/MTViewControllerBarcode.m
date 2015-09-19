@@ -19,7 +19,7 @@
 #import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
 
 #import "MTDatabase.h"

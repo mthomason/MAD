@@ -64,7 +64,6 @@
     NSNumber *objid = @(self.tag);
     [encoder encodeObject:  objid                   forKey: @"objid"];
     [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
-    [encoder encodeObject:  [self url]              forKey: [MTDataTable keyUrl]];
     [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
     [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
@@ -148,16 +147,16 @@
     return [tag stringByAppendingString:@"mdcache"];
 }
 
-- (NSURL *)url {
+- (NSURL *)urlForGroupIdentifier:(NSString *)groupIdentifier {
     NSString *filename = [self filenameMDCache];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
+    NSURL *cacheDirectory = self.cacheDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:groupIdentifier/*MADIdentifierGroup*/] :
     [self.cacheDelegate cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename
                                            isDirectory:NO];
 }
 
-- (void)loadFromCache {
-    NSString *path = [self url].path;
+- (void)loadFromCacheWithGroupIdentifier:(NSString *)groupIdentifier {
+    NSString *path = [self urlForGroupIdentifier:groupIdentifier].path;
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: path];
     [inputStream open];
     switch ([inputStream streamStatus]) {
@@ -198,23 +197,24 @@
     return self;
 }
 
-- (void)cachePlist:(id)data {
+- (void)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier {
     NSError *error = nil;
     NSData *cache = [NSPropertyListSerialization dataWithPropertyList: data
                                                                format: NSPropertyListBinaryFormat_v1_0
                                                               options: 0
                                                                 error: &error];
-    if ([self url]) {
-        [cache writeToURL:[self url]
+    NSURL *url = [self urlForGroupIdentifier:groupIdentifier];
+    if (url) {
+        [cache writeToURL:url
                   options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
                     error:&error];
         NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 
-- (void)cache {
+- (void)cacheForGroupIdentifier:(NSString *)groupIdentifier {
     NSDictionary *plist = [self plist];
-    [self cachePlist:plist];
+    [self cachePlist:plist forGroupIdentifier:groupIdentifier];
 }
 
 - (NSDictionary *)plist {

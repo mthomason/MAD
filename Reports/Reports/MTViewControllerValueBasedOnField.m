@@ -19,7 +19,7 @@
 #import "RptqDocument+Extras.h"
 #import "MTQuery.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTKeyChain.h"
 #import "MTDatabaseConnection.h"
 

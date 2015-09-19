@@ -8,7 +8,7 @@
 
 #import "UIDocument+thumbnailURL.h"
 #import "UIDevice+Hack.h"
-#import "NSFileManager+Common.h"
+#import <MADFoundation/NSFileManager+Common.h>
 
 NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 

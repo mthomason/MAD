@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryMaxFieldLength.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 #import "RptqDatabase.h"
@@ -18,7 +19,6 @@
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "MTDataTable.h"
 #import "MTDatabaseConnection.h"
 
 @interface MTQueryMaxFieldLength ()

@@ -14,7 +14,8 @@
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADSqlite3/MADSqlite3.h>
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
 
 @interface MTDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>

@@ -18,7 +18,7 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDatabaseSchemaField.h"
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MTTableViewControllerBarcodeExtraAztec.h"

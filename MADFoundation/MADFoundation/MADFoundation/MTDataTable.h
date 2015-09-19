@@ -10,13 +10,11 @@
 #define Reports_MTDataTable_h
 
 #import <Foundation/Foundation.h>
-#import <MADFileManager/MADFileManager.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import "MADConstants.h"
-#import "MTCacheProtocol.h"
-#import "MADDataProtocol.h"
-#import "MTAggregateFunctionType.h"
-#import "MADAggregateGroupByType.h"
+#import <MADFoundation/NSFileManager+Common.h>
+#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADDataProtocol.h>
+#import <MADFoundation/MTAggregateFunctionType.h>
+#import <MADFoundation/MADAggregateGroupByType.h>
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -48,12 +46,14 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
-- (NSURL *)url;
-- (void)cache;
+- (NSURL *)urlForGroupIdentifier:(NSString *)groupIdentifier;
+
+- (void)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier;
+- (void)cacheForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSDictionary *)plist;
 
 - (void)loadWithPlist:(id)plist;
-- (void)loadFromCache;
+- (void)loadFromCacheWithGroupIdentifier:(NSString *)groupIdentifier;
 
 - (void)addColumn:(MTDataColumn *)column;
 - (void)addRow:(NSArray *)row;

@@ -141,7 +141,7 @@ extern NSString * const MADIdentifierROWID;
 
 @class MTDatabase, MTDataTable, RptqQuery;
 
-#import "MADDataProtocol.h"
+#import <MADFoundation/MADDataProtocol.h>
 
 @interface MTQuery : NSObject
 

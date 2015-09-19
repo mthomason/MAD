@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheAddRow.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseDataBinding.h"
 #import "MTDatabaseConnection.h"
 

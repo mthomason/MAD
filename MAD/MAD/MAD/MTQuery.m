@@ -37,8 +37,6 @@
 #import "MTQueryCacheSelectRowIds.h"
 #import "MTQueryCacheAggregateFunction.h"
 
-#import "MTDataColumn.h"
-
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
@@ -51,7 +49,8 @@
 #import "RptqQueryPredicate.h"
 #import "RptqQueryPredicate+Extras.h"
 
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
 
 #import "MTDatabaseDataBinding.h"
 

@@ -7,8 +7,8 @@
 //
 
 #import "MTQueryCacheAggregateFunction.h"
-#import "MTAggregateFunctionType.h"
-#import "MADAggregateGroupByType.h"
+#import <MADFoundation/MTAggregateFunctionType.h>
+#import <MADFoundation/MADAggregateGroupByType.h>
 
 @interface MTQueryCacheAggregateFunction ()
 

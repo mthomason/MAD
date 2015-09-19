@@ -13,8 +13,8 @@
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MTTableFormatter.h"
-#import "MTCacheProtocol.h"
-#import "MADDataProtocol.h"
+#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADDataProtocol.h>
 #import "MTReportFormatterDataSource.h"
 
 typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {

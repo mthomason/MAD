@@ -7,7 +7,8 @@
 //
 
 #import "MTDataTableVirtual.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
+
 
 @interface MTDataTableVirtual ()
 

@@ -14,7 +14,7 @@
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
 
 @interface MTQueryCacheIndexCreate ()
 

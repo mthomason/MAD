@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryCacheSelectGroupKeys.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseSqlite3.h"
 
 @interface MTQueryCacheSelectGroupKeys ()

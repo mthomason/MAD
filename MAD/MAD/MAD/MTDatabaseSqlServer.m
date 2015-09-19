@@ -25,12 +25,10 @@
 
 #import "RptqQueryField.h"
 
-//#import "sybdb.h"
-
 #import "MTDatabaseProcessSqlServer.h"
 
-#import "MTDataTable.h"
-#import "MTDataColumn.h"
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

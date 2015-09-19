@@ -12,10 +12,10 @@
 
 #import "MTDataTableFast.h"
 #import "MTQuery.h"
-#import "MTDataColumn.h"
 #import "MTDataTableFastObjectEnumerator.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
+#import "MADConstants.h"
 
 @interface MTDataTableFast ()
 
@@ -202,7 +202,7 @@
 
 - (void)setCacheDelegate:(id<MTCacheProtocol>)cacheDelegate {
     super.cacheDelegate = cacheDelegate;
-    [super loadFromCache];
+    [super loadFromCacheWithGroupIdentifier:MADIdentifierGroup];
     [self reopenDbConnection];
 }
 

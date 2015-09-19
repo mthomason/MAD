@@ -14,8 +14,9 @@
 #import "MADConstants.h"
 #import "MADocument.h"
 #import "MTReportFormatterDataSource.h"
-#import "MTCacheProtocol.h"
-#import "MADDataProtocol.h"
+
+#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADDataProtocol.h>
 
 #import "MTQuery.h"
 #import "MTQueryCache.h"

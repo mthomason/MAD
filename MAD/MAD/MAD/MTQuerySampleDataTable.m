@@ -19,7 +19,7 @@
 #import "RptqUserCredentals.h"
 #import "RptqDatabase.h"
 #import "MTDatabaseField.h"
-#import "MTDataTable.h"
+#import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
 
