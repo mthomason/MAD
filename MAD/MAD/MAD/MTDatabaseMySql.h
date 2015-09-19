@@ -28,8 +28,6 @@
 - (NSString *)identifier;
 + (NSString *)identifier;
 
-+ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType;
-
 @end
 
 #endif

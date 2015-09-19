@@ -7,6 +7,10 @@
 //
 
 #import "MTDatabaseMySql.h"
+
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
+
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
 
@@ -33,11 +37,9 @@
 
 #import "MTKeyChain.h"
 
-#import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
-#import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseTable.h"
-
+#import "MTDataTypeMySQL.h"
 
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>
@@ -216,7 +218,7 @@
                 MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                 NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
                 [databaseField setFieldTypeNative:nativeColumnType];
-                MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];
+                MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: nativeColumnType];
                 [databaseField setFieldType:fieldType];
                 [databaseField setWidth:[[dataColumn dataLength] integerValue]];
                 [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
@@ -277,7 +279,7 @@
                                 MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                                 NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
                                 [databaseField setFieldTypeNative:nativeColumnType];
-                                MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];
+                                MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: nativeColumnType];
                                 [databaseField setFieldType:fieldType];
                                 [databaseField setWidth:[[dataColumn dataLength] integerValue]];
                                 [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
@@ -303,100 +305,6 @@
 
 - (void)closeProcess:(id)process {
     mysql_close(((MysqlConnection *)process).connection);
-}
-
-+ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
-    MTDataType result;
-    switch (nativeType) {
-        //case MAX_NO_FIELD_TYPES:
-        //    result = MTDataTypeString;
-        //    break;
-        case MYSQL_TYPE_BIT:
-            result = MTDataTypeBit;
-            break;
-        case MYSQL_TYPE_BLOB:
-            result = MTDataTypeBlob;
-            break;
-        case MYSQL_TYPE_DATE:
-            result = MTDataTypeDate;
-            break;
-        case MYSQL_TYPE_DATETIME:
-            result = MTDataTypeDateTime;
-            break;
-        case MYSQL_TYPE_DECIMAL:
-            result = MTDataTypeDecimal;
-            break;
-        case MYSQL_TYPE_DOUBLE:
-            result = MTDataTypeDouble;
-            break;
-        case MYSQL_TYPE_ENUM:
-            result = MTDataTypeEnum;
-            break;
-        case MYSQL_TYPE_FLOAT:
-            result = MTDataTypeFloat;
-            break;
-        case MYSQL_TYPE_GEOMETRY:
-            result = MTDataTypeGeometry;
-            break;
-        case MYSQL_TYPE_INT24:
-            result = MTDataTypeInteger;
-            break;
-        case MYSQL_TYPE_LONG:
-            result = MTDataTypeLong;
-            break;
-        case MYSQL_TYPE_LONG_BLOB:
-            result = MTDataTypeBlob;
-            break;
-        case MYSQL_TYPE_LONGLONG:
-            result = MTDataTypeLongLong;
-            break;
-        case MYSQL_TYPE_MEDIUM_BLOB:
-            result = MTDataTypeBlob;
-            break;
-        case MYSQL_TYPE_NEWDATE:
-            result = MTDataTypeDate;
-            break;
-        case MYSQL_TYPE_NEWDECIMAL:
-            result = MTDataTypeDecimal;
-            break;
-        case MYSQL_TYPE_NULL:
-            result = MTDataTypeNumber;
-            break;
-        case MYSQL_TYPE_SET:
-            result = MTDataTypeSet;
-            break;
-        case MYSQL_TYPE_SHORT:
-            result = MTDataTypeShort;
-            break;
-        case MYSQL_TYPE_STRING:
-            result = MTDataTypeString;
-            break;
-        case MYSQL_TYPE_TIME:
-            result = MTDataTypeDateTime;
-            break;
-        case MYSQL_TYPE_TIMESTAMP:
-            result = MTDataTypeTimeStamp;
-            break;
-        case MYSQL_TYPE_TINY:
-            result = MTDataTypeShort;
-            break;
-        case MYSQL_TYPE_TINY_BLOB:
-            result = MTDataTypeBlob;
-            break;
-        case MYSQL_TYPE_VAR_STRING:
-            result = MTDataTypeVarChar;
-            break;
-        case MYSQL_TYPE_VARCHAR:
-             result = MTDataTypeVarChar;
-            break;
-        case MYSQL_TYPE_YEAR:
-            result = MTDataTypeYear;
-            break;
-        default:
-            result = MTDataTypeString;
-            break;
-    }
-    return result;
 }
 
 - (NSString *)identifier {
