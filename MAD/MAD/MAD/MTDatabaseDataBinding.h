@@ -10,7 +10,7 @@
 #define Reports_MTDatabaseProcessSqlServer_h
 
 #import <Foundation/Foundation.h>
-#import "MTDataType.h"
+#import <MADFoundation/MTDataType.h>
 
 @interface MTDatabaseDataBinding : NSObject
 

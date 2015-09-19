@@ -5,6 +5,9 @@
       location = "container:"
       name = "Frameworks">
       <FileRef
+         location = "group:MADMySQL/MADMySQL.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MADTdsClient/MADTdsClient.xcodeproj">
       </FileRef>
       <FileRef
@@ -32,9 +35,6 @@
          location = "group:MADFoundation/MADFoundation.xcodeproj">
       </FileRef>
    </Group>
-   <FileRef
-      location = "group:MySQLClientObjC/MysqlClientObjC.xcodeproj">
-   </FileRef>
    <FileRef
       location = "group:Scrimpter/Scrimpter.xcodeproj">
    </FileRef>

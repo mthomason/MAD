@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MTDataType.h"
+#import <MADFoundation/MTDataType.h>
 #import "NSData+Comparson.h"
 
 @implementation MTDataTypeObject

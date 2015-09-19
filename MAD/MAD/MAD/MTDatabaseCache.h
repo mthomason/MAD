@@ -10,7 +10,7 @@
 #define Reports_MTDatabaseCache_h
 
 #import "MTDatabase.h"
-#import "MTDataType.h"
+#import <MADFoundation/MTDataType.h>
 
 @interface MTDatabaseCache : MTDatabase
 

@@ -21,8 +21,6 @@
 		4C66C1851BA8882300663575 /* syberror.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16D1BA8882300663575 /* syberror.h */; };
 		4C66C1861BA8882300663575 /* sybfront.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16E1BA8882300663575 /* sybfront.h */; };
 		4C66C1871BA8882300663575 /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16F1BA8882300663575 /* tds_sysdep_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C66C1941BA8882300663575 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C17C1BA8882300663575 /* libsybdb.a */; settings = {ASSET_TAGS = (); }; };
-		4C66C1A51BA89D0D00663575 /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C17B1BA8882300663575 /* libct.a */; settings = {ASSET_TAGS = (); }; };
 		4C66C1B21BA8AE6000663575 /* libct.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C66C17B1BA8882300663575 /* libct.a */; };
 		4C66C1B31BA8AE6000663575 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C66C17C1BA8882300663575 /* libsybdb.a */; };
 /* End PBXBuildFile section */
@@ -64,8 +62,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C66C1A51BA89D0D00663575 /* libct.a in Frameworks */,
-				4C66C1941BA8882300663575 /* libsybdb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +398,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MADTdsClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -409,6 +406,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTdsClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 			};
 			name = Debug;
 		};
@@ -420,6 +418,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MADTdsClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -427,6 +426,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTdsClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 			};
 			name = Release;
 		};

@@ -14,10 +14,11 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
 
-#import "MysqlConnection.h"
-#import "MysqlServer.h"
-#import "MysqlFetch.h"
-#import "MysqlFetchField.h"
+#import <MADMySQL/MysqlConnection.h>
+#import <MADMySQL/MysqlServer.h>
+#import <MADMySQL/MysqlFetch.h>
+#import <MADMySQL/MysqlFetchField.h>
+#import <MADMySQL/MTDataTypeMySQL.h>
 
 #import "MTQuery.h"
 
@@ -39,7 +40,6 @@
 
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseTable.h"
-#import "MTDataTypeMySQL.h"
 
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>

@@ -14,7 +14,7 @@
 
 #import <MADFoundation/MTAggregateFunctionType.h>
 #import <MADFoundation/MADAggregateGroupByType.h>
-#import "MTDataType.h"
+#import <MADFoundation/MTDataType.h>
 
 extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
