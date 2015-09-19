@@ -28,8 +28,8 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 @interface MTDatabaseDriverSelectorViewController ()
     <MTViewControllerProtocol,
-    MADVibrantTableViewCellDelegate,
-    UITableViewDelegate>
+        MADVibrantTableViewCellDelegate,
+        UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
 
@@ -137,16 +137,19 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
+        ((MTConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADIdentifierDatabaseMySQL;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
+        ((MTConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADIdentifierDatabaseTDS;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
+        ((MTConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADIdentifierDatabaseSqlite3;
 
     }

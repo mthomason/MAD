@@ -28,6 +28,10 @@ static NSString * const Downloading                             = @"Downloading"
 
 @implementation MADFileExplorerViewController
 
+- (NSURL *)documentDirectory {
+    return self.filesCoordnator.filesController.documentDirectory;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         

@@ -41,7 +41,7 @@ typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL 
 @interface MADFilesController : NSObject
 
     @property (nonatomic, weak) id<MADFilesControllerDelegate> delegate;
-    @property (nonatomic, readonly) NSURL *documentDirectory;
+    @property (readonly) NSURL *documentDirectory;
     @property (nonatomic, readonly) NSInteger count;
     @property (nonatomic, strong) id<MADFileCoordinator> fileCoordinator;
 

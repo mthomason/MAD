@@ -166,7 +166,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                                                                      action: nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
-    NSAssert(sender == nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
+    NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
     NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent:filename isDirectory:NO];

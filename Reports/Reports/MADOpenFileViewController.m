@@ -1081,6 +1081,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
     vc.delegate = self;
+    vc.saveFileDelegate = self;
     self.definesPresentationContext = YES;
     self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     

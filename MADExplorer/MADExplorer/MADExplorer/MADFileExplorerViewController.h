@@ -11,6 +11,7 @@
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADCollectionViewLayoutGroupedDelegate.h"
+#import "MADSaveFileProtocol.h"
 
 @class MADFileLocationManager;
 
@@ -25,7 +26,8 @@
 
 @interface MADFileExplorerViewController : UICollectionViewController
     <MADFilesControllerDelegate,
-        MADCollectionViewLayoutFilesDelegate>
+        MADCollectionViewLayoutFilesDelegate,
+        MADSaveFileProtocol>
 
 @property (nonatomic, weak) id <MADFileExplorerDelegate> fileExplorerDelegate;
 
