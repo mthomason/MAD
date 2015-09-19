@@ -16,8 +16,6 @@
 #import "MADOpenFileViewController.h"
 #import "MADVibrantTableView.h"
 #import "MADTableViewCellBase.h"
-#import "MADocument.h"
-#import "MADConstants.h"
 #import "UIButton+FollowTwitter.h"
 #import "ACAccountStore+Social.h"
 

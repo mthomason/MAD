@@ -11,7 +11,6 @@
 #endif
 
 #import "MTReportViewerReportPageViewController.h"
-#import "MADocument.h"
 #import "MTReportViewerReportPageView.h"
 #import "NSDate+Extras.h"
 #import "MADAppConfiguration.h"

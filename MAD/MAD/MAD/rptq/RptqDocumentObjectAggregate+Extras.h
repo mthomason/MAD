@@ -9,8 +9,8 @@
 #ifndef Reports_RptqDocumentObjectAggregate_Extras_h
 #define Reports_RptqDocumentObjectAggregate_Extras_h
 
-#import "RptqDocumentObjectAggregate.h"
-#import "MTAggregateFunctionInputType.h"
+#import <MAD/RptqDocumentObjectAggregate.h>
+#import <MAD/MTAggregateFunctionInputType.h>
 
 #import <MADFoundation/MTAggregateFunctionType.h>
 #import <MADFoundation/MADAggregateGroupByType.h>

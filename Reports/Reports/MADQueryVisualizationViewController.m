@@ -11,18 +11,8 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
-#import "MADocument.h"
-#import "MADConstants.h"
 #import "MADAppConfiguration.h"
 #import "MADViewControllerSQL.h"
-
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-
-#import "RptqQueryLinks.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryField.h"
-#import "RptqDatabaseSchemaTable.h"
 
 #import "MTConnectionViewController.h"
 #import "MTConnectorView.h"
@@ -30,15 +20,9 @@
 #import "MADQueryVisualizationSchemaViewController.h"
 #import "MADWatermarkView.h"
 
-#import "RptqQuery+Extras.h"
-#import "RptqQueryTable+Extras.h"
-
 #import "CGAffineTransform+Common.h"
 #import "UIView+NSObjectIdTag.h"
 
-#import "RptqDocument+Extras.h"
-
-#import "MTQueryTest.h"
 #import "UIViewController+Designer.h"
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
 #import "NSLayoutConstraint+QueryVisualization.h"

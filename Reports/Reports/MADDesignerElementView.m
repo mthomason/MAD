@@ -7,19 +7,9 @@
 //
 
 #import "MADDesignerElementView.h"
-#import <CoreData/CoreData.h>
-#import <QuartzCore/QuartzCore.h>
 #import "MTElementCanvas.h"
 #import "MADResizeHandles.h"
 #import "UIView+NSObjectIdTag.h"
-#import "MTAlignment.h"
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-#import "RptqDocumentObjectImage.h"
-#import "RptqDocumentObjectImage+Extras.h"
-
 #import "MTResizeHandleView.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)

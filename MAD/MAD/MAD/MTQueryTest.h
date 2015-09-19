@@ -10,6 +10,7 @@
 #define Reports_MTQueryTest_h
 
 #import "MTQuery.h"
+#import <MADFoundation/MTDataTable.h>
 
 @interface MTQueryTest : MTQuery
 

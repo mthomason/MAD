@@ -14,12 +14,6 @@
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqDocumentObjectAggregate.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-
 #import "MTAggregateFunctionsViewController.h"
 #import "MADNavigationBarTitleView.h"
 

@@ -13,7 +13,6 @@
 #import "MTQueryTest.h"
 #import "MTDatabase.h"
 #import "RptqUserCredentals.h"
-#import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
 

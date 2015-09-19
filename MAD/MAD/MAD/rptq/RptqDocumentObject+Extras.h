@@ -11,10 +11,12 @@
 
 #import "RptqDocumentObject.h"
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTDataType.h>
-#import "RptqDocumentObjectFactory.h"
-#import "MADDocumentObjectType.h"
+#import <MAD/MAD.h>
+#import <MAD/MTFont.h>
+#import <MAD/MADDocumentObjectType.h>
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;

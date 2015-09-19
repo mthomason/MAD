@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "RptqDocumentObjectAggregate+Extras.h"
+#import <MAD/MAD.h>
 #import "MADViewController.h"
 
 extern NSString * const MTGroupByViewControllerIdentifier;

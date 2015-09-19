@@ -11,22 +11,11 @@
 #endif
 
 #import "MADViewerController.h"
-#import "MADConstants.h"
 #import "MADNavigationBarTitleView.h"
-#import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportViewerReportPageView.h"
 
 #import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
-#import "MADocument.h"
-#import "MTDatabase.h"
-#import "MTActivityItemProviderPdf.h"
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqQuery.h"
-#import "MTReportFormatter.h"
-#import "MTQuery.h"
-#import "MTPaper.h"
 #import "MTActivityReportPrintPreview.h"
 #import "MTReportViewerReportPageViewController.h"
 
@@ -35,14 +24,9 @@
 #import "UIPageViewController+Extras.h"
 #import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
-#import <MADFoundation/MTDataTable.h>
 
-#import "MTNotificationDidFormatPage.h"
-#import "MTNotificationDidReadRows.h"
 #import "NSDate+Extras.h"
 
-#import "MTKeyChain.h"
-#import "MTDatabaseConnection.h"
 #import "MTStoreKitController+Features.h"
 
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";

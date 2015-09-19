@@ -13,13 +13,12 @@
 #import "MADQueryViewController.h"
 
 #import "MADNavigationBarTitleView.h"
-#import "MADocument.h"
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 
 #import "MADAppConfiguration.h"
 
-#import "MTQuery.h"
+#import <MAD/MTQuery.h>
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
@@ -31,7 +30,6 @@
 #import "MTTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 
-#import "MTDataFormatter.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
 
@@ -43,46 +41,8 @@
 #import "MADNavigationController.h"
 #import "MADViewControllerSQL.h"
 
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-
-#import "RptqDocumentObject.h"
-
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
-
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-
-#import "RptqQueryLinks.h"
-#import "RptqQueryLinks+Extras.h"
-
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqQueryGroup.h"
-#import "RptqQueryGroup+Extras.h"
-
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "RptqDocumentSectionRows.h"
-#import "RptqDocumentSectionRows+Extras.h"
-
-#import "RptqUserCredentals.h"
-#import "RptqUserCredentals+Extras.h"
-
 #import "UIViewController+tabBarItem.h"
 
-#import "MTQueryTest.h"
-
-#import "NSManagedObject+Extras.h"
 #import "NSParagraphStyle+CommonStyles.h"
 
 #import "UIViewController+UI.h"

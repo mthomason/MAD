@@ -7,7 +7,6 @@
 //
 
 #import "MADDesignerSectionLabel.h"
-#import "RptqDocumentSection+Extras.h"
 
 const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 

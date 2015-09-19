@@ -10,6 +10,11 @@
 #define Barcodes_MTViewControllerBarcodeOptions_h
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import <MAD/MAD.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTQuery.h>
+#import <MADFoundation/MTDataTable.h>
 
 #import "MTViewControllerBarcodeType.h"
 #import "MTTableViewControllerBarcodeExtraAztec.h"

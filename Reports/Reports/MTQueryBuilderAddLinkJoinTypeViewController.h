@@ -10,7 +10,9 @@
 #define Reports_MTQueryBuilderAddLinkJoinTypeViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MADLinkType.h"
+#import <MAD/MAD.h>
+#import <MAD/MADLinkType.h>
+#import <MAD/MTDatabaseConnection.h>
 
 @class MTQueryBuilderAddLinkJoinTypeViewController, MADocument;
 

@@ -11,13 +11,7 @@
 #endif
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
-#import "MADocument.h"
 #import "MADAppConfiguration.h"
-#import "RptqUserCredentals.h"
-#import "RptqUserCredentals+Extras.h"
-#import "RptqQueryLinks.h"
-#import "RptqQueryLinks+Extras.h"
-#import "MTDatabaseConnection.h"
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 

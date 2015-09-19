@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderAddGroupViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 

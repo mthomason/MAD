@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderAddTableViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
 #import "UITableViewControllerCoreDataResults.h"
 #import "MUIViewControllerDelegate.h"
 

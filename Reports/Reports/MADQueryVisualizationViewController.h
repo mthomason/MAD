@@ -10,6 +10,9 @@
 #define Reports_MTQueryBuilderVisualizationViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
+#import <MAD/MADConstants.h>
+#import <MAD/MTQueryTest.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import <MADDataStructures/MADDataStructures.h>

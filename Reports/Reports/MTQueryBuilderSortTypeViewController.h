@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderSortTypeViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MADSortOrder.h"
+#import <MAD/MADSortOrder.h>
 
 @class MTQueryBuilderSortTypeViewController;
 

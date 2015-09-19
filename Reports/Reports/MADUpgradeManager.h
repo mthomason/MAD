@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MAD/MADConstants.h>
 
 @interface MADUpgradeManager : NSObject
 

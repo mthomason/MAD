@@ -9,9 +9,8 @@
 #ifndef Reports_UITableViewControllerOpperators_h
 #define Reports_UITableViewControllerOpperators_h
 
-#import "RptqQueryPredicate+Extras.h"
-
 #import <UIKit/UIKit.h>
+#import <MAD/RptqQueryPredicate+Extras.h>
 
 @class UITableViewControllerOpperators;
 

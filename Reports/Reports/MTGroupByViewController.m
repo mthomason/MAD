@@ -11,10 +11,7 @@
 #endif
 
 #import "MTGroupByViewController.h"
-#import "MADocument.h"
 #import "MADNavigationBarTitleView.h"
-#import "RptqQueryGroup.h"
-#import "RptqQueryGroup+Extras.h"
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 

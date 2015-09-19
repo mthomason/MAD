@@ -12,16 +12,6 @@
 
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTCellEnterText.h"
-#import "MADocument.h"
-#import "MTDatabase.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-#import "MTQuery.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import <MADFoundation/MTDataTable.h>
-#import "MTKeyChain.h"
-#import "MTDatabaseConnection.h"
 
 @interface MTViewControllerValueBasedOnField ()
     <UITextFieldDelegate>

@@ -10,7 +10,7 @@
 #define MAD_MTTableFormatter_h
 
 #import <Foundation/Foundation.h>
-#import "MTDataFormatter.h"
+#import <MAD/MTDataFormatter.h>
 
 @class MTQuery;
 

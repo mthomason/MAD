@@ -11,24 +11,9 @@
 #endif
 
 #import "MADQueryVisualizationSchemaViewController.h"
-#import "MADocument.h"
-
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
-
 #import "UIView+NSObjectIdTag.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "RptqDatabaseSchemaField.h"
-
 #import "MTSchemaFieldCell.h"
 
 @interface MADQueryVisualizationSchemaViewController ()

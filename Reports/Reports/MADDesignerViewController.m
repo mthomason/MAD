@@ -11,11 +11,7 @@
 #endif
 
 #include <math.h>
-#import <CoreData/CoreData.h>
-
 #import "MADDesignerViewController.h"
-
-#import "MAD.h"
 
 #import "MADAppConfiguration.h"
 
@@ -27,7 +23,6 @@
 
 #import "MADDesignerElementPickerViewController.h"
 
-#import "MTFont.h"
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
@@ -38,40 +33,9 @@
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
-#import "RptqDocumentSectionEnumerator.h"
 #import "MADPopoverBackgroundView.h"
 
 #import "MADToolboxPresentationController.h"
-
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-
-#import "RptqDatabase.h"
-
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-
-#import "RptqQueryField.h"
-
-#import "RptqDocumentSectionRows.h"
-
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObject+Extras.h"
-
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
-
-#import "RptqDocumentObjectLabel.h"
-#import "RptqDocumentObjectLabelDataField.h"
-
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-
-#import "RptqDocumentObjectImage.h"
-#import "RptqDocumentObjectImage+Extras.h"
-
-#import "RptqDocumentObjectAggregate.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
 
 #import "MADDesignerStatusLabel.h"
 #import "MADBackgroundScrollView.h"
@@ -86,10 +50,8 @@
 
 #import "MADToolboxNavigationController.h"
 
-#import "MADSectionLayoutManager.h"
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 
-#import "NSManagedObject+Extras.h"
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"
 #import "UINavigationController+Designer.h"
@@ -99,7 +61,6 @@
 #import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIScrollView+Extras.h"
-#import "NSManagedObjectID+Extras.h"
 #import "UIView+Extras.h"
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;

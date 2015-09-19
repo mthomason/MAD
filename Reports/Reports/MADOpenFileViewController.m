@@ -12,14 +12,10 @@
 
 #import "MADOpenFileViewController.h"
 
-#import "MADConstants.h"
-
 #import "MADViewerController.h"
 
 #import "AppDelegate.h"
 #import "MADAppConfiguration.h"
-
-#import "MADocument.h"
 
 #import "MADSearchBar.h"
 
@@ -54,7 +50,6 @@
 #import "MTStoreKitController+Features.h"
 #import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
-#import <MADFoundation/NSURL+Document.h>
 
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";

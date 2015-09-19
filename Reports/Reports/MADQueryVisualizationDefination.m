@@ -7,11 +7,6 @@
 //
 
 #import "MADQueryVisualizationDefination.h"
-#import "RptqQuery.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryLinks.h"
-#import "RptqQueryField.h"
 #import "MTGraph+RptqQuery.h"
 
 @interface MADQueryVisualizationDefination()

@@ -11,22 +11,11 @@
 #endif
 
 #import "MTTableController.h"
-#import <CoreData/CoreData.h>
 
 #import "MTTableLayout.h"
-#import "MTDataFormatter.h"
-
-#import "MTQuery.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
 
-#import "MTDatabase.h"
-#import <MADFoundation/MTDataTable.h>
-#import "MTDataTable+Factory.h"
-#import "MTDatabaseField.h"
-
-#import "MTKeyChain.h"
-#import "MTDatabaseConnection.h"
 
 @interface MTTableController ()
     <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol>

@@ -10,6 +10,7 @@
 #define Reports_MTShowSqlViewController_h
 
 #import "MUIViewControllerDelegate.h"
+#import <MAD/MTQuery.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class  MTQuery;

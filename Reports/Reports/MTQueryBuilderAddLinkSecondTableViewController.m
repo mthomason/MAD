@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"
-#import "RptqQueryTable.h"
 
 @implementation MTQueryBuilderAddLinkSecondTableViewController
 

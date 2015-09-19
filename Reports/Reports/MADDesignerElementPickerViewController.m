@@ -11,7 +11,6 @@
 #endif
 
 #import "MADDesignerElementPickerViewController.h"
-#import <CoreData/CoreData.h>
 #import "MADNavigationBarTitleView.h"
 
 #import "MTAggregateFunctionsViewController.h"
@@ -22,13 +21,6 @@
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTGroupByViewController.h"
 
-#import "RptqDocumentObjectAggregate.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "MADDocumentObjectType.h"
 #import "MADDesignerViewController.h"
 
 #import "MADObjectIdentifier.h"

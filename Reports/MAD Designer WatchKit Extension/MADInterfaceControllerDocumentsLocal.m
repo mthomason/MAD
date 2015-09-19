@@ -10,7 +10,6 @@
 #import "MADRowTypeDocumentsLocal.h"
 #import "UIColor+EverydayApps.h"
 #import "NSFileManager+Common.h"
-#import "MADConstants.h"
 
 #import "MADAppConfiguration.h"
 

@@ -22,8 +22,7 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 #import <MessageUI/MessageUI.h>
-#import "MAD.h"
-
+#import <MAD/MADConstants.h>
 
 #if MAD_DESIGNER
     #import "UIViewController+Designer.h"
@@ -57,9 +56,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.166";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.166";
-NSString * const MTGlobalBundleRev                                  = @"2108";
+NSString * const MTGlobalBundleVersion                              = @"8.0.167";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.167";
+NSString * const MTGlobalBundleRev                                  = @"2109";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

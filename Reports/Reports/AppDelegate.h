@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <QuickLook/QuickLook.h>
+#import <MAD/MADConstants.h>
 #import <MADFileManager/MADFileManager.h>
 
 @class MADAppConfiguration;

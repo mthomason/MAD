@@ -10,7 +10,8 @@
 #define Reports_MTQueryBuilderLinkBuilderViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MADLinkType.h"
+#import <MAD/MAD.h>
+#import <MAD/MADLinkType.h>
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 

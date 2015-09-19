@@ -10,7 +10,7 @@
 #define Reports_MTCollectionViewCellElement_h
 
 #import <UIKit/UIKit.h>
-#import "RptqDocumentObject+Extras.h"
+#import <MAD/MAD.h>
 
 @class MTCollectionViewCellElement;
 

@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderAddTableViewController.h"
-#import "RptqDatabaseSchemaTable.h"
 
 @implementation MTQueryBuilderAddTableViewController
 

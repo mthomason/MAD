@@ -13,15 +13,6 @@
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
-#import "MTDatabase.h"
-#import "MTQuery.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryField.h"
-#import <MADFoundation/MTDataTable.h>
-#import "MTDataTable+Factory.h"
-#import "MTKeyChain.h"
-#import "MTDatabaseConnection.h"
-
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
 @property (nonatomic, strong) MTDataTable *dataTableSampleData;

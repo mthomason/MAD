@@ -11,6 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
+#import <MAD/MADConstants.h>
+#import <MAD/MADocument.h>
 #import "MUIViewControllerDelegate.h"
 
 @interface MADAboutTableViewController : UITableViewController

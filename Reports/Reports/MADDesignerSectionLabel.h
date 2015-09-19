@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MAD/MAD.h>
 
 extern const CGFloat MADesignerSectionLabelFontSize;
 

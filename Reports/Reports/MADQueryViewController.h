@@ -10,6 +10,9 @@
 #define Reports_MADQueryViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
+#import <MAD/MTQueryTest.h>
+#import <MAD/NSManagedObject+Extras.h>
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"

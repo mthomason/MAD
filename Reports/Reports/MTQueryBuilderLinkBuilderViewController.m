@@ -14,13 +14,6 @@
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 
-#import "RptqQuery.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryLinks+Extras.h"
-
 @interface MTQueryBuilderLinkBuilderViewController ()
 
 @property (nonatomic, strong) RptqQueryTable *firstTable;

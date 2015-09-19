@@ -7,17 +7,8 @@
 //
 
 #import "MADToolboxFormatViewController.h"
-#import <CoreData/CoreData.h>
-#import "MADocument.h"
 
-#import "MTDatabaseField.h"
 #import "MTToolboxViewControllerProtocol.h"
-
-#import "RptqQueryField.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDatabaseSchemaField.h"
-
-#import "RptqDocumentObject+Extras.h"
 
 #import "UIViewController+UI.h"
 

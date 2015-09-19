@@ -1,7 +1,7 @@
  
  
 //
-//  MNSDocument.h
+//  MADocument.h
 //  Reports
 //
 //  Created by Michael Thomason on 11/9/12.
@@ -14,13 +14,13 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <MAD/MTReportFormatterDataSource.h>
+#import <MAD/MADActivityProtocol.h>
+#import <MAD/MADSortOrder.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
-#import "MTReportFormatterDataSource.h"
-#import "MADActivityProtocol.h"
-#import "MADSortOrder.h"
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,

@@ -34,12 +34,12 @@
       <FileRef
          location = "group:MADFoundation/MADFoundation.xcodeproj">
       </FileRef>
+      <FileRef
+         location = "group:MAD/MAD.xcodeproj">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:Scrimpter/Scrimpter.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:MAD/MAD/MAD.xcodeproj">
    </FileRef>
    <FileRef
       location = "container:Reports/MAD Designer.xcodeproj">

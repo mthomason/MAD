@@ -10,7 +10,7 @@
 #define Reports_MTReportViewerReportPageView_h
 
 #import <UIKit/UIKit.h>
-#import "MTReportViewerPrintPageRenderer.h"
+#import <MAD/MTReportViewerPrintPageRenderer.h>
 #import "MTPrintingProtocol.h"
 
 @interface MTReportViewerReportPageView : UIView

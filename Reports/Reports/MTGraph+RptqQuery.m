@@ -7,10 +7,6 @@
 //
 
 #import "MTGraph+RptqQuery.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryField.h"
-#import "RptqQueryLinks.h"
 
 @implementation MTGraph (RptqQuery)
 

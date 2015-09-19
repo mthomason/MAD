@@ -11,22 +11,7 @@
 #endif
 
 #import "MTViewControllerBarcode.h"
-
-#import "MTQuery.h"
-
-#import "RptqQueryField.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-
-#import <MADFoundation/MTDataTable.h>
-#import "MTDataTable+Factory.h"
-
-#import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
-
 #import "MADNavigationBarTitleView.h"
-#import "MTKeyChain.h"
 
 NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 

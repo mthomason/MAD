@@ -10,6 +10,7 @@
 #define Reports_MADWatermarkView_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MADConstants.h>
 
 @interface MADWatermarkScrollView : UIScrollView
 

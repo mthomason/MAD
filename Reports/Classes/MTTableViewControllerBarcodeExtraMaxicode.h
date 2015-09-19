@@ -10,6 +10,12 @@
 #define Barcodes_MTTableViewControllerBarcodeExtraMaxicode_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDataTable+Factory.h>
+#import <MADFoundation/MTDataTable.h>
 #import "MTQueryBuilderChooseFieldDelegate.h"
 
 @protocol MTTableViewControllerBarcodeExtraMaxicodeDelegate

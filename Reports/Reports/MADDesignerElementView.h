@@ -10,6 +10,10 @@
 #define Reports_MTElementView_h
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import <QuartzCore/QuartzCore.h>
+#import <MAD/MAD.h>
+#import <MAD/MTAlignment.h>
 
 @class RptqDocumentObject, MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 

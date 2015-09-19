@@ -10,7 +10,17 @@
 #define MAD_MTTableController_h
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTDataFormatter.h>
+#import <MADFoundation/MTDataTable.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseField.h>
+#import <MAD/MTDatabaseConnection.h>
+
 #import "MADViewController.h"
 
 @class MTDataFormatter, MTQuery;

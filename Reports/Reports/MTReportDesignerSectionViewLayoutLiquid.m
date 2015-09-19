@@ -8,7 +8,6 @@
 //
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
-#import "RptqDocumentSectionEnumerator.h"
 #import "MTReportDesignerSectionDecorationView.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 

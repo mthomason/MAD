@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerSectionViewLayout_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MTReportDesignerSectionViewLayoutLiquid, MTCollectionViewLayoutLiquidAttributes;

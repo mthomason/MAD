@@ -10,6 +10,12 @@
 #define Barcodes_MTViewControllerBarcode_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTDataTable+Factory.h>
+#import <MADFoundation/MTDataTable.h>
+
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTUnwindProtocol.h"

@@ -11,18 +11,8 @@
 #endif
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MADocument.h"
 #import "MADAppConfiguration.h"
 #import "MADNavigationBarTitleView.h"
-#import "RptqFieldSelectorManager.h"
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqQuery.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryField.h"
-#import "RptqDatabaseSchemaField.h"
-
-#import "RptqDatabaseSchemaField+Extras.h"
 
 #pragma mark -
 #pragma mark TableViewController

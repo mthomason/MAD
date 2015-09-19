@@ -11,7 +11,6 @@
 #endif
 
 #import "MADViewControllerSQL.h"
-#import "MTQuery.h"
 
 @implementation MADViewControllerSQL
 

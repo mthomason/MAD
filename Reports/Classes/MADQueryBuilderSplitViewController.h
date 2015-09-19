@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MAD/MADocument.h>
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"

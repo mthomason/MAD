@@ -8,7 +8,6 @@
 
 #import "MADWatermarkView.h"
 #import "MADAppConfiguration.h"
-#import "MADConstants.h"
 
 NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
 

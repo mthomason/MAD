@@ -11,7 +11,7 @@
 
 #import "RptqQueryLinks.h"
 #import <MADDataStructures/MADDataStructures.h>
-#import "MADLinkType.h"
+#import <MAD/MADLinkType.h>
 
 extern NSString * const MNSJoinTypeInnerJoin;
 extern NSString * const MNSJoinTypeEquiJoin;

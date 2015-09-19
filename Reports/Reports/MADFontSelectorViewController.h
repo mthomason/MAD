@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MAD/MTFont.h>
 #import "MADViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 

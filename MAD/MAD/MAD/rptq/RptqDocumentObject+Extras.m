@@ -11,45 +11,7 @@
 #endif
 
 #import "RptqDocumentObject+Extras.h"
-
-#import <CoreData/CoreData.h>
 #import "MTAlignment.h"
-
-#import "MTFont.h"
-
-#import "RptqDocument.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocumentSection+Extras.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSectionRows.h"
-#import "RptqDocumentObjectFactory.h"
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObjectLabel.h"
-#import "RptqDocumentObjectLabel+Extras.h"
-#import "RptqDocumentObjectBarcode.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-#import "RptqDocumentObjectAggregate.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqDocumentObjectGroupKey.h"
-#import "RptqDocumentObjectGroupKey+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqDocumentObjectLabelLink.h"
-#import "RptqDocumentObjectLabelLink+Extras.h"
-
-#import "RptqDocumentObjectChart.h"
-#import "RptqDocumentObjectChart+Extras.h"
-
-#import "RptqDocumentObjectImage.h"
-#import "RptqDocumentObjectImage+Extras.h"
-
-#import "RptqDocumentObjectFormula.h"
-#import "RptqDocumentObjectFormula+Extras.h"
-
 #import "NSObject+DebugDescription.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";

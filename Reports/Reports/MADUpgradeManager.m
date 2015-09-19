@@ -7,7 +7,6 @@
 //
 
 #import "MADUpgradeManager.h"
-#import "MADConstants.h"
 #import "MADAppConfiguration.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.

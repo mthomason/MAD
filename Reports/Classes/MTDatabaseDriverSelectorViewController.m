@@ -13,7 +13,6 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MADVibrantTableViewCellImage.h"
 #import "MTConnectionViewController.h"
-#import "MTDatabaseConnection.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"

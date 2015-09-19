@@ -11,13 +11,8 @@
 #endif
 
 #import "MADToolboxStyleViewController.h"
-#import "MADocument.h"
-#import "RptqDocumentObject+Extras.h"
 #import "MADAppConfiguration.h"
-#import "MTFont.h"
-#import "NSManagedObject+Extras.h"
 #import "MADControlState.h"
-#import "MTAlignment.h"
 #import "UIViewController+UI.h"
 
 @interface MADToolboxStyleViewController()

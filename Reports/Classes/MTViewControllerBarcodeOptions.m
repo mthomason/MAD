@@ -11,14 +11,6 @@
 #endif
 
 #import "MTViewControllerBarcodeOptions.h"
-#import <CoreData/CoreData.h>
-#import "MTDatabase.h"
-
-#import "MTQuery.h"
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import <MADFoundation/MTDataTable.h>
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MTTableViewControllerBarcodeExtraAztec.h"
@@ -27,8 +19,6 @@
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 
-#import "MTDatabaseConnection.h"
-#import "MTKeyChain.h"
 
 @interface MTViewControllerBarcodeOptions ()
     <MTDatabaseProtocol, MTTableViewControllerStaticSelectRowDelegate>

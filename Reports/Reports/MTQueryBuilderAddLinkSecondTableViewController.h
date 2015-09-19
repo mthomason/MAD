@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderAddLinkSecondTableViewController_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MAD.h>
 #import "UITableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkSecondTableViewController, RptqQueryTable;

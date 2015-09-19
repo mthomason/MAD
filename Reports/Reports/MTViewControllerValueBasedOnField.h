@@ -11,6 +11,10 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <MAD/MAD.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTKeyChain.h>
+#import <MADFoundation/MTDataTable.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MADocument, NSManagedObjectID;

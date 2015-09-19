@@ -11,10 +11,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MTUnwindProtocol.h"
+#import <MAD/MAD.h>
 #import <MADFoundation/MADAggregateGroupByType.h>
 #import <MADFoundation/MTAggregateFunctionType.h>
-#import "MTAggregateFunctionInputType.h"
+#import <MAD/MTAggregateFunctionInputType.h>
+#import "MTUnwindProtocol.h"
 #import "MADViewController.h"
 
 @class MADocument, RptqQueryField, RptqDocumentObjectAggregate;
