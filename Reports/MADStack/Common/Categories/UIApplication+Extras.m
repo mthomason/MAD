@@ -11,7 +11,6 @@
 #endif
 
 #import "UIApplication+Extras.h"
-#import "MADAppConfiguration.h"
 
 @implementation UIApplication (Extras)
 
