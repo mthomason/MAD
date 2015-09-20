@@ -636,6 +636,19 @@
 		4C401F821BAE7EB500BAE5FC /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F731BAE7EB500BAE5FC /* MTViewTableHeader.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F851BAE843100BAE5FC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F831BAE843100BAE5FC /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
 		4C401F861BAE843100BAE5FC /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F841BAE843100BAE5FC /* MADFeatures.plist */; settings = {ASSET_TAGS = (); }; };
+		4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FA51BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FA71BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FA91BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FAB1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FAD1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FAF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC51BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC61BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB51BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC71BAE8AD500BAE5FC /* MTViewControllerBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB71BAE8AD500BAE5FC /* MTViewControllerBarcode.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB91BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBB1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -2746,6 +2759,33 @@
 		4C401F9B1BAE89C300BAE5FC /* MTArrayDataSourcePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourcePrivate.h; sourceTree = "<group>"; };
 		4C401F9C1BAE89C300BAE5FC /* MTArrayDataSourceTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourceTableView.h; sourceTree = "<group>"; };
 		4C401F9D1BAE89C300BAE5FC /* MTArrayDataSourceTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayDataSourceTableView.m; sourceTree = "<group>"; };
+		4C401FA41BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBarcodeCompositCode.h; sourceTree = "<group>"; };
+		4C401FA51BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBarcodeCompositCode.m; sourceTree = "<group>"; };
+		4C401FA61BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraAztec.h; sourceTree = "<group>"; };
+		4C401FA71BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraAztec.m; sourceTree = "<group>"; };
+		4C401FA81BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraDataMatrix.h; sourceTree = "<group>"; };
+		4C401FA91BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraDataMatrix.m; sourceTree = "<group>"; };
+		4C401FAA1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraGridMatrix.h; sourceTree = "<group>"; };
+		4C401FAB1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraGridMatrix.m; sourceTree = "<group>"; };
+		4C401FAC1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraMaxicode.h; sourceTree = "<group>"; };
+		4C401FAD1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraMaxicode.m; sourceTree = "<group>"; };
+		4C401FAE1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraMicroQrCode.h; sourceTree = "<group>"; };
+		4C401FAF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraMicroQrCode.m; sourceTree = "<group>"; };
+		4C401FB01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraPdf417Iso24728.h; sourceTree = "<group>"; };
+		4C401FB11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraPdf417Iso24728.m; sourceTree = "<group>"; };
+		4C401FB21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerBarcodeExtraQrCode.h; sourceTree = "<group>"; };
+		4C401FB31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerBarcodeExtraQrCode.m; sourceTree = "<group>"; };
+		4C401FB41BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerStaticSelectRow.h; sourceTree = "<group>"; };
+		4C401FB51BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerStaticSelectRow.m; sourceTree = "<group>"; };
+		4C401FB61BAE8AD500BAE5FC /* MTViewControllerBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcode.h; sourceTree = "<group>"; };
+		4C401FB71BAE8AD500BAE5FC /* MTViewControllerBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcode.m; sourceTree = "<group>"; };
+		4C401FB81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodeOptions.h; sourceTree = "<group>"; };
+		4C401FB91BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeOptions.m; sourceTree = "<group>"; };
+		4C401FBA1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodePreview.h; sourceTree = "<group>"; };
+		4C401FBB1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodePreview.m; sourceTree = "<group>"; };
+		4C401FBC1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodeType.h; sourceTree = "<group>"; };
+		4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeType.m; sourceTree = "<group>"; };
+		4C401FCB1BAE8BB700BAE5FC /* MTViewControllerBarcodePreviewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodePreviewDelegate.h; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4020,6 +4060,7 @@
 			isa = PBXGroup;
 			children = (
 				4C401EFE1BAE64AF00BAE5FC /* Common */,
+				4C401FA11BAE8AD500BAE5FC /* MADBarcodes */,
 				4C401F111BAE703200BAE5FC /* MADQuery */,
 				4C401EE81BAE61F700BAE5FC /* MADDesigner */,
 				4C401EB61BAE5E9000BAE5FC /* MADStore */,
@@ -4332,6 +4373,57 @@
 				4C401F9D1BAE89C300BAE5FC /* MTArrayDataSourceTableView.m */,
 			);
 			path = ArrayDataSource;
+			sourceTree = "<group>";
+		};
+		4C401FA11BAE8AD500BAE5FC /* MADBarcodes */ = {
+			isa = PBXGroup;
+			children = (
+				4C401FA21BAE8AD500BAE5FC /* UI */,
+			);
+			name = MADBarcodes;
+			path = MADStack/MADBarcodes;
+			sourceTree = "<group>";
+		};
+		4C401FA21BAE8AD500BAE5FC /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				4C401FA31BAE8AD500BAE5FC /* Cells */,
+				4C401FCB1BAE8BB700BAE5FC /* MTViewControllerBarcodePreviewDelegate.h */,
+				4C401FA61BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.h */,
+				4C401FA71BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m */,
+				4C401FA81BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.h */,
+				4C401FA91BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m */,
+				4C401FAA1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.h */,
+				4C401FAB1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m */,
+				4C401FAC1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.h */,
+				4C401FAD1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m */,
+				4C401FAE1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.h */,
+				4C401FAF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m */,
+				4C401FB01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */,
+				4C401FB11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */,
+				4C401FB21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.h */,
+				4C401FB31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m */,
+				4C401FB41BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.h */,
+				4C401FB51BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m */,
+				4C401FB61BAE8AD500BAE5FC /* MTViewControllerBarcode.h */,
+				4C401FB71BAE8AD500BAE5FC /* MTViewControllerBarcode.m */,
+				4C401FB81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.h */,
+				4C401FB91BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m */,
+				4C401FBA1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.h */,
+				4C401FBB1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m */,
+				4C401FBC1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.h */,
+				4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		4C401FA31BAE8AD500BAE5FC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4C401FA41BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.h */,
+				4C401FA51BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
@@ -7590,6 +7682,7 @@
 				4C38E9E019F33346000E0B2F /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4CE9985F14B69AA80015C8D1 /* MADToolboxStyleViewController.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
+				4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
 				4C00818114B6D158003DF437 /* MADFontSelectorViewController.m in Sources */,
 				4C401F7C1BAE7EB500BAE5FC /* MTBorderedView.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
@@ -7648,6 +7741,7 @@
 				4CA1500018B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C85D8C21B9D275700F4EA42 /* MADQueryVisualizationViewController+Designer.m in Sources */,
 				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
+				4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */,
 				4C401F2B1BAE703200BAE5FC /* MADTableViewCellQueryTableName.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4CB074F81B941C5C00F0C302 /* NSLayoutConstraint+QueryVisualization.m in Sources */,
@@ -7670,6 +7764,7 @@
 				4CDB48C61ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
 				4CC96A5D1AC90D220044C157 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
+				4C401FC71BAE8AD500BAE5FC /* MTViewControllerBarcode.m in Sources */,
 				4CB2D3CA1BA3C0F600AA473B /* MADOperationInstallSampleDocument.m in Sources */,
 				4C90D47E19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
@@ -7694,6 +7789,7 @@
 				4C75C9FE18E272F6006E8526 /* MTTableCellHeader.m in Sources */,
 				4C4740D91A029A4700B11434 /* MADFontPickerNavigationController.m in Sources */,
 				4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
+				4C401FC21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */,
 				4C05FD3119DE47D9003B2076 /* MADBarButtonItem.m in Sources */,
 				4C9E445718D88D7000F0F578 /* MTTableLayout.m in Sources */,
@@ -7710,6 +7806,7 @@
 				4C12293E16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m in Sources */,
 				4C401F761BAE7EB500BAE5FC /* MADBackgroundScrollView.m in Sources */,
 				4C401F801BAE7EB500BAE5FC /* MTTextView.m in Sources */,
+				4C401FC61BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4CA1E5A31B4E712000434D98 /* MADObjectIdentifier.m in Sources */,
 				4C359E151B082C1F00B3E9E0 /* NSString+Encryption.m in Sources */,
 				4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */,
@@ -7718,13 +7815,16 @@
 				4C5AA6801B98C7C400E405A1 /* MADQueryVisualizationDefination.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C401F7E1BAE7EB500BAE5FC /* MTGradientView.m in Sources */,
+				4C401FC31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4CCD2439193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
 				4C4740D31A0170B100B11434 /* MADToolboxStyleLayoutViewController.m in Sources */,
 				4C8D2A241B45307200237C20 /* UIMotionEffectGroup+HoverEffects.m in Sources */,
+				4C401FC51BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
 				4CC96A4B1AC90C6D0044C157 /* MADGettingStartedTableViewController.m in Sources */,
 				4C401EED1BAE61F700BAE5FC /* AppDelegate.m in Sources */,
 				4C401F0F1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m in Sources */,
+				4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */,
 				4C111C2C1B2412FA005CA4DD /* MFMailComposeViewController+FileManager.m in Sources */,
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
@@ -7747,9 +7847,11 @@
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C23FB3518FADEBB009F234F /* UIApplication+Extras.m in Sources */,
 				4C4740CF1A01709C00B11434 /* MADToolboxStyleStyleViewController.m in Sources */,
+				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
 				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */,
+				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4C0F895E1B2D892B00D75AF6 /* UINavigationController+Designer.m in Sources */,
 				4CF5319D1A08092F00511BEF /* MADToolboxTransitioner.m in Sources */,
 				4CB2937419FCB3F700C0171D /* MADTabBarController.m in Sources */,
@@ -7760,9 +7862,11 @@
 				4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4CD0B3EE1AC90B52005CA75C /* MADNavigationBarTitleView.m in Sources */,
 				4C6C9B271733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
+				4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C0F89611B2E4CB300D75AF6 /* MTViewControllerBarcode+Designer.m in Sources */,
 				4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */,
 				4CB53B4B17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
+				4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */,
 				4CA92ADD17DAFF1700D654C7 /* MADDesignerElementPickerViewController.m in Sources */,
 				4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C401F251BAE703200BAE5FC /* MADTableViewCellQueryInstructions.m in Sources */,
@@ -7785,6 +7889,7 @@
 				4C401ED91BAE5E9000BAE5FC /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
 				4CA57A5B179FD46300B58871 /* MADDesignerSectionLabel.m in Sources */,
 				4C0F89391B28C0EA00D75AF6 /* MTElementCanvas.m in Sources */,
+				4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
