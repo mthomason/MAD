@@ -7,7 +7,6 @@
 //
 
 #import "MADProgressView.h"
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @implementation MADProgressView
 
