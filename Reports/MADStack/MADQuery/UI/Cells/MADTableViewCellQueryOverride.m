@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellOverride.h"
+#import "MADTableViewCellQueryOverride.h"
 
-@implementation UITableViewCellOverride
+@implementation MADTableViewCellQueryOverride
 
 + (CGFloat)defaultHeight {
     return 44.0000f;

@@ -26,7 +26,7 @@
 
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
-#import "UITableViewCellQueryGroup.h"
+#import "MADTableViewCellQueryGroup.h"
 #import "MADTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 

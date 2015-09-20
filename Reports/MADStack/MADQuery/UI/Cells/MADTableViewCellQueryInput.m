@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellQueryInput.h"
+#import "MADTableViewCellQueryInput.h"
 #import "Constants.h"
 
-@implementation UITableViewCellQueryInput
+@implementation MADTableViewCellQueryInput
 
 + (CGFloat)defaultHeight {
     return MNSTableViewCellQueryInputHeightDefault;

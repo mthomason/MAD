@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "UITableViewCellQueryGroup.h"
+#import "MADTableViewCellQueryGroup.h"
 
 @interface UITableViewCellQueryGroup ()
 

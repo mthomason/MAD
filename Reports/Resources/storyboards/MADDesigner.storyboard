@@ -486,7 +486,7 @@
                                 </tableViewCellContentView>
                                 <animations/>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" textLabel="Fhi-ZR-338" style="IBUITableViewCellStyleDefault" id="igZ-C1-yJQ" customClass="UITableViewCellQueryGroup">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" textLabel="Fhi-ZR-338" style="IBUITableViewCellStyleDefault" id="igZ-C1-yJQ" customClass="MADTableViewCellQueryGroup">
                                 <rect key="frame" x="0.0" y="314" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="igZ-C1-yJQ" id="Rmk-cJ-qIc">
@@ -506,7 +506,7 @@
                                 </tableViewCellContentView>
                                 <animations/>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellQueryInput" rowHeight="100" id="08Y-DM-JEd" customClass="UITableViewCellQueryInput">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellQueryInput" rowHeight="100" id="08Y-DM-JEd" customClass="MADTableViewCellQueryInput">
                                 <rect key="frame" x="0.0" y="358" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="08Y-DM-JEd" id="y98-ZV-6u3">
