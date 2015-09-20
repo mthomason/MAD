@@ -20,8 +20,6 @@
     return (const char *)[theData bytes];
 }
 
-+ (NSString *)empty {
-    return @"";
-}
++ (NSString *)empty { return @""; }
 
 @end
