@@ -1,3 +1,8 @@
+
+#if __has_feature(objc_arc)
+    #warning Not yet converted to use ARC.
+#endif
+
 #import "MTDocumentStatusView.h"
 
 @interface MTDocumentStatusView()
