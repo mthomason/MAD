@@ -7,6 +7,82 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CD81BAE3AF800BAE5FC /* MTPaper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C401D251BAE3AF800BAE5FC /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CD91BAE3AF800BAE5FC /* MTPaper.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D271BAE3AF800BAE5FC /* MTPaperA0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CDB1BAE3AF800BAE5FC /* MTPaperA0.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D281BAE3AF800BAE5FC /* MTPaperA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CDC1BAE3AF800BAE5FC /* MTPaperA1.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D291BAE3AF800BAE5FC /* MTPaperA1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CDD1BAE3AF800BAE5FC /* MTPaperA1.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D2A1BAE3AF800BAE5FC /* MTPaperA2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CDE1BAE3AF800BAE5FC /* MTPaperA2.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D2B1BAE3AF800BAE5FC /* MTPaperA2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CDF1BAE3AF800BAE5FC /* MTPaperA2.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D2C1BAE3AF800BAE5FC /* MTPaperA3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CE01BAE3AF800BAE5FC /* MTPaperA3.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D2D1BAE3AF800BAE5FC /* MTPaperA3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CE11BAE3AF800BAE5FC /* MTPaperA3.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D2E1BAE3AF800BAE5FC /* MTPaperA4.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CE21BAE3AF800BAE5FC /* MTPaperA4.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D2F1BAE3AF800BAE5FC /* MTPaperA4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CE31BAE3AF800BAE5FC /* MTPaperA4.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D301BAE3AF800BAE5FC /* MTPaperA5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CE41BAE3AF800BAE5FC /* MTPaperA5.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D311BAE3AF800BAE5FC /* MTPaperA5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CE51BAE3AF800BAE5FC /* MTPaperA5.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D321BAE3AF800BAE5FC /* MTPaperA6.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CE61BAE3AF800BAE5FC /* MTPaperA6.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D331BAE3AF800BAE5FC /* MTPaperA6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CE71BAE3AF800BAE5FC /* MTPaperA6.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CE81BAE3AF800BAE5FC /* MTPaperA7.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D351BAE3AF800BAE5FC /* MTPaperA7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CE91BAE3AF800BAE5FC /* MTPaperA7.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D361BAE3AF800BAE5FC /* MTPaperA8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CEA1BAE3AF800BAE5FC /* MTPaperA8.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D371BAE3AF800BAE5FC /* MTPaperA8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CEB1BAE3AF800BAE5FC /* MTPaperA8.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D381BAE3AF800BAE5FC /* MTPaperA9.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CEC1BAE3AF800BAE5FC /* MTPaperA9.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D391BAE3AF800BAE5FC /* MTPaperA9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CED1BAE3AF800BAE5FC /* MTPaperA9.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D3A1BAE3AF800BAE5FC /* MTPaperA10.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CEE1BAE3AF800BAE5FC /* MTPaperA10.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D3B1BAE3AF800BAE5FC /* MTPaperA10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CEF1BAE3AF800BAE5FC /* MTPaperA10.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D3C1BAE3AF800BAE5FC /* MTPaperB0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CF01BAE3AF800BAE5FC /* MTPaperB0.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D3D1BAE3AF800BAE5FC /* MTPaperB0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CF11BAE3AF800BAE5FC /* MTPaperB0.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D3E1BAE3AF800BAE5FC /* MTPaperB1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CF21BAE3AF800BAE5FC /* MTPaperB1.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D3F1BAE3AF800BAE5FC /* MTPaperB1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CF31BAE3AF800BAE5FC /* MTPaperB1.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D401BAE3AF800BAE5FC /* MTPaperB2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CF41BAE3AF800BAE5FC /* MTPaperB2.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D411BAE3AF800BAE5FC /* MTPaperB2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CF51BAE3AF800BAE5FC /* MTPaperB2.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CF61BAE3AF800BAE5FC /* MTPaperB3.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D431BAE3AF800BAE5FC /* MTPaperB3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CF71BAE3AF800BAE5FC /* MTPaperB3.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D441BAE3AF800BAE5FC /* MTPaperB4.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CF81BAE3AF800BAE5FC /* MTPaperB4.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D451BAE3AF800BAE5FC /* MTPaperB4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CF91BAE3AF800BAE5FC /* MTPaperB4.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D461BAE3AF800BAE5FC /* MTPaperB5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CFA1BAE3AF800BAE5FC /* MTPaperB5.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D471BAE3AF800BAE5FC /* MTPaperB5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CFB1BAE3AF800BAE5FC /* MTPaperB5.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D481BAE3AF800BAE5FC /* MTPaperB6.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CFC1BAE3AF800BAE5FC /* MTPaperB6.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D491BAE3AF800BAE5FC /* MTPaperB6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CFD1BAE3AF800BAE5FC /* MTPaperB6.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D4A1BAE3AF800BAE5FC /* MTPaperB7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CFE1BAE3AF800BAE5FC /* MTPaperB7.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D4B1BAE3AF800BAE5FC /* MTPaperB7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CFF1BAE3AF800BAE5FC /* MTPaperB7.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D4C1BAE3AF800BAE5FC /* MTPaperB8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D001BAE3AF800BAE5FC /* MTPaperB8.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D4D1BAE3AF800BAE5FC /* MTPaperB8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D011BAE3AF800BAE5FC /* MTPaperB8.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D4E1BAE3AF800BAE5FC /* MTPaperB9.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D021BAE3AF800BAE5FC /* MTPaperB9.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D4F1BAE3AF800BAE5FC /* MTPaperB9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D031BAE3AF800BAE5FC /* MTPaperB9.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D501BAE3AF800BAE5FC /* MTPaperB10.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D041BAE3AF800BAE5FC /* MTPaperB10.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D511BAE3AF800BAE5FC /* MTPaperB10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D051BAE3AF800BAE5FC /* MTPaperB10.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D521BAE3AF800BAE5FC /* MTPaperC0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D061BAE3AF800BAE5FC /* MTPaperC0.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D531BAE3AF800BAE5FC /* MTPaperC0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D071BAE3AF800BAE5FC /* MTPaperC0.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D541BAE3AF800BAE5FC /* MTPaperC1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D081BAE3AF800BAE5FC /* MTPaperC1.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D551BAE3AF800BAE5FC /* MTPaperC1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D091BAE3AF800BAE5FC /* MTPaperC1.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D561BAE3AF800BAE5FC /* MTPaperC2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D0A1BAE3AF800BAE5FC /* MTPaperC2.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D571BAE3AF800BAE5FC /* MTPaperC2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D0B1BAE3AF800BAE5FC /* MTPaperC2.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D581BAE3AF800BAE5FC /* MTPaperC3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D0C1BAE3AF800BAE5FC /* MTPaperC3.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D591BAE3AF800BAE5FC /* MTPaperC3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D0D1BAE3AF800BAE5FC /* MTPaperC3.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D5A1BAE3AF800BAE5FC /* MTPaperC4.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D0E1BAE3AF800BAE5FC /* MTPaperC4.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D5B1BAE3AF800BAE5FC /* MTPaperC4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D0F1BAE3AF800BAE5FC /* MTPaperC4.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D5C1BAE3AF800BAE5FC /* MTPaperC5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D101BAE3AF800BAE5FC /* MTPaperC5.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D5D1BAE3AF800BAE5FC /* MTPaperC5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D111BAE3AF800BAE5FC /* MTPaperC5.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D5E1BAE3AF800BAE5FC /* MTPaperC6.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D121BAE3AF800BAE5FC /* MTPaperC6.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D5F1BAE3AF800BAE5FC /* MTPaperC6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D131BAE3AF800BAE5FC /* MTPaperC6.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D601BAE3AF800BAE5FC /* MTPaperC7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D141BAE3AF800BAE5FC /* MTPaperC7.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D611BAE3AF800BAE5FC /* MTPaperC7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D151BAE3AF800BAE5FC /* MTPaperC7.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D621BAE3AF800BAE5FC /* MTPaperC8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D161BAE3AF800BAE5FC /* MTPaperC8.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D631BAE3AF800BAE5FC /* MTPaperC8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D171BAE3AF800BAE5FC /* MTPaperC8.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D641BAE3AF800BAE5FC /* MTPaperC9.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D181BAE3AF800BAE5FC /* MTPaperC9.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D651BAE3AF800BAE5FC /* MTPaperC9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D191BAE3AF800BAE5FC /* MTPaperC9.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D661BAE3AF800BAE5FC /* MTPaperC10.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D1A1BAE3AF800BAE5FC /* MTPaperC10.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D671BAE3AF800BAE5FC /* MTPaperC10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D1B1BAE3AF800BAE5FC /* MTPaperC10.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D681BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D1C1BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D691BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D1D1BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D6A1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D1E1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D6B1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D1F1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D6C1BAE3AF800BAE5FC /* MTPaperLegal.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D201BAE3AF800BAE5FC /* MTPaperLegal.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D6D1BAE3AF800BAE5FC /* MTPaperLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D211BAE3AF800BAE5FC /* MTPaperLegal.m */; settings = {ASSET_TAGS = (); }; };
+		4C401D6E1BAE3AF800BAE5FC /* MTPaperLetter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401D221BAE3AF800BAE5FC /* MTPaperLetter.h */; settings = {ASSET_TAGS = (); }; };
+		4C401D6F1BAE3AF800BAE5FC /* MTPaperLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401D231BAE3AF800BAE5FC /* MTPaperLetter.m */; settings = {ASSET_TAGS = (); }; };
 		4CC281F81BADE80500775B72 /* MADActivityProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC281F91BADE80500775B72 /* MADArrayCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F01BADE80500775B72 /* MADArrayCaching.h */; settings = {ASSET_TAGS = (); }; };
 		4CC281FA1BADE80500775B72 /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F11BADE80500775B72 /* MADArrayCaching.m */; settings = {ASSET_TAGS = (); }; };
@@ -77,82 +153,6 @@
 		4CC282781BADE82100775B72 /* MTNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */; settings = {ASSET_TAGS = (); }; };
 		4CC282791BADE82200775B72 /* MTNotificationDidReadRows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC2827A1BADE82200775B72 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283201BADE85000775B72 /* MTPaper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2827B1BADE84E00775B72 /* MTPaper.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC283211BADE85000775B72 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2827C1BADE84E00775B72 /* MTPaper.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283221BADE85000775B72 /* MTPaperA0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2827D1BADE84E00775B72 /* MTPaperA0.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283231BADE85100775B72 /* MTPaperA0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2827E1BADE84E00775B72 /* MTPaperA0.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283241BADE85100775B72 /* MTPaperA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2827F1BADE84E00775B72 /* MTPaperA1.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283251BADE85200775B72 /* MTPaperA1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282801BADE84E00775B72 /* MTPaperA1.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283261BADE85200775B72 /* MTPaperA2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282811BADE84E00775B72 /* MTPaperA2.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283271BADE85200775B72 /* MTPaperA2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282821BADE84E00775B72 /* MTPaperA2.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283281BADE85300775B72 /* MTPaperA3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282831BADE84E00775B72 /* MTPaperA3.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283291BADE85300775B72 /* MTPaperA3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282841BADE84E00775B72 /* MTPaperA3.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2832A1BADE85300775B72 /* MTPaperA4.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282851BADE84E00775B72 /* MTPaperA4.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2832B1BADE85400775B72 /* MTPaperA4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282861BADE84E00775B72 /* MTPaperA4.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2832C1BADE85400775B72 /* MTPaperA5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282871BADE84E00775B72 /* MTPaperA5.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2832D1BADE85500775B72 /* MTPaperA5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282881BADE84F00775B72 /* MTPaperA5.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2832E1BADE85500775B72 /* MTPaperA6.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282891BADE84F00775B72 /* MTPaperA6.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2832F1BADE85500775B72 /* MTPaperA6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2828A1BADE84F00775B72 /* MTPaperA6.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283301BADE85600775B72 /* MTPaperA7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2828B1BADE84F00775B72 /* MTPaperA7.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283311BADE85600775B72 /* MTPaperA7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2828C1BADE84F00775B72 /* MTPaperA7.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283321BADE85700775B72 /* MTPaperA8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2828D1BADE84F00775B72 /* MTPaperA8.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283331BADE85700775B72 /* MTPaperA8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2828E1BADE84F00775B72 /* MTPaperA8.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283341BADE85800775B72 /* MTPaperA9.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2828F1BADE84F00775B72 /* MTPaperA9.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283351BADE85900775B72 /* MTPaperA9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282901BADE84F00775B72 /* MTPaperA9.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283361BADE85900775B72 /* MTPaperA10.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282911BADE84F00775B72 /* MTPaperA10.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283371BADE85A00775B72 /* MTPaperA10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282921BADE84F00775B72 /* MTPaperA10.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283381BADE85A00775B72 /* MTPaperB0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282931BADE84F00775B72 /* MTPaperB0.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283391BADE85A00775B72 /* MTPaperB0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282941BADE84F00775B72 /* MTPaperB0.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2833A1BADE85B00775B72 /* MTPaperB1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282951BADE84F00775B72 /* MTPaperB1.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2833B1BADE85B00775B72 /* MTPaperB1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282961BADE84F00775B72 /* MTPaperB1.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2833C1BADE85C00775B72 /* MTPaperB2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282971BADE84F00775B72 /* MTPaperB2.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2833D1BADE85C00775B72 /* MTPaperB2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282981BADE84F00775B72 /* MTPaperB2.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2833E1BADE85C00775B72 /* MTPaperB3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282991BADE84F00775B72 /* MTPaperB3.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2833F1BADE85D00775B72 /* MTPaperB3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2829A1BADE84F00775B72 /* MTPaperB3.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283401BADE85D00775B72 /* MTPaperB4.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2829B1BADE84F00775B72 /* MTPaperB4.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283411BADE85E00775B72 /* MTPaperB4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2829C1BADE84F00775B72 /* MTPaperB4.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283421BADE85E00775B72 /* MTPaperB5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2829D1BADE84F00775B72 /* MTPaperB5.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283431BADE85F00775B72 /* MTPaperB5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2829E1BADE84F00775B72 /* MTPaperB5.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283441BADE85F00775B72 /* MTPaperB6.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2829F1BADE84F00775B72 /* MTPaperB6.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283451BADE86000775B72 /* MTPaperB6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282A01BADE84F00775B72 /* MTPaperB6.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283461BADE86000775B72 /* MTPaperB7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282A11BADE84F00775B72 /* MTPaperB7.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283471BADE86100775B72 /* MTPaperB7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282A21BADE84F00775B72 /* MTPaperB7.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283481BADE86100775B72 /* MTPaperB8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282A31BADE84F00775B72 /* MTPaperB8.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283491BADE86200775B72 /* MTPaperB8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282A41BADE84F00775B72 /* MTPaperB8.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2834A1BADE86200775B72 /* MTPaperB9.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282A51BADE84F00775B72 /* MTPaperB9.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2834B1BADE86300775B72 /* MTPaperB9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282A61BADE84F00775B72 /* MTPaperB9.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2834C1BADE86300775B72 /* MTPaperB10.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282A71BADE84F00775B72 /* MTPaperB10.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2834D1BADE86400775B72 /* MTPaperB10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282A81BADE84F00775B72 /* MTPaperB10.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2834E1BADE86400775B72 /* MTPaperC0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282A91BADE84F00775B72 /* MTPaperC0.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2834F1BADE86500775B72 /* MTPaperC0.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282AA1BADE84F00775B72 /* MTPaperC0.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283501BADE86500775B72 /* MTPaperC1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282AB1BADE84F00775B72 /* MTPaperC1.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283511BADE86600775B72 /* MTPaperC1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282AC1BADE84F00775B72 /* MTPaperC1.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283521BADE86700775B72 /* MTPaperC2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282AD1BADE84F00775B72 /* MTPaperC2.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283531BADE86700775B72 /* MTPaperC2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282AE1BADE84F00775B72 /* MTPaperC2.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283541BADE86800775B72 /* MTPaperC3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282AF1BADE84F00775B72 /* MTPaperC3.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283551BADE86900775B72 /* MTPaperC3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282B01BADE84F00775B72 /* MTPaperC3.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283561BADE86900775B72 /* MTPaperC4.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282B11BADE84F00775B72 /* MTPaperC4.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283571BADE86A00775B72 /* MTPaperC4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282B21BADE84F00775B72 /* MTPaperC4.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283581BADE86A00775B72 /* MTPaperC5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282B31BADE84F00775B72 /* MTPaperC5.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283591BADE86B00775B72 /* MTPaperC5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282B41BADE84F00775B72 /* MTPaperC5.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2835A1BADE86B00775B72 /* MTPaperC6.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282B51BADE84F00775B72 /* MTPaperC6.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2835B1BADE86C00775B72 /* MTPaperC6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282B61BADE84F00775B72 /* MTPaperC6.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2835C1BADE86C00775B72 /* MTPaperC7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282B71BADE84F00775B72 /* MTPaperC7.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2835D1BADE86D00775B72 /* MTPaperC7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282B81BADE84F00775B72 /* MTPaperC7.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2835E1BADE86D00775B72 /* MTPaperC8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282B91BADE84F00775B72 /* MTPaperC8.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2835F1BADE86E00775B72 /* MTPaperC8.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282BA1BADE84F00775B72 /* MTPaperC8.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283601BADE86E00775B72 /* MTPaperC9.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282BB1BADE84F00775B72 /* MTPaperC9.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283611BADE86F00775B72 /* MTPaperC9.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282BC1BADE84F00775B72 /* MTPaperC9.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283621BADE86F00775B72 /* MTPaperC10.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282BD1BADE84F00775B72 /* MTPaperC10.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283631BADE87000775B72 /* MTPaperC10.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282BE1BADE84F00775B72 /* MTPaperC10.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283641BADE87000775B72 /* MTPaperGovernmentLegal.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282BF1BADE84F00775B72 /* MTPaperGovernmentLegal.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283651BADE87100775B72 /* MTPaperGovernmentLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282C01BADE84F00775B72 /* MTPaperGovernmentLegal.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283661BADE87200775B72 /* MTPaperGovernmentLetter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282C11BADE84F00775B72 /* MTPaperGovernmentLetter.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283671BADE87300775B72 /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282C21BADE84F00775B72 /* MTPaperGovernmentLetter.m */; settings = {ASSET_TAGS = (); }; };
-		4CC283681BADE87300775B72 /* MTPaperLegal.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282C31BADE84F00775B72 /* MTPaperLegal.h */; settings = {ASSET_TAGS = (); }; };
-		4CC283691BADE87400775B72 /* MTPaperLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282C41BADE84F00775B72 /* MTPaperLegal.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2836A1BADE87500775B72 /* MTPaperLetter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282C51BADE84F00775B72 /* MTPaperLetter.h */; settings = {ASSET_TAGS = (); }; };
-		4CC2836B1BADE87600775B72 /* MTPaperLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282C61BADE84F00775B72 /* MTPaperLetter.m */; settings = {ASSET_TAGS = (); }; };
 		4CC2836C1BADE87700775B72 /* MTQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282C71BADE84F00775B72 /* MTQuery.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC2836D1BADE87800775B72 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282C81BADE84F00775B72 /* MTQuery.m */; settings = {ASSET_TAGS = (); }; };
 		4CC2836E1BADE87900775B72 /* MTQueryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282C91BADE84F00775B72 /* MTQueryCache.h */; settings = {ASSET_TAGS = (); }; };
@@ -378,6 +378,82 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C401CD81BAE3AF800BAE5FC /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaper.h; path = MAD/MADPaper/MTPaper.h; sourceTree = "<group>"; };
+		4C401CD91BAE3AF800BAE5FC /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaper.m; path = MAD/MADPaper/MTPaper.m; sourceTree = "<group>"; };
+		4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA0.h; path = MAD/MADPaper/MTPaperA0.h; sourceTree = "<group>"; };
+		4C401CDB1BAE3AF800BAE5FC /* MTPaperA0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA0.m; path = MAD/MADPaper/MTPaperA0.m; sourceTree = "<group>"; };
+		4C401CDC1BAE3AF800BAE5FC /* MTPaperA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA1.h; path = MAD/MADPaper/MTPaperA1.h; sourceTree = "<group>"; };
+		4C401CDD1BAE3AF800BAE5FC /* MTPaperA1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA1.m; path = MAD/MADPaper/MTPaperA1.m; sourceTree = "<group>"; };
+		4C401CDE1BAE3AF800BAE5FC /* MTPaperA2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA2.h; path = MAD/MADPaper/MTPaperA2.h; sourceTree = "<group>"; };
+		4C401CDF1BAE3AF800BAE5FC /* MTPaperA2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA2.m; path = MAD/MADPaper/MTPaperA2.m; sourceTree = "<group>"; };
+		4C401CE01BAE3AF800BAE5FC /* MTPaperA3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA3.h; path = MAD/MADPaper/MTPaperA3.h; sourceTree = "<group>"; };
+		4C401CE11BAE3AF800BAE5FC /* MTPaperA3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA3.m; path = MAD/MADPaper/MTPaperA3.m; sourceTree = "<group>"; };
+		4C401CE21BAE3AF800BAE5FC /* MTPaperA4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA4.h; path = MAD/MADPaper/MTPaperA4.h; sourceTree = "<group>"; };
+		4C401CE31BAE3AF800BAE5FC /* MTPaperA4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA4.m; path = MAD/MADPaper/MTPaperA4.m; sourceTree = "<group>"; };
+		4C401CE41BAE3AF800BAE5FC /* MTPaperA5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA5.h; path = MAD/MADPaper/MTPaperA5.h; sourceTree = "<group>"; };
+		4C401CE51BAE3AF800BAE5FC /* MTPaperA5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA5.m; path = MAD/MADPaper/MTPaperA5.m; sourceTree = "<group>"; };
+		4C401CE61BAE3AF800BAE5FC /* MTPaperA6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA6.h; path = MAD/MADPaper/MTPaperA6.h; sourceTree = "<group>"; };
+		4C401CE71BAE3AF800BAE5FC /* MTPaperA6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA6.m; path = MAD/MADPaper/MTPaperA6.m; sourceTree = "<group>"; };
+		4C401CE81BAE3AF800BAE5FC /* MTPaperA7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA7.h; path = MAD/MADPaper/MTPaperA7.h; sourceTree = "<group>"; };
+		4C401CE91BAE3AF800BAE5FC /* MTPaperA7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA7.m; path = MAD/MADPaper/MTPaperA7.m; sourceTree = "<group>"; };
+		4C401CEA1BAE3AF800BAE5FC /* MTPaperA8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA8.h; path = MAD/MADPaper/MTPaperA8.h; sourceTree = "<group>"; };
+		4C401CEB1BAE3AF800BAE5FC /* MTPaperA8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA8.m; path = MAD/MADPaper/MTPaperA8.m; sourceTree = "<group>"; };
+		4C401CEC1BAE3AF800BAE5FC /* MTPaperA9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA9.h; path = MAD/MADPaper/MTPaperA9.h; sourceTree = "<group>"; };
+		4C401CED1BAE3AF800BAE5FC /* MTPaperA9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA9.m; path = MAD/MADPaper/MTPaperA9.m; sourceTree = "<group>"; };
+		4C401CEE1BAE3AF800BAE5FC /* MTPaperA10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA10.h; path = MAD/MADPaper/MTPaperA10.h; sourceTree = "<group>"; };
+		4C401CEF1BAE3AF800BAE5FC /* MTPaperA10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA10.m; path = MAD/MADPaper/MTPaperA10.m; sourceTree = "<group>"; };
+		4C401CF01BAE3AF800BAE5FC /* MTPaperB0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB0.h; path = MAD/MADPaper/MTPaperB0.h; sourceTree = "<group>"; };
+		4C401CF11BAE3AF800BAE5FC /* MTPaperB0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB0.m; path = MAD/MADPaper/MTPaperB0.m; sourceTree = "<group>"; };
+		4C401CF21BAE3AF800BAE5FC /* MTPaperB1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB1.h; path = MAD/MADPaper/MTPaperB1.h; sourceTree = "<group>"; };
+		4C401CF31BAE3AF800BAE5FC /* MTPaperB1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB1.m; path = MAD/MADPaper/MTPaperB1.m; sourceTree = "<group>"; };
+		4C401CF41BAE3AF800BAE5FC /* MTPaperB2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB2.h; path = MAD/MADPaper/MTPaperB2.h; sourceTree = "<group>"; };
+		4C401CF51BAE3AF800BAE5FC /* MTPaperB2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB2.m; path = MAD/MADPaper/MTPaperB2.m; sourceTree = "<group>"; };
+		4C401CF61BAE3AF800BAE5FC /* MTPaperB3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB3.h; path = MAD/MADPaper/MTPaperB3.h; sourceTree = "<group>"; };
+		4C401CF71BAE3AF800BAE5FC /* MTPaperB3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB3.m; path = MAD/MADPaper/MTPaperB3.m; sourceTree = "<group>"; };
+		4C401CF81BAE3AF800BAE5FC /* MTPaperB4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB4.h; path = MAD/MADPaper/MTPaperB4.h; sourceTree = "<group>"; };
+		4C401CF91BAE3AF800BAE5FC /* MTPaperB4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB4.m; path = MAD/MADPaper/MTPaperB4.m; sourceTree = "<group>"; };
+		4C401CFA1BAE3AF800BAE5FC /* MTPaperB5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB5.h; path = MAD/MADPaper/MTPaperB5.h; sourceTree = "<group>"; };
+		4C401CFB1BAE3AF800BAE5FC /* MTPaperB5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB5.m; path = MAD/MADPaper/MTPaperB5.m; sourceTree = "<group>"; };
+		4C401CFC1BAE3AF800BAE5FC /* MTPaperB6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB6.h; path = MAD/MADPaper/MTPaperB6.h; sourceTree = "<group>"; };
+		4C401CFD1BAE3AF800BAE5FC /* MTPaperB6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB6.m; path = MAD/MADPaper/MTPaperB6.m; sourceTree = "<group>"; };
+		4C401CFE1BAE3AF800BAE5FC /* MTPaperB7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB7.h; path = MAD/MADPaper/MTPaperB7.h; sourceTree = "<group>"; };
+		4C401CFF1BAE3AF800BAE5FC /* MTPaperB7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB7.m; path = MAD/MADPaper/MTPaperB7.m; sourceTree = "<group>"; };
+		4C401D001BAE3AF800BAE5FC /* MTPaperB8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB8.h; path = MAD/MADPaper/MTPaperB8.h; sourceTree = "<group>"; };
+		4C401D011BAE3AF800BAE5FC /* MTPaperB8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB8.m; path = MAD/MADPaper/MTPaperB8.m; sourceTree = "<group>"; };
+		4C401D021BAE3AF800BAE5FC /* MTPaperB9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB9.h; path = MAD/MADPaper/MTPaperB9.h; sourceTree = "<group>"; };
+		4C401D031BAE3AF800BAE5FC /* MTPaperB9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB9.m; path = MAD/MADPaper/MTPaperB9.m; sourceTree = "<group>"; };
+		4C401D041BAE3AF800BAE5FC /* MTPaperB10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB10.h; path = MAD/MADPaper/MTPaperB10.h; sourceTree = "<group>"; };
+		4C401D051BAE3AF800BAE5FC /* MTPaperB10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB10.m; path = MAD/MADPaper/MTPaperB10.m; sourceTree = "<group>"; };
+		4C401D061BAE3AF800BAE5FC /* MTPaperC0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC0.h; path = MAD/MADPaper/MTPaperC0.h; sourceTree = "<group>"; };
+		4C401D071BAE3AF800BAE5FC /* MTPaperC0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC0.m; path = MAD/MADPaper/MTPaperC0.m; sourceTree = "<group>"; };
+		4C401D081BAE3AF800BAE5FC /* MTPaperC1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC1.h; path = MAD/MADPaper/MTPaperC1.h; sourceTree = "<group>"; };
+		4C401D091BAE3AF800BAE5FC /* MTPaperC1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC1.m; path = MAD/MADPaper/MTPaperC1.m; sourceTree = "<group>"; };
+		4C401D0A1BAE3AF800BAE5FC /* MTPaperC2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC2.h; path = MAD/MADPaper/MTPaperC2.h; sourceTree = "<group>"; };
+		4C401D0B1BAE3AF800BAE5FC /* MTPaperC2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC2.m; path = MAD/MADPaper/MTPaperC2.m; sourceTree = "<group>"; };
+		4C401D0C1BAE3AF800BAE5FC /* MTPaperC3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC3.h; path = MAD/MADPaper/MTPaperC3.h; sourceTree = "<group>"; };
+		4C401D0D1BAE3AF800BAE5FC /* MTPaperC3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC3.m; path = MAD/MADPaper/MTPaperC3.m; sourceTree = "<group>"; };
+		4C401D0E1BAE3AF800BAE5FC /* MTPaperC4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC4.h; path = MAD/MADPaper/MTPaperC4.h; sourceTree = "<group>"; };
+		4C401D0F1BAE3AF800BAE5FC /* MTPaperC4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC4.m; path = MAD/MADPaper/MTPaperC4.m; sourceTree = "<group>"; };
+		4C401D101BAE3AF800BAE5FC /* MTPaperC5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC5.h; path = MAD/MADPaper/MTPaperC5.h; sourceTree = "<group>"; };
+		4C401D111BAE3AF800BAE5FC /* MTPaperC5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC5.m; path = MAD/MADPaper/MTPaperC5.m; sourceTree = "<group>"; };
+		4C401D121BAE3AF800BAE5FC /* MTPaperC6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC6.h; path = MAD/MADPaper/MTPaperC6.h; sourceTree = "<group>"; };
+		4C401D131BAE3AF800BAE5FC /* MTPaperC6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC6.m; path = MAD/MADPaper/MTPaperC6.m; sourceTree = "<group>"; };
+		4C401D141BAE3AF800BAE5FC /* MTPaperC7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC7.h; path = MAD/MADPaper/MTPaperC7.h; sourceTree = "<group>"; };
+		4C401D151BAE3AF800BAE5FC /* MTPaperC7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC7.m; path = MAD/MADPaper/MTPaperC7.m; sourceTree = "<group>"; };
+		4C401D161BAE3AF800BAE5FC /* MTPaperC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC8.h; path = MAD/MADPaper/MTPaperC8.h; sourceTree = "<group>"; };
+		4C401D171BAE3AF800BAE5FC /* MTPaperC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC8.m; path = MAD/MADPaper/MTPaperC8.m; sourceTree = "<group>"; };
+		4C401D181BAE3AF800BAE5FC /* MTPaperC9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC9.h; path = MAD/MADPaper/MTPaperC9.h; sourceTree = "<group>"; };
+		4C401D191BAE3AF800BAE5FC /* MTPaperC9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC9.m; path = MAD/MADPaper/MTPaperC9.m; sourceTree = "<group>"; };
+		4C401D1A1BAE3AF800BAE5FC /* MTPaperC10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC10.h; path = MAD/MADPaper/MTPaperC10.h; sourceTree = "<group>"; };
+		4C401D1B1BAE3AF800BAE5FC /* MTPaperC10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC10.m; path = MAD/MADPaper/MTPaperC10.m; sourceTree = "<group>"; };
+		4C401D1C1BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperGovernmentLegal.h; path = MAD/MADPaper/MTPaperGovernmentLegal.h; sourceTree = "<group>"; };
+		4C401D1D1BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperGovernmentLegal.m; path = MAD/MADPaper/MTPaperGovernmentLegal.m; sourceTree = "<group>"; };
+		4C401D1E1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperGovernmentLetter.h; path = MAD/MADPaper/MTPaperGovernmentLetter.h; sourceTree = "<group>"; };
+		4C401D1F1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperGovernmentLetter.m; path = MAD/MADPaper/MTPaperGovernmentLetter.m; sourceTree = "<group>"; };
+		4C401D201BAE3AF800BAE5FC /* MTPaperLegal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperLegal.h; path = MAD/MADPaper/MTPaperLegal.h; sourceTree = "<group>"; };
+		4C401D211BAE3AF800BAE5FC /* MTPaperLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperLegal.m; path = MAD/MADPaper/MTPaperLegal.m; sourceTree = "<group>"; };
+		4C401D221BAE3AF800BAE5FC /* MTPaperLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperLetter.h; path = MAD/MADPaper/MTPaperLetter.h; sourceTree = "<group>"; };
+		4C401D231BAE3AF800BAE5FC /* MTPaperLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperLetter.m; path = MAD/MADPaper/MTPaperLetter.m; sourceTree = "<group>"; };
 		4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADActivityProtocol.h; path = MAD/MADActivityProtocol.h; sourceTree = "<group>"; };
 		4CC281F01BADE80500775B72 /* MADArrayCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADArrayCaching.h; path = MAD/MADArrayCaching.h; sourceTree = "<group>"; };
 		4CC281F11BADE80500775B72 /* MADArrayCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADArrayCaching.m; path = MAD/MADArrayCaching.m; sourceTree = "<group>"; };
@@ -448,82 +524,6 @@
 		4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTNotificationDidFormatPage.m; path = MAD/MTNotificationDidFormatPage.m; sourceTree = "<group>"; };
 		4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNotificationDidReadRows.h; path = MAD/MTNotificationDidReadRows.h; sourceTree = "<group>"; };
 		4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTNotificationDidReadRows.m; path = MAD/MTNotificationDidReadRows.m; sourceTree = "<group>"; };
-		4CC2827B1BADE84E00775B72 /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaper.h; path = MAD/MTPaper.h; sourceTree = "<group>"; };
-		4CC2827C1BADE84E00775B72 /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaper.m; path = MAD/MTPaper.m; sourceTree = "<group>"; };
-		4CC2827D1BADE84E00775B72 /* MTPaperA0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA0.h; path = MAD/MTPaperA0.h; sourceTree = "<group>"; };
-		4CC2827E1BADE84E00775B72 /* MTPaperA0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA0.m; path = MAD/MTPaperA0.m; sourceTree = "<group>"; };
-		4CC2827F1BADE84E00775B72 /* MTPaperA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA1.h; path = MAD/MTPaperA1.h; sourceTree = "<group>"; };
-		4CC282801BADE84E00775B72 /* MTPaperA1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA1.m; path = MAD/MTPaperA1.m; sourceTree = "<group>"; };
-		4CC282811BADE84E00775B72 /* MTPaperA2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA2.h; path = MAD/MTPaperA2.h; sourceTree = "<group>"; };
-		4CC282821BADE84E00775B72 /* MTPaperA2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA2.m; path = MAD/MTPaperA2.m; sourceTree = "<group>"; };
-		4CC282831BADE84E00775B72 /* MTPaperA3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA3.h; path = MAD/MTPaperA3.h; sourceTree = "<group>"; };
-		4CC282841BADE84E00775B72 /* MTPaperA3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA3.m; path = MAD/MTPaperA3.m; sourceTree = "<group>"; };
-		4CC282851BADE84E00775B72 /* MTPaperA4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA4.h; path = MAD/MTPaperA4.h; sourceTree = "<group>"; };
-		4CC282861BADE84E00775B72 /* MTPaperA4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA4.m; path = MAD/MTPaperA4.m; sourceTree = "<group>"; };
-		4CC282871BADE84E00775B72 /* MTPaperA5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA5.h; path = MAD/MTPaperA5.h; sourceTree = "<group>"; };
-		4CC282881BADE84F00775B72 /* MTPaperA5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA5.m; path = MAD/MTPaperA5.m; sourceTree = "<group>"; };
-		4CC282891BADE84F00775B72 /* MTPaperA6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA6.h; path = MAD/MTPaperA6.h; sourceTree = "<group>"; };
-		4CC2828A1BADE84F00775B72 /* MTPaperA6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA6.m; path = MAD/MTPaperA6.m; sourceTree = "<group>"; };
-		4CC2828B1BADE84F00775B72 /* MTPaperA7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA7.h; path = MAD/MTPaperA7.h; sourceTree = "<group>"; };
-		4CC2828C1BADE84F00775B72 /* MTPaperA7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA7.m; path = MAD/MTPaperA7.m; sourceTree = "<group>"; };
-		4CC2828D1BADE84F00775B72 /* MTPaperA8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA8.h; path = MAD/MTPaperA8.h; sourceTree = "<group>"; };
-		4CC2828E1BADE84F00775B72 /* MTPaperA8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA8.m; path = MAD/MTPaperA8.m; sourceTree = "<group>"; };
-		4CC2828F1BADE84F00775B72 /* MTPaperA9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA9.h; path = MAD/MTPaperA9.h; sourceTree = "<group>"; };
-		4CC282901BADE84F00775B72 /* MTPaperA9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA9.m; path = MAD/MTPaperA9.m; sourceTree = "<group>"; };
-		4CC282911BADE84F00775B72 /* MTPaperA10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA10.h; path = MAD/MTPaperA10.h; sourceTree = "<group>"; };
-		4CC282921BADE84F00775B72 /* MTPaperA10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperA10.m; path = MAD/MTPaperA10.m; sourceTree = "<group>"; };
-		4CC282931BADE84F00775B72 /* MTPaperB0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB0.h; path = MAD/MTPaperB0.h; sourceTree = "<group>"; };
-		4CC282941BADE84F00775B72 /* MTPaperB0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB0.m; path = MAD/MTPaperB0.m; sourceTree = "<group>"; };
-		4CC282951BADE84F00775B72 /* MTPaperB1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB1.h; path = MAD/MTPaperB1.h; sourceTree = "<group>"; };
-		4CC282961BADE84F00775B72 /* MTPaperB1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB1.m; path = MAD/MTPaperB1.m; sourceTree = "<group>"; };
-		4CC282971BADE84F00775B72 /* MTPaperB2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB2.h; path = MAD/MTPaperB2.h; sourceTree = "<group>"; };
-		4CC282981BADE84F00775B72 /* MTPaperB2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB2.m; path = MAD/MTPaperB2.m; sourceTree = "<group>"; };
-		4CC282991BADE84F00775B72 /* MTPaperB3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB3.h; path = MAD/MTPaperB3.h; sourceTree = "<group>"; };
-		4CC2829A1BADE84F00775B72 /* MTPaperB3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB3.m; path = MAD/MTPaperB3.m; sourceTree = "<group>"; };
-		4CC2829B1BADE84F00775B72 /* MTPaperB4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB4.h; path = MAD/MTPaperB4.h; sourceTree = "<group>"; };
-		4CC2829C1BADE84F00775B72 /* MTPaperB4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB4.m; path = MAD/MTPaperB4.m; sourceTree = "<group>"; };
-		4CC2829D1BADE84F00775B72 /* MTPaperB5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB5.h; path = MAD/MTPaperB5.h; sourceTree = "<group>"; };
-		4CC2829E1BADE84F00775B72 /* MTPaperB5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB5.m; path = MAD/MTPaperB5.m; sourceTree = "<group>"; };
-		4CC2829F1BADE84F00775B72 /* MTPaperB6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB6.h; path = MAD/MTPaperB6.h; sourceTree = "<group>"; };
-		4CC282A01BADE84F00775B72 /* MTPaperB6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB6.m; path = MAD/MTPaperB6.m; sourceTree = "<group>"; };
-		4CC282A11BADE84F00775B72 /* MTPaperB7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB7.h; path = MAD/MTPaperB7.h; sourceTree = "<group>"; };
-		4CC282A21BADE84F00775B72 /* MTPaperB7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB7.m; path = MAD/MTPaperB7.m; sourceTree = "<group>"; };
-		4CC282A31BADE84F00775B72 /* MTPaperB8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB8.h; path = MAD/MTPaperB8.h; sourceTree = "<group>"; };
-		4CC282A41BADE84F00775B72 /* MTPaperB8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB8.m; path = MAD/MTPaperB8.m; sourceTree = "<group>"; };
-		4CC282A51BADE84F00775B72 /* MTPaperB9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB9.h; path = MAD/MTPaperB9.h; sourceTree = "<group>"; };
-		4CC282A61BADE84F00775B72 /* MTPaperB9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB9.m; path = MAD/MTPaperB9.m; sourceTree = "<group>"; };
-		4CC282A71BADE84F00775B72 /* MTPaperB10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperB10.h; path = MAD/MTPaperB10.h; sourceTree = "<group>"; };
-		4CC282A81BADE84F00775B72 /* MTPaperB10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperB10.m; path = MAD/MTPaperB10.m; sourceTree = "<group>"; };
-		4CC282A91BADE84F00775B72 /* MTPaperC0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC0.h; path = MAD/MTPaperC0.h; sourceTree = "<group>"; };
-		4CC282AA1BADE84F00775B72 /* MTPaperC0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC0.m; path = MAD/MTPaperC0.m; sourceTree = "<group>"; };
-		4CC282AB1BADE84F00775B72 /* MTPaperC1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC1.h; path = MAD/MTPaperC1.h; sourceTree = "<group>"; };
-		4CC282AC1BADE84F00775B72 /* MTPaperC1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC1.m; path = MAD/MTPaperC1.m; sourceTree = "<group>"; };
-		4CC282AD1BADE84F00775B72 /* MTPaperC2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC2.h; path = MAD/MTPaperC2.h; sourceTree = "<group>"; };
-		4CC282AE1BADE84F00775B72 /* MTPaperC2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC2.m; path = MAD/MTPaperC2.m; sourceTree = "<group>"; };
-		4CC282AF1BADE84F00775B72 /* MTPaperC3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC3.h; path = MAD/MTPaperC3.h; sourceTree = "<group>"; };
-		4CC282B01BADE84F00775B72 /* MTPaperC3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC3.m; path = MAD/MTPaperC3.m; sourceTree = "<group>"; };
-		4CC282B11BADE84F00775B72 /* MTPaperC4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC4.h; path = MAD/MTPaperC4.h; sourceTree = "<group>"; };
-		4CC282B21BADE84F00775B72 /* MTPaperC4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC4.m; path = MAD/MTPaperC4.m; sourceTree = "<group>"; };
-		4CC282B31BADE84F00775B72 /* MTPaperC5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC5.h; path = MAD/MTPaperC5.h; sourceTree = "<group>"; };
-		4CC282B41BADE84F00775B72 /* MTPaperC5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC5.m; path = MAD/MTPaperC5.m; sourceTree = "<group>"; };
-		4CC282B51BADE84F00775B72 /* MTPaperC6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC6.h; path = MAD/MTPaperC6.h; sourceTree = "<group>"; };
-		4CC282B61BADE84F00775B72 /* MTPaperC6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC6.m; path = MAD/MTPaperC6.m; sourceTree = "<group>"; };
-		4CC282B71BADE84F00775B72 /* MTPaperC7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC7.h; path = MAD/MTPaperC7.h; sourceTree = "<group>"; };
-		4CC282B81BADE84F00775B72 /* MTPaperC7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC7.m; path = MAD/MTPaperC7.m; sourceTree = "<group>"; };
-		4CC282B91BADE84F00775B72 /* MTPaperC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC8.h; path = MAD/MTPaperC8.h; sourceTree = "<group>"; };
-		4CC282BA1BADE84F00775B72 /* MTPaperC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC8.m; path = MAD/MTPaperC8.m; sourceTree = "<group>"; };
-		4CC282BB1BADE84F00775B72 /* MTPaperC9.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC9.h; path = MAD/MTPaperC9.h; sourceTree = "<group>"; };
-		4CC282BC1BADE84F00775B72 /* MTPaperC9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC9.m; path = MAD/MTPaperC9.m; sourceTree = "<group>"; };
-		4CC282BD1BADE84F00775B72 /* MTPaperC10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperC10.h; path = MAD/MTPaperC10.h; sourceTree = "<group>"; };
-		4CC282BE1BADE84F00775B72 /* MTPaperC10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperC10.m; path = MAD/MTPaperC10.m; sourceTree = "<group>"; };
-		4CC282BF1BADE84F00775B72 /* MTPaperGovernmentLegal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperGovernmentLegal.h; path = MAD/MTPaperGovernmentLegal.h; sourceTree = "<group>"; };
-		4CC282C01BADE84F00775B72 /* MTPaperGovernmentLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperGovernmentLegal.m; path = MAD/MTPaperGovernmentLegal.m; sourceTree = "<group>"; };
-		4CC282C11BADE84F00775B72 /* MTPaperGovernmentLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperGovernmentLetter.h; path = MAD/MTPaperGovernmentLetter.h; sourceTree = "<group>"; };
-		4CC282C21BADE84F00775B72 /* MTPaperGovernmentLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperGovernmentLetter.m; path = MAD/MTPaperGovernmentLetter.m; sourceTree = "<group>"; };
-		4CC282C31BADE84F00775B72 /* MTPaperLegal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperLegal.h; path = MAD/MTPaperLegal.h; sourceTree = "<group>"; };
-		4CC282C41BADE84F00775B72 /* MTPaperLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperLegal.m; path = MAD/MTPaperLegal.m; sourceTree = "<group>"; };
-		4CC282C51BADE84F00775B72 /* MTPaperLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperLetter.h; path = MAD/MTPaperLetter.h; sourceTree = "<group>"; };
-		4CC282C61BADE84F00775B72 /* MTPaperLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaperLetter.m; path = MAD/MTPaperLetter.m; sourceTree = "<group>"; };
 		4CC282C71BADE84F00775B72 /* MTQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQuery.h; path = MAD/MTQuery.h; sourceTree = "<group>"; };
 		4CC282C81BADE84F00775B72 /* MTQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQuery.m; path = MAD/MTQuery.m; sourceTree = "<group>"; };
 		4CC282C91BADE84F00775B72 /* MTQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCache.h; path = MAD/MTQueryCache.h; sourceTree = "<group>"; };
@@ -770,88 +770,96 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C401CD71BAE3AD600BAE5FC /* MADPaper */ = {
+			isa = PBXGroup;
+			children = (
+				4C401CD81BAE3AF800BAE5FC /* MTPaper.h */,
+				4C401CD91BAE3AF800BAE5FC /* MTPaper.m */,
+				4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */,
+				4C401CDB1BAE3AF800BAE5FC /* MTPaperA0.m */,
+				4C401CDC1BAE3AF800BAE5FC /* MTPaperA1.h */,
+				4C401CDD1BAE3AF800BAE5FC /* MTPaperA1.m */,
+				4C401CDE1BAE3AF800BAE5FC /* MTPaperA2.h */,
+				4C401CDF1BAE3AF800BAE5FC /* MTPaperA2.m */,
+				4C401CE01BAE3AF800BAE5FC /* MTPaperA3.h */,
+				4C401CE11BAE3AF800BAE5FC /* MTPaperA3.m */,
+				4C401CE21BAE3AF800BAE5FC /* MTPaperA4.h */,
+				4C401CE31BAE3AF800BAE5FC /* MTPaperA4.m */,
+				4C401CE41BAE3AF800BAE5FC /* MTPaperA5.h */,
+				4C401CE51BAE3AF800BAE5FC /* MTPaperA5.m */,
+				4C401CE61BAE3AF800BAE5FC /* MTPaperA6.h */,
+				4C401CE71BAE3AF800BAE5FC /* MTPaperA6.m */,
+				4C401CE81BAE3AF800BAE5FC /* MTPaperA7.h */,
+				4C401CE91BAE3AF800BAE5FC /* MTPaperA7.m */,
+				4C401CEA1BAE3AF800BAE5FC /* MTPaperA8.h */,
+				4C401CEB1BAE3AF800BAE5FC /* MTPaperA8.m */,
+				4C401CEC1BAE3AF800BAE5FC /* MTPaperA9.h */,
+				4C401CED1BAE3AF800BAE5FC /* MTPaperA9.m */,
+				4C401CEE1BAE3AF800BAE5FC /* MTPaperA10.h */,
+				4C401CEF1BAE3AF800BAE5FC /* MTPaperA10.m */,
+				4C401CF01BAE3AF800BAE5FC /* MTPaperB0.h */,
+				4C401CF11BAE3AF800BAE5FC /* MTPaperB0.m */,
+				4C401CF21BAE3AF800BAE5FC /* MTPaperB1.h */,
+				4C401CF31BAE3AF800BAE5FC /* MTPaperB1.m */,
+				4C401CF41BAE3AF800BAE5FC /* MTPaperB2.h */,
+				4C401CF51BAE3AF800BAE5FC /* MTPaperB2.m */,
+				4C401CF61BAE3AF800BAE5FC /* MTPaperB3.h */,
+				4C401CF71BAE3AF800BAE5FC /* MTPaperB3.m */,
+				4C401CF81BAE3AF800BAE5FC /* MTPaperB4.h */,
+				4C401CF91BAE3AF800BAE5FC /* MTPaperB4.m */,
+				4C401CFA1BAE3AF800BAE5FC /* MTPaperB5.h */,
+				4C401CFB1BAE3AF800BAE5FC /* MTPaperB5.m */,
+				4C401CFC1BAE3AF800BAE5FC /* MTPaperB6.h */,
+				4C401CFD1BAE3AF800BAE5FC /* MTPaperB6.m */,
+				4C401CFE1BAE3AF800BAE5FC /* MTPaperB7.h */,
+				4C401CFF1BAE3AF800BAE5FC /* MTPaperB7.m */,
+				4C401D001BAE3AF800BAE5FC /* MTPaperB8.h */,
+				4C401D011BAE3AF800BAE5FC /* MTPaperB8.m */,
+				4C401D021BAE3AF800BAE5FC /* MTPaperB9.h */,
+				4C401D031BAE3AF800BAE5FC /* MTPaperB9.m */,
+				4C401D041BAE3AF800BAE5FC /* MTPaperB10.h */,
+				4C401D051BAE3AF800BAE5FC /* MTPaperB10.m */,
+				4C401D061BAE3AF800BAE5FC /* MTPaperC0.h */,
+				4C401D071BAE3AF800BAE5FC /* MTPaperC0.m */,
+				4C401D081BAE3AF800BAE5FC /* MTPaperC1.h */,
+				4C401D091BAE3AF800BAE5FC /* MTPaperC1.m */,
+				4C401D0A1BAE3AF800BAE5FC /* MTPaperC2.h */,
+				4C401D0B1BAE3AF800BAE5FC /* MTPaperC2.m */,
+				4C401D0C1BAE3AF800BAE5FC /* MTPaperC3.h */,
+				4C401D0D1BAE3AF800BAE5FC /* MTPaperC3.m */,
+				4C401D0E1BAE3AF800BAE5FC /* MTPaperC4.h */,
+				4C401D0F1BAE3AF800BAE5FC /* MTPaperC4.m */,
+				4C401D101BAE3AF800BAE5FC /* MTPaperC5.h */,
+				4C401D111BAE3AF800BAE5FC /* MTPaperC5.m */,
+				4C401D121BAE3AF800BAE5FC /* MTPaperC6.h */,
+				4C401D131BAE3AF800BAE5FC /* MTPaperC6.m */,
+				4C401D141BAE3AF800BAE5FC /* MTPaperC7.h */,
+				4C401D151BAE3AF800BAE5FC /* MTPaperC7.m */,
+				4C401D161BAE3AF800BAE5FC /* MTPaperC8.h */,
+				4C401D171BAE3AF800BAE5FC /* MTPaperC8.m */,
+				4C401D181BAE3AF800BAE5FC /* MTPaperC9.h */,
+				4C401D191BAE3AF800BAE5FC /* MTPaperC9.m */,
+				4C401D1A1BAE3AF800BAE5FC /* MTPaperC10.h */,
+				4C401D1B1BAE3AF800BAE5FC /* MTPaperC10.m */,
+				4C401D1C1BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h */,
+				4C401D1D1BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m */,
+				4C401D1E1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h */,
+				4C401D1F1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m */,
+				4C401D201BAE3AF800BAE5FC /* MTPaperLegal.h */,
+				4C401D211BAE3AF800BAE5FC /* MTPaperLegal.m */,
+				4C401D221BAE3AF800BAE5FC /* MTPaperLetter.h */,
+				4C401D231BAE3AF800BAE5FC /* MTPaperLetter.m */,
+			);
+			name = MADPaper;
+			sourceTree = "<group>";
+		};
 		4C95C84F1BADE77100459CB0 /* MAD */ = {
 			isa = PBXGroup;
 			children = (
+				4C401CD71BAE3AD600BAE5FC /* MADPaper */,
 				4CC283C91BADE90600775B72 /* rptq */,
 				4CC283C51BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h */,
 				4CC283C61BADE8EA00775B72 /* RptqDocumentSectionEnumerator.m */,
-				4CC2827B1BADE84E00775B72 /* MTPaper.h */,
-				4CC2827C1BADE84E00775B72 /* MTPaper.m */,
-				4CC2827D1BADE84E00775B72 /* MTPaperA0.h */,
-				4CC2827E1BADE84E00775B72 /* MTPaperA0.m */,
-				4CC2827F1BADE84E00775B72 /* MTPaperA1.h */,
-				4CC282801BADE84E00775B72 /* MTPaperA1.m */,
-				4CC282811BADE84E00775B72 /* MTPaperA2.h */,
-				4CC282821BADE84E00775B72 /* MTPaperA2.m */,
-				4CC282831BADE84E00775B72 /* MTPaperA3.h */,
-				4CC282841BADE84E00775B72 /* MTPaperA3.m */,
-				4CC282851BADE84E00775B72 /* MTPaperA4.h */,
-				4CC282861BADE84E00775B72 /* MTPaperA4.m */,
-				4CC282871BADE84E00775B72 /* MTPaperA5.h */,
-				4CC282881BADE84F00775B72 /* MTPaperA5.m */,
-				4CC282891BADE84F00775B72 /* MTPaperA6.h */,
-				4CC2828A1BADE84F00775B72 /* MTPaperA6.m */,
-				4CC2828B1BADE84F00775B72 /* MTPaperA7.h */,
-				4CC2828C1BADE84F00775B72 /* MTPaperA7.m */,
-				4CC2828D1BADE84F00775B72 /* MTPaperA8.h */,
-				4CC2828E1BADE84F00775B72 /* MTPaperA8.m */,
-				4CC2828F1BADE84F00775B72 /* MTPaperA9.h */,
-				4CC282901BADE84F00775B72 /* MTPaperA9.m */,
-				4CC282911BADE84F00775B72 /* MTPaperA10.h */,
-				4CC282921BADE84F00775B72 /* MTPaperA10.m */,
-				4CC282931BADE84F00775B72 /* MTPaperB0.h */,
-				4CC282941BADE84F00775B72 /* MTPaperB0.m */,
-				4CC282951BADE84F00775B72 /* MTPaperB1.h */,
-				4CC282961BADE84F00775B72 /* MTPaperB1.m */,
-				4CC282971BADE84F00775B72 /* MTPaperB2.h */,
-				4CC282981BADE84F00775B72 /* MTPaperB2.m */,
-				4CC282991BADE84F00775B72 /* MTPaperB3.h */,
-				4CC2829A1BADE84F00775B72 /* MTPaperB3.m */,
-				4CC2829B1BADE84F00775B72 /* MTPaperB4.h */,
-				4CC2829C1BADE84F00775B72 /* MTPaperB4.m */,
-				4CC2829D1BADE84F00775B72 /* MTPaperB5.h */,
-				4CC2829E1BADE84F00775B72 /* MTPaperB5.m */,
-				4CC2829F1BADE84F00775B72 /* MTPaperB6.h */,
-				4CC282A01BADE84F00775B72 /* MTPaperB6.m */,
-				4CC282A11BADE84F00775B72 /* MTPaperB7.h */,
-				4CC282A21BADE84F00775B72 /* MTPaperB7.m */,
-				4CC282A31BADE84F00775B72 /* MTPaperB8.h */,
-				4CC282A41BADE84F00775B72 /* MTPaperB8.m */,
-				4CC282A51BADE84F00775B72 /* MTPaperB9.h */,
-				4CC282A61BADE84F00775B72 /* MTPaperB9.m */,
-				4CC282A71BADE84F00775B72 /* MTPaperB10.h */,
-				4CC282A81BADE84F00775B72 /* MTPaperB10.m */,
-				4CC282A91BADE84F00775B72 /* MTPaperC0.h */,
-				4CC282AA1BADE84F00775B72 /* MTPaperC0.m */,
-				4CC282AB1BADE84F00775B72 /* MTPaperC1.h */,
-				4CC282AC1BADE84F00775B72 /* MTPaperC1.m */,
-				4CC282AD1BADE84F00775B72 /* MTPaperC2.h */,
-				4CC282AE1BADE84F00775B72 /* MTPaperC2.m */,
-				4CC282AF1BADE84F00775B72 /* MTPaperC3.h */,
-				4CC282B01BADE84F00775B72 /* MTPaperC3.m */,
-				4CC282B11BADE84F00775B72 /* MTPaperC4.h */,
-				4CC282B21BADE84F00775B72 /* MTPaperC4.m */,
-				4CC282B31BADE84F00775B72 /* MTPaperC5.h */,
-				4CC282B41BADE84F00775B72 /* MTPaperC5.m */,
-				4CC282B51BADE84F00775B72 /* MTPaperC6.h */,
-				4CC282B61BADE84F00775B72 /* MTPaperC6.m */,
-				4CC282B71BADE84F00775B72 /* MTPaperC7.h */,
-				4CC282B81BADE84F00775B72 /* MTPaperC7.m */,
-				4CC282B91BADE84F00775B72 /* MTPaperC8.h */,
-				4CC282BA1BADE84F00775B72 /* MTPaperC8.m */,
-				4CC282BB1BADE84F00775B72 /* MTPaperC9.h */,
-				4CC282BC1BADE84F00775B72 /* MTPaperC9.m */,
-				4CC282BD1BADE84F00775B72 /* MTPaperC10.h */,
-				4CC282BE1BADE84F00775B72 /* MTPaperC10.m */,
-				4CC282BF1BADE84F00775B72 /* MTPaperGovernmentLegal.h */,
-				4CC282C01BADE84F00775B72 /* MTPaperGovernmentLegal.m */,
-				4CC282C11BADE84F00775B72 /* MTPaperGovernmentLetter.h */,
-				4CC282C21BADE84F00775B72 /* MTPaperGovernmentLetter.m */,
-				4CC282C31BADE84F00775B72 /* MTPaperLegal.h */,
-				4CC282C41BADE84F00775B72 /* MTPaperLegal.m */,
-				4CC282C51BADE84F00775B72 /* MTPaperLetter.h */,
-				4CC282C61BADE84F00775B72 /* MTPaperLetter.m */,
 				4CC282C71BADE84F00775B72 /* MTQuery.h */,
 				4CC282C81BADE84F00775B72 /* MTQuery.m */,
 				4CC282C91BADE84F00775B72 /* MTQueryCache.h */,
@@ -1216,8 +1224,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */,
 				4CC283B01BADE8BC00775B72 /* MTReportFormatter.h in Headers */,
-				4CC283201BADE85000775B72 /* MTPaper.h in Headers */,
 				4CC283B71BADE8C400775B72 /* MTReportViewerPrintPageRenderer.h in Headers */,
 				4CC282631BADE81E00775B72 /* MTDatabaseTable.h in Headers */,
 				4CC282591BADE81C00775B72 /* MTDatabaseField.h in Headers */,
@@ -1238,6 +1246,7 @@
 				4CC284991BADE9E800775B72 /* RptqQueryPredicate+Extras.h in Headers */,
 				4CC284031BADE92B00775B72 /* RptqDatabaseSchemaTable.h in Headers */,
 				4CC284831BADE9BD00775B72 /* RptqDocumentObjectLabel+Extras.h in Headers */,
+				4C401D2E1BAE3AF800BAE5FC /* MTPaperA4.h in Headers */,
 				4CC284291BADE96000775B72 /* RptqQueryPredicate.h in Headers */,
 				4CC284051BADE92E00775B72 /* RptqDocument.h in Headers */,
 				4CC284211BADE95400775B72 /* RptqQueryCache.h in Headers */,
@@ -1247,6 +1256,7 @@
 				4CC2849F1BADE9F400775B72 /* RptqRelationship+Extras.h in Headers */,
 				4CC284701BADE99800775B72 /* RptqDatabaseSchemaTable+Extras.h in Headers */,
 				4CC284811BADE9B800775B72 /* RptqDocumentObjectImage+Extras.h in Headers */,
+				4C401D301BAE3AF800BAE5FC /* MTPaperA5.h in Headers */,
 				4CC284891BADE9C900775B72 /* RptqDocumentSection+Extras.h in Headers */,
 				4CC2849B1BADE9EC00775B72 /* RptqQuerySort+Extras.h in Headers */,
 				4CC284741BADE99F00775B72 /* RptqDocumentObject+Extras.h in Headers */,
@@ -1254,17 +1264,25 @@
 				4CC284A11BADE9F800775B72 /* RptqUserCredentals+Extras.h in Headers */,
 				4CC283FF1BADE92600775B72 /* RptqDatabase.h in Headers */,
 				4CC2847F1BADE9B400775B72 /* RptqDocumentObjectGroupKey+Extras.h in Headers */,
+				4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */,
 				4CC2847C1BADE9AE00775B72 /* RptqDocumentObjectFactory.h in Headers */,
+				4C401D561BAE3AF800BAE5FC /* MTPaperC2.h in Headers */,
 				4CC2840F1BADE93A00775B72 /* RptqDocumentObjectFormula.h in Headers */,
 				4CC284781BADE9A700775B72 /* RptqDocumentObjectBarcode+Extras.h in Headers */,
 				4CC2840B1BADE93500775B72 /* RptqDocumentObjectBarcode.h in Headers */,
 				4CC284931BADE9DC00775B72 /* RptqQueryField+Extras.h in Headers */,
+				4C401D3C1BAE3AF800BAE5FC /* MTPaperB0.h in Headers */,
+				4C401D541BAE3AF800BAE5FC /* MTPaperC1.h in Headers */,
 				4CC2846C1BADE99200775B72 /* RptqDatabase+Extras.h in Headers */,
 				4CC284851BADE9C100775B72 /* RptqDocumentObjectLabelDataField+Extras.h in Headers */,
 				4CC284271BADE95D00775B72 /* RptqQueryLinks.h in Headers */,
+				4C401D5A1BAE3AF800BAE5FC /* MTPaperC4.h in Headers */,
+				4C401D521BAE3AF800BAE5FC /* MTPaperC0.h in Headers */,
+				4C401D621BAE3AF800BAE5FC /* MTPaperC8.h in Headers */,
 				4CC284231BADE95700775B72 /* RptqQueryField.h in Headers */,
 				4CC284761BADE9A300775B72 /* RptqDocumentObjectAggregate+Extras.h in Headers */,
 				4CC2848F1BADE9D400775B72 /* RptqQuery+Extras.h in Headers */,
+				4C401D5C1BAE3AF800BAE5FC /* MTPaperC5.h in Headers */,
 				4CC283C71BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h in Headers */,
 				4CC284131BADE94000775B72 /* RptqDocumentObjectImage.h in Headers */,
 				4CC284911BADE9D900775B72 /* RptqQueryCache+Extras.h in Headers */,
@@ -1272,6 +1290,7 @@
 				4CC284971BADE9E400775B72 /* RptqQueryLinks+Extras.h in Headers */,
 				4CC2841D1BADE94D00775B72 /* RptqDocumentSectionRows.h in Headers */,
 				4CC2848B1BADE9CC00775B72 /* RptqDocumentSectionRows+Extras.h in Headers */,
+				4C401D2A1BAE3AF800BAE5FC /* MTPaperA2.h in Headers */,
 				4CC284191BADE94800775B72 /* RptqDocumentObjectLabelLink.h in Headers */,
 				4CC284071BADE93000775B72 /* RptqDocumentObject.h in Headers */,
 				4CC284951BADE9E000775B72 /* RptqQueryGroup+Extras.h in Headers */,
@@ -1284,6 +1303,7 @@
 				4CC284111BADE93D00775B72 /* RptqDocumentObjectGroupKey.h in Headers */,
 				4CC284251BADE95A00775B72 /* RptqQueryGroup.h in Headers */,
 				4CC2847A1BADE9AA00775B72 /* RptqDocumentObjectChart+Extras.h in Headers */,
+				4C401D641BAE3AF800BAE5FC /* MTPaperC9.h in Headers */,
 				4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */,
 				4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */,
 				4CC282791BADE82200775B72 /* MTNotificationDidReadRows.h in Headers */,
@@ -1297,6 +1317,8 @@
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4CC282671BADE81E00775B72 /* MTDataTable+Factory.h in Headers */,
 				4CC282491BADE81B00775B72 /* MTAggregateFunctionInputType.h in Headers */,
+				4C401D381BAE3AF800BAE5FC /* MTPaperA9.h in Headers */,
+				4C401D321BAE3AF800BAE5FC /* MTPaperA6.h in Headers */,
 				4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */,
 				4CC281FE1BADE80500775B72 /* MADLinkType.h in Headers */,
 				4CC282711BADE82000775B72 /* MTErrorContainer.h in Headers */,
@@ -1304,95 +1326,81 @@
 				4CC282451BADE81A00775B72 /* MTActivityIndicator.h in Headers */,
 				4CC282751BADE82100775B72 /* MTKeyChain.h in Headers */,
 				4CC283B41BADE8C000775B72 /* MTReportFormatterDataSource.h in Headers */,
-				4CC283441BADE85F00775B72 /* MTPaperB6.h in Headers */,
-				4CC283341BADE85800775B72 /* MTPaperA9.h in Headers */,
-				4CC2832E1BADE85500775B72 /* MTPaperA6.h in Headers */,
+				4C401D581BAE3AF800BAE5FC /* MTPaperC3.h in Headers */,
+				4C401D4C1BAE3AF800BAE5FC /* MTPaperB8.h in Headers */,
+				4C401D281BAE3AF800BAE5FC /* MTPaperA1.h in Headers */,
 				4CC283801BADE88B00775B72 /* MTQueryCacheIndexDrop.h in Headers */,
 				4CC2826D1BADE81F00775B72 /* MTDataTableLocation.h in Headers */,
-				4CC283681BADE87300775B72 /* MTPaperLegal.h in Headers */,
 				4CC2825F1BADE81D00775B72 /* MTDatabaseSqlite3.h in Headers */,
 				4CC283A21BADE8B000775B72 /* MTQueryDefinitionTable.h in Headers */,
-				4CC2834C1BADE86300775B72 /* MTPaperB10.h in Headers */,
+				4C401D461BAE3AF800BAE5FC /* MTPaperB5.h in Headers */,
+				4C401D661BAE3AF800BAE5FC /* MTPaperC10.h in Headers */,
+				4C401D481BAE3AF800BAE5FC /* MTPaperB6.h in Headers */,
+				4C401D4E1BAE3AF800BAE5FC /* MTPaperB9.h in Headers */,
 				4CC2826B1BADE81F00775B72 /* MTDataTableFastObjectEnumerator.h in Headers */,
 				4CC283841BADE88F00775B72 /* MTQueryCacheJournalModeOverride.h in Headers */,
-				4CC283541BADE86800775B72 /* MTPaperC3.h in Headers */,
-				4CC283401BADE85D00775B72 /* MTPaperB4.h in Headers */,
+				4C401D3E1BAE3AF800BAE5FC /* MTPaperB1.h in Headers */,
 				4CC2836E1BADE87900775B72 /* MTQueryCache.h in Headers */,
-				4CC283561BADE86900775B72 /* MTPaperC4.h in Headers */,
-				4CC2835C1BADE86C00775B72 /* MTPaperC7.h in Headers */,
-				4CC283321BADE85700775B72 /* MTPaperA8.h in Headers */,
+				4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */,
 				4CC2839C1BADE8AB00775B72 /* MTQueryDefinitionLinks.h in Headers */,
+				4C401D401BAE3AF800BAE5FC /* MTPaperB2.h in Headers */,
 				4CC283B51BADE8C200775B72 /* MTReportFormatterPageDefinition.h in Headers */,
-				4CC283361BADE85900775B72 /* MTPaperA10.h in Headers */,
 				4CC2839E1BADE8AD00775B72 /* MTQueryDefinitionPredicate.h in Headers */,
-				4CC2836A1BADE87500775B72 /* MTPaperLetter.h in Headers */,
-				4CC283261BADE85200775B72 /* MTPaperA2.h in Headers */,
-				4CC283221BADE85000775B72 /* MTPaperA0.h in Headers */,
+				4C401D6C1BAE3AF800BAE5FC /* MTPaperLegal.h in Headers */,
 				4CC283A81BADE8B500775B72 /* MTQuerySampleDataField.h in Headers */,
 				4CC283C31BADE8D200775B72 /* NSString+Extras.h in Headers */,
+				4C401D601BAE3AF800BAE5FC /* MTPaperC7.h in Headers */,
 				4CC2838C1BADE89700775B72 /* MTQueryCacheSelectRowId.h in Headers */,
+				4C401D3A1BAE3AF800BAE5FC /* MTPaperA10.h in Headers */,
 				4CC283901BADE89C00775B72 /* MTQueryCacheSyncDefault.h in Headers */,
 				4CC2825D1BADE81D00775B72 /* MTDatabaseProcessSqlServer.h in Headers */,
 				4CF781481BADE5EA0050A67D /* MAD.h in Headers */,
+				4C401D6A1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h in Headers */,
 				4CC283961BADE8A400775B72 /* MTQueryCustomNoResults.h in Headers */,
 				4CC282531BADE81C00775B72 /* MTDatabaseConnectionSqlite3.h in Headers */,
-				4CC283641BADE87000775B72 /* MTPaperGovernmentLegal.h in Headers */,
 				4CC283981BADE8A700775B72 /* MTQueryDefinitionField.h in Headers */,
 				4CC2838A1BADE89500775B72 /* MTQueryCacheSelectLimitOffset.h in Headers */,
 				4CC283821BADE88D00775B72 /* MTQueryCacheJournalModeDefault.h in Headers */,
+				4C401D5E1BAE3AF800BAE5FC /* MTPaperC6.h in Headers */,
 				4CC283701BADE87A00775B72 /* MTQueryCacheAddColumn.h in Headers */,
 				4CC283881BADE89300775B72 /* MTQueryCacheSelectGroupKeys.h in Headers */,
-				4CC283241BADE85100775B72 /* MTPaperA1.h in Headers */,
 				4CC283A61BADE8B300775B72 /* MTQueryMaxFieldLength.h in Headers */,
 				4CC283C11BADE8D000775B72 /* NSObject+DebugDescription.h in Headers */,
 				4CC283AC1BADE8B900775B72 /* MTQuerySelectItemsForGroup.h in Headers */,
 				4CC281F91BADE80500775B72 /* MADArrayCaching.h in Headers */,
-				4CC2834E1BADE86400775B72 /* MTPaperC0.h in Headers */,
 				4CC282571BADE81C00775B72 /* MTDatabaseDataBinding.h in Headers */,
-				4CC283481BADE86100775B72 /* MTPaperB8.h in Headers */,
 				4CC283721BADE87C00775B72 /* MTQueryCacheAddRow.h in Headers */,
-				4CC283281BADE85300775B72 /* MTPaperA3.h in Headers */,
 				4CC2825B1BADE81D00775B72 /* MTDatabaseMySql.h in Headers */,
 				4CC282691BADE81E00775B72 /* MTDataTableFast.h in Headers */,
 				4CC2838E1BADE89900775B72 /* MTQueryCacheSelectRowIds.h in Headers */,
-				4CC283421BADE85E00775B72 /* MTPaperB5.h in Headers */,
 				4CC282511BADE81B00775B72 /* MTDatabaseConnectionMySql.h in Headers */,
+				4C401D441BAE3AF800BAE5FC /* MTPaperB4.h in Headers */,
 				4CC283AA1BADE8B700775B72 /* MTQuerySampleDataTable.h in Headers */,
 				4CC283BB1BADE8C800775B72 /* NSData+Comparson.h in Headers */,
+				4C401D6E1BAE3AF800BAE5FC /* MTPaperLetter.h in Headers */,
 				4CC283761BADE87F00775B72 /* MTQueryCacheBeginTransaction.h in Headers */,
-				4CC2834A1BADE86200775B72 /* MTPaperB9.h in Headers */,
-				4CC283621BADE86F00775B72 /* MTPaperC10.h in Headers */,
 				4CC2823E1BADE81A00775B72 /* MADocumentState.h in Headers */,
 				4CC283781BADE88100775B72 /* MTQueryCacheDeleteAllFromTable.h in Headers */,
 				4CC283741BADE87E00775B72 /* MTQueryCacheAggregateFunction.h in Headers */,
-				4CC283601BADE86E00775B72 /* MTPaperC9.h in Headers */,
 				4CC283A01BADE8AE00775B72 /* MTQueryDefinitionSort.h in Headers */,
 				4CC2837E1BADE88800775B72 /* MTQueryCacheIndexCreate.h in Headers */,
-				4CC2833A1BADE85B00775B72 /* MTPaperB1.h in Headers */,
+				4C401D2C1BAE3AF800BAE5FC /* MTPaperA3.h in Headers */,
 				4CC2839A1BADE8A900775B72 /* MTQueryDefinitionGroup.h in Headers */,
 				4CC283921BADE89F00775B72 /* MTQueryCacheSyncOff.h in Headers */,
-				4CC2832C1BADE85400775B72 /* MTPaperA5.h in Headers */,
-				4CC2833E1BADE85C00775B72 /* MTPaperB3.h in Headers */,
-				4CC283501BADE86500775B72 /* MTPaperC1.h in Headers */,
-				4CC283301BADE85600775B72 /* MTPaperA7.h in Headers */,
+				4C401D4A1BAE3AF800BAE5FC /* MTPaperB7.h in Headers */,
 				4CC2846B1BADE98F00775B72 /* rptq.h in Headers */,
-				4CC2835E1BADE86D00775B72 /* MTPaperC8.h in Headers */,
-				4CC2832A1BADE85300775B72 /* MTPaperA4.h in Headers */,
+				4C401D501BAE3AF800BAE5FC /* MTPaperB10.h in Headers */,
 				4CC2837C1BADE88500775B72 /* MTQueryCacheEndTransaction.h in Headers */,
-				4CC283521BADE86700775B72 /* MTPaperC2.h in Headers */,
 				4CC283861BADE89100775B72 /* MTQueryCacheSelect.h in Headers */,
-				4CC2833C1BADE85C00775B72 /* MTPaperB2.h in Headers */,
 				4CC2837A1BADE88300775B72 /* MTQueryCacheDropTable.h in Headers */,
-				4CC283461BADE86000775B72 /* MTPaperB7.h in Headers */,
+				4C401D361BAE3AF800BAE5FC /* MTPaperA8.h in Headers */,
+				4C401D681BAE3AF800BAE5FC /* MTPaperGovernmentLegal.h in Headers */,
 				4CC2826F1BADE81F00775B72 /* MTDataTableVirtual.h in Headers */,
-				4CC283381BADE85A00775B72 /* MTPaperB0.h in Headers */,
 				4CC282611BADE81D00775B72 /* MTDatabaseSqlServer.h in Headers */,
 				4CC283B21BADE8BE00775B72 /* MTReportFormatterCache.h in Headers */,
 				4CC283A41BADE8B100775B72 /* MTQueryFull.h in Headers */,
+				4C401D341BAE3AF800BAE5FC /* MTPaperA7.h in Headers */,
 				4CC283941BADE8A200775B72 /* MTQueryCacheVacuum.h in Headers */,
-				4CC283661BADE87200775B72 /* MTPaperGovernmentLetter.h in Headers */,
-				4CC283581BADE86A00775B72 /* MTPaperC5.h in Headers */,
-				4CC2835A1BADE86B00775B72 /* MTPaperC6.h in Headers */,
 				4CC282551BADE81C00775B72 /* MTDatabaseConnectionSqlServer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1493,116 +1501,120 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CC283431BADE85F00775B72 /* MTPaperB5.m in Sources */,
+				4C401D551BAE3AF800BAE5FC /* MTPaperC1.m in Sources */,
+				4C401D6B1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m in Sources */,
 				4CC282701BADE82000775B72 /* MTDataTableVirtual.m in Sources */,
-				4CC283671BADE87300775B72 /* MTPaperGovernmentLetter.m in Sources */,
-				4CC283351BADE85900775B72 /* MTPaperA9.m in Sources */,
+				4C401D5F1BAE3AF800BAE5FC /* MTPaperC6.m in Sources */,
 				4CC284711BADE99B00775B72 /* RptqDatabaseSchemaTable+Extras.m in Sources */,
 				4CC283BE1BADE8CD00775B72 /* NSManagedObject+Extras.m in Sources */,
-				4CC2832D1BADE85500775B72 /* MTPaperA5.m in Sources */,
 				4CC283B11BADE8BE00775B72 /* MTReportFormatter.m in Sources */,
+				4C401D631BAE3AF800BAE5FC /* MTPaperC8.m in Sources */,
+				4C401D271BAE3AF800BAE5FC /* MTPaperA0.m in Sources */,
+				4C401D591BAE3AF800BAE5FC /* MTPaperC3.m in Sources */,
+				4C401D451BAE3AF800BAE5FC /* MTPaperB4.m in Sources */,
 				4CC282681BADE81E00775B72 /* MTDataTable+Factory.m in Sources */,
 				4CC283C41BADE8D400775B72 /* NSString+Extras.m in Sources */,
-				4CC2833F1BADE85D00775B72 /* MTPaperB3.m in Sources */,
+				4C401D5B1BAE3AF800BAE5FC /* MTPaperC4.m in Sources */,
+				4C401D2D1BAE3AF800BAE5FC /* MTPaperA3.m in Sources */,
 				4CC282481BADE81B00775B72 /* MTActivityItemProviderPdf.m in Sources */,
 				4CC2838F1BADE89B00775B72 /* MTQueryCacheSelectRowIds.m in Sources */,
 				4CC2846D1BADE99400775B72 /* RptqDatabase+Extras.m in Sources */,
-				4CC283451BADE86000775B72 /* MTPaperB6.m in Sources */,
 				4CC284101BADE93C00775B72 /* RptqDocumentObjectFormula.m in Sources */,
 				4CC282581BADE81C00775B72 /* MTDatabaseDataBinding.m in Sources */,
+				4C401D691BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m in Sources */,
 				4CC2841A1BADE94A00775B72 /* RptqDocumentObjectLabelLink.m in Sources */,
 				4CC283871BADE89300775B72 /* MTQueryCacheSelect.m in Sources */,
 				4CC283991BADE8A900775B72 /* MTQueryDefinitionField.m in Sources */,
 				4CC282781BADE82100775B72 /* MTNotificationDidFormatPage.m in Sources */,
 				4CC283B61BADE8C400775B72 /* MTReportFormatterPageDefinition.m in Sources */,
-				4CC2835B1BADE86C00775B72 /* MTPaperC6.m in Sources */,
 				4CC2842C1BADE96500775B72 /* RptqQuerySort.m in Sources */,
 				4CC284841BADE9C000775B72 /* RptqDocumentObjectLabel+Extras.m in Sources */,
 				4CC284121BADE93F00775B72 /* RptqDocumentObjectGroupKey.m in Sources */,
-				4CC2833D1BADE85C00775B72 /* MTPaperB2.m in Sources */,
+				4C401D671BAE3AF800BAE5FC /* MTPaperC10.m in Sources */,
 				4CC2847E1BADE9B300775B72 /* RptqDocumentObjectFormula+Extras.m in Sources */,
-				4CC283591BADE86B00775B72 /* MTPaperC5.m in Sources */,
 				4CC282761BADE82100775B72 /* MTKeyChain.m in Sources */,
+				4C401D5D1BAE3AF800BAE5FC /* MTPaperC5.m in Sources */,
 				4CC284181BADE94700775B72 /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4CC283A91BADE8B600775B72 /* MTQuerySampleDataField.m in Sources */,
 				4CC283C21BADE8D200775B72 /* NSObject+DebugDescription.m in Sources */,
 				4CC283771BADE88000775B72 /* MTQueryCacheBeginTransaction.m in Sources */,
 				4CC284981BADE9E700775B72 /* RptqQueryLinks+Extras.m in Sources */,
+				4C401D511BAE3AF800BAE5FC /* MTPaperB10.m in Sources */,
 				4CC284791BADE9A900775B72 /* RptqDocumentObjectBarcode+Extras.m in Sources */,
+				4C401D331BAE3AF800BAE5FC /* MTPaperA6.m in Sources */,
+				4C401D4B1BAE3AF800BAE5FC /* MTPaperB7.m in Sources */,
 				4CC283A51BADE8B300775B72 /* MTQueryFull.m in Sources */,
 				4CC283731BADE87D00775B72 /* MTQueryCacheAddRow.m in Sources */,
 				4CC283711BADE87B00775B72 /* MTQueryCacheAddColumn.m in Sources */,
-				4CC283531BADE86700775B72 /* MTPaperC2.m in Sources */,
+				4C401D6D1BAE3AF800BAE5FC /* MTPaperLegal.m in Sources */,
 				4CC281FC1BADE80500775B72 /* MADConstants.m in Sources */,
 				4CC284751BADE9A200775B72 /* RptqDocumentObject+Extras.m in Sources */,
 				4CC284771BADE9A600775B72 /* RptqDocumentObjectAggregate+Extras.m in Sources */,
 				4CC2839D1BADE8AC00775B72 /* MTQueryDefinitionLinks.m in Sources */,
-				4CC2834D1BADE86400775B72 /* MTPaperB10.m in Sources */,
 				4CC2848A1BADE9CB00775B72 /* RptqDocumentSection+Extras.m in Sources */,
 				4CC282741BADE82000775B72 /* MADFont.m in Sources */,
-				4CC283391BADE85A00775B72 /* MTPaperB0.m in Sources */,
 				4CC284021BADE92B00775B72 /* RptqDatabaseSchemaField.m in Sources */,
 				4CC283811BADE88C00775B72 /* MTQueryCacheIndexDrop.m in Sources */,
 				4CC2841E1BADE95000775B72 /* RptqDocumentSectionRows.m in Sources */,
-				4CC283231BADE85100775B72 /* MTPaperA0.m in Sources */,
 				4CC284241BADE95900775B72 /* RptqQueryField.m in Sources */,
 				4CC284861BADE9C400775B72 /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
 				4CC284161BADE94500775B72 /* RptqDocumentObjectLabel.m in Sources */,
+				4C401D351BAE3AF800BAE5FC /* MTPaperA7.m in Sources */,
 				4CC283AF1BADE8BC00775B72 /* MTQueryTest.m in Sources */,
+				4C401D431BAE3AF800BAE5FC /* MTPaperB3.m in Sources */,
 				4CC284321BADE97000775B72 /* RptqUserCredentals.m in Sources */,
+				4C401D571BAE3AF800BAE5FC /* MTPaperC2.m in Sources */,
 				4CC2826E1BADE81F00775B72 /* MTDataTableLocation.m in Sources */,
-				4CC2834F1BADE86500775B72 /* MTPaperC0.m in Sources */,
 				4CC284941BADE9DF00775B72 /* RptqQueryField+Extras.m in Sources */,
 				4CC2848C1BADE9CF00775B72 /* RptqDocumentSectionRows+Extras.m in Sources */,
 				4CC284881BADE9C800775B72 /* RptqDocumentObjectLabelLink+Extras.m in Sources */,
-				4CC2832B1BADE85400775B72 /* MTPaperA4.m in Sources */,
-				4CC283271BADE85200775B72 /* MTPaperA2.m in Sources */,
 				4CC282001BADE80500775B72 /* MADocument.m in Sources */,
 				4CC284221BADE95600775B72 /* RptqQueryCache.m in Sources */,
-				4CC283471BADE86100775B72 /* MTPaperB7.m in Sources */,
 				4CC283C01BADE8CF00775B72 /* NSManagedObjectID+Extras.m in Sources */,
+				4C401D371BAE3AF800BAE5FC /* MTPaperA8.m in Sources */,
 				4CC283A11BADE8AF00775B72 /* MTQueryDefinitionSort.m in Sources */,
+				4C401D651BAE3AF800BAE5FC /* MTPaperC9.m in Sources */,
 				4CC284961BADE9E300775B72 /* RptqQueryGroup+Extras.m in Sources */,
-				4CC283611BADE86F00775B72 /* MTPaperC9.m in Sources */,
 				4CC2838B1BADE89700775B72 /* MTQueryCacheSelectLimitOffset.m in Sources */,
 				4CC284261BADE95C00775B72 /* RptqQueryGroup.m in Sources */,
 				4CC283BA1BADE8C700775B72 /* MTTableFormatter.m in Sources */,
 				4CC2836F1BADE87A00775B72 /* MTQueryCache.m in Sources */,
 				4CC283971BADE8A600775B72 /* MTQueryCustomNoResults.m in Sources */,
-				4CC2832F1BADE85500775B72 /* MTPaperA6.m in Sources */,
-				4CC283211BADE85000775B72 /* MTPaper.m in Sources */,
-				4CC283551BADE86900775B72 /* MTPaperC3.m in Sources */,
-				4CC283631BADE87000775B72 /* MTPaperC10.m in Sources */,
 				4CC283791BADE88300775B72 /* MTQueryCacheDeleteAllFromTable.m in Sources */,
 				4CC282431BADE81A00775B72 /* MADSectionLayoutManager.m in Sources */,
 				4CC284041BADE92D00775B72 /* RptqDatabaseSchemaTable.m in Sources */,
 				4CC284A21BADE9FB00775B72 /* RptqUserCredentals+Extras.m in Sources */,
 				4CC2848E1BADE9D300775B72 /* RptqFieldSelectorManager.m in Sources */,
 				4CC283C81BADE8EC00775B72 /* RptqDocumentSectionEnumerator.m in Sources */,
-				4CC283371BADE85A00775B72 /* MTPaperA10.m in Sources */,
 				4CC2823F1BADE81A00775B72 /* MADocumentState.m in Sources */,
+				4C401D6F1BAE3AF800BAE5FC /* MTPaperLetter.m in Sources */,
 				4CC283911BADE89E00775B72 /* MTQueryCacheSyncDefault.m in Sources */,
-				4CC283311BADE85600775B72 /* MTPaperA7.m in Sources */,
 				4CC2836D1BADE87800775B72 /* MTQuery.m in Sources */,
+				4C401D311BAE3AF800BAE5FC /* MTPaperA5.m in Sources */,
 				4CC2825A1BADE81C00775B72 /* MTDatabaseField.m in Sources */,
+				4C401D2F1BAE3AF800BAE5FC /* MTPaperA4.m in Sources */,
 				4CC2837F1BADE88A00775B72 /* MTQueryCacheIndexCreate.m in Sources */,
-				4CC2836B1BADE87600775B72 /* MTPaperLetter.m in Sources */,
 				4CC283851BADE89100775B72 /* MTQueryCacheJournalModeOverride.m in Sources */,
 				4CC2847B1BADE9AD00775B72 /* RptqDocumentObjectChart+Extras.m in Sources */,
+				4C401D3D1BAE3AF800BAE5FC /* MTPaperB0.m in Sources */,
 				4CC282661BADE81E00775B72 /* MTDataFormatter.m in Sources */,
 				4CC284201BADE95300775B72 /* RptqQuery.m in Sources */,
 				4CC284901BADE9D800775B72 /* RptqQuery+Extras.m in Sources */,
+				4C401D491BAE3AF800BAE5FC /* MTPaperB6.m in Sources */,
 				4CC282541BADE81C00775B72 /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4CC282461BADE81A00775B72 /* MTActivityIndicator.m in Sources */,
 				4CC284821BADE9BC00775B72 /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4CC284301BADE96C00775B72 /* RptqRelationship.m in Sources */,
 				4CC284281BADE95F00775B72 /* RptqQueryLinks.m in Sources */,
 				4CC283951BADE8A400775B72 /* MTQueryCacheVacuum.m in Sources */,
+				4C401D2B1BAE3AF800BAE5FC /* MTPaperA2.m in Sources */,
 				4CC284921BADE9DC00775B72 /* RptqQueryCache+Extras.m in Sources */,
 				4CC2825E1BADE81D00775B72 /* MTDatabaseProcessSqlServer.m in Sources */,
+				4C401D251BAE3AF800BAE5FC /* MTPaper.m in Sources */,
 				4CC2837B1BADE88500775B72 /* MTQueryCacheDropTable.m in Sources */,
 				4CC282561BADE81C00775B72 /* MTDatabaseConnectionSqlServer.m in Sources */,
 				4CC2840C1BADE93700775B72 /* RptqDocumentObjectBarcode.m in Sources */,
+				4C401D291BAE3AF800BAE5FC /* MTPaperA1.m in Sources */,
 				4CC283B31BADE8C000775B72 /* MTReportFormatterCache.m in Sources */,
 				4CC284081BADE93200775B72 /* RptqDocumentObject.m in Sources */,
 				4CC2849E1BADE9F300775B72 /* RptqQueryTable+Extras.m in Sources */,
@@ -1614,53 +1626,49 @@
 				4CC282501BADE81B00775B72 /* MTDatabaseConnection.m in Sources */,
 				4CC283B81BADE8C500775B72 /* MTReportViewerPrintPageRenderer.m in Sources */,
 				4CC2846F1BADE99800775B72 /* RptqDatabaseSchemaField+Extras.m in Sources */,
-				4CC283411BADE85E00775B72 /* MTPaperB4.m in Sources */,
 				4CC282641BADE81E00775B72 /* MTDatabaseTable.m in Sources */,
+				4C401D3F1BAE3AF800BAE5FC /* MTPaperB1.m in Sources */,
 				4CC283A71BADE8B500775B72 /* MTQueryMaxFieldLength.m in Sources */,
 				4CC2837D1BADE88700775B72 /* MTQueryCacheEndTransaction.m in Sources */,
 				4CC283A31BADE8B100775B72 /* MTQueryDefinitionTable.m in Sources */,
-				4CC283511BADE86600775B72 /* MTPaperC1.m in Sources */,
 				4CC283891BADE89500775B72 /* MTQueryCacheSelectGroupKeys.m in Sources */,
+				4C401D3B1BAE3AF800BAE5FC /* MTPaperA10.m in Sources */,
 				4CC2827A1BADE82200775B72 /* MTNotificationDidReadRows.m in Sources */,
-				4CC2835D1BADE86D00775B72 /* MTPaperC7.m in Sources */,
 				4CC2839F1BADE8AE00775B72 /* MTQueryDefinitionPredicate.m in Sources */,
+				4C401D4D1BAE3AF800BAE5FC /* MTPaperB8.m in Sources */,
+				4C401D391BAE3AF800BAE5FC /* MTPaperA9.m in Sources */,
+				4C401D411BAE3AF800BAE5FC /* MTPaperB2.m in Sources */,
 				4CC284001BADE92800775B72 /* RptqDatabase.m in Sources */,
 				4CC2842A1BADE96200775B72 /* RptqQueryPredicate.m in Sources */,
 				4CC282721BADE82000775B72 /* MTErrorContainer.m in Sources */,
 				4CC283BC1BADE8CA00775B72 /* NSData+Comparson.m in Sources */,
 				4CC2824C1BADE81B00775B72 /* MTDatabase.m in Sources */,
-				4CC283571BADE86A00775B72 /* MTPaperC4.m in Sources */,
-				4CC283291BADE85300775B72 /* MTPaperA3.m in Sources */,
 				4CC2824E1BADE81B00775B72 /* MTDatabaseCache.m in Sources */,
-				4CC283331BADE85700775B72 /* MTPaperA8.m in Sources */,
-				4CC283491BADE86200775B72 /* MTPaperB8.m in Sources */,
-				4CC283651BADE87100775B72 /* MTPaperGovernmentLegal.m in Sources */,
 				4CC283751BADE87F00775B72 /* MTQueryCacheAggregateFunction.m in Sources */,
 				4CC2838D1BADE89900775B72 /* MTQueryCacheSelectRowId.m in Sources */,
 				4CC2840E1BADE93900775B72 /* RptqDocumentObjectChart.m in Sources */,
 				4CC284801BADE9B700775B72 /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4CC2826C1BADE81F00775B72 /* MTDataTableFastObjectEnumerator.m in Sources */,
-				4CC2834B1BADE86300775B72 /* MTPaperB9.m in Sources */,
+				4C401D611BAE3AF800BAE5FC /* MTPaperC7.m in Sources */,
 				4CC2825C1BADE81D00775B72 /* MTDatabaseMySql.m in Sources */,
 				4CC282521BADE81C00775B72 /* MTDatabaseConnectionMySql.m in Sources */,
 				4CC284A01BADE9F700775B72 /* RptqRelationship+Extras.m in Sources */,
 				4CC283AD1BADE8BA00775B72 /* MTQuerySelectItemsForGroup.m in Sources */,
 				4CC283AB1BADE8B800775B72 /* MTQuerySampleDataTable.m in Sources */,
-				4CC2835F1BADE86E00775B72 /* MTPaperC8.m in Sources */,
 				4CC282621BADE81D00775B72 /* MTDatabaseSqlServer.m in Sources */,
-				4CC2833B1BADE85B00775B72 /* MTPaperB1.m in Sources */,
 				4CC283931BADE8A100775B72 /* MTQueryCacheSyncOff.m in Sources */,
+				4C401D531BAE3AF800BAE5FC /* MTPaperC0.m in Sources */,
 				4CC2841C1BADE94D00775B72 /* RptqDocumentSection.m in Sources */,
 				4CC2842E1BADE96900775B72 /* RptqQueryTable.m in Sources */,
 				4CC281FA1BADE80500775B72 /* MADArrayCaching.m in Sources */,
 				4CC2849C1BADE9EF00775B72 /* RptqQuerySort+Extras.m in Sources */,
 				4CC282601BADE81D00775B72 /* MTDatabaseSqlite3.m in Sources */,
 				4CC2849A1BADE9EB00775B72 /* RptqQueryPredicate+Extras.m in Sources */,
-				4CC283691BADE87400775B72 /* MTPaperLegal.m in Sources */,
+				4C401D4F1BAE3AF800BAE5FC /* MTPaperB9.m in Sources */,
 				4CC2839B1BADE8AB00775B72 /* MTQueryDefinitionGroup.m in Sources */,
 				4CC284141BADE94200775B72 /* RptqDocumentObjectImage.m in Sources */,
 				4CC284731BADE99E00775B72 /* RptqDocument+Extras.m in Sources */,
-				4CC283251BADE85200775B72 /* MTPaperA1.m in Sources */,
+				4C401D471BAE3AF800BAE5FC /* MTPaperB5.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
