@@ -203,8 +203,6 @@
 		4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
-		4C138D5D197E254000BABB0C /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
-		4C138D5E197E254000BABB0C /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C174CDE18B13760007A88B3 /* MADAppConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MADAppConfiguration.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C174CDF18B13760007A88B3 /* MADAppConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MADAppConfiguration.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
@@ -569,7 +567,6 @@
 		4C2F26C41B53FA1C004DFAEC /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C2F26C51B53FA1C004DFAEC /* MADImageToolbarCloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E61AB6791F00B54D3A /* MADImageToolbarCloud@2x.png */; };
 		4C2F26C71B53FA1C004DFAEC /* UIButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F21AC8FBC4005CA75C /* UIButton@2x.png */; };
-		4C2F26C91B53FA1C004DFAEC /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
 		4C2F26CA1B53FA1C004DFAEC /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23C1AC90018005CA75C /* MTImageLaunchDesignerPhonePortraitRetina.png */; };
 		4C2F26CD1B53FA1C004DFAEC /* MTActivityProvidence~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B25E1AC90115005CA75C /* MTActivityProvidence~iPad@2x.png */; };
 		4C2F26D31B53FA1C004DFAEC /* MADImageToolbarCloudUpload.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E91AB6791F00B54D3A /* MADImageToolbarCloudUpload.png */; };
@@ -648,7 +645,6 @@
 		4C2F278C1B53FA1C004DFAEC /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C2F27921B53FA1C004DFAEC /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C2F27931B53FA1C004DFAEC /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C2F27981B53FA1C004DFAEC /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C2F279B1B53FA1C004DFAEC /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C2F279E1B53FA1C004DFAEC /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
 		4C2F279F1B53FA1C004DFAEC /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
@@ -716,6 +712,8 @@
 		4C401EF11BAE620800BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EF21BAE620900BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EF91BAE62FD00BAE5FC /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EF71BAE62FD00BAE5FC /* chinook.sqlite3 */; settings = {ASSET_TAGS = (); }; };
+		4C401EFC1BAE640500BAE5FC /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EFA1BAE640500BAE5FC /* London.mad */; settings = {ASSET_TAGS = (); }; };
+		4C401EFD1BAE640500BAE5FC /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EFB1BAE640500BAE5FC /* Music.mad */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -864,7 +862,6 @@
 		4C6700A41BA133AB001C9D5A /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C6700A91BA133AB001C9D5A /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C6700AA1BA133AB001C9D5A /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C6700AE1BA133AB001C9D5A /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C6700B11BA133AB001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C6700B41BA133AB001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
 		4C6700B51BA133AB001C9D5A /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
@@ -1178,7 +1175,6 @@
 		4C67FB4C1BA1043B001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C67FB4D1BA1043B001C9D5A /* MADImageToolbarCloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E61AB6791F00B54D3A /* MADImageToolbarCloud@2x.png */; };
 		4C67FB4F1BA1043B001C9D5A /* UIButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F21AC8FBC4005CA75C /* UIButton@2x.png */; };
-		4C67FB511BA1043B001C9D5A /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
 		4C67FB521BA1043B001C9D5A /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23C1AC90018005CA75C /* MTImageLaunchDesignerPhonePortraitRetina.png */; };
 		4C67FB551BA1043B001C9D5A /* MTActivityProvidence~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B25E1AC90115005CA75C /* MTActivityProvidence~iPad@2x.png */; };
 		4C67FB5B1BA1043B001C9D5A /* MADImageToolbarCloudUpload.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E91AB6791F00B54D3A /* MADImageToolbarCloudUpload.png */; };
@@ -1259,7 +1255,6 @@
 		4C67FC081BA1043B001C9D5A /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C67FC0D1BA1043B001C9D5A /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C67FC0E1BA1043B001C9D5A /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C67FC121BA1043B001C9D5A /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C67FC151BA1043B001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C67FC181BA1043B001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
 		4C67FC191BA1043B001C9D5A /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
@@ -1571,7 +1566,6 @@
 		4C67FD991BA1183D001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C67FD9A1BA1183D001C9D5A /* MADImageToolbarCloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E61AB6791F00B54D3A /* MADImageToolbarCloud@2x.png */; };
 		4C67FD9C1BA1183D001C9D5A /* UIButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F21AC8FBC4005CA75C /* UIButton@2x.png */; };
-		4C67FD9E1BA1183D001C9D5A /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
 		4C67FD9F1BA1183D001C9D5A /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23C1AC90018005CA75C /* MTImageLaunchDesignerPhonePortraitRetina.png */; };
 		4C67FDA21BA1183D001C9D5A /* MTActivityProvidence~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B25E1AC90115005CA75C /* MTActivityProvidence~iPad@2x.png */; };
 		4C67FDA81BA1183D001C9D5A /* MADImageToolbarCloudUpload.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E91AB6791F00B54D3A /* MADImageToolbarCloudUpload.png */; };
@@ -1652,7 +1646,6 @@
 		4C67FE551BA1183D001C9D5A /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C67FE5A1BA1183D001C9D5A /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C67FE5B1BA1183D001C9D5A /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C67FE5F1BA1183D001C9D5A /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C67FE621BA1183D001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C67FE651BA1183D001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
 		4C67FE661BA1183D001C9D5A /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
@@ -1965,7 +1958,6 @@
 		4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C67FFE91BA133AB001C9D5A /* MADImageToolbarCloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E61AB6791F00B54D3A /* MADImageToolbarCloud@2x.png */; };
 		4C67FFEB1BA133AB001C9D5A /* UIButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F21AC8FBC4005CA75C /* UIButton@2x.png */; };
-		4C67FFED1BA133AB001C9D5A /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
 		4C67FFEE1BA133AB001C9D5A /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23C1AC90018005CA75C /* MTImageLaunchDesignerPhonePortraitRetina.png */; };
 		4C67FFF11BA133AB001C9D5A /* MTActivityProvidence~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B25E1AC90115005CA75C /* MTActivityProvidence~iPad@2x.png */; };
 		4C67FFF71BA133AB001C9D5A /* MADImageToolbarCloudUpload.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B2E91AB6791F00B54D3A /* MADImageToolbarCloudUpload.png */; };
@@ -2863,8 +2855,6 @@
 		4C122AE916D0066B00B69763 /* MTConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTConnectorView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
-		4C138D5B197E254000BABB0C /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = "Resources/Sample Reports/London.mad"; sourceTree = "<group>"; };
-		4C138D5C197E254000BABB0C /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = Music.mad; path = "Resources/Sample Reports/Music.mad"; sourceTree = "<group>"; };
 		4C174CDC18B13760007A88B3 /* MADAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAppConfiguration.h; path = Reports/MADAppConfiguration.h; sourceTree = "<group>"; };
 		4C174CDD18B13760007A88B3 /* MADAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAppConfiguration.m; path = Reports/MADAppConfiguration.m; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
@@ -3023,6 +3013,8 @@
 		4C401EE91BAE61F700BAE5FC /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C401EF71BAE62FD00BAE5FC /* chinook.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = chinook.sqlite3; sourceTree = "<group>"; };
+		4C401EFA1BAE640500BAE5FC /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = London.mad; sourceTree = "<group>"; };
+		4C401EFB1BAE640500BAE5FC /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = Music.mad; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4538,6 +4530,8 @@
 		4C401EF81BAE62FD00BAE5FC /* Reports */ = {
 			isa = PBXGroup;
 			children = (
+				4C401EFA1BAE640500BAE5FC /* London.mad */,
+				4C401EFB1BAE640500BAE5FC /* Music.mad */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -4939,8 +4933,6 @@
 		4C5CD3D81821A0AA005FC6DD /* Reports */ = {
 			isa = PBXGroup;
 			children = (
-				4C138D5B197E254000BABB0C /* London.mad */,
-				4C138D5C197E254000BABB0C /* Music.mad */,
 			);
 			name = Reports;
 			sourceTree = "<group>";
@@ -6724,7 +6716,6 @@
 				4C2F26C41B53FA1C004DFAEC /* my_config.he in Resources */,
 				4C2F26C51B53FA1C004DFAEC /* MADImageToolbarCloud@2x.png in Resources */,
 				4C2F26C71B53FA1C004DFAEC /* UIButton@2x.png in Resources */,
-				4C2F26C91B53FA1C004DFAEC /* London.mad in Resources */,
 				4C2F26CA1B53FA1C004DFAEC /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4C2F26CD1B53FA1C004DFAEC /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C2F26D31B53FA1C004DFAEC /* MADImageToolbarCloudUpload.png in Resources */,
@@ -6803,7 +6794,6 @@
 				4C2F278C1B53FA1C004DFAEC /* MADImageIconInfo@2x.png in Resources */,
 				4C2F27921B53FA1C004DFAEC /* MADBarcode64.png in Resources */,
 				4C2F27931B53FA1C004DFAEC /* UIButtonHighlighted.png in Resources */,
-				4C2F27981B53FA1C004DFAEC /* Music.mad in Resources */,
 				4C2F279B1B53FA1C004DFAEC /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C2F279E1B53FA1C004DFAEC /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
 				4C2F279F1B53FA1C004DFAEC /* UIImageJustified@2x.png in Resources */,
@@ -6870,6 +6860,7 @@
 				4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */,
 				4C5CD399181E3937005FC6DD /* README.md in Resources */,
 				4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */,
+				4C401EFD1BAE640500BAE5FC /* Music.mad in Resources */,
 				4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */,
 				4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */,
 				4CD0B2711AC90273005CA75C /* MADImageCaratOpen@2x.png in Resources */,
@@ -6892,7 +6883,6 @@
 				4C401EE41BAE5E9000BAE5FC /* MADLicensing.storyboard in Resources */,
 				4C08B2F11AB6791F00B54D3A /* MADImageToolbarCloud@2x.png in Resources */,
 				4CD0B2161AC8FBC4005CA75C /* UIButton@2x.png in Resources */,
-				4C138D5D197E254000BABB0C /* London.mad in Resources */,
 				4CD0B24D1AC90018005CA75C /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4CD0B2651AC90115005CA75C /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C08B2F71AB6791F00B54D3A /* MADImageToolbarCloudUpload.png in Resources */,
@@ -6974,7 +6964,7 @@
 				4C08B30D1AB679BE00B54D3A /* MADImageIconInfo@2x.png in Resources */,
 				4C1E898C1B34115100B26B5E /* MADBarcode64.png in Resources */,
 				4CD0B2181AC8FBC4005CA75C /* UIButtonHighlighted.png in Resources */,
-				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
+				4C401EFC1BAE640500BAE5FC /* London.mad in Resources */,
 				4C8394DF1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4CD0B24B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
 				4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */,
@@ -7062,7 +7052,6 @@
 				4C67FB4C1BA1043B001C9D5A /* my_config.he in Resources */,
 				4C67FB4D1BA1043B001C9D5A /* MADImageToolbarCloud@2x.png in Resources */,
 				4C67FB4F1BA1043B001C9D5A /* UIButton@2x.png in Resources */,
-				4C67FB511BA1043B001C9D5A /* London.mad in Resources */,
 				4C67FB521BA1043B001C9D5A /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4C67FB551BA1043B001C9D5A /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C67FB5B1BA1043B001C9D5A /* MADImageToolbarCloudUpload.png in Resources */,
@@ -7143,7 +7132,6 @@
 				4C67FC081BA1043B001C9D5A /* MADImageIconInfo@2x.png in Resources */,
 				4C67FC0D1BA1043B001C9D5A /* MADBarcode64.png in Resources */,
 				4C67FC0E1BA1043B001C9D5A /* UIButtonHighlighted.png in Resources */,
-				4C67FC121BA1043B001C9D5A /* Music.mad in Resources */,
 				4C67FC151BA1043B001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C67FC181BA1043B001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
 				4C67FC191BA1043B001C9D5A /* UIImageJustified@2x.png in Resources */,
@@ -7231,7 +7219,6 @@
 				4C67FD991BA1183D001C9D5A /* my_config.he in Resources */,
 				4C67FD9A1BA1183D001C9D5A /* MADImageToolbarCloud@2x.png in Resources */,
 				4C67FD9C1BA1183D001C9D5A /* UIButton@2x.png in Resources */,
-				4C67FD9E1BA1183D001C9D5A /* London.mad in Resources */,
 				4C67FD9F1BA1183D001C9D5A /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4C67FDA21BA1183D001C9D5A /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C67FDA81BA1183D001C9D5A /* MADImageToolbarCloudUpload.png in Resources */,
@@ -7313,7 +7300,6 @@
 				4C67FE551BA1183D001C9D5A /* MADImageIconInfo@2x.png in Resources */,
 				4C67FE5A1BA1183D001C9D5A /* MADBarcode64.png in Resources */,
 				4C67FE5B1BA1183D001C9D5A /* UIButtonHighlighted.png in Resources */,
-				4C67FE5F1BA1183D001C9D5A /* Music.mad in Resources */,
 				4C67FE621BA1183D001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C67FE651BA1183D001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
 				4C67FE661BA1183D001C9D5A /* UIImageJustified@2x.png in Resources */,
@@ -7401,7 +7387,6 @@
 				4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */,
 				4C67FFE91BA133AB001C9D5A /* MADImageToolbarCloud@2x.png in Resources */,
 				4C67FFEB1BA133AB001C9D5A /* UIButton@2x.png in Resources */,
-				4C67FFED1BA133AB001C9D5A /* London.mad in Resources */,
 				4C67FFEE1BA133AB001C9D5A /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4C67FFF11BA133AB001C9D5A /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C67FFF71BA133AB001C9D5A /* MADImageToolbarCloudUpload.png in Resources */,
@@ -7482,7 +7467,6 @@
 				4C6700A41BA133AB001C9D5A /* MADImageIconInfo@2x.png in Resources */,
 				4C6700A91BA133AB001C9D5A /* MADBarcode64.png in Resources */,
 				4C6700AA1BA133AB001C9D5A /* UIButtonHighlighted.png in Resources */,
-				4C6700AE1BA133AB001C9D5A /* Music.mad in Resources */,
 				4C6700B11BA133AB001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C6700B41BA133AB001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
 				4C6700B51BA133AB001C9D5A /* UIImageJustified@2x.png in Resources */,
