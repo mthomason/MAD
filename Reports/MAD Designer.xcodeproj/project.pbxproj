@@ -329,7 +329,6 @@
 		4C2F25AC1B53FA1C004DFAEC /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4C2F25AD1B53FA1C004DFAEC /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25AE1B53FA1C004DFAEC /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C2F25AF1B53FA1C004DFAEC /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25B01B53FA1C004DFAEC /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25B11B53FA1C004DFAEC /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
 		4C2F25B21B53FA1C004DFAEC /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -755,8 +754,6 @@
 		4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
 		4C5626031759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C5626041759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
-		4C590B28191BC3A400C4E211 /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C590B29191BC3A400C4E211 /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C5AA67C1B98C4AA00E405A1 /* MTQueryVisualizationLinkDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5AA67B1B98C4AA00E405A1 /* MTQueryVisualizationLinkDefination.m */; };
 		4C5AA6801B98C7C400E405A1 /* MADQueryVisualizationDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5AA67F1B98C7C400E405A1 /* MADQueryVisualizationDefination.m */; };
 		4C5AA6831B992AD800E405A1 /* MTGraph+RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5AA6821B992AD800E405A1 /* MTGraph+RptqQuery.m */; };
@@ -930,7 +927,6 @@
 		4C67FA311BA1043B001C9D5A /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4C67FA321BA1043B001C9D5A /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA331BA1043B001C9D5A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FA341BA1043B001C9D5A /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA351BA1043B001C9D5A /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA361BA1043B001C9D5A /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
 		4C67FA371BA1043B001C9D5A /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1305,7 +1301,6 @@
 		4C67FC7E1BA1183D001C9D5A /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4C67FC7F1BA1183D001C9D5A /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC801BA1183D001C9D5A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FC811BA1183D001C9D5A /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC821BA1183D001C9D5A /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC831BA1183D001C9D5A /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
 		4C67FC841BA1183D001C9D5A /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1681,7 +1676,6 @@
 		4C67FECD1BA133AB001C9D5A /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4C67FECE1BA133AB001C9D5A /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FECF1BA133AB001C9D5A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FED01BA133AB001C9D5A /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FED11BA133AB001C9D5A /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MADNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FED21BA133AB001C9D5A /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */; };
 		4C67FED31BA133AB001C9D5A /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MADDesignerElementView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -3087,8 +3081,6 @@
 		4C5625EA1759730200433E88 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4C5626011759865900433E88 /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		4C5626021759865A00433E88 /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
-		4C590B26191BC3A400C4E211 /* MTPageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPageCaching.h; sourceTree = "<group>"; };
-		4C590B27191BC3A400C4E211 /* MTPageCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPageCaching.m; sourceTree = "<group>"; };
 		4C5AA67A1B98C4AA00E405A1 /* MTQueryVisualizationLinkDefination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryVisualizationLinkDefination.h; sourceTree = "<group>"; };
 		4C5AA67B1B98C4AA00E405A1 /* MTQueryVisualizationLinkDefination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryVisualizationLinkDefination.m; sourceTree = "<group>"; };
 		4C5AA67E1B98C7C400E405A1 /* MADQueryVisualizationDefination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationDefination.h; sourceTree = "<group>"; };
@@ -5016,16 +5008,6 @@
 			path = Reports;
 			sourceTree = "<group>";
 		};
-		4C7B0B1A1B37C843005DC0CE /* Cache */ = {
-			isa = PBXGroup;
-			children = (
-				4C590B26191BC3A400C4E211 /* MTPageCaching.h */,
-				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
-			);
-			name = Cache;
-			path = Reports;
-			sourceTree = "<group>";
-		};
 		4C7B0B1B1B37C852005DC0CE /* Upgrade */ = {
 			isa = PBXGroup;
 			children = (
@@ -5097,7 +5079,6 @@
 				4CA1E5A11B4E712000434D98 /* MADObjectIdentifier.h */,
 				4CA1E5A21B4E712000434D98 /* MADObjectIdentifier.m */,
 				4C7B0B1B1B37C852005DC0CE /* Upgrade */,
-				4C7B0B1A1B37C843005DC0CE /* Cache */,
 				4C0F89A41B31656B00D75AF6 /* Preferences */,
 				4C5BED5718E8982400BDDDB8 /* User Interface */,
 				4CBF7B7718EDA9E20035FCB9 /* User */,
@@ -7629,7 +7610,6 @@
 				4CC96A5C1AC90D220044C157 /* MADVibrantTableViewCellBase.m in Sources */,
 				4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */,
 				4C0E7779163B5AEC003B951E /* MADDesignerElementView.m in Sources */,
-				4C590B29191BC3A400C4E211 /* MTPageCaching.m in Sources */,
 				4C0E777A163B5AEC003B951E /* MTResizeHandleView.m in Sources */,
 				4C0E7790163B5AEC003B951E /* MADViewerController.m in Sources */,
 				4C6268DD19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */,
@@ -7813,7 +7793,6 @@
 				4C2F25AC1B53FA1C004DFAEC /* MTSliderPageVertical.m in Sources */,
 				4C2F25AD1B53FA1C004DFAEC /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C2F25AE1B53FA1C004DFAEC /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
-				4C2F25AF1B53FA1C004DFAEC /* MTPageCaching.m in Sources */,
 				4C2F25B01B53FA1C004DFAEC /* MADNavigationController.m in Sources */,
 				4C2F25B11B53FA1C004DFAEC /* MADVibrantTableViewCell.m in Sources */,
 				4C2F25B21B53FA1C004DFAEC /* MADDesignerElementView.m in Sources */,
@@ -8019,7 +7998,6 @@
 				4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */,
 				4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
-				4C590B28191BC3A400C4E211 /* MTPageCaching.m in Sources */,
 				4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */,
 				4C6362BE14E6278D005DBBFF /* MADNavigationController.m in Sources */,
 				4C6268DC19F5DBF400DCCC2E /* MADVibrantTableViewCell.m in Sources */,
@@ -8243,7 +8221,6 @@
 				4C67FA311BA1043B001C9D5A /* MTSliderPageVertical.m in Sources */,
 				4C67FA321BA1043B001C9D5A /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C67FA331BA1043B001C9D5A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
-				4C67FA341BA1043B001C9D5A /* MTPageCaching.m in Sources */,
 				4C67FA351BA1043B001C9D5A /* MADNavigationController.m in Sources */,
 				4C67FA361BA1043B001C9D5A /* MADVibrantTableViewCell.m in Sources */,
 				4C67FA371BA1043B001C9D5A /* MADDesignerElementView.m in Sources */,
@@ -8443,7 +8420,6 @@
 				4C67FC7E1BA1183D001C9D5A /* MTSliderPageVertical.m in Sources */,
 				4C67FC7F1BA1183D001C9D5A /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C67FC801BA1183D001C9D5A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
-				4C67FC811BA1183D001C9D5A /* MTPageCaching.m in Sources */,
 				4C67FC821BA1183D001C9D5A /* MADNavigationController.m in Sources */,
 				4C67FC831BA1183D001C9D5A /* MADVibrantTableViewCell.m in Sources */,
 				4C67FC841BA1183D001C9D5A /* MADDesignerElementView.m in Sources */,
@@ -8643,7 +8619,6 @@
 				4C67FECD1BA133AB001C9D5A /* MTSliderPageVertical.m in Sources */,
 				4C67FECE1BA133AB001C9D5A /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C67FECF1BA133AB001C9D5A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
-				4C67FED01BA133AB001C9D5A /* MTPageCaching.m in Sources */,
 				4C67FED11BA133AB001C9D5A /* MADNavigationController.m in Sources */,
 				4C67FED21BA133AB001C9D5A /* MADVibrantTableViewCell.m in Sources */,
 				4C67FED31BA133AB001C9D5A /* MADDesignerElementView.m in Sources */,
