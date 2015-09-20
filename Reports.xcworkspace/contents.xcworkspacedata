@@ -36,9 +36,6 @@
             location = "group:MADExplorer/MADExplorer.xcodeproj">
          </FileRef>
          <FileRef
-            location = "group:/Users/mthomason/Desktop/Reports/Feedback/MADFeedback.xcodeproj">
-         </FileRef>
-         <FileRef
             location = "group:MADFileManager/MADFileManager.xcodeproj">
          </FileRef>
          <FileRef
