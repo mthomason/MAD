@@ -699,8 +699,8 @@
 		4C401F0E1BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C401F0F1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F251BAE703200BAE5FC /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F171BAE703200BAE5FC /* UITableViewCellInstruction.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F261BAE703200BAE5FC /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F191BAE703200BAE5FC /* UITableViewCellLinkName.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F251BAE703200BAE5FC /* MADTableViewCellInstructions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F171BAE703200BAE5FC /* MADTableViewCellInstructions.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F261BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F191BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F271BAE703200BAE5FC /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F1B1BAE703200BAE5FC /* UITableViewCellOverride.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F281BAE703200BAE5FC /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F1D1BAE703200BAE5FC /* UITableViewCellQueryGroup.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F291BAE703200BAE5FC /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F1F1BAE703200BAE5FC /* UITableViewCellQueryInput.m */; settings = {ASSET_TAGS = (); }; };
@@ -2952,10 +2952,10 @@
 		4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAboutTitle.m; sourceTree = "<group>"; };
 		4C401F141BAE703200BAE5FC /* MADTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
 		4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellQueryPredicate.m; sourceTree = "<group>"; };
-		4C401F161BAE703200BAE5FC /* UITableViewCellInstruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellInstruction.h; sourceTree = "<group>"; };
-		4C401F171BAE703200BAE5FC /* UITableViewCellInstruction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellInstruction.m; sourceTree = "<group>"; };
-		4C401F181BAE703200BAE5FC /* UITableViewCellLinkName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLinkName.h; sourceTree = "<group>"; };
-		4C401F191BAE703200BAE5FC /* UITableViewCellLinkName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellLinkName.m; sourceTree = "<group>"; };
+		4C401F161BAE703200BAE5FC /* MADTableViewCellInstructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellInstructions.h; sourceTree = "<group>"; };
+		4C401F171BAE703200BAE5FC /* MADTableViewCellInstructions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellInstructions.m; sourceTree = "<group>"; };
+		4C401F181BAE703200BAE5FC /* MADTableViewCellQueryLinkName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellQueryLinkName.h; sourceTree = "<group>"; };
+		4C401F191BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellQueryLinkName.m; sourceTree = "<group>"; };
 		4C401F1A1BAE703200BAE5FC /* UITableViewCellOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellOverride.h; sourceTree = "<group>"; };
 		4C401F1B1BAE703200BAE5FC /* UITableViewCellOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellOverride.m; sourceTree = "<group>"; };
 		4C401F1C1BAE703200BAE5FC /* UITableViewCellQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryGroup.h; sourceTree = "<group>"; };
@@ -4535,10 +4535,10 @@
 			children = (
 				4C401F141BAE703200BAE5FC /* MADTableViewCellQueryPredicate.h */,
 				4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */,
-				4C401F161BAE703200BAE5FC /* UITableViewCellInstruction.h */,
-				4C401F171BAE703200BAE5FC /* UITableViewCellInstruction.m */,
-				4C401F181BAE703200BAE5FC /* UITableViewCellLinkName.h */,
-				4C401F191BAE703200BAE5FC /* UITableViewCellLinkName.m */,
+				4C401F161BAE703200BAE5FC /* MADTableViewCellInstructions.h */,
+				4C401F171BAE703200BAE5FC /* MADTableViewCellInstructions.m */,
+				4C401F181BAE703200BAE5FC /* MADTableViewCellQueryLinkName.h */,
+				4C401F191BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m */,
 				4C401F1A1BAE703200BAE5FC /* UITableViewCellOverride.h */,
 				4C401F1B1BAE703200BAE5FC /* UITableViewCellOverride.m */,
 				4C401F1C1BAE703200BAE5FC /* UITableViewCellQueryGroup.h */,
@@ -8007,7 +8007,7 @@
 				4C9860201B98C2F10082A12D /* MADQueryVisualizationTableDefination.m in Sources */,
 				4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
-				4C401F261BAE703200BAE5FC /* UITableViewCellLinkName.m in Sources */,
+				4C401F261BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m in Sources */,
 				4CB2D3C31BA3394600AA473B /* MADOperationArchiveData.m in Sources */,
 				4CF5319B1A08092F00511BEF /* MADToolboxPresentationController.m in Sources */,
 				4C111C1F1B2030E1005CA4DD /* NSLayoutConstraint+Designer.m in Sources */,
@@ -8170,7 +8170,7 @@
 				4C23FAEE18FADC68009F234F /* MTViewControllerBarcodeOptions.m in Sources */,
 				4CA92ADD17DAFF1700D654C7 /* MADDesignerElementPickerViewController.m in Sources */,
 				4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
-				4C401F251BAE703200BAE5FC /* UITableViewCellInstruction.m in Sources */,
+				4C401F251BAE703200BAE5FC /* MADTableViewCellInstructions.m in Sources */,
 				4C0F899B1B30250100D75AF6 /* MADUserDefault.m in Sources */,
 				4CB2D3CD1BA3C10C00AA473B /* MADOperationInstallSampleDatabase.m in Sources */,
 				4C7B0B461B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */,

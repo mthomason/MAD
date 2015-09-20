@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellLinkName.h"
+#import "MADTableViewCellQueryLinkName.h"
 
-@implementation UITableViewCellLinkName
+@implementation MADTableViewCellQueryLinkName
 
 + (CGFloat)defaultHeight {
     return 0.0000f;

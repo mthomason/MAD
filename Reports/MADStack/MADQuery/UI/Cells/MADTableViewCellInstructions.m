@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellInstruction.h"
+#import "MADTableViewCellInstructions.h"
 
 CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
 

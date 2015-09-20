@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
 
-@interface UITableViewCellLinkName : MTAutoLayoutTableViewCell
+@interface MADTableViewCellQueryLinkName : MTAutoLayoutTableViewCell
 
 + (CGFloat)defaultHeight;
 
