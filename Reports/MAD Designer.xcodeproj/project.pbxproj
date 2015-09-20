@@ -4541,11 +4541,11 @@
 		4C401F041BAE6DF100BAE5FC /* About */ = {
 			isa = PBXGroup;
 			children = (
+				4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */,
 				4C401F051BAE6DF100BAE5FC /* MADAboutTableView.h */,
 				4C401F061BAE6DF100BAE5FC /* MADAboutTableView.m */,
 				4C401F071BAE6DF100BAE5FC /* MADAboutTableViewController.h */,
 				4C401F081BAE6DF100BAE5FC /* MADAboutTableViewController.m */,
-				4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */,
 				4C401F0A1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.h */,
 				4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */,
 			);
