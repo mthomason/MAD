@@ -8,28 +8,6 @@
 
 #import "MADTableViewCellQueryPredicate.h"
 
-@implementation MTTableViewCellQueryPredicate
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-    }
-    return self;
-}
-
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        
-    }
-    return self;
-    
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
+@implementation MADTableViewCellQueryPredicate
 
 @end

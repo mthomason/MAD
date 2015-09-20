@@ -27,7 +27,7 @@
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
 #import "UITableViewCellQueryGroup.h"
-#import "MTTableViewCellQueryPredicate.h"
+#import "MADTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 
 #import "MTDatabaseDriverSelectorViewController.h"
@@ -777,7 +777,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                              range: rangeMiddle];
             result.textLabel.text = messageText;
             result.textLabel.attributedText = message;
-            [(MTTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
+            [(MADTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
             
             break;
         }
@@ -1601,7 +1601,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         
         
-        MTTableViewCellQueryPredicate *tableViewCellPredicate = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
+        MADTableViewCellQueryPredicate *tableViewCellPredicate = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
         NSError *error = nil;
         NSManagedObject *object = nil;
         if (tableViewCellPredicate) {
@@ -1776,7 +1776,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    NSManagedObjectID *objid = [(MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath] tableID];
+    NSManagedObjectID *objid = [(MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath] tableID];
     NSManagedObject *predicate = [self.document.activeDocumentModel.managedObjectContext objectRegisteredForID:objid];
     [self.document.activeDocumentModel.managedObjectContext deleteObject:predicate];
     [self.document.activeDocumentModel.managedObjectContext save:nil];
