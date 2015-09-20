@@ -706,6 +706,8 @@
 		4C401F291BAE703200BAE5FC /* MADTableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F1F1BAE703200BAE5FC /* MADTableViewCellQueryInput.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F2A1BAE703200BAE5FC /* MADTableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F211BAE703200BAE5FC /* MADTableViewCellQueryLink.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F2B1BAE703200BAE5FC /* MADTableViewCellQueryTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F231BAE703200BAE5FC /* MADTableViewCellQueryTableName.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F2E1BAE754200BAE5FC /* MADTableViewCellAuto.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F301BAE754200BAE5FC /* MADTableViewCellBase.m */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -2966,6 +2968,11 @@
 		4C401F211BAE703200BAE5FC /* MADTableViewCellQueryLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellQueryLink.m; sourceTree = "<group>"; };
 		4C401F221BAE703200BAE5FC /* MADTableViewCellQueryTableName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellQueryTableName.h; sourceTree = "<group>"; };
 		4C401F231BAE703200BAE5FC /* MADTableViewCellQueryTableName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellQueryTableName.m; sourceTree = "<group>"; };
+		4C401F2D1BAE754200BAE5FC /* MADTableViewCellAuto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAuto.h; sourceTree = "<group>"; };
+		4C401F2E1BAE754200BAE5FC /* MADTableViewCellAuto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAuto.m; sourceTree = "<group>"; };
+		4C401F2F1BAE754200BAE5FC /* MADTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellBase.h; sourceTree = "<group>"; };
+		4C401F301BAE754200BAE5FC /* MADTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellBase.m; sourceTree = "<group>"; };
+		4C401F311BAE754200BAE5FC /* MADTableViewCellMargin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellMargin.h; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4487,6 +4494,7 @@
 		4C401F031BAE6DF100BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C401F2C1BAE754200BAE5FC /* Cells */,
 				4C401F041BAE6DF100BAE5FC /* About */,
 			);
 			path = UI;
@@ -4549,6 +4557,18 @@
 				4C401F211BAE703200BAE5FC /* MADTableViewCellQueryLink.m */,
 				4C401F221BAE703200BAE5FC /* MADTableViewCellQueryTableName.h */,
 				4C401F231BAE703200BAE5FC /* MADTableViewCellQueryTableName.m */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		4C401F2C1BAE754200BAE5FC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4C401F2D1BAE754200BAE5FC /* MADTableViewCellAuto.h */,
+				4C401F2E1BAE754200BAE5FC /* MADTableViewCellAuto.m */,
+				4C401F2F1BAE754200BAE5FC /* MADTableViewCellBase.h */,
+				4C401F301BAE754200BAE5FC /* MADTableViewCellBase.m */,
+				4C401F311BAE754200BAE5FC /* MADTableViewCellMargin.h */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -8132,6 +8152,7 @@
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
 				4C23FB0218FADCE4009F234F /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
+				4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */,
 				4CF3E77A19F04D2D0064DA5F /* MADSearchBar.m in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
 				4C0F896A1B2E61A900D75AF6 /* UITableViewController+Designer.m in Sources */,
@@ -8162,6 +8183,7 @@
 				4C54F2E41A12D54A004B5228 /* MADToolboxNavigationController.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,
 				4C2F6E78194C3609009D192B /* MTArrayDataSourceTableView.m in Sources */,
+				4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */,
 				4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4CD0B3EE1AC90B52005CA75C /* MADNavigationBarTitleView.m in Sources */,
 				4C6C9B271733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
