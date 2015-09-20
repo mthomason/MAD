@@ -13,7 +13,7 @@
 #import <CoreData/CoreData.h>
 #import "MTAutoLayoutTableViewCell.h"
 
-@interface MTTableViewCellQueryPredicate : MTAutoLayoutTableViewCell
+@interface MADTableViewCellQueryPredicate : MTAutoLayoutTableViewCell
 
 @property (retain) NSManagedObjectID *tableID;
 

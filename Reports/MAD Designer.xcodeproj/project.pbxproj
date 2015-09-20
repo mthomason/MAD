@@ -698,7 +698,7 @@
 		4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F081BAE6DF100BAE5FC /* MADAboutTableViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F0E1BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C401F0F1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F241BAE703200BAE5FC /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F151BAE703200BAE5FC /* MTTableViewCellQueryPredicate.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F251BAE703200BAE5FC /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F171BAE703200BAE5FC /* UITableViewCellInstruction.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F261BAE703200BAE5FC /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F191BAE703200BAE5FC /* UITableViewCellLinkName.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F271BAE703200BAE5FC /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F1B1BAE703200BAE5FC /* UITableViewCellOverride.m */; settings = {ASSET_TAGS = (); }; };
@@ -2950,8 +2950,8 @@
 		4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardAbout.storyboard; sourceTree = "<group>"; };
 		4C401F0A1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAboutTitle.h; sourceTree = "<group>"; };
 		4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAboutTitle.m; sourceTree = "<group>"; };
-		4C401F141BAE703200BAE5FC /* MTTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
-		4C401F151BAE703200BAE5FC /* MTTableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellQueryPredicate.m; sourceTree = "<group>"; };
+		4C401F141BAE703200BAE5FC /* MADTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
+		4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellQueryPredicate.m; sourceTree = "<group>"; };
 		4C401F161BAE703200BAE5FC /* UITableViewCellInstruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellInstruction.h; sourceTree = "<group>"; };
 		4C401F171BAE703200BAE5FC /* UITableViewCellInstruction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellInstruction.m; sourceTree = "<group>"; };
 		4C401F181BAE703200BAE5FC /* UITableViewCellLinkName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLinkName.h; sourceTree = "<group>"; };
@@ -4533,8 +4533,8 @@
 		4C401F131BAE703200BAE5FC /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				4C401F141BAE703200BAE5FC /* MTTableViewCellQueryPredicate.h */,
-				4C401F151BAE703200BAE5FC /* MTTableViewCellQueryPredicate.m */,
+				4C401F141BAE703200BAE5FC /* MADTableViewCellQueryPredicate.h */,
+				4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */,
 				4C401F161BAE703200BAE5FC /* UITableViewCellInstruction.h */,
 				4C401F171BAE703200BAE5FC /* UITableViewCellInstruction.m */,
 				4C401F181BAE703200BAE5FC /* UITableViewCellLinkName.h */,
@@ -8147,7 +8147,7 @@
 				4CD0B3EA1AC90AFA005CA75C /* NSData+Base64.m in Sources */,
 				4C2213AC17D7932B00BD36F5 /* UIImage+ImageEffects.m in Sources */,
 				4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
-				4C401F241BAE703200BAE5FC /* MTTableViewCellQueryPredicate.m in Sources */,
+				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C23FB3518FADEBB009F234F /* UIApplication+Extras.m in Sources */,
 				4C4740CF1A01709C00B11434 /* MADToolboxStyleStyleViewController.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
