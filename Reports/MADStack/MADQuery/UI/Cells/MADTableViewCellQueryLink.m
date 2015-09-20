@@ -9,7 +9,7 @@
 #import "MADTableViewCellQueryLink.h"
 #import "Constants.h"
 
-@implementation UITableViewCellQueryLink
+@implementation MADTableViewCellQueryLink
 
 + (CGFloat)defaultHeight {
     return MNSTableViewCellQueryLinkHeightDefault;

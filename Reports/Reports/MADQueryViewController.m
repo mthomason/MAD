@@ -233,7 +233,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                  name: UIContentSizeCategoryDidChangeNotification
                                                object: nil];
     
-    [self.tableView registerClass: [UITableViewCellTableName class]
+    [self.tableView registerClass: [MADTableViewCellQueryTableName class]
            forCellReuseIdentifier: @"UITableViewCellTableName"];
     
     self.tableView.estimatedRowHeight = 44.0000f;
@@ -737,7 +737,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             result.textLabel.text = messageText;
             result.textLabel.attributedText = message;
             result.textLabel.numberOfLines = 0;
-            [(UITableViewCellQueryGroup *)result setTableID:group.objectID];
+            [(MADTableViewCellQueryGroup *)result setTableID:group.objectID];
             break;
         }
         

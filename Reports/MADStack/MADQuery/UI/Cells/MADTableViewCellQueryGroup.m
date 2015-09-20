@@ -12,13 +12,13 @@
 
 #import "MADTableViewCellQueryGroup.h"
 
-@interface UITableViewCellQueryGroup ()
+@interface MADTableViewCellQueryGroup ()
 
 @property (nonatomic, weak) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
 
 @end
 
-@implementation UITableViewCellQueryGroup
+@implementation MADTableViewCellQueryGroup
 
 + (CGFloat)defaultHeight {
     return 88.0000f;
