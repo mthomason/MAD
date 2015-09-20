@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@interface UITableViewCellTableName : UITableViewCell
+@interface MADTableViewCellQueryTableName : UITableViewCell
 
 @property (nonatomic, strong) NSManagedObjectID *tableID;
 

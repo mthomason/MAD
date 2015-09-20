@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellQueryLink.h"
+#import "MADTableViewCellQueryLink.h"
 #import "Constants.h"
 
 @implementation UITableViewCellQueryLink

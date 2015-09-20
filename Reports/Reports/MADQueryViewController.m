@@ -24,8 +24,8 @@
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "MTQueryBuilderPredicateFormatViewController.h"
 
-#import "UITableViewCellTableName.h"
-#import "UITableViewCellQueryLink.h"
+#import "MADTableViewCellQueryTableName.h"
+#import "MADTableViewCellQueryLink.h"
 #import "MADTableViewCellQueryGroup.h"
 #import "MADTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
@@ -685,7 +685,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             post = links.fieldright.capitalizedString;
             NSString *rightString = [NSString stringWithFormat:@"%@.%@", pre, post];
 
-            [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
+            [(MADTableViewCellQueryLink *)result setTableID: [links objectID]];
             result.textLabel.numberOfLines = 0;
 
             NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -1285,7 +1285,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                                  forKeys: sections];
             NSNumber *height1 = @(50.0000f);
-            NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
+            NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
             NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1] : @[height1, height2]; 
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
                                                                                                  forKeys: sections];
@@ -1315,7 +1315,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                  forKeys: sections];
             
             NSNumber *height1 = @(44.0000f);
-            NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
+            NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
             NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1, height1, height1] :
                                                                @[height1, height2, height1, height1];
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
@@ -1347,8 +1347,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                                  forKeys: sections];
             NSNumber *height1 = @(44.0000f);
-            NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
-            NSNumber *height3 = @([UITableViewCellQueryLink defaultHeight]);    //50.0000f
+            NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
+            NSNumber *height3 = @([MADTableViewCellQueryLink defaultHeight]);    //50.0000f
             NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height3, height1, height1, height1] :
                                                                @[height1, height2, height3, height1, height1];
             NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection
@@ -1532,7 +1532,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = nil;
         NSManagedObject *object = nil;
-        UITableViewCellQueryLink *tableViewCellLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
+        MADTableViewCellQueryLink *tableViewCellLink = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
         if (tableViewCellLink) {
             object = [context existingObjectWithID:[tableViewCellLink tableID] error:&error];
         } else {
@@ -1764,7 +1764,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)deleteQueryLinksFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCellQueryLink *cell = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
+    MADTableViewCellQueryLink *cell = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
     NSManagedObject *obj = [self.document.managedObjectContext objectRegisteredForID:cell.tableID];
     [self.document.managedObjectContext deleteObject: obj];
     [self.document.managedObjectContext save:nil];

@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellTableName.h"
+#import "MADTableViewCellQueryTableName.h"
 #import "Constants.h"
 
-@implementation UITableViewCellTableName
+@implementation MADTableViewCellQueryTableName
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
