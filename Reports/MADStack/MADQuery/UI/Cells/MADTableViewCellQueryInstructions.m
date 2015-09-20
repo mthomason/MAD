@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADTableViewCellInstructions.h"
+#import "MADTableViewCellQueryInstructions.h"
 
 CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
 
-@implementation UITableViewCellInstruction
+@implementation MADTableViewCellQueryInstructions
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];

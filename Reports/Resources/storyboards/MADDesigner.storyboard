@@ -407,7 +407,7 @@
                                 <animations/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </tableViewCell>
-                            <tableViewCell contentMode="center" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="SKb-hJ-vsU" detailTextLabel="fcc-0q-9Z5" style="IBUITableViewCellStyleValue1" id="99H-Yo-uAO" customClass="MADTableViewCellInstructions">
+                            <tableViewCell contentMode="center" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="SKb-hJ-vsU" detailTextLabel="fcc-0q-9Z5" style="IBUITableViewCellStyleValue1" id="99H-Yo-uAO" customClass="MADTableViewCellQueryInstructions">
                                 <rect key="frame" x="0.0" y="182" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="99H-Yo-uAO" id="eOi-Kv-DuB">

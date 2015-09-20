@@ -14,7 +14,7 @@
 
 extern CGFloat const MNSTableViewCellHeightDefault;
 
-@interface MADTableViewCellInstructions : MTAutoLayoutTableViewCell
+@interface MADTableViewCellQueryInstructions : MTAutoLayoutTableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
 @property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
