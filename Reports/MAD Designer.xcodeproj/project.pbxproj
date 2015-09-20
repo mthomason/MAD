@@ -2865,6 +2865,7 @@
 		4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPreferencesManager.m; sourceTree = "<group>"; };
 		4C401F8E1BAE86AC00BAE5FC /* MADUserDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUserDefault.h; sourceTree = "<group>"; };
 		4C401F8F1BAE86AC00BAE5FC /* MADUserDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUserDefault.m; sourceTree = "<group>"; };
+		4C401F941BAE883200BAE5FC /* mad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mad-Info.plist"; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4228,6 +4229,7 @@
 		4C401EE81BAE61F700BAE5FC /* MADDesigner */ = {
 			isa = PBXGroup;
 			children = (
+				4C401F941BAE883200BAE5FC /* mad-Info.plist */,
 				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
 				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
 				4C401F4D1BAE7AC400BAE5FC /* MADAppConfiguration.h */,
@@ -9041,7 +9043,7 @@
 					"DEBUG=1",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "Reports/mad-Info.plist";
+				INFOPLIST_FILE = "MADStack/MADDesigner/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -9099,7 +9101,7 @@
 					"MAD_VIEWER=0",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "Reports/mad-Info.plist";
+				INFOPLIST_FILE = "MADStack/MADDesigner/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
