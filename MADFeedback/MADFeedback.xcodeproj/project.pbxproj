@@ -7,19 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C8DCF991B8FCD4D0078563C /* MADFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8DCF981B8FCD4D0078563C /* MADFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C401F401BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F351BAE780300BAE5FC /* Info.plist */; settings = {ASSET_TAGS = (); }; };
+		4C401F411BAE780300BAE5FC /* MADFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F361BAE780300BAE5FC /* MADFeedback.h */; settings = {ASSET_TAGS = (); }; };
+		4C401F421BAE780300BAE5FC /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */; settings = {ASSET_TAGS = (); }; };
+		4C401F431BAE780300BAE5FC /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F441BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */; settings = {ASSET_TAGS = (); }; };
+		4C401F451BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F461BAE780300BAE5FC /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */; settings = {ASSET_TAGS = (); }; };
+		4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F491BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F3F1BAE780300BAE5FC /* Info.plist */; settings = {ASSET_TAGS = (); }; };
+		4C401F4A1BAE78A100BAE5FC /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F4C1BAE791B00BAE5FC /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C401F4B1BAE791B00BAE5FC /* MADCocoaExtensions.framework */; };
 		4C8DCFA01B8FCD4D0078563C /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */; };
-		4C8DCFA51B8FCD4D0078563C /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DCFA41B8FCD4D0078563C /* FeedbackTests.m */; };
-		4C8DCFB11B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8DCFAF1B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C8DCFB21B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DCFB01B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m */; };
 		4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB31B90C9F50078563C /* UIKit.framework */; };
-		4CC035D91B90F50C001A3CC5 /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC035DA1B90F50C001A3CC5 /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */; };
-		4CC035E11B90F813001A3CC5 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */; };
-		4CC035E41B90FC0E001A3CC5 /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */; };
-		4CC035E51B90FC0E001A3CC5 /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */; };
 		4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC035E61B90FF99001A3CC5 /* MessageUI.framework */; };
-		4CC035EA1B9102DC001A3CC5 /* UIAlertController+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,22 +34,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C401F351BAE780300BAE5FC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C401F361BAE780300BAE5FC /* MADFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedback.h; sourceTree = "<group>"; };
+		4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackFrustration.h; sourceTree = "<group>"; };
+		4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackFrustration.m; sourceTree = "<group>"; };
+		4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackUncaughtExceptionHandler.h; sourceTree = "<group>"; };
+		4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackUncaughtExceptionHandler.m; sourceTree = "<group>"; };
+		4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Feedback.h"; sourceTree = "<group>"; };
+		4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Feedback.m"; sourceTree = "<group>"; };
+		4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackTests.m; sourceTree = "<group>"; };
+		4C401F3F1BAE780300BAE5FC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C401F4B1BAE791B00BAE5FC /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C8DCF981B8FCD4D0078563C /* MADFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADFeedback.h; sourceTree = "<group>"; };
-		4C8DCF9A1B8FCD4D0078563C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C8DCF9F1B8FCD4D0078563C /* MADFeedback.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADFeedback.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C8DCFA41B8FCD4D0078563C /* FeedbackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedbackTests.m; sourceTree = "<group>"; };
-		4C8DCFA61B8FCD4D0078563C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C8DCFAF1B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackUncaughtExceptionHandler.h; sourceTree = "<group>"; };
-		4C8DCFB01B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackUncaughtExceptionHandler.m; sourceTree = "<group>"; };
 		4C8DCFB31B90C9F50078563C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackFrustration.h; sourceTree = "<group>"; };
-		4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeedbackFrustration.m; sourceTree = "<group>"; };
-		4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Utilities.h"; path = "../CocoaExtensions/CocoaExtensions/UIViewController+Utilities.h"; sourceTree = "<group>"; };
-		4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Feedback.h"; sourceTree = "<group>"; };
-		4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Feedback.m"; sourceTree = "<group>"; };
 		4CC035E61B90FF99001A3CC5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "../CocoaExtensions/CocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C401F4C1BAE791B00BAE5FC /* MADCocoaExtensions.framework in Frameworks */,
 				4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */,
 				4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */,
 			);
@@ -72,11 +73,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C401F341BAE780300BAE5FC /* MADFeedback */ = {
+			isa = PBXGroup;
+			children = (
+				4C401F351BAE780300BAE5FC /* Info.plist */,
+				4C401F361BAE780300BAE5FC /* MADFeedback.h */,
+				4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */,
+				4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */,
+				4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */,
+				4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */,
+				4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */,
+				4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */,
+			);
+			path = MADFeedback;
+			sourceTree = "<group>";
+		};
+		4C401F3D1BAE780300BAE5FC /* MADFeedbackTest */ = {
+			isa = PBXGroup;
+			children = (
+				4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */,
+				4C401F3F1BAE780300BAE5FC /* Info.plist */,
+			);
+			path = MADFeedbackTest;
+			sourceTree = "<group>";
+		};
 		4C8DCF8B1B8FCD4D0078563C = {
 			isa = PBXGroup;
 			children = (
-				4C8DCF971B8FCD4D0078563C /* Feedback */,
-				4C8DCFA31B8FCD4D0078563C /* FeedbackTests */,
+				4C401F341BAE780300BAE5FC /* MADFeedback */,
+				4C401F3D1BAE780300BAE5FC /* MADFeedbackTest */,
 				4C8DCFFC1B90DF1E0078563C /* Frameworks */,
 				4C8DCF961B8FCD4D0078563C /* Products */,
 			);
@@ -91,47 +116,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4C8DCF971B8FCD4D0078563C /* Feedback */ = {
-			isa = PBXGroup;
-			children = (
-				4C8DCF981B8FCD4D0078563C /* MADFeedback.h */,
-				4C8DCF9A1B8FCD4D0078563C /* Info.plist */,
-				4C8DCFAF1B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h */,
-				4C8DCFB01B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m */,
-				4CC035D71B90F50C001A3CC5 /* MADFeedbackFrustration.h */,
-				4CC035D81B90F50C001A3CC5 /* MADFeedbackFrustration.m */,
-				4CC035E21B90FC0E001A3CC5 /* UIAlertController+Feedback.h */,
-				4CC035E31B90FC0E001A3CC5 /* UIAlertController+Feedback.m */,
-			);
-			path = Feedback;
-			sourceTree = "<group>";
-		};
-		4C8DCFA31B8FCD4D0078563C /* FeedbackTests */ = {
-			isa = PBXGroup;
-			children = (
-				4C8DCFA41B8FCD4D0078563C /* FeedbackTests.m */,
-				4C8DCFA61B8FCD4D0078563C /* Info.plist */,
-			);
-			path = FeedbackTests;
-			sourceTree = "<group>";
-		};
 		4C8DCFFC1B90DF1E0078563C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4CC035E81B90FFAD001A3CC5 /* CocoaExtensions */,
+				4C401F4B1BAE791B00BAE5FC /* MADCocoaExtensions.framework */,
 				4C8DCFB31B90C9F50078563C /* UIKit.framework */,
 				4CC035E61B90FF99001A3CC5 /* MessageUI.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4CC035E81B90FFAD001A3CC5 /* CocoaExtensions */ = {
-			isa = PBXGroup;
-			children = (
-				4CC035E91B9102DC001A3CC5 /* UIAlertController+Constructors.h */,
-				4CC035E01B90F813001A3CC5 /* UIViewController+Utilities.h */,
-			);
-			name = CocoaExtensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,12 +133,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DCF991B8FCD4D0078563C /* MADFeedback.h in Headers */,
-				4CC035D91B90F50C001A3CC5 /* MADFeedbackFrustration.h in Headers */,
-				4C8DCFB11B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.h in Headers */,
-				4CC035EA1B9102DC001A3CC5 /* UIAlertController+Constructors.h in Headers */,
-				4CC035E11B90F813001A3CC5 /* UIViewController+Utilities.h in Headers */,
-				4CC035E41B90FC0E001A3CC5 /* UIAlertController+Feedback.h in Headers */,
+				4C401F441BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h in Headers */,
+				4C401F421BAE780300BAE5FC /* MADFeedbackFrustration.h in Headers */,
+				4C401F461BAE780300BAE5FC /* UIAlertController+Feedback.h in Headers */,
+				4C401F411BAE780300BAE5FC /* MADFeedback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +219,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C401F491BAE780300BAE5FC /* Info.plist in Resources */,
+				4C401F401BAE780300BAE5FC /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,9 +238,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DCFB21B90C82B0078563C /* MADFeedbackUncaughtExceptionHandler.m in Sources */,
-				4CC035DA1B90F50C001A3CC5 /* MADFeedbackFrustration.m in Sources */,
-				4CC035E51B90FC0E001A3CC5 /* UIAlertController+Feedback.m in Sources */,
+				4C401F451BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m in Sources */,
+				4C401F431BAE780300BAE5FC /* MADFeedbackFrustration.m in Sources */,
+				4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,7 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8DCFA51B8FCD4D0078563C /* FeedbackTests.m in Sources */,
+				4C401F4A1BAE78A100BAE5FC /* FeedbackTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +360,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Feedback/Info.plist;
+				INFOPLIST_FILE = MADFeedback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.Feedback;
@@ -384,7 +376,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Feedback/Info.plist;
+				INFOPLIST_FILE = MADFeedback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.Feedback;
@@ -396,7 +388,7 @@
 		4C8DCFAD1B8FCD4D0078563C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = FeedbackTests/Info.plist;
+				INFOPLIST_FILE = MADFeedbackTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.FeedbackTests;
 				PRODUCT_NAME = MADFeedback;
@@ -406,7 +398,7 @@
 		4C8DCFAE1B8FCD4D0078563C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = FeedbackTests/Info.plist;
+				INFOPLIST_FILE = MADFeedbackTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.FeedbackTests;
 				PRODUCT_NAME = MADFeedback;

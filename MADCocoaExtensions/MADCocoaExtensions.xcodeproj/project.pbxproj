@@ -12,7 +12,7 @@
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
 		4C5205A31BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205A41BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */; settings = {ASSET_TAGS = (); }; };
+		4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; settings = {ASSET_TAGS = (); }; };
 		4C5205AA1BA7E2A2000E6A59 /* UIColor+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057F1BA7E2A2000E6A59 /* UIColor+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };

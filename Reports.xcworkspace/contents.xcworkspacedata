@@ -15,6 +15,9 @@
          location = "container:"
          name = "Frameworks">
          <FileRef
+            location = "group:MADFeedback/MADFeedback.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:MADMySQL/MADMySQL.xcodeproj">
          </FileRef>
          <FileRef

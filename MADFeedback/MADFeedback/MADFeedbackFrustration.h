@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import <MADCocoaExtensions/UIViewController+Utilities.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 @interface MADFeedbackFrustration : UIResponder
 
