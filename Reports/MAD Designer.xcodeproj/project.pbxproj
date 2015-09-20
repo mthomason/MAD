@@ -4486,9 +4486,9 @@
 		4C401EE81BAE61F700BAE5FC /* MADDesigner */ = {
 			isa = PBXGroup;
 			children = (
-				4C401EF31BAE62FD00BAE5FC /* Resources */,
 				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
 				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
+				4C401EF31BAE62FD00BAE5FC /* Resources */,
 				4C401EEC1BAE61F700BAE5FC /* UI */,
 			);
 			name = MADDesigner;
