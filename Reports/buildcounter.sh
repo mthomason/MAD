@@ -52,7 +52,7 @@ echo "Updated build number to $currentvnum"
 /usr/libexec/Plistbuddy -c "Set MADRev $buildnum" "${plist}"
 echo "Updated build number to $buildnum"
 
-filelocation=${PROJECT_DIR}/Reports/MADAppConfiguration.m
+filelocation=${PROJECT_DIR}/MADStack/MADDesigner/MADAppConfiguration.m
 sed -ie "s/NSString \* const MTGlobalBundleVersion.*/NSString \* const MTGlobalBundleVersion                              = @\"${currentvnum}\";/g" "${filelocation}"
 sed -ie "s/NSString \* const MTGlobalBundleShortVersion.*/NSString \* const MTGlobalBundleShortVersion                         = @\"${currentvnum}\";/g" "${filelocation}"
 sed -ie "s/NSString \* const MTGlobalBundleRev.*/NSString \* const MTGlobalBundleRev                                  = @\"${buildnum}\";/g" "${filelocation}"
