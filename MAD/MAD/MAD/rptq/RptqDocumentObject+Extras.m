@@ -54,8 +54,8 @@ static NSNumberFormatter *currencyNumberFormatter;
         lastDropIndex = [[lastObject dropIndex] integerValue] + 1;
     }
     NSNumber *identifier = @(idNumber);
-    NSString *fontname = [MTFont defaultFamily];
-    NSNumber *fontSize = @([MTFont defaultSize]);
+    NSString *fontname = [MADFont defaultFamily];
+    NSNumber *fontSize = @([MADFont defaultSize]);
     NSNumber *bold = @NO;
     NSNumber *italic = @NO;
     NSNumber *underline = @NO;
@@ -487,7 +487,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 - (NSDictionary *)attributesForDrawingText {
-    MTFont *font = [[MTFont alloc] initWithFamilyName:[self fontname]
+    MADFont *font = [[MADFont alloc] initWithFamilyName:[self fontname]
                                          andPointSize:[[self fontsize] floatValue]
                                                isBold:[[self bold] boolValue]
                                              isItalic:[[self italic] boolValue]];

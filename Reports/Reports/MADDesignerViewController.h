@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <MAD/MAD.h>
-#import <MAD/MTFont.h>
+#import <MAD/MADFont.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/NSManagedObject+Extras.h>
 #import <MAD/NSManagedObjectID+Extras.h>

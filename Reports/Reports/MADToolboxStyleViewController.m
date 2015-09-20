@@ -300,7 +300,7 @@
             NSNumber *verticalAlignmentHolder = @(-1), *horizontalAlignmentHolder = @(-1);
             NSNumber *sizeWidthHolder = @(CGFLOAT_MIN), *sizeHeightHolder = @(CGFLOAT_MIN);
             
-            CGFloat fontSizeHolder = [MTFont defaultSize];
+            CGFloat fontSizeHolder = [MADFont defaultSize];
             
             NSInteger numberOfMarginTop = 0, numberOfMarginBottom = 0, numberOfMarginLeft = 0, numberOfMarginRight = 0;
             NSInteger numberOfPaddingTop = 0, numberOfPaddingBottom = 0, numberOfPaddingLeft = 0, numberOfPaddingRight = 0;
@@ -630,7 +630,7 @@
     return localizedAttributedMessage;
 }
 
-- (void)chooseFont:(MTFont *)font {
+- (void)chooseFont:(MADFont *)font {
     self.labelFontName.font = [font font];
     self.labelFontName.text = font.familyName;
     [self.labelFontName setAttributedText:[self boldSystemString: font.familyName
@@ -912,7 +912,7 @@
 
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
     CGFloat currentPointSize = [[self.labelFontName font] pointSize];
-    MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
+    MADFont *font = [[MADFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
     [self chooseFont:font];
 }
 
@@ -929,7 +929,7 @@
             break;
         }
 
-        MTFont *font = [MTFont fontWithFamilyName:fontname];
+        MADFont *font = [MADFont fontWithFamilyName:fontname];
         
         [((MADFontSelectorViewController *)segue.destinationViewController) setSelectedFont:font];
         

@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTFont_h
-#define Reports_MTFont_h
+#ifndef Reports_MADFont_h
+#define Reports_MADFont_h
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
@@ -25,7 +25,7 @@ extern NSString * const MTFontFamilyTrebuchet;
 extern NSString * const MTFontFamilyVerdana;
 extern NSString * const MTFontFamilyZapfino;
 
-@interface MTFont : NSObject
+@interface MADFont : NSObject
 
 + (instancetype)fontWithFamilyName:(NSString *)familyName;
 - (instancetype)init;

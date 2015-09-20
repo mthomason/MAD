@@ -15,7 +15,7 @@
 
 @interface MADFontSelectorViewController()
 
-@property (nonatomic, strong) MTFont *initalSelectedFont;
+@property (nonatomic, strong) MADFont *initalSelectedFont;
 
 @end
 
@@ -116,7 +116,7 @@
     
 }
 
-- (void)checkSelectedFont:(MTFont *)font {
+- (void)checkSelectedFont:(MADFont *)font {
     [self uncheckAllCells];
     
     if ([font.familyName isEqualToString:MTFontFamilyAmericanTypewriter]) {
@@ -144,7 +144,7 @@
     }
 }
 
-- (void)setSelectedFont:(MTFont *)font {
+- (void)setSelectedFont:(MADFont *)font {
     [self setInitalSelectedFont:font];
 }
 

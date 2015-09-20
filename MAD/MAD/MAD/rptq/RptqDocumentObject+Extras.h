@@ -15,7 +15,7 @@
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTDataType.h>
 #import <MAD/MAD.h>
-#import <MAD/MTFont.h>
+#import <MAD/MADFont.h>
 #import <MAD/MADDocumentObjectType.h>
 
 extern NSString * const MTDocumentObjectDefinationType;

@@ -11,11 +11,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import <MAD/MTFont.h>
+#import <MAD/MADFont.h>
 #import "MADViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 
-@class MADocument, MADFontSelectorViewController, MTFont;
+@class MADocument, MADFontSelectorViewController, MADFont;
 
 @protocol MTReportDesignerFontSelectorDelegate
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
@@ -39,7 +39,7 @@
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontVerdana;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontZapfino;
 
-- (void)setSelectedFont:(MTFont *)font;
+- (void)setSelectedFont:(MADFont *)font;
 
 @property (nonatomic, assign) BOOL clearsBackground;
 

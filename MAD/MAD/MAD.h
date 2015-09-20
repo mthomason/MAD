@@ -128,7 +128,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MTAggregateFunctionInputType.h>
 #import <MAD/MADDocumentObjectType.h>
 #import <MAD/MADConstants.h>
-#import <MAD/MTFont.h>
+#import <MAD/MADFont.h>
 #import <MAD/MTDataType.h>
 #import <MAD/NSManagedObject+Extras.h>
 #import <MAD/NSManagedObjectID+Extras.h>

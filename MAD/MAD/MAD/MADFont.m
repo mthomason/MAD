@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTFont.h"
+#import "MADFont.h"
 
 // MARK: Keys for each type of font.
 NSString * const MTFontNormal            = @"MTFontNormal";
@@ -46,7 +46,7 @@ NSString * const MTFontFamilyTrebuchet           = @"Trebuchet";
 NSString * const MTFontFamilyVerdana             = @"Verdana";
 NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
-@interface MTFont()
+@interface MADFont()
 
 @property (nonatomic, strong, readwrite) NSString *familyName;
 @property (nonatomic, assign) BOOL bold;
@@ -54,7 +54,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
 @end
 
-@implementation MTFont
+@implementation MADFont
 
 + (NSArray *)familyNames {
     return @[MTFontFamilyAmericanTypewriter, MTFontFamilyArial, MTFontFamilyCourierNew, MTFontFamilyCourier, MTFontFamilyGeorgia, MTFontFamilyHelvetica, MTFontFamilyHelveticaNeue, MTFontFamilyTimesNewRoman, MTFontFamilyTrebuchet, MTFontFamilyVerdana, MTFontFamilyZapfino];
@@ -227,16 +227,16 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     if ([familyName length] == 0) {
         familyName = MTFontFamilyHelveticaNeue;
     }
-    MTFont *font = [[MTFont alloc] initWithFamilyName:familyName];
+    MADFont *font = [[MADFont alloc] initWithFamilyName:familyName];
     return font;
 }
 
 - (instancetype)init {
-    return [self initWithFamilyName:[MTFont defaultFamily]];
+    return [self initWithFamilyName:[MADFont defaultFamily]];
 }
 
 - (instancetype)initWithFamilyName:(NSString *)familyName {
-    return [self initWithFamilyName:familyName andPointSize:[MTFont defaultSize]];
+    return [self initWithFamilyName:familyName andPointSize:[MADFont defaultSize]];
 }
 
 - (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize {
@@ -288,7 +288,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (CTFontRef)standardCoreTextFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontNormal];
     if ([fontName length] == 0) {
         fontName = fontNames[MTFontNormal];
@@ -298,7 +298,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (UIFont *)standardFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontNormal];
     UIFont *result = nil;
     if ([fontName length] == 0) {
@@ -309,7 +309,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (CTFontRef)italicCoreTextFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontItalic];
     if ([fontName length] == 0) {
         fontName = fontNames[MTFontNormal];
@@ -319,7 +319,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (UIFont *)italicFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontItalic];
     UIFont *result = nil;
     if ([fontName length] == 0) {
@@ -330,7 +330,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (CTFontRef)boldCoreTextFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontBold];
     if ([fontName length] == 0) {
         fontName = fontNames[MTFontNormal];
@@ -340,7 +340,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (UIFont *)boldFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontBold];
     UIFont *result = nil;
     if ([fontName length] == 0) {
@@ -352,7 +352,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
 
 - (CTFontRef)boldItalicCoreTextFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontBoldItalic];
     if ([fontName length] == 0) {
         fontName = fontNames[MTFontNormal];
@@ -362,7 +362,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 - (UIFont *)boldItalicFont {
-    NSDictionary *fontNames = [MTFont fontNamesForFamilyName:self.familyName];
+    NSDictionary *fontNames = [MADFont fontNamesForFamilyName:self.familyName];
     NSString *fontName = fontNames[MTFontBoldItalic];
     UIFont *result = nil;
     if ([fontName length] == 0) {

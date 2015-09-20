@@ -69,8 +69,8 @@
 		4CC282701BADE82000775B72 /* MTDataTableVirtual.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282331BADE81A00775B72 /* MTDataTableVirtual.m */; settings = {ASSET_TAGS = (); }; };
 		4CC282711BADE82000775B72 /* MTErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282341BADE81A00775B72 /* MTErrorContainer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282721BADE82000775B72 /* MTErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282351BADE81A00775B72 /* MTErrorContainer.m */; settings = {ASSET_TAGS = (); }; };
-		4CC282731BADE82000775B72 /* MTFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282361BADE81A00775B72 /* MTFont.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CC282741BADE82000775B72 /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282371BADE81A00775B72 /* MTFont.m */; settings = {ASSET_TAGS = (); }; };
+		4CC282731BADE82000775B72 /* MADFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282361BADE81A00775B72 /* MADFont.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC282741BADE82000775B72 /* MADFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282371BADE81A00775B72 /* MADFont.m */; settings = {ASSET_TAGS = (); }; };
 		4CC282751BADE82100775B72 /* MTKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282381BADE81A00775B72 /* MTKeyChain.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282761BADE82100775B72 /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282391BADE81A00775B72 /* MTKeyChain.m */; settings = {ASSET_TAGS = (); }; };
 		4CC282771BADE82100775B72 /* MTNotificationDidFormatPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -440,8 +440,8 @@
 		4CC282331BADE81A00775B72 /* MTDataTableVirtual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDataTableVirtual.m; path = MAD/MTDataTableVirtual.m; sourceTree = "<group>"; };
 		4CC282341BADE81A00775B72 /* MTErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTErrorContainer.h; path = MAD/MTErrorContainer.h; sourceTree = "<group>"; };
 		4CC282351BADE81A00775B72 /* MTErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTErrorContainer.m; path = MAD/MTErrorContainer.m; sourceTree = "<group>"; };
-		4CC282361BADE81A00775B72 /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTFont.h; path = MAD/MTFont.h; sourceTree = "<group>"; };
-		4CC282371BADE81A00775B72 /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTFont.m; path = MAD/MTFont.m; sourceTree = "<group>"; };
+		4CC282361BADE81A00775B72 /* MADFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFont.h; path = MAD/MADFont.h; sourceTree = "<group>"; };
+		4CC282371BADE81A00775B72 /* MADFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFont.m; path = MAD/MADFont.m; sourceTree = "<group>"; };
 		4CC282381BADE81A00775B72 /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKeyChain.h; path = MAD/MTKeyChain.h; sourceTree = "<group>"; };
 		4CC282391BADE81A00775B72 /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKeyChain.m; path = MAD/MTKeyChain.m; sourceTree = "<group>"; };
 		4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNotificationDidFormatPage.h; path = MAD/MTNotificationDidFormatPage.h; sourceTree = "<group>"; };
@@ -994,8 +994,8 @@
 				4CC282331BADE81A00775B72 /* MTDataTableVirtual.m */,
 				4CC282341BADE81A00775B72 /* MTErrorContainer.h */,
 				4CC282351BADE81A00775B72 /* MTErrorContainer.m */,
-				4CC282361BADE81A00775B72 /* MTFont.h */,
-				4CC282371BADE81A00775B72 /* MTFont.m */,
+				4CC282361BADE81A00775B72 /* MADFont.h */,
+				4CC282371BADE81A00775B72 /* MADFont.m */,
 				4CC282381BADE81A00775B72 /* MTKeyChain.h */,
 				4CC282391BADE81A00775B72 /* MTKeyChain.m */,
 				4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */,
@@ -1294,7 +1294,7 @@
 				4CC283AE1BADE8BB00775B72 /* MTQueryTest.h in Headers */,
 				4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */,
 				4CC283BD1BADE8CA00775B72 /* NSManagedObject+Extras.h in Headers */,
-				4CC282731BADE82000775B72 /* MTFont.h in Headers */,
+				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4CC282671BADE81E00775B72 /* MTDataTable+Factory.h in Headers */,
 				4CC282491BADE81B00775B72 /* MTAggregateFunctionInputType.h in Headers */,
 				4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */,
@@ -1539,7 +1539,7 @@
 				4CC2839D1BADE8AC00775B72 /* MTQueryDefinitionLinks.m in Sources */,
 				4CC2834D1BADE86400775B72 /* MTPaperB10.m in Sources */,
 				4CC2848A1BADE9CB00775B72 /* RptqDocumentSection+Extras.m in Sources */,
-				4CC282741BADE82000775B72 /* MTFont.m in Sources */,
+				4CC282741BADE82000775B72 /* MADFont.m in Sources */,
 				4CC283391BADE85A00775B72 /* MTPaperB0.m in Sources */,
 				4CC284021BADE92B00775B72 /* RptqDatabaseSchemaField.m in Sources */,
 				4CC283811BADE88C00775B72 /* MTQueryCacheIndexDrop.m in Sources */,

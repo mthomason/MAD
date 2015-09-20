@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import <MAD/MTFont.h>
+#import <MAD/MADFont.h>
 #import <MAD/NSManagedObject+Extras.h>
 #import <MAD/MTAlignment.h>
 #import "MTToolboxViewControllerProtocol.h"
@@ -34,7 +34,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
 @property (nonatomic, assign) BOOL clearsBackground;
 
-- (void)chooseFont:(MTFont *)font;
+- (void)chooseFont:(MADFont *)font;
 
 @end
 
