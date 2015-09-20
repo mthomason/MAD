@@ -26,7 +26,7 @@
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
 
-- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
+- (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
 - (void)getUserCloudPrefs;
 
 @end

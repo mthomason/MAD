@@ -31,8 +31,6 @@
 
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
-
-#import "MADOpenDocumentManager.h"
 #import "MADBarButtonItem.h"
 
 #import "MADNavigationController.h"
@@ -48,7 +46,6 @@
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
-#import "MADOpenDocumentManager.h"
 #import "MADocumentProtocol.h"
 
 
@@ -71,7 +68,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         MFMailComposeViewControllerDelegate,
         UIDocumentInteractionControllerDelegate,
         UIDocumentPickerDelegate,
-        UISearchBarDelegate,
         UITextFieldDelegate,
         MADFileExplorerDelegate,
         MADFileLocationManagerDelegate,
@@ -109,7 +105,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (atomic, assign) BOOL aboutViewControllerOnScreen;
 
 @property (nonatomic, strong) MADSearchBar *searchBar;
-@property (readonly) UILabel *labelMadDesigner;
+@property (readonly) UILabel *titleView;
 
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
@@ -126,12 +122,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) NSMutableArray *batchRemoves;
 @property (nonatomic, strong) NSMutableArray *batchUpdates;
 
-@property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
 @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
-@property (nonatomic, assign) MTReportState reportState;
-
 @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
+
+- (MADocument *)openDocument;
 
 @end
 
@@ -143,16 +138,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - MADFileManagerLocationDelegate
 
-- (NSString *)groupIdentifier {
-    return MADIdentifierGroup;
-}
-- (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
-}
-
-- (NSString *)fileExtention {
-    return MADFileExtentionMobleApplicationDocument;
-}
+- (NSString *)groupIdentifier {     return MADIdentifierGroup; }
+- (NSString *)ubiquityIdentifier {  return MADUbiquityIdentifier; }
+- (NSString *)fileExtention {       return MADFileExtentionMobleApplicationDocument; }
 
 - (void)didConfigureFilesController:(MADFilesController *)filesController {
     filesController.delegate = self;
@@ -179,7 +167,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Helper functions
 
-- (void)closeReport:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
+- (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
     MADocument *activeDocument = self.openDocument;
     [activeDocument regenThumbnailWithTraits:traitCollectionForThumbnail];
     if (activeDocument && activeDocument.documentState != UIDocumentStateClosed) {
@@ -192,8 +180,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (MADocument *)openDocument {
-    if (self.reportState == MTReportStateOpen) return (MADocument *)self.fileManager.openDocument;
-    else return nil;
+    return (MADocument *)[super openDocument];
 }
 
 #pragma mark - Static Functions
@@ -360,16 +347,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
     
     self.pendingLaunchContext = nil;
-    
-    for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
-        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-        [cell performDeselectionAnimations];
-    }
-    
-    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
-        [self.collectionView deselectItemAtIndexPath: path animated: animated];
-    }
-    
     self.aboutViewControllerOnScreen = NO;
 }
 
@@ -420,7 +397,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        [self closeReport:self.traitCollection completion:^(BOOL success) {
+        [self closeDocument:self.traitCollection completion:^(BOOL success) {
             [self reenable];
         }];
     }
@@ -490,44 +467,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
-}
-
-#pragma mark - UISearchBarDelegate
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField { }
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
-
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    //[[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-    //[[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-
-    //[self animateUpdates];
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    //if (self.searchBar.text.length > 0) {
-    //    self.searchBar.text = @"";
-        //[[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-        //[[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-
-        //[self animateUpdates];
-    //}
-    //[searchBar resignFirstResponder];
-    //[self search: self];
-}
-
-- (void)reenableDataWithSearch {
-    //if (self.searchBar) {
-    //    [self searchBar: self.searchBar
-    //      textDidChange: self.searchBar.text];
-    //} else {
-    //[self.collectionView reloadData];
-    //}
 }
 
 #pragma mark - Segues
@@ -688,7 +627,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Delegates
 
-- (void)finishCloseReport:(MADOpenFileViewController *)sender {
+- (void)finishCloseDocument:(MADOpenFileViewController *)sender {
     [sender reenable];
     [UIView performWithoutAnimation:^{
         [sender.collectionView.backgroundView setNeedsDisplay];
@@ -700,8 +639,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.shouldShowAddDocumentPopover = YES;
 
     __weak MADOpenFileViewController *weakself = self;
-    [self closeReport:self.traitCollection completion:^(BOOL success) {
-        [weakself performSelectorOnMainThread:@selector(finishCloseReport:) withObject:weakself waitUntilDone:NO];
+    [self closeDocument:self.traitCollection completion:^(BOOL success) {
+        [weakself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:weakself waitUntilDone:NO];
     }];
 
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -860,7 +799,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark UI Helpers
 
-- (UILabel *)labelMadDesigner {
+- (UILabel *)titleView {
     return (UILabel *)self.navigationItem.titleView;
 }
 
@@ -892,7 +831,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
         [cell.activityIndicator stopAnimating];
     }
-    [self reenableDataWithSearch];
 }
 
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
@@ -1097,7 +1035,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         self.searchBar.hidden = NO;
         self.searchBar.showsCancelButton = NO;
         self.searchBar.alpha = 0.0000f;
-        self.labelMadDesigner.alpha = 1.0000f;
+        self.titleView.alpha = 1.0000f;
         self.navigationItem.leftBarButtonItem.enabled = NO;
         __weak MADOpenFileViewController *weakself = self;
         
@@ -1120,7 +1058,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
                                weakself.searchBar.alpha = 1.0000f;
-                               weakself.labelMadDesigner.alpha = 0.0000f;
+                               weakself.titleView.alpha = 0.0000f;
                                weakself.navigationItem.titleView = searchViewHolder;
                            } completion:^(BOOL finished) {
                                if (weakself.searchBar.isFirstResponder == NO) {
@@ -1134,15 +1072,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }
         self.searchBar.hidden = YES;
         self.searchBar.alpha = 0.1000f;
-        self.labelMadDesigner.alpha = 0.0000f;
+        self.titleView.alpha = 0.0000f;
         self.navigationItem.leftBarButtonItem.enabled = YES;
         __weak MADOpenFileViewController *weakself = self;
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
                                weakself.searchBar.alpha = 0.0000f;
-                               weakself.labelMadDesigner.alpha = 1.0000f;
-                               weakself.navigationItem.titleView = weakself.labelMadDesigner;
+                               weakself.titleView.alpha = 1.0000f;
+                               weakself.navigationItem.titleView = weakself.titleView;
                            } completion:nil];
         
     }
@@ -1253,6 +1191,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
     }
 }
+
 - (void)handleBarButtonItemStore:(id)sender {
     
     UINavigationController *licensing = [UINavigationController Licensing];

@@ -11,13 +11,14 @@
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MTCollectionViewCellDocument.h"
 #import "MADFileLocationManager.h"
+#import "MADOpenDocumentManager.h"
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
 static NSString * const Downloading                             = @"Downloading";
 
 @interface MADFileExplorerViewController ()
-    <MTDocumentCellProtocol, UIGestureRecognizerDelegate>
+    <MTDocumentCellProtocol, UIGestureRecognizerDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
 
@@ -27,6 +28,10 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (NSURL *)documentDirectory {
     return self.filesCoordnator.filesController.documentDirectory;
+}
+
+- (UIManagedDocument *)openDocument {
+    return self.reportState == MTReportStateOpen ? self.fileManager.openDocument : nil;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -47,6 +52,19 @@ static NSString * const Downloading                             = @"Downloading"
     self.collectionViewDelegate = delegate;
     self.collectionView.delegate = self.collectionViewDelegate;
     self.collectionView.dataSource = self;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        [cell performDeselectionAnimations];
+    }
+    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+        [self.collectionView deselectItemAtIndexPath: path animated: animated];
+    }
+    
 }
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
@@ -155,6 +173,20 @@ static NSString * const Downloading                             = @"Downloading"
     
     return cell;
 }
+
+#pragma mark - UISearchBarDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField { }
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText { }
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar { }
 
 #pragma mark - MTDocumentCellProtocol
 

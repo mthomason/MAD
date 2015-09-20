@@ -17,6 +17,7 @@ FOUNDATION_EXPORT const unsigned char MADExplorerVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <MADExplorer/PublicHeader.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewController.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADBackgroundViewSelected.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MTDocumentCellProtocol.h>

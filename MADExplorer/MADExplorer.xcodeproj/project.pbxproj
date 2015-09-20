@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C401E3F1BAE42DD00BAE5FC /* MADOpenDocumentManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */; settings = {ASSET_TAGS = (); }; };
+		4C401E421BAE44B200BAE5FC /* MADDocumentState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E411BAE446100BAE5FC /* MADDocumentState.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C5205D81BA7E67F000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205D71BA7E67F000E6A59 /* MADCocoaExtensions.framework */; };
 		4C6700EF1BA20633001C9D5A /* MADExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6700EE1BA20633001C9D5A /* MADExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6700F61BA20633001C9D5A /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6700EB1BA20633001C9D5A /* MADExplorer.framework */; settings = {ASSET_TAGS = (); }; };
@@ -39,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOpenDocumentManager.h; path = MADExplorer/MADOpenDocumentManager.h; sourceTree = "<group>"; };
+		4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOpenDocumentManager.m; path = MADExplorer/MADOpenDocumentManager.m; sourceTree = "<group>"; };
+		4C401E411BAE446100BAE5FC /* MADDocumentState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADDocumentState.h; path = MADExplorer/MADDocumentState.h; sourceTree = "<group>"; };
 		4C5205D71BA7E67F000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../MADCocoaExtensions/build/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C6700EB1BA20633001C9D5A /* MADExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6700EE1BA20633001C9D5A /* MADExplorer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADExplorer.h; sourceTree = "<group>"; };
@@ -134,6 +140,8 @@
 		4CC6414B1BA7791100F3ECCE /* MADExplorer */ = {
 			isa = PBXGroup;
 			children = (
+				4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */,
+				4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */,
 				4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */,
 				4CC6415C1BA77AEC00F3ECCE /* MTDocumentCellProtocol.h */,
 				4CC641841BA78A1300F3ECCE /* MTTableViewCellDocument.h */,
@@ -148,6 +156,7 @@
 				4CC641591BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m */,
 				4CC641701BA77D6100F3ECCE /* MADBackgroundViewSelected.h */,
 				4CC641711BA77D6100F3ECCE /* MADBackgroundViewSelected.m */,
+				4C401E411BAE446100BAE5FC /* MADDocumentState.h */,
 			);
 			name = MADExplorer;
 			sourceTree = "<group>";
@@ -184,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C6700EF1BA20633001C9D5A /* MADExplorer.h in Headers */,
+				4C401E3F1BAE42DD00BAE5FC /* MADOpenDocumentManager.h in Headers */,
 				4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */,
 				4CC641561BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.h in Headers */,
 				4CC6415D1BA77AEC00F3ECCE /* MTDocumentCellProtocol.h in Headers */,
@@ -191,6 +201,7 @@
 				4CC641721BA77D6100F3ECCE /* MADBackgroundViewSelected.h in Headers */,
 				4CC641861BA78A1300F3ECCE /* MTTableViewCellDocument.h in Headers */,
 				4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */,
+				4C401E421BAE44B200BAE5FC /* MADDocumentState.h in Headers */,
 				4CC6414E1BA7793900F3ECCE /* MADFileExplorerViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,6 +307,7 @@
 				4CC641571BA77A6200F3ECCE /* MADCollectionViewLayoutGroupedDelegate.m in Sources */,
 				4CC641871BA78A1300F3ECCE /* MTTableViewCellDocument.m in Sources */,
 				4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */,
+				4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */,
 				4CC6414F1BA7793900F3ECCE /* MADFileExplorerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

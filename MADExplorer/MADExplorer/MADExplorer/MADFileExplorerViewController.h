@@ -10,17 +10,18 @@
 #import <MessageUI/MessageUI.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MADExplorer/MADDocumentState.h>
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MADSaveFileProtocol.h"
 
-@class MADFileLocationManager;
+@class MADFileLocationManager, MADOpenDocumentManager;
 
 @protocol MADFileExplorerDelegate <NSObject>
 
-- (void)editFile:(id)sender;
-- (void)emailFile:(id)sender;
-- (void)renameFile:(id)sender;
-- (void)duplicateFile:(id)sender;
+    - (void)editFile:(id)sender;
+    - (void)emailFile:(id)sender;
+    - (void)renameFile:(id)sender;
+    - (void)duplicateFile:(id)sender;
 
 @end
 
@@ -29,11 +30,14 @@
         MADCollectionViewLayoutFilesDelegate,
         MADSaveFileProtocol>
 
-@property (nonatomic, weak) id <MADFileExplorerDelegate> fileExplorerDelegate;
+    @property (nonatomic, weak) id <MADFileExplorerDelegate> fileExplorerDelegate;
 
-@property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
-@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
+    @property (nonatomic, strong) MADFileLocationManager *filesCoordnator;
+    @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
+    @property (nonatomic, strong, readwrite) MADOpenDocumentManager *fileManager;
+    @property (nonatomic, assign) MTReportState reportState;
 
-- (NSString *)subtitleForMetadata:(MADMetaData *)metadata;
+    - (NSString *)subtitleForMetadata:(MADMetaData *)metadata;
+    - (UIManagedDocument *)openDocument;
 
 @end

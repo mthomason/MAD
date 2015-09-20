@@ -11,8 +11,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class MADocument;
-
 @interface MADOpenDocumentManager : NSObject
 
 @property (nonatomic, strong, readonly) NSURL *openUrl;
