@@ -649,6 +649,8 @@
 		4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB91BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m */; settings = {ASSET_TAGS = (); }; };
 		4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBB1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m */; settings = {ASSET_TAGS = (); }; };
 		4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */; settings = {ASSET_TAGS = (); }; };
+		4C401FD01BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */; settings = {ASSET_TAGS = (); }; };
+		4C401FD11BAE8DC400BAE5FC /* MTStoryboardLaunchImagesPadOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401FCF1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesPadOS7.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -2784,6 +2786,8 @@
 		4C401FBC1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodeType.h; sourceTree = "<group>"; };
 		4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeType.m; sourceTree = "<group>"; };
 		4C401FCB1BAE8BB700BAE5FC /* MTViewControllerBarcodePreviewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodePreviewDelegate.h; sourceTree = "<group>"; };
+		4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MTStoryboardLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
+		4C401FCF1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesPadOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MTStoryboardLaunchImagesPadOS7.storyboard; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4218,6 +4222,7 @@
 		4C401F031BAE6DF100BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C401FCD1BAE8DC400BAE5FC /* Storyboards */,
 				4C401F041BAE6DF100BAE5FC /* About */,
 				4C401F2C1BAE754200BAE5FC /* Cells */,
 				4C401F541BAE7EB500BAE5FC /* Controls */,
@@ -4422,6 +4427,15 @@
 				4C401FA51BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		4C401FCD1BAE8DC400BAE5FC /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */,
+				4C401FCF1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesPadOS7.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
@@ -6624,6 +6638,8 @@
 				4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */,
 				4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */,
 				4CD0B2551AC90018005CA75C /* MTImageLaunchViewerPadPortraitRetina.png in Resources */,
+				4C401FD11BAE8DC400BAE5FC /* MTStoryboardLaunchImagesPadOS7.storyboard in Resources */,
+				4C401FD01BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard in Resources */,
 				4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */,
 				4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */,
 				4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */,
