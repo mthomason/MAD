@@ -2948,6 +2948,8 @@
 		4C401F311BAE754200BAE5FC /* MADTableViewCellMargin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellMargin.h; sourceTree = "<group>"; };
 		4C401F4D1BAE7AC400BAE5FC /* MADAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAppConfiguration.h; sourceTree = "<group>"; };
 		4C401F4E1BAE7AC400BAE5FC /* MADAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAppConfiguration.m; sourceTree = "<group>"; };
+		4C401F511BAE7BFE00BAE5FC /* MTPageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPageCaching.h; sourceTree = "<group>"; };
+		4C401F521BAE7BFE00BAE5FC /* MTPageCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPageCaching.m; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -4443,6 +4445,7 @@
 		4C401EFE1BAE64AF00BAE5FC /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				4C401F501BAE7BFE00BAE5FC /* Containers */,
 				4C401F031BAE6DF100BAE5FC /* UI */,
 				4C401EFF1BAE64AF00BAE5FC /* Categories */,
 			);
@@ -4532,6 +4535,15 @@
 				4C401F311BAE754200BAE5FC /* MADTableViewCellMargin.h */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		4C401F501BAE7BFE00BAE5FC /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				4C401F511BAE7BFE00BAE5FC /* MTPageCaching.h */,
+				4C401F521BAE7BFE00BAE5FC /* MTPageCaching.m */,
+			);
+			path = Containers;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
