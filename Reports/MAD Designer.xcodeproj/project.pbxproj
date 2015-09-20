@@ -648,7 +648,6 @@
 		4C2F278C1B53FA1C004DFAEC /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C2F27921B53FA1C004DFAEC /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C2F27931B53FA1C004DFAEC /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C2F27961B53FA1C004DFAEC /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C2F27981B53FA1C004DFAEC /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C2F279B1B53FA1C004DFAEC /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C2F279E1B53FA1C004DFAEC /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
@@ -716,6 +715,7 @@
 		4C401EF01BAE620800BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EF11BAE620800BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EF21BAE620900BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
+		4C401EF91BAE62FD00BAE5FC /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EF71BAE62FD00BAE5FC /* chinook.sqlite3 */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -747,8 +747,6 @@
 		4C4C78D5169624A3000ADD1D /* UIImage+Resizable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */; };
 		4C4CAC6B19BF0253000927AC /* MADPromptManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4CAC6A19BF0253000927AC /* MADPromptManager.m */; };
 		4C4CAC6C19BF0253000927AC /* MADPromptManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4CAC6A19BF0253000927AC /* MADPromptManager.m */; };
-		4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
-		4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -866,7 +864,6 @@
 		4C6700A41BA133AB001C9D5A /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C6700A91BA133AB001C9D5A /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C6700AA1BA133AB001C9D5A /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C6700AC1BA133AB001C9D5A /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C6700AE1BA133AB001C9D5A /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C6700B11BA133AB001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C6700B41BA133AB001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
@@ -1262,7 +1259,6 @@
 		4C67FC081BA1043B001C9D5A /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C67FC0D1BA1043B001C9D5A /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C67FC0E1BA1043B001C9D5A /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C67FC101BA1043B001C9D5A /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C67FC121BA1043B001C9D5A /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C67FC151BA1043B001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C67FC181BA1043B001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
@@ -1656,7 +1652,6 @@
 		4C67FE551BA1183D001C9D5A /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C08B3081AB679BE00B54D3A /* MADImageIconInfo@2x.png */; };
 		4C67FE5A1BA1183D001C9D5A /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1E898A1B34115100B26B5E /* MADBarcode64.png */; };
 		4C67FE5B1BA1183D001C9D5A /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B1F31AC8FBC4005CA75C /* UIButtonHighlighted.png */; };
-		4C67FE5D1BA1183D001C9D5A /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C67FE5F1BA1183D001C9D5A /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C67FE621BA1183D001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394DA1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png */; };
 		4C67FE651BA1183D001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
@@ -3027,6 +3022,7 @@
 		4C401ED71BAE5E9000BAE5FC /* MTLicensingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLicensingViewController.m; sourceTree = "<group>"; };
 		4C401EE91BAE61F700BAE5FC /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4C401EF71BAE62FD00BAE5FC /* chinook.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = chinook.sqlite3; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -3137,7 +3133,6 @@
 		4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resizable.m"; sourceTree = "<group>"; };
 		4C4CAC6919BF0253000927AC /* MADPromptManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPromptManager.h; path = Reports/MADPromptManager.h; sourceTree = "<group>"; };
 		4C4CAC6A19BF0253000927AC /* MADPromptManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPromptManager.m; path = Reports/MADPromptManager.m; sourceTree = "<group>"; };
-		4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = chinook.sqlite3; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstFieldViewController.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
@@ -4491,20 +4486,13 @@
 		4C401EE81BAE61F700BAE5FC /* MADDesigner */ = {
 			isa = PBXGroup;
 			children = (
+				4C401EF31BAE62FD00BAE5FC /* Resources */,
 				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
 				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
-				4C401EEB1BAE61F700BAE5FC /* Resources */,
 				4C401EEC1BAE61F700BAE5FC /* UI */,
 			);
 			name = MADDesigner;
 			path = MADStack/MADDesigner;
-			sourceTree = "<group>";
-		};
-		4C401EEB1BAE61F700BAE5FC /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		4C401EEC1BAE61F700BAE5FC /* UI */ = {
@@ -4512,6 +4500,46 @@
 			children = (
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		4C401EF31BAE62FD00BAE5FC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C401EF41BAE62FD00BAE5FC /* Images */,
+				4C401EF51BAE62FD00BAE5FC /* Samples */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4C401EF41BAE62FD00BAE5FC /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		4C401EF51BAE62FD00BAE5FC /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				4C401EF61BAE62FD00BAE5FC /* Databases */,
+				4C401EF81BAE62FD00BAE5FC /* Reports */,
+			);
+			path = Samples;
+			sourceTree = "<group>";
+		};
+		4C401EF61BAE62FD00BAE5FC /* Databases */ = {
+			isa = PBXGroup;
+			children = (
+				4C401EF71BAE62FD00BAE5FC /* chinook.sqlite3 */,
+			);
+			path = Databases;
+			sourceTree = "<group>";
+		};
+		4C401EF81BAE62FD00BAE5FC /* Reports */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
@@ -5161,7 +5189,6 @@
 		4C8BE86D1BAD494A00F6E3F7 /* Databases */ = {
 			isa = PBXGroup;
 			children = (
-				4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */,
 			);
 			name = Databases;
 			sourceTree = "<group>";
@@ -6591,7 +6618,6 @@
 				4C08B2F21AB6791F00B54D3A /* MADImageToolbarCloud@2x.png in Resources */,
 				4C94AA3817DCB88A000F6FCF /* Images.xcassets in Resources */,
 				4CD0B22C1AC8FC39005CA75C /* MTSliderThumb.png in Resources */,
-				4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4CD0B2441AC90018005CA75C /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4CF8D41A1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
@@ -6777,7 +6803,6 @@
 				4C2F278C1B53FA1C004DFAEC /* MADImageIconInfo@2x.png in Resources */,
 				4C2F27921B53FA1C004DFAEC /* MADBarcode64.png in Resources */,
 				4C2F27931B53FA1C004DFAEC /* UIButtonHighlighted.png in Resources */,
-				4C2F27961B53FA1C004DFAEC /* chinook.sqlite3 in Resources */,
 				4C2F27981B53FA1C004DFAEC /* Music.mad in Resources */,
 				4C2F279B1B53FA1C004DFAEC /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C2F279E1B53FA1C004DFAEC /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
@@ -6878,6 +6903,7 @@
 				4CD0B24F1AC90018005CA75C /* MTImageLaunchViewerPadLandscape.png in Resources */,
 				4CD0B2201AC8FBC4005CA75C /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD0B2041AC8FBC4005CA75C /* UIBarButtonItemMadDesigner8.png in Resources */,
+				4C401EF91BAE62FD00BAE5FC /* chinook.sqlite3 in Resources */,
 				4C08B2F31AB6791F00B54D3A /* MADImageToolbarCloudDownloadSelected.png in Resources */,
 				4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */,
 				4CD0B2141AC8FBC4005CA75C /* UIButton.png in Resources */,
@@ -6948,7 +6974,6 @@
 				4C08B30D1AB679BE00B54D3A /* MADImageIconInfo@2x.png in Resources */,
 				4C1E898C1B34115100B26B5E /* MADBarcode64.png in Resources */,
 				4CD0B2181AC8FBC4005CA75C /* UIButtonHighlighted.png in Resources */,
-				4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
 				4C8394DF1AC8EEE80055EDE9 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4CD0B24B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
@@ -7118,7 +7143,6 @@
 				4C67FC081BA1043B001C9D5A /* MADImageIconInfo@2x.png in Resources */,
 				4C67FC0D1BA1043B001C9D5A /* MADBarcode64.png in Resources */,
 				4C67FC0E1BA1043B001C9D5A /* UIButtonHighlighted.png in Resources */,
-				4C67FC101BA1043B001C9D5A /* chinook.sqlite3 in Resources */,
 				4C67FC121BA1043B001C9D5A /* Music.mad in Resources */,
 				4C67FC151BA1043B001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C67FC181BA1043B001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
@@ -7289,7 +7313,6 @@
 				4C67FE551BA1183D001C9D5A /* MADImageIconInfo@2x.png in Resources */,
 				4C67FE5A1BA1183D001C9D5A /* MADBarcode64.png in Resources */,
 				4C67FE5B1BA1183D001C9D5A /* UIButtonHighlighted.png in Resources */,
-				4C67FE5D1BA1183D001C9D5A /* chinook.sqlite3 in Resources */,
 				4C67FE5F1BA1183D001C9D5A /* Music.mad in Resources */,
 				4C67FE621BA1183D001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C67FE651BA1183D001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
@@ -7459,7 +7482,6 @@
 				4C6700A41BA133AB001C9D5A /* MADImageIconInfo@2x.png in Resources */,
 				4C6700A91BA133AB001C9D5A /* MADBarcode64.png in Resources */,
 				4C6700AA1BA133AB001C9D5A /* UIButtonHighlighted.png in Resources */,
-				4C6700AC1BA133AB001C9D5A /* chinook.sqlite3 in Resources */,
 				4C6700AE1BA133AB001C9D5A /* Music.mad in Resources */,
 				4C6700B11BA133AB001C9D5A /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C6700B41BA133AB001C9D5A /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
