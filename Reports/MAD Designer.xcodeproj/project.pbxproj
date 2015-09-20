@@ -245,7 +245,6 @@
 		4C2F25C21B53FA1C004DFAEC /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C2F25C41B53FA1C004DFAEC /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C2F25C51B53FA1C004DFAEC /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C2F25C61B53FA1C004DFAEC /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C2F25C91B53FA1C004DFAEC /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CC1B53FA1C004DFAEC /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25CF1B53FA1C004DFAEC /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
@@ -616,6 +615,7 @@
 		4C4020661BAE92F200BAE5FC /* UIViewController+Viewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020351BAE92F200BAE5FC /* UIViewController+Viewer.m */; settings = {ASSET_TAGS = (); }; };
 		4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020681BAE938500BAE5FC /* NSData+Base64.m */; settings = {ASSET_TAGS = (); }; };
 		4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */; settings = {ASSET_TAGS = (); }; };
+		4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020751BAE957D00BAE5FC /* MADUpgradeManager.m */; settings = {ASSET_TAGS = (); }; };
 		4C42372A1B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4237291B9BBC36006C2E1B /* MADQueryVisualizationCacheData.m */; };
 		4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */; };
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
@@ -793,7 +793,6 @@
 		4C67FA471BA1043B001C9D5A /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C67FA491BA1043B001C9D5A /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C67FA4A1BA1043B001C9D5A /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FA4B1BA1043B001C9D5A /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C67FA4E1BA1043B001C9D5A /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA511BA1043B001C9D5A /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA541BA1043B001C9D5A /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
@@ -1080,7 +1079,6 @@
 		4C67FC941BA1183D001C9D5A /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C67FC961BA1183D001C9D5A /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C67FC971BA1183D001C9D5A /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FC981BA1183D001C9D5A /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C67FC9B1BA1183D001C9D5A /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC9E1BA1183D001C9D5A /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCA11BA1183D001C9D5A /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
@@ -1368,7 +1366,6 @@
 		4C67FEE31BA133AB001C9D5A /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A351AC90C240044C157 /* MADTransparentPresentationController.m */; };
 		4C67FEE51BA133AB001C9D5A /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C67FEE61BA133AB001C9D5A /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C67FEE71BA133AB001C9D5A /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 		4C67FEEA1BA133AB001C9D5A /* MTCollectionViewCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEED1BA133AB001C9D5A /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MADQueryBuilderSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEF01BA133AB001C9D5A /* MADNavigationBarFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54F2D71A12D45C004B5228 /* MADNavigationBarFixedSize.m */; };
@@ -1867,8 +1864,6 @@
 		4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */; };
 		4CFC3DE416714A270016E1E8 /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CFC3DE516714A270016E1E8 /* MADViewControllerSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CFFCBB019C35B2100919440 /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
-		4CFFCBB119C35B2100919440 /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2507,6 +2502,8 @@
 		4C40206A1BAE938500BAE5FC /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
 		4C40206C1BAE940E00BAE5FC /* UIApplication+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Extras.h"; sourceTree = "<group>"; };
 		4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Extras.m"; sourceTree = "<group>"; };
+		4C4020741BAE957D00BAE5FC /* MADUpgradeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUpgradeManager.h; sourceTree = "<group>"; };
+		4C4020751BAE957D00BAE5FC /* MADUpgradeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUpgradeManager.m; sourceTree = "<group>"; };
 		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
 		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C4237281B9BBC36006C2E1B /* MADQueryVisualizationCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheData.h; sourceTree = "<group>"; };
@@ -3193,8 +3190,6 @@
 		4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeKeyValue.m; sourceTree = "<group>"; };
 		4CFC3DE216714A260016E1E8 /* MADViewControllerSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerSQL.h; sourceTree = "<group>"; };
 		4CFC3DE316714A260016E1E8 /* MADViewControllerSQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewControllerSQL.m; sourceTree = "<group>"; };
-		4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUpgradeManager.h; sourceTree = "<group>"; };
-		4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUpgradeManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3761,6 +3756,7 @@
 				4C401F4E1BAE7AC400BAE5FC /* MADAppConfiguration.m */,
 				4C401EF31BAE62FD00BAE5FC /* Resources */,
 				4C401EEC1BAE61F700BAE5FC /* UI */,
+				4C4020731BAE957D00BAE5FC /* Upgrade */,
 			);
 			name = MADDesigner;
 			path = MADStack/MADDesigner;
@@ -4159,6 +4155,15 @@
 				4C401FCF1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesPadOS7.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		4C4020731BAE957D00BAE5FC /* Upgrade */ = {
+			isa = PBXGroup;
+			children = (
+				4C4020741BAE957D00BAE5FC /* MADUpgradeManager.h */,
+				4C4020751BAE957D00BAE5FC /* MADUpgradeManager.m */,
+			);
+			path = Upgrade;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* libSsl */ = {
@@ -4623,16 +4628,6 @@
 			path = Reports;
 			sourceTree = "<group>";
 		};
-		4C7B0B1B1B37C852005DC0CE /* Upgrade */ = {
-			isa = PBXGroup;
-			children = (
-				4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */,
-				4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */,
-			);
-			name = Upgrade;
-			path = Reports;
-			sourceTree = "<group>";
-		};
 		4C8BE8521BAD457700F6E3F7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -4690,7 +4685,6 @@
 				4CC2BE8319D9078B006AAB24 /* MADControlState.h */,
 				4CA1E5A11B4E712000434D98 /* MADObjectIdentifier.h */,
 				4CA1E5A21B4E712000434D98 /* MADObjectIdentifier.m */,
-				4C7B0B1B1B37C852005DC0CE /* Upgrade */,
 				4CBF7B7718EDA9E20035FCB9 /* User */,
 				4C23FC2118FC323C009F234F /* Activities */,
 				4CF1329616CA1E5D00FD0F0B /* Query Builder */,
@@ -6991,7 +6985,6 @@
 				4CC96A371AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4CFC3DE516714A270016E1E8 /* MADViewControllerSQL.m in Sources */,
 				4CF8D421168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
-				4CFFCBB119C35B2100919440 /* MADUpgradeManager.m in Sources */,
 				4C23FB2918FADDE7009F234F /* MADQueryBuilderSplitViewController.m in Sources */,
 				4CA1500118B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C3727BC168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
@@ -7100,7 +7093,6 @@
 				4C2F25C21B53FA1C004DFAEC /* MADTransparentPresentationController.m in Sources */,
 				4C2F25C41B53FA1C004DFAEC /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4C2F25C51B53FA1C004DFAEC /* MADViewControllerSQL.m in Sources */,
-				4C2F25C61B53FA1C004DFAEC /* MADUpgradeManager.m in Sources */,
 				4C2F25C91B53FA1C004DFAEC /* MTCollectionViewCellElement.m in Sources */,
 				4C2F25CC1B53FA1C004DFAEC /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C2F25CF1B53FA1C004DFAEC /* MADNavigationBarFixedSize.m in Sources */,
@@ -7265,7 +7257,6 @@
 				4CC96A361AC90C240044C157 /* MADTransparentPresentationController.m in Sources */,
 				4C111C281B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4CFC3DE416714A270016E1E8 /* MADViewControllerSQL.m in Sources */,
-				4CFFCBB019C35B2100919440 /* MADUpgradeManager.m in Sources */,
 				4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */,
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C40205A1BAE92F200BAE5FC /* UIScrollView+Extras.m in Sources */,
@@ -7356,6 +7347,7 @@
 				4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */,
 				4C4020651BAE92F200BAE5FC /* UIViewController+UI.m in Sources */,
 				4C4020511BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m in Sources */,
+				4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */,
 				4CB53B4B17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
 				4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */,
 				4CA92ADD17DAFF1700D654C7 /* MADDesignerElementPickerViewController.m in Sources */,
@@ -7441,7 +7433,6 @@
 				4C67FA471BA1043B001C9D5A /* MADTransparentPresentationController.m in Sources */,
 				4C67FA491BA1043B001C9D5A /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4C67FA4A1BA1043B001C9D5A /* MADViewControllerSQL.m in Sources */,
-				4C67FA4B1BA1043B001C9D5A /* MADUpgradeManager.m in Sources */,
 				4C67FA4E1BA1043B001C9D5A /* MTCollectionViewCellElement.m in Sources */,
 				4C67FA511BA1043B001C9D5A /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C67FA541BA1043B001C9D5A /* MADNavigationBarFixedSize.m in Sources */,
@@ -7557,7 +7548,6 @@
 				4C67FC941BA1183D001C9D5A /* MADTransparentPresentationController.m in Sources */,
 				4C67FC961BA1183D001C9D5A /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4C67FC971BA1183D001C9D5A /* MADViewControllerSQL.m in Sources */,
-				4C67FC981BA1183D001C9D5A /* MADUpgradeManager.m in Sources */,
 				4C67FC9B1BA1183D001C9D5A /* MTCollectionViewCellElement.m in Sources */,
 				4C67FC9E1BA1183D001C9D5A /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C67FCA11BA1183D001C9D5A /* MADNavigationBarFixedSize.m in Sources */,
@@ -7673,7 +7663,6 @@
 				4C67FEE31BA133AB001C9D5A /* MADTransparentPresentationController.m in Sources */,
 				4C67FEE51BA133AB001C9D5A /* MADViewControllerBaseInterfacePrivate.h in Sources */,
 				4C67FEE61BA133AB001C9D5A /* MADViewControllerSQL.m in Sources */,
-				4C67FEE71BA133AB001C9D5A /* MADUpgradeManager.m in Sources */,
 				4C67FEEA1BA133AB001C9D5A /* MTCollectionViewCellElement.m in Sources */,
 				4C67FEED1BA133AB001C9D5A /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C67FEF01BA133AB001C9D5A /* MADNavigationBarFixedSize.m in Sources */,
