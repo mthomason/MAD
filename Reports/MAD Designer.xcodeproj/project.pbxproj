@@ -3460,8 +3460,8 @@
 			children = (
 				4C401EFE1BAE64AF00BAE5FC /* Common */,
 				4C401FA11BAE8AD500BAE5FC /* MADBarcodes */,
-				4C401F111BAE703200BAE5FC /* MADQuery */,
 				4C401EE81BAE61F700BAE5FC /* MADDesigner */,
+				4C401F111BAE703200BAE5FC /* MADQuery */,
 				4C401EB61BAE5E9000BAE5FC /* MADStore */,
 				4C4020F71BAE98C300BAE5FC /* MADViewer */,
 			);
@@ -4426,13 +4426,6 @@
 			name = "Misc Tool Images";
 			sourceTree = "<group>";
 		};
-		4C5CD3D81821A0AA005FC6DD /* Reports */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Reports;
-			sourceTree = "<group>";
-		};
 		4C6268FB19F6008700DCCC2E /* Vibrant */ = {
 			isa = PBXGroup;
 			children = (
@@ -4503,7 +4496,6 @@
 		4C8BE8521BAD457700F6E3F7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4C8BE86C1BAD494100F6E3F7 /* Samples */,
 				4C4EBFBE17EFC2B700D10622 /* Fonts */,
 				4C0E7860163B5C8D003B951E /* Images */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
@@ -4598,22 +4590,6 @@
 				4C7B0B031B374266005DC0CE /* MADFeatures.plist */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		4C8BE86C1BAD494100F6E3F7 /* Samples */ = {
-			isa = PBXGroup;
-			children = (
-				4C8BE86D1BAD494A00F6E3F7 /* Databases */,
-				4C5CD3D81821A0AA005FC6DD /* Reports */,
-			);
-			name = Samples;
-			sourceTree = "<group>";
-		};
-		4C8BE86D1BAD494A00F6E3F7 /* Databases */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Databases;
 			sourceTree = "<group>";
 		};
 		4C8F7DE414CFFA13006171A7 /* Rptq */ = {
@@ -5477,10 +5453,10 @@
 			projectRoot = "";
 			targets = (
 				4C384E2314B29789007B4F48 /* MAD Designer */,
+				4C0E771F163B5AEC003B951E /* MAD Viewer */,
 				4C67FE701BA133AB001C9D5A /* MAD Barcodes */,
 				4C67FC211BA1183D001C9D5A /* MAD Explorer */,
 				4C67F9D41BA1043B001C9D5A /* MAD Query */,
-				4C0E771F163B5AEC003B951E /* MAD Viewer */,
 				4C2F25481B53FA1C004DFAEC /* MAD Designer with WatchKit */,
 				4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
 				4C8F99B81ACA97C8006D3996 /* MAD Designer WatchKit App */,
