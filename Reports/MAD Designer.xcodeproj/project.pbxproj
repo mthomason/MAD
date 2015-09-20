@@ -292,7 +292,6 @@
 		4C2F257B1B53FA1C004DFAEC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAFD18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F257D1B53FA1C004DFAEC /* MTArrayDataSourceCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E7C194C38E4009D192B /* MTArrayDataSourceCollectionView.m */; };
 		4C2F257F1B53FA1C004DFAEC /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A4E1AC90D220044C157 /* MADVibrantCollectionView.m */; };
-		4C2F25801B53FA1C004DFAEC /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
 		4C2F25811B53FA1C004DFAEC /* UITabBarController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89561B2D7EDF00D75AF6 /* UITabBarController+Shared.m */; };
 		4C2F25821B53FA1C004DFAEC /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C2F25831B53FA1C004DFAEC /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
@@ -433,7 +432,6 @@
 		4C2F261E1B53FA1C004DFAEC /* MADDesignerElementPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MADDesignerElementPickerViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F261F1B53FA1C004DFAEC /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F26201B53FA1C004DFAEC /* MADUserDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C359E2C1B083EE900B3E9E0 /* MADUserDefault.m */; };
-		4C2F26211B53FA1C004DFAEC /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
 		4C2F26221B53FA1C004DFAEC /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F26231B53FA1C004DFAEC /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
 		4C2F26241B53FA1C004DFAEC /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
@@ -890,7 +888,6 @@
 		4C67F9FC1BA1043B001C9D5A /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAFD18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67F9FE1BA1043B001C9D5A /* MTArrayDataSourceCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E7C194C38E4009D192B /* MTArrayDataSourceCollectionView.m */; };
 		4C67FA001BA1043B001C9D5A /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A4E1AC90D220044C157 /* MADVibrantCollectionView.m */; };
-		4C67FA011BA1043B001C9D5A /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
 		4C67FA021BA1043B001C9D5A /* UITabBarController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89561B2D7EDF00D75AF6 /* UITabBarController+Shared.m */; };
 		4C67FA031BA1043B001C9D5A /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C67FA041BA1043B001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
@@ -1039,7 +1036,6 @@
 		4C67FAA61BA1043B001C9D5A /* MADDesignerElementPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MADDesignerElementPickerViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FAA71BA1043B001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FAA81BA1043B001C9D5A /* MADUserDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C359E2C1B083EE900B3E9E0 /* MADUserDefault.m */; };
-		4C67FAA91BA1043B001C9D5A /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
 		4C67FAAA1BA1043B001C9D5A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FAAB1BA1043B001C9D5A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
 		4C67FAAC1BA1043B001C9D5A /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
@@ -1268,7 +1264,6 @@
 		4C67FC491BA1183D001C9D5A /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAFD18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC4B1BA1183D001C9D5A /* MTArrayDataSourceCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E7C194C38E4009D192B /* MTArrayDataSourceCollectionView.m */; };
 		4C67FC4D1BA1183D001C9D5A /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A4E1AC90D220044C157 /* MADVibrantCollectionView.m */; };
-		4C67FC4E1BA1183D001C9D5A /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
 		4C67FC4F1BA1183D001C9D5A /* UITabBarController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89561B2D7EDF00D75AF6 /* UITabBarController+Shared.m */; };
 		4C67FC501BA1183D001C9D5A /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C67FC511BA1183D001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
@@ -1417,7 +1412,6 @@
 		4C67FCF31BA1183D001C9D5A /* MADDesignerElementPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MADDesignerElementPickerViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCF41BA1183D001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCF51BA1183D001C9D5A /* MADUserDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C359E2C1B083EE900B3E9E0 /* MADUserDefault.m */; };
-		4C67FCF61BA1183D001C9D5A /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
 		4C67FCF71BA1183D001C9D5A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCF81BA1183D001C9D5A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
 		4C67FCF91BA1183D001C9D5A /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
@@ -1647,7 +1641,6 @@
 		4C67FE981BA133AB001C9D5A /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAFD18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FE9A1BA133AB001C9D5A /* MTArrayDataSourceCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E7C194C38E4009D192B /* MTArrayDataSourceCollectionView.m */; };
 		4C67FE9C1BA133AB001C9D5A /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC96A4E1AC90D220044C157 /* MADVibrantCollectionView.m */; };
-		4C67FE9D1BA133AB001C9D5A /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
 		4C67FE9E1BA133AB001C9D5A /* UITabBarController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89561B2D7EDF00D75AF6 /* UITabBarController+Shared.m */; };
 		4C67FE9F1BA133AB001C9D5A /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E89811B33CD0600B26B5E /* MADBackgroundView.m */; };
 		4C67FEA01BA133AB001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
@@ -1796,7 +1789,6 @@
 		4C67FF421BA133AB001C9D5A /* MADDesignerElementPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MADDesignerElementPickerViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FF431BA133AB001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FF441BA133AB001C9D5A /* MADUserDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C359E2C1B083EE900B3E9E0 /* MADUserDefault.m */; };
-		4C67FF451BA133AB001C9D5A /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
 		4C67FF461BA133AB001C9D5A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FF471BA133AB001C9D5A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
 		4C67FF481BA133AB001C9D5A /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
@@ -1954,10 +1946,6 @@
 		4C7B0B111B375F07005DC0CE /* NSDateFormatter+RFC_3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */; };
 		4C7B0B1E1B37EAB1005DC0CE /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
 		4C7B0B1F1B37EAB1005DC0CE /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
-		4C7B0B3E1B392372005DC0CE /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
-		4C7B0B3F1B392372005DC0CE /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */; };
-		4C7B0B461B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
-		4C7B0B471B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */; };
 		4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -3173,11 +3161,6 @@
 		4C7B0B0F1B375F07005DC0CE /* NSDateFormatter+RFC_3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC_3339.m"; sourceTree = "<group>"; };
 		4C7B0B1C1B37EAB1005DC0CE /* MADUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUser.h; sourceTree = "<group>"; };
 		4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUser.m; sourceTree = "<group>"; };
-		4C7B0B3B1B392318005DC0CE /* MADTableViewCellMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellMargin.h; sourceTree = "<group>"; };
-		4C7B0B3C1B392372005DC0CE /* MADTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellBase.h; sourceTree = "<group>"; };
-		4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellBase.m; sourceTree = "<group>"; };
-		4C7B0B441B394CD5005DC0CE /* MADTableViewCellAuto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAuto.h; sourceTree = "<group>"; };
-		4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAuto.m; sourceTree = "<group>"; };
 		4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewAggregateViewController.h; sourceTree = "<group>"; };
 		4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewAggregateViewController.m; sourceTree = "<group>"; };
 		4C8155C217009E7000D5330E /* MTAggregateFunctionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionsViewController.h; sourceTree = "<group>"; };
@@ -4977,11 +4960,6 @@
 		4C6268FB19F6008700DCCC2E /* Vibrant */ = {
 			isa = PBXGroup;
 			children = (
-				4C7B0B3B1B392318005DC0CE /* MADTableViewCellMargin.h */,
-				4C7B0B3C1B392372005DC0CE /* MADTableViewCellBase.h */,
-				4C7B0B3D1B392372005DC0CE /* MADTableViewCellBase.m */,
-				4C7B0B441B394CD5005DC0CE /* MADTableViewCellAuto.h */,
-				4C7B0B451B394CD5005DC0CE /* MADTableViewCellAuto.m */,
 				4CC96A4D1AC90D220044C157 /* MADVibrantCollectionView.h */,
 				4CC96A4E1AC90D220044C157 /* MADVibrantCollectionView.m */,
 				4CC96A4F1AC90D220044C157 /* MADVibrantTableView.h */,
@@ -7688,7 +7666,6 @@
 				4C0E7799163B5AEC003B951E /* MTRulerView.m in Sources */,
 				4CC96A5E1AC90D220044C157 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4CDB48C71ABFD58500E76879 /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
-				4C7B0B471B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */,
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
 				4C90D47F19E7892D005136B2 /* MADCollectionViewLayoutGrouped.m in Sources */,
 				4C0F89481B2D755600D75AF6 /* UIStoryboard+Viewer.m in Sources */,
@@ -7772,7 +7749,6 @@
 				4C23FB0518FADCE4009F234F /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
 				4C23FB3618FADEBB009F234F /* UIApplication+Extras.m in Sources */,
 				4CD0B3EF1AC90B52005CA75C /* MADNavigationBarTitleView.m in Sources */,
-				4C7B0B3F1B392372005DC0CE /* MADTableViewCellBase.m in Sources */,
 				4C5625EC1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C23FAEF18FADC68009F234F /* MTViewControllerBarcodeOptions.m in Sources */,
 				4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */,
@@ -7821,7 +7797,6 @@
 				4C2F257B1B53FA1C004DFAEC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C2F257D1B53FA1C004DFAEC /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C2F257F1B53FA1C004DFAEC /* MADVibrantCollectionView.m in Sources */,
-				4C2F25801B53FA1C004DFAEC /* MADTableViewCellBase.m in Sources */,
 				4C2F25811B53FA1C004DFAEC /* UITabBarController+Shared.m in Sources */,
 				4C2F25821B53FA1C004DFAEC /* MADBackgroundView.m in Sources */,
 				4C2F25831B53FA1C004DFAEC /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
@@ -7963,7 +7938,6 @@
 				4C2F261E1B53FA1C004DFAEC /* MADDesignerElementPickerViewController.m in Sources */,
 				4C2F261F1B53FA1C004DFAEC /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C2F26201B53FA1C004DFAEC /* MADUserDefault.m in Sources */,
-				4C2F26211B53FA1C004DFAEC /* MADTableViewCellAuto.m in Sources */,
 				4C2F26221B53FA1C004DFAEC /* MTCellEnterText.m in Sources */,
 				4C2F26231B53FA1C004DFAEC /* MADViewController.m in Sources */,
 				4C2F26241B53FA1C004DFAEC /* UIImage+Resize.m in Sources */,
@@ -8017,7 +7991,6 @@
 				4C23FB0818FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C2F6E7D194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4CC96A571AC90D220044C157 /* MADVibrantCollectionView.m in Sources */,
-				4C7B0B3E1B392372005DC0CE /* MADTableViewCellBase.m in Sources */,
 				4C0F89571B2D7EDF00D75AF6 /* UITabBarController+Shared.m in Sources */,
 				4C1E89821B33CD0600B26B5E /* MADBackgroundView.m in Sources */,
 				4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
@@ -8195,7 +8168,6 @@
 				4C401F251BAE703200BAE5FC /* MADTableViewCellQueryInstructions.m in Sources */,
 				4C0F899B1B30250100D75AF6 /* MADUserDefault.m in Sources */,
 				4CB2D3CD1BA3C10C00AA473B /* MADOperationInstallSampleDatabase.m in Sources */,
-				4C7B0B461B394CD5005DC0CE /* MADTableViewCellAuto.m in Sources */,
 				4C23FB3018FADE65009F234F /* MTCellEnterText.m in Sources */,
 				4CA19F821A15C197004DDA52 /* MADViewController.m in Sources */,
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
@@ -8252,7 +8224,6 @@
 				4C67F9FC1BA1043B001C9D5A /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C67F9FE1BA1043B001C9D5A /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C67FA001BA1043B001C9D5A /* MADVibrantCollectionView.m in Sources */,
-				4C67FA011BA1043B001C9D5A /* MADTableViewCellBase.m in Sources */,
 				4C67FA021BA1043B001C9D5A /* UITabBarController+Shared.m in Sources */,
 				4C67FA031BA1043B001C9D5A /* MADBackgroundView.m in Sources */,
 				4C67FA041BA1043B001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
@@ -8401,7 +8372,6 @@
 				4C67FAA61BA1043B001C9D5A /* MADDesignerElementPickerViewController.m in Sources */,
 				4C67FAA71BA1043B001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C67FAA81BA1043B001C9D5A /* MADUserDefault.m in Sources */,
-				4C67FAA91BA1043B001C9D5A /* MADTableViewCellAuto.m in Sources */,
 				4C67FAAA1BA1043B001C9D5A /* MTCellEnterText.m in Sources */,
 				4C67FAAB1BA1043B001C9D5A /* MADViewController.m in Sources */,
 				4C67FAAC1BA1043B001C9D5A /* UIImage+Resize.m in Sources */,
@@ -8455,7 +8425,6 @@
 				4C67FC491BA1183D001C9D5A /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C67FC4B1BA1183D001C9D5A /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C67FC4D1BA1183D001C9D5A /* MADVibrantCollectionView.m in Sources */,
-				4C67FC4E1BA1183D001C9D5A /* MADTableViewCellBase.m in Sources */,
 				4C67FC4F1BA1183D001C9D5A /* UITabBarController+Shared.m in Sources */,
 				4C67FC501BA1183D001C9D5A /* MADBackgroundView.m in Sources */,
 				4C67FC511BA1183D001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
@@ -8604,7 +8573,6 @@
 				4C67FCF31BA1183D001C9D5A /* MADDesignerElementPickerViewController.m in Sources */,
 				4C67FCF41BA1183D001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C67FCF51BA1183D001C9D5A /* MADUserDefault.m in Sources */,
-				4C67FCF61BA1183D001C9D5A /* MADTableViewCellAuto.m in Sources */,
 				4C67FCF71BA1183D001C9D5A /* MTCellEnterText.m in Sources */,
 				4C67FCF81BA1183D001C9D5A /* MADViewController.m in Sources */,
 				4C67FCF91BA1183D001C9D5A /* UIImage+Resize.m in Sources */,
@@ -8658,7 +8626,6 @@
 				4C67FE981BA133AB001C9D5A /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C67FE9A1BA133AB001C9D5A /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C67FE9C1BA133AB001C9D5A /* MADVibrantCollectionView.m in Sources */,
-				4C67FE9D1BA133AB001C9D5A /* MADTableViewCellBase.m in Sources */,
 				4C67FE9E1BA133AB001C9D5A /* UITabBarController+Shared.m in Sources */,
 				4C67FE9F1BA133AB001C9D5A /* MADBackgroundView.m in Sources */,
 				4C67FEA01BA133AB001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
@@ -8807,7 +8774,6 @@
 				4C67FF421BA133AB001C9D5A /* MADDesignerElementPickerViewController.m in Sources */,
 				4C67FF431BA133AB001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C67FF441BA133AB001C9D5A /* MADUserDefault.m in Sources */,
-				4C67FF451BA133AB001C9D5A /* MADTableViewCellAuto.m in Sources */,
 				4C67FF461BA133AB001C9D5A /* MTCellEnterText.m in Sources */,
 				4C67FF471BA133AB001C9D5A /* MADViewController.m in Sources */,
 				4C67FF481BA133AB001C9D5A /* UIImage+Resize.m in Sources */,
