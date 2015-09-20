@@ -12,10 +12,9 @@
 
 #import "MADAboutTableViewController.h"
 #import "MADAppConfiguration.h"
-#import "UIApplication+Extras.h"
-#import "MADOpenFileViewController.h"
-#import "MADVibrantTableView.h"
 #import "MADTableViewCellBase.h"
+
+#import "UIApplication+Extras.h"
 #import "UIButton+FollowTwitter.h"
 #import "ACAccountStore+Social.h"
 
