@@ -2563,8 +2563,6 @@
 		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
 		4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = MADFeedback.framework; path = "/Users/mthomason/Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFeedback.framework"; sourceTree = "<absolute>"; };
-		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
-		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
 		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
 		4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerOpperators.m; sourceTree = "<group>"; };
 		4C1A585B14DE348200184445 /* MTQueryBuilderSortTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderSortTypeViewController.h; sourceTree = "<group>"; };
@@ -4874,15 +4872,13 @@
 		4C7B0B181B37C7AC005DC0CE /* Standard */ = {
 			isa = PBXGroup;
 			children = (
-				4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */,
-				4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */,
-				4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */,
-				4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */,
-				4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */,
 				4CA19F801A15C197004DDA52 /* MADViewController.h */,
 				4CA19F811A15C197004DDA52 /* MADViewController.m */,
 				4C111C261B23E853005CA4DD /* MADViewControllerBase.h */,
 				4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */,
+				4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */,
+				4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */,
+				4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */,
 				4C6362BC14E6278D005DBBFF /* MADNavigationController.h */,
 				4C6362BD14E6278D005DBBFF /* MADNavigationController.m */,
 				4C38E9DE19F33346000E0B2F /* MADNavigationControllerSplitParentViewController.h */,
