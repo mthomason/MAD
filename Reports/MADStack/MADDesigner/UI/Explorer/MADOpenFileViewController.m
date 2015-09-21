@@ -14,7 +14,6 @@
 
 #import "MADViewerController.h"
 
-#import "AppDelegate.h"
 #import "MADAppConfiguration.h"
 
 #import "MADSearchBar.h"
