@@ -112,28 +112,30 @@ static NSString * const Tag = @"tag";
     
     MADObjectIdentifier *labelDynamic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectDataCollectionViewCell
                                                                            andTag: MTDocumentObjectTypeLabelDynamic];
-    [dataSource addObject:labelDynamic];
     
     MADObjectIdentifier *labelStatic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectLabelCollectionViewCell
                                                                                 andTag: MTDocumentObjectTypeLabelStatic];
-    [dataSource addObject:labelStatic];
     
     MADObjectIdentifier *aggregate = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectAggregateCollectionViewCell
                                                                               andTag: MTDocumentObjectTypeAggregate];
-    [dataSource addObject:aggregate];
     
     MADObjectIdentifier *image = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectImageCollectionViewCell
                                                                           andTag: MTDocumentObjectTypeImage];
-    [dataSource addObject:image];
     
     MADObjectIdentifier *whitespace = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectWhitespaceCollectionViewCell
                                                                                andTag: MTDocumentObjectTypeWhtiespace];
+    [dataSource addObject:labelDynamic];
+    [dataSource addObject:labelStatic];
+    [dataSource addObject:aggregate];
+    [dataSource addObject:image];
     [dataSource addObject:whitespace];
+    
     if ([[MTStoreKitController sharedObject] isBarcodeDesignerEnabled]) {
         MADObjectIdentifier *barcode = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectBarcodeCollectionViewCell
                                                                                 andTag: MTDocumentObjectTypeBarcode];
         [dataSource addObject:barcode];
     }
+
     /*
     MADObjectIdentifier *groupKey = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectGroupKeyCollectionViewCell
                                                                              andTag: MTDocumentObjectTypeGroupKey];

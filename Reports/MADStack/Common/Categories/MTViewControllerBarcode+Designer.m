@@ -9,7 +9,7 @@
 #import "MTViewControllerBarcode+Designer.h"
 #import "UIStoryboard+Designer.h"
 
-static NSString * const MainIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
+static NSString * const MainIdentifier = @"MADIdentifierBarcodeViewController";
 
 @implementation MTViewControllerBarcode (Designer)
 
