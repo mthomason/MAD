@@ -551,6 +551,8 @@
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C52054F1BA7ACAB000E6A59 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3ED1BA47AF400AA473B /* MADFileManager.framework */; };
 		4C5205501BA7ACB2000E6A59 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3E31BA47A9200AA473B /* MADExplorer.framework */; };
+		4C60C5A01BB0A100004D9758 /* MADDesignerFileExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */; settings = {ASSET_TAGS = (); }; };
+		4C60C5B61BB0A1CC004D9758 /* MADDesignerExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C611981199130700090ECC4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
@@ -2163,6 +2165,9 @@
 		4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarDuplicate@2x.png"; path = "Resources/Images/MADImageToolbarDuplicate@2x.png"; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
+		4C60C59E1BB0A100004D9758 /* MADDesignerFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerFileExplorerViewController.h; sourceTree = "<group>"; };
+		4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerFileExplorerViewController.m; sourceTree = "<group>"; };
+		4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADDesignerExplorer.storyboard; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
 		4C6700BB1BA133AB001C9D5A /* MAD Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Barcodes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2942,6 +2947,9 @@
 		4C26B9991BAF123A00456DC8 /* Explorer */ = {
 			isa = PBXGroup;
 			children = (
+				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
+				4C60C59E1BB0A100004D9758 /* MADDesignerFileExplorerViewController.h */,
+				4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */,
 				4C26B99C1BAF123A00456DC8 /* MADOpenFileViewController.h */,
 				4C26B99D1BAF123A00456DC8 /* MADOpenFileViewController.m */,
 				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
@@ -5575,6 +5583,7 @@
 				4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */,
 				4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */,
 				4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */,
+				4C60C5B61BB0A1CC004D9758 /* MADDesignerExplorer.storyboard in Resources */,
 				4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */,
 				4CD0B2551AC90018005CA75C /* MTImageLaunchViewerPadPortraitRetina.png in Resources */,
 				4C401FD01BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard in Resources */,
@@ -6415,6 +6424,7 @@
 				4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m in Sources */,
 				4C26BA591BAF99F000456DC8 /* MTElementCanvas.m in Sources */,
 				4C401F7E1BAE7EB500BAE5FC /* MTGradientView.m in Sources */,
+				4C60C5A01BB0A100004D9758 /* MADDesignerFileExplorerViewController.m in Sources */,
 				4C401FC31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C4020EB1BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C40205C1BAE92F200BAE5FC /* UIStoryboard+Viewer.m in Sources */,

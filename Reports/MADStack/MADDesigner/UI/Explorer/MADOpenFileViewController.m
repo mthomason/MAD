@@ -53,6 +53,7 @@ NSString * const MTSegueShowAddDocument                         = @"showAddDocum
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
+// FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUtiPublicData                               = @"public.data";
 

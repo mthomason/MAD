@@ -11,8 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import <MADExplorer/MADExplorer.h>
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADExplorer/MADFileExplorerViewController.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADocument.h>
 #import <MADFoundation/NSURL+Document.h>

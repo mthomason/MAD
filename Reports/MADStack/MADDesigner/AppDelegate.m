@@ -32,7 +32,7 @@
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"
 
-#import "MADOpenFileViewController.h"
+#import "MADDesignerFileExplorerViewController.h"
 
 NSString * const MADIdentifierFileLondon            = @"London";
 NSString * const MADIdentifierFileMusic             = @"Music";
@@ -55,7 +55,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 @property (nonatomic, strong, readwrite) MADAppConfiguration *appConfiguration;
 @property (readonly) MADNavigationController *navigationController;
-@property (readonly) MADOpenFileViewController *openFileViewController;
+@property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
 
@@ -282,8 +282,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return (MADNavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
 }
 
-- (MADOpenFileViewController *)openFileViewController {
-    return (MADOpenFileViewController *)self.navigationController.topViewController;
+- (MADDesignerFileExplorerViewController *)openFileViewController {
+    return (MADDesignerFileExplorerViewController *)self.navigationController.topViewController;
 }
 
 @end
