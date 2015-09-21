@@ -26,7 +26,7 @@
 		4CC6415D1BA77AEC00F3ECCE /* MTDocumentCellProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC6415C1BA77AEC00F3ECCE /* MTDocumentCellProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641721BA77D6100F3ECCE /* MADBackgroundViewSelected.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641701BA77D6100F3ECCE /* MADBackgroundViewSelected.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641731BA77D6100F3ECCE /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641711BA77D6100F3ECCE /* MADBackgroundViewSelected.m */; settings = {ASSET_TAGS = (); }; };
-		4CC641861BA78A1300F3ECCE /* MTTableViewCellDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641841BA78A1300F3ECCE /* MTTableViewCellDocument.h */; settings = {ASSET_TAGS = (); }; };
+		4CC641861BA78A1300F3ECCE /* MTTableViewCellDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641841BA78A1300F3ECCE /* MTTableViewCellDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641871BA78A1300F3ECCE /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641851BA78A1300F3ECCE /* MTTableViewCellDocument.m */; settings = {ASSET_TAGS = (); }; };
 		4CC6418C1BA78DB000F3ECCE /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC6418B1BA78DB000F3ECCE /* MADFileManager.framework */; };
 /* End PBXBuildFile section */
@@ -199,8 +199,8 @@
 				4CC6415D1BA77AEC00F3ECCE /* MTDocumentCellProtocol.h in Headers */,
 				4CC6415A1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h in Headers */,
 				4CC641721BA77D6100F3ECCE /* MADBackgroundViewSelected.h in Headers */,
-				4CC641861BA78A1300F3ECCE /* MTTableViewCellDocument.h in Headers */,
 				4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */,
+				4CC641861BA78A1300F3ECCE /* MTTableViewCellDocument.h in Headers */,
 				4C401E421BAE44B200BAE5FC /* MADDocumentState.h in Headers */,
 				4CC6414E1BA7793900F3ECCE /* MADFileExplorerViewController.h in Headers */,
 			);

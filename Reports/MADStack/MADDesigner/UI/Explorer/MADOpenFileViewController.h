@@ -12,6 +12,9 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MADExplorer/MADFileExplorerViewController.h>
+#import <MADExplorer/MTCollectionViewCellDocument.h>
+#import <MADExplorer/MADFileLocationManager.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADocument.h>
 #import <MADFoundation/NSURL+Document.h>

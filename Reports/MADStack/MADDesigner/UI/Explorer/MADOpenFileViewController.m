@@ -20,16 +20,8 @@
 
 #import "MADOpenFileSectionHeaderView.h"
 
-#import "MTStoreKitController.h"
-#import "MTStoreKitController+NonRenewableLicensing.h"
-
-#import "MADDesignerViewController.h"
-#import "MADWatermarkView.h"
-
 #import "MADQueryBuilderSplitViewController.h"
 
-#import "MADQueryViewController.h"
-#import "MTDatabaseDriverSelectorViewController.h"
 #import "MADBarButtonItem.h"
 
 #import "MADNavigationController.h"
@@ -264,8 +256,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.navigationController.toolbar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
     
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    self.collectionView.backgroundView = watermarkView;
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];

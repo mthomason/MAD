@@ -22,6 +22,8 @@
 #import "UITabBarController+Shared.h"
 #import "UITableViewController+Designer.h"
 
+#import "MADWatermarkView.h"
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
@@ -64,6 +66,9 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     self.openFileDelegate = self;
     self.aboutViewControllerOnScreen = NO;
     
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+    self.collectionView.backgroundView = watermarkView;
+
     self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 
 }
