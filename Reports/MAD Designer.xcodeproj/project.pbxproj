@@ -117,8 +117,6 @@
 		4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
 		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
-		4C0F89391B28C0EA00D75AF6 /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */; };
-		4C0F893C1B28C30800D75AF6 /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */; };
 		4C111C281B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C111C291B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h in Sources */ = {isa = PBXBuildFile; fileRef = 4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */; };
 		4C12293616CE239900B69763 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293516CE239900B69763 /* MTSchemaFieldCell.m */; };
@@ -223,7 +221,6 @@
 		4C2F256D1B53FA1C004DFAEC /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F257A1B53FA1C004DFAEC /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
 		4C2F25831B53FA1C004DFAEC /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
-		4C2F25901B53FA1C004DFAEC /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */; };
 		4C2F259E1B53FA1C004DFAEC /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F259F1B53FA1C004DFAEC /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F25A71B53FA1C004DFAEC /* MTActivityReportPrintPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -260,7 +257,6 @@
 		4C2F261F1B53FA1C004DFAEC /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F26221B53FA1C004DFAEC /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2F26231B53FA1C004DFAEC /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
-		4C2F26341B53FA1C004DFAEC /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */; };
 		4C2F26361B53FA1C004DFAEC /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
 		4C2F26371B53FA1C004DFAEC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4C2F26381B53FA1C004DFAEC /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
@@ -686,7 +682,6 @@
 		4C67F9EE1BA1043B001C9D5A /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67F9FB1BA1043B001C9D5A /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
 		4C67FA041BA1043B001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
-		4C67FA111BA1043B001C9D5A /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */; };
 		4C67FA211BA1043B001C9D5A /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA221BA1043B001C9D5A /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FA2A1BA1043B001C9D5A /* MTActivityReportPrintPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -723,7 +718,6 @@
 		4C67FAA71BA1043B001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FAAA1BA1043B001C9D5A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FAAB1BA1043B001C9D5A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
-		4C67FABC1BA1043B001C9D5A /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */; };
 		4C67FABE1BA1043B001C9D5A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
 		4C67FABF1BA1043B001C9D5A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4C67FAC01BA1043B001C9D5A /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
@@ -902,7 +896,6 @@
 		4C67FC3B1BA1183D001C9D5A /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC481BA1183D001C9D5A /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
 		4C67FC511BA1183D001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
-		4C67FC5E1BA1183D001C9D5A /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */; };
 		4C67FC6E1BA1183D001C9D5A /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC6F1BA1183D001C9D5A /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FC771BA1183D001C9D5A /* MTActivityReportPrintPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -939,7 +932,6 @@
 		4C67FCF41BA1183D001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCF71BA1183D001C9D5A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FCF81BA1183D001C9D5A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
-		4C67FD091BA1183D001C9D5A /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */; };
 		4C67FD0B1BA1183D001C9D5A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
 		4C67FD0C1BA1183D001C9D5A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4C67FD0D1BA1183D001C9D5A /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
@@ -1119,7 +1111,6 @@
 		4C67FE8A1BA133AB001C9D5A /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FE971BA133AB001C9D5A /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B0B1D1B37EAB1005DC0CE /* MADUser.m */; };
 		4C67FEA01BA133AB001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
-		4C67FEAD1BA133AB001C9D5A /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */; };
 		4C67FEBD1BA133AB001C9D5A /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEBE1BA133AB001C9D5A /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FEC61BA133AB001C9D5A /* MTActivityReportPrintPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1156,7 +1147,6 @@
 		4C67FF431BA133AB001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FF461BA133AB001C9D5A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2F18FADE65009F234F /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67FF471BA133AB001C9D5A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA19F811A15C197004DDA52 /* MADViewController.m */; };
-		4C67FF581BA133AB001C9D5A /* MTElementCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */; };
 		4C67FF5A1BA133AB001C9D5A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
 		4C67FF5B1BA133AB001C9D5A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4C67FF5C1BA133AB001C9D5A /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
@@ -1818,10 +1808,6 @@
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
-		4C0F89371B28C0EA00D75AF6 /* MTElementCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTElementCanvas.h; sourceTree = "<group>"; };
-		4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTElementCanvas.m; sourceTree = "<group>"; };
-		4C0F893A1B28C30800D75AF6 /* MADResizeHandles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeHandles.h; sourceTree = "<group>"; };
-		4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADResizeHandles.m; sourceTree = "<group>"; };
 		4C111C231B23E83A005CA4DD /* MADViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewControllerBase.m; sourceTree = "<group>"; };
 		4C111C261B23E853005CA4DD /* MADViewControllerBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBase.h; sourceTree = "<group>"; };
 		4C111C271B2406AD005CA4DD /* MADViewControllerBaseInterfacePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerBaseInterfacePrivate.h; sourceTree = "<group>"; };
@@ -2284,8 +2270,6 @@
 		4C4020FC1BAE98C300BAE5FC /* MTReportViewerReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageView.m; sourceTree = "<group>"; };
 		4C4020FD1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageViewController.h; sourceTree = "<group>"; };
 		4C4020FE1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageViewController.m; sourceTree = "<group>"; };
-		4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADThumbnail.h; sourceTree = "<group>"; };
-		4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADThumbnail.m; sourceTree = "<group>"; };
 		4C434AD818B5F3E800750B6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		4C434AD918B5F3E800750B6B /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
 		4C434ADA18B5F3E800750B6B /* asn1_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
@@ -3162,10 +3146,6 @@
 		4C0F892F1B2800A700D75AF6 /* Element View */ = {
 			isa = PBXGroup;
 			children = (
-				4C0F89371B28C0EA00D75AF6 /* MTElementCanvas.h */,
-				4C0F89381B28C0EA00D75AF6 /* MTElementCanvas.m */,
-				4C0F893A1B28C30800D75AF6 /* MADResizeHandles.h */,
-				4C0F893B1B28C30800D75AF6 /* MADResizeHandles.m */,
 			);
 			name = "Element View";
 			sourceTree = "<group>";
@@ -4387,8 +4367,6 @@
 		4C6DF38E16D5F5D500BDC0C1 /* Open Document */ = {
 			isa = PBXGroup;
 			children = (
-				4C4037D31BA73FB70067DFB4 /* MADThumbnail.h */,
-				4C4037D41BA73FB70067DFB4 /* MADThumbnail.m */,
 			);
 			name = "Open Document";
 			path = Reports;
@@ -6612,7 +6590,6 @@
 				4C2F257A1B53FA1C004DFAEC /* MADUser.m in Sources */,
 				4C2F25831B53FA1C004DFAEC /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
 				4C401EEE1BAE620700BAE5FC /* AppDelegate.m in Sources */,
-				4C2F25901B53FA1C004DFAEC /* MADResizeHandles.m in Sources */,
 				4C2F259E1B53FA1C004DFAEC /* MTTableCell.m in Sources */,
 				4C2F259F1B53FA1C004DFAEC /* UITableViewControllerOpperators.m in Sources */,
 				4C2F25A71B53FA1C004DFAEC /* MTActivityReportPrintPreview.m in Sources */,
@@ -6649,7 +6626,6 @@
 				4C2F261F1B53FA1C004DFAEC /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C2F26221B53FA1C004DFAEC /* MTCellEnterText.m in Sources */,
 				4C2F26231B53FA1C004DFAEC /* MADViewController.m in Sources */,
-				4C2F26341B53FA1C004DFAEC /* MTElementCanvas.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6708,7 +6684,6 @@
 				4C4020411BAE92F200BAE5FC /* NSData+AES256.m in Sources */,
 				4C401F811BAE7EB500BAE5FC /* MTTitleView.m in Sources */,
 				4C4020EF1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
-				4C0F893C1B28C30800D75AF6 /* MADResizeHandles.m in Sources */,
 				4C26B9CC1BAF123A00456DC8 /* MADToolboxPresentationController.m in Sources */,
 				4C4020421BAE92F200BAE5FC /* NSDate+Extras.m in Sources */,
 				4C26B9CA1BAF123A00456DC8 /* MADToolboxFormatViewController.m in Sources */,
@@ -6874,7 +6849,6 @@
 				4C401F7B1BAE7EB500BAE5FC /* MTBlurView.m in Sources */,
 				4C26BA201BAF150F00456DC8 /* MADQueryVisualizationCacheData.m in Sources */,
 				4C401ED91BAE5E9000BAE5FC /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
-				4C0F89391B28C0EA00D75AF6 /* MTElementCanvas.m in Sources */,
 				4C26BA221BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m in Sources */,
 				4C4020441BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m in Sources */,
 				4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
@@ -6894,7 +6868,6 @@
 				4C67F9EE1BA1043B001C9D5A /* MTConnectionViewController.m in Sources */,
 				4C67F9FB1BA1043B001C9D5A /* MADUser.m in Sources */,
 				4C67FA041BA1043B001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
-				4C67FA111BA1043B001C9D5A /* MADResizeHandles.m in Sources */,
 				4C67FA211BA1043B001C9D5A /* MTTableCell.m in Sources */,
 				4C67FA221BA1043B001C9D5A /* UITableViewControllerOpperators.m in Sources */,
 				4C67FA2A1BA1043B001C9D5A /* MTActivityReportPrintPreview.m in Sources */,
@@ -6931,7 +6904,6 @@
 				4C67FAA71BA1043B001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C67FAAA1BA1043B001C9D5A /* MTCellEnterText.m in Sources */,
 				4C67FAAB1BA1043B001C9D5A /* MADViewController.m in Sources */,
-				4C67FABC1BA1043B001C9D5A /* MTElementCanvas.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6948,7 +6920,6 @@
 				4C67FC3B1BA1183D001C9D5A /* MTConnectionViewController.m in Sources */,
 				4C67FC481BA1183D001C9D5A /* MADUser.m in Sources */,
 				4C67FC511BA1183D001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
-				4C67FC5E1BA1183D001C9D5A /* MADResizeHandles.m in Sources */,
 				4C67FC6E1BA1183D001C9D5A /* MTTableCell.m in Sources */,
 				4C67FC6F1BA1183D001C9D5A /* UITableViewControllerOpperators.m in Sources */,
 				4C67FC771BA1183D001C9D5A /* MTActivityReportPrintPreview.m in Sources */,
@@ -6985,7 +6956,6 @@
 				4C67FCF41BA1183D001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C67FCF71BA1183D001C9D5A /* MTCellEnterText.m in Sources */,
 				4C67FCF81BA1183D001C9D5A /* MADViewController.m in Sources */,
-				4C67FD091BA1183D001C9D5A /* MTElementCanvas.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7002,7 +6972,6 @@
 				4C67FE8A1BA133AB001C9D5A /* MTConnectionViewController.m in Sources */,
 				4C67FE971BA133AB001C9D5A /* MADUser.m in Sources */,
 				4C67FEA01BA133AB001C9D5A /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
-				4C67FEAD1BA133AB001C9D5A /* MADResizeHandles.m in Sources */,
 				4C67FEBD1BA133AB001C9D5A /* MTTableCell.m in Sources */,
 				4C67FEBE1BA133AB001C9D5A /* UITableViewControllerOpperators.m in Sources */,
 				4C67FEC61BA133AB001C9D5A /* MTActivityReportPrintPreview.m in Sources */,
@@ -7039,7 +7008,6 @@
 				4C67FF431BA133AB001C9D5A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C67FF461BA133AB001C9D5A /* MTCellEnterText.m in Sources */,
 				4C67FF471BA133AB001C9D5A /* MADViewController.m in Sources */,
-				4C67FF581BA133AB001C9D5A /* MTElementCanvas.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
