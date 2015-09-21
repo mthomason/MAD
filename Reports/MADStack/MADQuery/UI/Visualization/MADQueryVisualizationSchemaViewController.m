@@ -19,10 +19,10 @@
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
-@property (nonatomic, strong) IBOutlet MTTitleView *titleView;
+@property (nonatomic, weak) IBOutlet MTTitleView *titleView;
+@property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSMutableArray *hasFieldsObjectIds;
 @property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
-@property (nonatomic, strong) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSArray *sortDescriptorsFields;
 @property (nonatomic, strong) UIFont *titleFont;
 @property (nonatomic, strong) UIFont *detailFont;

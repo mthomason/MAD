@@ -436,7 +436,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RDu-VC-BrM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6635" y="-383"/>
+            <point key="canvasLocation" x="7602" y="685"/>
         </scene>
         <!--New Static Label-->
         <scene sceneID="RVh-AY-gui">
@@ -1125,7 +1125,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xYv-MO-jrf" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="WtF-2e-D8t" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="7045" y="-402"/>
+            <point key="canvasLocation" x="6559" y="-166"/>
         </scene>
         <!--Group By-->
         <scene sceneID="UDG-5d-S4q">
@@ -1302,6 +1302,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="rnE-S6-GTx"/>
+        <segue reference="W0B-96-bJj"/>
     </inferredMetricsTieBreakers>
 </document>

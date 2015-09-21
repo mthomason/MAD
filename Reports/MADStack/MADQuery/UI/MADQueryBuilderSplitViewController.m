@@ -56,13 +56,6 @@
     
     if (self) {
         
-        //NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
-        //MADQueryVisualizationViewController *queryVisualizationViewController = [MADQueryVisualizationViewController QueryVisualizationViewController];
-        //viewControllers[1] = queryVisualizationViewController;
-        //UIViewController *vc0 = viewControllers[0];
-        //self.viewControllers = viewControllers;
-        
-        
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
         self.navigationController.navigationItem.titleView.tintColor = [UIColor whiteColor];
         

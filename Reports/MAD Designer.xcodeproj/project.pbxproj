@@ -383,6 +383,12 @@
 		4C2F279E1B53FA1C004DFAEC /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
 		4C2F279F1B53FA1C004DFAEC /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C2F27AD1B53FC37004DFAEC /* MAD Designer.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C32A48F1BAFD8D900DD59A3 /* MADSplitViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */; settings = {ASSET_TAGS = (); }; };
+		4C32A4A61BB0765900DD59A3 /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4A51BB0765900DD59A3 /* info.plist */; settings = {ASSET_TAGS = (); }; };
+		4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */; settings = {ASSET_TAGS = (); }; };
+		4C32A4B21BB0773300DD59A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B01BB0773300DD59A3 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
+		4C32A4B31BB0773300DD59A3 /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B11BB0773300DD59A3 /* MADFeatures.plist */; settings = {ASSET_TAGS = (); }; };
+		4C32A4B51BB0778800DD59A3 /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B41BB0778800DD59A3 /* info.plist */; settings = {ASSET_TAGS = (); }; };
 		4C359E221B082E7D00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C359E231B082E7E00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C359E241B082E7F00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -1049,7 +1055,6 @@
 		4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */; };
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
-		4C7B0B051B374266005DC0CE /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B0B031B374266005DC0CE /* MADFeatures.plist */; };
 		4C8394DB1AC8EEE80055EDE9 /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */; };
 		4C8394DC1AC8EEE80055EDE9 /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */; };
 		4C8394DD1AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */; };
@@ -1080,7 +1085,6 @@
 		4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2761BAFAA0A00AD1111 /* MTSchemaFieldCell.m */; settings = {ASSET_TAGS = (); }; };
 		4C8DE27E1BAFB04D00AD1111 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE27B1BAFB04D00AD1111 /* InfoPlist.strings */; settings = {ASSET_TAGS = (); }; };
 		4C8DE27F1BAFB04D00AD1111 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; settings = {ASSET_TAGS = (); }; };
-		4C8DE2811BAFB10700AD1111 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2801BAFB10700AD1111 /* Settings.bundle */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */; settings = {ASSET_TAGS = (); }; };
@@ -1110,7 +1114,6 @@
 		4C9374591BAD40AB00D6BD62 /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3E31BA47A9200AA473B /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C93745A1BAD40E400D6BD62 /* MADFileManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3ED1BA47AF400AA473B /* MADFileManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C9374641BAD43DE00D6BD62 /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9374611BAD43BB00D6BD62 /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C94AA3817DCB88A000F6FCF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3717DCB88A000F6FCF /* Images.xcassets */; };
 		4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C94ADE317C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
@@ -1559,7 +1562,6 @@
 		4C08B30A1AB679BE00B54D3A /* MADImageIconInfoSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageIconInfoSelected@2x.png"; path = "Resources/Images/MADImageIconInfoSelected@2x.png"; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
@@ -1778,6 +1780,15 @@
 		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeRSS@2x.png"; path = "Reports/UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
 		4C2F27A51B53FA1C004DFAEC /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2F27A61B53FA1D004DFAEC /* app.everydayapps.mad.designer.watchkit.info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = app.everydayapps.mad.designer.watchkit.info.plist; path = /Users/mthomason/Desktop/Reports/Reports/app.everydayapps.mad.designer.watchkit.info.plist; sourceTree = "<absolute>"; };
+		4C32A48D1BAFD8D900DD59A3 /* MADSplitViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSplitViewContainer.h; sourceTree = "<group>"; };
+		4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSplitViewContainer.m; sourceTree = "<group>"; };
+		4C32A4A41BB0763300DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
+		4C32A4A51BB0765900DD59A3 /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
+		4C32A4AA1BB076A900DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
+		4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MAD Viewer.entitlements"; sourceTree = "<group>"; };
+		4C32A4B01BB0773300DD59A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
+		4C32A4B11BB0773300DD59A3 /* MADFeatures.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MADFeatures.plist; path = Resources/MADFeatures.plist; sourceTree = "<group>"; };
+		4C32A4B41BB0778800DD59A3 /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		4C37E0F41ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeDocumentsLocal.h; sourceTree = "<group>"; };
 		4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeDocumentsLocal.m; sourceTree = "<group>"; };
 		4C37E0F91ACC791600B4BC0D /* MAD Designer WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Designer WatchKit Extension.entitlements"; sourceTree = "<group>"; };
@@ -2150,11 +2161,8 @@
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
 		4C6700BB1BA133AB001C9D5A /* MAD Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Barcodes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C6700BC1BA133AB001C9D5A /* madb-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madb-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madb-Info.plist"; sourceTree = "<absolute>"; };
 		4C67FC1F1BA1043B001C9D5A /* MAD Query.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Query.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C67FC201BA1043B001C9D5A /* madq-Info.plist.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madq-Info.plist.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madq-Info.plist.plist"; sourceTree = "<absolute>"; };
 		4C67FE6C1BA1183D001C9D5A /* MAD Explorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Explorer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C67FE6D1BA1183E001C9D5A /* made-info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "made-info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/made-info.plist"; sourceTree = "<absolute>"; };
 		4C6A17CC19B193610098717E /* MADImageToolbarCloudDownload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarCloudDownload@2x.png"; path = "Resources/Images/MADImageToolbarCloudDownload@2x.png"; sourceTree = "<group>"; };
 		4C6A17CD19B193610098717E /* MADImageToolbarCloudDownload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageToolbarCloudDownload.png; path = Resources/Images/MADImageToolbarCloudDownload.png; sourceTree = "<group>"; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
@@ -2168,7 +2176,6 @@
 		4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageLandscape@2x.png"; path = "Reports/UIImageLandscape@2x.png"; sourceTree = "<group>"; };
 		4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageArrowDown.png; path = Reports/UIImageArrowDown.png; sourceTree = "<group>"; };
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageArrowDown@2x.png"; path = "Reports/UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
-		4C7B0B031B374266005DC0CE /* MADFeatures.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MADFeatures.plist; path = "MAD Viewer/MADFeatures.plist"; sourceTree = "<group>"; };
 		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C8394D81AC8EEE80055EDE9 /* MADImageBackgroundIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageBackgroundIcon.png; path = Resources/Images/MADImageBackgroundIcon.png; sourceTree = "<group>"; };
 		4C8394D91AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@2x.png"; path = "Resources/Images/MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
@@ -2241,9 +2248,7 @@
 		4C9374271BAD2F5800D6BD62 /* MADFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADFoundation.xcodeproj; path = ../MADFoundation/MADFoundation.xcodeproj; sourceTree = "<group>"; };
 		4C9374311BAD2F7E00D6BD62 /* MADCocoaExtensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADCocoaExtensions.xcodeproj; path = ../MADCocoaExtensions/MADCocoaExtensions.xcodeproj; sourceTree = "<group>"; };
 		4C93745B1BAD43BA00D6BD62 /* MADDataStructures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADDataStructures.xcodeproj; path = ../MADDataStructures/MADDataStructures.xcodeproj; sourceTree = "<group>"; };
-		4C94AA3717DCB88A000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Viewer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageJustified@2x.png"; path = "Reports/UIImageJustified@2x.png"; sourceTree = "<group>"; };
-		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -2586,7 +2591,6 @@
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocuments20@2x.png"; path = "Reports/UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentsAlt20.png; path = Reports/UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentsAlt20@2x.png"; path = "Reports/UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
-		4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Viewer.entitlements"; sourceTree = "<group>"; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF9D08C1AD0EF6500525A50 /* MADRowTypeKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeKeyValue.h; sourceTree = "<group>"; };
 		4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeKeyValue.m; sourceTree = "<group>"; };
@@ -2810,10 +2814,6 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4C67FC201BA1043B001C9D5A /* madq-Info.plist.plist */,
-				4C67FE6D1BA1183E001C9D5A /* made-info.plist */,
-				4C6700BC1BA133AB001C9D5A /* madb-Info.plist */,
-				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
 			);
 			name = Resources;
@@ -3199,13 +3199,20 @@
 			path = MADStack/Activities;
 			sourceTree = "<group>";
 		};
+		4C32A4AD1BB076FC00DD59A3 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
-				4C8BE8671BAD469400F6E3F7 /* Viewer */,
 				4C00818414B738E9003DF437 /* Model */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4C0E785F163B5C51003B951E /* Resources */,
@@ -3642,6 +3649,7 @@
 		4C401F111BAE703200BAE5FC /* MADQuery */ = {
 			isa = PBXGroup;
 			children = (
+				4C32A4B41BB0778800DD59A3 /* info.plist */,
 				4C401F121BAE703200BAE5FC /* UI */,
 			);
 			name = MADQuery;
@@ -3693,6 +3701,8 @@
 				4C4020781BAE966000BAE5FC /* MADQueryNavigationController.m */,
 				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
 				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
+				4C32A48D1BAFD8D900DD59A3 /* MADSplitViewContainer.h */,
+				4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -3835,6 +3845,7 @@
 			isa = PBXGroup;
 			children = (
 				4C401FA21BAE8AD500BAE5FC /* UI */,
+				4C32A4A41BB0763300DD59A3 /* info.plist */,
 			);
 			name = MADBarcodes;
 			path = MADStack/MADBarcodes;
@@ -3903,6 +3914,10 @@
 		4C4020F71BAE98C300BAE5FC /* MADViewer */ = {
 			isa = PBXGroup;
 			children = (
+				4C32A4AD1BB076FC00DD59A3 /* SupportingFiles */,
+				4C32A4B01BB0773300DD59A3 /* Images.xcassets */,
+				4C32A4B11BB0773300DD59A3 /* MADFeatures.plist */,
+				4C32A4AA1BB076A900DD59A3 /* info.plist */,
 				4C4020F81BAE98C300BAE5FC /* UI */,
 			);
 			name = MADViewer;
@@ -4215,25 +4230,6 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		4C8BE8671BAD469400F6E3F7 /* Viewer */ = {
-			isa = PBXGroup;
-			children = (
-				4C8BE86B1BAD48E700F6E3F7 /* Resources */,
-			);
-			name = Viewer;
-			sourceTree = "<group>";
-		};
-		4C8BE86B1BAD48E700F6E3F7 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				4C94AA3717DCB88A000F6FCF /* Images.xcassets */,
-				4C0E785D163B5AEC003B951E /* madview-Info.plist */,
-				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
-				4C7B0B031B374266005DC0CE /* MADFeatures.plist */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 		4C8DE2441BAFA66100AD1111 /* ReuseableViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -4260,6 +4256,7 @@
 			isa = PBXGroup;
 			children = (
 				4C8DE2891BAFB23400AD1111 /* UI */,
+				4C32A4A51BB0765900DD59A3 /* info.plist */,
 			);
 			name = MADExplorer;
 			path = MADStack/MADExplorer;
@@ -5255,13 +5252,13 @@
 				4C08B2F01AB6791F00B54D3A /* MADImageToolbarCloud.png in Resources */,
 				4CD0B2091AC8FBC4005CA75C /* UIBarButtonItemMadViewer.png in Resources */,
 				4C08B2F61AB6791F00B54D3A /* MADImageToolbarCloudDownloadSelected@2x.png in Resources */,
-				4C7B0B051B374266005DC0CE /* MADFeatures.plist in Resources */,
 				4CD0B2621AC90115005CA75C /* MTActivityProvidence@2x.png in Resources */,
 				4CD0B2561AC90018005CA75C /* MTImageLaunchViewerPadPortraitRetina.png in Resources */,
 				4CD0B2341AC8FC39005CA75C /* MTSliderThumbRotateDisabled.png in Resources */,
 				4CD0B2661AC90115005CA75C /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4CD0B2581AC90018005CA75C /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
 				4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */,
+				4C32A4B51BB0778800DD59A3 /* info.plist in Resources */,
 				4CD0B2461AC90018005CA75C /* MTImageLaunchDesignerPadLandscapeRetina.png in Resources */,
 				4CD0B2821AC90339005CA75C /* MADIcon320.png in Resources */,
 				4CD0B27C1AC90339005CA75C /* MADIcon44x58.png in Resources */,
@@ -5288,6 +5285,7 @@
 				4C08B2FE1AB6791F00B54D3A /* MADImageToolbarCloudUploadSelected@2x.png in Resources */,
 				4CD0B2361AC8FC39005CA75C /* MTSliderThumbRotateDisabled@2x.png in Resources */,
 				4CD0B2071AC8FBC4005CA75C /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
+				4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */,
 				4CD0B21D1AC8FBC4005CA75C /* UIButtonSelected.png in Resources */,
 				4C08B2FC1AB6791F00B54D3A /* MADImageToolbarCloudUploadSelected.png in Resources */,
 				4CD0B2481AC90018005CA75C /* MTImageLaunchDesignerPadPortrait.png in Resources */,
@@ -5298,6 +5296,7 @@
 				4C08B3101AB679BE00B54D3A /* MADImageIconInfoSelected.png in Resources */,
 				4CD0B2171AC8FBC4005CA75C /* UIButton@2x.png in Resources */,
 				4C08B2F81AB6791F00B54D3A /* MADImageToolbarCloudUpload.png in Resources */,
+				4C32A4B21BB0773300DD59A3 /* Images.xcassets in Resources */,
 				4CD0B3701AC909E0005CA75C /* UIImagePatternHomemadePaper.png in Resources */,
 				4C1E898D1B34115100B26B5E /* MADBarcode64.png in Resources */,
 				4CD0B24E1AC90018005CA75C /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
@@ -5318,7 +5317,6 @@
 				4CD0B2721AC90273005CA75C /* MADImageCaratOpen@2x.png in Resources */,
 				4CD0B3721AC909E0005CA75C /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4C08B2F21AB6791F00B54D3A /* MADImageToolbarCloud@2x.png in Resources */,
-				4C94AA3817DCB88A000F6FCF /* Images.xcassets in Resources */,
 				4CD0B22C1AC8FC39005CA75C /* MTSliderThumb.png in Resources */,
 				4CD0B2441AC90018005CA75C /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
@@ -5329,6 +5327,7 @@
 				4CE3141D1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
 				4C08B30C1AB679BE00B54D3A /* MADImageIconInfo.png in Resources */,
 				4CD0B21B1AC8FBC4005CA75C /* UIButtonHighlighted@2x.png in Resources */,
+				4C32A4B31BB0773300DD59A3 /* MADFeatures.plist in Resources */,
 				4CE314221694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
 				4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CD0B2301AC8FC39005CA75C /* MTSliderThumbRotate.png in Resources */,
@@ -5589,6 +5588,7 @@
 				4C08B2F71AB6791F00B54D3A /* MADImageToolbarCloudUpload.png in Resources */,
 				4CD0B2511AC90018005CA75C /* MTImageLaunchViewerPadLandscapeRetina.png in Resources */,
 				4CD0B2061AC8FBC4005CA75C /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
+				4C32A4A61BB0765900DD59A3 /* info.plist in Resources */,
 				4C26B9DF1BAF148B00456DC8 /* MADImageChevronRightTall@2x.png in Resources */,
 				4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
 				4CD0B24F1AC90018005CA75C /* MTImageLaunchViewerPadLandscape.png in Resources */,
@@ -5617,7 +5617,6 @@
 				4CD0B2531AC90018005CA75C /* MTImageLaunchViewerPadPortrait.png in Resources */,
 				4C8394DD1AC8EEE80055EDE9 /* MADImageBackgroundIcon@2x.png in Resources */,
 				4CD0B2331AC8FC39005CA75C /* MTSliderThumbRotateDisabled.png in Resources */,
-				4C8DE2811BAFB10700AD1111 /* Settings.bundle in Resources */,
 				4CD0B2611AC90115005CA75C /* MTActivityProvidence@2x.png in Resources */,
 				4C26B9E01BAF148B00456DC8 /* MADImageChevronRightTall@3x.png in Resources */,
 				4CD0B22B1AC8FC39005CA75C /* MTSliderThumb.png in Resources */,
@@ -6418,6 +6417,7 @@
 				4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */,
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */,
+				4C32A48F1BAFD8D900DD59A3 /* MADSplitViewContainer.m in Sources */,
 				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
 				4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */,
@@ -6550,7 +6550,7 @@
 					"DEBUG=1",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "madview-Info.plist";
+				INFOPLIST_FILE = MADStack/MADViewer/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6600,7 +6600,7 @@
 					"MAD_DESIGNER=0",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "madview-Info.plist";
+				INFOPLIST_FILE = MADStack/MADViewer/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6980,7 +6980,7 @@
 					"DEBUG=1",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "madb-Info.plist";
+				INFOPLIST_FILE = MADStack/MADBarcodes/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -7037,7 +7037,7 @@
 					"MAD_VIEWER=0",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "madb-Info.plist";
+				INFOPLIST_FILE = MADStack/MADBarcodes/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -7096,7 +7096,7 @@
 					"DEBUG=1",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "madq-Info.plist";
+				INFOPLIST_FILE = MADStack/MADQuery/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -7153,7 +7153,7 @@
 					"MAD_VIEWER=0",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "madq-Info.plist";
+				INFOPLIST_FILE = MADStack/MADQuery/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -7212,7 +7212,7 @@
 					"DEBUG=1",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "made-Info.plist";
+				INFOPLIST_FILE = MADStack/MADExplorer/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -7269,7 +7269,7 @@
 					"MAD_VIEWER=0",
 				);
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "made-Info.plist";
+				INFOPLIST_FILE = MADStack/MADExplorer/info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

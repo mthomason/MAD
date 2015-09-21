@@ -57,7 +57,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 @property (nonatomic, assign) BOOL showFieldOrFormulaFormulaPickerViewerController;
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
-
 @property (nonatomic, strong) NSArray *dataSource;
 
 - (IBAction)done:(id)sender;
@@ -99,9 +98,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     self.view.opaque = NO;
 
 }
-
-static NSString * const CellIdentifier = @"ci";
-static NSString * const Tag = @"tag";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

@@ -11,6 +11,18 @@
 @implementation MADQueryNavigationController
 
 - (void)dealloc {
+/*    for (UIViewController *controller in self.viewControllers) {
+        if ([controller isKindOfClass:[UISplitViewController class]]) {
+            for (UIViewController *childViewController in ((UISplitViewController *) controller).childViewControllers) {
+                [childViewController willMoveToParentViewController:nil];
+                [childViewController.view removeFromSuperview];
+                [childViewController removeFromParentViewController];
+                [childViewController didMoveToParentViewController:nil];
+            }
+            
+        }
+    }
+    [self popViewControllerAnimated:NO];*/
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 

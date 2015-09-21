@@ -69,7 +69,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2673" y="-1335"/>
+            <point key="canvasLocation" x="3653" y="-1119"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0jz-2x-7ar">
@@ -99,7 +99,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1622" y="-1335"/>
+            <point key="canvasLocation" x="2602" y="-1119"/>
         </scene>
         <!--MAD Designer-->
         <scene sceneID="yOK-hf-Fsm">
@@ -296,12 +296,12 @@
                         <animations/>
                     </toolbar>
                     <connections>
-                        <segue destination="Hcs-Qh-Ddc" kind="relationship" relationship="rootViewController" id="rVK-Y0-92c"/>
+                        <segue destination="Hcs-Qh-Ddc" kind="relationship" relationship="rootViewController" id="7yk-CL-MJD"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="emG-jU-bGk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="647" y="-2799"/>
+            <point key="canvasLocation" x="537" y="-2799"/>
         </scene>
         <!--Query View Controller-->
         <scene sceneID="jeR-GO-JXK">
@@ -540,14 +540,14 @@
                         <color key="selectedImageTintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="xGC-NN-HDb" kind="relationship" relationship="viewControllers" id="A3c-KL-OPM"/>
+                        <segue destination="xGC-NN-HDb" kind="relationship" relationship="viewControllers" id="WS2-Mc-U6A"/>
                         <segue destination="OXh-cm-FbU" kind="relationship" relationship="viewControllers" id="kbI-Yj-qMT"/>
                         <segue destination="E4Y-T0-TTM" kind="relationship" relationship="viewControllers" id="Udn-gS-Nm5"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VrE-5r-MlD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-577" y="389"/>
+            <point key="canvasLocation" x="-841" y="-75"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jwp-2p-7YR">
@@ -2146,10 +2146,11 @@
             </objects>
             <point key="canvasLocation" x="2557" y="-3488"/>
         </scene>
-        <!--Query Builder Split View Controller-->
+        <!--MAD Query-->
         <scene sceneID="H8u-lx-f3W">
             <objects>
-                <splitViewController id="Hcs-Qh-Ddc" customClass="MADQueryBuilderSplitViewController" sceneMemberID="viewController">
+                <splitViewController storyboardIdentifier="MADIdentifierQueryBuilderSplitViewController" title="MAD Query" id="Hcs-Qh-Ddc" customClass="MADQueryBuilderSplitViewController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="b7g-tO-05B"/>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="EIU-KQ-pJF"/>
                         <barButtonItem title="SQL" id="bhA-2Z-ta5">
@@ -2287,8 +2288,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="T0e-pi-cpg"/>
         <segue reference="GHV-ru-Qf2"/>
+        <segue reference="T0e-pi-cpg"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>

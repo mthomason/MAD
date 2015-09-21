@@ -18,13 +18,14 @@
 #import "MTConnectorView.h"
 
 #import "MADQueryVisualizationSchemaViewController.h"
+#import "MADQueryVisualizationSchemaViewController+Designer.h"
+
 #import "MADWatermarkView.h"
 
 #import "CGAffineTransform+Common.h"
 #import "UIView+NSObjectIdTag.h"
 
 #import "UIViewController+Designer.h"
-#import "MADQueryVisualizationSchemaViewController+Designer.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADQueryVisualizationTableDefination.h"
 
@@ -58,8 +59,8 @@ typedef void(^MTBlockResultVoid)(void);
     MADQueryVisualizationSchemaDelegate,
     MTViewControllerProtocol>
 
-@property (nonatomic, strong) IBOutlet UIToolbar *toolbarBottom;
-@property (nonatomic, strong) IBOutlet UIView *backgroundContainer;
+@property (nonatomic, weak) IBOutlet UIToolbar *toolbarBottom;
+@property (nonatomic, weak) IBOutlet UIView *backgroundContainer;
 
 @property (nonatomic, strong) MADWatermarkScrollView *scrollView;
 @property (nonatomic, strong) UIView *contentView;
@@ -453,6 +454,7 @@ typedef void(^MTBlockResultVoid)(void);
                     [weakViewController willMoveToParentViewController:nil];
                     [weakViewController.view removeFromSuperview];
                     [weakViewController removeFromParentViewController];
+                    [weakViewController didMoveToParentViewController:nil];
                 }];
             }
             
@@ -780,6 +782,8 @@ typedef void(^MTBlockResultVoid)(void);
         [viewController willMoveToParentViewController:nil];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
+        [viewController didMoveToParentViewController:nil];
+        [self.controllersForObjectIds removeObjectForKey:deletedQueryTable.objectID.URIRepresentation];
     }
 }
 
@@ -842,6 +846,8 @@ typedef void(^MTBlockResultVoid)(void);
     if (linkViewController != nil) {
         [self removeViewController:linkViewController];
     }
+    [self.controllersForObjectIdsLink removeObjectForKey:deletedLink.objectID.URIRepresentation];
+    [self.controllersForObjectIds removeObjectForKey:deletedLink.objectID.URIRepresentation];
 }
 
 #pragma mark - UI Items
@@ -882,19 +888,21 @@ typedef void(^MTBlockResultVoid)(void);
         [viewController willMoveToParentViewController:nil];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
+        [viewController didMoveToParentViewController:nil];
         
     } else if ([viewController.view isKindOfClass:[MTConnectorView class]]) {
         
         CGPoint center = viewController.view.center;
         __weak UIViewController *weakViewController = viewController;
         [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            [weakViewController.view setBounds:CGRectZero];
-            [weakViewController.view setCenter:center];
-            [weakViewController.view setTransform:swingTransform];
+            weakViewController.view.bounds = CGRectZero;
+            weakViewController.view.center = center;
+            weakViewController.view.transform = swingTransform;
         } completion:^(BOOL finished) {
             [weakViewController willMoveToParentViewController:nil];
             [weakViewController.view removeFromSuperview];
             [weakViewController removeFromParentViewController];
+            [weakViewController didMoveToParentViewController:nil];
         }];
     }
 }
