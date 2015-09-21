@@ -2937,10 +2937,10 @@
 		4C26B9991BAF123A00456DC8 /* Explorer */ = {
 			isa = PBXGroup;
 			children = (
-				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
-				4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */,
 				4C26B99C1BAF123A00456DC8 /* MADOpenFileViewController.h */,
 				4C26B99D1BAF123A00456DC8 /* MADOpenFileViewController.m */,
+				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
+				4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */,
 			);
 			path = Explorer;
 			sourceTree = "<group>";
@@ -6838,7 +6838,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -6898,7 +6898,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;

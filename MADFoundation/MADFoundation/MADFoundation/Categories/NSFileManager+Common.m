@@ -59,6 +59,7 @@ NSString * const MADPathComponentData       = @"Data";
     
     NSError *error;
     NSURL *groupUrl = [self containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
+    NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil for %@.  Maybe the fucking entitlment file is missing?!?!", groupIdentifier);
     NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent
                                                 isDirectory: YES];
     BOOL isDirectory;
