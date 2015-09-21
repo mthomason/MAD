@@ -389,6 +389,14 @@
 		4C32A4B21BB0773300DD59A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B01BB0773300DD59A3 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
 		4C32A4B31BB0773300DD59A3 /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B11BB0773300DD59A3 /* MADFeatures.plist */; settings = {ASSET_TAGS = (); }; };
 		4C32A4B51BB0778800DD59A3 /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B41BB0778800DD59A3 /* info.plist */; settings = {ASSET_TAGS = (); }; };
+		4C32A4BB1BB07BF300DD59A3 /* MADBarcodesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32A4BA1BB07BF300DD59A3 /* MADBarcodesAppDelegate.m */; settings = {ASSET_TAGS = (); }; };
+		4C32A4BE1BB07D5A00DD59A3 /* MADBarcodes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4BD1BB07D5A00DD59A3 /* MADBarcodes.entitlements */; settings = {ASSET_TAGS = (); }; };
+		4C32A4C01BB07D6300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32A4BF1BB07D6300DD59A3 /* main.m */; settings = {ASSET_TAGS = (); }; };
+		4C32A4C11BB07F6800DD59A3 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9374191BAD2EF100D6BD62 /* MADBarcodes.framework */; };
+		4C32A4C21BB07F6F00DD59A3 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB2D3E31BA47A9200AA473B /* MADExplorer.framework */; };
+		4C32A4C31BB07FF300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; settings = {ASSET_TAGS = (); }; };
+		4C32A4C41BB0813400DD59A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
+		4C32A4C51BB0816A00DD59A3 /* MADExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28A1BAFB23400AD1111 /* MADExplorer.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C359E221B082E7D00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C359E231B082E7E00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C359E241B082E7F00B3E9E0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -419,10 +427,6 @@
 		4C401EE71BAE5E9000BAE5FC /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED71BAE5E9000BAE5FC /* MTLicensingViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EED1BAE61F700BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EEE1BAE620700BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
-		4C401EEF1BAE620700BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
-		4C401EF01BAE620800BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
-		4C401EF11BAE620800BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
-		4C401EF21BAE620900BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4C401EF91BAE62FD00BAE5FC /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EF71BAE62FD00BAE5FC /* chinook.sqlite3 */; settings = {ASSET_TAGS = (); }; };
 		4C401EFC1BAE640500BAE5FC /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EFA1BAE640500BAE5FC /* London.mad */; settings = {ASSET_TAGS = (); }; };
 		4C401EFD1BAE640500BAE5FC /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EFB1BAE640500BAE5FC /* Music.mad */; settings = {ASSET_TAGS = (); }; };
@@ -944,9 +948,7 @@
 		4C67FE841BA133AB001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4C67FF5A1BA133AB001C9D5A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
 		4C67FF5B1BA133AB001C9D5A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
-		4C67FF5C1BA133AB001C9D5A /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C67FF5E1BA133AB001C9D5A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
-		4C67FF5F1BA133AB001C9D5A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0A077019C95EAC0059E1D9 /* StoreKit.framework */; };
 		4C67FF601BA133AB001C9D5A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C67FF611BA133AB001C9D5A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C67FF621BA133AB001C9D5A /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2318B5F3E800750B6B /* libcrypto.a */; };
@@ -961,7 +963,6 @@
 		4C67FF6B1BA133AB001C9D5A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
 		4C67FF6C1BA133AB001C9D5A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C67FF6D1BA133AB001C9D5A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
-		4C67FF6E1BA133AB001C9D5A /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C009F821B01BBFC00F22BFF /* libmysqlclient.a */; };
 		4C67FF6F1BA133AB001C9D5A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C67FF701BA133AB001C9D5A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C67FF711BA133AB001C9D5A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -1084,7 +1085,6 @@
 		4C8DE2771BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2741BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2761BAFAA0A00AD1111 /* MTSchemaFieldCell.m */; settings = {ASSET_TAGS = (); }; };
 		4C8DE27E1BAFB04D00AD1111 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE27B1BAFB04D00AD1111 /* InfoPlist.strings */; settings = {ASSET_TAGS = (); }; };
-		4C8DE27F1BAFB04D00AD1111 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */; settings = {ASSET_TAGS = (); }; };
@@ -1789,6 +1789,11 @@
 		4C32A4B01BB0773300DD59A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		4C32A4B11BB0773300DD59A3 /* MADFeatures.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MADFeatures.plist; path = Resources/MADFeatures.plist; sourceTree = "<group>"; };
 		4C32A4B41BB0778800DD59A3 /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
+		4C32A4B81BB07B1000DD59A3 /* MADBarcodes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADBarcodes-Prefix.pch"; sourceTree = "<group>"; };
+		4C32A4B91BB07BF200DD59A3 /* MADBarcodesAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBarcodesAppDelegate.h; sourceTree = "<group>"; };
+		4C32A4BA1BB07BF300DD59A3 /* MADBarcodesAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBarcodesAppDelegate.m; sourceTree = "<group>"; };
+		4C32A4BD1BB07D5A00DD59A3 /* MADBarcodes.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MADBarcodes.entitlements; sourceTree = "<group>"; };
+		4C32A4BF1BB07D6300DD59A3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C37E0F41ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeDocumentsLocal.h; sourceTree = "<group>"; };
 		4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeDocumentsLocal.m; sourceTree = "<group>"; };
 		4C37E0F91ACC791600B4BC0D /* MAD Designer WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Designer WatchKit Extension.entitlements"; sourceTree = "<group>"; };
@@ -2758,11 +2763,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C32A4C21BB07F6F00DD59A3 /* MADExplorer.framework in Frameworks */,
+				4C32A4C11BB07F6800DD59A3 /* MADBarcodes.framework in Frameworks */,
 				4C67FF5A1BA133AB001C9D5A /* Accounts.framework in Frameworks */,
 				4C67FF5B1BA133AB001C9D5A /* Social.framework in Frameworks */,
-				4C67FF5C1BA133AB001C9D5A /* libssl.a in Frameworks */,
 				4C67FF5E1BA133AB001C9D5A /* MobileCoreServices.framework in Frameworks */,
-				4C67FF5F1BA133AB001C9D5A /* StoreKit.framework in Frameworks */,
 				4C67FF601BA133AB001C9D5A /* libSystem.dylib in Frameworks */,
 				4C67FF611BA133AB001C9D5A /* libc++.dylib in Frameworks */,
 				4C67FF621BA133AB001C9D5A /* libcrypto.a in Frameworks */,
@@ -2777,7 +2782,6 @@
 				4C67FF6B1BA133AB001C9D5A /* SystemConfiguration.framework in Frameworks */,
 				4C67FF6C1BA133AB001C9D5A /* CFNetwork.framework in Frameworks */,
 				4C67FF6D1BA133AB001C9D5A /* CoreData.framework in Frameworks */,
-				4C67FF6E1BA133AB001C9D5A /* libmysqlclient.a in Frameworks */,
 				4C67FF6F1BA133AB001C9D5A /* UIKit.framework in Frameworks */,
 				4C67FF701BA133AB001C9D5A /* Foundation.framework in Frameworks */,
 				4C67FF711BA133AB001C9D5A /* CoreGraphics.framework in Frameworks */,
@@ -3203,6 +3207,23 @@
 			isa = PBXGroup;
 			children = (
 				4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		4C32A4B61BB07B1000DD59A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4C32A4B71BB07B1000DD59A3 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				4C32A4BF1BB07D6300DD59A3 /* main.m */,
+				4C32A4BD1BB07D5A00DD59A3 /* MADBarcodes.entitlements */,
+				4C32A4B81BB07B1000DD59A3 /* MADBarcodes-Prefix.pch */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -3844,7 +3865,11 @@
 		4C401FA11BAE8AD500BAE5FC /* MADBarcodes */ = {
 			isa = PBXGroup;
 			children = (
+				4C32A4B61BB07B1000DD59A3 /* Resources */,
+				4C32A4B71BB07B1000DD59A3 /* SupportingFiles */,
 				4C401FA21BAE8AD500BAE5FC /* UI */,
+				4C32A4B91BB07BF200DD59A3 /* MADBarcodesAppDelegate.h */,
+				4C32A4BA1BB07BF300DD59A3 /* MADBarcodesAppDelegate.m */,
 				4C32A4A41BB0763300DD59A3 /* info.plist */,
 			);
 			name = MADBarcodes;
@@ -6052,6 +6077,7 @@
 				4C67002E1BA133AB001C9D5A /* MADImageCarat.png in Resources */,
 				4C6700341BA133AB001C9D5A /* fontawesome-webfont.ttf in Resources */,
 				4C6700371BA133AB001C9D5A /* UIBarButtonItemDatabase8@2x.png in Resources */,
+				4C32A4C51BB0816A00DD59A3 /* MADExplorer.storyboard in Resources */,
 				4C67003C1BA133AB001C9D5A /* MTImageLaunchViewerPadPortrait.png in Resources */,
 				4C67003D1BA133AB001C9D5A /* MADImageBackgroundIcon@2x.png in Resources */,
 				4C6700421BA133AB001C9D5A /* MTSliderThumbRotateDisabled.png in Resources */,
@@ -6071,6 +6097,7 @@
 				4C6700771BA133AB001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C6700791BA133AB001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C67007A1BA133AB001C9D5A /* UIImageExportTypeCSV.png in Resources */,
+				4C32A4BE1BB07D5A00DD59A3 /* MADBarcodes.entitlements in Resources */,
 				4C67007B1BA133AB001C9D5A /* UIImageExportTypeCSV@2x.png in Resources */,
 				4C67007D1BA133AB001C9D5A /* UIImageExportTypeAppEngine.png in Resources */,
 				4C67007F1BA133AB001C9D5A /* UIImagePatternHomemadePaper.png in Resources */,
@@ -6221,8 +6248,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C32A4C41BB0813400DD59A3 /* AppDelegate.m in Sources */,
 				4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */,
-				4C401EEF1BAE620700BAE5FC /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6329,8 +6356,8 @@
 				4C26B98F1BAF11FA00456DC8 /* MADVibrantTableView.m in Sources */,
 				4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */,
 				4C8DE26D1BAFA98B00AD1111 /* MTResizeHandleView.m in Sources */,
-				4C8DE27F1BAFB04D00AD1111 /* main.m in Sources */,
 				4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */,
+				4C32A4C31BB07FF300DD59A3 /* main.m in Sources */,
 				4C26BA5E1BAF99F000456DC8 /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C8DE2521BAFA92C00AD1111 /* MADNavigationBarFixedSize.m in Sources */,
 				4C4020F41BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
@@ -6469,7 +6496,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C401EF01BAE620800BAE5FC /* AppDelegate.m in Sources */,
 				4C67F9E81BA1043B001C9D5A /* MAD.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6478,7 +6504,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C401EF11BAE620800BAE5FC /* AppDelegate.m in Sources */,
 				4C67FC351BA1183D001C9D5A /* MAD.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6487,7 +6512,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C401EF21BAE620900BAE5FC /* AppDelegate.m in Sources */,
+				4C32A4C01BB07D6300DD59A3 /* main.m in Sources */,
+				4C32A4BB1BB07BF300DD59A3 /* MADBarcodesAppDelegate.m in Sources */,
 				4C67FE841BA133AB001C9D5A /* MAD.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6543,7 +6569,7 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "MADStack/MADViewer/SupportingFiles/MADViewer-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MAD_VIEWER=1",
 					"MAD_DESIGNER=0",
@@ -6594,7 +6620,7 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "MADStack/MADViewer/SupportingFiles/MADViewer-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MAD_VIEWER=1",
 					"MAD_DESIGNER=0",
@@ -6958,7 +6984,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MADStack/MADBarcodes/SupportingFiles/MADBarcodes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -6970,7 +6996,7 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "MADStack/MADBarcodes/SupportingFiles/MADBarcodes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
 					"$(inherited)",
 					"SRC_ROOT=\"$(SRCROOT)\"",
@@ -7017,7 +7043,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MADStack/MADBarcodes/SupportingFiles/MADBarcodes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -7028,7 +7054,7 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "MADStack/MADBarcodes/SupportingFiles/MADBarcodes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
 					"$(inherited)",
 					"SRC_ROOT=\"$(SRCROOT)\"",
