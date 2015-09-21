@@ -3407,7 +3407,6 @@
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
 				4C8BE8651BAD45CD00F6E3F7 /* Designer */,
 				4C8BE8671BAD469400F6E3F7 /* Viewer */,
-				4C8BE8691BAD46C300F6E3F7 /* Query */,
 				4CDB624B14E38C8400A5389E /* Categories */,
 				4C00818414B738E9003DF437 /* Model */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
@@ -4450,13 +4449,6 @@
 				4C8BE86B1BAD48E700F6E3F7 /* Resources */,
 			);
 			name = Viewer;
-			sourceTree = "<group>";
-		};
-		4C8BE8691BAD46C300F6E3F7 /* Query */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Query;
 			sourceTree = "<group>";
 		};
 		4C8BE86A1BAD476200F6E3F7 /* Code */ = {
