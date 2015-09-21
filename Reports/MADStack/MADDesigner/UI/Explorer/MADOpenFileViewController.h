@@ -16,7 +16,16 @@
 #import <MAD/MADocument.h>
 #import <MADFoundation/NSURL+Document.h>
 
+@protocol MADOpenFileViewControllerDelegate <NSObject>
+
+- (void)didOpenDocument:(MADocument *)document;
+
+@end
+
 @interface MADOpenFileViewController : MADFileExplorerViewController
+
+@property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
+@property (readonly) MADocument *openDocument;
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;
@@ -27,6 +36,7 @@
 
 - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
 - (void)getUserCloudPrefs;
+- (void)reenable;
 
 @end
 

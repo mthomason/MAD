@@ -34,23 +34,16 @@
 
 #import "MADNavigationController.h"
 #import "MADNavigationBarTitleView.h"
-#import "MADDocumentInformationTableViewController.h"
 
 #import "MADProgressView.h"
 
 #import "UITabBarController+Shared.h"
 #import "UINavigationController+Designer.h"
-#import "MADDocumentInformationTableViewController+Designer.h"
-#import "UITableViewController+Designer.h"
 
 #import "MADStoreViewController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADocumentProtocol.h"
 
-
-NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
-NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
-NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
@@ -62,18 +55,15 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
-        UIPopoverControllerDelegate,
-        UIPopoverPresentationControllerDelegate,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
         UIDocumentInteractionControllerDelegate,
         UIDocumentPickerDelegate,
         UITextFieldDelegate,
+        UIPopoverControllerDelegate,
         MADFileExplorerDelegate,
         MADFileLocationManagerDelegate,
-        MTViewControllerProtocol,
-        MTDocumentCellProtocol,
-        MTViewControllerProtocol>
+        MTDocumentCellProtocol>
 
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
 
@@ -82,7 +72,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
 @property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
-@property (nonatomic, strong)           UIBarButtonItem *barButtonItemLicensing;
 @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformation;
@@ -91,18 +80,9 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
 @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
 
-@property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
-@property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
-@property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
-
 @property (nonatomic, strong) MADNavigationController *aboutNavigationController;
 
-@property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
-@property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
-
-@property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
-@property (atomic, assign) BOOL aboutViewControllerOnScreen;
 
 @property (nonatomic, strong) MADSearchBar *searchBar;
 @property (readonly) UILabel *titleView;
@@ -260,12 +240,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - UIViewController
 
-- (void)awakeFromNib {
-    self.shouldShowAddDocumentPopover = YES;
-    [self.barButtonItemAddNewDocument setEnabled:YES];
-    [super awakeFromNib];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -273,7 +247,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     [self addObservers];
     
-    self.aboutViewControllerOnScreen = NO;
     self.updatingEnabled = YES;
     self.cloudActivityRunning = NO;
     self.cloudActivityRunningDisplay = NO;
@@ -310,17 +283,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [searchBar sizeToFit];
     self.searchBar = searchBar;
 
-    NSString *store = NSLocalizedString(@"Store", @"Store");
-    UIBarButtonItem *barButtonItemLicensing = [[UIBarButtonItem alloc] initWithTitle:store style:UIBarButtonItemStylePlain target:self action:@selector(handleBarButtonItemStore:)];
-    barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
     NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
     [toolbarButtons removeObject:self.barButtonItemAction];
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
     [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
-    [toolbarButtons addObject:barButtonItemLicensing];
-    
-    self.barButtonItemLicensing = barButtonItemLicensing;
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
@@ -347,7 +314,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     }
     
     self.pendingLaunchContext = nil;
-    self.aboutViewControllerOnScreen = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -371,59 +337,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     // Configure the view controller with the launch context.
     [self configureViewControllerWithLaunchContext:launchContext];
-}
-
-#pragma mark - UIStateRestoring
-
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super decodeRestorableStateWithCoder:coder];
-}
-
-- (void)applicationFinishedRestoringState {
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
-
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
-        [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
-    }
-}
-
-#pragma mark - Exit
-
-- (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
-    
-    NSString *actionIdentifier = [action identifier];
-    if ([actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        [self closeDocument:self.traitCollection completion:^(BOOL success) {
-            [self reenable];
-        }];
-    }
-    self.shouldShowAddDocumentPopover = YES;
-    self.barButtonItemAddNewDocument.enabled = YES;
-    
-    if ([[MADAppConfiguration mainInstance] isMadViewer] && self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer] && self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-    
-    } else {
-        [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    }
-}
-
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
-    return action == @selector(unwindToOpenDocumentViewController:);
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
-    
-    return action == @selector(unwindToOpenDocumentViewController:) ?
-            self :
-            [super viewControllerForUnwindSegueAction: action
-                                   fromViewController: fromViewController
-                                           withSender: sender];
 }
 
 #pragma mark - NSNotificationCenter
@@ -469,140 +382,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     return UIStatusBarStyleLightContent;
 }
 
-#pragma mark - Segues
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [super prepareForSegue:segue sender:sender];
-    
-    [self dismissAllPopovers];
-    
-    if ([segue.identifier isEqualToString:MTSegueLicensing]) {
-        [self prepareForSegueLicensing:segue];
-        
-    }
-}
-
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    
-    BOOL shouldPerformSegueWithIdentifier = YES;
-    if ([identifier isEqualToString:MTSegueShowAddDocument]) {
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
-            self.shouldShowAddDocumentPopover = NO;
-            self.barButtonItemAddNewDocument.enabled = NO;
-        }
-    } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
-        shouldPerformSegueWithIdentifier = !self.isEditing;
-    }
-    return shouldPerformSegueWithIdentifier;
-}
-
-- (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = segue.destinationViewController;
-        id tvc = navControl.topViewController;
-        [tvc setDelegate: self];
-    }
-    [segue.destinationViewController setDelegate: self];
-    
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = segue.destinationViewController;
-        if (navControl.topViewController) {
-            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                self.licensingPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
-            }
-        }
-    }
-}
-
-- (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
-    MADViewerController *viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
-    viewControllerReportViewer.viewControllerDelegate = self;
-}
-
-- (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] ||
-        [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
-        
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
-            tabBarController.view.tintColor = [UIColor tintColorRed];
-            
-            UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-            MADQueryBuilderSplitViewController *queryBuilderContainerController = (MADQueryBuilderSplitViewController *)[navController topViewController];
-            queryBuilderContainerController.viewControllerDelegate = self;
-            
-            UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
-            reportDesignerViewController.delegate = self;
-            
-            UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
-            reportViewerViewController.viewControllerDelegate = self ;
-            
-        } else {
-            
-            UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
-            tabBarController.view.tintColor = [UIColor greenColor];
-            [UITabBar appearance].tintColor = [UIColor redColor];
-            
-            UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-
-            MADQueryBuilderSplitViewController *queryBuilderContainerController = (MADQueryBuilderSplitViewController *)navController.topViewController;
-            queryBuilderContainerController.viewControllerDelegate = self;
-            
-            UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
-            reportDesignerViewController.delegate = self;
-            
-            UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
-            reportViewerViewController.viewControllerDelegate = self;
-
-        }
-        
-    } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderSplitViewController class]]) {
-        
-    } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
-        MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
-        [queryBuilderViewController reloadMainDocumentAnimated:YES];
-    }
-}
-
-#pragma mark - UIPopoverControllerDelegate
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return [self.openDocumentPopoverController isEqual:popoverController] == NO;
-}
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    self.shouldShowAddDocumentPopover = YES;
-    [self.barButtonItemAddNewDocument setEnabled:YES];
-}
-
-#pragma mark - UIAdaptivePresentationControllerDelegate
-
-- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
-    UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
-    if ([controller isEqual:self.aboutPopoverPresentationController] || [controller isEqual:self.infoPopoverPresentationController] ||
-        [controller isEqual:self.documentInformationPopoverPresentationController]) {
-        style = UIModalPresentationNone;
-    }
-    return style;
-}
-
-#pragma mark - UIPopoverPresentationControllerDelegate
-
-- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController { }
-
-- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController { return YES; }
-
-- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
-    self.aboutViewControllerOnScreen = NO;
-}
-
-- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view { }
-
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -623,38 +402,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
     return self.navigationController;
-}
-
-#pragma mark - Delegates
-
-- (void)finishCloseDocument:(MADOpenFileViewController *)sender {
-    [sender reenable];
-    [UIView performWithoutAnimation:^{
-        [sender.collectionView.backgroundView setNeedsDisplay];
-        [sender.collectionView reloadItemsAtIndexPaths:sender.collectionView.indexPathsForVisibleItems];
-    }];
-}
-
-- (void)viewControllerDidFinish:(id)sender {
-    self.shouldShowAddDocumentPopover = YES;
-
-    __weak MADOpenFileViewController *weakself = self;
-    [self closeDocument:self.traitCollection completion:^(BOOL success) {
-        [weakself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:weakself waitUntilDone:NO];
-    }];
-
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    self.shouldShowAddDocumentPopover = YES;
-    self.barButtonItemAddNewDocument.enabled = YES;
-    [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-}
-
-- (void)viewControllerDidCancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    self.shouldShowAddDocumentPopover = YES;
-    [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
 #pragma mark - Static functions
@@ -723,44 +470,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)handleFileOpenCompletion:(id)sender {
     self.reportState = MTReportStateOpen;
-    
-    if ([[MADAppConfiguration mainInstance] isMadViewer]) {
-        
-        [self.openDocument activeDocumentModel];
-        [self performSegueWithIdentifier: MTSegueOpenInViewer sender: self];
-        
-    } else if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
-        
-        [self.openDocument activeDocumentModel];
-        
-        // MARK: Reporting feature (number of results in main query)
-        self.openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-        [self showMainViewController:self];
-    }
-}
-
-- (void)showMainViewController:(id)sender {
-    UITabBarController *tabBarController = [UITabBarController mainTabBarController];
-    NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
-    ((id <MADocumentProtocol>)tabBarController).document = self.openDocument;
-
-    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    
-    UINavigationController *navController = (UINavigationController *)tabBarController.viewControllers[0];
-    UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
-    UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
-    
-    __weak MADQueryBuilderSplitViewController * queryBuilderViewController = (MADQueryBuilderSplitViewController *)navController.topViewController;
-    queryBuilderViewController.viewControllerDelegate = self;
-    
-    __weak MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
-    reportDesignerViewController.delegate = self;
-    
-    __weak MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
-    reportViewerViewController.viewControllerDelegate = self ;
-    
-    [self presentViewController:tabBarController animated:YES completion:nil];
+    [self.openDocument activeDocumentModel];
+    self.openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    [self.openFileDelegate didOpenDocument:self.openDocument];
+    //[self showMainViewController:self];
 }
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
@@ -801,29 +514,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (UILabel *)titleView {
     return (UILabel *)self.navigationItem.titleView;
-}
-
-- (BOOL)dismissAllPopovers {
-
-    BOOL result = NO;
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-
-        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
-        if (self.openDocumentPopoverController != nil)
-            [allpopovers addObject:self.openDocumentPopoverController];
-        if (self.licensingPopoverController != nil)
-            [allpopovers addObject:self.licensingPopoverController];
-        
-        for (UIPopoverController *popoverController in allpopovers) {
-            if ([popoverController isPopoverVisible]) {
-                [popoverController dismissPopoverAnimated:YES];
-                result = YES;
-            }
-        }
-
-    }
-    return result;
-
 }
 
 - (void)reenable {
@@ -1010,21 +700,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Actions
 
-- (IBAction)addDocument:(id)sender {
-    UINavigationController *navControl = [UINavigationController NewDocument];
-    navControl.modalPresentationStyle = UIModalPresentationFormSheet;
-    
-    MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
-    vc.delegate = self;
-    vc.saveFileDelegate = self;
-    self.definesPresentationContext = YES;
-    self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    
-    UIPresentationController *pc = navControl.presentationController;
-    pc.presentedView.backgroundColor = [UIColor whiteColor];
-    [self showViewController:navControl sender:self];
-}
-
 - (IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.barButtonItemAddNewDocument setEnabled:YES];
@@ -1092,8 +767,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self setEditing:startEdit animated:YES];
     
     if (startEdit) {
-
-        self.barButtonItemLicensing.enabled = NO;
+        
+        //self.barButtonItemLicensing.enabled = NO;
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
@@ -1109,7 +784,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)done:(id)sender {
     self.editing = NO;
-    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
+    //self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     self.barButtonItemAddNewDocument.enabled = YES;
     self.barButtonItemAbout.enabled = YES;
     self.barButtonItemInformation.enabled = YES;
@@ -1157,51 +832,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self.collectionView reloadData];
 }
 
-- (IBAction)info:(id)sender {
-    
-    UINavigationController *infoViewController = [UINavigationController AppInformation];
-    UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
-    ppc.backgroundColor = [UIColor clearColor];
-    ppc.delegate = self;
-    ppc.barButtonItem = sender;
-    self.infoPopoverPresentationController = ppc;
-    [self showViewController:infoViewController sender:self];
-    
-}
-
-- (IBAction)about:(id)sender {
-    
-    if (self.aboutViewControllerOnScreen) {
-        self.aboutViewControllerOnScreen = NO;
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    } else {
-        self.aboutViewControllerOnScreen = YES;
-
-        UITableViewController *aboutViewController = [UITableViewController About];
-        UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
-        ppc.backgroundColor = [UIColor clearColor];
-        ppc.delegate = self;
-        ppc.barButtonItem = sender;
-        self.aboutPopoverPresentationController = ppc;
-        [self showViewController:aboutViewController sender:self];
-        
-    }
-}
-
-- (void)handleBarButtonItemStore:(id)sender {
-    
-    UINavigationController *licensing = [UINavigationController Licensing];
-    licensing.modalPresentationStyle = UIModalPresentationFormSheet;
-    licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
-    [self showViewController:licensing sender:self];    
-    
-}
-
 - (IBAction)activity:(id)sender {
     
     NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0];
@@ -1244,30 +874,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     } else {
         [self presentViewController:activityViewController animated:YES completion:^{ }];
     }
-}
-
-- (IBAction)documentInformation:(id)sender {
-    MADMetaData *metadata = nil;
-    NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
-    NSIndexPath *indexPath;
-    NSMutableArray *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
-    for (indexPath in selectedItems) {
-        metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
-        [metadataItems addObject:metadata];
-    }
-    
-    MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformation];
-    documentInformation.modalPresentationStyle = UIModalPresentationPopover;
-    UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
-    ppc.backgroundColor = [UIColor clearColor];
-    ppc.delegate = self;
-    ppc.barButtonItem = sender;
-    self.documentInformationPopoverPresentationController = ppc;
-    
-    documentInformation.metadataItems = metadataItems;
-    [self showViewController:documentInformation sender:self];
-    [self done:sender];
 }
 
 - (IBAction)delete:(id)sender {
@@ -1504,6 +1110,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(actionDuplicate:)];
     }
     return _barButtonItemDuplicate;
+}
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return YES;
 }
 
 @end

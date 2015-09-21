@@ -7,8 +7,10 @@
 //
 
 #import <MADExplorer/MADExplorer.h>
+#import <StoreKit/StoreKit.h>
 #import "MADOpenFileViewController.h"
 
 @interface MADDesignerFileExplorerViewController : MADOpenFileViewController
+    <MADOpenFileViewControllerDelegate>
 
 @end

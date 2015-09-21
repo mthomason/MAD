@@ -173,6 +173,11 @@
                                 <action selector="about:" destination="RNf-Mn-Gwm" id="foC-Hk-h5w"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem title="Store" id="JzB-Jd-m01">
+                            <connections>
+                                <action selector="store:" destination="RNf-Mn-Gwm" id="zwd-Fz-j7N"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="R7M-aS-znj"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Designer" id="2wQ-Oa-qQW">
@@ -189,6 +194,7 @@
                         <outlet property="barButtonItemCloudDown" destination="OMr-Ce-L5Y" id="0K6-f4-vF1"/>
                         <outlet property="barButtonItemInformation" destination="6Un-o8-5Jw" id="iWn-wf-dmt"/>
                         <outlet property="barButtonItemInformationDocument" destination="rW5-Le-DOq" id="Wiq-wO-NZY"/>
+                        <outlet property="barButtonItemLicensing" destination="JzB-Jd-m01" id="sRs-Yo-Zko"/>
                         <outlet property="barButtonItemTrash" destination="wuY-ge-Gue" id="WOn-hf-VLR"/>
                     </connections>
                 </collectionViewController>
