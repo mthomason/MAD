@@ -12,7 +12,6 @@
 
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MADVibrantTableViewCellImage.h"
-#import "MTConnectionViewController.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"

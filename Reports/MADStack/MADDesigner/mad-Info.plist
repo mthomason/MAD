@@ -47,15 +47,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.245</string>
+	<string>8.0.249</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.245</string>
+	<string>8.0.249</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADRev</key>
-	<string>2187</string>
+	<string>2191</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 EVERYDAY APPS LLC.  All rights reserved.</string>
 	<key>NSUbiquitousContainers</key>
