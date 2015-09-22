@@ -15,6 +15,11 @@
 
 NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
+#define degreesToRadians(x) (M_PI * (x) / 180.0)
+const CGFloat MTAnimationRotateDeg = 1.0000f;
+#define degreesToRadians(x) (M_PI * (x) / 180.0)
+#define kAnimationRotateDeg 1.0
+
 @interface MTCollectionViewCellDocument ()
 
 @property (nonatomic, strong) UIColor *bgColor;
@@ -26,6 +31,8 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @property (nonatomic, strong) UIMotionEffectGroup *hoverEffects;
+
+@property (nonatomic, assign) BOOL wobbling;
 
 @end
 
@@ -103,6 +110,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self = [super initWithCoder:aDecoder];
     if (self) {
         
+        self.wobbling = NO;
         UIColor *colorTextNormal = [UIColor tintColorBlue];
         UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
         self.bgColor = bgColor;
@@ -272,6 +280,37 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.labelTitle.textColor = self.colorTextNormal;
         self.tapGestureRecognizer.enabled = YES;
     }
+}
+
+- (void)startWobble {
+    if (self.wobbling == NO) {
+        self.wobbling = YES;
+        NSInteger randomInt = arc4random_uniform(500);
+        float r = (randomInt/500.0)+0.5;
+        CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+        CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
+        
+        [self.layer setAnchorPoint:CGPointMake(0.5, 0.5)];
+        [UIView animateWithDuration:0.1 animations:^{
+            self.transform = leftWobble;
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1
+                                  delay:0
+                                options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionBeginFromCurrentState
+                             animations:^{
+                                 [UIView setAnimationRepeatCount:CGFLOAT_MAX];
+                                 self.transform = rightWobble;
+                             }
+                             completion:nil];
+        }];
+    }
+    
+}
+
+- (void)stopWobble {
+    self.wobbling = NO;
+    [self.layer removeAllAnimations];
+    self.transform = CGAffineTransformIdentity;
 }
 
 @end

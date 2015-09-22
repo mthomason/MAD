@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
-@interface MADOpenFileSectionHeaderView : UICollectionReusableView
-
 typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
     MACloudManagerSectionLocal = 0,
     MACloudManagerSectionCloud = 1,
 };
+
+@interface MADOpenFileSectionHeaderView : UICollectionReusableView
 
 @property (nonatomic, assign) MACloudManagerSection sectionType;
 

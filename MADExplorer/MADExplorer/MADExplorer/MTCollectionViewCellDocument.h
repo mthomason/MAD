@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MTDocumentCellProtocol.h"
 
 @class MTCollectionViewCellDocument;
@@ -45,6 +44,9 @@
 - (void)setText:(NSString *)text;
 
 - (void)updateFont;
+
+- (void)startWobble;
+- (void)stopWobble;
 
 @end
 

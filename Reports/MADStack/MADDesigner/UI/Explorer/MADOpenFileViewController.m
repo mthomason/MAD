@@ -25,7 +25,7 @@
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
-NSString * const MADUtiPublicData                               = @"public.data";
+//NSString * const MADUtiPublicData                               = @"public.data";
 
 
 CGFloat const MADSectionHeaderHeight                            = 32.0000f;
@@ -333,8 +333,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.collectionView.backgroundView setNeedsLayout];
         [self.collectionView.backgroundView setNeedsDisplay];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-    }];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) { }];
 
 }
 
@@ -455,6 +454,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             }
         }
     } else {
+        [cell stopWobble];
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
         [cell.activityIndicator startAnimating];
         [self.collectionView setUserInteractionEnabled: NO];
@@ -735,8 +735,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
-
-        [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+        
+        for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+            [cell startWobble];
+        }
         [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
         
     } else {
@@ -759,7 +761,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.collectionView.allowsMultipleSelection = NO;
     
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
-    [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+    for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
+        [self.collectionView deselectItemAtIndexPath:path animated:YES];
+    }
+    for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+        [cell stopWobble];
+        [cell normalizeTint];
+    }
+
 }
 
 - (IBAction)download:(id)sender {

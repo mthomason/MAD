@@ -48,11 +48,19 @@ static inline CGRect rectCellLabel() {
 
 #pragma mark - UICollectionViewDelegate
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(nonnull MTCollectionViewCellDocument *)cell forItemAtIndexPath:(nonnull NSIndexPath *)indexPath { }
+
 - (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
     return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(MTCollectionViewCellDocument *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*if ([self.delegate isFileViewEditing]) {
+        [cell startWobble];
+    } else {
+        [cell stopWobble];
+    }*/
+}
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
 
@@ -164,11 +172,6 @@ static inline CGRect rectCellLabel() {
     self.testLabel.contentScaleFactor = contentScaleFactor;
     [self.testLabel sizeToFit];
     return self.testLabel.frame.size.height;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(MTCollectionViewCellDocument *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-
-
 }
 
 @end
