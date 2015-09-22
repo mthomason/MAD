@@ -11,24 +11,29 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import <MAD/MADConstants.h>
+#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 #import <MADExplorer/MADFileExplorerViewController.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
-#import <MAD/MADConstants.h>
-#import <MAD/MADocument.h>
+#import <MADDataStructures/MTPair.h>
 #import <MADFoundation/NSURL+Document.h>
 
 @protocol MADOpenFileViewControllerDelegate <NSObject>
 
-- (void)didOpenDocument:(MADocument *)document;
+- (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
+- (UIManagedDocument *)documentForURL:(NSURL *)url;
+- (void)didOpenDocument:(UIManagedDocument *)document;
+- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
+- (NSArray *)supportedUTIs;
 
 @end
 
 @interface MADOpenFileViewController : MADFileExplorerViewController
 
 @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
-@property (readonly) MADocument *openDocument;
+@property (readonly) UIManagedDocument *openDocument;
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;

@@ -11,35 +11,20 @@
 #endif
 
 #import "MADOpenFileViewController.h"
-
-#import "MADViewerController.h"
+#import "MADOpenFileSectionHeaderView.h"
+#import "MADSearchBar.h"
+#import "MADNavigationBarTitleView.h"
 
 #import "MADAppConfiguration.h"
-
-#import "MADSearchBar.h"
-
-#import "MADOpenFileSectionHeaderView.h"
-
-#import "MADQueryBuilderSplitViewController.h"
-
 #import "MADBarButtonItem.h"
-
-#import "MADNavigationController.h"
-#import "MADNavigationBarTitleView.h"
 
 #import "MADProgressView.h"
 
-#import "UITabBarController+Shared.h"
-#import "UINavigationController+Designer.h"
-
-#import "MADStoreViewController.h"
-#import "MTStoreKitController+Features.h"
 #import "MADocumentProtocol.h"
 
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
-NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUtiPublicData                               = @"public.data";
 
 
@@ -72,8 +57,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemCloudDown;
 @property (nonatomic, strong)           UIBarButtonItem *barButtonItemDuplicate;
 
-@property (nonatomic, strong) MADNavigationController *aboutNavigationController;
-
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
 @property (nonatomic, strong) MADSearchBar *searchBar;
@@ -98,7 +81,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
-- (MADocument *)openDocument;
+- (UIManagedDocument *)openDocument;
 
 @end
 
@@ -140,12 +123,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - Helper functions
 
 - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion {
-    MADocument *activeDocument = self.openDocument;
-    [activeDocument regenThumbnailWithTraits:traitCollectionForThumbnail];
-    if (activeDocument && activeDocument.documentState != UIDocumentStateClosed) {
+    if (self.openDocument && self.openDocument.documentState != UIDocumentStateClosed) {
         self.reportState = MTReportStateClosed;
         [self.fileManager removeDocumentWithUrl:self.fileManager.openUrl];
-        [activeDocument closeWithCompletionHandler:^(BOOL success) {
+        [self.openDocument closeWithCompletionHandler:^(BOOL success) {
             completion(success);
         }];
     }
@@ -443,27 +424,18 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - UICollectionViewDelegate
 
 - (void)openFileWithUrl:(NSURL *)url {
-    MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    self.fileManager.openDocument = document;
-    
-    __weak MADOpenFileViewController *weakself = self;
-    [document openWithCompletionHandler:^(BOOL success) {
-        
+    [self.openFileDelegate openDocumentAtURL:url completionHandler:^(BOOL success, UIManagedDocument *document) {
         if (success) {
-            [weakself performSelectorOnMainThread:@selector(handleFileOpenCompletion:) withObject:self waitUntilDone:YES];
+            self.fileManager.openDocument = document;
+            [self performSelectorOnMainThread:@selector(handleFileOpenCompletion:) withObject:self waitUntilDone:NO];
         }
-        
-        [weakself reenable];
-        
+        [self reenable];
     }];
 }
 
 - (void)handleFileOpenCompletion:(id)sender {
     self.reportState = MTReportStateOpen;
-    [self.openDocument activeDocumentModel];
-    self.openDocument.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
     [self.openFileDelegate didOpenDocument:self.openDocument];
-    //[self showMainViewController:self];
 }
 
 #pragma mark - MADCollectionViewLayoutFilesDelegate
@@ -519,7 +491,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             
             MTCollectionViewCellDocument *visibleCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+            NSURL *url = [UIDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image) {
@@ -791,7 +763,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (IBAction)download:(id)sender {
-    NSArray *documentTypes = @[MADUtiType];
+    NSArray *documentTypes = [self.openFileDelegate supportedUTIs];
     UIDocumentPickerViewController *vc = [[UIDocumentPickerViewController alloc] initWithDocumentTypes: documentTypes
                                                                                                 inMode: UIDocumentPickerModeImport];
     vc.delegate = self;
@@ -918,7 +890,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
             if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
                 if (metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
-                    UIDocument *doc = [[MADocument alloc] initWithFileURL:metaData.URL];
+                    
+                    UIDocument *doc = [self.openFileDelegate documentForURL:metaData.URL];
                     [doc openWithCompletionHandler:^(BOOL success) {
                         if (success) {
                             [doc closeWithCompletionHandler:^(BOOL success) {
@@ -928,6 +901,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                             }];
                         }
                     }];
+                    
                 } else {
                     [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                 }
@@ -957,9 +931,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
         MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
-        
-        MADocument *documentReport = [[MADocument alloc] initWithFileURL:metadata.URL];
-        
+        UIManagedDocument *documentReport = [self.openFileDelegate documentForURL:metadata.URL];
         if (documentReport.documentState != UIDocumentStateClosed) {
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
@@ -968,13 +940,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             }];
         } else {
             
+            NSString *mimeType = [self.openFileDelegate mimeTypeForDocumentUTI:documentReport.fileType];
             NSString *messageStringStart = NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
                                                              @"The attached document can be opened with MAD Viewer.");
             NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
             [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
             MFMailComposeViewController	*mailComposer = [MFMailComposeViewController body: messageBody
                                                                                attachment: metadata.URL
-                                                                                 mimeType: MADMimeType
+                                                                                 mimeType: mimeType
                                                                        userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
             mailComposer.mailComposeDelegate = self;
             [self showViewController:mailComposer sender:self];
@@ -983,12 +956,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateBegan) {
-        
+
+    if (sender.state == UIGestureRecognizerStateBegan) {
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
-        if (self.isEditing == NO) {
-            [self edit:self];
-        }
+        if (self.isEditing == NO) [self edit:self];
+        
         [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         [self selectionsUpdated];
     }

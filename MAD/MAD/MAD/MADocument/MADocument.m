@@ -265,6 +265,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 
 - (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
+    [self regenThumbnail];
     __weak MADocument *weakself = self;
     [super closeWithCompletionHandler:^(BOOL success) {
         if (success) {
@@ -940,36 +941,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return self.thumbnailURL.path.lastPathComponent;
 }
 
-+ (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
-    NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension;
-    NSString *fileName = [handle stringByAppendingString:@"1024"];
-    fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
-    
-    NSString *fileNameId = [self filenameId:handle.hash];
-    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
-    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
-    
-}
-
-+ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
-    NSString *name = [UIDevice isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
-    
-    NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
-    
-    NSString *fileNameId = [self filenameId:handle.hash];
-    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
-    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
-}
-
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    return [MADocument thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
-                            andRetinaDisplay: [UIDevice isRetnaDisplay]];
-}
-
-+ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
-    return [self thumbnailUrlForMadUrl:madUrl];
-}
-
 // FIXME: Only ever called when creating of report failes
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
@@ -999,7 +970,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                          andMessage: message];
 }
 
-- (void)regenThumbnailWithTraits:(UITraitCollection *)traits {
+- (void)regenThumbnail {
     [[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path];
     BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned == YES || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.thumbnailURL.path] == NO) {
@@ -1140,10 +1111,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark File Name
 
-+ (NSString *)filenameId:(NSUInteger)tag {
-    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-}
-
 - (void)removeGuts {
     NSArray *propertyKeys = @[NSURLIsDirectoryKey];
     NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts
@@ -1177,6 +1144,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
     return madUrl.lastPathComponent.stringByDeletingPathExtension;
+}
+
+- (NSString *)mimetype {
+    return MADMimeType;
 }
 
 @end

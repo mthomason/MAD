@@ -38,4 +38,28 @@ NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
     return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
 }
 
++ (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
+    return madUrl.lastPathComponent.stringByDeletingPathExtension;
+}
+
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
+    NSString *filenameId = [self filenameId:filename.hash];
+    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
+}
+
++ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
+    return [self thumbnailUrlForMadUrl:madUrl];
+}
+
++ (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
+    NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension;
+    NSString *fileName = [handle stringByAppendingString:@"1024"];
+    fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
+    
+    NSString *fileNameId = [self filenameId:handle.hash];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
+    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
+    
+}
+
 @end

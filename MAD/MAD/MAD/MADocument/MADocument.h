@@ -74,7 +74,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
                status:(void (^)(NSString *status, CGFloat progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 
-- (void)regenThumbnailWithTraits:(UITraitCollection *)traits;
+- (void)regenThumbnail;
 
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
@@ -82,10 +82,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 - (NSURL *)cachedDataUrl;
 - (UIImage *)fullyRenderedThumbnail;
-
-+ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
-+ (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
 
 - (void)initalizeMainQuery:(RptqDocument *)document;
 - (void)prepareForQuery;
@@ -101,6 +97,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (NSDictionary *)layoutHeightsBySectionKey;
 
 - (void)removeGuts; //Cleans any cache that may exist.
+
+- (NSString *)mimetype;
 
 @end
 

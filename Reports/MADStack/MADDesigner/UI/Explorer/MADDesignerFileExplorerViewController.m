@@ -13,6 +13,8 @@
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
+#import "MTStoreKitController.h"
+#import "MTStoreKitController+Features.h"
 #import "MADStoreViewController.h"
 
 #import "MADDocumentInformationTableViewController.h"
@@ -27,6 +29,8 @@
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
+
+NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 
 @interface MADDesignerFileExplorerViewController ()
     <UIPopoverControllerDelegate,
@@ -241,10 +245,16 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     }];
 }
 
+#pragma mark - MADOpenFileViewControllerDelegate
+
 - (void)didOpenDocument:(MADocument *)document {
+    
+    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+
+    
     UITabBarController *tabBarController = [UITabBarController mainTabBarController];
     NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
-    ((id <MADocumentProtocol>)tabBarController).document = self.openDocument;
+    ((id <MADocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
     
     tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -263,6 +273,38 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     reportViewerViewController.viewControllerDelegate = self ;
     
     [self presentViewController:tabBarController animated:YES completion:nil];
+}
+
+- (UIManagedDocument *)documentForURL:(NSURL *)url {
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    return document;
+}
+
+- (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler {
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    
+    __weak MADOpenFileViewController *weakself = self;
+    [document openWithCompletionHandler:^(BOOL success) {
+        
+        if (success) [document activeDocumentModel];
+        handler(success, document);
+        
+        [weakself reenable];
+        
+    }];
+}
+
+- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType {
+    if ([documentType isEqualToString:MADUtiType]) {
+        return MADMimeType;
+    } else {
+        NSAssert(false, @"Unknown type at %s", __PRETTY_FUNCTION__);
+        return MADMimeType;
+    }
+}
+
+- (NSArray *)supportedUTIs {
+    return @[MADUtiType];
 }
 
 #pragma mark - Actions
