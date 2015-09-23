@@ -7,6 +7,8 @@
 //
 
 #import "MADDesignerFileExplorerViewController.h"
+//#import "MADocumentProtocol.h"
+#import "MADAppConfiguration.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADViewerController.h"
@@ -24,6 +26,7 @@
 #import "UITabBarController+Shared.h"
 #import "UITableViewController+Designer.h"
 
+#import "MADNavigationBarTitleView.h"
 #import "MADWatermarkView.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
@@ -35,7 +38,8 @@ NSString * const MADUtiType                                     = @"com.everyday
 @interface MADDesignerFileExplorerViewController ()
     <UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
-        MTViewControllerProtocol>
+        MTViewControllerProtocol,
+        MADFileLocationManagerDelegate>
 
 @property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 @property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
@@ -53,6 +57,37 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 @implementation MADDesignerFileExplorerViewController
 
+#pragma mark - MADFileLocationManagerDelegate
+
+- (NSString *)groupIdentifier {     return MADIdentifierGroup; }
+- (NSString *)ubiquityIdentifier {  return MADUbiquityIdentifier; }
+- (NSString *)fileExtention {       return MADFileExtentionMobleApplicationDocument; }
+
+- (void)didConfigureFilesController:(MADFilesController *)filesController {
+    filesController.delegate = self;
+}
+
+- (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
+                                          cloud:(void (^)())handlerCloud {
+    UIAlertController *alert = [UIAlertController promotStorageOptionLocal:handlerLocal cloud:handlerCloud];
+    return alert;
+}
+
+- (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
+    UIAlertController *alert = [UIAlertController promotCloudSignOut:handler];
+    return alert;
+}
+
+- (void)startLongRunningActivity {
+    
+}
+
+- (void)completedLongRunningActivity {
+    
+}
+
+#pragma mark -
+
 - (void)awakeFromNib {
     [self.barButtonItemAddNewDocument setEnabled:YES];
     [super awakeFromNib];
@@ -60,6 +95,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+        self.filesCoordnator.delegate = self;
         self.shouldShowAddDocumentPopover = YES;
     }
     return self;
@@ -67,11 +103,17 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.openFileDelegate = self;
-    self.aboutViewControllerOnScreen = NO;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [[MADAppConfiguration mainInstance] applicationName];
+    self.navigationItem.titleView = titleView;
+    self.navigationItem.hidesBackButton = YES;
     
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
     self.collectionView.backgroundView = watermarkView;
+
+    self.openFileDelegate = self;
+    self.aboutViewControllerOnScreen = NO;
 
     self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 

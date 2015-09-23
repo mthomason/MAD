@@ -13,14 +13,9 @@
 #import "MADOpenFileViewController.h"
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
-#import "MADNavigationBarTitleView.h"
-
-#import "MADAppConfiguration.h"
 #import "MADBarButtonItem.h"
 
 #import "MADProgressView.h"
-
-#import "MADocumentProtocol.h"
 
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
@@ -39,7 +34,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         UITextFieldDelegate,
         UIPopoverControllerDelegate,
         MADFileExplorerDelegate,
-        MADFileLocationManagerDelegate,
         MTDocumentCellProtocol>
 
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible) BOOL rightBarButtonItemActivityIndicatorVisible;
@@ -81,8 +75,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 @property (nonatomic, assign) BOOL getUserCloudPrefsFirstCall;
 
-- (UIManagedDocument *)openDocument;
-
 @end
 
 @implementation MADOpenFileViewController
@@ -90,35 +82,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
-
-#pragma mark - MADFileManagerLocationDelegate
-
-- (NSString *)groupIdentifier {     return MADIdentifierGroup; }
-- (NSString *)ubiquityIdentifier {  return MADUbiquityIdentifier; }
-- (NSString *)fileExtention {       return MADFileExtentionMobleApplicationDocument; }
-
-- (void)didConfigureFilesController:(MADFilesController *)filesController {
-    filesController.delegate = self;
-}
-
-- (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
-                                          cloud:(void (^)())handlerCloud {
-    UIAlertController *alert = [UIAlertController promotStorageOptionLocal:handlerLocal cloud:handlerCloud];
-    return alert;
-}
-
-- (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
-    UIAlertController *alert = [UIAlertController promotCloudSignOut:handler];
-    return alert;
-}
-
-- (void)startLongRunningActivity {
-    
-}
-
-- (void)completedLongRunningActivity {
-    
-}
 
 #pragma mark - Helper functions
 
@@ -130,10 +93,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             completion(success);
         }];
     }
-}
-
-- (MADocument *)openDocument {
-    return (MADocument *)[super openDocument];
 }
 
 #pragma mark - Static Functions
@@ -170,8 +129,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-
-        self.filesCoordnator.delegate = self;
 
         self.getUserCloudPrefsFirstCall = YES;
         
@@ -238,12 +195,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
     
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
-    
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [[MADAppConfiguration mainInstance] applicationName];
-    self.navigationItem.titleView = titleView;
-    self.navigationItem.hidesBackButton = YES;
-    
+        
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                                            action: @selector(handleDidTapCollectionView:)];
     tapGestureRecognizer.delegate = self;

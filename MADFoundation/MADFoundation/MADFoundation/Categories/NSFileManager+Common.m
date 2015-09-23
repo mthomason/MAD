@@ -56,7 +56,7 @@ NSString * const MADPathComponentData       = @"Data";
 - (NSURL *)localDirectoryForGroupIdentifier:(NSString *)groupIdentifier
                               pathComponent:(NSString *)pathComponent
                         alternativeSelector:(SEL)alternativeSelector {
-    
+    NSAssert(groupIdentifier != nil, @"Need a group identifier... %s", __PRETTY_FUNCTION__);
     NSError *error;
     NSURL *groupUrl = [self containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
     NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil for %@.  Maybe the fucking entitlment file is missing?!?!", groupIdentifier);

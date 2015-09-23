@@ -21,14 +21,10 @@
     if (self = [super initWithFrame:frame]) {
         self.arrowOffsetHolder = 50.0000f;
         self.arrowDirectionHolder = UIPopoverArrowDirectionAny;
-        //self.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.2000f];
-        //self.layer.backgroundColor = [UIColor clearColor].CGColor;
         self.layer.shadowColor = [UIColor clearColor].CGColor;
         self.layer.shadowOffset = CGSizeZero;
         self.layer.shadowRadius = CGSizeZero.width;
-        //self.layer.borderColor = [UIColor greenColor].CGColor;
         self.opaque = NO;
-        
     }
     return self;
 }

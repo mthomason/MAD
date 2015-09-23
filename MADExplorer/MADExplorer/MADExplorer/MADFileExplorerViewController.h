@@ -38,6 +38,6 @@
     @property (nonatomic, assign) MTReportState reportState;
 
     - (NSString *)subtitleForMetadata:(MADMetaData *)metadata;
-    - (UIManagedDocument *)openDocument;
+    @property (readonly) UIManagedDocument *openDocument;
 
 @end

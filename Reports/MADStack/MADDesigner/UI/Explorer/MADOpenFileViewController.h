@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import <MAD/MADConstants.h>
 #import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 #import <MADExplorer/MADFileExplorerViewController.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
@@ -22,8 +21,8 @@
 
 @protocol MADOpenFileViewControllerDelegate <NSObject>
 
-- (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
 - (UIManagedDocument *)documentForURL:(NSURL *)url;
+- (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
 - (void)didOpenDocument:(UIManagedDocument *)document;
 - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
 - (NSArray *)supportedUTIs;

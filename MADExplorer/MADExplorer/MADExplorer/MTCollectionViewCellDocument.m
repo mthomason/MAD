@@ -39,8 +39,8 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 @implementation MTCollectionViewCellDocument
 
 + (dispatch_queue_t)queue {
-    static dispatch_queue_t queue;
     
+    static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         queue = dispatch_queue_create("com.everydayapps.mad.cell.image", DISPATCH_QUEUE_SERIAL);
