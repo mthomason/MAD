@@ -279,7 +279,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         self.statusLabelZoomScale = detailDisplay;
         
         MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [[MADAppConfiguration  mainInstance] madDesigner];
+        titleView.text = [MADDesignerViewController MADDesigner];
         self.navigationItem.titleView = titleView;
         
     }
@@ -313,7 +313,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark - UIViewController
 
 - (NSString *)title {
-    return NSLocalizedString(@"MAD Designer", "MAD Designer");
+    return [MADDesignerViewController MADDesigner];
+}
+
++ (NSString *)MADDesigner {
+    NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
+    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
 }
 
 - (void)awakeFromNib {

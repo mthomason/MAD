@@ -15,6 +15,7 @@
 #import "MTVerificationController.h"
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import <MADFoundation/MADAppDelegate.h>
 
 @interface MTLicensingViewController ()
 
@@ -65,13 +66,13 @@
     [[self activityIndicator2] stopAnimating];
     
     [self enableUserInterface];
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+    if ([UIApplication isMADDesigner]) {
         [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
         [self.buttonBuyNowDesignerOneYear setEnabled:success];
         [self.buttonBuyNowDesignerOneYear setHidden:NO];
         [self.buttonBuyNowDesignerOneMonth setEnabled:success];
         [self.buttonBuyNowDesignerOneMonth setHidden:NO];
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+    } else if ([UIApplication isMADViewer]) {
         [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
         [self.buttonBuyNowViewerOneYear setEnabled:success];
         [self.buttonBuyNowViewerOneYear setHidden:NO];
@@ -122,13 +123,13 @@
         [[self activityIndicator2] stopAnimating];
         
         BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
-        if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+        if ([UIApplication isMADDesigner]) {
             [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:allowPurchase];
             [self.buttonBuyNowDesignerOneYear setHidden:!allowPurchase];
             [self.buttonBuyNowDesignerOneMonth setEnabled:allowPurchase];
             [self.buttonBuyNowDesignerOneMonth setHidden:!allowPurchase];
-        } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+        } else if ([UIApplication isMADViewer]) {
             [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
             [self.buttonBuyNowViewerOneMonth setEnabled:allowPurchase];
             [self.buttonBuyNowViewerOneMonth setHidden:!allowPurchase];
@@ -145,28 +146,24 @@
             [obj setHidden: NO];
         }];
         
-        if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+        if ([UIApplication isMADDesigner]) {
             [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:NO];
             [self.buttonBuyNowDesignerOneMonth setEnabled:NO];
-            //[self.buttonBuyNowDesignerOneYear setHidden:YES];
-            //[self.buttonBuyNowDesignerOneMonth setHidden:YES];
-        } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+        } else if ([UIApplication isMADViewer]) {
             [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
             [self.buttonBuyNowViewerOneYear setEnabled:NO];
             [self.buttonBuyNowViewerOneMonth setEnabled:NO];
-            //[self.buttonBuyNowViewerOneYear setHidden:YES];
-            //[self.buttonBuyNowViewerOneMonth setHidden:YES];
         }
         
         [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
         [[self activityIndicator2] startAnimating];
         
         NSArray *productIds;
-        if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+        if ([UIApplication isMADDesigner]) {
             productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionMonth1,
                            MTStoreKitProductIdentifierDesignerSubscriptionYear1];
-        } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+        } else if ([UIApplication isMADViewer]) {
             productIds = @[MTStoreKitProductIdentifierViewerSubscriptionMonth1,
                            MTStoreKitProductIdentifierViewerSubscriptionYear1];
         } else {
@@ -205,10 +202,10 @@
     };
     [self setStandardCompletion:completion];
 
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+    if ([UIApplication isMADDesigner]) {
         self.buttonBuyNowDesignerOneYear.layer.cornerRadius = 6.6666f;
         self.buttonBuyNowDesignerOneMonth.layer.cornerRadius = 6.6666f;
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+    } else if ([UIApplication isMADViewer]) {
         self.buttonBuyNowViewerOneYear.layer.cornerRadius = 6.6666f;
         self.buttonBuyNowViewerOneMonth.layer.cornerRadius = 6.6666f;
     }
@@ -217,11 +214,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+    if ([UIApplication isMADDesigner]) {
         //[self viewBuyButtonsBackground].backgroundColor = YES ? [UIColor whiteColor] : [UIColor lightGrayColor];
         self.buttonBuyNowDesignerOneYear.enabled = NO;
         self.buttonBuyNowDesignerOneMonth.enabled = NO;
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+    } else if ([UIApplication isMADViewer]) {
         //[self viewBuyButtonsBackground].backgroundColor = YES ? [UIColor whiteColor] : [UIColor lightGrayColor];
         self.buttonBuyNowViewerOneYear.enabled = NO;
         self.buttonBuyNowViewerOneMonth.enabled = NO;
@@ -254,12 +251,12 @@
 }
 
 - (void)disableUserInterface {
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+    if ([UIApplication isMADDesigner]) {
         [self.buttonBuyNowDesignerOneYear setEnabled:NO];
         [self.buttonBuyNowDesignerOneMonth setEnabled:NO];
         [self.buttonBuyNowDesignerOneYear setHidden:YES];
         [self.buttonBuyNowDesignerOneMonth setHidden:YES];
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+    } else if ([UIApplication isMADViewer]) {
         [self.buttonBuyNowViewerOneYear setEnabled:NO];
         [self.buttonBuyNowViewerOneMonth setEnabled:NO];
         [self.buttonBuyNowViewerOneYear setHidden:YES];
@@ -271,12 +268,12 @@
 }
 
 - (void)enableUserInterface {
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+    if ([UIApplication isMADDesigner]) {
         [self.buttonBuyNowDesignerOneYear setEnabled:YES];
         [self.buttonBuyNowDesignerOneMonth setEnabled:YES];
         [self.buttonBuyNowDesignerOneYear setHidden:NO];
         [self.buttonBuyNowDesignerOneMonth setHidden:NO];
-    } else if ([[MADAppConfiguration mainInstance] isMadViewer]) {
+    } else if ([UIApplication isMADViewer]) {
         [self.buttonBuyNowViewerOneYear setEnabled:YES];
         [self.buttonBuyNowViewerOneMonth setEnabled:YES];
         [self.buttonBuyNowViewerOneYear setHidden:NO];

@@ -82,8 +82,39 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (NSString *)name {
-    return [[MADAppConfiguration mainInstance] applicationName];
+    NSString *trademark = [self trademark];
+    NSString *appName = [self applicationNameSufixPart];
+    NSString *name = [NSString stringWithFormat:@"%@ %@", trademark, appName];
+    return name;
 }
+
+- (NSString *)localizedName {
+    NSString *trademark = [self trademark];
+    NSString *appName = [self localizedApplicationNameSufixPart];
+    NSString *name = [NSString stringWithFormat:@"%@ %@", trademark, appName];
+    return name;
+}
+
+- (NSString *)applicationIdentifier {
+    return @"666001433";
+}
+
+- (NSString *)applicationBundleIdentifier {
+    return @"com.everydayapps.mad.designer";
+}
+
+- (NSString *)trademark {
+    return @"MAD";
+}
+
+- (NSString *)applicationNameSufixPart {
+    return @"Designer";
+}
+
+- (NSString *)localizedApplicationNameSufixPart {
+    return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
+}
+
 
 /*static const unsigned char keyEncryption[] = {
     0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,

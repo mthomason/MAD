@@ -46,8 +46,14 @@
 }
 
 - (NSString *)title {
-    return NSLocalizedString(@"MAD Query", "MAD Query");
+    return [MADQueryBuilderSplitViewController MADQuery];
 }
+
++ (NSString *)MADQuery {
+    NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
+    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
+}
+
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
@@ -94,7 +100,7 @@
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [[MADAppConfiguration mainInstance] madQuery];
+    titleView.text = self.title;
     self.navigationItem.titleView = titleView;
     
     self.navigationItem.prompt = self.document.fileURL.lastPathComponent;

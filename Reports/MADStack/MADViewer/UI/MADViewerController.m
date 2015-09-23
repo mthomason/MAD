@@ -231,7 +231,12 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 #pragma mark - UIViewController Standard Callbacks
 
 - (NSString *)title {
-    return NSLocalizedString(@"MAD Viewer", "MAD Viewer");
+    return [MADViewerController MADViewer];
+}
+
++ (NSString *)MADViewer {
+    NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
+    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
 }
 
 - (void)viewDidLoad {
@@ -243,7 +248,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
 
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [[MADAppConfiguration mainInstance] madViewer];
+    titleView.text = self.title;
     self.navigationItem.titleView = titleView;
     
     _timerLabelTimeSinceRefreh = nil;

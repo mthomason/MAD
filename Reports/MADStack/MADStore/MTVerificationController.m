@@ -15,6 +15,8 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MADAppConfiguration.h"
 
+#import <MADFoundation/MADAppDelegate.h>
+
 @interface MTVerificationController() <SKRequestDelegate>
 
 @property (copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
@@ -67,8 +69,9 @@ static MTVerificationController *sharedSingleton;
 
 - (void)reloadReceipt {
     MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
-    self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: [[MADAppConfiguration mainInstance] bundleId]
-                                                     bundleVersion: [[MADAppConfiguration mainInstance] bundleVersion]
+    NSString *bundleID = [[UIApplication AppDelegate] applicationBundleIdentifier];
+    self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: bundleID
+                                                     bundleVersion: MTGlobalBundleVersion
                                                        andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
     if (self.modernReceiptIsValid) {
         self.receipt = receipt;
@@ -79,8 +82,9 @@ static MTVerificationController *sharedSingleton;
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
     if ([[NSFileManager defaultManager] fileExistsAtPath:receiptUrl.path]) {
         MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
-        BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: [[MADAppConfiguration mainInstance] bundleId]
-                                                   bundleVersion: [[MADAppConfiguration mainInstance] bundleVersion]
+        NSString *bundleID = [[UIApplication AppDelegate] applicationBundleIdentifier];
+        BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: bundleID
+                                                   bundleVersion: MTGlobalBundleVersion
                                                      andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
         if ((self.modernReceiptIsValid = isValidReceipt)) {
             self.receipt = receipt;

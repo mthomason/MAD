@@ -41,7 +41,7 @@ extern NSString * const MADUpgradeInstalledSamples;
 @property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
 @property (nonatomic, strong, readonly) NSUserDefaults *applicationUserDefaults;
 
-+ (MADAppConfiguration *)mainInstance;
+//+ (MADAppConfiguration *)mainInstance;
 - (void)registerDefaultsFromSettingsBundle;
 
 - (BOOL)sampleInstalled;
@@ -56,7 +56,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 - (NSString *)bundleVersion;
 
 - (NSString *)madDesigner;
-- (NSString *)madViewer;
 - (NSString *)madQuery;
 
 - (BOOL)isFirstLaunch;

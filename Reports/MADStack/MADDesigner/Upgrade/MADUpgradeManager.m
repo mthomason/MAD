@@ -8,6 +8,7 @@
 
 #import "MADUpgradeManager.h"
 #import "MADAppConfiguration.h"
+#import "MADOperationInstallSampleDatabase.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 
@@ -41,7 +42,7 @@ const NSInteger currentMajorVersion = 8;
         installChinook = NO;
     }
     
-    if ([[MADAppConfiguration mainInstance] isMadDesigner]) {
+    if ([UIApplication isMADDesigner]) {
         NSNumber *samplesInstalled = [standardUserDefault objectForKey:MADUpgradeInstalledSamples];
         if (samplesInstalled == nil) {
             installSamples = YES;
@@ -80,85 +81,13 @@ const NSInteger currentMajorVersion = 8;
  *      Move documents to group folder.
  */
 - (void)migrateDocumentToGroupFolder {
-    NSError *error = nil;
-    [MADUpgradeManager installSampleDatabase:&error];
+    NSOperationQueue *opqueue = [[NSOperationQueue alloc] init];
+    opqueue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
+    [opqueue addOperation:sampleDatabase];
+    
     MADAppDelegate delegate = [UIApplication AppDelegate];
     [MADFileUtilities copyInitialFiles:MADFileExtentionMobleApplicationDocument groupId:[delegate groupIdentifier]];
-}
-
-+ (BOOL)installSampleDatabase:(NSError **)error {
-    BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
-    if (installed == NO) {
-
-        NSURL *fileUrl = [MADAppConfiguration applicationBundleSampleDatabaseChinook];
-        NSURL *chinookAppSupportUrl = [MADAppConfiguration applicationSupportSampleDatabaseChinook];
-        NSFileManager *defaultManager = [NSFileManager defaultManager];
-        
-        if (chinookAppSupportUrl != nil) {
-            [defaultManager copyItemAtURL:fileUrl toURL:chinookAppSupportUrl error:error];
-            installed = [defaultManager fileExistsAtPath:[chinookAppSupportUrl path]];
-            if (installed) {
-                NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-                [standardUserDefaults setBool:YES forKey:MADUpgradeInstalledChinook];
-                [standardUserDefaults synchronize];
-            }
-        }
-
-    }
-    return installed;
-}
-
-+ (BOOL)installSamplesDocuments:(NSError **)error {
-    /*
-    BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledSamples];
-    if (installed == NO) {
-
-        NSBundle *mainBundle = [NSBundle mainBundle];
-        NSURL *sampleUrl1 = [mainBundle URLForResource: MADIdentifierFileLondon
-                                         withExtension: MADFileExtentionMobleApplicationDocument];
-        NSURL *sampleUrl2 = [mainBundle URLForResource: MADIdentifierFileMusic
-                                         withExtension: MADFileExtentionMobleApplicationDocument];
-        
-        NSFileManager *defaultManager = [NSFileManager defaultManager];
-        NSURL *documentDirectory = [defaultManager localDocumentsDirectoryForGroupIdentifier:MADIdentifierGroup];
-        
-        if (documentDirectory) {
-            NSURL *londonUrl = [documentDirectory URLByAppendingPathComponent: MADIdentifierFileLondon
-                                                                  isDirectory: NO];
-            londonUrl = [londonUrl URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-            NSURL *musicUrl = [documentDirectory URLByAppendingPathComponent: MADIdentifierFileMusic
-                                                                 isDirectory: NO];
-            musicUrl = [musicUrl URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-            error = nil;
-
-            [defaultManager copyItemAtURL:sampleUrl1 toURL:londonUrl error:error];
-            if (error == nil) {
-                [defaultManager copyItemAtURL:sampleUrl2 toURL:musicUrl error:error];
-            }
-            if (error == nil) {
-                installed = YES;
-                NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-                [standardUserDefaults setBool:YES forKey:MADUpgradeInstalledSamples];
-                [standardUserDefaults synchronize];
-            }
-        }
-    }
-    return installed;*/
-    return YES;
-}
-
-+ (void)installSamples {
-    if ([[MADAppConfiguration mainInstance] sampleInstalled] == NO) {
-        dispatch_queue_t queue = dispatch_queue_create(queueUpgrade, DISPATCH_QUEUE_SERIAL);
-        dispatch_async(queue, ^{
-            NSError *error = nil;
-            BOOL installedDocs = [MADUpgradeManager installSamplesDocuments:&error];
-            BOOL installedDB = [MADUpgradeManager installSampleDatabase:&error];
-            if (installedDocs && installedDB) {
-                [[MADAppConfiguration mainInstance] installedSample];
-            }
-        });
-    }
 }
 
 @end

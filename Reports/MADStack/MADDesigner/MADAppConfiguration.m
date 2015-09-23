@@ -45,9 +45,6 @@ NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppCo
 NSString * const MADIDUser                                          = @"MADIDUser";
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 
-NSString * const MTApplicationIdMadDesigner                         = @"666001433";
-NSString * const MTApplicationIdMadViewer                           = @"666003759";
-
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
@@ -121,11 +118,11 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
                             NSLocalizedString(@"Viewer", @"Viewer");
 }
 
-- (NSString *)applicationId {
+/*- (NSString *)applicationId {
     return [self isMadDesigner] ?
                             MTApplicationIdMadDesigner :
                             MTApplicationIdMadViewer;
-}
+}*/
 
 - (NSString *)bundleDisplayName {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];;
@@ -140,12 +137,6 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 - (NSString *)madDesigner {
     NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
-    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
-}
-
-- (NSString *)madViewer {
-    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
-    NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 

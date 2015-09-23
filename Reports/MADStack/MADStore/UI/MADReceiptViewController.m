@@ -17,6 +17,7 @@
 #import "NSDateFormatter+RFC_3339.h"
 #import "MADAppConfiguration.h"
 #import "UIColor+PaperPatterns.h"
+#import <MADFoundation/MADAppDelegate.h>
 
 @interface MADReceiptViewController ()
 
@@ -62,7 +63,7 @@
         if (indexPath.item == 0) {
             static NSString *reuseID = @"MADIdentifierReceiptApplicationDetails";
             cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
-            ((MADTableViewCellReceiptApplication *)cell).product.text = [[MADAppConfiguration mainInstance] applicationName];
+            ((MADTableViewCellReceiptApplication *)cell).product.text = [[UIApplication AppDelegate] name];
             ((MADTableViewCellReceiptApplication *)cell).version.text = [MTVerificationController sharedInstance].receipt.version;
         } else if (indexPath.item == 1) {
             
