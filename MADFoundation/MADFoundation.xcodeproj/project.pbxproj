@@ -15,8 +15,6 @@
 		4C9372BC1BACFDB200D6BD62 /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372BA1BACFDB200D6BD62 /* MTDataTable.m */; settings = {ASSET_TAGS = (); }; };
 		4C9372C91BACFEDA00D6BD62 /* MADAggregateGroupByType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372C51BACFEDA00D6BD62 /* MADAggregateGroupByType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372CA1BACFEDA00D6BD62 /* MTAggregateFunctionType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372C61BACFEDA00D6BD62 /* MTAggregateFunctionType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C9372CB1BACFEDA00D6BD62 /* MADDataProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372C71BACFEDA00D6BD62 /* MADDataProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C9372CC1BACFEDA00D6BD62 /* MTCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372C81BACFEDA00D6BD62 /* MTCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372CF1BACFF0F00D6BD62 /* MTDataColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372CD1BACFF0F00D6BD62 /* MTDataColumn.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372D01BACFF0F00D6BD62 /* MTDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372CE1BACFF0F00D6BD62 /* MTDataColumn.m */; settings = {ASSET_TAGS = (); }; };
 		4C9372E91BAD209400D6BD62 /* MTDataType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372E71BAD209400D6BD62 /* MTDataType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +25,9 @@
 		4C9372F41BAD215B00D6BD62 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372EE1BAD215B00D6BD62 /* NSFileManager+Common.m */; settings = {ASSET_TAGS = (); }; };
 		4C9372F51BAD215B00D6BD62 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372EF1BAD215B00D6BD62 /* NSURL+Document.m */; settings = {ASSET_TAGS = (); }; };
 		4C9372F61BAD215B00D6BD62 /* NSURL+Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +52,6 @@
 		4C9372BA1BACFDB200D6BD62 /* MTDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTable.m; sourceTree = "<group>"; };
 		4C9372C51BACFEDA00D6BD62 /* MADAggregateGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAggregateGroupByType.h; sourceTree = "<group>"; };
 		4C9372C61BACFEDA00D6BD62 /* MTAggregateFunctionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionType.h; sourceTree = "<group>"; };
-		4C9372C71BACFEDA00D6BD62 /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
-		4C9372C81BACFEDA00D6BD62 /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCacheProtocol.h; sourceTree = "<group>"; };
 		4C9372CD1BACFF0F00D6BD62 /* MTDataColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataColumn.h; sourceTree = "<group>"; };
 		4C9372CE1BACFF0F00D6BD62 /* MTDataColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataColumn.m; sourceTree = "<group>"; };
 		4C9372E71BAD209400D6BD62 /* MTDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataType.h; sourceTree = "<group>"; };
@@ -63,6 +62,9 @@
 		4C9372EE1BAD215B00D6BD62 /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+Common.m"; path = "Categories/NSFileManager+Common.m"; sourceTree = "<group>"; };
 		4C9372EF1BAD215B00D6BD62 /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+Document.m"; path = "Categories/NSURL+Document.m"; sourceTree = "<group>"; };
 		4C9372F01BAD215B00D6BD62 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+Document.h"; path = "Categories/NSURL+Document.h"; sourceTree = "<group>"; };
+		4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADApplicationProtocol.h; sourceTree = "<group>"; };
+		4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
+		4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCacheProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,21 +128,12 @@
 		4C9372B81BACFDB200D6BD62 /* MADFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				4CF09A3C1BB23FA8007BCF7A /* Protocols */,
 				4C9372E21BAD0E5C00D6BD62 /* Categories */,
 				4C9372E11BAD0E4C00D6BD62 /* DataTable */,
 				4C9372E01BAD0E3500D6BD62 /* Types */,
-				4C9372DF1BAD0E2800D6BD62 /* Protocols */,
 			);
 			path = MADFoundation;
-			sourceTree = "<group>";
-		};
-		4C9372DF1BAD0E2800D6BD62 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				4C9372C71BACFEDA00D6BD62 /* MADDataProtocol.h */,
-				4C9372C81BACFEDA00D6BD62 /* MTCacheProtocol.h */,
-			);
-			name = Protocols;
 			sourceTree = "<group>";
 		};
 		4C9372E01BAD0E3500D6BD62 /* Types */ = {
@@ -186,6 +179,16 @@
 			name = Resouces;
 			sourceTree = "<group>";
 		};
+		4CF09A3C1BB23FA8007BCF7A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */,
+				4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */,
+				4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -195,14 +198,15 @@
 			files = (
 				4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */,
 				4C9372BB1BACFDB200D6BD62 /* MTDataTable.h in Headers */,
-				4C9372CC1BACFEDA00D6BD62 /* MTCacheProtocol.h in Headers */,
 				4C9372C91BACFEDA00D6BD62 /* MADAggregateGroupByType.h in Headers */,
-				4C9372CB1BACFEDA00D6BD62 /* MADDataProtocol.h in Headers */,
 				4C9372F31BAD215B00D6BD62 /* NSFileManager+Common.h in Headers */,
 				4C9372F61BAD215B00D6BD62 /* NSURL+Document.h in Headers */,
 				4C9372CA1BACFEDA00D6BD62 /* MTAggregateFunctionType.h in Headers */,
+				4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */,
 				4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */,
 				4C9372E91BAD209400D6BD62 /* MTDataType.h in Headers */,
+				4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */,
+				4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */,
 				4C9372CF1BACFF0F00D6BD62 /* MTDataColumn.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -490,6 +494,7 @@
 				4C9372B01BACFC9200D6BD62 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C9372B11BACFC9200D6BD62 /* Build configuration list for PBXNativeTarget "MADFoundationTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +503,7 @@
 				4C9372B31BACFC9200D6BD62 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

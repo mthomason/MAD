@@ -12,17 +12,12 @@
 
 #import "MADAppConfiguration.h"
 
-#if MAD_DESIGNER || MADWATCHKIT
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
-#elif MAD_VIEWER
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
-#endif
-
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 #import <MessageUI/MessageUI.h>
 #import <MAD/MADConstants.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 
 #if MAD_DESIGNER
     #import "UIViewController+Designer.h"
@@ -56,9 +51,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.265";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.265";
-NSString * const MTGlobalBundleRev                                  = @"2207";
+NSString * const MTGlobalBundleVersion                              = @"8.0.266";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.266";
+NSString * const MTGlobalBundleRev                                  = @"2208";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -242,16 +237,17 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 }
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:[delegate groupIdentifier]];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 #pragma mark - Property Overrides
 
-- (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
-}
+//- (NSString *)ubiquityIdentifier {
+//    return MADUbiquityIdentifier;
+//}
 
 - (BOOL)isCloudAvailable {
     return [MADFilesController isCloudAvailable];

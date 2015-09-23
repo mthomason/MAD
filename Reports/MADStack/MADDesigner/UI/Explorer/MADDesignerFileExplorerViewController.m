@@ -7,16 +7,16 @@
 //
 
 #import "MADDesignerFileExplorerViewController.h"
-//#import "MADocumentProtocol.h"
-#import "MADAppConfiguration.h"
+
+#import "MTStoreKitController.h"
+#import "MTStoreKitController+Features.h"
+#import <MADFoundation/MADApplicationProtocol.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
-#import "MTStoreKitController.h"
-#import "MTStoreKitController+Features.h"
 #import "MADStoreViewController.h"
 
 #import "MADDocumentInformationTableViewController.h"
@@ -41,10 +41,11 @@ NSString * const MADUtiType                                     = @"com.everyday
         MTViewControllerProtocol,
         MADFileLocationManagerDelegate>
 
-@property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 @property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
 @property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonItemLicensing;
+
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
+@property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 
 @property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
 @property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
@@ -59,8 +60,16 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 #pragma mark - MADFileLocationManagerDelegate
 
-- (NSString *)groupIdentifier {     return MADIdentifierGroup; }
-- (NSString *)ubiquityIdentifier {  return MADUbiquityIdentifier; }
+- (NSString *)groupIdentifier {
+    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    return [delegate groupIdentifier];
+}
+
+- (NSString *)ubiquityIdentifier {
+    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    return [delegate ubiquityIdentifier];
+}
+
 - (NSString *)fileExtention {       return MADFileExtentionMobleApplicationDocument; }
 
 - (void)didConfigureFilesController:(MADFilesController *)filesController {
@@ -105,7 +114,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    titleView.text = [[MADAppConfiguration mainInstance] applicationName];
+    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    titleView.text = [delegate name];
     self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;
     

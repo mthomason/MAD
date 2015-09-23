@@ -8,6 +8,7 @@
 
 #import "MADUpgradeManager.h"
 #import "MADAppConfiguration.h"
+#import <MADFoundation/MADApplicationProtocol.h>
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 
@@ -80,7 +81,8 @@ const NSInteger currentMajorVersion = 8;
 - (void)migrateDocumentToGroupFolder {
     NSError *error = nil;
     [MADUpgradeManager installSampleDatabase:&error];
-    [MADFileUtilities copyInitialFiles:MADFileExtentionMobleApplicationDocument groupId:MADIdentifierGroup];
+    id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    [MADFileUtilities copyInitialFiles:MADFileExtentionMobleApplicationDocument groupId:[appDelegate groupIdentifier]];
 }
 
 + (BOOL)installSampleDatabase:(NSError **)error {

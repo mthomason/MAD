@@ -43,6 +43,14 @@ NSString * const MADIdentifierFileMusic             = @"Music";
 NSString *s = @"";
 #endif
 
+#if MAD_DESIGNER || MADWATCHKIT
+NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
+#elif MAD_VIEWER
+NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
+#endif
+
+NSString * const MADIdentifierGroup                                 = @"group.everydayapps.mad";
+
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 const NSInteger MADTagAlertViewNewDocument = 3838;
@@ -62,6 +70,20 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @end
 
 @implementation AppDelegate
+
+#pragma mark - MADApplicationProtocol
+
+- (NSString *)ubiquityIdentifier {
+    return MADUbiquityIdentifier;
+}
+
+- (NSString *)groupIdentifier {
+    return MADIdentifierGroup;
+}
+
+- (NSString *)name {
+    return [[MADAppConfiguration mainInstance] applicationName];
+}
 
 /*static const unsigned char keyEncryption[] = {
     0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,

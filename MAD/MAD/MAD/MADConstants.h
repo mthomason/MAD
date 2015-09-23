@@ -11,7 +11,6 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const MADIdentifierGroup;
 extern NSString * const MADFileExtentionMobleApplicationDocumentArchive;
 extern NSString * const MADFileExtentionMobleApplicationDocument;
 extern NSString * const MADTrademark;

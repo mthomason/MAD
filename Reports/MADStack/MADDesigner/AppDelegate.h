@@ -14,11 +14,12 @@
 #import <QuickLook/QuickLook.h>
 #import <MAD/MADConstants.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 
 @class MADAppConfiguration;
 
 @interface AppDelegate : UIResponder
-    <UIApplicationDelegate>
+    <UIApplicationDelegate, MADApplicationProtocol>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong, readonly) MADAppConfiguration *appConfiguration;

@@ -21,7 +21,6 @@ extern NSString * const MADUpgradeInstalledSamplesMusic;
 extern NSString * const MADUpgradeInstalledChinook;
 
 extern NSString * const MADUpgradeInstalledChinook;
-extern NSString * const MADUbiquityIdentifier;
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 

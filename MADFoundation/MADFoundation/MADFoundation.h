@@ -14,7 +14,7 @@ FOUNDATION_EXPORT double MADFoundationVersionNumber;
 //! Project version string for MADFoundation.
 FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <MADFoundation/PublicHeader.h>
+#import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
 

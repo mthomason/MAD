@@ -34,6 +34,8 @@
 
 #import "MADOperationArchiveData.h"
 
+#import <MADFoundation/MADApplicationProtocol.h>
+
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
 NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundryLandscapeTop";
@@ -179,11 +181,13 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewDidLoad {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
+
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
 
     [super viewDidLoad];
     
-    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup];
+    id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[appDelegate groupIdentifier]];
     NSString *cacheFileName = [self cacheFileName];
     NSURL *cacheFileUrl = [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
     self.localCacheFileUrl = cacheFileUrl;
