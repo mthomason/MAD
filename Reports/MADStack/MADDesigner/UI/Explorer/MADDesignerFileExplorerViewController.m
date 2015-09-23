@@ -29,6 +29,8 @@
 #import "MADNavigationBarTitleView.h"
 #import "MADWatermarkView.h"
 
+#import <MADFoundation/MADAppDelegate.h>
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
@@ -61,12 +63,12 @@ NSString * const MADUtiType                                     = @"com.everyday
 #pragma mark - MADFileLocationManagerDelegate
 
 - (NSString *)groupIdentifier {
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     return [delegate groupIdentifier];
 }
 
 - (NSString *)ubiquityIdentifier {
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     return [delegate ubiquityIdentifier];
 }
 
@@ -114,7 +116,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     titleView.text = [delegate name];
     self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;

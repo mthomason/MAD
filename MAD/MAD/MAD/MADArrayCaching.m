@@ -7,6 +7,8 @@
 //
 
 #import "MADArrayCaching.h"
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
 #import "MADConstants.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
@@ -198,7 +200,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSURL *)url {
     NSURL *result = nil;
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
                                         [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[delegate groupIdentifier]] :
                                         [self.cachedDelegate cachedFilesDirectory];

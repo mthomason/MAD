@@ -15,7 +15,6 @@
 #import <MADSqlite3/MADSqlite3.h>
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTCacheProtocol.h>
-#import <MADFoundation/MADApplicationProtocol.h>
 
 @interface MADArrayCaching : NSEnumerator
 

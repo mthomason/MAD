@@ -15,6 +15,7 @@ FOUNDATION_EXPORT double MADFoundationVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
 

@@ -18,6 +18,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
 
 #if MAD_DESIGNER
     #import "UIViewController+Designer.h"
@@ -51,9 +52,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.266";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.266";
-NSString * const MTGlobalBundleRev                                  = @"2208";
+NSString * const MTGlobalBundleVersion                              = @"8.0.268";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.268";
+NSString * const MTGlobalBundleRev                                  = @"2210";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -237,7 +238,7 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 }
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:[delegate groupIdentifier]];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];

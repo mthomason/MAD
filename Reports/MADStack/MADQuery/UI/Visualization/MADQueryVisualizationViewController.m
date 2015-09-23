@@ -35,6 +35,7 @@
 #import "MADOperationArchiveData.h"
 
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -186,8 +187,8 @@ typedef void(^MTBlockResultVoid)(void);
 
     [super viewDidLoad];
     
-    id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
-    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[appDelegate groupIdentifier]];
+    MADAppDelegate delegate = [UIApplication AppDelegate];
+    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[delegate groupIdentifier]];
     NSString *cacheFileName = [self cacheFileName];
     NSURL *cacheFileUrl = [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
     self.localCacheFileUrl = cacheFileUrl;

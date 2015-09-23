@@ -73,6 +73,7 @@
 #import "NSManagedObjectID+Extras.h"
 
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -887,7 +888,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     NSURL *url = [self.mainDataTable urlForGroupIdentifier:[delegate groupIdentifier]];
     return [[NSFileManager defaultManager] fileExistsAtPath:url.path];
 }
@@ -922,7 +923,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             
             [self.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
                 
-                id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+                MADAppDelegate delegate = [UIApplication AppDelegate];
                 [weakself.mainDataTable cacheForGroupIdentifier:[delegate groupIdentifier]];
                 weakself.didRefresh = success;
                 
@@ -938,7 +939,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSURL *)cachedDataUrl {
-    id <UIApplicationDelegate, MADApplicationProtocol> delegate = (id <UIApplicationDelegate, MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+    MADAppDelegate delegate = [UIApplication AppDelegate];
     return [self.mainDataTable urlForGroupIdentifier:[delegate groupIdentifier]];
 }
 
