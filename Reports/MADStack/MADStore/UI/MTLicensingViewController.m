@@ -11,10 +11,10 @@
 #endif
 
 #import "MTLicensingViewController.h"
-#import "MADAppConfiguration.h"
 #import "MTVerificationController.h"
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 

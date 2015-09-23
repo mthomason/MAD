@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderAddPredicateViewController.h"
-#import "MADAppConfiguration.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 @implementation MTQueryBuilderAddPredicateViewController

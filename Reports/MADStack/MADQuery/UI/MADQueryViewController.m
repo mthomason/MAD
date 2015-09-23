@@ -16,8 +16,6 @@
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 
-#import "MADAppConfiguration.h"
-
 #import <MAD/MTQuery.h>
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"

@@ -13,8 +13,6 @@
 #include <math.h>
 #import "MADDesignerViewController.h"
 
-#import "MADAppConfiguration.h"
-
 #import "MTRulerView.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADDesignerElementView.h"

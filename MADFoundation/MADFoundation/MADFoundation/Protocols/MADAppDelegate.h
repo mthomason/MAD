@@ -6,7 +6,12 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADFoundation_MADAppDelegate_h
+#define MAD_MADFoundation_MADAppDelegate_h
+
 #import <UIKit/UIKit.h>
 #import "MADApplicationProtocol.h"
 
 typedef id <UIApplicationDelegate, MADApplicationProtocol> MADAppDelegate;
+
+#endif

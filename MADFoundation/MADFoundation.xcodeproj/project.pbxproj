@@ -29,7 +29,6 @@
 		4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3E1BB23FA8007BCF7A /* MADDataProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A421BB23FA8007BCF7A /* MTCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3F1BB23FA8007BCF7A /* MTCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A451BB25EDF007BCF7A /* MADAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A431BB25EDF007BCF7A /* MADAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CF09A461BB25EDF007BCF7A /* MADAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF09A441BB25EDF007BCF7A /* MADAppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4CF09A491BB2791D007BCF7A /* UIApplication+MADAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A471BB2791D007BCF7A /* UIApplication+MADAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A4A1BB2791D007BCF7A /* UIApplication+MADAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF09A481BB2791D007BCF7A /* UIApplication+MADAppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -324,7 +323,6 @@
 				4C9372EA1BAD209400D6BD62 /* MTDataType.m in Sources */,
 				4C9372F21BAD215B00D6BD62 /* NSData+Comparson.m in Sources */,
 				4C9372D01BACFF0F00D6BD62 /* MTDataColumn.m in Sources */,
-				4CF09A461BB25EDF007BCF7A /* MADAppDelegate.m in Sources */,
 				4CF09A4A1BB2791D007BCF7A /* UIApplication+MADAppDelegate.m in Sources */,
 				4C9372F51BAD215B00D6BD62 /* NSURL+Document.m in Sources */,
 				4C9372F41BAD215B00D6BD62 /* NSFileManager+Common.m in Sources */,

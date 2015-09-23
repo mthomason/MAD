@@ -11,7 +11,6 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
-#import "MADAppConfiguration.h"
 #import "MADViewControllerSQL.h"
 
 #import "MTConnectionViewController.h"

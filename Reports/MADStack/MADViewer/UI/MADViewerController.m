@@ -14,7 +14,6 @@
 #import "MADNavigationBarTitleView.h"
 #import "MTReportViewerReportPageView.h"
 
-#import "MADAppConfiguration.h"
 #import "UIApplication+Extras.h"
 #import "MTActivityReportPrintPreview.h"
 #import "MTReportViewerReportPageViewController.h"

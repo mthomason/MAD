@@ -15,8 +15,8 @@
 #import "MADFeatures.h"
 #import "MADFeature.h"
 #import "NSDateFormatter+RFC_3339.h"
-#import "MADAppConfiguration.h"
 #import "UIColor+PaperPatterns.h"
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 

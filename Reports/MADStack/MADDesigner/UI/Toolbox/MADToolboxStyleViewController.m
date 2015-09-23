@@ -11,7 +11,6 @@
 #endif
 
 #import "MADToolboxStyleViewController.h"
-#import "MADAppConfiguration.h"
 #import "MADControlState.h"
 #import "UIViewController+UI.h"
 

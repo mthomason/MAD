@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MADAppConfiguration.h"
 #import "MADNavigationBarTitleView.h"
 
 #pragma mark -

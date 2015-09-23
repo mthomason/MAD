@@ -7,7 +7,6 @@
 //
 
 #import "MADOperationInstallSampleDocument.h"
-#import "MADAppConfiguration.h"
 
 @interface MADOperationInstallSampleDocument ()
 

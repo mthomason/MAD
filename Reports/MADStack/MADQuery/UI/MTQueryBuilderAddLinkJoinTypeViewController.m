@@ -11,7 +11,6 @@
 #endif
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
-#import "MADAppConfiguration.h"
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 

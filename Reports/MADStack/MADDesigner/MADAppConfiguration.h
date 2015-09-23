@@ -35,10 +35,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 
 @interface MADAppConfiguration : NSObject
 
-- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
-             subsquientLaunches:(void (^)(void))subsequentLaunch
-                    everyLaunch:(void (^)(void))everyLaunch;
-
 + (NSURL *)applicationBundleSampleDatabaseChinook;
 + (NSURL *)applicationSupportSampleDatabaseChinook;
 

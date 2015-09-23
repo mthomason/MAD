@@ -7,7 +7,6 @@
 //
 
 #import "MADWatermarkView.h"
-#import "MADAppConfiguration.h"
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 

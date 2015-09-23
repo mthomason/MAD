@@ -38,6 +38,9 @@ NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.ev
 NSString * const MADIdentifierFileLondon                            = @"London";
 NSString * const MADIdentifierFileMusic                             = @"Music";
 NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
+NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
+
+NSString * const MADIDUser                                          = @"MADIDUser";
 
 //#import <MADFeedback/MADFeedbackFrustration.h>
 
@@ -231,8 +234,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     //[self.appConfiguration cleanupBeforeTerminate];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 /*
     NSURL *documentsDirectory = self.appConfiguration.filesController.documentDirectory;
     NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
@@ -359,6 +361,35 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 - (void)installedSample {
     NSUserDefaults *userDefaults = [self applicationUserDefaults];
     [userDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+}
+
+- (NSString *)bundleDisplayName {
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];
+}
+
+
+- (BOOL)isFirstLaunch {
+    NSUserDefaults *userDefaults = [self applicationUserDefaults];
+    BOOL firstLaunch = [userDefaults stringForKey:MADIDUser] == nil;
+    if (firstLaunch) {
+        dispatch_async(self.appDelegateQueueSerial, ^{
+            NSUUID *uuid = [NSUUID UUID];
+            [userDefaults setObject:uuid.UUIDString forKey:MADIDUser];
+            [userDefaults synchronize];
+        });
+    }
+    return firstLaunch;
+}
+
+- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
+             subsquientLaunches:(void (^)(void))subsequentLaunch
+                    everyLaunch:(void (^)(void))everyLaunch {
+    if (self.isFirstLaunch) {
+        firstLaunchHandler();
+    } else {
+        subsequentLaunch();
+    }
+    everyLaunch();
 }
 
 @end

@@ -13,7 +13,6 @@
 #import "MTReportViewerReportPageViewController.h"
 #import "MTReportViewerReportPageView.h"
 #import "NSDate+Extras.h"
-#import "MADAppConfiguration.h"
 
 @interface MTReportViewerReportPageViewController ()
 

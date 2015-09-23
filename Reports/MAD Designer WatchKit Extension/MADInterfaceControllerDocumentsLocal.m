@@ -11,8 +11,6 @@
 #import "UIColor+EverydayApps.h"
 #import "NSFileManager+Common.h"
 
-#import "MADAppConfiguration.h"
-
 @interface MADInterfaceControllerDocumentsLocal()
 
 @property (weak, nonatomic) IBOutlet WKInterfaceGroup *groupMiddle;

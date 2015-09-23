@@ -41,18 +41,13 @@ NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgra
 NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
 NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
 
-NSString * const MADIDUser                                          = @"MADIDUser";
-
-
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.270";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.270";
-NSString * const MTGlobalBundleRev                                  = @"2212";
-
-NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
+NSString * const MTGlobalBundleVersion                              = @"8.0.271";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.271";
+NSString * const MTGlobalBundleRev                                  = @"2213";
 
 const char * MADQueueAppInstance = "com.everydayapps.mad.designer.app";
 
@@ -82,9 +77,9 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
-        NSCAssert([[self bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
+        //NSCAssert([[self bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
         NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
-        NSCAssert([[self bundleId] isEqualToString:MTBundleIdMadDesigner] || [[self bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
+        //NSCAssert([[self bundleId] isEqualToString:MTBundleIdMadDesigner] || [[self bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
         NSCAssert([[self bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
 #endif
@@ -94,74 +89,6 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 }
 
 #pragma mark - App settings
-
-- (NSString *)applicationNamePrefixPartFormat {
-    return @"MAD %@";
-}
-
-- (NSString *)applicationNameSufixPart {
-    return [self isMadDesigner] ?
-                            NSLocalizedString(@"Designer", @"Designer") :
-                            NSLocalizedString(@"Viewer", @"Viewer");
-}
-
-/*- (NSString *)applicationId {
-    return [self isMadDesigner] ?
-                            MTApplicationIdMadDesigner :
-                            MTApplicationIdMadViewer;
-}*/
-
-- (NSString *)bundleDisplayName {
-    return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];;
-}
-
-- (NSString *)applicationName {
-    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
-    NSString *localizedSuffix = [self applicationNameSufixPart];
-    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
-}
-
-- (NSString *)madDesigner {
-    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
-    NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
-    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
-}
-
-- (NSString *)madQuery {
-    NSString *localizedPrefix = [self applicationNamePrefixPartFormat];
-    NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
-    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
-}
-
-- (BOOL)isMadViewer {
-    static BOOL _isMadViewer;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-        _isMadViewer = [bundleId isEqualToString:MTBundleIdMadViewer];
-    });
-    return _isMadViewer;
-}
-
-- (BOOL)isMadDesigner {
-    static BOOL _isMadDesigner;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-        _isMadDesigner = [bundleId isEqualToString:MTBundleIdMadDesigner];
-    });
-    return _isMadDesigner;
-}
-
-- (NSString *)bundleId {
-    static NSString *_bundleId;
-    if ([self isMadDesigner]) {
-        _bundleId = MTBundleIdMadDesigner;
-    } else if ([self isMadViewer]) {
-        _bundleId = MTBundleIdMadViewer;
-    }
-    return _bundleId;
-}
 
 - (NSString *)bundleVersion {
     return MTGlobalBundleVersion;
@@ -224,37 +151,9 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 #pragma mark - Property Overrides
 
-//- (NSString *)ubiquityIdentifier {
-//    return MADUbiquityIdentifier;
-//}
-
 - (BOOL)isCloudAvailable {
     return [MADFilesController isCloudAvailable];
 }
 
-
-- (BOOL)isFirstLaunch {
-    NSUserDefaults *userDefaults = [[UIApplication AppDelegate] applicationUserDefaults];
-    BOOL firstLaunch = [userDefaults stringForKey:MADIDUser] == nil;
-    if (firstLaunch) {
-        dispatch_async(self.appInstaceQueue, ^{
-            NSUUID *uuid = [NSUUID UUID];
-            [userDefaults setObject:uuid.UUIDString forKey:MADIDUser];
-            [userDefaults synchronize];
-        });
-    }
-    return firstLaunch;
-}
-
-- (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
-             subsquientLaunches:(void (^)(void))subsequentLaunch
-                    everyLaunch:(void (^)(void))everyLaunch {
-    if (self.isFirstLaunch) {
-        firstLaunchHandler();
-    } else {
-        subsequentLaunch();
-    }
-    everyLaunch();
-}
 
 @end

@@ -13,7 +13,6 @@
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADNavigationBarTitleView.h"
 
-#import "MADAppConfiguration.h"
 #import "MADQueryViewController.h"
 #import "MADViewControllerSQL.h"
 
