@@ -41,18 +41,16 @@ NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgra
 NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
 NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
 
-NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
-
 NSString * const MADIDUser                                          = @"MADIDUser";
-NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
+
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.269";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.269";
-NSString * const MTGlobalBundleRev                                  = @"2211";
+NSString * const MTGlobalBundleVersion                              = @"8.0.270";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.270";
+NSString * const MTGlobalBundleRev                                  = @"2212";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
@@ -64,7 +62,6 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 @interface MADAppConfiguration ()
 
-@property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 @property (nonatomic, strong) dispatch_queue_t appInstaceQueue;
 
 @end
@@ -81,17 +78,6 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
         
         dispatch_queue_t appInstaceQueue = dispatch_queue_create(MADQueueAppInstance, DISPATCH_QUEUE_SERIAL);
         self.appInstaceQueue = appInstaceQueue;
-        
-        NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
-        NSNumber *defaultSamplesInstalled = @(NO);
-        NSNumber *defaultReportsInstalled = @(NO);
-        NSNumber *defaultChinookInstalled = @(NO);
-        NSDictionary *defaultsToRegister = @{MADUpgradeInstalledChinook: defaultChinookInstalled,
-                                             MADUpgradeInstalledSamples : defaultReportsInstalled,
-                                             MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
-                                             };
-        [defaults registerDefaults:defaultsToRegister];
-        self.applicationUserDefaults = defaults;
         
 #ifndef MADWATCHKIT
         // FIXME: Run these checks on app instance start...
@@ -246,21 +232,15 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
     return [MADFilesController isCloudAvailable];
 }
 
-- (BOOL)sampleInstalled {
-    return [self.applicationUserDefaults boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
-}
-
-- (void)installedSample {
-    [self.applicationUserDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
-}
 
 - (BOOL)isFirstLaunch {
-    BOOL firstLaunch = [self.applicationUserDefaults stringForKey:MADIDUser] == nil;
+    NSUserDefaults *userDefaults = [[UIApplication AppDelegate] applicationUserDefaults];
+    BOOL firstLaunch = [userDefaults stringForKey:MADIDUser] == nil;
     if (firstLaunch) {
         dispatch_async(self.appInstaceQueue, ^{
             NSUUID *uuid = [NSUUID UUID];
-            [self.applicationUserDefaults setObject:uuid.UUIDString forKey:MADIDUser];
-            [self.applicationUserDefaults synchronize];
+            [userDefaults setObject:uuid.UUIDString forKey:MADIDUser];
+            [userDefaults synchronize];
         });
     }
     return firstLaunch;

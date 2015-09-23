@@ -19,6 +19,7 @@
 - (NSString *)trademark;
 - (NSString *)applicationNameSufixPart;
 - (NSString *)localizedApplicationNameSufixPart;
+- (NSUserDefaults *)applicationUserDefaults;
 
 @end
 

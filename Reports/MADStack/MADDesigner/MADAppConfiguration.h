@@ -13,6 +13,7 @@
 #import <MADFileManager/MADFileManager.h>
 
 @class MADFilesController, UITraitCollection, UIViewController;
+
 @protocol MADFileCoordinator;
 
 extern NSString * const MADUpgradeInstalledSamples;
@@ -37,28 +38,6 @@ extern NSString * const MADUpgradeInstalledSamples;
 - (void)runHandlerOnFirstLaunch:(void (^)(void))firstLaunchHandler
              subsquientLaunches:(void (^)(void))subsequentLaunch
                     everyLaunch:(void (^)(void))everyLaunch;
-
-@property (nonatomic, readonly, getter=isCloudAvailable) BOOL cloudAvailable;
-@property (nonatomic, strong, readonly) NSUserDefaults *applicationUserDefaults;
-
-//+ (MADAppConfiguration *)mainInstance;
-- (void)registerDefaultsFromSettingsBundle;
-
-- (BOOL)sampleInstalled;
-- (void)installedSample;
-
-- (NSString *)applicationName;
-- (NSString *)applicationNameSufixPart;
-
-- (BOOL)isMadViewer;
-- (BOOL)isMadDesigner;
-- (NSString *)bundleId;
-- (NSString *)bundleVersion;
-
-- (NSString *)madDesigner;
-- (NSString *)madQuery;
-
-- (BOOL)isFirstLaunch;
 
 + (NSURL *)applicationBundleSampleDatabaseChinook;
 + (NSURL *)applicationSupportSampleDatabaseChinook;

@@ -34,8 +34,10 @@
 
 #import "MADDesignerFileExplorerViewController.h"
 
-NSString * const MADIdentifierFileLondon            = @"London";
-NSString * const MADIdentifierFileMusic             = @"Music";
+NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
+NSString * const MADIdentifierFileLondon                            = @"London";
+NSString * const MADIdentifierFileMusic                             = @"Music";
+NSString * const MADAppConfigurationUserDefaultsSamplesInstalled    = @"MADAppConfigurationUserDefaultsSamplesInstalled";
 
 //#import <MADFeedback/MADFeedbackFrustration.h>
 
@@ -66,6 +68,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
+@property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
 
 @end
 
@@ -115,7 +118,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
 }
 
-
 /*static const unsigned char keyEncryption[] = {
     0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,
     0x06, 0x77, 0x6d, 0xd6, 0xbb, 0x5b, 0xd3, 0x21,
@@ -154,6 +156,17 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
+    NSNumber *defaultSamplesInstalled = @(NO);
+    NSNumber *defaultReportsInstalled = @(NO);
+    NSNumber *defaultChinookInstalled = @(NO);
+    NSDictionary *defaultsToRegister = @{MADUpgradeInstalledChinook: defaultChinookInstalled,
+                                         MADUpgradeInstalledSamples : defaultReportsInstalled,
+                                         MADAppConfigurationUserDefaultsSamplesInstalled : defaultSamplesInstalled,
+                                         };
+    [defaults registerDefaults:defaultsToRegister];
+    self.applicationUserDefaults = defaults;
+    
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound
                                                                                              categories: nil];
@@ -337,6 +350,15 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (MADDesignerFileExplorerViewController *)openFileViewController {
     return (MADDesignerFileExplorerViewController *)self.navigationController.topViewController;
+}
+
+- (BOOL)sampleInstalled {
+    return [[self applicationUserDefaults] boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+}
+
+- (void)installedSample {
+    NSUserDefaults *userDefaults = [self applicationUserDefaults];
+    [userDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
 }
 
 @end
