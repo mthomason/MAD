@@ -36,6 +36,7 @@
 
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

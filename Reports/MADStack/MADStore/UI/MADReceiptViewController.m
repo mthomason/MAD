@@ -18,6 +18,7 @@
 #import "MADAppConfiguration.h"
 #import "UIColor+PaperPatterns.h"
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MADReceiptViewController ()
 

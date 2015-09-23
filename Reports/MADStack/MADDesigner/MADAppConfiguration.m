@@ -19,6 +19,7 @@
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #if MAD_DESIGNER
     #import "UIViewController+Designer.h"
@@ -49,9 +50,9 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 
-NSString * const MTGlobalBundleVersion                              = @"8.0.268";
-NSString * const MTGlobalBundleShortVersion                         = @"8.0.268";
-NSString * const MTGlobalBundleRev                                  = @"2210";
+NSString * const MTGlobalBundleVersion                              = @"8.0.269";
+NSString * const MTGlobalBundleShortVersion                         = @"8.0.269";
+NSString * const MTGlobalBundleRev                                  = @"2211";
 
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 

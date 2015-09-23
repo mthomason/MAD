@@ -11,6 +11,7 @@
 #import "MADOperationInstallSampleDatabase.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 

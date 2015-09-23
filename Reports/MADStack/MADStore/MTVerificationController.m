@@ -16,6 +16,7 @@
 #import "MADAppConfiguration.h"
 
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MTVerificationController() <SKRequestDelegate>
 

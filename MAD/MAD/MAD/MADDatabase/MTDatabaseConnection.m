@@ -21,6 +21,7 @@
 #import "NSString+Extras.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
 NSString * const MADIdentifierDatabaseTDS       = @"TDS";

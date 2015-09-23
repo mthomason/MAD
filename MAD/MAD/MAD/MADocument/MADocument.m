@@ -74,6 +74,7 @@
 
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 

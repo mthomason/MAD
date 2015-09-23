@@ -18,6 +18,7 @@
 #import "MADConstants.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MTDataTableFast ()
 

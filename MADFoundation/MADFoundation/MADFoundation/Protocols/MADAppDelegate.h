@@ -10,11 +10,3 @@
 #import "MADApplicationProtocol.h"
 
 typedef id <UIApplicationDelegate, MADApplicationProtocol> MADAppDelegate;
-
-@interface UIApplication (MADAppDelegate)
-
-+ (MADAppDelegate)AppDelegate;
-+ (BOOL)isMADDesigner;
-+ (BOOL)isMADViewer;
-
-@end

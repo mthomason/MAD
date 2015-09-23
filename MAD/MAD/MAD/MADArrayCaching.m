@@ -15,6 +15,7 @@
 #import <MADFoundation/MTDataColumn.h>
 #import "MTQuery.h"
 #import "MTDatabaseField.h"
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 NSString * const MTArrayCachedTableName = @"ac";
 NSString * const MTArrayCachedColumnKey = @"ci";
