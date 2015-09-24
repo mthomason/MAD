@@ -210,8 +210,7 @@
                     [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
                 }
             }
-            
-            [path setLineWidth:3.0000f];
+            path.lineWidth = 3.0000f;
             [path stroke];
         }
     }
