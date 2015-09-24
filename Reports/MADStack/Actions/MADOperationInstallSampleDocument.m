@@ -21,10 +21,10 @@
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
     if (self = [super init]) {
-        self.filename = filename;
-        self.fileExtension = fileExtension;
-        self.groupIdentifier = groupIdentifier;
-        self.installFlag = installFlag;
+        self.filename = filename.copy;
+        self.fileExtension = fileExtension.copy;
+        self.groupIdentifier = groupIdentifier.copy;
+        self.installFlag = installFlag.copy;
     }
     return self;
 }
