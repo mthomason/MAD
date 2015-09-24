@@ -7,7 +7,16 @@
 //
 
 #import "MADOperationInstallSampleDatabase.h"
-#import "MADAppConfiguration.h"
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADFoundation/NSFileManager+Common.h>
+
+NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
+NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgradeInstalledSamplesLondon";
+NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
+NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
+
+NSString * const MTSampleDatabaseChinook            = @"chinook";
+NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 @implementation MADOperationInstallSampleDatabase
 
@@ -15,8 +24,8 @@
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
     if (installed == NO) {
         
-        NSURL *fileUrl = [MADAppConfiguration applicationBundleSampleDatabaseChinook];
-        NSURL *chinookAppSupportUrl = [MADAppConfiguration applicationSupportSampleDatabaseChinook];
+        NSURL *fileUrl = [MADOperationInstallSampleDatabase applicationBundleSampleDatabaseChinook];
+        NSURL *chinookAppSupportUrl = [MADOperationInstallSampleDatabase applicationSupportSampleDatabaseChinook];
         
         if (chinookAppSupportUrl != nil) {
             NSError *error = nil;
@@ -30,6 +39,19 @@
         }
         
     }
+}
+
++ (NSURL *)applicationBundleSampleDatabaseChinook {
+    return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook
+                                   withExtension: MTDocumentExtentionSqlite3];
+}
+
+
++ (NSURL *)applicationSupportSampleDatabaseChinook {
+    MADAppDelegate delegate = [UIApplication AppDelegate];
+    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:[delegate groupIdentifier]];
+    NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
+    return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 @end

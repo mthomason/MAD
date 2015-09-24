@@ -15,12 +15,7 @@
 @implementation UIApplication (Extras)
 
 + (NSString *)version {
-    static NSString *version;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-        version = infoDict[@"CFBundleVersion"];
-    });
+    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
     return version;
 }
 

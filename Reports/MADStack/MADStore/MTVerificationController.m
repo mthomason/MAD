@@ -71,8 +71,9 @@ static MTVerificationController *sharedSingleton;
 - (void)reloadReceipt {
     MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
     NSString *bundleID = [[UIApplication AppDelegate] applicationBundleIdentifier];
+    NSString *globalBundleVersion = [[UIApplication AppDelegate] versionNumber];
     self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: bundleID
-                                                     bundleVersion: MTGlobalBundleVersion
+                                                     bundleVersion: globalBundleVersion
                                                        andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
     if (self.modernReceiptIsValid) {
         self.receipt = receipt;
@@ -84,8 +85,9 @@ static MTVerificationController *sharedSingleton;
     if ([[NSFileManager defaultManager] fileExistsAtPath:receiptUrl.path]) {
         MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
         NSString *bundleID = [[UIApplication AppDelegate] applicationBundleIdentifier];
+        NSString *globalBundleVersion = [[UIApplication AppDelegate] versionNumber];
         BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: bundleID
-                                                   bundleVersion: MTGlobalBundleVersion
+                                                   bundleVersion: globalBundleVersion
                                                      andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
         if ((self.modernReceiptIsValid = isValidReceipt)) {
             self.receipt = receipt;

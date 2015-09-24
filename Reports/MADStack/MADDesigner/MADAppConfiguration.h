@@ -15,7 +15,7 @@
 @class MADFilesController, UITraitCollection, UIViewController;
 
 @protocol MADFileCoordinator;
-
+/*&
 extern NSString * const MADUpgradeInstalledSamples;
 extern NSString * const MADUpgradeInstalledSamplesLondon;
 extern NSString * const MADUpgradeInstalledSamplesMusic;
@@ -25,18 +25,11 @@ extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 
-extern NSString * const MTGlobalBundleVersion;
-extern NSString * const MTGlobalBundleShortVersion;
-extern NSString * const MTGlobalBundleRev;
-
 extern NSString * const MADUpgradeInstalledSamples;
-
+*/
 @class MADocument;
 
 @interface MADAppConfiguration : NSObject
-
-+ (NSURL *)applicationBundleSampleDatabaseChinook;
-+ (NSURL *)applicationSupportSampleDatabaseChinook;
 
 @end
 

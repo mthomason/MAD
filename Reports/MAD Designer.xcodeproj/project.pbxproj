@@ -1910,7 +1910,7 @@
 		4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPreferencesManager.m; sourceTree = "<group>"; };
 		4C401F8E1BAE86AC00BAE5FC /* MADUserDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUserDefault.h; sourceTree = "<group>"; };
 		4C401F8F1BAE86AC00BAE5FC /* MADUserDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUserDefault.m; sourceTree = "<group>"; };
-		4C401F941BAE883200BAE5FC /* mad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mad-Info.plist"; sourceTree = "<group>"; };
+		4C401F941BAE883200BAE5FC /* mad-Info.plist */ = {isa = PBXFileReference; explicitFileType = text.plist.info; fileEncoding = 4; path = "mad-Info.plist"; sourceTree = "<group>"; };
 		4C401F971BAE89C300BAE5FC /* MTArrayDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSource.h; sourceTree = "<group>"; };
 		4C401F981BAE89C300BAE5FC /* MTArrayDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayDataSource.m; sourceTree = "<group>"; };
 		4C401F991BAE89C300BAE5FC /* MTArrayDataSourceCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourceCollectionView.h; sourceTree = "<group>"; };
@@ -3046,6 +3046,8 @@
 			isa = PBXGroup;
 			children = (
 				4C8DE28E1BAFB26700AD1111 /* MADQueryVisualization.storyboard */,
+				4C26BA1A1BAF150F00456DC8 /* MADQueryVisualizationViewController.h */,
+				4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */,
 				4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */,
 				4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */,
 				4C26BA121BAF150F00456DC8 /* MADQueryVisualizationCacheData.h */,
@@ -3056,8 +3058,6 @@
 				4C26BA171BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m */,
 				4C26BA181BAF150F00456DC8 /* MADQueryVisualizationTableDefination.h */,
 				4C26BA191BAF150F00456DC8 /* MADQueryVisualizationTableDefination.m */,
-				4C26BA1A1BAF150F00456DC8 /* MADQueryVisualizationViewController.h */,
-				4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */,
 				4C26BA1C1BAF150F00456DC8 /* MTQueryVisualizationLinkDefination.h */,
 				4C26BA1D1BAF150F00456DC8 /* MTQueryVisualizationLinkDefination.m */,
 			);

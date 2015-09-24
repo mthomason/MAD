@@ -11,12 +11,14 @@
 #endif
 
 #import "MADAboutTableViewController.h"
-#import "MADAppConfiguration.h"
 #import "MADTableViewCellBase.h"
 
 #import "UIApplication+Extras.h"
 #import "UIButton+FollowTwitter.h"
 #import "ACAccountStore+Social.h"
+
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
@@ -60,14 +62,15 @@
 
 - (NSString *)versionText {
     NSString *versionTextKey = NSLocalizedString(@"v%@", @"v%@");
-    NSString *version = [UIApplication version];
-    NSString *versionText = [NSString stringWithFormat:versionTextKey, version];
+    NSString *globalBundleVersion = [[UIApplication AppDelegate] versionNumber];
+    NSString *versionText = [NSString stringWithFormat:versionTextKey, globalBundleVersion];
     return versionText;
 }
 
 - (NSString *)buildText {
     NSString *buildTextKey = NSLocalizedString(@"r%@", @"r%@");
-    NSString *buildText = [NSString stringWithFormat:buildTextKey, MTGlobalBundleRev];
+    NSString *revision = [[UIApplication AppDelegate] revisionNumber];
+    NSString *buildText = [NSString stringWithFormat:buildTextKey, revision];
     return buildText;
 }
 

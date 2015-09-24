@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MADUpgradeInstalledSamples;
+extern NSString * const MADUpgradeInstalledChinook;
+extern NSString * const MADUpgradeInstalledSamplesLondon;
+extern NSString * const MADUpgradeInstalledSamplesMusic;
+
 @interface MADOperationInstallSampleDatabase : NSOperation
+
++ (NSURL *)applicationBundleSampleDatabaseChinook;
++ (NSURL *)applicationSupportSampleDatabaseChinook;
 
 @end

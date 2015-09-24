@@ -42,6 +42,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 
 NSString * const MADIDUser                                          = @"MADIDUser";
 
+const CFStringRef MADKeyRevision = CFSTR("MADRevision");
+
 //#import <MADFeedback/MADFeedbackFrustration.h>
 
 #if MAD_DESIGNER
@@ -121,12 +123,15 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
 }
 
-/*static const unsigned char keyEncryption[] = {
-    0x19, 0xdf, 0x8a, 0xc1, 0x0a, 0x25, 0x38, 0x57,
-    0x06, 0x77, 0x6d, 0xd6, 0xbb, 0x5b, 0xd3, 0x21,
-    0xdb, 0x46, 0xa5, 0xfd, 0x1e, 0xbe, 0x91, 0x69,
-    0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
-};*/
+- (NSString *)versionNumber {
+    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
+    return version;
+}
+
+- (NSString *)revisionNumber {
+    NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), MADKeyRevision);
+    return version;
+}
 
 #pragma mark - Initialization
 
@@ -194,10 +199,17 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController selector:@selector(getUserCloudPrefs) object:NULL];
 
     MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
-    MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesLondon];
-    MADOperationInstallSampleDocument *sampleDatabaseLondon = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileMusic fileExtension:MADFileExtentionMobleApplicationDocument groupIdentifier:MADIdentifierGroup installFlag:MADUpgradeInstalledSamplesMusic];
+    MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon
+                                                                                                           fileExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                         groupIdentifier:MADIdentifierGroup
+                                                                                                             installFlag:MADUpgradeInstalledSamplesLondon];
+    MADOperationInstallSampleDocument *sampleDatabaseLondon = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileMusic
+                                                                                                            fileExtension:MADFileExtentionMobleApplicationDocument
+                                                                                                          groupIdentifier:MADIdentifierGroup
+                                                                                                              installFlag:MADUpgradeInstalledSamplesMusic];
     
-    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget:[MTVerificationController sharedInstance] selector:@selector(resetReceipt) object:NULL];
+    NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
+                                                                     selector: @selector(resetReceipt) object: NULL];
     NSArray *addSampleData = @[getUserCloudPreferences, sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
 

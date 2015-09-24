@@ -34,7 +34,7 @@ const NSInteger currentMajorVersion = 8;
     NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:MADUpgradeLastVersionRun];
     
-    NSURL *chinookUrl = [MADAppConfiguration applicationSupportSampleDatabaseChinook];
+    NSURL *chinookUrl = [MADOperationInstallSampleDatabase applicationSupportSampleDatabaseChinook];
     BOOL isDirectory;
     BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:chinookUrl.path isDirectory:&isDirectory];
     if (gotChinook == NO) {
