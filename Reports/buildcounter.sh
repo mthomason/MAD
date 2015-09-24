@@ -17,7 +17,7 @@ versionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1]
 versionnum=${versionnum#"v"}
 
 versionminor=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); a[2]}' )
-if [-n "$versionminor"]; then
+if [ -n "$versionminor" ]; then
     currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
 else
     currentvnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1] ".0"}' )
@@ -39,6 +39,9 @@ echo "No build number from git"
 exit 2
 fi
 
+MADBuildDate=$(date +%FT%T%Z)
+/usr/libexec/PlistBuddy -c "Set :MADBuildDate $MADBuildDate" "${plist}"
+
 /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitext}"
 /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitapp}"
 /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plist}"
@@ -49,10 +52,5 @@ echo "Updated version number to $versionnum"
 /usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plist}"
 echo "Updated build number to $currentvnum"
 
-/usr/libexec/Plistbuddy -c "Set MADRev $buildnum" "${plist}"
+/usr/libexec/Plistbuddy -c "Set MADRevision $buildnum" "${plist}"
 echo "Updated build number to $buildnum"
-
-filelocation=${PROJECT_DIR}/MADStack/MADDesigner/MADAppConfiguration.m
-sed -ie "s/NSString \* const MTGlobalBundleVersion.*/NSString \* const MTGlobalBundleVersion                              = @\"${currentvnum}\";/g" "${filelocation}"
-sed -ie "s/NSString \* const MTGlobalBundleShortVersion.*/NSString \* const MTGlobalBundleShortVersion                         = @\"${currentvnum}\";/g" "${filelocation}"
-sed -ie "s/NSString \* const MTGlobalBundleRev.*/NSString \* const MTGlobalBundleRev                                  = @\"${buildnum}\";/g" "${filelocation}"
