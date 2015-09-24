@@ -13,7 +13,6 @@
 //#import "asn_application.h"
 #import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "MADAppConfiguration.h"
 
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>

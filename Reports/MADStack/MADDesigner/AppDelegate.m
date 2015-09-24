@@ -12,7 +12,6 @@
 
 
 #import "AppDelegate.h"
-#import "MADAppConfiguration.h"
 
 #import "MADNavigationController.h"
 
@@ -212,10 +211,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                                      selector: @selector(resetReceipt) object: NULL];
     NSArray *addSampleData = @[getUserCloudPreferences, sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
-
-    
-    MADAppConfiguration *appConfiguration = [[MADAppConfiguration alloc] init];
-    self.appConfiguration = appConfiguration;
 
     return YES;
 }

@@ -7,7 +7,6 @@
 //
 
 #import "MADUpgradeManager.h"
-#import "MADAppConfiguration.h"
 #import "MADOperationInstallSampleDatabase.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
