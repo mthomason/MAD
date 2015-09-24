@@ -20,6 +20,8 @@
 - (NSString *)applicationNameSufixPart;
 - (NSString *)localizedApplicationNameSufixPart;
 - (NSUserDefaults *)applicationUserDefaults;
+- (NSString *)versionNumber;
+- (NSString *)revisionNumber;
 
 @end
 
