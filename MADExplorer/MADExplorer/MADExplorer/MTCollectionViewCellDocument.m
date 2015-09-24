@@ -118,21 +118,27 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
         UIView *selectedBackground = [[MADBackgroundViewSelected alloc] initWithFrame:self.frame];
         self.selectedBackgroundView = selectedBackground;
         
-        UIActivityIndicatorView *activityView = [MTCollectionViewCellDocument activityIndicatorView];
-        activityView.center = self.contentView.center;
-        [self.contentView addSubview:activityView];
 
         UIColor *colorTextSelectedHighlighted = [UIColor whiteColor];
         UIColor *colorTextSelected = [UIColor lightTextColor];
         self.colorTextSelectedHighlighted = colorTextSelectedHighlighted;
         self.colorTextSelected = colorTextSelected;
-        self.activityIndicator = activityView;
         self.colorTextNormal = colorTextNormal;
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
         
     }
     return self;
+}
+
+- (UIActivityIndicatorView *)activityIndicator {
+    if (_activityIndicator == nil) {
+        UIActivityIndicatorView *activityView = [MTCollectionViewCellDocument activityIndicatorView];
+        activityView.center = self.contentView.center;
+        [self.contentView addSubview:activityView];
+        _activityIndicator = activityView;
+    }
+    return _activityIndicator;
 }
 
 - (void)addMotionEffect:(UIMotionEffect *)effect {
