@@ -138,7 +138,6 @@
     self.titleView.label.text = table.alias;
     self.titleView.label.font = self.titleFont;
     self.titleView.label.textColor = [UIColor whiteColor];
-    [self.schemaTableViewController reloadData];
 }
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
