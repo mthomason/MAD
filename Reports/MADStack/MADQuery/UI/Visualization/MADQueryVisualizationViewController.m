@@ -249,8 +249,6 @@ typedef void(^MTBlockResultVoid)(void);
     self.contentView = containerView;
     
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
-    [animator addBehavior:self.dynamicItemBehavior];
-    [animator addBehavior:self.collisionBehavior];
     animator.delegate = self;
     self.dynamicAnimator = animator;
     
