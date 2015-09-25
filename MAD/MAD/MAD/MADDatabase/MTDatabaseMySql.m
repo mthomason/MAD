@@ -233,7 +233,6 @@
 - (void)getFieldsForTableName: (NSString *)tableName
                    completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
-    
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
@@ -249,7 +248,7 @@
                 if (successConnection) {
                     
                     
-                    NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
+                    NSString *command = [[NSString alloc] initWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
                     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                     MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
                     MTDataTable *dataTable = [myFetch fetchWithCommand: command
@@ -268,7 +267,7 @@
                         }
                         
                         MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
-                        NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
+                        NSString *command2 = [[NSString alloc] initWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
                         MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
                         MTDataTable *dataTable2 = [myFetch2 fetchWithCommand: command2
                                                                    dataTable: &dataTableVirtual2
