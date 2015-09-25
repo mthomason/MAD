@@ -259,12 +259,12 @@ CG_INLINE CGFloat CGDelta(CGFloat f1, CGFloat f2) {
 
 CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2);
 CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
-    return atan2f(p2.y - p1.y, p2.x - p1.x) * (180.0000f / M_PI);
+    return atan2(p2.y - p1.y, p2.x - p1.x) * (180.0000f / M_PI);
 }
 
 CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity);
 CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity) {
-    return atan2f(velocity.y, velocity.x);
+    return atan2(velocity.y, velocity.x);
 }
 
 CG_INLINE CGRect CGRectAdjustForScale(CGRect rect, CGFloat zoomScale);
@@ -365,7 +365,7 @@ CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger o
 CG_INLINE CGPoint CGPointRoundPointToGrid(CGPoint point);
 CG_INLINE CGPoint
 CGPointRoundPointToGrid(CGPoint point) {
-    return CGPointMake(roundf(point.x / 10.0000f) * 10.0000f, roundf(point.y / 10.0000f) * 10.0000f);
+    return CGPointMake(round(point.x / 10.0000f) * 10.0000f, round(point.y / 10.0000f) * 10.0000f);
 }
 
 CG_INLINE CGPoint CGCornerTopLeftPointInRect(CGRect frame);
@@ -497,25 +497,25 @@ CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
 	else return 0;
 }
 
-CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, long d);
-CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, long d) {
+CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d);
+CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
 	CGPoint returnVal;
-	long double m = -1 * CGDistance(p1, p2);
-	long double b = CGInterceptBySlope(p2, m);
+	CGFloat m = -1 * CGDistance(p1, p2);
+	CGFloat b = CGInterceptBySlope(p2, m);
 	BOOL movingUp;
 	if (p1.y < p2.y) movingUp = YES;
         else movingUp = NO;
             
-            long double x = p2.x;
-            long double y = p2.y;
+            CGFloat x = p2.x;
+            CGFloat y = p2.y;
             
             if (d >= 0) {		
-                long double mPow2 = pow(m, 2);
-                long double bPow2 = pow(b, 2);
-                long double dPow2 = pow(d, 2);
-                long double u = p2.x;
-                long double v = p2.y;
-                long double sqrtPart = 0.0;
+                CGFloat mPow2 = pow(m, 2);
+                CGFloat bPow2 = pow(b, 2);
+                CGFloat dPow2 = pow(d, 2);
+                CGFloat u = p2.x;
+                CGFloat v = p2.y;
+                CGFloat sqrtPart = 0.0;
                 sqrtPart = (mPow2)*( ((-1)*(bPow2)) + ((dPow2)*(1+mPow2)) - (pow((((-1)*(m)*(u)) + v),2)) + (b*(((-1)*(2)*(m)*(u))+((2)*(v)))) );
                 if (!isnan(sqrtPart)) {
                     if (movingUp) y = ((b)+((m)*(u))+((mPow2)*(v))+sqrt(sqrtPart)) / (1+mPow2);
@@ -559,14 +559,14 @@ CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
     
 }
 
-CG_INLINE BOOL CGFloatMax(CGFloat n1, CGFloat n2);
-CG_INLINE BOOL
+CG_INLINE CGFloat CGFloatMax(CGFloat n1, CGFloat n2);
+CG_INLINE CGFloat
 CGFloatMax(CGFloat n1, CGFloat n2) {
     return n1 > n2 ? n1 : n2;
 }
 
-CG_INLINE BOOL CGFloatMin(CGFloat n1, CGFloat n2);
-CG_INLINE BOOL
+CG_INLINE CGFloat CGFloatMin(CGFloat n1, CGFloat n2);
+CG_INLINE CGFloat
 CGFloatMin(CGFloat n1, CGFloat n2) {
     return n1 < n2 ? n1 : n2;
 }
