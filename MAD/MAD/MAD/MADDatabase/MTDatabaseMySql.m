@@ -191,7 +191,7 @@
     BOOL successConnection = conn != nil;
     NSMutableDictionary *resultsDictionary = nil;
     
-    NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
+    NSString *command = [[NSString alloc] initWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
     NSError *errorShowColumns = nil;
@@ -210,7 +210,7 @@
         }
         
         MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
-        NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
+        NSString *command2 = [[NSString alloc] initWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
         MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
         MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
         if (errorColumnMetaData == nil) {

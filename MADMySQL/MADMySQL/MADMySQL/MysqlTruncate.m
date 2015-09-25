@@ -36,8 +36,8 @@
         if (!tableName) {
             [MysqlException raiseConnection:connection withFormat:@"Truncate is missing table name"];
         }
-        
-        if (mysql_query(connection.connection, [[NSString stringWithFormat:@"truncate %@",self.tableName] UTF8String])) {
+        NSString *truncate = [[NSString alloc] initWithFormat:@"truncate %@", self.tableName];
+        if (mysql_query(connection.connection, truncate.UTF8String)) {
             [MysqlException raiseConnection:connection
                                  withFormat:@"Could not truncate table %@ - #%d:%s",tableName,mysql_errno(connection.connection), mysql_error(connection.connection)];
         }

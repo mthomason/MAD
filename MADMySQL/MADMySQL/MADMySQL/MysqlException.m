@@ -33,7 +33,7 @@
 + (NSError *)errorWithConnection:(MysqlConnection *)connection
                           domain:(NSString *)domain
                          andCode:(NSInteger)code {
-    NSString *errorString = [NSString stringWithFormat:@"MySQL says %d! %s.",
+    NSString *errorString = [[NSString alloc] initWithFormat:@"MySQL says %d! %s.",
                              mysql_errno(connection.connection),
                              mysql_error(connection.connection)];
     NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,

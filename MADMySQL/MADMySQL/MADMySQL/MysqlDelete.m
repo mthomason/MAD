@@ -33,9 +33,8 @@
 }
 
 
-- (NSString *)command
-{
-    NSMutableString *cmd = [NSMutableString stringWithFormat:@"DELETE FROM %@ WHERE %@",tableName,qualifier];
+- (NSString *)command {
+    NSString *cmd = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@",tableName,qualifier];
     return cmd;
 }
 

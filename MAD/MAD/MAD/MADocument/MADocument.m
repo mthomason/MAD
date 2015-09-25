@@ -903,7 +903,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
-    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    NSString *readRecords = [[NSString alloc] initWithFormat:formatString, decimalString];
     [self.statusLabel.status performSelectorOnMainThread: @selector(setText:)
                                               withObject: readRecords
                                            waitUntilDone: NO];

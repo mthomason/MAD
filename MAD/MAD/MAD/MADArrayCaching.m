@@ -137,19 +137,19 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 }
 
 - (BOOL)prepareStatementEnum {
-    NSString *sql = [NSString stringWithFormat:MTArrayCachedQueryEnumer,  MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *sql = [[NSString alloc] initWithFormat:MTArrayCachedQueryEnumer,  MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
     if (_statementEnumer != NULL) {
         sqlite3_finalize(_statementEnumer);
         _statementEnumer = NULL;
     }
     BOOL success = YES;
     if (_statementEnumer == NULL)
-        success = sqlite3_prepare_v2([[self database] databaseHandle], [sql UTF8String], -1, &_statementEnumer, NULL) == SQLITE_OK;
+        success = sqlite3_prepare_v2([[self database] databaseHandle], sql.UTF8String, -1, &_statementEnumer, NULL) == SQLITE_OK;
     return success;
 }
 
 - (BOOL)prepareStatementInsert {
-    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryInsert, MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
+    NSString *queryString = [[NSString alloc] initWithFormat:MTArrayCachedQueryInsert, MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
     if (_statementInsert != NULL) {
         sqlite3_finalize(_statementInsert);
         _statementInsert = NULL;
@@ -161,7 +161,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 }
 
 - (BOOL)prepareStatementSelect {
-    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQuerySelect, MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *queryString = [[NSString alloc] initWithFormat:MTArrayCachedQuerySelect, MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
     if (_statementSelect != NULL) {
         sqlite3_finalize(_statementSelect);
         _statementSelect = NULL;
@@ -174,7 +174,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 }
 
 - (BOOL)prepareStatementCount {
-    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryLastId, MTArrayCachedColumnKey, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *queryString = [[NSString alloc] initWithFormat:MTArrayCachedQueryLastId, MTArrayCachedColumnKey, MTArrayCachedTableName, MTArrayCachedColumnKey];
     if (_statementCount != NULL) {
         sqlite3_finalize(_statementCount);
         _statementCount = NULL;

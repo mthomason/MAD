@@ -86,7 +86,7 @@
             if (prepareResult) {
                 const char *err = mysql_stmt_error(myStatement);
                 unsigned int code = mysql_stmt_errno(myStatement);
-                NSString *errorString = [NSString stringWithFormat:@"MySQL says %d! %s.", code, err];
+                NSString *errorString = [[NSString alloc] initWithFormat:@"MySQL says %d! %s.", code, err];
                 NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,
                                             NSLocalizedFailureReasonErrorKey : @"Error"};
                 errorFetch = [NSError errorWithDomain:@"mad" code:code userInfo:errorInfo];
@@ -133,14 +133,14 @@
                                                                          length:myStatement->fields[x].name_length
                                                                        encoding:NSUTF8StringEncoding];
                         if ([table length] > 0) {
-                            fieldName=[NSString stringWithFormat:@"`%@`.`%@`",table,fieldKeyName];
+                            fieldName=[[NSString alloc] initWithFormat:@"`%@`.`%@`", table, fieldKeyName];
                         } else {
-                            fieldName=[NSString stringWithFormat:@"`%@`",fieldKeyName];
+                            fieldName=[[NSString alloc] initWithFormat:@"`%@`", fieldKeyName];
                         }
                     } else {
-                        fieldName= [[NSString alloc]  initWithBytes:myStatement->fields[x].name
-                                                             length:myStatement->fields[x].name_length
-                                                           encoding:NSUTF8StringEncoding];
+                        fieldName= [[NSString alloc]  initWithBytes: myStatement->fields[x].name
+                                                             length: myStatement->fields[x].name_length
+                                                           encoding: NSUTF8StringEncoding];
                     }
                     [fieldNameCollector addObject:fieldName];
                     
