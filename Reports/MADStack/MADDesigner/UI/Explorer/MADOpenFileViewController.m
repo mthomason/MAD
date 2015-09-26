@@ -764,7 +764,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [wrappedUrls addObject:fileUrl];
     }
     NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-    for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+    for (NSUInteger i=0; i<numberOfItemsInSection; i++) {
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         if (documentCell != nil) {
@@ -772,19 +772,19 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }
     }
     
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:wrappedUrls applicationActivities:@[]];
-    [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo]];
-    [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        
-        NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-        for (NSInteger i=0; i<numberOfItemsInSection; i++) {
-            NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
-            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
-            if (documentCell != nil) {
-                [documentCell normalizeTint];
-            }
+    NSArray *applicationActivities = @[];
+    NSArray *excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
+                                                                                         applicationActivities: applicationActivities];
+    activityViewController.excludedActivityTypes = excludedActivityTypes;
+    
+    MADOpenFileViewController * __weak weakself = self;
+    activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
+            MTCollectionViewCellDocument * __weak documentCell = (MTCollectionViewCellDocument *)cell;
+            [documentCell normalizeTint];
         }
-    }];
+    };
     
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         if (self.popoverControllerActivity == nil || self.popoverControllerActivity.isPopoverVisible == NO) {
