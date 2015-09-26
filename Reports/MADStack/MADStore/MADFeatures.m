@@ -29,7 +29,7 @@ static NSString * const Plist = @"plist";
         self.availablePredicate = available;
         NSString *path = [[NSBundle mainBundle] pathForResource:Features ofType:Plist];
         NSArray *features = [NSArray arrayWithContentsOfFile:path];
-        NSAssert(features.count <= 0, @"No features found! FML!!! Maybe clean and recompile.");
+        NSAssert(features.count > 0, @"No features found! FML!!! Maybe clean and recompile.");
         NSMutableArray *fa = [[NSMutableArray alloc] initWithCapacity:features.count];
         for (NSDictionary *feature in features) {
             MADFeature *f = [[MADFeature alloc] initWithDictionary:feature];
