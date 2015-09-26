@@ -32,7 +32,6 @@
 @interface MADOpenFileViewController : MADFileExplorerViewController
 
 @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
-@property (readonly) UIManagedDocument *openDocument;
 
 - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;
