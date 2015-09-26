@@ -12,18 +12,11 @@ const int MTModernOSMajorVersion = 8;
 
 @implementation UIDevice (Hack)
 
-+ (NSUInteger)deviceSystemMajorVersion {
-    static NSUInteger _deviceSystemMajorVersion = -1;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSArray *versionComponents = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
-        NSString *versionComponentMajor = versionComponents[0];
-        _deviceSystemMajorVersion = [versionComponentMajor integerValue];
-    });
-    return _deviceSystemMajorVersion;
++ (int)deviceSystemMajorVersion {
+    NSArray *versionComponents = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    NSString *versionComponentMajor = versionComponents[0];
+    return [versionComponentMajor intValue];
 }
-
-
 
 + (BOOL)isPad {
     static BOOL _isPad;
