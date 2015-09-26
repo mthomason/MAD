@@ -80,7 +80,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDocumentObjectFormula+Extras.h>
 
 #import <MAD/RptqDocumentObjectGroupKey.h>
-#import <MAD/RptqDocumentObjectGroupKey+Extras.h>
 
 #import <MAD/RptqDocumentObjectImage.h>
 #import <MAD/RptqDocumentObjectImage+Extras.h>
