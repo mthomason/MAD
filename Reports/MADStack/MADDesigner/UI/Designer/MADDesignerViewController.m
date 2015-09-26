@@ -1006,16 +1006,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *documentSection = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
     
-    BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.integerValue;
-    BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.integerValue;
+    BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.unsignedIntegerValue;
+    BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.unsignedIntegerValue;
     
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     
-    if (documentSection.numberOfRows.integerValue == numberOfRows) {
+    if (documentSection.numberOfRows.unsignedIntegerValue == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > documentSection.numberOfRows.integerValue) {
+    } else if (numberOfRows > documentSection.numberOfRows.unsignedIntegerValue) {
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
@@ -1025,7 +1025,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [hasRows addObject:newRowToAppend];
         documentSection.hasRows = hasRows;
         
-    } else if (numberOfRows < documentSection.numberOfRows.integerValue) {
+    } else if (numberOfRows < documentSection.numberOfRows.unsignedIntegerValue) {
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = documentSection.hasRows.lastObject;
@@ -1676,13 +1676,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)collectionView: (UICollectionView *)collectionView performAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
     
-    NSInteger row = indexPath.row;
+    NSUInteger row = indexPath.row;
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
                                                                     inManagedObjectContext: self.document.managedObjectContext];
     NSOrderedSet *objects = [documentSection.hasRows[indexPath.section] hasObjects];
     
-    if ([objects count] > row) {
+    if (objects.count > row) {
         RptqDocumentObject *documentObject = objects[row];
         
         if (action == @selector(delete:)) {
@@ -2651,8 +2651,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             for (RptqDocumentSection *documentSection in sectionEnumerator) {
                 MADDesignerSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
                 
-                for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
-                    for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
+                for (NSInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+                    for (NSInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
                         if ([self.selectedObjectIds containsObject: [elementView objectIdTag]]) {
@@ -2796,7 +2796,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     CGFloat height = (self.sectionViewsArray.count * MTReportDesignerBufferPaddingVertical) + (2 * MTReportDesignerBorderPaddingVertical) + self.ruler.intrinsicContentSize.height;
     for (UIView *subview in self.sectionViewsArray) {
         height += subview.frame.size.height <= CGSizeZero.height ?
-        ceilf(subview.intrinsicContentSize.height) :
+        ceil(subview.intrinsicContentSize.height) :
         [subview frame].size.height;
     }
     return CGSizeMake(self.view.bounds.size.width, height);
