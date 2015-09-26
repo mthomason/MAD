@@ -184,14 +184,16 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                            andTableName: tableName];
     NSString *safeTable = [self safeIdentifier:tableName];
-    NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT "
-                     @"%@ %@ %@ "
-                     @"%@ %@ "
-                     @"LIMIT 511;",
-                     [self selectPart],
-                     safeField, [self tableAliasConnector], safeFieldAlias,
-                     MTSqlFrom, safeTable];
-    return sql;
+    return [NSString stringWithFormat:@"%@ DISTINCT "
+                                                    @"%@ %@ %@ "
+                                                    @"%@ %@ "
+                                                    @"LIMIT 511;",
+                                                    [self selectPart],
+                                                    safeField,
+                                                    [self tableAliasConnector],
+                                                    safeFieldAlias,
+                                                    MTSqlFrom,
+                                                    safeTable];
 }
 
 - (BOOL)cleanupBulkInsert { return  YES; }
