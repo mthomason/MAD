@@ -87,8 +87,8 @@ void sqliteLog(void *foo, const char* statement) {
 #endif
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
-    NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:len1 encoding:NSUTF8StringEncoding];
-    NSString *string2 = [[NSString alloc] initWithBytes:arg2 length:len2 encoding:NSUTF8StringEncoding];
+    NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding];
+    NSString *string2 = [[NSString alloc] initWithBytes:arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding];
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
@@ -455,7 +455,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             
             if (success) {
                 
-                int numberOfColumns = sqlite3_column_count(statement);
+                int colCount = sqlite3_column_count(statement);
+                NSUInteger numberOfColumns = colCount >= 0 ? (NSUInteger) colCount : 0;
                 
                 MTDataTable *dataTable = [self.delegate dataTableForQuery:query];
                 [dataTable removeAllObjects];
