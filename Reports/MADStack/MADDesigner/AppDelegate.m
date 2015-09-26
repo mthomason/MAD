@@ -17,14 +17,11 @@
 
 #import "MADUpgradeManager.h"
 
-#import "UIViewController+Designer.h"
-#import "UITabBarController+Shared.h"
 #import "MTVerificationController.h"
 
 #import "MADQueryViewController.h"
 
 #import "MADToolboxNavigationController.h"
-#import "MADNavigationController.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarFixedSize.h"
 
@@ -32,6 +29,8 @@
 #import "MADOperationInstallSampleDocument.h"
 
 #import "MADDesignerFileExplorerViewController.h"
+
+#import <QuickLook/QuickLook.h>
 
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 NSString * const MADIdentifierFileLondon                            = @"London";
@@ -67,7 +66,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, strong, readwrite) MADAppConfiguration *appConfiguration;
 @property (readonly) MADNavigationController *navigationController;
 @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;

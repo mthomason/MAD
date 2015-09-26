@@ -12,8 +12,6 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@class MADAppConfiguration;
-
 @interface MADBarcodesAppDelegate : UIResponder
     <UIApplicationDelegate>
 

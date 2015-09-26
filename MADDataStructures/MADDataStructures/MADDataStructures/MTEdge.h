@@ -33,9 +33,9 @@ typedef NS_ENUM(NSUInteger, MTEdgeType) {
 
 @interface MTEdge : MTObject <MTProtocolLog, MTProtocolCompare>
 
-@property(readonly) BOOL isDirected;
+@property(atomic, readonly) BOOL isDirected;
 
-@property(assign) MTEdgeType dfsEdgeType;
+@property(atomic, assign) MTEdgeType dfsEdgeType;
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2;
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id)object;

@@ -35,7 +35,7 @@ static NSString * const keyTables                   = @"3";
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
         self.scrollViewContentOffset = [aDecoder decodeCGPointForKey:keyScrollViewContentOffset];
-        self.scrollViewZoomScale = [aDecoder decodeFloatForKey:keyScrollViewZoomScale];
+        self.scrollViewZoomScale = (CGFloat)[aDecoder decodeDoubleForKey:keyScrollViewZoomScale];
         NSDictionary *tableDefinations = [aDecoder decodeObjectForKey:keyTables];
         self.tableDefinations = tableDefinations.mutableCopy;
     }
@@ -44,7 +44,7 @@ static NSString * const keyTables                   = @"3";
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeCGPoint:self.scrollViewContentOffset forKey:keyScrollViewContentOffset];
-    [aCoder encodeFloat:self.scrollViewZoomScale forKey:keyScrollViewZoomScale];
+    [aCoder encodeDouble:self.scrollViewZoomScale forKey:keyScrollViewZoomScale];
     [aCoder encodeObject:self.tableDefinations forKey:keyTables];
 }
 

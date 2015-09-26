@@ -64,7 +64,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (void)removeAllObjects;
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
-- (id)objectAtRow:(NSInteger)row;
+- (id)objectAtRow:(NSUInteger)row;
 
 - (NSEnumerator *)columnsEnumerator;
 - (NSEnumerator *)objectEnumerator;
@@ -73,7 +73,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (void)endBulkInsert;
 
 - (NSArray *)allObjects;
-- (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit;
+- (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit;
 - (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys;
 
 - (NSUInteger)count;

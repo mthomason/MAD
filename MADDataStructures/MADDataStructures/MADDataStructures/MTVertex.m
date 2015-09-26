@@ -34,7 +34,7 @@
     self = [super initWithObject:object];
     if (self) {
         
-        NSNumber *number = [[NSNumber alloc] initWithInteger:idnumber];
+        NSNumber *number = [[NSNumber alloc] initWithUnsignedLong:idnumber];
         self.uniqueIdForStructure = number;
 
         NSMutableArray *array = [[NSMutableArray alloc] init];

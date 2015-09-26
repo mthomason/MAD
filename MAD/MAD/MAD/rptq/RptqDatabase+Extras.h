@@ -42,6 +42,8 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
 - (RptqQuery *)defaultQuery;
 - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
 
+- (MNSDatabaseType)databaseType;
+
 @end
 
 #endif

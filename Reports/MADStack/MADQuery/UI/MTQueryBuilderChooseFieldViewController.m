@@ -106,7 +106,8 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated]; 
 	
-	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != [self numberOfSectionsInTableView:self.tableView])) {
+    NSUInteger numberOfSectionsInTable = [self numberOfSectionsInTableView:self.tableView];
+	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != numberOfSectionsInTable)) {
 		
 		NSMutableArray *infoArray = [[NSMutableArray alloc] init];
 		
@@ -211,10 +212,10 @@
 - (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryField *queryField = nil;
     RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][indexPath.section];
-    if ([[[sectionInfo table] hasQueryFields] count] > indexPath.row) {
-        NSSet *fields = [[sectionInfo table] hasQueryFields];
+    NSUInteger row = indexPath.row;
+    if (sectionInfo.table.hasQueryFields.count > row) {
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
-        NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
+        NSArray *fieldsArray = [sectionInfo.table.hasQueryFields sortedArrayUsingDescriptors:@[namesAccending]];
         queryField = fieldsArray[indexPath.row];
         [self setQueryField:queryField];
     }
@@ -249,9 +250,12 @@
 		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = [self sectionInfoArray][previousOpenSectionIndex];
         previousOpenSection.open = NO;
         [previousOpenSection.headerView toggleOpenWithUserAction:NO];
-        NSInteger countOfRowsToDelete = [previousOpenSection.fields count];
-        for (NSInteger i = 0; i < countOfRowsToDelete; i++) {
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:previousOpenSectionIndex]];
+        NSUInteger countOfRowsToDelete = previousOpenSection.fields.count;
+        for (NSUInteger i = 0; i < countOfRowsToDelete; i++) {
+            @autoreleasepool {
+                NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:previousOpenSectionIndex];
+                [indexPathsToDelete addObject:path];
+            }
         }
     }
     

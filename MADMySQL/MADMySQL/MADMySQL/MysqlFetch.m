@@ -90,7 +90,7 @@
                 NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,
                                             NSLocalizedFailureReasonErrorKey : @"Error"};
                 errorFetch = [NSError errorWithDomain:@"mad" code:code userInfo:errorInfo];
-                *error = errorFetch;
+                if (error != NULL) *error = errorFetch;
                 
             } else {
                 

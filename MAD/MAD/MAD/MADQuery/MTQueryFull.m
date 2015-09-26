@@ -201,7 +201,7 @@
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             
-            MTDataType dataType = queryPredicate.hasLeftField.databaseSchemaField.dataType.integerValue;
+            MTDataType dataType = queryPredicate.hasLeftField.databaseSchemaField.dataType.unsignedIntegerValue;
             BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
             
             if (isNumeric == NO) {
@@ -459,10 +459,10 @@
                             
                             if (queryLink) {
                                 [result appendString:@"\n\t"];
-                                for (NSUInteger i = 0; i <= [*linkDepth integerValue]; i++) {
+                                for (NSUInteger i = 0; i <= [*linkDepth unsignedIntegerValue]; i++) {
                                     [result appendString:@"\t"];
                                 }
-                                NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:[[queryLink jointypeenum] integerValue]];
+                                NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:[[queryLink jointypeenum] unsignedIntegerValue]];
                                 [result appendFormat:@" %@ ", sqlForLink];
                                 
                                 RptqQueryField *rightField = queryLink.hasRightField;
@@ -475,7 +475,7 @@
                                 NSString *safeOgRightTable = [[self.dataDelegate database] safeIdentifier:ogRightTable];
                                 [result appendString:safeOgRightTable];
                                 [result appendString:@"\n\t"];
-                                for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {
+                                for (NSUInteger i = 0; i <= [*linkDepth unsignedIntegerValue] + 1; i++) {
                                     [result appendString:@"\t"];
                                 }
                                 
@@ -510,7 +510,7 @@
                     NSCharacterSet *charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
                     [result setString: [result stringByTrimmingCharactersInSet:charSet]];
                     
-                    for (NSUInteger i = 0; i < [*linkDepth integerValue]; i++) {
+                    for (NSUInteger i = 0; i < [*linkDepth unsignedIntegerValue]; i++) {
                         [result appendFormat:@"\t"];
                     }
                     [result appendString:tableFactor];

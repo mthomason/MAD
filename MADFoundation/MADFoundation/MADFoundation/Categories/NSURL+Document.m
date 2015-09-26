@@ -18,7 +18,7 @@
 
     NSInteger ctr = 0;
     
-    NSURL *uniqueUrl = self;
+    NSURL * uniqueUrl = self;
     while ([[NSFileManager defaultManager] fileExistsAtPath:uniqueUrl.path]) {
         NSString *maybe = [self.lastPathComponent.stringByDeletingPathExtension stringByAppendingFormat:@" %ld", (long)ctr];
         [maybe stringByAppendingPathExtension:self.pathExtension];

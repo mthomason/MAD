@@ -164,7 +164,7 @@
         CGFloat zigDivisor = 4.0000f;
         int topRandNumber = 4;
         
-        NSInteger numberOfZigs = pathRect.size.height / zigDivisor;
+        CGFloat numberOfZigs = pathRect.size.height / zigDivisor;
         for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
             NSInteger zigNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
             CGFloat zigReal = zigNumber / scale;
@@ -188,7 +188,7 @@
         
         //zag
         CGFloat zagDivisor = 4.0000f;
-        NSInteger numberOfZags = pathRect.size.height / zagDivisor;
+        CGFloat numberOfZags = pathRect.size.height / zagDivisor;
         for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
             
             NSInteger zagNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
@@ -246,7 +246,7 @@
     CGPathRelease(path);
 }
 
-- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
+- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     [self drawWhiteCanvas: ctx
@@ -302,7 +302,7 @@
 
 }
 
-- (void)drawPageAtIndex:(NSInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
+- (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
 
     NSUInteger rowIndex = 0;
     RptqDocument *document = [self.reportFormatter.layout activeDocumentModel];
@@ -329,9 +329,9 @@
             NSNumber *detailRowId = nil;
             
             for (NSDictionary *pageSection in [self.reportFormatter layoutEnumeratorForPage:pageIndex]) {
-                NSInteger groupLevel = [pageSection[MTReportGroupLevel] integerValue];
+                NSUInteger groupLevel = [pageSection[MTReportGroupLevel] unsignedIntegerValue];
                 
-                MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
+                MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] unsignedIntegerValue];
                 RptqDocumentSection *documentSection = [document documentSectionForType:typeDocumentSection andLevel:groupLevel];
 
                 
@@ -385,25 +385,24 @@
                                                                              andTable: queryField.inQueryTable.queryAlias];
                                         
                                         NSArray *groupKeys;
-                                        NSInteger groupCount = [aggregateField.groupNumber integerValue];
+                                        NSUInteger groupCount = [aggregateField.groupNumber unsignedIntegerValue];
                                         if (groupCount < [groupLevelKeys count]) {
                                             NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
                                             groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
                                         }
                                         
-                                        MTAggregateFunctionType functionType = [aggregateField.function integerValue];
-                                        RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
-                                        NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
-                                        MTDataType aggregateType = [databaseSchemaFieldDataType integerValue];
+                                        MTAggregateFunctionType functionType = aggregateField.function.unsignedIntegerValue;
+                                        MTDataType aggregateType = queryField.databaseSchemaField.dataType.unsignedIntegerValue;
                                         
-                                        BOOL calculateInMemory = functionType == MTAggregateFunctionTypeFirst || functionType == MTAggregateFunctionTypeLast;
+                                        BOOL calculateInMemory = functionType == MTAggregateFunctionTypeFirst ||
+                                                                 functionType == MTAggregateFunctionTypeLast;
                                         
                                         id aggregateResult;
                                         
                                         if (calculateInMemory == NO) {
                                             
-                                            aggregateResult = [self.dataTable resultsForAggregateType: [aggregateField.groupType integerValue]
-                                                                                             function: [aggregateField.function integerValue]
+                                            aggregateResult = [self.dataTable resultsForAggregateType: aggregateField.groupType.unsignedIntegerValue
+                                                                                             function: aggregateField.function.unsignedIntegerValue
                                                                                              fieldKey: fieldKey
                                                                                             groupKeys: groupKeys
                                                                                                rowids: [self.reportFormatter rowidsForPage:pageIndex]];
@@ -412,14 +411,11 @@
                                             
                                             NSArray *dataForGroup = nil;
                                             NSDictionary *dataOfInterest = nil;
-                                            NSNumber *aggregateFieldGroupType = aggregateField.groupType;
-                                            MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
                                             
-                                            switch (aggregateGroupType) {
+                                            switch (aggregateField.groupType.unsignedIntegerValue) {
                                                 case MTAggregateGroupByTypeSection: {
-                                                    NSInteger groupCount = [aggregateField.groupNumber integerValue];
-                                                    if (groupCount < [groupLevelKeys count]) {
-                                                        NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
+                                                    if (aggregateField.groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+                                                        NSRange rangeForLevel = NSMakeRange(0, aggregateField.groupNumber.unsignedIntegerValue + 1);
                                                         NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
                                                         dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
                                                     } else {
@@ -460,8 +456,8 @@
                                                             
                                                                 NSNumber *firstRowid = nil;
                                                                 for (NSDictionary *pageSection in self.reportFormatter.reportLayout[pageIndex]) {
-                                                                    MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
-                                                                    if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                                                                    NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
+                                                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
                                                                         firstRowid = pageSection[MTReportDetailRowId];
                                                                         break;
                                                                     }
@@ -477,8 +473,8 @@
                                                             
                                                             NSNumber *lastRowid = nil;
                                                             for (NSDictionary *pageSection in [self.reportFormatter.reportLayout[pageIndex] reverseObjectEnumerator]) {
-                                                                MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
-                                                                if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                                                                NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
+                                                                if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
                                                                     lastRowid = pageSection[MTReportDetailRowId];
                                                                     break;
                                                                 }
@@ -499,8 +495,8 @@
                                                             
                                                             NSNumber *firstRowid = nil;
                                                             for (NSDictionary *pageSection in self.reportFormatter.reportLayout[0]) {
-                                                                MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
-                                                                if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                                                                NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
+                                                                if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
                                                                     firstRowid = pageSection[MTReportDetailRowId];
                                                                     break;
                                                                 }
@@ -512,8 +508,8 @@
                                                             
                                                             NSNumber *lastRowid = nil;
                                                             for (NSDictionary *pageSection in [self.reportFormatter.reportLayout[[self.reportFormatter numberOfPages] - 1] reverseObjectEnumerator]) {
-                                                                MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] integerValue];
-                                                                if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                                                                NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
+                                                                if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
                                                                     lastRowid = pageSection[MTReportDetailRowId];
                                                                     break;
                                                                 }
@@ -552,20 +548,16 @@
                                         NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
 
                                         RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
-                                        RptqQueryField *queryField1 = [barcodeObject referencesField1];
-                                        RptqQueryField *queryField2 = [barcodeObject referencesField2];
+                                        RptqQueryField *queryField1 = barcodeObject.referencesField1;
+                                        RptqQueryField *queryField2 = barcodeObject.referencesField2;
                                         NSString *tableFieldKey1 = [database safeQueryField: queryField1.databaseSchemaField.name
                                                                                    andTable: queryField1.inQueryTable.queryAlias];
                                         NSString *tableFieldKey2 = [database safeQueryField: queryField2.databaseSchemaField.name
                                                                                    andTable: queryField2.inQueryTable.queryAlias];
                                         id value1 = rowData[tableFieldKey1];
                                         id value2 = rowData[tableFieldKey2];
-                                        RptqDatabaseSchemaField *schemaField1 = [queryField1 databaseSchemaField];
-                                        RptqDatabaseSchemaField *schemaField2 = [queryField2 databaseSchemaField];
-                                        NSNumber *dataTypeNumber1 = [schemaField1 dataType];
-                                        NSNumber *dataTypeNumber2 = [schemaField2 dataType];
-                                        MTDataType dataType1 = [dataTypeNumber1 integerValue];
-                                        MTDataType dataType2 = [dataTypeNumber2 integerValue];
+                                        MTDataType dataType1 = queryField1.databaseSchemaField.dataType.unsignedIntegerValue;
+                                        MTDataType dataType2 = queryField2.databaseSchemaField.dataType.unsignedIntegerValue;
                                         NSString *input1 = [item formattedString:dataType1 forValue:value1];
                                         if ([input1 isEqualToString:MTNullIdentifier]) {
                                             input1 = @"";
@@ -593,7 +585,7 @@
                                             id value = rowData[tableFieldKey];
                                             RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
                                             NSNumber *dataTypeNumber = [schemaField dataType];
-                                            MTDataType dataType = [dataTypeNumber integerValue];
+                                            MTDataType dataType = dataTypeNumber.unsignedIntegerValue;
                                             drawingObject = [NSString stringWithString:[item formattedString:dataType forValue:value]];
                                             if ([drawingObject isEqualToString:MTNullIdentifier]) {
                                                 drawingObject = @"";
@@ -712,13 +704,12 @@
 #pragma mark - UIPrintPageRender
 
 - (NSInteger)numberOfPages {
-    return [self.reportFormatter numberOfPages];
+    return (NSInteger)[self.reportFormatter numberOfPages];
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-    [self drawPageAtIndex: index
-                   inRect: pageRect
-withTransparentBackground: NO];
+    [self drawPageAtIndex: (unsigned long)labs(index)
+                   inRect: pageRect withTransparentBackground: NO];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {

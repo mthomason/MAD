@@ -15,10 +15,10 @@
 
 @interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
 
-@property (assign) BOOL open;
-@property (strong) RptqQueryTable *table;
-@property (strong) NSArray *fields;
-@property (strong) UIViewTableSectionHeaderDatabaseTable *headerView;
+@property (nonatomic, assign) BOOL open;
+@property (nonatomic, strong) RptqQueryTable *table;
+@property (nonatomic, strong) NSArray *fields;
+@property (nonatomic, strong) UIViewTableSectionHeaderDatabaseTable *headerView;
 @property (nonatomic, strong) NSMutableArray *rowHeights;
 
 - (instancetype)initWithTable:(RptqQueryTable *)sectionTable NS_DESIGNATED_INITIALIZER;

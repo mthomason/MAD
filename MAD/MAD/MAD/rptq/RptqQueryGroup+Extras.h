@@ -17,7 +17,7 @@
 
 @interface RptqQueryGroup (Extras) <MTProtocolCompare>
 
-+ (NSInteger)numberOfGroupsForQuery:(RptqQuery *)query;
++ (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;
 
 - (NSString *)fieldNameNice;
 - (NSString *)fieldNameQuery;

@@ -67,12 +67,8 @@ static unsigned char base64DecodeLookup[256] =
 // returns the decoded buffer. Must be free'd by caller. Length is given by
 //	outputLength.
 //
-void *NewBase64Decode(
-	const char *inputBuffer,
-	size_t length,
-	size_t *outputLength)
-{
-	if (length == -1)
+void *NewBase64Decode(const char *inputBuffer, size_t length, size_t *outputLength) {
+    if (length == (NSUInteger)-1)
 	{
 		length = strlen(inputBuffer);
 	}
@@ -108,7 +104,7 @@ void *NewBase64Decode(
 		//
 		// Store the 6 bits from each of the 4 characters as 3 bytes
 		//
-		outputBuffer[j] = (accumulated[0] << 2) | (accumulated[1] >> 4);
+        outputBuffer[j] = (accumulated[0] << 2) | (accumulated[1] >> 4);
 		outputBuffer[j + 1] = (accumulated[1] << 4) | (accumulated[2] >> 2);
 		outputBuffer[j + 2] = (accumulated[2] << 6) | accumulated[3];
 		j += accumulateIndex - 1;

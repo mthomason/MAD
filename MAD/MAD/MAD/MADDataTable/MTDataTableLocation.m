@@ -32,18 +32,22 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
-    [encoder encodeInteger: self.row
+    NSNumber *row = @(self.row);
+    NSNumber *column = @(self.column);
+    [encoder encodeObject: row
                     forKey: [MTDataTableLocation keyRow]];
     
-    [encoder encodeInteger: self.column
+    [encoder encodeObject: column
                     forKey: [MTDataTableLocation keyColumn]];
     
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
-        self.row = [decoder decodeIntegerForKey: [MTDataTableLocation keyRow]];
-        self.column = [decoder decodeIntegerForKey: [MTDataTableLocation keyColumn]];
+        NSNumber *row = [decoder decodeObjectForKey: [MTDataTableLocation keyRow]];
+        NSNumber *column = [decoder decodeObjectForKey: [MTDataTableLocation keyColumn]];
+        self.row = row.unsignedIntegerValue;
+        self.column = column.unsignedIntegerValue;
     }
     
     return self;

@@ -37,13 +37,13 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 
 @property (nonatomic, strong, readonly) NSNumber *uniqueIdForStructure;
 
-@property (assign) MTAlgorithmColor sortVertexColor;
+@property (atomic, assign) MTAlgorithmColor sortVertexColor;
 
-@property (assign) MTAlgorithmColor bfsVertexColor;
-@property (nonatomic, weak) MTVertex           *bfsPredecessor;
+@property (atomic, assign) MTAlgorithmColor bfsVertexColor;
+@property (nonatomic, weak)   MTVertex         *bfsPredecessor;
 @property (nonatomic, strong) NSNumber         *bfsDistance;
 
-@property (assign) MTAlgorithmColor dfsVertexColor;
+@property (atomic, assign) MTAlgorithmColor dfsVertexColor;
 @property (nonatomic, strong) NSNumber         *dfsDistance;
 @property (nonatomic, weak) MTVertex           *dfsPredecessor;
 @property (nonatomic, strong) NSNumber         *dfsFoundCounter;

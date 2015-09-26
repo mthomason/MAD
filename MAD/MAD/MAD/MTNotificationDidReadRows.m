@@ -16,7 +16,7 @@ static const NSInteger RowIntervalInitalMax = 77;
 
 @interface MTNotificationDidReadRows ()
 
-@property (nonatomic, assign) NSInteger rowInterval;
+@property (nonatomic, assign) NSUInteger rowInterval;
 
 @end
 
@@ -48,7 +48,7 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
     [self setRowInterval:RowIntervalInital];
 }
 
-- (NSDictionary *)parametersWithNumberOfRows:(NSInteger)row {
+- (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
     NSNumber *rowCounterWrapper = @(row);
     return @{
              MTDatabaseNumberOfRowsReadKey : rowCounterWrapper,
@@ -65,7 +65,7 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
         [[NSNotificationCenter defaultCenter] postNotification:notification];
         if ([self rowInterval] < RowIntervalInitalMax) {
             if (row > self.rowInterval) {
-                self.rowInterval = ceil(self.rowInterval * 1.1);
+                self.rowInterval = (NSUInteger)ceill((long double)self.rowInterval * 1.1);
             }
         }
     }

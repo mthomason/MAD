@@ -52,8 +52,8 @@
         NSString *tableName = object[keyMTQuerySelectTableName];
         NSArray *fieldKeys = [[NSArray alloc] initWithArray:object[keyMTQuerySelectFieldKeys]];
 
-        NSUInteger limit = [object[keyMTQuerySelectLimit] integerValue];
-        NSUInteger offset = [object[keyMTQuerySelectOffset] integerValue];
+        NSUInteger limit = [object[keyMTQuerySelectLimit] unsignedIntegerValue];
+        NSUInteger offset = [object[keyMTQuerySelectOffset] unsignedIntegerValue];
         
         NSArray *predicates = [[NSArray alloc] initWithArray:object[keyMTQuerySelectPredicates]];
         NSArray *sortDescriptors = [[NSArray alloc] initWithArray:object[keyMTQuerySelectSortDescriptors]];

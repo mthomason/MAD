@@ -16,7 +16,7 @@ static const NSInteger PageIntervalInitalMax = 7;
 
 @interface MTNotificationDidFormatPage ()
 
-@property (nonatomic, assign) NSInteger pageInterval;
+@property (nonatomic, assign) NSUInteger pageInterval;
 
 @end
 
@@ -48,7 +48,7 @@ static MTNotificationDidFormatPage *sharedSingleton = nil;
     [self setPageInterval:PageIntervalInital];
 }
 
-- (NSDictionary *)parametersWithNumberOfPages:(NSInteger)pages {
+- (NSDictionary *)parametersWithNumberOfPages:(NSUInteger)pages {
     NSNumber *pageCounterWrapper = @(pages);
     return @{
              MTDatabaseNumberOfPagesFormattedKey : pageCounterWrapper,
@@ -64,7 +64,7 @@ static MTNotificationDidFormatPage *sharedSingleton = nil;
         [[NSNotificationCenter defaultCenter] postNotification:notification];
         if ([self pageInterval] < PageIntervalInitalMax) {
             if (page > self.pageInterval) {
-                self.pageInterval = ceil(self.pageInterval * 1.1);
+                self.pageInterval = (unsigned long)ceil(self.pageInterval * 1.1);
             }
         }
     }

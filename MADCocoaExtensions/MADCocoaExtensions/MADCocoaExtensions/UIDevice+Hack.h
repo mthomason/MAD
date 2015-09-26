@@ -13,7 +13,6 @@
 
 @interface UIDevice (Hack)
 
-+ (NSUInteger)deviceSystemMajorVersion;
 + (BOOL)isPad;
 
 + (BOOL)isLagacyOS;

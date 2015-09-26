@@ -16,7 +16,7 @@
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 
-- (RptqDocumentSection *)documentSectionForRow:(NSInteger)row;
+- (RptqDocumentSection *)documentSectionForRow:(NSUInteger)row;
 - (RptqQueryGroup *)firstQueryGroup;
 - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
 - (NSArray *)sortedQueryGroups;

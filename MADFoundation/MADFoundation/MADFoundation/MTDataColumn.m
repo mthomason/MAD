@@ -163,7 +163,7 @@
     return self;
 }
 
-- (id)objectAtIndex:(NSInteger)index {
+- (id)objectAtIndex:(NSUInteger)index {
     NSAssert(index < [[self column] count], @"Column doesn't exit!");
     return [self column][index];
 }

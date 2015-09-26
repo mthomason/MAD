@@ -66,12 +66,13 @@
         if ([[self sortDescriptors] count] > 0) {
             [sql appendString:@" ("];
             NSUInteger sortCounter = 0;
-            for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
+            for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
                 if (sortCounter != 0) [sql appendString:@", "];
                 
-                MTDataColumn *column = [self columns][[sortDescriptor key]];
+                MTDataColumn *column = self.columns[sortDescriptor.key];
                 NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-                NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[column nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
+                NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[column nativeColumnType] unsignedIntegerValue]
+                                                                         ascending:sortDescriptor.ascending];
                 [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
                 sortCounter++;
             }

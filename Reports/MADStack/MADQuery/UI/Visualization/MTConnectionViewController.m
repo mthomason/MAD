@@ -184,7 +184,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
         if (success) {
             
             __weak MTConnectionViewController *weakself = self;
-            [self.docToSave addConnection:self.databaseConnection status:^(NSString *readStatus, CGFloat progress) {
+            [self.docToSave addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
                 
                 weakself.navigationItem.prompt = readStatus;
                 weakself.progressView.progress = progress;

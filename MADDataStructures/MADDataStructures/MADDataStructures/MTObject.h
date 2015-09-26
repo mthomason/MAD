@@ -23,7 +23,7 @@
 
 @interface MTObject : NSObject <MTProtocolCompare, MTProtocolLog>
 
-@property (strong) id object;
+@property (atomic, strong) id object;
 
 - (instancetype)init;
 - (instancetype)initWithObject:(id)object;

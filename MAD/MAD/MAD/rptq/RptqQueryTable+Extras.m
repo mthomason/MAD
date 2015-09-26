@@ -46,9 +46,10 @@
     
     if (error == nil) {
         RptqQueryTable *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
     
     [self setDesignerOriginX:@(CGPointZero.x)];
     [self setDesignerOriginY:@(CGPointZero.y)];
@@ -95,8 +96,8 @@
 }
 
 - (NSString *)tableAlias {
-    NSUInteger dropIndex = [[self dropIndex] integerValue];
-    return dropIndex == 0 ? [[self databaseSchemaTable] name] : [self queryAlias];
+    return self.dropIndex.unsignedIntegerValue == 0 ?
+                [[self databaseSchemaTable] name] : [self queryAlias];
 }
 
 - (NSString *)queryAlias {

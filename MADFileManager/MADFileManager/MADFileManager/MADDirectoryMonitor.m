@@ -10,7 +10,7 @@
 
 @interface MADDirectoryMonitor ()
 
-@property (nonatomic) int monitoredDirectoryFileDescriptor;
+@property (nonatomic, assign) int monitoredDirectoryFileDescriptor;
 @property (nonatomic, strong) dispatch_queue_t directoryMonitorQueue;
 @property (nonatomic, strong) dispatch_source_t directoryMonitorSource;
 @property (nonatomic, strong) NSURL *URL;
@@ -24,7 +24,7 @@
 
     if (self = [super init]) {
         self.URL = URL;
-        self.monitoredDirectoryFileDescriptor = -1;
+        self.monitoredDirectoryFileDescriptor = 0;
     }
     
     return self;
@@ -36,21 +36,23 @@
 
     if (self.directoryMonitorSource == nil && self.monitoredDirectoryFileDescriptor == -1) {
         self.monitoredDirectoryFileDescriptor = open([self.URL.path cStringUsingEncoding:NSUTF8StringEncoding], O_EVTONLY);
-        
-        self.directoryMonitorQueue = dispatch_queue_create("com.everydayapps.mad.filesystem.watcher", DISPATCH_QUEUE_CONCURRENT);
-        
-        self.directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, self.monitoredDirectoryFileDescriptor, DISPATCH_VNODE_WRITE, self.directoryMonitorQueue);
-        
-        dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
-            [self.delegate directoryMonitorDidObserveChange:self];
-        });
-        
-        dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
-            close(self.monitoredDirectoryFileDescriptor);
-            self.monitoredDirectoryFileDescriptor = -1;
-            self.directoryMonitorSource = nil;
-        });
-        dispatch_resume(self.directoryMonitorSource);
+        if (self.monitoredDirectoryFileDescriptor >= 0) {
+            self.directoryMonitorQueue = dispatch_queue_create("com.everydayapps.mad.filesystem.watcher", DISPATCH_QUEUE_CONCURRENT);
+            
+            unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
+            self.directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, (uintptr_t)self.monitoredDirectoryFileDescriptor, mask, self.directoryMonitorQueue);
+            
+            dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
+                [self.delegate directoryMonitorDidObserveChange:self];
+            });
+            
+            dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
+                close(self.monitoredDirectoryFileDescriptor);
+                self.monitoredDirectoryFileDescriptor = -1;
+                self.directoryMonitorSource = nil;
+            });
+            dispatch_resume(self.directoryMonitorSource);
+        }
     }
 }
 

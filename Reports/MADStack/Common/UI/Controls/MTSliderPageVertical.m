@@ -87,7 +87,7 @@
     rect.origin = CGPointMake(rect.origin.x, rect.origin.y + offsetHeight);
     rect.size = CGSizeMake(rect.size.height, rect.size.width - offsetHeight * 2.0000f);
 
-    NSInteger numberOfTicks = (rect.size.height / stringHeight) - 1;
+    CGFloat numberOfTicks = (rect.size.height / stringHeight) - 1;
     
     if (numberOfTicks < 0) { numberOfTicks = 0; }
 
@@ -96,11 +96,13 @@
     }
 
     BOOL everyOther = numberOfTicks > 5;
-    if (everyOther && numberOfTicks % 2 == 0) {
+    if (everyOther && (NSInteger)numberOfTicks % 2 == 0) {
         numberOfTicks--;
     }
     
-    CGFloat distanceBetweenTicks = numberOfTicks > 1 ? (rect.size.height - (stringHeight * numberOfTicks)) / (numberOfTicks - 1) : CGSizeZero.height;
+    CGFloat distanceBetweenTicks = numberOfTicks > 1 ?
+                            (rect.size.height - (stringHeight * numberOfTicks)) / (numberOfTicks - 1) :
+                            CGSizeZero.height;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
 
     double tickValue = [self maximumValue] / (numberOfTicks - 1);

@@ -38,7 +38,7 @@
     return self;
 }
 
-- (NSInteger)count {
+- (NSUInteger)count {
     RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
@@ -49,8 +49,8 @@
     RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    NSInteger current = self.current;
-    NSInteger total = [self count];
+    NSUInteger current = self.current;
+    NSUInteger total = [self count];
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - current)];
     for (; self.current<total; self.current++) {
         @autoreleasepool {

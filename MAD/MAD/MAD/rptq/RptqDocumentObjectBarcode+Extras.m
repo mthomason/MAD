@@ -31,7 +31,7 @@
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocumentObjectBarcode *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     [self setIdentifier:@(identifier)];
     
@@ -82,11 +82,11 @@
 
 + (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject {
     
-    MTBarcodeType type = [[documentObject type] integerValue];
+    MTBarcodeType type = [[documentObject type] unsignedIntegerValue];
     MTBarcode *barcode = [MTBarcode barcodeWithType:type];
 
     [barcode setHas2dComponentEnabled:[[documentObject add2dComponent] boolValue]];
-    [barcode setBorderStyle:        [[documentObject borderStyle] integerValue]];
+    [barcode setBorderStyle:        [[documentObject borderStyle] unsignedIntegerValue]];
     barcode.borderWidth =         [[documentObject borderWidth] integerValue];
     [barcode setHeight:             [[documentObject height] integerValue]];
     [barcode setHumanReadable:      [[documentObject humanReadable] integerValue]];

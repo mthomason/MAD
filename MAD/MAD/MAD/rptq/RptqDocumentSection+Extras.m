@@ -60,7 +60,7 @@
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocumentSection *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = [[lastObject identifier] unsignedIntegerValue] + 1;
     }
     NSNumber *identiferNumber = @(identifier);
     [self setIdentifier:identiferNumber];
@@ -156,7 +156,7 @@
     if (error == nil) {
         RptqDocumentObject *lastObject = fetchResults.lastObject;
         if (lastObject.objectID.isTemporaryID == NO) {
-            dropIndex = lastObject.dropIndex.integerValue + 1;
+            dropIndex = lastObject.dropIndex.unsignedIntegerValue + 1;
         }
     }
     return dropIndex;
@@ -168,9 +168,9 @@
     [documentObject setOrigin:origin];
     
     NSUInteger sectionZero = 0;
-    RptqDocumentSectionRows *sectionRow = [self hasRows][sectionZero];
-    NSUInteger lastIndex = [[sectionRow hasObjects] count];
-    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
+    RptqDocumentSectionRows *sectionRow = self.hasRows.firstObject;
+    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:(NSInteger)sectionRow.hasObjects.count
+                                                   inSection:(NSInteger)sectionZero];
     
     NSNumber *dropIndex = @([self nextDropIndexForSection]);
     [documentObject setDropIndex:dropIndex];
@@ -178,7 +178,8 @@
     NSOrderedSet *documentObjects = [sectionRow hasObjects];
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
     
-    [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
+    [hasObjects insertObject: documentObject
+                     atIndex: (NSUInteger)indexInsert.item];
     [sectionRow setHasObjects:hasObjects];
     
     [self.managedObjectContext save:nil];
@@ -200,12 +201,12 @@
     return (RptqDocumentSection *)[managedObjectContext objectRegisteredForID:objectId];
 }
 
-+ (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
-    NSInteger documentHeader    = 0;
-    NSInteger pageHeader        = 1;
-    NSInteger body              = 2 + numberOfGroups;       //6
-    NSInteger pageFooter        = 3 + (2 * numberOfGroups); //11
-    NSInteger documentFooter    = 4 + (2 * numberOfGroups); //12
++ (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row withNumberOfGroups:(NSUInteger)numberOfGroups {
+    const int8_t documentHeader    = 0;
+    const int8_t pageHeader        = 1;
+    NSUInteger body              = 2 + numberOfGroups;       //6
+    NSUInteger pageFooter        = 3 + (2 * numberOfGroups); //11
+    NSUInteger documentFooter    = 4 + (2 * numberOfGroups); //12
     MNSDocumentSectionType result;
 
     if (row == documentHeader) {
@@ -219,7 +220,7 @@
     } else if (row == documentFooter) {
         result = MNSDocumentSectionTypeReportFooter;
     } else {
-        NSInteger locationRelitaveToGroup = row - pageHeader;
+        NSUInteger locationRelitaveToGroup = row - pageHeader;
         BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
         if (isGroupHeader) {
             result = MNSDocumentSectionTypeGroupHeader;
@@ -309,7 +310,7 @@
 }
 
 - (MNSDocumentSectionType)getDocumentSectionType {
-    return self.type.integerValue;
+    return self.type.unsignedIntegerValue;
 }
 
 - (NSString *)localizedDisplayName {

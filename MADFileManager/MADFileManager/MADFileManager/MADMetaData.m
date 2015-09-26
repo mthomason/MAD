@@ -129,11 +129,11 @@
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue) : NO;
 }
 
-- (double)ubiquitousItemPercentUploaded {
+- (CGFloat)ubiquitousItemPercentUploaded {
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey]).doubleValue) : 100.0;
 }
 
-- (double)ubiquitousItemPercentDownloaded {
+- (CGFloat)ubiquitousItemPercentDownloaded {
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue) : 100.0;
 }
 
@@ -170,7 +170,7 @@
             self.ubiquitousItemPercentUploaded == unknown.ubiquitousItemPercentUploaded;
 }
 
-- (NSUInteger)samePercentageHash {
+- (CGFloat)samePercentageHash {
     return self.ubiquitousItemPercentDownloaded * 5 + self.ubiquitousItemPercentUploaded * 7;
 }
 
@@ -178,14 +178,14 @@
     NSError *error = nil;
     NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
     NSNumber *fsfn = [attributes objectForKey:NSFileSystemFileNumber];
-    return fsfn.longLongValue;
+    return fsfn.unsignedLongLongValue;
 }
 
 - (unsigned long long)fileSystemNumber {
     NSError *error = nil;
     NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.URL.path error:&error];
     NSNumber *fsf = [attributes objectForKey:NSFileSystemNumber];
-    return fsf.longLongValue;
+    return fsf.unsignedLongLongValue;
 }
 
 - (unsigned long long)st_ino {

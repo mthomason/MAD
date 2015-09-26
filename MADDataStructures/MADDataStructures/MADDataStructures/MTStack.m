@@ -14,8 +14,8 @@
 
 @interface MTStack ()
 
-@property (strong) NSMutableArray *stack;
-@property (assign) NSUInteger counter;
+@property (nonatomic, strong) NSMutableArray *stack;
+@property (nonatomic, assign) NSUInteger counter;
 
 @end
 

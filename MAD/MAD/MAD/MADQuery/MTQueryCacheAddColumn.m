@@ -55,11 +55,11 @@
         NSNumber *uniqueObj = object[@(MTQueryCacheAddColumnUnique)];
         BOOL uniqueValue = NO;
         if (uniqueObj != nil) {
-            uniqueValue = [uniqueObj boolValue];
+            uniqueValue = uniqueObj.boolValue;
         }
         [self setUniqueColumnHack:uniqueValue];
         
-        [self setCreateTable:[createTable boolValue]];
+        [self setCreateTable:createTable.boolValue];
         [self setColumnName:columnName];
         
         [self setTableName:tableName];
@@ -83,7 +83,7 @@
     NSString *tableName = [self tableName];
     NSString *columnName = [self columnName];
     
-    NSString *columnAffinity = [[self database] nativeTypeForDataType:[[[self column] columnType] integerValue]];
+    NSString *columnAffinity = [[self database] nativeTypeForDataType:[[[self column] columnType] unsignedIntegerValue]];
 
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];

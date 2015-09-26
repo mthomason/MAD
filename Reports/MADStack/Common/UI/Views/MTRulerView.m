@@ -80,7 +80,7 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGMutablePathRef pathInchMarks = CGPathCreateMutable();
     
-    for (NSInteger i = CGPointZero.x; i < rect.size.width / [self eigthInchInPoints]; i++) {
+    for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / [self eigthInchInPoints]; i++) {
         @autoreleasepool {
             CGFloat xPoint = i * [self eigthInchInPoints];
             CGFloat length = 0.0000f;
@@ -107,7 +107,7 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
     
     CGFloat offsetInPoints = (72.0000f / 2.5400f) / 10.0000f;   //One cm
     CGMutablePathRef pathCmMarks = CGPathCreateMutable();
-    for (NSInteger i = CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
+    for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
         @autoreleasepool {
             CGFloat length = 0.0000f;
             CGFloat xPointC = i * ([self cmInPoints] / 10.0000f);

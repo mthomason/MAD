@@ -117,7 +117,7 @@
             }
         }
     }
-    placedItem.frame = CGRectMake(roundf(placedItem.frame.origin.x), roundf(placedItem.frame.origin.y), placedItem.frame.size.width, placedItem.frame.size.height);
+    placedItem.frame = CGRectMake(round(placedItem.frame.origin.x), round(placedItem.frame.origin.y), placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
 - (NSArray *)positionUnplacedItems:(NSArray *)unplacedItems aroundPlacedItems:(NSArray *)placedItems {
@@ -281,7 +281,7 @@
 }
 
 - (void)addItemWithObjectID:(NSManagedObjectID *)objectID andFrame:(CGRect)frame {
-    NSIndexPath *path = [NSIndexPath indexPathForItem:self.items.count inSection:0];
+    NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)self.items.count inSection:0];
     MADSectionLayoutAttributes *layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
     layout.objectID = objectID;
     layout.frame = frame;

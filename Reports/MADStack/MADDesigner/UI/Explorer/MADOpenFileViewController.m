@@ -528,19 +528,19 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [self.batchUpdates removeAllObjects];
 }
 
-- (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+- (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchInserts addObject:pair];
 }
 
-- (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+- (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchRemoves addObject:pair];
 }
 
-- (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSInteger)index {
+- (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
     NSNumber *i = @(index);
     MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
     [self.batchUpdates addObject:pair];
@@ -642,18 +642,19 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         self.searchBar.barTintColor = [UIColor whiteColor];
         self.searchBar.tintColor = [UIColor whiteColor];
         
-        
-        [UIView transitionWithView:self.navigationItem.titleView
-                          duration:0.2000f
-                           options:UIViewAnimationOptionCurveEaseOut animations:^{
-                               weakself.searchBar.alpha = 1.0000f;
-                               weakself.titleView.alpha = 0.0000f;
-                               weakself.navigationItem.titleView = searchViewHolder;
-                           } completion:^(BOOL finished) {
-                               if (weakself.searchBar.isFirstResponder == NO) {
-                                   [weakself.searchBar becomeFirstResponder];
-                               }
-                           }];
+        if (self.navigationItem.titleView != nil) {
+            [UIView transitionWithView:(UIView * _Nonnull)self.navigationItem.titleView
+                              duration:0.2000f
+                               options:UIViewAnimationOptionCurveEaseOut animations:^{
+                                   weakself.searchBar.alpha = 1.0000f;
+                                   weakself.titleView.alpha = 0.0000f;
+                                   weakself.navigationItem.titleView = searchViewHolder;
+                               } completion:^(BOOL finished) {
+                                   if (weakself.searchBar.isFirstResponder == NO) {
+                                       [weakself.searchBar becomeFirstResponder];
+                                   }
+                               }];
+        }
         
     } else {
         if (self.searchBar.text.length > 0) {

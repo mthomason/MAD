@@ -157,7 +157,7 @@
     NSUInteger sortedIndex;
     if ([[self sortDescriptors] count] > 0) {
         sortedIndex = [[self sortIndex] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj[@"~rowid~"] integerValue] == index) {
+            if ([obj[@"~rowid~"] unsignedIntegerValue] == index) {
                 *stop = YES;
                 return YES;
             }
@@ -185,7 +185,7 @@
     return [[self columns] objectEnumerator];
 }
 
-- (id)objectAtRow:(NSInteger)row {
+- (id)objectAtRow:(NSUInteger)row {
     return [self sortIndex][row];
 }
 
@@ -197,7 +197,7 @@
     return objectForField;
 }
 
-- (id)objectAtIndex:(NSInteger)index {
+- (id)objectAtIndex:(NSUInteger)index {
     NSUInteger sortedIndex = [self sortedIndexForIndex:index];
     
     NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[[self columnKeys] count]];
@@ -259,7 +259,7 @@
     return NSStringFromSelector(selSortIndex);
 }
 
-- (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
+- (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     NSRange range = NSMakeRange(row, limit);
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
     return [[self sortIndex] objectsAtIndexes:indexSet];

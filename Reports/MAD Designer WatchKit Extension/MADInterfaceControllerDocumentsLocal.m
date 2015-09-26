@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonExport;
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *buttonMad;
 
-@property (nonatomic, strong) MADAppConfiguration *app;
 @property (nonatomic, strong) NSArray *filesByURL;
 
 @end

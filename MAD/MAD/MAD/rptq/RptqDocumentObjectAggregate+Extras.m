@@ -38,17 +38,18 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectAggregate class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    [request setSortDescriptors: sortDescriptors];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocumentObjectAggregate *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {
@@ -85,11 +86,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 }
 
 - (NSString *)functionName {
-    return [RptqDocumentObjectAggregate displayStringForType: self.function.integerValue];
+    return [RptqDocumentObjectAggregate displayStringForType: self.function.unsignedIntegerValue];
 }
 
 - (NSString *)functionNameShort {
-    return [RptqDocumentObjectAggregate shortDisplayStringForType: self.function.integerValue];
+    return [RptqDocumentObjectAggregate shortDisplayStringForType: self.function.unsignedIntegerValue];
 }
 
 + (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {

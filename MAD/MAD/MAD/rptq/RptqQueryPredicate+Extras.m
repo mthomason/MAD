@@ -28,17 +28,18 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqQueryPredicate *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {
@@ -174,11 +175,11 @@
 }
 
 - (NSString *)symbolForDisplay {
-    return MNSPredicateOperatorSymbolsDisplay[self.comparson.integerValue];
+    return MNSPredicateOperatorSymbolsDisplay[self.comparson.unsignedIntegerValue];
 }
 
 - (NSString *)symbolForComparson {
-    return MNSPredicateOperatorSymbols[self.comparson.integerValue];
+    return MNSPredicateOperatorSymbols[self.comparson.unsignedIntegerValue];
 }
 
 #pragma mark - MTProtocolCompare

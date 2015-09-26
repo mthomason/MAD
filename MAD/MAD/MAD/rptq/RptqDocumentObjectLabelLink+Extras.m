@@ -37,11 +37,10 @@
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocumentObjectLabelLink *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
-}
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;}
 
 - (void)awakeFromFetch {
     [super awakeFromFetch];

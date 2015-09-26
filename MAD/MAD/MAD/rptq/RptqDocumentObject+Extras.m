@@ -50,8 +50,8 @@ static NSNumberFormatter *currencyNumberFormatter;
     NSUInteger lastDropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = [fetchResults lastObject];
-        idNumber = [[lastObject identifier] integerValue] + 1;
-        lastDropIndex = [[lastObject dropIndex] integerValue] + 1;
+        idNumber = [[lastObject identifier] unsignedIntegerValue] + 1;
+        lastDropIndex = [[lastObject dropIndex] unsignedIntegerValue] + 1;
     }
     NSNumber *identifier = @(idNumber);
     NSString *fontname = [MADFont defaultFamily];
@@ -212,7 +212,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 #pragma mark - Member
 
 - (MTDocumentObjectType)getType {
-    return self.type.integerValue;
+    return self.type.unsignedIntegerValue;
 }
 
 - (NSString *)designerRepresentationText {
@@ -258,7 +258,7 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
             
         case MTDocumentObjectTypeBarcode: {
-            NSString *barcodeName = [MTBarcode barcodeNameForType:self.isBarcode.type.integerValue];
+            NSString *barcodeName = [MTBarcode barcodeNameForType:self.isBarcode.type.unsignedIntegerValue];
             result = [NSString stringWithFormat:@"Barcode (%@)", barcodeName];
             break;
         }
@@ -267,16 +267,12 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
     
     }
-
-    if (!result) {
-        NSLog(@"WTF");
-    }
     return result;
 }
 
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
     
-    MTDocumentObjectType objectType = [[documentObject type] integerValue];
+    MTDocumentObjectType objectType = [[documentObject type] unsignedIntegerValue];
     NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
     
     switch (objectType) {
@@ -316,10 +312,10 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 - (void)dropAtRect:(CGRect)rect {
-    CGFloat sizeWidth = nearbyintf(rect.size.width);
-    CGFloat sizeHeight = nearbyintf(rect.size.height);
-    self.sizewidth = @(sizeWidth);
-    self.sizeheight = @(sizeHeight);
+    NSNumber *sizeWidth = @(nearbyint(rect.size.width));
+    NSNumber *sizeHeight = @(nearbyint(rect.size.height));
+    self.sizewidth = sizeWidth;
+    self.sizeheight = sizeHeight;
 }
 
 #pragma mark - MTProtocolCompare

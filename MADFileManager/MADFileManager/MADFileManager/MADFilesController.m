@@ -117,7 +117,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Property Overrides
 
-- (NSInteger)count {
+- (NSUInteger)count {
     return self.fileMetaDatum.count;
 }
 
@@ -147,7 +147,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 #pragma mark - Subscripting
 
-- (MADMetaData *)objectAtIndexedSubscript:(NSInteger)index {
+- (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index {
     // Fetch the appropriate list info protected by listInfoQueue.
     __block MADMetaData *listInfo = nil;
     
@@ -189,7 +189,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
     dispatch_async(self.fileMetaDataQueue, ^{
         // Remove the old list info and replace it with the new one.
-        NSInteger indexOfListInfo = [self.fileMetaDatum indexOfObject:listInfo];
+        NSUInteger indexOfListInfo = [self.fileMetaDatum indexOfObject:listInfo];
         self.fileMetaDatum[indexOfListInfo] = listInfo;
         
         [self.delegateQueue addOperationWithBlock:^{
@@ -336,7 +336,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         
         // Remove
         for (MADMetaData *trackedRemovedListInfo in trackedRemovedListInfos) {
-            __block NSInteger trackedRemovedListInfoIndex;
+            __block NSUInteger trackedRemovedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
                 trackedRemovedListInfoIndex = [self.fileMetaDatum indexOfObject:trackedRemovedListInfo];
@@ -359,7 +359,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         NSArray *fileMetaDatumSorted = [self.fileMetaDatum sortedArrayUsingFunction:finderSortWithLocale context:(__bridge void *)([NSLocale currentLocale])];
         self.fileMetaDatum = fileMetaDatumSorted.mutableCopy;
         for (MADMetaData *untrackedInsertedListInfo in untrackedInsertedListInfos) {
-            __block NSInteger untrackedInsertedListInfoIndex;
+            __block NSUInteger untrackedInsertedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
                 untrackedInsertedListInfoIndex = [self.fileMetaDatum indexOfObject:untrackedInsertedListInfo];
@@ -374,7 +374,7 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
         
         // Update
         for (MADMetaData *updatedListInfo in updatedMetaDatum) {
-            __block NSInteger updatedListInfoIndex;
+            __block NSUInteger updatedListInfoIndex;
             
             dispatch_sync(self.fileMetaDataQueue, ^{
                 //NSLog(@"UPDATING %@", updatedListInfo);

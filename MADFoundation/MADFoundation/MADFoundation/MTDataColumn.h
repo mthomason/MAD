@@ -34,7 +34,7 @@
 - (void)removeAllObjects;
 
 - (void)addObject:(id)object;               //Adds to end of column data
-- (instancetype)objectAtIndex:(NSInteger)index;       //Object at row number
+- (instancetype)objectAtIndex:(NSUInteger)index;       //Object at row number
 - (void)addRows:(NSUInteger)count;          //Adds specifc number of rows with default value.
 
 @end

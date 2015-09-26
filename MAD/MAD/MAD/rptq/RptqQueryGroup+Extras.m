@@ -40,17 +40,18 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqQueryGroup *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {
@@ -79,12 +80,12 @@
 
 #pragma mark - Static
 
-+ (NSInteger)numberOfGroupsForQuery:(RptqQuery *)query {
++ (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
     [request setPredicate:predicate];
     NSError *error = nil;
-    NSInteger result = [[query managedObjectContext] countForFetchRequest:request error:&error];
+    NSUInteger result = [[query managedObjectContext] countForFetchRequest:request error:&error];
     return (error) ? 0 : result;
 }
 

@@ -34,7 +34,7 @@ extern NSString * const MTFontFamilyZapfino;
 - (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, strong, readonly) NSString *familyName;
-@property (assign) CGFloat pointSize;
+@property (nonatomic, assign) CGFloat pointSize;
 
 - (UIFont *)font;
 - (CTFontRef)coreTextFont;

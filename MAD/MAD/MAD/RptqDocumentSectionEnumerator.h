@@ -15,12 +15,12 @@
 
 @interface RptqDocumentSectionEnumerator : NSEnumerator
 
-@property (assign) NSInteger current;
+@property (atomic, assign) NSUInteger current;
 
 - (id)initWithDocument:(RptqDocument *)document;
 - (NSArray *)allObjects;
 - (id)nextObject;
-- (NSInteger)count;
+- (NSUInteger)count;
 
 @end
 

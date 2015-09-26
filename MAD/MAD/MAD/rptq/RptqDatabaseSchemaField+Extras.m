@@ -29,7 +29,9 @@
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = [[fetchResults firstObject] unsignedIntegerValue] + 1;
-    [self setIdentifier:@(identifier)];
+
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {
@@ -84,7 +86,7 @@
     [result setName:self.name];
     [result setFieldType:(MTDataType)[[self dataType] integerValue]];
     [result setFieldTypeNative:[[self dataTypeNative] integerValue]];
-    [result setDecimals:[[self decimals] integerValue]];
+    [result setDecimals:[[self decimals] unsignedIntegerValue]];
     [result setPrimaryKey:[[self primaryKey] boolValue]];
     return result;
 }
@@ -99,7 +101,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MTDataTypeObject selectorForSorting:[[self dataType] integerValue]];
+    return [MTDataTypeObject selectorForSorting:[[self dataType] unsignedIntegerValue]];
 }
 
 #pragma mark - MTProtocolLog

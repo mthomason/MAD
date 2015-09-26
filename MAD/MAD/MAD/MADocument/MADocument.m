@@ -552,7 +552,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSError *error = nil;
-    NSInteger groupCount = [self.managedObjectContext countForFetchRequest:request error:&error];
+    NSUInteger groupCount = [self.managedObjectContext countForFetchRequest:request error:&error];
     groupCount = (error) ? 0 : groupCount;
     
     queryGroup.hasField = queryField;
@@ -703,7 +703,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)addConnection:(MTDatabaseConnection *)connection
-               status:(void (^)(NSString *status, CGFloat progress))status
+               status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion {
     
     RptqDocument *rptqDocument = [self activeDocumentModel];
@@ -712,7 +712,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [self setMainDatabase:database];
         
         [rptqDocument addDatabase: self.mainDatabase
-                           status: ^(NSString *message, CGFloat progress) {
+                           status: ^(NSString *message, float progress) {
             status(message, progress);
         } completion:^(BOOL success, MTErrorContainer *errorContainer) {
             completion(success, errorContainer);
@@ -780,7 +780,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
     RptqDocumentSection *section = sectionRow.inSection;
-    NSInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
+    NSUInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
     
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
     [hasObjects removeObjectAtIndex:deleteIndex];
@@ -1064,7 +1064,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSArray *properties = @[NSURLIsDirectoryKey];
         NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: fileURL
                                               includingPropertiesForKeys: properties
-                                                                 options: -1
+                                                                 options: NSDirectoryEnumerationSkipsHiddenFiles
                                                             errorHandler: ^BOOL(NSURL *url, NSError *error) {
                                                                 return YES;
                                                             }];
@@ -1122,7 +1122,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSArray *propertyKeys = @[NSURLIsDirectoryKey];
     NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: self.urlGuts
                                           includingPropertiesForKeys: propertyKeys
-                                                             options: -1
+                                                             options: NSNotFound
                                                         errorHandler: ^BOOL(NSURL *url, NSError *error) {
                                                             return YES;
                                                         }];

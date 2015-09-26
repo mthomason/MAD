@@ -44,11 +44,11 @@
         
         NSNumber *keyGroupByType = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
         NSNumber *groupBy = object[keyGroupByType];
-        [self setGroupByType:[groupBy integerValue]];
+        [self setGroupByType:[groupBy unsignedIntegerValue]];
         
         NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
         NSNumber *functionType = object[keyAggregateFunctionType];
-        [self setFunctionType:[functionType integerValue]];
+        [self setFunctionType:[functionType unsignedIntegerValue]];
         
         NSNumber *keyParametersFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
         NSString *columnKey = [NSString stringWithString:object[keyParametersFieldKey]];

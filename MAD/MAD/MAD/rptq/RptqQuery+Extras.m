@@ -69,10 +69,10 @@
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqQuery *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-    
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {
@@ -106,8 +106,8 @@
 
 #pragma mark - Actions
 
-- (RptqDocumentSection *)documentSectionForRow:(NSInteger)row {
-    NSInteger numberOfGroups = self.hasQueryGroups.count;
+- (RptqDocumentSection *)documentSectionForRow:(NSUInteger)row {
+    NSUInteger numberOfGroups = self.hasQueryGroups.count;
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
         
@@ -136,16 +136,16 @@
                 break;
                 
             case MNSDocumentSectionTypeGroupHeader: {
-                NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
+                NSUInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
                 RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
                 resultSection = [self headerSectionInSections:[group hasSection]];
                 break;
             }
                 
             case MNSDocumentSectionTypeGroupFooter: {
-                NSInteger body          = 2 + numberOfGroups;
-                NSInteger indentLevel   = body - (row - body);
-                NSInteger groupNumber   = indentLevel - 2;
+                NSUInteger body          = 2 + numberOfGroups;
+                NSUInteger indentLevel   = body - (row - body);
+                NSUInteger groupNumber   = indentLevel - 2;
                 RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
                 resultSection = [self footerSectionInSections:[group hasSection]];
                 break;
@@ -218,7 +218,7 @@
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
-            SEL sel = [MTDataTypeObject selectorForSorting: groupField.databaseSchemaField.dataType.integerValue];
+            SEL sel = [MTDataTypeObject selectorForSorting: groupField.databaseSchemaField.dataType.unsignedIntegerValue];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
                                                                            ascending: sortAscending
                                                                             selector: sel];

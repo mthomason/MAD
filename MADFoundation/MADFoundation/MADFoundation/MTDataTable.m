@@ -67,7 +67,7 @@
     [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
     [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
-    [encoder encodeInteger: [self rowCounter]       forKey: [MTDataTable keyRowCounter]];
+    [encoder encodeObject: [NSNumber numberWithUnsignedInteger: [self rowCounter]]        forKey: [MTDataTable keyRowCounter]];
     
 }
 
@@ -76,25 +76,24 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-    self = [super init];
-    if(self) {
+    if (self = [super init]) {
         NSString *name =                [decoder decodeObjectForKey: [MTDataTable keyName]];
-        [self setName: name];
+        self.name = name;
         
         NSMutableArray *columnKeys =    [decoder decodeObjectForKey: [MTDataTable keyColumnKeys]];
-        [self setColumnKeys: columnKeys];
+        self.columnKeys = columnKeys;
         
         NSMutableDictionary *columns =  [decoder decodeObjectForKey: [MTDataTable keyColumns]];
-        [self setColumns: columns];
+        self.columns = columns;
         
-        NSUInteger rowCounter =         [decoder decodeIntegerForKey: [MTDataTable keyRowCounter]];
-        [self setRowCounter:rowCounter];
+        NSNumber *rowCounterObject = [decoder decodeObjectForKey: [MTDataTable keyRowCounter]];
+        self.rowCounter = rowCounterObject.unsignedIntegerValue;
         
         NSMutableArray *sortDescriptors = [decoder decodeObjectForKey:[MTDataTable keySortDescriptors]];
-        [self setSortDescriptors:sortDescriptors];
+        self.sortDescriptors = sortDescriptors;
 
         NSNumber *objid = [decoder decodeObjectForKey:@"objid"];
-        self.tag = [objid unsignedIntegerValue];
+        self.tag = objid.unsignedIntegerValue;
         
    }
     return self;
@@ -262,8 +261,7 @@
     }
     
     NSNumber *rowCounterObj = plist[[MTDataTable keyRowCounter]];
-    NSUInteger rowCounter = [rowCounterObj integerValue];
-    [self setRowCounter:rowCounter];
+    self.rowCounter = rowCounterObj.unsignedIntegerValue;
     
 }
 
@@ -289,7 +287,7 @@
     return nil;
 }
 
-- (id)objectAtRow:(NSInteger)row {
+- (id)objectAtRow:(NSUInteger)row {
     return nil;
 }
 
@@ -307,7 +305,7 @@
     return @[];
 }
 
-- (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
+- (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     return @[];
 }
 

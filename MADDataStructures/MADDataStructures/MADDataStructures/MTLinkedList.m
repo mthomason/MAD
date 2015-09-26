@@ -15,7 +15,7 @@
 @interface MTLinkedList()
 
 @property (nonatomic, strong) NSMutableArray *list;
-@property (assign) NSInteger location;
+@property (nonatomic, assign) NSUInteger location;
 
 @end
 

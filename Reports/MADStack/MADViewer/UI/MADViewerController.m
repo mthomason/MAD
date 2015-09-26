@@ -495,9 +495,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     UISlider *slider = (UISlider *)tap.view;
     if (slider.highlighted == NO) {
         CGPoint pt = [tap locationInView: slider];
-        CGFloat percentage = pt.x / slider.bounds.size.width;
-        CGFloat delta = percentage * (slider.maximumValue - slider.minimumValue);
-        CGFloat value = slider.minimumValue + delta;
+        float percentage = (float)(pt.x / slider.bounds.size.width);
+        float delta = percentage * (slider.maximumValue - slider.minimumValue);
+        float value = slider.minimumValue + delta;
         [slider setValue:value animated:YES];
         [self sliderPageDidFinishDrag:slider];
         [self sliderChangedPage:slider];
@@ -538,8 +538,8 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 - (void)sliderChangedPage:(id)sender {
 
     UISlider *slider = (UISlider *)sender;
-    float sliderIndex = lroundf([slider value]);
-    if ((int)sliderIndex != self.currentPageIndex) {
+    long int sliderIndex = lroundf([slider value]);
+    if ((unsigned long)sliderIndex != self.currentPageIndex) {
         self.currentPageIndex = sliderIndex;
         [self updatePageStatus];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
@@ -616,13 +616,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
-    NSArray *viewControllers = self.viewControllers;
-    NSInteger numberOfViewControllers = [viewControllers count];
     MTReportViewerReportPageViewController *result = nil;
-    if (index < numberOfViewControllers) {
-        result = viewControllers[index];
+    if (index < self.viewControllers.count) {
+        result = self.viewControllers[index];
     } else {
-        result = viewControllers.lastObject;
+        result = self.viewControllers.lastObject;
     }
     return result;
 }

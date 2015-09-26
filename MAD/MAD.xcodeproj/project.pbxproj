@@ -316,8 +316,6 @@
 		4CC2847C1BADE9AE00775B72 /* RptqDocumentObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284441BADE98F00775B72 /* RptqDocumentObjectFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC2847D1BADE9B000775B72 /* RptqDocumentObjectFormula+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284451BADE98F00775B72 /* RptqDocumentObjectFormula+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC2847E1BADE9B300775B72 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284461BADE98F00775B72 /* RptqDocumentObjectFormula+Extras.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2847F1BADE9B400775B72 /* RptqDocumentObjectGroupKey+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284471BADE98F00775B72 /* RptqDocumentObjectGroupKey+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC284801BADE9B700775B72 /* RptqDocumentObjectGroupKey+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284481BADE98F00775B72 /* RptqDocumentObjectGroupKey+Extras.m */; settings = {ASSET_TAGS = (); }; };
 		4CC284811BADE9B800775B72 /* RptqDocumentObjectImage+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284491BADE98F00775B72 /* RptqDocumentObjectImage+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284821BADE9BC00775B72 /* RptqDocumentObjectImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2844A1BADE98F00775B72 /* RptqDocumentObjectImage+Extras.m */; settings = {ASSET_TAGS = (); }; };
 		4CC284831BADE9BD00775B72 /* RptqDocumentObjectLabel+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2844B1BADE98F00775B72 /* RptqDocumentObjectLabel+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1320,7 +1318,6 @@
 				4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */,
 				4CC284A11BADE9F800775B72 /* RptqUserCredentals+Extras.h in Headers */,
 				4CC283FF1BADE92600775B72 /* RptqDatabase.h in Headers */,
-				4CC2847F1BADE9B400775B72 /* RptqDocumentObjectGroupKey+Extras.h in Headers */,
 				4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */,
 				4CC2847C1BADE9AE00775B72 /* RptqDocumentObjectFactory.h in Headers */,
 				4C401D561BAE3AF800BAE5FC /* MTPaperC2.h in Headers */,
@@ -1698,7 +1695,6 @@
 				4C401DEC1BAE3BD800BAE5FC /* MTQueryDefinitionTable.m in Sources */,
 				4C401DCC1BAE3BD600BAE5FC /* MTQueryCacheJournalModeDefault.m in Sources */,
 				4CC2840E1BADE93900775B72 /* RptqDocumentObjectChart.m in Sources */,
-				4CC284801BADE9B700775B72 /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4C401DB61BAE3BD600BAE5FC /* MTQuery.m in Sources */,
 				4C401D611BAE3AF800BAE5FC /* MTPaperC7.m in Sources */,
 				4CC284A01BADE9F700775B72 /* RptqRelationship+Extras.m in Sources */,
@@ -1830,11 +1826,21 @@
 		4CF781591BADE5EA0050A67D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
 				INFOPLIST_FILE = MAD/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1848,11 +1854,21 @@
 		4CF7815A1BADE5EA0050A67D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
 				INFOPLIST_FILE = MAD/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

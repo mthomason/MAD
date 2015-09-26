@@ -30,10 +30,11 @@
     NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        identifier = ((RptqRelationship *)fetchResults.lastObject).identifier.integerValue + 1;
+        RptqRelationship *lastObject = fetchResults.lastObject;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    NSNumber *identifierWrapper = @(identifier);
-    self.identifier = identifierWrapper;
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
     
 }
 

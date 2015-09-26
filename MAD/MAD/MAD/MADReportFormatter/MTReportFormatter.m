@@ -354,20 +354,17 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
-    for (NSInteger groupLevel = [lastValues count] - 1; groupLevel >= 0; groupLevel--) {
+    for (NSUInteger groupLevel = lastValues.count; groupLevel > 0; groupLevel--) {
         @autoreleasepool {
-            NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel];
-            SEL comparec = [sortDesc selector];
-            NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel]
-                                                          withValue: currentValues[groupLevel]
-                                                      usingSelector: comparec];
+            NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel - 1];
+            NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel - 1]
+                                                          withValue: currentValues[groupLevel - 1]
+                                                      usingSelector: sortDesc.selector];
             
-            BOOL newFooter = comparsonResult != NSOrderedSame;
-            
-            if (newFooter) {
-                RptqQueryGroup *group = self.sortedQueryGroups[groupLevel];
+            if (comparsonResult != NSOrderedSame) {
+                RptqQueryGroup *group = self.sortedQueryGroups[groupLevel - 1];
                 [self addHeightFromGroupFooterWithQueryGroup: group];
-                [self addGroupFooterAtLevel:groupLevel];
+                [self addGroupFooterAtLevel:groupLevel - 1];
             }
         }
     }
@@ -376,7 +373,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)displayNewGroupHeadersIfNeeded:(NSArray *)currentValues
                          andLastValues:(NSArray *)lastValues {
 
-    for (NSInteger groupLevel = 0; groupLevel < currentValues.count; groupLevel++) {
+    for (NSUInteger groupLevel = 0; groupLevel < currentValues.count; groupLevel++) {
         @autoreleasepool {
             BOOL newHeader = lastValues.count == 0;
             if (newHeader == NO) {
@@ -430,7 +427,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return comparsonResult;
 }
 
-- (NSArray *)rowidsForPage:(NSInteger)pageIndex {
+- (NSArray *)rowidsForPage:(NSUInteger)pageIndex {
     return _reportIndexes[pageIndex];
 }
 

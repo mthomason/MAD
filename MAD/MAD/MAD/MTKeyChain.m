@@ -23,11 +23,11 @@ NSInteger const MTKeyErrorUserCanceled = 393920;
 @interface MTKeyChain()
     <UITextFieldDelegate>
 
-@property (copy) MTKeyChainCredentialsCompletion credentialsCompletion;
+@property (atomic, copy) MTKeyChainCredentialsCompletion credentialsCompletion;
 @property (nonatomic, strong) NSString *credentialsUsername;
 @property (nonatomic, strong) NSString *credentialsKey;
 
-@property (copy) MTKeyChainSaveCompletion saveCompletion;
+@property (atomic, copy) MTKeyChainSaveCompletion saveCompletion;
 @property (nonatomic, strong) NSString *saveUsername;
 @property (nonatomic, strong) NSString *savePassword;
 @property (nonatomic, strong) NSString *saveKey;

@@ -71,7 +71,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 - (void)addConnection:(MTDatabaseConnection *)connection
-               status:(void (^)(NSString *status, CGFloat progress))status
+               status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 
 - (void)regenThumbnail;

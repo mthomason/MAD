@@ -64,7 +64,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqQueryLinks *lastObject = [fetchResults lastObject];
-        identifier = lastObject.identifier.integerValue + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     
     NSNumber *identifierWrapper = @(identifier);
@@ -137,7 +137,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 }
 
 - (NSString *)linkDescription {
-    return [RptqQueryLinks LocalizedNamesForLinkType:self.jointypeenum.integerValue];
+    return [RptqQueryLinks LocalizedNamesForLinkType:self.jointypeenum.unsignedIntegerValue];
 }
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type {

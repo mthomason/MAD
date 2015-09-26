@@ -46,7 +46,7 @@ extern NSString * const MTNullIdentifier;
 - (NSArray *)layoutForPage:(NSUInteger)page;
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
-- (NSArray *)rowidsForPage:(NSInteger)pageIndex;
+- (NSArray *)rowidsForPage:(NSUInteger)pageIndex;
 - (NSArray *)keysForCachedID:(NSNumber *)rowid;
 
 - (void)setLayoutSize:(CGSize)layoutSize;

@@ -73,10 +73,10 @@
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqDocument *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-
+    NSNumber *identifierObj = @(identifier);
+    self.identifier = identifierObj;
 }
 
 - (void)awakeFromFetch {
@@ -256,11 +256,11 @@
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     
-    if (section.numberOfRows.integerValue == numberOfRows) {
+    if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > section.numberOfRows.integerValue) {
+    } else if (numberOfRows > section.numberOfRows.unsignedIntegerValue) {
         
         //Add row
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
@@ -271,7 +271,7 @@
         [hasRows addObject:newRowToAppend];
         [section setHasRows:hasRows];
         
-    } else if (numberOfRows < section.numberOfRows.integerValue) {
+    } else if (numberOfRows < section.numberOfRows.unsignedIntegerValue) {
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
@@ -282,7 +282,8 @@
         [rowToDelete setInSection:nil];
         
     }
-    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
+    NSNumber *numberOfRowsObj = [NSNumber numberWithUnsignedInteger:numberOfRows];
+    [section setNumberOfRows: numberOfRowsObj];
 }
 
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
@@ -298,13 +299,13 @@
     section.visibility = visibility;
 }
 
-- (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSInteger)sectionRow {
+- (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     [section setProducesFormFeed:newPageAfter];
 }
 
-- (BOOL)newPageAfterSectionAtRow:(NSInteger)sectionRow {
+- (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     return [section producesFormFeed];
@@ -316,7 +317,7 @@
 }
 
 - (void)addDatabase:(MTDatabase *)database
-             status:(void (^)(NSString *status, CGFloat progress))status
+             status:(void (^)(NSString *status, float progress))status
          completion:(void (^)(BOOL success, MTErrorContainer *error))completion {
     
     __block MTErrorContainer *errorContainer = [MTErrorContainer new];
@@ -406,7 +407,7 @@
                     
                     if (success) {
                         [tables setArray:resultTables];
-                        NSInteger counter = 0, numberOfTables = [tables count];
+                        NSUInteger counter = 0, numberOfTables = tables.count;
                         
                         for (MTDatabaseTable *databaseTable in tables) {
                             @autoreleasepool {
@@ -414,7 +415,7 @@
                                 __weak NSString *weakname = name;
                                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                     dispatch_sync(queueMain, ^{
-                                        status(weakname, (CGFloat)(counter + 1) / numberOfTables);
+                                        status(weakname, (counter + 1) / numberOfTables);
                                     });
                                 });
                                 __block NSMutableArray *fields = [[NSMutableArray alloc] init];
@@ -512,7 +513,8 @@
 - (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination {
     NSManagedObjectContext *mangedObjectContext = [self managedObjectContext];
     
-    MTDocumentObjectType objectType = [defination[MTDocumentObjectDefinationType] integerValue];
+    NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
+    MTDocumentObjectType objectType = objectTypeObj.unsignedIntegerValue;
     
     NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: entityName
@@ -658,7 +660,7 @@
 
 - (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
 
-    MTDocumentObjectType objectType = documentObject.type.integerValue;
+    MTDocumentObjectType objectType = documentObject.type.unsignedIntegerValue;
     NSManagedObjectContext *managedObjectContext = documentObject.managedObjectContext;
     
     switch (objectType) {

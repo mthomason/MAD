@@ -21,9 +21,9 @@
 @optional
 
     - (void)filesControllerWillChangeContent:(MADFilesController *)filesController;
-    - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
-    - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
-    - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADMetaData *)listInfo atIndex:(NSInteger)index;
+    - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADMetaData *)listInfo atIndex:(NSUInteger)index;
+    - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADMetaData *)listInfo atIndex:(NSUInteger)index;
+    - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADMetaData *)listInfo atIndex:(NSUInteger)index;
     - (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL success, NSError *error))completion;
     - (void)filesController:(MADFilesController *)filesController didFailCreatingListInfo:(MADMetaData *)listInfo
                   withError:(NSError *)error;
@@ -42,7 +42,7 @@ typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL 
 
     @property (nonatomic, weak) id<MADFilesControllerDelegate> delegate;
     @property (readonly) NSURL *documentDirectory;
-    @property (nonatomic, readonly) NSInteger count;
+    @property (nonatomic, readonly) NSUInteger count;
     @property (nonatomic, strong) id<MADFileCoordinator> fileCoordinator;
 
     - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
@@ -51,7 +51,7 @@ typedef void (^MADBlockCompletionFileStorageLocation)(BOOL cloudAvailble, NSURL 
 
     - (void)startSearching;
     - (void)stopSearching;
-    - (MADMetaData *)objectAtIndexedSubscript:(NSInteger)index;
+    - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index;
     - (void)removeFileInfo:(MADMetaData *)listInfo;
     - (void)duplicateFileInfo:(MADMetaData *)listInfo;
     - (void)renameFileInfo:(MADMetaData *)listInfo toName:(NSString *)name;
