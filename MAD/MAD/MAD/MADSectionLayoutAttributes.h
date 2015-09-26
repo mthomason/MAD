@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @class MADSectionLayoutManager;
 @protocol MADReportDesignerSectionElementLayoutManagerDelegate;
@@ -21,7 +20,6 @@
     - (BOOL)intersectsAnItemInArray:(NSArray *)items;
     - (BOOL)moveOnScreen;
     - (void)placeItemGivenAttributes:(NSArray *)layoutAttributes;
-    //- (void)placeItemGivenAlreadyPlacedItems:(NSArray *)alreadyPlacedItems;
     - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems;
     - (NSArray *)dropPointsHorizontal;
     - (NSArray *)dropPoints;

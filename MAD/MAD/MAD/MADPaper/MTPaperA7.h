@@ -10,7 +10,6 @@
 #define Reports_MTPaperA7_h
 
 #import "MTPaper.h"
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MTPaperA7 : MTPaper
 

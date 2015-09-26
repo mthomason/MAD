@@ -10,7 +10,6 @@
 #define Reports_MTActivityItemProviderPdf_h
 
 #import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @protocol MTActivityItemProviderDelegate <NSObject>
 - (void)showPrintDialog;

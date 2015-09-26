@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 typedef NS_ENUM(NSUInteger, MTPaperType) {
     MTPaperTypeLetter = 2,

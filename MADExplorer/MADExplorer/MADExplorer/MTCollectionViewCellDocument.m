@@ -12,6 +12,8 @@
 
 #import "MTCollectionViewCellDocument.h"
 #import "MADBackgroundViewSelected.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 
 NSString * const MTImageBlank = @"UIImageDocumentBlank";
 

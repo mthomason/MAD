@@ -7,6 +7,7 @@
 //
 
 #import "MADBackgroundViewSelected.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADBackgroundViewSelected
 

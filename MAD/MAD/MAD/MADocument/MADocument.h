@@ -18,7 +18,6 @@
 #import <MAD/MADActivityProtocol.h>
 #import <MAD/MADSortOrder.h>
 #import <MADFileManager/MADFileManager.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 

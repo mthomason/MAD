@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MADFileManager/MADFileManager.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import <MADExplorer/MADDocumentState.h>
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MADSaveFileProtocol.h"

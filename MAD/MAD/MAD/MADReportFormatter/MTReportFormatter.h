@@ -13,7 +13,6 @@
 #import <UIKit/UIKit.h>
 #import <MAD/MTTableFormatter.h>
 #import <MAD/MTReportFormatterDataSource.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 

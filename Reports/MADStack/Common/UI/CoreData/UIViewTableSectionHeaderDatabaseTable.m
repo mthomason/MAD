@@ -7,6 +7,7 @@
 //
 
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface UIViewTableSectionHeaderDatabaseTable ()
 

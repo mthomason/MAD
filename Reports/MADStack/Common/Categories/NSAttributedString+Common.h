@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface NSAttributedString (Common)
 

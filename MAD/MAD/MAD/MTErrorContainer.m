@@ -7,6 +7,7 @@
 //
 
 #import "MTErrorContainer.h"
+#import <MADCocoaExtensions/NSError+Constructors.h>
 
 @interface MTErrorContainer ()
 

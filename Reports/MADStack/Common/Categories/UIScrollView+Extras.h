@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface UIScrollView (Extras)
 

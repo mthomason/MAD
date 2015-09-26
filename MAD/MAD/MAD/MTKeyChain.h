@@ -11,7 +11,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 extern NSInteger const MTKeyErrorUserCanceled;
 

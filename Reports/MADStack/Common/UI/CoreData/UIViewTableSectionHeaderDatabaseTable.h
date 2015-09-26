@@ -11,7 +11,6 @@
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADSectionHeaderViewDelegate.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
