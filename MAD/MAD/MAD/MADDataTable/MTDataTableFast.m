@@ -78,13 +78,10 @@
     [self setUrlFastCache: url];
     
     NSNumber *tagWrapper = plist[[MTDataTableFast keyTag]];
-
-     NSUInteger tag = [tagWrapper integerValue];
-    [self setTag:tag];
+    self.tag = tagWrapper.unsignedIntegerValue;
     
     NSNumber *bulkInsertLoopWrapper = plist[[MTDataTableFast keyBulkInsertLoop]];
-    BOOL bulkInsertLoop = [bulkInsertLoopWrapper boolValue];
-    [self setBulkInsertLoop:bulkInsertLoop];
+    self.bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
     
     NSArray *groupKeysArray = plist[[MTDataTableFast keyGroupKeys]];
     NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
@@ -254,16 +251,16 @@
         groupKeys = nil;
 }
 
-- (NSString *)idColumnKeyForGroupLocation:(NSInteger)groupLevel {
+- (NSString *)idColumnKeyForGroupLocation:(NSUInteger)groupLevel {
     NSString *result = nil;
     if ([self.groupKeys count] > groupLevel) {
-        NSInteger loc = [self.groupKeys[groupLevel] integerValue];
+        NSUInteger loc = [self.groupKeys[groupLevel] unsignedIntegerValue];
         result = self.columnKeys[loc];
     }
     return result;
 }
 
-- (MTDataColumn *)idDataColumnForGroupLevel:(NSInteger)groupLevel {
+- (MTDataColumn *)idDataColumnForGroupLevel:(NSUInteger)groupLevel {
     NSString *key = [self idColumnKeyForGroupLocation:groupLevel];
     return self.columns[key];
 }
@@ -353,7 +350,7 @@
                 for (columnKey in self.columnKeys) {
                     column = self.columns[columnKey];
                     if ([column.fieldName isEqualToString:sortDescriptor.key]) {
-                        sortAlgo = [MTDataTypeObject selectorForSorting:column.columnType.integerValue];
+                        sortAlgo = [MTDataTypeObject selectorForSorting:column.columnType.unsignedIntegerValue];
                         newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
                                                                           ascending:sortDescriptor.ascending
                                                                            selector:sortAlgo];
@@ -394,15 +391,11 @@
 
 - (NSArray *)sortDescriptorIndexGroupsForSortDescriptors:(NSArray *)sortDescriptors {
 
-    NSInteger sortDescCtr = [sortDescriptors count];
-    NSUInteger capacity = sortDescCtr + 1;
-    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:capacity];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count + 1];
     [results addObject:sortDescriptors];
     for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-        @autoreleasepool {
-            NSArray *group = @[sortDescriptor];
-            [results addObject:group];
-        }
+        NSArray *group = @[sortDescriptor];
+        [results addObject:group];
     }
     return results;
 }
@@ -411,7 +404,7 @@
     return [NSString stringWithFormat:@"s%ld", (long)groupLevel];
 }
 
-- (NSString *)indexNameForGroupLevel:(NSInteger)groupLevel andIndex:(NSInteger)index {
+- (NSString *)indexNameForGroupLevel:(NSUInteger)groupLevel andIndex:(NSUInteger)index {
     return [NSString stringWithFormat:@"i%ld%ld", (long)groupLevel, (long)index];
 }
 
@@ -430,10 +423,10 @@
     [[self sortDescriptors] setArray:sortDescriptors];
     [self sortUsingDescriptors:[self sortDescriptors]];
     
-    NSInteger sortDescCtr = [[self sortDescriptors] count];
+    NSUInteger sortDescCtr = self.sortDescriptors.count;
     NSArray *sortDescriptorGroups = [self sortDescriptorIndexGroupsForSortDescriptors:[self sortDescriptors]];
     
-    NSInteger groupCounter = 0;
+    NSUInteger groupCounter = 0;
     for (NSArray *sortDescriptors in sortDescriptorGroups) {
 
         NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
@@ -456,9 +449,9 @@
 }
 
 - (void)dropIndex {
-    NSInteger sortDescCtr = [[self sortDescriptors] count];
-    NSInteger groupCounter = 0;
-    for (NSInteger i = 0; i<sortDescCtr; i++) {
+    NSUInteger sortDescCtr = self.sortDescriptors.count;
+    NSUInteger groupCounter = 0;
+    for (NSUInteger i = 0; i<sortDescCtr; i++) {
         NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
         NSDictionary *parameters = @{
                                      @(MTQueryCacheIndexDropIndexName) : groupName,
@@ -529,8 +522,9 @@
     return objForRow[fieldName];
 }
 
-- (NSDictionary *)objectAtRow:(NSInteger)row {
-    return [[self objectAtRow:row limit:1] firstObject];
+- (NSDictionary *)objectAtRow:(NSUInteger)row {
+    NSArray *objectAtRow = [self objectAtRow:row limit:1];
+    return objectAtRow.firstObject;
 }
 
 - (NSDictionary *)queryDefinationSelect {
@@ -699,9 +693,10 @@
     
     NSArray *columnKeys = @[[self idColumnKeyForGroupLocation:groupLevel]];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
-    
+
+    NSUInteger sortLevel;
     for (NSString *key in keys) {
-        NSInteger sortLevel = groupLevel - 1;
+        sortLevel = groupLevel >= 1 ? groupLevel - 1 : 0;
         NSDictionary *whereStatement = @{@"c" : [self idColumnKeyForGroupLocation:sortLevel],
                                          @"v" : key};
         [whereClause addObject:whereStatement];
