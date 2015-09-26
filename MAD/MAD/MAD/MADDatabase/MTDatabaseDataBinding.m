@@ -34,7 +34,7 @@
     return self;
 }
 
-- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value {
+- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSUInteger)fieldIndex value:(id)value {
     if (self = [super init]) {
         
         if (value == nil || value == [NSNull null]) {

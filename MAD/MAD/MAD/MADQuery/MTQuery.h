@@ -173,7 +173,7 @@ extern NSString * const MADIdentifierROWID;
 - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
-- (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3
+- (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
 - (instancetype)initWithObject:(id)object;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;

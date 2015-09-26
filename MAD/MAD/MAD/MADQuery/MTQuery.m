@@ -56,11 +56,11 @@
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
-NSString * const MTQueryKeyType = @"MTQueryKeyType";
-NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
-NSString * const MTQueryKeyPredicateColumn = @"c";
-NSString * const MTQueryKeyPredicateValue = @"v";
-NSString * const MADIdentifierROWID = @"ROWID";
+NSString * const MTQueryKeyType             = @"MTQueryKeyType";
+NSString * const MTQueryKeyObject           = @"MTQueryKeyObject";
+NSString * const MTQueryKeyPredicateColumn  = @"c";
+NSString * const MTQueryKeyPredicateValue   = @"v";
+NSString * const MADIdentifierROWID         = @"ROWID";
 
 @interface MTQuery ()
 
@@ -304,7 +304,7 @@ NSString * const MADIdentifierROWID = @"ROWID";
                 dataColumn = [self columns][[sortDescriptor key]];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.integerValue
+            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.unsignedIntegerValue
                                                                      ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;
@@ -318,13 +318,8 @@ NSString * const MADIdentifierROWID = @"ROWID";
     BOOL firstTime = YES;
     if ([rowids count] > 0) {
         for (NSNumber *rowido in rowids) {
-            NSUInteger rowid = [rowido integerValue];
-            if (firstTime == NO) {
-                [sql appendString: @" OR "];
-            } else {
-                [sql appendString: @" WHERE "];
-            }
-            [sql appendFormat:@"rowid = %lu", (unsigned long)rowid];
+            [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
+            [sql appendFormat:@"rowid = %lu", rowido.unsignedIntegerValue];
             firstTime = NO;
         }
     } else {
@@ -333,8 +328,8 @@ NSString * const MADIdentifierROWID = @"ROWID";
     return sql;
 }
 
-- (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MTDataColumn *)[self columns][columnHandle] columnType] integerValue];
+- (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
+    return [[(MTDataColumn *)[self columns][columnHandle] columnType] unsignedIntegerValue];
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {

@@ -19,7 +19,7 @@
 @property (nonatomic, assign, readonly) NSUInteger fieldIndex;
 
 - (instancetype)initWithDataType: (MTDataType)datatype
-                      fieldIndex: (NSInteger)fieldIndex
+                      fieldIndex: (NSUInteger)fieldIndex
                            value: (id)value NS_DESIGNATED_INITIALIZER;
 
 - (id)value;
