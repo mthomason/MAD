@@ -160,10 +160,12 @@
     UINavigationController *toolboxNavigationController;
     BOOL isToolboxVisible = self.isToolboxVisible;
     if (isToolboxVisible == NO) {
-        tabBarController = (UITabBarController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+        UINavigationController *navController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+        tabBarController = navController.viewControllers.firstObject;
         toolboxNavigationController = (UINavigationController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     } else {
-        tabBarController = (UITabBarController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+        UINavigationController *navController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+        tabBarController = navController.viewControllers.firstObject;
         toolboxNavigationController = (UINavigationController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     }
     
@@ -189,8 +191,8 @@
 
     toolboxNavigationController.view.frame = initialFrame;
 
-    UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
-    UIViewController <MADViewControllerProtocol> *designer = designerNavigationController.viewControllers.firstObject;
+    //UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
+    UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
     [designer setHidesStatusBar: isToolboxVisible];
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
                           delay: 0

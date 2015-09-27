@@ -2920,6 +2920,8 @@
 		4C26B9931BAF123A00456DC8 /* Designer */ = {
 			isa = PBXGroup;
 			children = (
+				4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */,
+				4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */,
 				4C26B9E41BAF14A500456DC8 /* MADDesignerElementPickerViewController.h */,
 				4C26B9E51BAF14A500456DC8 /* MADDesignerElementPickerViewController.m */,
 				4C26B9E61BAF14A500456DC8 /* MADDesignerElementView.h */,
@@ -2928,8 +2930,6 @@
 				4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */,
 				4C26B9EA1BAF14A500456DC8 /* MADDesignerSectionView.h */,
 				4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */,
-				4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */,
-				4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */,
 				4C26B9EE1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.h */,
 				4C26B9EF1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m */,
 				4C26B9F01BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.h */,

@@ -113,9 +113,9 @@
 
 - (void)presentationTransitionWillBegin {
 
-    UITabBarController *tabBarController = (UITabBarController *)self.presentingViewController;
-    UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
-    UIViewController <MADViewControllerProtocol> *designer = designerNavigationController.viewControllers.firstObject;
+    UINavigationController *navController = (UINavigationController *)self.presentingViewController;;
+    UITabBarController *tabBarController = navController.viewControllers.firstObject;
+    UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
     self.designerViewController = designer;
     
     UIView *containerView = self.containerView;
