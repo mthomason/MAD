@@ -158,7 +158,7 @@
 
 #pragma mark - Static
 
-+ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext {
++ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
     
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];

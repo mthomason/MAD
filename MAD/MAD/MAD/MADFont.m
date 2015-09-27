@@ -223,7 +223,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return 9.0000f;
 }
 
-+ (instancetype)fontWithFamilyName:(NSString *)familyName {
++ (instancetype)fontWithFamilyName:(NSString *)familyName NS_RETURNS_RETAINED {
     if ([familyName length] == 0) {
         familyName = MTFontFamilyHelveticaNeue;
     }

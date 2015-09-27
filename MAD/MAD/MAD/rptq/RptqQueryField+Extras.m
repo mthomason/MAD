@@ -67,7 +67,7 @@
     }
 }
 
-+ (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
     NSString *entityName = NSStringFromClass([RptqQueryField class]);
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
     RptqQueryField *queryField = [[RptqQueryField alloc] initWithEntity:entityDescription insertIntoManagedObjectContext: managedObjectContext];

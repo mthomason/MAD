@@ -61,7 +61,7 @@
 #pragma mark - Static
 
 + (instancetype)databaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                  andField:(MTDatabaseField *)field {
+                                                         andField:(MTDatabaseField *)field NS_RETURNS_RETAINED {
     
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
     NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName

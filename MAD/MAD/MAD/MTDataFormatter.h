@@ -19,7 +19,7 @@
 @property (nonatomic, assign) BOOL didRefresh;
 @property (nonatomic, assign, readonly) BOOL needsFormat;
 
-- (instancetype)initWithQuery:(MTQuery *)query;
+- (instancetype)initWithQuery:(MTQuery *)query NS_RETURNS_RETAINED;
 
 @end
 

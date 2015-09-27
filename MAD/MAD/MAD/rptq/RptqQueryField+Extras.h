@@ -14,8 +14,8 @@
 
 @interface RptqQueryField (Extras) <MTProtocolLog, MTProtocolCompare>
 
++ (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED;
 + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)display;
 - (NSString *)tableFieldKey;

@@ -47,7 +47,7 @@ extern NSString * const MTLinkSqlFullOuterJoin;
 
 + (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
                                    rightField:(RptqQueryField *)fieldRight
-                                     joinType:(MNSLinkType)joinType;
+                                     joinType:(MNSLinkType)joinType NS_RETURNS_RETAINED;
 
 - (NSString *)linkDescription;
 

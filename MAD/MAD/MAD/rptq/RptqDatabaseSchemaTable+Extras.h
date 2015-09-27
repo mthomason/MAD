@@ -20,10 +20,10 @@
                                                             label:(NSString *)label
                                                       labelPlural:(NSString *)labelPlural
                                                              name:(NSString *)name
-                                                     andQueryable:(BOOL)queryable;
+                                                     andQueryable:(BOOL)queryable NS_RETURNS_RETAINED;
 
 + (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                         andTable:(MTDatabaseTable *)table;
+                                                         andTable:(MTDatabaseTable *)table NS_RETURNS_RETAINED;
 
 + (instancetype)databaseSchemaTableForDatabase:(RptqDatabase *)database
                                   andTableName:(NSString *)name;

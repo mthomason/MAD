@@ -17,11 +17,11 @@
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (instancetype)databaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                  andField:(MTDatabaseField *)field;
+                                                         andField:(MTDatabaseField *)field NS_RETURNS_RETAINED;
 
 - (MTDatabaseField *)databaseFieldWrapper;
 + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
-       andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+                 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)display;
 - (NSString *)fieldTypeDisplay;

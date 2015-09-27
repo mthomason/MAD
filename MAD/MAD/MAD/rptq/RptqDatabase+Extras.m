@@ -91,7 +91,7 @@
     
     RptqDatabase *currentDatabase = nil;
     for (RptqDatabase *db in document.hasDatabaseSchemas) {
-        if ([[db identifier] integerValue] == [connectionId integerValue]) {
+        if (db.identifier.integerValue == connectionId.integerValue) {
             currentDatabase = db;
             break;
         }
@@ -102,7 +102,7 @@
 
 + (RptqDatabase *)databaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                 driverType:(NSString *)driverIdentifier
-                                              connectionId:(NSNumber *)connectionId {
+                                              connectionId:(NSNumber *)connectionId NS_RETURNS_RETAINED {
 
     NSString *entityName = NSStringFromClass([RptqDatabase class]);
     NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: entityName

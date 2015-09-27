@@ -116,7 +116,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 + (instancetype)reportFormatterWithQuery: (MTQuery *)query
                                   layout: (MADocument *)layout
-                                 options: (MTReportFormatterOptions)options {
+                                 options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
     return result;
 }
@@ -709,7 +709,7 @@ NSString * const MTNullIdentifier = @"(null)";
  // FIXME: Write function to return results for keys without having data stored in memeory.
  */
 
-+ (instancetype)dataForGroupData:(id)data andKeys:(NSArray *)keys {
++ (instancetype)dataForGroupData:(id)data andKeys:(NSArray *)keys NS_RETURNS_RETAINED {
     id resultData = nil;
     if ([data isKindOfClass:[NSArray class]]) {
         resultData = [[NSArray alloc] initWithArray:data];

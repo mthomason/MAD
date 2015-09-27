@@ -10,7 +10,7 @@
 
 @implementation UILabel (Constructors)
 
-+ (instancetype)documentCaption:(CGRect)frame width:(CGFloat)width {
++ (instancetype)documentCaption:(CGRect)frame width:(CGFloat)width NS_RETURNS_RETAINED {
     UILabel *label = [[UILabel alloc] initWithFrame:frame];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;

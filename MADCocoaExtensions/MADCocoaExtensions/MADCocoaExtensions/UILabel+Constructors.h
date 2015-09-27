@@ -13,7 +13,7 @@
 
 @interface UILabel (Constructors)
 
-+ (instancetype)documentCaption:(CGRect)frame width:(CGFloat)width;
++ (instancetype)documentCaption:(CGRect)frame width:(CGFloat)width NS_RETURNS_RETAINED;
 
 @end
 

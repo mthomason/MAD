@@ -10,7 +10,7 @@
 
 @interface MTDataTable (Factory)
 
-+ (instancetype)dataTableFactory:(NSDictionary *)parameters;
-+ (instancetype)newDataTableForIdentifier:(NSString *)identifier;
++ (instancetype)dataTableFactory:(NSDictionary *)parameters NS_RETURNS_RETAINED;
++ (instancetype)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED;
 
 @end

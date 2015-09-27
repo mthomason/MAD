@@ -62,7 +62,7 @@
     return self;
 }
 
-+ (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
++ (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column NS_RETURNS_RETAINED {
     id result = [[MTDataTableLocation alloc] initWithRow:row inColumn:column];
     return result;
 }

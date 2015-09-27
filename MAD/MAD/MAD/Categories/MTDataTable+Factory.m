@@ -12,7 +12,7 @@
 
 @implementation MTDataTable (Factory)
 
-+ (instancetype)dataTableFactory:(NSDictionary *)parameters {
++ (instancetype)dataTableFactory:(NSDictionary *)parameters NS_RETURNS_RETAINED {
     NSNumber *keyDataTableType = @(MTDataTableTypeOfTable);
     NSNumber *keyDataTableObjectId = @(MTDataTableObjectId);
     NSNumber *keyDataTableNumberOfColumns = @(MTDataTableNumberOfColumns);
@@ -29,7 +29,7 @@
     
     if (datatableNumberOfColumns != nil) {
         numberOfColumnsHack = YES;
-        numberOfColumns = [datatableNumberOfColumns integerValue];
+        numberOfColumns = [datatableNumberOfColumns unsignedIntegerValue];
     }
     
     //Default type is virtual. If there is no object id, then type MUST be virtual.  That's
@@ -37,12 +37,12 @@
     MTDataTableType type = MTDataTableTypeVirtual;
     NSUInteger objectId = 0;
     if (dataTableType != nil && dataTableObjectId != nil) {
-        type = [dataTableType integerValue];
+        type = [dataTableType unsignedIntegerValue];
     }
     
     if (dataTableObjectId != nil) {
         objectIdSet = YES;
-        objectId = [dataTableObjectId integerValue];
+        objectId = [dataTableObjectId unsignedIntegerValue];
     }
     
     switch (type) {
@@ -70,7 +70,7 @@
 
 }
 
-+ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
++ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED {
     NSUInteger hash = [identifier hash];
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypeVirtual);

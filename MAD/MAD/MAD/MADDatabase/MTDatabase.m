@@ -37,7 +37,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return self;
 }
 
-+ (instancetype)databaseFactory:(MTDatabaseConnection *)connection {
++ (instancetype)databaseFactory:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED {
 
     NSString *identifier = [connection databaseTypeIdentifier];
     

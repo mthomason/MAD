@@ -105,13 +105,13 @@
 
 #pragma mark - Static
 
-+ (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext {
++ (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
     NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
-    RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
+    id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
     return userCredentals;
 }
 
-+ (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
     request.sortDescriptors = @[sortDescriptor];

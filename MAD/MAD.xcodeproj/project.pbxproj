@@ -311,8 +311,6 @@
 		4CC284771BADE9A600775B72 /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2843F1BADE98F00775B72 /* RptqDocumentObjectAggregate+Extras.m */; settings = {ASSET_TAGS = (); }; };
 		4CC284781BADE9A700775B72 /* RptqDocumentObjectBarcode+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284401BADE98F00775B72 /* RptqDocumentObjectBarcode+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284791BADE9A900775B72 /* RptqDocumentObjectBarcode+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284411BADE98F00775B72 /* RptqDocumentObjectBarcode+Extras.m */; settings = {ASSET_TAGS = (); }; };
-		4CC2847A1BADE9AA00775B72 /* RptqDocumentObjectChart+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284421BADE98F00775B72 /* RptqDocumentObjectChart+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC2847B1BADE9AD00775B72 /* RptqDocumentObjectChart+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284431BADE98F00775B72 /* RptqDocumentObjectChart+Extras.m */; settings = {ASSET_TAGS = (); }; };
 		4CC2847C1BADE9AE00775B72 /* RptqDocumentObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284441BADE98F00775B72 /* RptqDocumentObjectFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC2847D1BADE9B000775B72 /* RptqDocumentObjectFormula+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284451BADE98F00775B72 /* RptqDocumentObjectFormula+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC2847E1BADE9B300775B72 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284461BADE98F00775B72 /* RptqDocumentObjectFormula+Extras.m */; settings = {ASSET_TAGS = (); }; };
@@ -1379,7 +1377,6 @@
 				4CC284151BADE94200775B72 /* RptqDocumentObjectLabel.h in Headers */,
 				4CC284111BADE93D00775B72 /* RptqDocumentObjectGroupKey.h in Headers */,
 				4CC284251BADE95A00775B72 /* RptqQueryGroup.h in Headers */,
-				4CC2847A1BADE9AA00775B72 /* RptqDocumentObjectChart+Extras.h in Headers */,
 				4C401D641BAE3AF800BAE5FC /* MTPaperC9.h in Headers */,
 				4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */,
 				4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */,
@@ -1644,7 +1641,6 @@
 				4C401DD81BAE3BD700BAE5FC /* MTQueryCacheSelectRowIds.m in Sources */,
 				4C401D2F1BAE3AF800BAE5FC /* MTPaperA4.m in Sources */,
 				4C401DD41BAE3BD600BAE5FC /* MTQueryCacheSelectLimitOffset.m in Sources */,
-				4CC2847B1BADE9AD00775B72 /* RptqDocumentObjectChart+Extras.m in Sources */,
 				4C401DF81BAE3BDA00BAE5FC /* MTQueryTest.m in Sources */,
 				4C401D3D1BAE3AF800BAE5FC /* MTPaperB0.m in Sources */,
 				4CC282661BADE81E00775B72 /* MTDataFormatter.m in Sources */,

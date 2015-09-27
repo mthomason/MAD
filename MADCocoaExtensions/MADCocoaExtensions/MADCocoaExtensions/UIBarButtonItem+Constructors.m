@@ -10,14 +10,14 @@
 
 @implementation UIBarButtonItem (Constructors)
 
-+ (instancetype)buttonEdit:(id)target action:(SEL)action {
++ (instancetype)buttonEdit:(id)target action:(SEL)action NS_RETURNS_RETAINED {
     UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
                                                                           target: target
                                                                           action: action];
     return edit;
 }
 
-+ (instancetype)buttonDuplicate:(id)target action:(SEL)action {
++ (instancetype)buttonDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED {
     UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
     UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
                                                                                style: UIBarButtonItemStylePlain
@@ -27,14 +27,14 @@
     return barButtonItemDuplicate;
 }
 
-+ (instancetype)buttonEditDone:(id)target action:(SEL)action {
++ (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED {
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                                            target: target
                                                                                            action: action];
     return barButtonItemEditDone;
 }
 
-+ (instancetype)ActivityIndicator {
++ (instancetype)ActivityIndicator NS_RETURNS_RETAINED {
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;

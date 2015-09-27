@@ -10,7 +10,7 @@
 
 @implementation NSNumberFormatter (Constructors)
 
-+ (instancetype)twoDecimalPlaces {
++ (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED {
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     numberFormatter.maximumFractionDigits = 2;

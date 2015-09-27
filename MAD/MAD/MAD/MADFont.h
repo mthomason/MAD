@@ -27,7 +27,7 @@ extern NSString * const MTFontFamilyZapfino;
 
 @interface MADFont : NSObject
 
-+ (instancetype)fontWithFamilyName:(NSString *)familyName;
++ (instancetype)fontWithFamilyName:(NSString *)familyName NS_RETURNS_RETAINED;
 - (instancetype)init;
 - (instancetype)initWithFamilyName:(NSString *)familyName;
 - (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize NS_DESIGNATED_INITIALIZER;

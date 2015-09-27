@@ -101,7 +101,7 @@
     return barcode;
 }
 
-+ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo {
++ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED {
     
     RptqDocumentObjectBarcode *reportObject = nil;
     

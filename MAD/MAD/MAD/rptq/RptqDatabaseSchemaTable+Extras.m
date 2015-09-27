@@ -78,7 +78,7 @@
                                                             label:(NSString *)label
                                                       labelPlural:(NSString *)labelPlural
                                                              name:(NSString *)name
-                                                     andQueryable:(BOOL)queryable {
+                                                     andQueryable:(BOOL)queryable NS_RETURNS_RETAINED {
 
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
@@ -92,7 +92,7 @@
 }
 
 + (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                         andTable:(MTDatabaseTable *)table {
+                                                         andTable:(MTDatabaseTable *)table NS_RETURNS_RETAINED {
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
     RptqDatabaseSchemaTable *rptqTable = [[RptqDatabaseSchemaTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];

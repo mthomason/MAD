@@ -19,7 +19,7 @@
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
-+ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext;
++ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 @property (readonly) RptqQuery *query;  //Default... works for one query reports.

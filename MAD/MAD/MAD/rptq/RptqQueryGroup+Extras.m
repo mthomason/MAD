@@ -83,9 +83,9 @@
 + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
-    [request setPredicate:predicate];
+    request.predicate = predicate;
     NSError *error = nil;
-    NSUInteger result = [[query managedObjectContext] countForFetchRequest:request error:&error];
+    NSUInteger result = [query.managedObjectContext countForFetchRequest:request error:&error];
     return (error) ? 0 : result;
 }
 

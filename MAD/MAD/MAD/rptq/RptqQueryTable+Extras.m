@@ -64,9 +64,8 @@
 }
 
 + (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
-                                           database:(RptqDatabase *)database {
+                                           database:(RptqDatabase *)database NS_RETURNS_RETAINED {
 
-    //RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     
     NSSet *queryTables = [query hasQueryTables];

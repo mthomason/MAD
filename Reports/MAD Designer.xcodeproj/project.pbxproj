@@ -1275,6 +1275,7 @@
 		4CFEE81F1BB7A3A300AFAA0A /* MTQueryBuilderAddPredicateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8191BB7A3A300AFAA0A /* MTQueryBuilderAddPredicateViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4CFEE8201BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81A1BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m */; settings = {ASSET_TAGS = (); }; };
 		4CFEE8211BB7A3A300AFAA0A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81D1BB7A3A300AFAA0A /* MTCellEnterText.m */; settings = {ASSET_TAGS = (); }; };
+		4CFEE8241BB7AE0800AFAA0A /* UINavigationController+MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2612,6 +2613,8 @@
 		4CFEE81C1BB7A3A300AFAA0A /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellEnterText.h; sourceTree = "<group>"; };
 		4CFEE81D1BB7A3A300AFAA0A /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellEnterText.m; sourceTree = "<group>"; };
 		4CFEE81E1BB7A3A300AFAA0A /* MTQueryBuilderAddPredicateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddPredicateViewController.h; sourceTree = "<group>"; };
+		4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+MADQuery.h"; sourceTree = "<group>"; };
+		4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+MADQuery.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3702,6 +3705,8 @@
 				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
 				4C32A48D1BAFD8D900DD59A3 /* MADSplitViewContainer.h */,
 				4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */,
+				4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */,
+				4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -6528,6 +6533,7 @@
 				4C4020651BAE92F200BAE5FC /* UIViewController+UI.m in Sources */,
 				4C4020511BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m in Sources */,
 				4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */,
+				4CFEE8241BB7AE0800AFAA0A /* UINavigationController+MADQuery.m in Sources */,
 				4C26B9921BAF11FA00456DC8 /* MADVibrantTableViewCellImage.m in Sources */,
 				4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */,
 				4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */,

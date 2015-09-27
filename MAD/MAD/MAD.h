@@ -74,7 +74,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDocumentObjectBarcode+Extras.h>
 
 #import <MAD/RptqDocumentObjectChart.h>
-#import <MAD/RptqDocumentObjectChart+Extras.h>
 
 #import <MAD/RptqDocumentObjectFormula.h>
 #import <MAD/RptqDocumentObjectFormula+Extras.h>
@@ -103,33 +102,3 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
 #import <MAD/RptqUserCredentals.h>
 #import <MAD/RptqUserCredentals+Extras.h>
-
-/*
-#import <MAD/MTKeyChain.h>
-
-#import <MAD/MTErrorContainer.h>
-#import <MAD/MTAlignment.h>
-#import <MAD/MTPaper.h>
-#import <MAD/MADSectionLayoutManager.h>
-#import <MAD/MADSortOrder.h>
-#import <MAD/MTQueryTest.h>
-#import <MAD/MTNotificationDidFormatPage.h>
-#import <MAD/MADLinkType.h>
-#import <MAD/MTNotificationDidReadRows.h>
-#import <MAD/MTActivityItemProviderPdf.h>
-#import <MAD/RptqDocumentSectionEnumerator.h>
-#import <MAD/MTDataFormatter.h>
-#import <MAD/MTReportViewerPrintPageRenderer.h>
-#import <MAD/MTQuery.h>
-#import <MAD/MTActivityIndicator.h>
-#import <MAD/MTAggregateFunctionType.h>
-#import <MAD/MADAggregateGroupByType.h>
-#import <MAD/MTAggregateFunctionInputType.h>
-#import <MAD/MADDocumentObjectType.h>
-#import <MAD/MADConstants.h>
-#import <MAD/MADFont.h>
-#import <MAD/MTDataType.h>
-#import <MAD/NSManagedObject+Extras.h>
-#import <MAD/NSManagedObjectID+Extras.h>
-
- */

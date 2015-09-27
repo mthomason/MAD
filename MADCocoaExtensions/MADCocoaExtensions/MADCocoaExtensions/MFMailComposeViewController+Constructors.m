@@ -13,7 +13,7 @@
 
 + (instancetype)title:(NSString *)title
                  body:(NSString *)body
-   userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
+   userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED {
     
     MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
     mailComposer.subject = title;
@@ -32,7 +32,7 @@
 + (instancetype)body:(NSString *)body
           attachment:(NSURL *)attachmentURL
             mimeType:(NSString *)mimeType
-  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
+  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED {
     
     NSData *data = [NSData dataWithContentsOfURL:attachmentURL];
     NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");

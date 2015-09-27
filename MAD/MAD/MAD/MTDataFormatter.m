@@ -18,7 +18,7 @@
 
 @implementation MTDataFormatter
 
-+ (instancetype)reportFormatterWithQuery:(MTQuery *)query {
++ (instancetype)reportFormatterWithQuery:(MTQuery *)query NS_RETURNS_RETAINED {
     MTDataFormatter *result = [[MTDataFormatter alloc] initWithQuery:query];
     return result;
 }

@@ -62,7 +62,7 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
 + (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
                                              host:(NSString *)host
                                          database:(NSString *)database
-                                             port:(NSInteger)port {
+                                             port:(NSInteger)port NS_RETURNS_RETAINED {
     
     id result = [self databaseConnectionFactoryEmpty:typeIdentifier];
     
@@ -77,7 +77,7 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
     return result;
 }
 
-+ (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier {
++ (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier NS_RETURNS_RETAINED {
     
     id resultCredentals = nil;
     
@@ -104,7 +104,7 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
 
 }
 
-+ (instancetype)databaseConnectionFactory:(id)connectionObject {
++ (instancetype)databaseConnectionFactory:(id)connectionObject NS_RETURNS_RETAINED {
     
     id resultCredentals = nil;
     

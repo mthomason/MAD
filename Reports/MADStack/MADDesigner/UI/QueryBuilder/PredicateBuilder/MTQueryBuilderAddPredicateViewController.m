@@ -93,12 +93,33 @@
 
 - (IBAction)save:(id)sender {
     
-    RptqQueryPredicate *queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
-                                                                                 leftValue: self.leftValue
-                                                                         comparsonOperator: self.predicateOperator
-                                                                                rightField: self.fieldRight
-                                                                                rightValue: self.rightValue
-                                                                   forManagedObjectContext: self.document.managedObjectContext];
+    RptqQueryPredicate *queryPredicate = nil;
+    if (self.leftValue == nil) {
+        if (self.rightValue == nil) {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightField: self.fieldRight
+                                                       forManagedObjectContext: self.document.managedObjectContext];
+        } else {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightValue: self.rightValue
+                                                       forManagedObjectContext: self.document.managedObjectContext];
+        }
+    } else {
+        if (self.rightValue == nil) {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightField: self.fieldRight
+                                                       forManagedObjectContext: self.document.managedObjectContext];
+        } else {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightValue: self.rightValue
+                                                       forManagedObjectContext: self.document.managedObjectContext];
+        }
+    }
+    
     [self.delegate uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }
