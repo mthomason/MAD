@@ -12,9 +12,9 @@
 #import <UIKit/UIKit.h>
 #import "MADocumentProtocol.h"
 
-extern const NSInteger MADIndexQuery;
-extern const NSInteger MADIndexDesigner;
-extern const NSInteger MADIndexViewer;
+extern const int8_t MADIndexQuery;
+extern const int8_t MADIndexDesigner;
+extern const int8_t MADIndexViewer;
 
 @class MADocument;
 

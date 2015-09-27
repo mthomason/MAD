@@ -7,12 +7,16 @@
 //
 
 #import "MADTabBarController.h"
+#import "MADNavigationBarTitleView.h"
 
-const NSInteger MADIndexQuery = 0;
-const NSInteger MADIndexDesigner = 1;
-const NSInteger MADIndexViewer = 2;
+const int8_t MADIndexQuery = 0;
+const int8_t MADIndexDesigner = 1;
+const int8_t MADIndexViewer = 2;
 
 @interface MADTabBarController ()
+    <UITabBarControllerDelegate>
+
+@property (nonatomic, assign) NSUInteger lastSelectedIndex;
 
 @end
 
@@ -26,9 +30,7 @@ const NSInteger MADIndexViewer = 2;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    if (self = [super initWithCoder:aDecoder]) {
-        
-    }
+    if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
@@ -36,33 +38,41 @@ const NSInteger MADIndexViewer = 2;
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
+    self.lastSelectedIndex = -1;
+    self.delegate = self;
     for (UIViewController *viewController in self.viewControllers) {
         if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
             ((id <MADocumentProtocol>)viewController).document = self.document;
         }
     }
-    NSLog(@"\t%s\n%@\n%lu", __PRETTY_FUNCTION__, self.viewControllers, self.viewControllers.count);
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.viewControllers.count > 0) {
+        [self showTitleWithText: self.viewControllers[0].title];
+    }
 }
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.selectedViewController;
 }
 
+#pragma mark - UITabBarControllerDelegate
 
-#pragma mark - Navigation
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if (tabBarController.selectedIndex != self.lastSelectedIndex) {
+        [self showTitleWithText: viewController.title];
+    }
+    self.lastSelectedIndex = tabBarController.selectedIndex;
+}
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - helpers
+
+- (void)showTitleWithText:(NSString *)text {
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = text;
+    self.navigationItem.titleView = titleView;
 }
 
 @end

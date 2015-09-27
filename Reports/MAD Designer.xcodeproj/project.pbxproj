@@ -380,7 +380,6 @@
 		4C2F279E1B53FA1C004DFAEC /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0B23B1AC90018005CA75C /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
 		4C2F279F1B53FA1C004DFAEC /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C2F27AD1B53FC37004DFAEC /* MAD Designer.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		4C32A48F1BAFD8D900DD59A3 /* MADSplitViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */; settings = {ASSET_TAGS = (); }; };
 		4C32A4A61BB0765900DD59A3 /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4A51BB0765900DD59A3 /* info.plist */; settings = {ASSET_TAGS = (); }; };
 		4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */; settings = {ASSET_TAGS = (); }; };
 		4C32A4B21BB0773300DD59A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4B01BB0773300DD59A3 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
@@ -6516,7 +6515,6 @@
 				4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */,
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */,
-				4C32A48F1BAFD8D900DD59A3 /* MADSplitViewContainer.m in Sources */,
 				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
 				4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */,

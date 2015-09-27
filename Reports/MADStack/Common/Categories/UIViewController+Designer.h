@@ -17,7 +17,6 @@
 
 + (instancetype)layoutSettingsViewController;
 + (instancetype)fileManager;
-+ (instancetype)queryNavigationController;
 + (instancetype)queryViewController;
 + (instancetype)queryContainerController;
 + (instancetype)viewerNavigationController;

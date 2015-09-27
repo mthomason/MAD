@@ -122,9 +122,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
                     </toolbar>
-                    <connections>
-                        <segue destination="SZT-w9-gB7" kind="relationship" relationship="rootViewController" id="e5i-38-lkr"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QcX-WH-yVq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -226,9 +223,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
                     </toolbar>
-                    <connections>
-                        <segue destination="ERc-MK-TMQ" kind="relationship" relationship="rootViewController" id="nhR-dP-ASX"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vih-KI-ZLK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -295,9 +289,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
                     </toolbar>
-                    <connections>
-                        <segue destination="Hcs-Qh-Ddc" kind="relationship" relationship="rootViewController" id="7yk-CL-MJD"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="emG-jU-bGk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -539,15 +530,10 @@
                         <color key="barTintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="selectedImageTintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
-                    <connections>
-                        <segue destination="xGC-NN-HDb" kind="relationship" relationship="viewControllers" id="WS2-Mc-U6A"/>
-                        <segue destination="OXh-cm-FbU" kind="relationship" relationship="viewControllers" id="kbI-Yj-qMT"/>
-                        <segue destination="E4Y-T0-TTM" kind="relationship" relationship="viewControllers" id="Udn-gS-Nm5"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VrE-5r-MlD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-841" y="-75"/>
+            <point key="canvasLocation" x="-2090" y="489"/>
         </scene>
         <!--Layout Settings-->
         <scene sceneID="qFs-uN-Jcs">

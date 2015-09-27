@@ -99,8 +99,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UIGestureRecognizerDelegate,
     UINavigationControllerDelegate,
     UIScrollViewDelegate,
-    UIImagePickerControllerDelegate,
-    UITabBarControllerDelegate>
+    UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) MTRulerView *ruler;
 @property (nonatomic, strong) MADPromptManager *promptManager;
@@ -275,11 +274,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         
         MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
-        
-        MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-        titleView.text = [MADDesignerViewController MADDesigner];
-        self.navigationItem.titleView = titleView;
-        
+                
     }
     return self;
 }
@@ -368,9 +363,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.zoomScaleRestore = -1.0000f;
     self.shownAndHidden = NO;
     self.editAggregate = NO;
-    
-    self.tabBarController.delegate = self;
-    
+        
     self.insetsSetup = NO;
     self.toolboxVisible = NO;
     self.sectionSettingsVisible = NO;
@@ -415,9 +408,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     self.navigationControllerSectionLayoutSettings = navigationController;
     self.settingsTransitioningDelegate = settingsTransitioningDelegate;
-    
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    self.navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
     
     self.navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
     self.navigationControllerSectionLayoutSettings.preferredContentSize =  CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
@@ -1209,10 +1199,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self dismissViewControllerAnimated:YES completion:NULL];
     [self setDisplayActive];
 }
-
-#pragma mark - UITabBarControllerDelegate
-
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController { }
 
 #pragma mark - UIPresentationControllerDelegate
 

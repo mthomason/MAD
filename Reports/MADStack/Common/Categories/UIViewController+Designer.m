@@ -23,10 +23,10 @@ static NSString * const MADIdentifierLayoutSettingsViewController = @"MTReportDe
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardOpenFileViewController"];
 }
 
-+ (instancetype)queryNavigationController {
+/*+ (instancetype)queryNavigationController {
     UIStoryboard *designer = [UIStoryboard Designer];
     return [designer instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryNavigationController"];
-}
+}*/
 
 + (instancetype)queryViewController {
     UIStoryboard *designer = [UIStoryboard Designer];

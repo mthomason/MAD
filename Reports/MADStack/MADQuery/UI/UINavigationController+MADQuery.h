@@ -10,6 +10,8 @@
 
 @interface UINavigationController (MADQuery)
 
-+ (instancetype)QuerySplitViewController NS_RETURNS_RETAINED;
++ (instancetype)QuerySplitViewController;
++ (instancetype)DesignerController;
++ (instancetype)ViewerController;
 
 @end
