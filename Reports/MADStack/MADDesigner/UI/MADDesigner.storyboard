@@ -1105,7 +1105,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XFD-Wd-taR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7737" y="-5258"/>
+            <point key="canvasLocation" x="7697" y="-5970"/>
         </scene>
         <!--Select Field-->
         <scene sceneID="UO8-xl-8Vz">
@@ -1156,7 +1156,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RMo-aq-pPt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7737" y="-3835"/>
+            <point key="canvasLocation" x="7593" y="-3549"/>
         </scene>
         <!--MADIdentifierQueryBuilderAddGroup-->
         <scene sceneID="rqS-hW-Euf">
@@ -1290,7 +1290,7 @@
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="Gtp-vp-RJ8" kind="push" identifier="showAddPredicateFofLeftSide" id="KU2-KT-EzF"/>
+                                            <segue destination="q2H-D6-1Ez" kind="push" identifier="showAddPredicateFofLeftSide" id="6Bq-bb-Gf9"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="b1Y-EW-oYc" detailTextLabel="wYd-FB-Wac" style="IBUITableViewCellStyleValue1" id="BlV-6W-K5e">
@@ -1380,7 +1380,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r3O-EL-wuN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6678" y="-5456"/>
+            <point key="canvasLocation" x="6472" y="-6124"/>
         </scene>
         <!--Select Join Type-->
         <scene sceneID="cY0-Cc-W8F">
@@ -1766,7 +1766,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="te9-UK-3nu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7744" y="-5185"/>
+            <point key="canvasLocation" x="7593" y="-4439"/>
         </scene>
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
@@ -2031,6 +2031,57 @@
             </objects>
             <point key="canvasLocation" x="2787" y="-2403"/>
         </scene>
+        <!--Select Field-->
+        <scene sceneID="NlY-9F-DKp">
+            <objects>
+                <tableViewController storyboardIdentifier="MADIdentifierQueryBuilderAddPredicateSelectField" id="q2H-D6-1Ez" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="WRF-UU-EMy">
+                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="aNA-Q5-a1u" detailTextLabel="CUc-pG-2u6" style="IBUITableViewCellStyleValue1" id="w3K-Zt-CCf">
+                                <rect key="frame" x="0.0" y="22" width="540" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w3K-Zt-CCf" id="3hN-66-bU7">
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="aNA-Q5-a1u">
+                                            <rect key="frame" x="15" y="11" width="37" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="CUc-pG-2u6">
+                                            <rect key="frame" x="481" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <animations/>
+                                </tableViewCellContentView>
+                                <animations/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="q2H-D6-1Ez" id="tkf-KY-JfF"/>
+                            <outlet property="delegate" destination="q2H-D6-1Ez" id="ezm-Xk-mFi"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Select Field" id="mgK-of-Yxn"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bs6-EJ-Krt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7241" y="-6740"/>
+        </scene>
     </scenes>
     <resources>
         <image name="UIBarButtonItemDatabase.png" width="48" height="32"/>
@@ -2043,8 +2094,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="GHV-ru-Qf2"/>
         <segue reference="T0e-pi-cpg"/>
+        <segue reference="aFd-qe-sMU"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>
