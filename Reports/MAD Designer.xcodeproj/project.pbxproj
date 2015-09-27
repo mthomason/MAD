@@ -526,11 +526,9 @@
 		4C4020EA1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020D01BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020EB1BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020D21BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020EC1BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020D41BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {ASSET_TAGS = (); }; };
-		4C4020ED1BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020D61BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020EE1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020D81BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020EF1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020DA1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020F11BAE988900BAE5FC /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020DE1BAE988900BAE5FC /* MTQueryBuilderAddTableViewController.m */; settings = {ASSET_TAGS = (); }; };
-		4C4020F31BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020E31BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020F41BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020E51BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020E71BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m */; settings = {ASSET_TAGS = (); }; };
 		4C4020FF1BAE98C300BAE5FC /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */; settings = {ASSET_TAGS = (); }; };
@@ -1275,6 +1273,8 @@
 		4CFEE80A1BB7993300AFAA0A /* MADPredicateBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4CFEE80B1BB7993300AFAA0A /* MADAddTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4CFEE80C1BB7993300AFAA0A /* MADLinkBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */; settings = {ASSET_TAGS = (); }; };
+		4CFEE80F1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE80D1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m */; settings = {ASSET_TAGS = (); }; };
+		4CFEE8121BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8101BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2059,16 +2059,12 @@
 		4C4020D21BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
 		4C4020D31BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstTableViewController.h; sourceTree = "<group>"; };
 		4C4020D41BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstTableViewController.m; sourceTree = "<group>"; };
-		4C4020D51BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
-		4C4020D61BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkJoinTypeViewController.m; sourceTree = "<group>"; };
 		4C4020D71BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkSecondFieldViewController.h; sourceTree = "<group>"; };
 		4C4020D81BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkSecondFieldViewController.m; sourceTree = "<group>"; };
 		4C4020D91BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkSecondTableViewController.h; sourceTree = "<group>"; };
 		4C4020DA1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkSecondTableViewController.m; sourceTree = "<group>"; };
 		4C4020DD1BAE988900BAE5FC /* MTQueryBuilderAddTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddTableViewController.h; sourceTree = "<group>"; };
 		4C4020DE1BAE988900BAE5FC /* MTQueryBuilderAddTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddTableViewController.m; sourceTree = "<group>"; };
-		4C4020E21BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderLinkBuilderViewController.h; sourceTree = "<group>"; };
-		4C4020E31BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderLinkBuilderViewController.m; sourceTree = "<group>"; };
 		4C4020E41BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderPredicateFormatViewController.h; sourceTree = "<group>"; };
 		4C4020E51BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderPredicateFormatViewController.m; sourceTree = "<group>"; };
 		4C4020E61BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderSortTypeViewController.h; sourceTree = "<group>"; };
@@ -2612,6 +2608,10 @@
 		4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADPredicateBuilder.storyboard; sourceTree = "<group>"; };
 		4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADAddTable.storyboard; sourceTree = "<group>"; };
 		4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADLinkBuilder.storyboard; sourceTree = "<group>"; };
+		4CFEE80D1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderLinkBuilderViewController.m; sourceTree = "<group>"; };
+		4CFEE80E1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderLinkBuilderViewController.h; sourceTree = "<group>"; };
+		4CFEE8101BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkJoinTypeViewController.m; sourceTree = "<group>"; };
+		4CFEE8111BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3700,8 +3700,6 @@
 				4C4020D21BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m */,
 				4C4020D31BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.h */,
 				4C4020D41BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m */,
-				4C4020D51BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.h */,
-				4C4020D61BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.m */,
 				4C4020D71BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.h */,
 				4C4020D81BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m */,
 				4C4020D91BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.h */,
@@ -3712,8 +3710,6 @@
 				4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */,
 				4C4020DD1BAE988900BAE5FC /* MTQueryBuilderAddTableViewController.h */,
 				4C4020DE1BAE988900BAE5FC /* MTQueryBuilderAddTableViewController.m */,
-				4C4020E21BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.h */,
-				4C4020E31BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.m */,
 				4C4020E41BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.h */,
 				4C4020E51BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.m */,
 				4C8DE2701BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.h */,
@@ -4835,6 +4831,10 @@
 			isa = PBXGroup;
 			children = (
 				4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */,
+				4CFEE8111BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.h */,
+				4CFEE8101BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m */,
+				4CFEE80E1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.h */,
+				4CFEE80D1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m */,
 			);
 			path = LinkBuilder;
 			sourceTree = "<group>";
@@ -6353,7 +6353,6 @@
 				4C26B98E1BAF11FA00456DC8 /* MADVibrantCollectionView.m in Sources */,
 				4C4020621BAE92F200BAE5FC /* UIViewController+Designer.m in Sources */,
 				4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */,
-				4C4020ED1BAE988900BAE5FC /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */,
 				4C60C5B91BB11E94004D9758 /* UIManagedDocument+URLs.m in Sources */,
@@ -6369,7 +6368,6 @@
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C401F7F1BAE7EB500BAE5FC /* MTRulerView.m in Sources */,
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,
-				4C4020F31BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,
 				4C8DE24E1BAFA88400AD1111 /* MTCollectionViewCellElement.m in Sources */,
 				4C4020401BAE92F200BAE5FC /* NSAttributedString+Logo.m in Sources */,
@@ -6513,6 +6511,7 @@
 				4C40205E1BAE92F200BAE5FC /* UITableViewController+Designer.m in Sources */,
 				4C401F821BAE7EB500BAE5FC /* MTViewTableHeader.m in Sources */,
 				4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */,
+				4CFEE80F1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
 				4C26BA9A1BAF9B9B00456DC8 /* MADNavigationBarTitleView.m in Sources */,
 				4C401F281BAE703200BAE5FC /* MADTableViewCellQueryGroup.m in Sources */,
 				4C26BA241BAF150F00456DC8 /* MADQueryVisualizationViewController.m in Sources */,
@@ -6528,6 +6527,7 @@
 				4C4020EA1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C26B9541BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,
+				4CFEE8121BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4C40204C1BAE92F200BAE5FC /* UIButton+FollowTwitter.m in Sources */,
 				4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */,

@@ -324,7 +324,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RAQ-go-gPg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="980.46875" y="1868.5546875"/>
+            <point key="canvasLocation" x="1366" y="1863"/>
         </scene>
         <!--MADIdentifierSelectField-->
         <scene sceneID="SdZ-b7-du8">
@@ -334,7 +334,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ny7-xd-Eyw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="967.1875" y="2170.8984375"/>
+            <point key="canvasLocation" x="1158" y="2334"/>
         </scene>
         <!--MADIdentifierSelectField-->
         <scene sceneID="eCy-Ln-AEu">
@@ -344,7 +344,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="099-A0-cF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="932.8125" y="1607.2265625"/>
+            <point key="canvasLocation" x="1158" y="1453"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
