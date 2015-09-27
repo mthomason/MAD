@@ -1269,6 +1269,7 @@
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */; };
+		4CFEE7F61BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2600,6 +2601,7 @@
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF9D08C1AD0EF6500525A50 /* MADRowTypeKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeKeyValue.h; sourceTree = "<group>"; };
 		4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeKeyValue.m; sourceTree = "<group>"; };
+		4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryBuilderAddGroup.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3415,6 +3417,7 @@
 		4C401EEC1BAE61F700BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4CFEE7F31BB773D800AFAA0A /* QueryBuilder */,
 				4C26BA041BAF14F200456DC8 /* About */,
 				4C26B9931BAF123A00456DC8 /* Designer */,
 				4C26B9941BAF123A00456DC8 /* DocumentInformation */,
@@ -4773,6 +4776,22 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		4CFEE7F31BB773D800AFAA0A /* QueryBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				4CFEE7F41BB773D800AFAA0A /* AddGroup */,
+			);
+			path = QueryBuilder;
+			sourceTree = "<group>";
+		};
+		4CFEE7F41BB773D800AFAA0A /* AddGroup */ = {
+			isa = PBXGroup;
+			children = (
+				4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */,
+			);
+			path = AddGroup;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -5588,6 +5607,7 @@
 				4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */,
 				4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */,
 				4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */,
+				4CFEE7F61BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard in Resources */,
 				4C401EFD1BAE640500BAE5FC /* Music.mad in Resources */,
 				4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */,
 				4C26BA031BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard in Resources */,
