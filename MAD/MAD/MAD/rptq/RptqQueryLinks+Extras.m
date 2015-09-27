@@ -115,7 +115,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 + (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
                                    rightField:(RptqQueryField *)fieldRight
-                                     joinType:(MNSLinkType)joinType {
+                                     joinType:(MNSLinkType)joinType NS_RETURNS_RETAINED {
     
     NSManagedObjectContext *managedObjectContext = [fieldLeft managedObjectContext];
     NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:managedObjectContext];
