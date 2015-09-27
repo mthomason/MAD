@@ -762,7 +762,7 @@
                                         </tableViewCellContentView>
                                         <animations/>
                                         <connections>
-                                            <segue destination="Gtp-vp-RJ8" kind="push" identifier="showSelectLinkTableFieldOne" id="XS1-RV-s1s"/>
+                                            <segue destination="0Py-Je-ql5" kind="push" identifier="showSelectLinkTableFieldOne" id="yJL-Ok-pcc"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="0sR-bu-3wQ" detailTextLabel="5X8-kN-DN1" style="IBUITableViewCellStyleValue1" id="Oip-Uo-K1q">
@@ -825,7 +825,7 @@
                                         </tableViewCellContentView>
                                         <animations/>
                                         <connections>
-                                            <segue destination="Gtp-vp-RJ8" kind="push" identifier="showSelectLinkTableFieldTwo" id="GHV-ru-Qf2"/>
+                                            <segue destination="KsQ-iq-Q6B" kind="push" identifier="showSelectLinkTableFieldTwo" id="9C2-6E-cFD"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1105,58 +1105,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XFD-Wd-taR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7392" y="-5876"/>
-        </scene>
-        <!--Select Field-->
-        <scene sceneID="UO8-xl-8Vz">
-            <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseField" id="Gtp-vp-RJ8" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="T4W-y8-PQL">
-                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="xFc-Vq-gtY" detailTextLabel="OPG-8q-u6L" style="IBUITableViewCellStyleValue1" id="aiH-WV-Ogi">
-                                <rect key="frame" x="0.0" y="22" width="540" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aiH-WV-Ogi" id="6df-kY-AKq">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="xFc-Vq-gtY">
-                                            <rect key="frame" x="15" y="11" width="37" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="OPG-8q-u6L">
-                                            <rect key="frame" x="481" y="11" width="44" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                    </subviews>
-                                    <animations/>
-                                </tableViewCellContentView>
-                                <animations/>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="Gtp-vp-RJ8" id="yQY-T9-IEO"/>
-                            <outlet property="delegate" destination="Gtp-vp-RJ8" id="6BI-Sw-7oW"/>
-                        </connections>
-                    </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Select Field" id="Pv7-s0-G3C"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RMo-aq-pPt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="7593" y="-3549"/>
+            <point key="canvasLocation" x="7646" y="-5374"/>
         </scene>
         <!--MADIdentifierQueryBuilderAddGroup-->
         <scene sceneID="rqS-hW-Euf">
@@ -1354,7 +1303,7 @@
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="Gtp-vp-RJ8" kind="push" identifier="showAddPredicateFofRightSide" id="aFd-qe-sMU"/>
+                                            <segue destination="boc-YL-qB2" kind="push" identifier="showAddPredicateFofRightSide" id="iZJ-nK-AIz"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1540,7 +1489,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RAQ-go-gPg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7737" y="-3059"/>
+            <point key="canvasLocation" x="6455" y="-3403"/>
         </scene>
         <!--Add Predicate-->
         <scene sceneID="O4k-yE-nsm">
@@ -1583,7 +1532,7 @@
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="Gtp-vp-RJ8" kind="push" identifier="showAddPredicateFovLeftSide" id="zUp-ku-ep4"/>
+                                            <segue destination="AVb-W3-fgG" kind="push" identifier="showAddPredicateFovLeftSide" id="oa4-Ee-e4x"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="bo0-it-CNq" detailTextLabel="ZWC-AT-lTp" style="IBUITableViewCellStyleValue1" id="4LH-Gm-gF1">
@@ -1766,7 +1715,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="te9-UK-3nu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7593" y="-4439"/>
+            <point key="canvasLocation" x="7669" y="-4477"/>
         </scene>
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
@@ -2041,6 +1990,46 @@
             </objects>
             <point key="canvasLocation" x="7392" y="-6472"/>
         </scene>
+        <!--MADIdentifierSelectField-->
+        <scene sceneID="G4r-T5-xdB">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MADQueryBuilderSelectField" referencedIdentifier="MADIdentifierSelectField" id="boc-YL-qB2" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="DTy-Nz-w9n"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LUZ-Zf-A4B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7406" y="-6334"/>
+        </scene>
+        <!--MADIdentifierSelectField-->
+        <scene sceneID="SdZ-b7-du8">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MADQueryBuilderSelectField" referencedIdentifier="MADIdentifierSelectField" id="KsQ-iq-Q6B" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="UYB-ef-FaF"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ny7-xd-Eyw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6438" y="-2887"/>
+        </scene>
+        <!--MADIdentifierSelectField-->
+        <scene sceneID="pTS-0M-zUZ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MADQueryBuilderSelectField" referencedIdentifier="MADIdentifierSelectField" id="AVb-W3-fgG" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="cYs-Wp-XUH"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r0d-EH-YaS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7533" y="-3869"/>
+        </scene>
+        <!--MADIdentifierSelectField-->
+        <scene sceneID="eCy-Ln-AEu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MADQueryBuilderSelectField" referencedIdentifier="MADIdentifierSelectField" id="0Py-Je-ql5" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Roa-ht-B29"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="099-A0-cF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6394" y="-3849"/>
+        </scene>
     </scenes>
     <resources>
         <image name="UIBarButtonItemDatabase.png" width="48" height="32"/>
@@ -2054,7 +2043,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="T0e-pi-cpg"/>
-        <segue reference="aFd-qe-sMU"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>
