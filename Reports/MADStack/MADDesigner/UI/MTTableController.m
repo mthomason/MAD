@@ -216,7 +216,7 @@
     [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
                                                      andRowCount:self.rowCount];
     
-    for (NSInteger i=0; i<self.columnCount; i++) {
+    for (NSUInteger i=0; i<self.columnCount; i++) {
 
         __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
         NSString *reuseId = [self reuseIdForColumn:i];

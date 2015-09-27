@@ -184,7 +184,7 @@
             NSTimeInterval ti = [lastDate timeIntervalSinceDate:now];
             NSInteger secPart = (NSInteger)ti;
             NSTimeInterval goodPart = ti - secPart;
-            NSInteger milliseconds = ABS((goodPart * 1000));
+            NSInteger milliseconds = (NSInteger)fabs((goodPart * 1000));
             NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber: @(milliseconds)
                                                                     numberStyle: NSNumberFormatterSpellOutStyle];
             if (milliseconds == 1) {

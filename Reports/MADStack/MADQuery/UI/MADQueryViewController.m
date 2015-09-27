@@ -1522,11 +1522,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                              inTableView:(UITableView *)tableView
                           numberOfTables:(NSInteger)numberOfTables
                                inContext:(NSManagedObjectContext *)context {
-    NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
+    NSUInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSFetchedResultsController *fetchedLinkes = [self fetchedResultsControllerLinks];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
     
-    for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
+    for (NSUInteger row = 0; row < numberOfRowsInSection; row++) {
         NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = nil;
         NSManagedObject *object = nil;

@@ -33,7 +33,7 @@
 - (BOOL)didToggleShowErrorMessages;
 - (void)didChangeSymbolHeight:(NSInteger)symbolHeight;
 - (void)setInput:(NSString *)input;
-- (void)setBorderWidth:(CGFloat)borderWidth;
+- (void)setBorderWidth:(NSUInteger)borderWidth;
 - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle;
 - (void)setSampleData:(NSArray *)sampleData;
 

@@ -123,10 +123,10 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     
     NSUInteger rowCount = [tableView numberOfRowsInSection:indexPath.section];
 
-    for (NSInteger i = 0; i < rowCount; i++) {
+    for (NSUInteger i = 0; i < rowCount; i++) {
         NSIndexPath *cellPath = [NSIndexPath indexPathForItem:i inSection:indexPath.section];
         UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:cellPath];
-        [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
+        tableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];

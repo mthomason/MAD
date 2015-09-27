@@ -134,7 +134,7 @@ static NSString * const Downloading                             = @"Downloading"
     if (uploading) {
         cell.progressViewUpload.hidden = NO;
         if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentUploaded / 100.0000f) {
-            [cell.progressViewUpload setProgress:metadata.ubiquitousItemPercentUploaded / 100.0000f animated:YES];
+            [cell.progressViewUpload setProgress:(float) (metadata.ubiquitousItemPercentUploaded / 100.0000f) animated:YES];
         }
     } else {
         cell.progressViewUpload.hidden = YES;
@@ -144,7 +144,7 @@ static NSString * const Downloading                             = @"Downloading"
     if (downloading) {
         cell.progressViewDownload.hidden = NO;
         if (cell.progressViewUpload.progress < metadata.ubiquitousItemPercentDownloaded / 100.0000f) {
-            [cell.progressViewDownload setProgress:metadata.ubiquitousItemPercentDownloaded / 100.0000f animated:YES];
+            [cell.progressViewDownload setProgress:(float) (metadata.ubiquitousItemPercentDownloaded / 100.0000f) animated:YES];
         }
     } else {
         cell.progressViewDownload.hidden = YES;

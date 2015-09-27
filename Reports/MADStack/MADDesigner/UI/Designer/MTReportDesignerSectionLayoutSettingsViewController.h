@@ -32,7 +32,7 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 
 @property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
 
-@property (nonatomic, assign) NSInteger initalHeightValue;
+@property (nonatomic, assign) double initalHeightValue;
 @property (nonatomic, assign) BOOL initalVisibility;
 @property (nonatomic, assign) BOOL initalFormFeedEnabled;
 @property (nonatomic, assign) NSUInteger initalNumberOfRows;

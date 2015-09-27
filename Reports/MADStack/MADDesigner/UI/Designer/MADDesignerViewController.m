@@ -2598,10 +2598,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
         MADDesignerSectionView *documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
 
-        for (NSUInteger section = 0; section < documentSectionView.numberOfSections; section++) {
+        for (NSUInteger section = 0; (NSInteger)section < documentSectionView.numberOfSections; section++) {
             NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
             
-            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
+            for (NSUInteger item = 0; (NSInteger)item < numberOfItemsInSection; item++) {
                 
                 NSIndexPath *path = [NSIndexPath indexPathForItem:item inSection:section];
                 MADDesignerElementView *elementView = [self elementViewAtIndexPath: path inCollectionView: documentSectionView];

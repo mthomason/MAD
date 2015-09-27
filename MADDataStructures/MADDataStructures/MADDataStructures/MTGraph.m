@@ -18,8 +18,8 @@
 @property (nonatomic, strong) NSMutableArray *vertices;
 
 // MARK: Counters to give edges and verties unique ids.
-@property (assign) NSUInteger idUniqueVertices;
-@property (assign) NSUInteger idUniqueEdges;
+@property (atomic, assign) NSUInteger idUniqueVertices;
+@property (atomic, assign) NSUInteger idUniqueEdges;
 
 @end
 
@@ -220,7 +220,7 @@
     *isDirectedAcyclicGraph = YES;
     //BOOL isDirectedAcyclicGraph = YES;
     for (MTPair *pair in resultEdges) {
-        MTEdgeType edgeType = [[pair latter] integerValue];
+        MTEdgeType edgeType = [pair.latter unsignedIntegerValue];
         if (edgeType == MTEdgeTypeBackEdge) {
             *isDirectedAcyclicGraph = NO;
 

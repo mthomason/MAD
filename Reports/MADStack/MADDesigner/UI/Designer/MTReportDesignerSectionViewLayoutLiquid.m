@@ -13,8 +13,8 @@
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 
-@property (nonatomic, assign) NSInteger numberOfSections;
-@property (nonatomic, assign) NSInteger numberOfItems;
+@property (nonatomic, assign) NSUInteger numberOfSections;
+@property (nonatomic, assign) NSUInteger numberOfItems;
 @property (nonatomic, strong) NSMutableArray *itemAttributesBySection;
 
 @end

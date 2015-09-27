@@ -57,8 +57,8 @@
     
     // Build a context that's the same dimensions as the new size
     CGContextRef bitmap = CGBitmapContextCreate(NULL,
-                                                newRect.size.width,
-                                                newRect.size.height,
+                                                (size_t)newRect.size.width,
+                                                (size_t)newRect.size.height,
                                                 CGImageGetBitsPerComponent(self.CGImage),
                                                 0,
                                                 CGImageGetColorSpace(self.CGImage),

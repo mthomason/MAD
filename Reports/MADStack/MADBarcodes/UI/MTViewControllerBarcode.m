@@ -309,7 +309,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     [self updateBarcode];
 }
 
-- (void)setBorderWidth:(CGFloat)borderWidth {
+- (void)setBorderWidth:(NSUInteger)borderWidth {
     [self barcode].borderWidth = borderWidth;
     [self updateBarcode];
 }

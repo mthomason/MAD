@@ -172,7 +172,7 @@
     if ([sender isEqual:self.stepperNumberOfDecimals]) {
         valueChangedAction = @selector(setFormatNumericDecimals:);
         valueThatChanged = @([self.stepperNumberOfDecimals value]);
-        [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
+        [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]]];
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];

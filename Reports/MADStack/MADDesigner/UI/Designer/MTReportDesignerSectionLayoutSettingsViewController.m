@@ -87,7 +87,7 @@
     self.labelHeight.text = localizedHeight;
 }
 
-- (void)setNumberOfRowsLabel:(NSUInteger)numberOfRows {
+- (void)setNumberOfRowsLabel:(double)numberOfRows {
     NSNumber *numberOfRowsWrapper = @(numberOfRows);
     NSString *localizedNumberOfRows = [NSNumberFormatter localizedStringFromNumber: numberOfRowsWrapper
                                                                        numberStyle: NSNumberFormatterSpellOutStyle];
@@ -104,7 +104,7 @@
 
 - (IBAction)numberOfRowsChanged:(UIStepper *)sender {
     [self setNumberOfRowsLabel:sender.value];
-    [self.delegate sectionLayoutDidUpdateNumberOfRows:sender.value];
+    [self.delegate sectionLayoutDidUpdateNumberOfRows:(NSUInteger)sender.value];
 }
 
 - (IBAction)valueChangedVisibility:(id)sender {
