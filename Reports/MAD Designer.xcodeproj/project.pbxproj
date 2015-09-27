@@ -3696,8 +3696,6 @@
 				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */,
 				4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */,
 				4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */,
-				4C4020CF1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.h */,
-				4C4020D01BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m */,
 				4C4020D11BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.h */,
 				4C4020D21BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m */,
 				4C4020D31BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.h */,
@@ -3721,8 +3719,6 @@
 				4C4020E31BAE988900BAE5FC /* MTQueryBuilderLinkBuilderViewController.m */,
 				4C4020E41BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.h */,
 				4C4020E51BAE988900BAE5FC /* MTQueryBuilderPredicateFormatViewController.m */,
-				4C4020E61BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.h */,
-				4C4020E71BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m */,
 				4C8DE2701BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.h */,
 				4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */,
 				4C4020771BAE966000BAE5FC /* MADQueryNavigationController.h */,
@@ -4788,6 +4784,10 @@
 			isa = PBXGroup;
 			children = (
 				4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */,
+				4C4020CF1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.h */,
+				4C4020D01BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m */,
+				4C4020E61BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.h */,
+				4C4020E71BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m */,
 			);
 			path = AddGroup;
 			sourceTree = "<group>";
