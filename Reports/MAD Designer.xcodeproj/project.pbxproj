@@ -1272,6 +1272,9 @@
 		4CFEE7FD1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FC1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4CFEE8021BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FF1BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8011BB78CAB00AFAA0A /* UITableViewControllerOpperators.m */; settings = {ASSET_TAGS = (); }; };
+		4CFEE80A1BB7993300AFAA0A /* MADPredicateBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */; settings = {ASSET_TAGS = (); }; };
+		4CFEE80B1BB7993300AFAA0A /* MADAddTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */; settings = {ASSET_TAGS = (); }; };
+		4CFEE80C1BB7993300AFAA0A /* MADLinkBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2606,6 +2609,9 @@
 		4CFEE7FF1BB78CAB00AFAA0A /* MADQueryBuilderSelectOperator.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryBuilderSelectOperator.storyboard; sourceTree = "<group>"; };
 		4CFEE8001BB78CAB00AFAA0A /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
 		4CFEE8011BB78CAB00AFAA0A /* UITableViewControllerOpperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerOpperators.m; sourceTree = "<group>"; };
+		4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADPredicateBuilder.storyboard; sourceTree = "<group>"; };
+		4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADAddTable.storyboard; sourceTree = "<group>"; };
+		4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADLinkBuilder.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4766,6 +4772,9 @@
 		4CFEE7F31BB773D800AFAA0A /* QueryBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				4CFEE8041BB7993300AFAA0A /* PredicateBuilder */,
+				4CFEE8061BB7993300AFAA0A /* AddTable */,
+				4CFEE8081BB7993300AFAA0A /* LinkBuilder */,
 				4CFEE7FE1BB78CAB00AFAA0A /* SelectOperator */,
 				4CFEE7F71BB77BD600AFAA0A /* SelectField */,
 				4CFEE7F41BB773D800AFAA0A /* AddGroup */,
@@ -4804,6 +4813,30 @@
 				4CFEE8011BB78CAB00AFAA0A /* UITableViewControllerOpperators.m */,
 			);
 			path = SelectOperator;
+			sourceTree = "<group>";
+		};
+		4CFEE8041BB7993300AFAA0A /* PredicateBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				4CFEE8051BB7993300AFAA0A /* MADPredicateBuilder.storyboard */,
+			);
+			path = PredicateBuilder;
+			sourceTree = "<group>";
+		};
+		4CFEE8061BB7993300AFAA0A /* AddTable */ = {
+			isa = PBXGroup;
+			children = (
+				4CFEE8071BB7993300AFAA0A /* MADAddTable.storyboard */,
+			);
+			path = AddTable;
+			sourceTree = "<group>";
+		};
+		4CFEE8081BB7993300AFAA0A /* LinkBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				4CFEE8091BB7993300AFAA0A /* MADLinkBuilder.storyboard */,
+			);
+			path = LinkBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -5619,6 +5652,7 @@
 				4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */,
 				4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */,
 				4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */,
+				4CFEE80B1BB7993300AFAA0A /* MADAddTable.storyboard in Resources */,
 				4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */,
 				4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */,
 				4CFEE7F61BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard in Resources */,
@@ -5654,6 +5688,7 @@
 				4CD0B2061AC8FBC4005CA75C /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
 				4C32A4A61BB0765900DD59A3 /* info.plist in Resources */,
 				4C26B9DF1BAF148B00456DC8 /* MADImageChevronRightTall@2x.png in Resources */,
+				4CFEE80C1BB7993300AFAA0A /* MADLinkBuilder.storyboard in Resources */,
 				4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
 				4CD0B24F1AC90018005CA75C /* MTImageLaunchViewerPadLandscape.png in Resources */,
 				4CD0B2201AC8FBC4005CA75C /* UIImageExportTypeSqlServer@2x.png in Resources */,
@@ -5706,6 +5741,7 @@
 				4C8DE26F1BAFA9A900AD1111 /* MTViewTableHeader.xib in Resources */,
 				4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CD0B1FC1AC8FBC4005CA75C /* UIBarButtonItemDatabase8.png in Resources */,
+				4CFEE80A1BB7993300AFAA0A /* MADPredicateBuilder.storyboard in Resources */,
 				4CD0B2001AC8FBC4005CA75C /* UIBarButtonItemMadDesigner.png in Resources */,
 				4C08B2F51AB6791F00B54D3A /* MADImageToolbarCloudDownloadSelected@2x.png in Resources */,
 				4CD0B2491AC90018005CA75C /* MTImageLaunchDesignerPadPortraitRetina.png in Resources */,
