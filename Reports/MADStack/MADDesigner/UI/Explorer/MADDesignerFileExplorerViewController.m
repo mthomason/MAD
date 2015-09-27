@@ -186,6 +186,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
+
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] ||
         [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
         
@@ -318,13 +319,13 @@ NSString * const MADUtiType                                     = @"com.everyday
     UINavigationController *navController2 = (UINavigationController *)tabBarController.viewControllers[1];
     UINavigationController *navController3 = (UINavigationController *)tabBarController.viewControllers[2];
     
-    __weak MADQueryBuilderSplitViewController * queryBuilderViewController = (MADQueryBuilderSplitViewController *)navController.topViewController;
+    MADQueryBuilderSplitViewController * __weak queryBuilderViewController = (MADQueryBuilderSplitViewController *)navController.topViewController;
     queryBuilderViewController.viewControllerDelegate = self;
     
-    __weak MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
+    MADDesignerViewController * __weak reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
     reportDesignerViewController.delegate = self;
     
-    __weak MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
+    MADViewerController * __weak reportViewerViewController = (MADViewerController *)navController3.topViewController;
     reportViewerViewController.viewControllerDelegate = self ;
     
     [self presentViewController:tabBarController animated:YES completion:nil];
