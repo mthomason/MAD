@@ -73,7 +73,9 @@
                                                              withSender: sender];
     }
     
-    return foundViewController;
+    return [super viewControllerForUnwindSegueAction: action
+                                  fromViewController: self
+                                          withSender: sender];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

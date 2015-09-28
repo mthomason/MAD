@@ -2798,9 +2798,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         UIView *sectionView = [self detailSectionView];
         CGRect rect = sectionView.frame;
         self.hidesStatusBar = NO;
-        [self dismissViewControllerAnimated:YES completion:^{
+        //[self dismissViewControllerAnimated:YES completion:^{
             [self.scroller scrollRectToVisible:rect animated:YES];
-        }];
+        //}];
     }
 }
 

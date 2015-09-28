@@ -65,7 +65,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @implementation MADDesignerElementPickerViewController
 
-#pragma mark - Exit
+#pragma mark - Storyboard Interactions
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
                  fromViewController:(UIViewController *)fromViewController
@@ -73,7 +73,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     return NO;
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+/*- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
                                               withSender:(id)sender {
     
@@ -82,11 +82,41 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             [super viewControllerForUnwindSegueAction: action
                                    fromViewController: fromViewController
                                            withSender: sender];
+}*/
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    /*if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
+        
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate =  self;
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushStaticLabelNew"]) {
+        
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushAggregateLabelNew"]) {
+        
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushBarcodeLabelNew"]) {
+        
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    }*/
+    if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
+        [segue.destinationViewController setDocument:self.document];
+    }
 }
+
+- (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    [super performSegueWithIdentifier:identifier sender:sender];
+}
+
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"MAD Objects", @"Title of the document object select");
     self.navigationItem.titleView = titleView;
@@ -96,7 +126,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     self.collectionView.opaque = NO;
     self.view.backgroundColor = [UIColor clearColor];
     self.view.opaque = NO;
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,7 +137,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     NSMutableArray *dataSource = [[NSMutableArray alloc] init];
     
     MADObjectIdentifier *labelDynamic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectDataCollectionViewCell
-                                                                           andTag: MTDocumentObjectTypeLabelDynamic];
+                                                                                 andTag: MTDocumentObjectTypeLabelDynamic];
     
     MADObjectIdentifier *labelStatic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectLabelCollectionViewCell
                                                                                 andTag: MTDocumentObjectTypeLabelStatic];
@@ -131,54 +161,24 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                                                                                 andTag: MTDocumentObjectTypeBarcode];
         [dataSource addObject:barcode];
     }
-
+    
     /*
-    MADObjectIdentifier *groupKey = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectGroupKeyCollectionViewCell
-                                                                             andTag: MTDocumentObjectTypeGroupKey];
+     MADObjectIdentifier *groupKey = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectGroupKeyCollectionViewCell
+     andTag: MTDocumentObjectTypeGroupKey];
+     
+     MADObjectIdentifier *chart = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectChartCollectionViewCell
+     andTag: MTDocumentObjectTypeChart];
+     
+     MADObjectIdentifier *formula = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectFormulaCollectionViewCell
+     andTag: MTDocumentObjectTypeFormula];
+     
+     [dataSource addObject:groupKey];
+     [dataSource addObject:chart];
+     [dataSource addObject:formula];
+     */
     
-    MADObjectIdentifier *chart = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectChartCollectionViewCell
-                                                                          andTag: MTDocumentObjectTypeChart];
-    
-    MADObjectIdentifier *formula = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectFormulaCollectionViewCell
-                                                                            andTag: MTDocumentObjectTypeFormula];
-    
-    [dataSource addObject:groupKey];
-    [dataSource addObject:chart];
-    [dataSource addObject:formula];
-    */
-
     
     self.dataSource = dataSource;
-}
-
-#pragma mark - View lifecycle
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
-        
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate =  self;
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushStaticLabelNew"]) {
-
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushAggregateLabelNew"]) {
-        
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushBarcodeLabelNew"]) {
-        
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    }
-    if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-        [segue.destinationViewController setDocument:self.document];
-    }
-}
-
-- (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    [super performSegueWithIdentifier:identifier sender:sender];
 }
 
 #pragma mark - Actions
