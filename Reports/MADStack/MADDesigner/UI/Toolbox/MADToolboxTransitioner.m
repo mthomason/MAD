@@ -195,9 +195,9 @@
     UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
     [designer setHidesStatusBar: isToolboxVisible];
     [UIView animateWithDuration: [self transitionDuration:transitionContext]
-                          delay: 0
-         usingSpringWithDamping: 300.0
-          initialSpringVelocity: 5.0
+                          delay: 0.0000f
+         usingSpringWithDamping: 300.0000f
+          initialSpringVelocity: 5.0000f
                         options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations: ^{
                          
