@@ -70,6 +70,7 @@ const int8_t MADIndexViewer = 2;
 #pragma mark - UITabBarControllerDelegate
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    
     if (tabBarController.selectedIndex != self.lastSelectedIndex) {
         [self showTitleWithText: viewController.title];
     }
