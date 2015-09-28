@@ -11,6 +11,20 @@
 #endif
 
 #import "MADViewerController.h"
+#import <MAD/MADConstants.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTReportFormatter.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTActivityItemProviderPdf.h>
+#import <MAD/MTNotificationDidFormatPage.h>
+#import <MAD/MTNotificationDidReadRows.h>
+#import <MAD/MTKeyChain.h>
+
+#import <MADDataStructures/MADDataStructures.h>
+#import <MADFoundation/MTDataTable.h>
+#import "MUIViewControllerDelegate.h"
+
 #import "MADNavigationBarTitleView.h"
 #import "MTReportViewerReportPageView.h"
 
@@ -99,11 +113,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 @property (nonatomic, assign) BOOL didRefreshBeforeReaload;
 @property (nonatomic, assign) BOOL activityExporting;
 
-//- (instancetype)init NS_DESIGNATED_INITIALIZER;
-//- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
-//- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
-//- (instancetype)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options NS_DESIGNATED_INITIALIZER;
-
 @end
 
 @implementation MADViewerController
@@ -179,8 +188,10 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
     self.activityExporting = NO;
     self.didRefreshBeforeReaload = NO;
+    
     NSAttributedString *lineReturnString = [[NSAttributedString alloc] initWithString:@"\n"];
     self.lineReturnString = lineReturnString;
+    
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
 
@@ -190,6 +201,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     self.statusMessage1 = statusMessage1;
     self.statusMessage2 = statusMessage2;
     self.statusMessage3 = statusMessage3;
+    
+    UIBarButtonItem *barButtonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
+    self.barButtonItemRefresh = barButtonRefresh;
     
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     progressView.trackTintColor = [UIColor tintColorRed];
@@ -240,6 +254,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     
@@ -285,7 +300,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
     [self setTintColorForToolbar:self.navigationController.toolbar];
     [self setTintColorForSidebar:self.toolbarSideRight];
-    
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -905,10 +919,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return self;
 }
 
-- (void)doneButton {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
                   withCompletionHandler:(void (^)(BOOL))completionHandler {
     
@@ -918,7 +928,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [self.popoverControllerActivity dismissPopoverAnimated:YES];
         completionHandler(YES);
     }
-
 }
 
 - (void)reload {
