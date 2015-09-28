@@ -1274,6 +1274,7 @@
 		4CFEE8201BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81A1BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m */; settings = {ASSET_TAGS = (); }; };
 		4CFEE8211BB7A3A300AFAA0A /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81D1BB7A3A300AFAA0A /* MTCellEnterText.m */; settings = {ASSET_TAGS = (); }; };
 		4CFEE8241BB7AE0800AFAA0A /* UINavigationController+MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */; settings = {ASSET_TAGS = (); }; };
+		4CFEE8281BB99DB200AFAA0A /* MADQuery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1777,8 +1778,6 @@
 		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeRSS@2x.png"; path = "Reports/UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
 		4C2F27A51B53FA1C004DFAEC /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2F27A61B53FA1D004DFAEC /* app.everydayapps.mad.designer.watchkit.info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = app.everydayapps.mad.designer.watchkit.info.plist; path = /Users/mthomason/Desktop/Reports/Reports/app.everydayapps.mad.designer.watchkit.info.plist; sourceTree = "<absolute>"; };
-		4C32A48D1BAFD8D900DD59A3 /* MADSplitViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSplitViewContainer.h; sourceTree = "<group>"; };
-		4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSplitViewContainer.m; sourceTree = "<group>"; };
 		4C32A4A41BB0763300DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		4C32A4A51BB0765900DD59A3 /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		4C32A4AA1BB076A900DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
@@ -2613,6 +2612,7 @@
 		4CFEE81E1BB7A3A300AFAA0A /* MTQueryBuilderAddPredicateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddPredicateViewController.h; sourceTree = "<group>"; };
 		4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+MADQuery.h"; sourceTree = "<group>"; };
 		4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+MADQuery.m"; sourceTree = "<group>"; };
+		4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQuery.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3701,8 +3701,6 @@
 				4C4020781BAE966000BAE5FC /* MADQueryNavigationController.m */,
 				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
 				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
-				4C32A48D1BAFD8D900DD59A3 /* MADSplitViewContainer.h */,
-				4C32A48E1BAFD8D900DD59A3 /* MADSplitViewContainer.m */,
 				4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */,
 				4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */,
 			);
@@ -4753,6 +4751,7 @@
 		4CFEE7F31BB773D800AFAA0A /* QueryBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */,
 				4CFEE8041BB7993300AFAA0A /* PredicateBuilder */,
 				4CFEE8061BB7993300AFAA0A /* AddTable */,
 				4CFEE8081BB7993300AFAA0A /* LinkBuilder */,
@@ -5628,6 +5627,7 @@
 				4C00817C14B6CAAF003DF437 /* UIImageStrikethrough20@2x.png in Resources */,
 				4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */,
 				4CD0B21C1AC8FBC4005CA75C /* UIButtonSelected.png in Resources */,
+				4CFEE8281BB99DB200AFAA0A /* MADQuery.storyboard in Resources */,
 				4C8DE24F1BAFA88400AD1111 /* MTCollectionViewCellElement.xib in Resources */,
 				4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */,
 				4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */,

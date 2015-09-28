@@ -317,15 +317,16 @@ NSString * const MADUtiType                                     = @"com.everyday
     NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
     ((id <MADocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
 
-    UIStoryboard *storyboard = [UIStoryboard Designer];
-
     // FIXME: UISplitViewController has retain cycle, and can't be dealloc without issues.  This is
     //          a work around.  We are keeping one split view controller alive.
     if (self.splitViewController == nil) {
-        MADQueryBuilderSplitViewController *splitViewController =  [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
+        UIStoryboard *storyboardQuery = [UIStoryboard storyboardWithName:@"MADQuery" bundle:NULL];
+        MADQueryBuilderSplitViewController *splitViewController =  [storyboardQuery instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
         splitViewController.viewControllerDelegate = self;
         self.splitViewController = splitViewController;
     }
+
+    UIStoryboard *storyboard = [UIStoryboard Designer];
     
     MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
     designerViewController.delegate = self;
