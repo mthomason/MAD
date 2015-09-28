@@ -83,8 +83,6 @@ typedef void(^MTBlockResultVoid)(void);
 @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviorsTables;
 @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviorsLinks;
 
-@property (nonatomic, strong) NSURL *localCacheFileUrl;
-
 @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
 
 @property (nonatomic, strong) NSOperationQueue *operationQueueCache;
@@ -171,6 +169,14 @@ typedef void(^MTBlockResultVoid)(void);
     return [MADQueryVisualizationViewController cacheFileNameForDocument:self.document];
 }
 
+- (NSURL *)localCacheFileUrl {
+    MADAppDelegate delegate = [UIApplication AppDelegate];
+    NSString *groupIdentifier = [delegate groupIdentifier];
+    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:groupIdentifier];
+    NSString *cacheFileName = [self cacheFileName];
+    return [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
+}
+
 + (NSString *)cacheFileNameForDocument:(MADocument *)document {
     return [self cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
 }
@@ -184,14 +190,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-
     [super viewDidLoad];
-    
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[delegate groupIdentifier]];
-    NSString *cacheFileName = [self cacheFileName];
-    NSURL *cacheFileUrl = [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];
-    self.localCacheFileUrl = cacheFileUrl;
     
     CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
     UIColor *borderColor = [UIColor lightGrayColor];

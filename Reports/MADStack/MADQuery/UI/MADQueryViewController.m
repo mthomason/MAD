@@ -1245,7 +1245,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         }
         [self.tableView reloadData];
     }
-    
 }
 
 - (NSMutableDictionary *)datamodel {
