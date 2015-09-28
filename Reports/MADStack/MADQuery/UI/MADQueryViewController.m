@@ -236,9 +236,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
-    [self reloadMainDocumentAnimated:YES];
-    
+
     self.navigationItem.prompt = nil;
     
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
