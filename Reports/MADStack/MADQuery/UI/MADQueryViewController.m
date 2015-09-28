@@ -83,8 +83,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerLinks;
@@ -241,6 +241,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     self.navigationItem.prompt = nil;
     
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                                   target: self
+                                                                                   action: @selector(edit:)];
+    
+    self.barButtonItemEdit = barButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -256,6 +261,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                    object: self.document];
     }
     [self enableTabBarItems];
+    [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -1079,21 +1089,14 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (IBAction)edit:(id)sender {
     
-    BOOL editing = ![self.tableView isEditing];
+    BOOL editing = !self.tableView.isEditing;
     
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        UIBarButtonSystemItem buttonType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
-        SEL toggleEditModeQueryDesigner = @selector(edit:);
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                       target: self
-                                                                                       action: toggleEditModeQueryDesigner];
-        
-        
-        [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-        //[self setBarButtonItemEdit:barButtonItem];
-    }
-    
-    [self.tableView setEditing: editing];
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone
+                                                                                   target: self
+                                                                                   action: @selector(edit:)];
+    [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    self.barButtonItemEdit = barButtonItem;
+    self.tableView.editing = editing;
 }
 
 - (IBAction)done:(id)sender {

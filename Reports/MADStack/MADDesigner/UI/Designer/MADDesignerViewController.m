@@ -152,7 +152,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) NSMutableDictionary *collectionViewReuseIdentifiers;
 
 @property (nonatomic, weak)   IBOutlet UIToolbar *toolbarBottom;                          //iPhone only
-@property (nonatomic, weak)   IBOutlet UIBarButtonItem *barButtonAddReportObject;
+@property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
 
 @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
 
@@ -274,6 +274,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         
         MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
+        
+        UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionAdd:)];
+        self.barButtonAddReportObject = barButtonItemAdd;
                 
     }
     return self;
@@ -440,7 +443,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self.view addConstraints:constraints];
     
     self.scroller.container.backgroundColor = [UIColor clearColor];
-    
 }
 
 - (void)setHidesStatusBar:(BOOL)hidesStatusBar {
@@ -611,6 +613,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self.scroller addConstraints: constraintsScroller];
     [self.scroller.container addConstraints: constraintsContainer];
     
+    [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonAddReportObject animated:NO];
+
 }
 
 - (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
@@ -642,7 +646,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
         [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
     }
-    
     [self.scroller flashScrollIndicators];
     [self.view setNeedsUpdateConstraints];
 }

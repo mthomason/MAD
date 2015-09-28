@@ -685,7 +685,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     self.labelDateLastRefreshed.text = @"";
     [self.labelDateLastRefreshed setNeedsDisplay];
 
-    [self.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
+    [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
 
 }
 
@@ -719,8 +719,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     activityIndicator.hidesWhenStopped = NO;
     
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [self.navigationItem setRightBarButtonItem: barButtonItem
-                                      animated: YES];
+    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem animated: YES];
     
 }
 
