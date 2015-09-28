@@ -343,6 +343,9 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
+    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                             target:self action:@selector(viewControllerDidFinish:)];
+    [tabBarController.navigationItem setRightBarButtonItem:dismiss animated:NO];
 
     [self presentViewController:navigationController animated:YES completion:nil];
 }
