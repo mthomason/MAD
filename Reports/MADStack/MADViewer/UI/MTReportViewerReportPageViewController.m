@@ -72,7 +72,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setEdgesForExtendedLayout:UIRectEdgeNone];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -103,6 +102,17 @@
         }
         [self setTimerLabelTimeSinceRefreh:nil];
     }
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    id t = self.tabBarController;
+    id b = self.navigationController;
+    CGFloat l = self.tabBarController.navigationController.topLayoutGuide.length;
+    //CGRect r = CGRectInset(self.view.bounds, CGSizeZero.width, self.tabBarController.topLayoutGuide.length);
+    //self.view.bounds = CGRectInset(self.view.bounds, CGSizeZero.width, self.tabBarController.topLayoutGuide.length);
+    
+
 }
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {

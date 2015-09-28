@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B17c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
     <dependencies>
         <deployment version="2080" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8151.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -12,6 +12,7 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="72b-A9-bsM">
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -21,6 +22,7 @@
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="b2H-fK-jpV">
                         <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -40,6 +42,7 @@
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="hM7-88-jCf">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewLayout key="collectionViewLayout" id="J0m-2b-CAI" customClass="MADCollectionViewLayoutGrouped"/>
                         <cells>
@@ -52,6 +55,7 @@
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="MGC-1F-js4">
                                             <rect key="frame" x="6" y="9" width="128" height="128"/>
+                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="128" id="h8x-Hi-w69"/>
                                                 <constraint firstAttribute="height" constant="128" id="oDe-iy-aWz"/>
@@ -59,13 +63,16 @@
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="770" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="12345 67890 67890 67890.mad" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="6" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="140" translatesAutoresizingMaskIntoConstraints="NO" id="az2-K4-gw3">
                                             <rect key="frame" x="0.0" y="140" width="140" height="21"/>
+                                            <animations/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <animations/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <animations/>
                                 <constraints>
                                     <constraint firstItem="MGC-1F-js4" firstAttribute="top" secondItem="wHl-MT-z05" secondAttribute="top" constant="9" id="5dF-38-9rY"/>
                                     <constraint firstAttribute="bottom" secondItem="az2-K4-gw3" secondAttribute="bottom" constant="7" id="66c-4H-QAg"/>
@@ -133,6 +140,7 @@
                 <navigationController definesPresentationContext="YES" id="MI3-W5-wJi" customClass="MADNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4VZ-eM-FIW">
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </navigationBar>
                     <connections>
                         <segue destination="xWb-ap-j8N" kind="relationship" relationship="rootViewController" id="jUn-1Q-Qy8"/>
@@ -149,6 +157,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="e05-Nt-3yF">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="bRA-75-DMZ">
@@ -162,11 +171,13 @@
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Viewer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vbo-Sj-MLo">
                                                     <rect key="frame" x="20" y="20" width="280" height="21"/>
+                                                    <animations/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="WHD-WA-wKV">
                                                     <rect key="frame" x="20" y="49" width="280" height="118"/>
+                                                    <animations/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="MAD">
                                                             <attributes>
@@ -188,7 +199,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <animations/>
                                         </tableViewCellContentView>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="WHD-WA-wKV" secondAttribute="trailing" constant="20" id="TVd-TY-pCJ"/>
                                             <constraint firstItem="Vbo-Sj-MLo" firstAttribute="leading" secondItem="eJL-9C-M06" secondAttribute="leading" constant="20" id="WZS-af-OOM"/>
@@ -234,12 +247,14 @@
                     <navigationItem key="navigationItem" id="cer-7U-Ubk"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="BCd-wA-a4t">
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                         <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="bEN-Z1-a5R">
                         <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>

@@ -10,23 +10,17 @@
 #define Reports_MTReportViewerController_h
 
 #import <UIKit/UIKit.h>
-#import <MAD/MADConstants.h>
-#import <MAD/MAD.h>
 #import <MAD/MADActivityProtocol.h>
-#import <MAD/MTQuery.h>
-#import <MAD/MTActivityItemProviderPdf.h>
-#import <MAD/MTNotificationDidFormatPage.h>
-#import <MAD/MTNotificationDidReadRows.h>
-#import <MAD/MTKeyChain.h>
-
-#import <MADDataStructures/MADDataStructures.h>
-#import <MADFoundation/MTDataTable.h>
 #import "MADocumentProtocol.h"
-#import "MUIViewControllerDelegate.h"
+
+@protocol MTViewControllerProtocol;
 
 @interface MADViewerController : UIPageViewController
-    <MADocumentProtocol, UIPageViewControllerDelegate, UIPageViewControllerDataSource,
-        UIDocumentInteractionControllerDelegate, MADActivityProtocol>
+    <MADocumentProtocol,
+        MADActivityProtocol,
+        UIPageViewControllerDelegate,
+        UIPageViewControllerDataSource,
+        UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 

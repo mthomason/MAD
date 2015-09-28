@@ -1077,7 +1077,6 @@
 		4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE28B1BAFB23400AD1111 /* MADExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28A1BAFB23400AD1111 /* MADExplorer.storyboard */; settings = {ASSET_TAGS = (); }; };
-		4C8DE28D1BAFB25300AD1111 /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28C1BAFB25300AD1111 /* MTStoryboardReportViewer.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE28F1BAFB26700AD1111 /* MADQueryVisualization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE28E1BAFB26700AD1111 /* MADQueryVisualization.storyboard */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */; settings = {ASSET_TAGS = (); }; };
 		4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */; settings = {ASSET_TAGS = (); }; };
@@ -5664,7 +5663,6 @@
 				4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */,
 				4C6A17CE19B193610098717E /* MADImageToolbarCloudDownload@2x.png in Resources */,
 				4CD0B26F1AC90273005CA75C /* MADImageCaratOpen.png in Resources */,
-				4C8DE28D1BAFB25300AD1111 /* MTStoryboardReportViewer.storyboard in Resources */,
 				4C8DE28B1BAFB23400AD1111 /* MADExplorer.storyboard in Resources */,
 				4C08B2EF1AB6791F00B54D3A /* MADImageToolbarCloud.png in Resources */,
 				4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,

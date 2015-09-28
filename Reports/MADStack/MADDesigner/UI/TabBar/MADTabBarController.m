@@ -54,6 +54,15 @@ const int8_t MADIndexViewer = 2;
     }
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+//    self.topLayoutGuide.length = self.navigationController.topLayoutGuide.length;
+}
+
+- (id <UILayoutSupport>)topLayoutGuide {
+    return self.navigationController.topLayoutGuide;
+}
+
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.selectedViewController;
 }
@@ -65,6 +74,20 @@ const int8_t MADIndexViewer = 2;
         [self showTitleWithText: viewController.title];
     }
     self.lastSelectedIndex = tabBarController.selectedIndex;
+    switch (tabBarController.selectedIndex) {
+        case MADIndexQuery:
+            tabBarController.edgesForExtendedLayout = UIRectEdgeAll;
+            break;
+        case MADIndexDesigner:
+            tabBarController.edgesForExtendedLayout = UIRectEdgeAll;
+            break;
+        case MADIndexViewer:
+            tabBarController.edgesForExtendedLayout = UIRectEdgeBottom;
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - helpers
