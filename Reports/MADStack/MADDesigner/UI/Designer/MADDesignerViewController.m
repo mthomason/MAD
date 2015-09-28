@@ -110,7 +110,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
 @property (nonatomic, assign) BOOL editAggregate;
-@property (nonatomic, assign) BOOL editDynamicField;
 
 @property (nonatomic, strong) NSArray *sectionViewsArray;
 @property (nonatomic, strong) NSArray *sectionControlViewsArray;
@@ -1418,7 +1417,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)editDocumentObjectLabelDynamic:(RptqDocumentObject *)object {
     
-    self.editDynamicField = YES;
     self.objectIdEditDynamicLabel = object.objectID;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
