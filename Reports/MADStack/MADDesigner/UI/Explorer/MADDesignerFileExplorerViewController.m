@@ -283,7 +283,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     [self closeDocument:self.traitCollection completion:^(BOOL success) {
         [weakself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:weakself waitUntilDone:NO];
     }];
-    
+    [self.splitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
     
     self.shouldShowAddDocumentPopover = YES;

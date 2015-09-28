@@ -552,9 +552,8 @@ typedef void(^MTBlockResultVoid)(void);
         NSUInteger counter = 0;
         for (NSURL *queryTable in self.rootTables) {
             CGFloat attachmentPointY = segHeight * (counter + 1);
-            CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY);
             UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[queryTable];
-            attachmentBehavior.anchorPoint = attachmentPoint;
+            attachmentBehavior.anchorPoint = CGPointMake(CGPointZero.x, attachmentPointY);
             counter++;
         }
     }
@@ -592,7 +591,6 @@ typedef void(^MTBlockResultVoid)(void);
             if (tableIdVertext.object != nil) {
                 
                 MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
-                
                 MADQueryVisualizationTableDefination *tableDef = [[MADQueryVisualizationTableDefination alloc] init];
                 tableDef.center = viewController.view.center;
                 tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];

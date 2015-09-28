@@ -24,6 +24,7 @@
     <MTViewControllerProtocol, MADocumentProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+@property (readonly) UINavigationController *detailNavigationController;
 
 @end
 

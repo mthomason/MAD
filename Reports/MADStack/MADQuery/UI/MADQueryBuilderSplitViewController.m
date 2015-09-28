@@ -79,9 +79,8 @@
                                                                                     target: self
                                                                                     action: @selector(redrawQueryVisualization:)];
 
-        UIViewController *vc = self.viewControllers[0];
         UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
-        [self setOverrideTraitCollection:traitCollection forChildViewController:vc];
+        [self setOverrideTraitCollection:traitCollection forChildViewController:self.detailNavigationController];
         
         self.barButtonItemRevealQuery = barButtonItemRevealQuery;
         
@@ -98,18 +97,18 @@
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
+    __weak id<UISplitViewControllerDelegate> delegate = self;
+    self.delegate = delegate;
+    
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = self.title;
     self.navigationItem.titleView = titleView;
     
     self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
 
-    __weak id<UISplitViewControllerDelegate> delegate = self;
-    self.delegate = delegate;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
-    UINavigationController *navigationController = self.viewControllers[0];
-    navigationController.navigationBarHidden = NO;
+    self.detailNavigationController.navigationBarHidden = NO;
     
     MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
     queryVisualizationViewController.document = self.document;
@@ -134,7 +133,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     [self.queryBuilderController reloadMainDocumentAnimated: YES];
     
     __block MADQueryBuilderSplitViewController *blockSelf = self;
@@ -151,7 +150,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    self.delegate = nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

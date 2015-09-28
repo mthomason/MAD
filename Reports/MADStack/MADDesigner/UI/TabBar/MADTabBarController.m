@@ -54,6 +54,11 @@ const int8_t MADIndexViewer = 2;
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 //    self.topLayoutGuide.length = self.navigationController.topLayoutGuide.length;
