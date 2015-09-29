@@ -35,6 +35,8 @@
 #import "UINavigationController+MADQuery.h"
 #import "UIStoryboard+Designer.h"
 
+#import "MADNavigationController.h"
+
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
@@ -313,6 +315,9 @@ NSString * const MADUtiType                                     = @"com.everyday
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
     UITabBarController *tabBarController = [UITabBarController mainTabBarController];
+    tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent;
+    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     
     NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
     ((id <MADocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
@@ -334,12 +339,14 @@ NSString * const MADUtiType                                     = @"com.everyday
     MADViewerController *viewerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
     viewerViewController.viewControllerDelegate = self ;
     
-    NSArray *tabBarViewControllers = @[self.splitViewController, designerViewController, viewerViewController];
+    MADNavigationController *navControllerViewer = [[MADNavigationController alloc] initWithRootViewController:viewerViewController];
+    navControllerViewer.document = document;
+    [navControllerViewer setNavigationBarHidden:YES animated:NO];
+    [navControllerViewer setToolbarHidden:NO animated:NO];
+    
+    NSArray *tabBarViewControllers = @[self.splitViewController, designerViewController, navControllerViewer];
     [tabBarController setViewControllers:tabBarViewControllers animated:NO];
     
-    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tabBarController];
     
     navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];

@@ -2679,10 +2679,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)displayPrompt {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-        self.navigationItem.prompt = self.promptManager.prompt;
+        self.tabBarController.navigationItem.prompt = self.promptManager.prompt;
     } else {
-        if (self.navigationItem.prompt != nil) {
-            self.navigationItem.prompt = nil;
+        if (self.tabBarController.navigationItem.prompt != nil) {
+            self.tabBarController.navigationItem.prompt = nil;
         }
     }
 }

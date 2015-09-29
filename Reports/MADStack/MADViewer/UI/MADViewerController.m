@@ -255,6 +255,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    NSLog(@"%@", self.tabBarController);
+    NSLog(@"%@", self.navigationController);
+    NSLog(@"%@", self.navigationController.tabBarController);
     
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     
@@ -309,10 +312,10 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 - (void)updateNavigationPrompt:(BOOL)animated {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         [UIView setAnimationsEnabled:animated];
-        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+        self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
-        self.navigationItem.prompt = nil;
+        self.tabBarController.navigationItem.prompt = nil;
     }
 }
 

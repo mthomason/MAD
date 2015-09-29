@@ -104,7 +104,7 @@
     titleView.text = self.title;
     self.navigationItem.titleView = titleView;
     
-    self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+    self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
 
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
@@ -230,10 +230,10 @@
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+        self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
         [UIView setAnimationsEnabled:YES];
     } else {
-        self.navigationItem.prompt = nil;
+        self.tabBarController.navigationItem.prompt = nil;
     }
 }
 
