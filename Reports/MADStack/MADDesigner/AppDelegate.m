@@ -328,6 +328,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor                      = [UIColor edaOrange];
     [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil].tintColor                             = [UIColor edaOrange];
     [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = [UIColor tintColorWhite];
+    [[UINavigationBar appearance] setTitleTextAttributes:
+    [NSDictionary dictionaryWithObjectsAndKeys: [UIColor tintColorRed], NSForegroundColorAttributeName, nil]];
     
 }
 
