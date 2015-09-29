@@ -103,7 +103,7 @@
         }
     }
 }
-/*
+
 - (void)setDocument:(MADocument *)document {
     if (document != _document) {
         _document = document;
@@ -114,5 +114,5 @@
         }
     }
 }
-*/
+
 @end
