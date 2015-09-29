@@ -32,6 +32,7 @@
         NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
         ((id <MADocumentProtocol>)self.topViewController).document = self.document;
     }
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -305,18 +305,18 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor tintColorWhite]};
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
     
-#ifndef MADWATCHKIT
-    [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [UIColor tintColorBlue];
-    [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
-    [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
-#endif
+    #ifndef MADWATCHKIT
+        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [UIColor tintColorBlue];
+        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
+        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
+    #endif
     
     [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [UIColor tintColorAnalogous4];
     [UINavigationBar appearanceWhenContainedIn:[MFMailComposeViewController class], nil].barTintColor               = [UIColor tintColorAnalogous4];
     
-#ifndef MADWATCHKIT
-    [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                   = [UIColor tintColorWhite];
-#endif
+    #ifndef MADWATCHKIT
+        [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].tintColor                  = [UIColor tintColorWhite];
+    #endif
     
     [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor                             = [UIColor tintColorWhite];
     [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor                       = [UIColor tintColorWhite];
@@ -329,7 +329,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [UIImageView appearanceWhenContainedIn:[UICollectionViewCell class], nil].tintColor                             = [UIColor edaOrange];
     [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor                           = [UIColor tintColorWhite];
     [[UINavigationBar appearance] setTitleTextAttributes:
-    [NSDictionary dictionaryWithObjectsAndKeys: [UIColor tintColorRed], NSForegroundColorAttributeName, nil]];
+    [NSDictionary dictionaryWithObjectsAndKeys: [UIColor tintColorWhite], NSForegroundColorAttributeName, nil]];
     
 }
 

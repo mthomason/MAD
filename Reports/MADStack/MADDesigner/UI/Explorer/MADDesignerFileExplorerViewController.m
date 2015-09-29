@@ -347,7 +347,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     NSArray *tabBarViewControllers = @[self.splitViewController, designerViewController, navControllerViewer];
     [tabBarController setViewControllers:tabBarViewControllers animated:NO];
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tabBarController];
+    MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
     
     navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
