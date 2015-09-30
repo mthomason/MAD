@@ -7,6 +7,8 @@
 //
 
 #import "MADQueryVisualizationCacheData.h"
+#import <Foundation/NSCoder.h>
+#import <UIKit/UIGeometry.h>
 
 static NSString * const keyScrollViewContentOffset  = @"1";
 static NSString * const keyScrollViewZoomScale      = @"2";

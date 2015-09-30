@@ -128,7 +128,7 @@
         for (NSUInteger i=0; i<numberOfPages; i++) {
             @autoreleasepool {
                 UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-                [printPageRender drawPageAtIndex:i inRect:trimBoxRect];
+                [printPageRender drawPageAtIndex:(NSInteger)i inRect:trimBoxRect];
                 NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
                 NSString *text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
                 [activityView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];

@@ -9,39 +9,36 @@
 #ifndef Reports_MTReportDesignerFontSelectorViewController_h
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import <MAD/MADFont.h>
 #import "MADViewController.h"
 #import "MADToolboxDisplayProtocol.h"
 
 @class MADocument, MADFontSelectorViewController, MADFont;
 
 @protocol MTReportDesignerFontSelectorDelegate
-- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
+    - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
 @end
 
 @interface MADFontSelectorViewController : MADTableViewController
     <UITableViewDelegate, MADToolboxDisplayProtocol>
 
-@property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontArial;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontCourierNew;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontCourier;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontGeorgia;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontHelvetica;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontHelveticaNeue;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontTimesNewRoman;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontTrebuchet;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontVerdana;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontZapfino;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontArial;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontCourierNew;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontCourier;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontGeorgia;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontHelvetica;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontHelveticaNeue;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontTimesNewRoman;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontTrebuchet;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontVerdana;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontZapfino;
 
-- (void)setSelectedFont:(MADFont *)font;
+    - (void)setSelectedFont:(MADFont *)font;
 
-@property (nonatomic, assign) BOOL clearsBackground;
+    @property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 

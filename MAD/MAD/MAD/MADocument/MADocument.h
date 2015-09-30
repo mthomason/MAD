@@ -12,14 +12,12 @@
 #define Reports_MADocument_h
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import <UIKit/UIManagedDocument.h>
+#import <UIKit/UIPrintInteractionController.h>
 #import <MAD/MTReportFormatterDataSource.h>
-#import <MAD/MADActivityProtocol.h>
-#import <MAD/MADSortOrder.h>
-#import <MADFileManager/MADFileManager.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
+#import <MAD/MADSortOrder.h>
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
@@ -40,7 +38,9 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject;
+        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase;
+
+@protocol MADActivityProtocol;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,

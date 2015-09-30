@@ -10,7 +10,12 @@
 
 @implementation MADTransparentPresentationController
 
-
++ (void)initialize {
+    [super initialize];
+    if (self == [MADTransparentPresentationController self]) {
+        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
+    }
+}
 
 - (BOOL) shouldRemovePresentersView {
     return NO;

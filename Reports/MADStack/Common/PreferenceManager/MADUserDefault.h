@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADUserDefault_h
+#define MAD_Designer_MADUserDefault_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADUserDefault : NSObject
 
@@ -14,3 +17,5 @@
 - (instancetype)initWithIdentifier:(NSString *)identifier shared:(BOOL)shared;
 
 @end
+
+#endif

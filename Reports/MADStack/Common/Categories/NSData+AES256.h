@@ -11,7 +11,7 @@
 #ifndef Reports_NSData_AES256_h
 #define Reports_NSData_AES256_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSData.h>
 #import <CommonCrypto/CommonCryptor.h>
 
 @interface NSData (AES256)

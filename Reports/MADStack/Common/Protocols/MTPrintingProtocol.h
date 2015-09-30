@@ -9,7 +9,7 @@
 #ifndef Reports_MTPrintingProtocol_h
 #define Reports_MTPrintingProtocol_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @protocol MTPrintingProtocol <NSObject>
 

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSOperation.h>
 
 extern NSString * const MADUpgradeInstalledSamples;
 extern NSString * const MADUpgradeInstalledChinook;

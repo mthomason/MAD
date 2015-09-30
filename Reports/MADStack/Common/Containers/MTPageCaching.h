@@ -9,7 +9,7 @@
 #ifndef Reports_MTPageCaching_h
 #define Reports_MTPageCaching_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTPageCaching : NSObject
 

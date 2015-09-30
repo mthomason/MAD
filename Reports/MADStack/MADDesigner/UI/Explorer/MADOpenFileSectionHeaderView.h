@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UICollectionViewCell.h>
 
 typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
     MACloudManagerSectionLocal = 0,
@@ -16,9 +15,9 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
 
 @interface MADOpenFileSectionHeaderView : UICollectionReusableView
 
-@property (nonatomic, assign) MACloudManagerSection sectionType;
+    @property (nonatomic, assign) MACloudManagerSection sectionType;
 
-- (void)startAnimating;
-- (void)stopAnimating;
+    - (void)startAnimating;
+    - (void)stopAnimating;
 
 @end

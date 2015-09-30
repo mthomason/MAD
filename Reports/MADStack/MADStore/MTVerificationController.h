@@ -2,7 +2,6 @@
 #ifndef MAD_MTVerificationController_h
 #define MAD_MTVerificationController_h
 
-#import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 #import "NSData+Base64.h"
 

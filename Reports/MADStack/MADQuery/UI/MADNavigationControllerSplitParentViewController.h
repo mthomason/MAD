@@ -9,7 +9,6 @@
 #ifndef MAD_MADNavigationControllerSplitParentViewController_h
 #define MAD_MADNavigationControllerSplitParentViewController_h
 
-#import <UIKit/UIKit.h>
 #import "MADNavigationController.h"
 
 @interface MADNavigationControllerSplitParentViewController : MADNavigationController

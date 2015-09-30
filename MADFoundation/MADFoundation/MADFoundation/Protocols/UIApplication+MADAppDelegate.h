@@ -9,7 +9,7 @@
 #ifndef MAD_MADFoundation_UIApplication__MADAppDelegate__h
 #define MAD_MADFoundation_UIApplication__MADAppDelegate__h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIApplication.h>
 #import "MADAppDelegate.h"
 
 @interface UIApplication (MADAppDelegate)

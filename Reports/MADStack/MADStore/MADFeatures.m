@@ -8,6 +8,11 @@
 
 #import "MADFeatures.h"
 #import "MADFeature.h"
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
 
 static NSString * const Features = @"MADFeatures";
 static NSString * const Plist = @"plist";

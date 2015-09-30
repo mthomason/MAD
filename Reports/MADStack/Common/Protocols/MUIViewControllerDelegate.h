@@ -9,8 +9,6 @@
 #ifndef Reports_MUIViewControllerProtocol_h
 #define Reports_MUIViewControllerProtocol_h
 
-#import <Foundation/Foundation.h>
-
 @protocol MTViewControllerProtocol
 @optional
 - (void)viewControllerDidFinish:(id)sender;

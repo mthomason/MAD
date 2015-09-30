@@ -9,7 +9,7 @@
 #ifndef MAD_MADPopoverBackgroundView_h
 #define MAD_MADPopoverBackgroundView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIPopoverBackgroundView.h>
 
 @interface MADPopoverBackgroundView : UIPopoverBackgroundView
     <UIPopoverBackgroundViewMethods>

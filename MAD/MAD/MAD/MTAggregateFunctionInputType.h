@@ -9,6 +9,8 @@
 #ifndef MAD_MTAggregateFunctionInputType_h
 #define MAD_MTAggregateFunctionInputType_h
 
+#import <Foundation/NSObjCRuntime.h>
+
 typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     MTAggregateFunctionInputTypeField = 0,
     MTAggregateFunctionInputTypeFormula

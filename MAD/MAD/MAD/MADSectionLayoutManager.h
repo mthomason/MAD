@@ -9,26 +9,24 @@
 #ifndef Reports_MADReportDesignerSectionLayoutAttributes_h
 #define Reports_MADReportDesignerSectionLayoutAttributes_h
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
 #import <MAD/MADSectionLayoutAttributes.h>
 
-@class MADSectionLayoutManager, RptqDocumentSection;
+@class MADSectionLayoutManager, RptqDocumentSection, NSManagedObjectID;
 
-@interface MADSectionLayoutManager : NSObject
+    @interface MADSectionLayoutManager : NSObject
 
-@property (nonatomic, strong, readonly) NSMutableDictionary *items;
-@property (nonatomic, weak) id <MADReportDesignerSectionElementLayoutManagerDelegate>delegate;
+    @property (nonatomic, strong, readonly) NSMutableDictionary *items;
+    @property (nonatomic, weak) id <MADReportDesignerSectionElementLayoutManagerDelegate>delegate;
 
-- (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
+    - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
 
-- (void)addItem:(MADSectionLayoutAttributes *)item;
-- (void)removeItemWithID:(NSManagedObjectID *)objectID;
-- (CGSize)size;
-- (void)layout;
+    - (void)addItem:(MADSectionLayoutAttributes *)item;
+    - (void)removeItemWithID:(NSManagedObjectID *)objectID;
+    - (CGSize)size;
+    - (void)layout;
 
-- (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
+    - (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
 
 @end
 

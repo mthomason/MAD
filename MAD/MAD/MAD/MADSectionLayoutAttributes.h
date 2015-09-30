@@ -6,9 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import <Foundation/NSArray.h>
+#import <CoreGraphics/CGGeometry.h>
+#import <CoreData/NSManagedObjectID.h>
+#import <UIKit/UICollectionViewLayout.h>
 
 @class MADSectionLayoutManager;
 @protocol MADReportDesignerSectionElementLayoutManagerDelegate;

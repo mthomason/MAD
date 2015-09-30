@@ -11,13 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
-#import <MAD/MADFont.h>
-#import <MAD/MADSectionLayoutManager.h>
-#import <MAD/NSManagedObject+Extras.h>
-#import <MAD/NSManagedObjectID+Extras.h>
-#import <MAD/RptqDocumentSectionEnumerator.h>
-
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"

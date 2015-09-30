@@ -9,7 +9,7 @@
 #ifndef Reports_MADPromptManager_h
 #define Reports_MADPromptManager_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MADPromptManager : NSObject
 

@@ -9,7 +9,7 @@
 #ifndef MAD_MTArrayCached_h
 #define MAD_MTArrayCached_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSEnumerator.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADSqlite3/MADSqlite3.h>
 #import <MADDataStructures/MADDataStructures.h>

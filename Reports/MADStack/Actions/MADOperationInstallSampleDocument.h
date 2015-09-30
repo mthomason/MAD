@@ -6,7 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADOperationInstallSampleDocument_h
+#define MAD_Designer_MADOperationInstallSampleDocument_h
+
+#import <Foundation/NSOperation.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
@@ -15,3 +18,5 @@
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag;
 
 @end
+
+#endif

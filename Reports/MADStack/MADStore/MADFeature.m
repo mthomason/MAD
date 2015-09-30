@@ -7,6 +7,8 @@
 //
 
 #import "MADFeature.h"
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 
 static NSString * const ProductID       = @"product-id";
 static NSString * const AppleID         = @"apple-id";

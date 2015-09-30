@@ -6,8 +6,11 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <MAD/MAD.h>
+#ifndef MAD_Designer_MADQueryVisualizationDefination_h
+#define MAD_Designer_MADQueryVisualizationDefination_h
+
+#import <Foundation/NSObject.h>
+#import <MAD/RptqQuery.h>
 #import <MADDataStructures/MADDataStructures.h>
 
 @class RptqQuery, MTGraph, MTLinkedList;
@@ -22,3 +25,5 @@
 @property (nonatomic, assign, readonly, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
 
 @end
+
+#endif

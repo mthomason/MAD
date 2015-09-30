@@ -7,6 +7,7 @@
 //
 
 #import "MADPopoverBackgroundView.h"
+#import <QuartzCore/CALayer.h>
 
 @interface MADPopoverBackgroundView ()
 

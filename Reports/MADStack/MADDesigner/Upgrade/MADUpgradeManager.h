@@ -9,7 +9,6 @@
 #ifndef MAD_MADUpgradeManager_h
 #define MAD_MADUpgradeManager_h
 
-#import <Foundation/Foundation.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MAD/MADConstants.h>
 

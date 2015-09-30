@@ -7,6 +7,7 @@
 //
 
 #import "MADAboutTableView.h"
+#import <UIKit/UINibLoading.h>
 
 @implementation MADAboutTableView
 

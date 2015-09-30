@@ -7,6 +7,7 @@
 //
 
 #import "MADOpenFileSectionHeaderView.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";

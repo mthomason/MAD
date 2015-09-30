@@ -9,7 +9,7 @@
 #ifndef Reports_MTTableViewControllerAbout_h
 #define Reports_MTTableViewControllerAbout_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
 #import <CoreText/CoreText.h>
 #import <MAD/MADConstants.h>
 #import "MUIViewControllerDelegate.h"

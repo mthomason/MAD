@@ -9,7 +9,7 @@
 #ifndef MADDesigner_Constants_h
 #define MADDesigner_Constants_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSString.h>
 
 extern NSString * const MADFileExtentionMobleApplicationDocumentArchive;
 extern NSString * const MADFileExtentionMobleApplicationDocument;

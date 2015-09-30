@@ -6,7 +6,12 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADSalesReceipt_h
+#define MAD_Designer_MADSalesReceipt_h
+
+#import <Foundation/NSObject.h>
+
+@class NSUUID;
 
 @interface MADSalesReceipt : NSObject
 
@@ -24,3 +29,5 @@
 @property (readonly) BOOL charterMembership;
 
 @end
+
+#endif

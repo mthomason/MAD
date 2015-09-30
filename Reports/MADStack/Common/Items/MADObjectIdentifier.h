@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADObjectIdentifier_h
+#define MAD_Designer_MADObjectIdentifier_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADObjectIdentifier : NSObject
 
@@ -16,3 +19,5 @@
 - (instancetype)initWithIdentifier:(NSString *)identifier andTag:(NSInteger)tag;
 
 @end
+
+#endif

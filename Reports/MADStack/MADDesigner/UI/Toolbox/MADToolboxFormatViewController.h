@@ -9,7 +9,6 @@
 #ifndef Reports_MTReportDesignerDocumentObjectFormat_h
 #define Reports_MTReportDesignerDocumentObjectFormat_h
 
-#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <MAD/MAD.h>
 #import <MAD/MTDatabaseField.h>

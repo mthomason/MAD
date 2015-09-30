@@ -9,7 +9,6 @@
 #ifndef Reports_MTQueryBuilderChooseFieldViewController_h
 #define Reports_MTQueryBuilderChooseFieldViewController_h
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"

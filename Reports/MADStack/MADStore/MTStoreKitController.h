@@ -9,7 +9,7 @@
 #ifndef Reports_MTStoreKitController_h
 #define Reports_MTStoreKitController_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <StoreKit/StoreKit.h>
 
 extern NSString * const MTStoreKitTransactionReceipt;

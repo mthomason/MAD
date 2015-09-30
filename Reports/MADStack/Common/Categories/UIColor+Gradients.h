@@ -9,7 +9,8 @@
 #ifndef Reports_UIColor_Gradients_h
 #define Reports_UIColor_Gradients_h
 
-#import <Foundation/Foundation.h>
+#import <CoreGraphics/CGGradient.h>
+#import <UIKit/UIColor.h>
 
 @interface UIColor (Gradients)
 

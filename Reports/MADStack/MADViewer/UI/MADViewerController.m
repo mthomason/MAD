@@ -11,6 +11,7 @@
 #endif
 
 #import "MADViewerController.h"
+#import <CoreData/CoreData.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTReportFormatter.h>

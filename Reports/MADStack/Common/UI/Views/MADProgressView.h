@@ -9,8 +9,7 @@
 #ifndef Reports_MADProgressView_h
 #define Reports_MADProgressView_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIProgressView.h>
 
 @interface MADProgressView : UIProgressView
 

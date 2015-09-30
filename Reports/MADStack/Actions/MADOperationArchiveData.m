@@ -7,6 +7,8 @@
 //
 
 #import "MADOperationArchiveData.h"
+#import <Foundation/NSData.h>
+#import <Foundation/NSKeyedArchiver.h>
 
 @interface MADOperationArchiveData ()
     @property (nonatomic, strong) NSURL *url;

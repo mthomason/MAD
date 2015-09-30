@@ -6,7 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MTElementCanvas_h
+#define MAD_Designer_MTElementCanvas_h
+
 #import <MADBarcodes/MADBarcodes.h>
 
 @protocol MTElementCanvasDelegate <NSObject>
@@ -27,3 +29,5 @@
 @property (readonly) NSStringDrawingOptions drawingOptions;
 
 @end
+
+#endif

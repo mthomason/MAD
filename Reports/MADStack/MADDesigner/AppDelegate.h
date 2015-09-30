@@ -9,8 +9,8 @@
 #ifndef MAD_Designer_AppDelegate_h
 #define MAD_Designer_AppDelegate_h
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
+#import <UIKit/UIResponder.h>
+#import <UIKit/UIApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 @interface AppDelegate : UIResponder

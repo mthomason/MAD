@@ -7,6 +7,8 @@
 //
 
 #import "MADPromptManager.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
 
 @interface MADPromptManager ()
 

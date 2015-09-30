@@ -15,7 +15,8 @@
 #ifndef Reports_NSData_Base64_h
 #define Reports_NSData_Base64_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSData.h>
 
 void *NewBase64Decode(
 	const char *inputBuffer,

@@ -12,6 +12,8 @@
 
 
 #import "AppDelegate.h"
+#import <QuickLook/QLPreviewController.h>
+#import <Foundation/NSString.h>
 
 #import "MADNavigationController.h"
 
@@ -21,16 +23,12 @@
 
 #import "MADQueryViewController.h"
 
-#import "MADToolboxNavigationController.h"
-#import "MADTransparentPresentationController.h"
-#import "MADNavigationBarFixedSize.h"
-
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"
 
 #import "MADDesignerFileExplorerViewController.h"
 
-#import <QuickLook/QuickLook.h>
+@class MADTransparentPresentationController;
 
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 NSString * const MADIdentifierFileLondon                            = @"London";
@@ -41,8 +39,6 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 NSString * const MADIDUser                                          = @"MADIDUser";
 
 const CFStringRef MADKeyRevision = CFSTR("MADRevision");
-
-//#import <MADFeedback/MADFeedbackFrustration.h>
 
 #if MAD_DESIGNER
 NSString *s = @"";
@@ -307,8 +303,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     #ifndef MADWATCHKIT
         [UINavigationBar appearanceWhenContainedIn:[MADNavigationController class], nil].barTintColor               = [UIColor tintColorBlue];
-        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
-        [UINavigationBar appearanceWhenContainedIn:[MADTransparentPresentationController class], nil].barTintColor  = [UIColor clearColor];
     #endif
     
     [UINavigationBar appearanceWhenContainedIn:[QLPreviewController class], nil].barTintColor                       = [UIColor tintColorAnalogous4];
@@ -361,13 +355,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return (MADDesignerFileExplorerViewController *)self.navigationController.topViewController;
 }
 
-- (BOOL)sampleInstalled {
-    return [[self applicationUserDefaults] boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+- (BOOL)isSampleInstalled {
+    return [self.applicationUserDefaults boolForKey:MADAppConfigurationUserDefaultsSamplesInstalled];
 }
 
 - (void)installedSample {
-    NSUserDefaults *userDefaults = [self applicationUserDefaults];
-    [userDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
+    [self.applicationUserDefaults setBool:YES forKey:MADAppConfigurationUserDefaultsSamplesInstalled];
 }
 
 - (NSString *)bundleDisplayName {
@@ -376,13 +369,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 
 - (BOOL)isFirstLaunch {
-    NSUserDefaults *userDefaults = [self applicationUserDefaults];
-    BOOL firstLaunch = [userDefaults stringForKey:MADIDUser] == nil;
+    BOOL firstLaunch = [self.applicationUserDefaults stringForKey:MADIDUser] == nil;
     if (firstLaunch) {
         dispatch_async(self.appDelegateQueueSerial, ^{
             NSUUID *uuid = [NSUUID UUID];
-            [userDefaults setObject:uuid.UUIDString forKey:MADIDUser];
-            [userDefaults synchronize];
+            [self.applicationUserDefaults setObject:uuid.UUIDString forKey:MADIDUser];
+            [self.applicationUserDefaults synchronize];
         });
     }
     return firstLaunch;

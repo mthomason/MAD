@@ -7,6 +7,9 @@
 //
 
 #import "NSData+AES256.h"
+#import <stdlib.h>
+#import <strings.h>
+#import <Foundation/NSString.h>
 
 @implementation NSData (AES256)
 

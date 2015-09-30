@@ -8,6 +8,7 @@
 
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADBackgroundView.h"
+#import <MADExplorer/MADBackgroundViewSelected.h>
 
 @interface MADCollectionViewCellProductFeature ()
 

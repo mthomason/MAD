@@ -7,6 +7,7 @@
 //
 
 #import "MADNavigationControllerSplitParentViewController.h"
+#import <UIKit/UINavigationBar.h>
 
 @interface MADNavigationControllerSplitParentViewController ()
 

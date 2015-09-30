@@ -6,7 +6,8 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSObject.h>
 
 typedef NS_ENUM(NSUInteger, MADFeatureType) {
     MADFeatureTypeNonConsumable                     = 1,

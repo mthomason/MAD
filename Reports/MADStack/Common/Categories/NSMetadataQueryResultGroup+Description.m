@@ -7,12 +7,12 @@
 //
 
 #import "NSMetadataQueryResultGroup+Description.h"
+#import <Foundation/NSString.h>
 
 @implementation NSMetadataQueryResultGroup (Description)
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<NSMetadataQueryResultGroup (\"%@\")>",
-            [self value]];
+    return [NSString stringWithFormat:@"<NSMetadataQueryResultGroup (\"%@\")>", self.value];
 }
 
 @end

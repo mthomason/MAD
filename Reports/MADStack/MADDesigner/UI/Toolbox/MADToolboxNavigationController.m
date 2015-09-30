@@ -14,6 +14,13 @@
 
 @implementation MADToolboxNavigationController
 
++ (void)initialize {
+    [super initialize];
+    if (self == [MADToolboxNavigationController self]) {
+        [UINavigationBar appearanceWhenContainedIn:[MADToolboxNavigationController class], nil].barTintColor        = [UIColor clearColor];
+    }
+}
+
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }

@@ -9,8 +9,7 @@
 #ifndef Reports_MADDesignerStatusLabel_h
 #define Reports_MADDesignerStatusLabel_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIView.h>
 
 @interface MADDesignerStatusLabel : UIView
 

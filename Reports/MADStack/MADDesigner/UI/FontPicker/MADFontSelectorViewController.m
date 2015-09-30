@@ -12,6 +12,8 @@
 
 #import "MADFontSelectorViewController.h"
 #import "UIViewController+UI.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MAD/MADFont.h>
 
 @interface MADFontSelectorViewController()
 

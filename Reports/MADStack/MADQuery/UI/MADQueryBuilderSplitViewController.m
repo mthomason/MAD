@@ -11,6 +11,8 @@
 #endif
 
 #import "MADQueryBuilderSplitViewController.h"
+#import <MAD/MADocument.h>
+
 #import "MADNavigationBarTitleView.h"
 
 #import "MADQueryViewController.h"

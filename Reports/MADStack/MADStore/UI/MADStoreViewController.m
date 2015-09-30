@@ -16,6 +16,8 @@
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
 #import "MADSalesReceipt.h"
+#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
 
 @interface MADStoreViewController ()
     <MTViewControllerProtocol>

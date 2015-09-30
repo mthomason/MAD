@@ -7,6 +7,7 @@
 //
 
 #import "MADObjectIdentifier.h"
+#import <Foundation/NSString.h>
 
 @interface MADObjectIdentifier ()
 

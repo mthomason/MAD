@@ -7,6 +7,7 @@
 //
 
 #import "MADProgressView.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADProgressView
 

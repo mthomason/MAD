@@ -9,6 +9,9 @@
 #ifndef Reports_CGAffineTransform_Common_h
 #define Reports_CGAffineTransform_Common_h
 
+#import <CoreGraphics/CoreGraphics.h>
+#import <math.h>
+
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0000f * M_PI)
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.00000f / M_PI))
 

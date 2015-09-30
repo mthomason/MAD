@@ -7,6 +7,8 @@
 //
 
 #import "MADBackgroundScrollView.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
 

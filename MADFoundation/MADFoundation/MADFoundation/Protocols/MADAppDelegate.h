@@ -9,7 +9,8 @@
 #ifndef MAD_MADFoundation_MADAppDelegate_h
 #define MAD_MADFoundation_MADAppDelegate_h
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <UIKit/UIApplication.h>
 #import "MADApplicationProtocol.h"
 
 typedef id <UIApplicationDelegate, MADApplicationProtocol> MADAppDelegate;

@@ -7,6 +7,8 @@
 //
 
 #import "MADQueryVisualizationTableDefination.h"
+#import <Foundation/NSCoder.h>
+#import <UIKit/UIGeometry.h>
 
 static NSString * const keyCenter = @"c";
 static NSString * const keyRoot = @"r";

@@ -7,6 +7,7 @@
 //
 
 #import "MADDesignerStatusLabel.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 const CGFloat MADViewDetailSmallCornerRadius        =  3.0000f;
 const CGFloat MADViewDetailSmallAnimationDuration   =  0.3333f;

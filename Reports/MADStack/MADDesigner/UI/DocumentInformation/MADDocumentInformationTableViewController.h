@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MADFileManager/MADFileManager.h>
+#import <UIKit/UITableViewController.h>
 
 @interface MADDocumentInformationTableViewController : UITableViewController
 

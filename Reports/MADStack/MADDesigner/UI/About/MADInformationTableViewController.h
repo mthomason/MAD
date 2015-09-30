@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UITableViewController.h>
 
 @interface MADInformationTableViewController : UITableViewController
 

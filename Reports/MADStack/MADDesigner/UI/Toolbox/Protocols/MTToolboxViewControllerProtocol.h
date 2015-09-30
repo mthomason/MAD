@@ -9,8 +9,6 @@
 #ifndef Reports_MTToolboxViewControllerProtocol_h
 #define Reports_MTToolboxViewControllerProtocol_h
 
-#import <Foundation/Foundation.h>
-
 @class MADocument;
 
 @protocol MTToolboxViewControllerProtocol <NSObject>

@@ -7,6 +7,8 @@
 //
 
 #import "NSDateFormatter+RFC_3339.h"
+#import <Foundation/NSLocale.h>
+#import <Foundation/NSTimeZone.h>
 
 @implementation NSDateFormatter (RFC_3339)
 

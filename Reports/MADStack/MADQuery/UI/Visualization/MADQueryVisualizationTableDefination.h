@@ -6,7 +6,8 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
 
 @interface MADQueryVisualizationTableDefination : NSObject
     <NSCoding, NSCopying>

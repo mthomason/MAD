@@ -9,7 +9,8 @@
 #ifndef Reports_Constants_h
 #define Reports_Constants_h
 
-#import <UIKit/UIKit.h>
+#import <CoreGraphics/CGBase.h>
+#import <Foundation/NSObjCRuntime.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
 #if __has_attribute(objc_designated_initializer)

@@ -9,7 +9,7 @@
 #ifndef Reports_UIViewTableSectionHeaderDatabaseTable_h
 #define Reports_UIViewTableSectionHeaderDatabaseTable_h
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIView.h>
 #import <QuartzCore/QuartzCore.h>
 #import "MADSectionHeaderViewDelegate.h"
 

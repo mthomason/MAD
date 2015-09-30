@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_NSMetadataQueryResultGroup_Description_h
+#define MAD_NSMetadataQueryResultGroup_Description_h
+
+#import <Foundation/NSMetadata.h>
 
 @interface NSMetadataQueryResultGroup (Description)
 
 @end
+
+#endif

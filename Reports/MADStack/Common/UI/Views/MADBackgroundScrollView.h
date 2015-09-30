@@ -9,9 +9,8 @@
 #ifndef Reports_MADBackgroundScrollView_h
 #define Reports_MADBackgroundScrollView_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADWatermarkView.h"
+#import <UIKit/UITapGestureRecognizer.h>
 
 @interface MADBackgroundScrollView : MADWatermarkScrollView
 

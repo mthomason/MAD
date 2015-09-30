@@ -10,14 +10,7 @@
 #define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
-#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 #import <MADExplorer/MADFileExplorerViewController.h>
-#import <MADExplorer/MTCollectionViewCellDocument.h>
-#import <MADExplorer/MADFileLocationManager.h>
-#import <MADExplorer/MADOpenDocumentManager.h>
-#import <MADDataStructures/MTPair.h>
-#import <MADFoundation/NSURL+Document.h>
 
 @protocol MADOpenFileViewControllerDelegate <NSObject>
 

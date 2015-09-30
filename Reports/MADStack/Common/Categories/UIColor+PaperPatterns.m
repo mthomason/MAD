@@ -7,6 +7,7 @@
 //
 
 #import "UIColor+PaperPatterns.h"
+#import <UIKit/UIImage.h>
 
 @implementation UIColor (PaperPatterns)
 

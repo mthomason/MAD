@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIBarButtonItem.h>
 
 extern const NSInteger MADBarButtonSystemItemActivity;
 

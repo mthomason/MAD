@@ -11,6 +11,8 @@
 #import "MADResizeHandles.h"
 #import "UIView+NSObjectIdTag.h"
 #import "MTResizeHandleView.h"
+#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+Extras.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0

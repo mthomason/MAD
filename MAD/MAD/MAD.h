@@ -6,8 +6,6 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 FOUNDATION_EXPORT double MADVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADVersionString[];
 

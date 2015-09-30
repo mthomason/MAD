@@ -9,7 +9,7 @@
 #ifndef Reports_UIColor_PaperPatterns_h
 #define Reports_UIColor_PaperPatterns_h
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIColor.h>
 
 @interface UIColor (PaperPatterns)
 

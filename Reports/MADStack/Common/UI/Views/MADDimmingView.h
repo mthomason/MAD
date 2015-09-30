@@ -9,7 +9,7 @@
 #ifndef Reports_MADDimmingView_h
 #define Reports_MADDimmingView_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @interface MADDimmingView : UIView
 

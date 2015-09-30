@@ -11,11 +11,20 @@
 #endif
 
 #import "MADOpenFileViewController.h"
+#import <MessageUI/MessageUI.h>
+#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
+#import <MADExplorer/MTCollectionViewCellDocument.h>
+#import <MADExplorer/MADFileLocationManager.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
+#import <MADDataStructures/MTPair.h>
+#import <MADFoundation/NSURL+Document.h>
+
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
 #import "MADBarButtonItem.h"
 
 #import "MADProgressView.h"
+
 
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 

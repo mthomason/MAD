@@ -9,8 +9,8 @@
 #ifndef Reports_MTNavigationController_h
 #define Reports_MTNavigationController_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIViewControllerTransitioning.h>
 #import "MADocumentProtocol.h"
 
 @interface MADNavigationController : UINavigationController

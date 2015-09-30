@@ -6,8 +6,13 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADOperationRegisterDefaults_h
+#define MAD_Designer_MADOperationRegisterDefaults_h
+
+#import <Foundation/NSOperation.h>
 
 @interface MADOperationRegisterDefaults : NSOperation
 
 @end
+
+#endif

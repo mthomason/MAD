@@ -9,13 +9,9 @@
 #ifndef Reports_MADDesignerElementPIckerViewController_h
 #define Reports_MADDesignerElementPIckerViewController_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
-#import <MAD/MTAggregateFunctionInputType.h>
-#import <MAD/MADDocumentObjectType.h>
 #import <MADFoundation/MADAggregateGroupByType.h>
 #import <MADFoundation/MTAggregateFunctionType.h>
+#import <MAD/MTAggregateFunctionInputType.h>
 
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"

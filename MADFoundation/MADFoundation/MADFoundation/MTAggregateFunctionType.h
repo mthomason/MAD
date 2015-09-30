@@ -9,6 +9,8 @@
 #ifndef MAD_MTAggregateFunctionType_h
 #define MAD_MTAggregateFunctionType_h
 
+#import <Foundation/NSObjCRuntime.h>
+
 typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
     MTAggregateFunctionTypeSum = 2,
     MTAggregateFunctionTypeMean = 3,

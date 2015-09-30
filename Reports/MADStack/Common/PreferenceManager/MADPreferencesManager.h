@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADPreferencesManager_h
+#define MAD_Designer_MADPreferencesManager_h
+
+#import <Foundation/NSObject.h>
 #import "MADPreference.h"
 
 @interface MADPreferencesManager : NSObject
@@ -16,3 +19,5 @@
 - (void)addPreference:(MADPreference *)preference;
 
 @end
+
+#endif

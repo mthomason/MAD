@@ -14,7 +14,9 @@
  0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
  };*/
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSString.h>
+
+@class NSData;
 
 @interface NSString (Encryption)
 

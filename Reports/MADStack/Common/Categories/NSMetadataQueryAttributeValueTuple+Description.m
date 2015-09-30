@@ -7,6 +7,7 @@
 //
 
 #import "NSMetadataQueryAttributeValueTuple+Description.h"
+#import <Foundation/NSString.h>
 
 @implementation NSMetadataQueryAttributeValueTuple (Description)
 

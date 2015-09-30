@@ -9,7 +9,6 @@
 #ifndef Barcodes_MTTableViewControllerStaticSelectRow_h
 #define Barcodes_MTTableViewControllerStaticSelectRow_h
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 @protocol MTTableViewControllerStaticSelectRowDelegate

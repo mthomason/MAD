@@ -9,7 +9,7 @@
 #ifndef MAD_MADCollectionViewLayoutGrouped_h
 #define MAD_MADCollectionViewLayoutGrouped_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
 
 @interface MADCollectionViewLayoutGrouped : UICollectionViewFlowLayout
 

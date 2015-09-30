@@ -9,7 +9,7 @@
 #ifndef Reports_MADNavigationBarFixedSize_h
 #define Reports_MADNavigationBarFixedSize_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UINavigationBar.h>
 
 @interface MADNavigationBarFixedSize : UINavigationBar
 

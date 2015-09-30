@@ -13,6 +13,9 @@
 //
 
 #import "NSData+Base64.h"
+#import <Foundation/NSString.h>
+#import <stdlib.h>
+#import <string.h>
 
 //
 // Mapping from 6 bit pattern to ASCII character.

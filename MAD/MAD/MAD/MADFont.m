@@ -11,6 +11,9 @@
 #endif
 
 #import "MADFont.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
+#import <UIKit/UIFont.h>
 
 // MARK: Keys for each type of font.
 NSString * const MTFontNormal            = @"MTFontNormal";

@@ -9,7 +9,7 @@
 #ifndef Reports_MADocumentState_h
 #define Reports_MADocumentState_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MADocumentState : NSObject
 

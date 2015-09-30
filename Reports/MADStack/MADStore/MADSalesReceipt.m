@@ -8,6 +8,11 @@
 
 #import "MADSalesReceipt.h"
 #import <Security/Security.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSUUID.h>
+#import <Foundation/NSPathUtilities.h>
 
 #include "pkcs7.h"
 #include "objects.h"

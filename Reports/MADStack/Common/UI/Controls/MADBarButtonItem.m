@@ -7,6 +7,7 @@
 //
 
 #import "MADBarButtonItem.h"
+#import <UIKit/UIActivityIndicatorView.h>
 
 const NSInteger MADBarButtonSystemItemActivity = 123321;
 

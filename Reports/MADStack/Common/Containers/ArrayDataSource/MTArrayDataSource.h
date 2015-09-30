@@ -9,7 +9,7 @@
 #ifndef MAD_MTArrayDataSource_h
 #define MAD_MTArrayDataSource_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 typedef NS_ENUM(NSInteger, MTDataSourceType) {
     MTDataSourceTypeTableView,

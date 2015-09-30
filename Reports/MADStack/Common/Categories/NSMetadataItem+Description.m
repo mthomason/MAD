@@ -7,6 +7,7 @@
 //
 
 #import "NSMetadataItem+Description.h"
+#import <Foundation/NSString.h>
 
 @implementation NSMetadataItem (Description)
 

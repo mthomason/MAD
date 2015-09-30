@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MADExplorer/MADExplorer.h>
+#import <UIKit/UICollectionViewCell.h>
+#import <UIKit/UIImageView.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UITextView.h>
 
 @interface MADCollectionViewCellProductFeature : UICollectionViewCell
 
