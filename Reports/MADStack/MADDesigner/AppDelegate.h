@@ -16,7 +16,7 @@
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate, MADApplicationProtocol>
 
-@property (nonatomic, strong) UIWindow *window;
+    @property (nonatomic, strong) UIWindow *window;
 
 @end
 

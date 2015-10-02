@@ -40,17 +40,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 
 @implementation MTCollectionViewCellDocument
 
-+ (dispatch_queue_t)queue {
-    
-    static dispatch_queue_t queue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        queue = dispatch_queue_create("com.everydayapps.mad.cell.image", DISPATCH_QUEUE_SERIAL);
-    });
-    
-    return queue;
-}
-
 + (UIImage *)defaultThumbnail {
     UIImage *result = [UIImage imageNamed:MTImageBlank];
     return result;
@@ -182,21 +171,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     [self normalizeTint];
 }
 
-- (void)loadPreviewImageForUrl:(NSURL *)url {
-    dispatch_async([MTCollectionViewCellDocument queue], ^{
-        NSURL *thumbnailUrl = [UIDocument thumbnailUrlForMadUrl:url];
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-        dispatch_sync(dispatch_get_main_queue(), ^(void) {
-            [self updatePreviewImageUIForImage:image];
-        });
-    });
-}
-
-- (void)updatePreviewImageUIForImage:(UIImage *)image {
-    self.imagePreview.image = image ?: [UIImage imageNamed:MTImageBlank];
-    [self setNeedsLayout];
-}
-
 - (void)setNeedsLayout {
     [super setNeedsLayout];
     [self.labelTitle setNeedsLayout];
@@ -294,11 +268,11 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     if (self.wobbling == NO) {
         self.wobbling = YES;
         NSInteger randomInt = arc4random_uniform(500);
-        float r = (randomInt/500.0)+0.5;
+        float r = (randomInt / 500.0000f) + 0.5000f;
         CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians((kAnimationRotateDeg * -1.0) - r));
         CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
         
-        [self.layer setAnchorPoint:CGPointMake(0.5, 0.5)];
+        self.layer.anchorPoint = CGPointMake(0.5, 0.5);
         [UIView animateWithDuration:0.1 animations:^{
             self.transform = leftWobble;
         } completion:^(BOOL finished) {
@@ -306,7 +280,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
                                   delay:0
                                 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionBeginFromCurrentState
                              animations:^{
-                                 [UIView setAnimationRepeatCount:CGFLOAT_MAX];
+                                 [UIView setAnimationRepeatCount: MAXFLOAT];
                                  self.transform = rightWobble;
                              }
                              completion:nil];

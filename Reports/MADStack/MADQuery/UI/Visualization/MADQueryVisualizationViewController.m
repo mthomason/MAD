@@ -192,21 +192,24 @@ typedef void(^MTBlockResultVoid)(void);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
-    CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
-    UIColor *borderColor = [UIColor lightGrayColor];
-    self.backgroundContainer.layer.borderWidth = borderWidth;
-    self.backgroundContainer.layer.borderColor = borderColor.CGColor;
+    self.backgroundContainer.layer.borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+    //self.backgroundContainer.layer.borderColor = [UIColor lightGrayColor].CGColor;
     
     UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
     containerView.contentMode = UIViewContentModeScaleAspectFit;
     containerView.autoresizesSubviews = NO;
     containerView.translatesAutoresizingMaskIntoConstraints = NO;
+    containerView.opaque = NO;
+    containerView.backgroundColor = [UIColor clearColor];
     
-    containerView.backgroundColor = [UIColor greenColor];
-    self.backgroundContainer.backgroundColor = [UIColor redColor];
+    self.backgroundContainer.backgroundColor = [UIColor clearColor];
+    self.backgroundContainer.opaque = NO;
+    self.view.opaque = YES;
     
     MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
     scrollView.delegate = self;
+    scrollView.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
+    scrollView.opaque = NO;
     [scrollView addSubview:containerView];
     
     [self.backgroundContainer addSubview:scrollView];
@@ -308,43 +311,49 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    for (UIViewController *subviewController in [self childViewControllers]) {
-        [self didMoveFieldRect: subviewController animated: YES];
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        
+        for (UIViewController *subviewController in [self childViewControllers]) {
+            [self didMoveFieldRect: subviewController animated: YES];
+        }
+        
+        [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryBottom];
+        [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryTop];
+        [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLeft];
+        [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryRight];
+        
+        CGPoint fromPoint = self.contentView.frame.origin;
+        CGPoint toPoint = CGPointMake(self.contentView.frame.origin.x + self.contentView.frame.size.width,
+                                      self.contentView.frame.origin.y);
+        
+        [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryTop
+                                                fromPoint: fromPoint
+                                                  toPoint: toPoint];
+        
+        fromPoint = toPoint;
+        toPoint = CGPointMake(toPoint.x,
+                              self.contentView.frame.origin.y + self.contentView.frame.size.height);
+        [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryRight
+                                                fromPoint: fromPoint
+                                                  toPoint: toPoint];
+        
+        fromPoint = toPoint;
+        toPoint = CGPointMake(self.contentView.frame.origin.x,
+                              toPoint.y);
+        [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryBottom
+                                                fromPoint: fromPoint
+                                                  toPoint: toPoint];
+        
+        fromPoint = toPoint;
+        toPoint = self.contentView.frame.origin;
+        [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryLeft
+                                                fromPoint: fromPoint
+                                                  toPoint: toPoint];
+        
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [self.view setNeedsDisplay];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
     }
-    
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryBottom];
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryTop];
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLeft];
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryRight];
-    
-    CGPoint fromPoint = self.contentView.frame.origin;
-    CGPoint toPoint = CGPointMake(self.contentView.frame.origin.x + self.contentView.frame.size.width,
-                                  self.contentView.frame.origin.y);
-    
-    [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryTop
-                                            fromPoint: fromPoint
-                                              toPoint: toPoint];
-    
-    fromPoint = toPoint;
-    toPoint = CGPointMake(toPoint.x,
-                          self.contentView.frame.origin.y + self.contentView.frame.size.height);
-    [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryRight
-                                            fromPoint: fromPoint
-                                              toPoint: toPoint];
-    
-    fromPoint = toPoint;
-    toPoint = CGPointMake(self.contentView.frame.origin.x,
-                          toPoint.y);
-    [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryBottom
-                                            fromPoint: fromPoint
-                                              toPoint: toPoint];
-    
-    fromPoint = toPoint;
-    toPoint = self.contentView.frame.origin;
-    [self.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryLeft
-                                            fromPoint: fromPoint
-                                              toPoint: toPoint];
 }
 
 #pragma mark Scroll view helper

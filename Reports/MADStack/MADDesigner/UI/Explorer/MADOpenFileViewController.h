@@ -14,28 +14,28 @@
 
 @protocol MADOpenFileViewControllerDelegate <NSObject>
 
-- (UIManagedDocument *)documentForURL:(NSURL *)url;
-- (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
-- (void)didOpenDocument:(UIManagedDocument *)document;
-- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
-- (NSArray *)supportedUTIs;
+    - (UIManagedDocument *)documentForURL:(NSURL *)url;
+    - (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler;
+    - (void)didOpenDocument:(UIManagedDocument *)document;
+    - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
+    - (NSArray *)supportedUTIs;
 
 @end
 
 @interface MADOpenFileViewController : MADFileExplorerViewController
 
-@property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
+    @property (nonatomic, weak) id <MADOpenFileViewControllerDelegate> openFileDelegate;
 
-- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
+    - (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
                                              animated:(BOOL)animated;
 
 
-- (IBAction)done:(id)sender;
-- (IBAction)edit:(id)sender;
+    - (IBAction)done:(id)sender;
+    - (IBAction)edit:(id)sender;
 
-- (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
-- (void)getUserCloudPrefs;
-- (void)reenable;
+    - (void)closeDocument:(UITraitCollection *)traitCollectionForThumbnail completion:(void (^)(BOOL))completion;
+    - (void)getUserCloudPrefs;
+    - (void)reenable;
 
 @end
 

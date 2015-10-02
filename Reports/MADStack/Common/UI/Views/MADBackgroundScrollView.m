@@ -24,22 +24,25 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-
-        self.bouncesZoom = YES;
-        self.scrollsToTop = YES;
+        
+        self.showsHorizontalScrollIndicator = YES;
+        self.showsVerticalScrollIndicator = YES;
+        self.contentOffset = CGPointZero;
+        self.maximumZoomScale = 1.0000f;
+        self.minimumZoomScale = 1.0000f;
+        self.zoomScale = 1.0000f;
+        self.bounces = YES;
+        self.alwaysBounceHorizontal = YES;
+        self.alwaysBounceVertical = YES;
+        self.bouncesZoom = NO;
+        self.delaysContentTouches = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.scrollEnabled = YES;
-        self.userInteractionEnabled = YES;
-        self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
         
         UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
         container.userInteractionEnabled = YES;
-        container.backgroundColor = [UIColor clearColor];
         container.translatesAutoresizingMaskIntoConstraints = NO;
-        container.backgroundColor = [UIColor headerColor];
+        container.backgroundColor = [UIColor clearColor];
         
-        self.maximumZoomScale = 4.0000f;
-        self.minimumZoomScale = 0.3000f;
 
         [self addSubview:container];
         

@@ -45,6 +45,7 @@ const int8_t MADIndexViewer = 2;
             ((id <MADocumentProtocol>)viewController).document = self.document;
         }
     }
+    self.view.backgroundColor = [UIColor purpleColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -186,11 +186,21 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [self initalizeAppearance];
     
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+            [self runOperations];
+    //    });
+    //});
+    
+    return YES;
+}
+
+- (void)runOperations {
     NSOperationQueue *operationQueueBackground = [[NSOperationQueue alloc] init];
     operationQueueBackground.underlyingQueue = self.appDelegateQueueBackground;
     
     NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController selector:@selector(getUserCloudPrefs) object:NULL];
-
+    
     MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
     MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon
                                                                                                            fileExtension:MADFileExtentionMobleApplicationDocument
@@ -205,8 +215,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                                      selector: @selector(resetReceipt) object: NULL];
     NSArray *addSampleData = @[getUserCloudPreferences, sampleDatabase, sampleDocumentMusic, sampleDatabaseLondon, resetReceipt];
     [operationQueueBackground addOperations:addSampleData waitUntilFinished:NO];
-
-    return YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

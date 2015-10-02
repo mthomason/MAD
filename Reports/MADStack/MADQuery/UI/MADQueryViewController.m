@@ -224,6 +224,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
     self.tableView.backgroundView = watermarkView;
+    
     [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -293,7 +294,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [self.tableView scrollRectToVisible: r animated: NO];
         
     }
-    [super viewDidLayoutSubviews];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -394,6 +394,15 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
     [self enableTabBarItems];
     [super dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [self.tableView.backgroundView setNeedsDisplay];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+    }
 }
 
 #pragma mark - MTQueryBuilderPredicateFormatDelegate

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B17c" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B22c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment version="2080" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -13,12 +13,12 @@
                         <viewControllerLayoutGuide type="top" id="Dhv-H6-x7a"/>
                         <viewControllerLayoutGuide type="bottom" id="YL0-yC-lLI"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="VIm-k8-3OZ">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                    <view key="view" contentMode="scaleToFill" id="VIm-k8-3OZ" customClass="MADWatermarkView">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOG-3q-Pa5" customClass="MADBackgroundScrollView">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </scrollView>
                             <view opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wxc-IA-YFE" userLabel="Toolbox View">
@@ -63,7 +63,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6T5-oH-o0V" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050" y="-3410"/>
+            <point key="canvasLocation" x="820.3125" y="-1998.046875"/>
         </scene>
         <!--Viewer Controller-->
         <scene sceneID="iMy-DU-OrK">
@@ -89,7 +89,7 @@
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Q9-tm-5N4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050" y="-2211"/>
+            <point key="canvasLocation" x="820.3125" y="-1295.5078125"/>
         </scene>
         <!--MAD Viewer-->
         <scene sceneID="6KI-hh-jgt">
@@ -111,14 +111,14 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VrE-5r-MlD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-494" y="-2810"/>
+            <point key="canvasLocation" x="-385.9375" y="-1646.484375"/>
         </scene>
         <!--Layout Settings-->
         <scene sceneID="qFs-uN-Jcs">
             <objects>
                 <tableViewController storyboardIdentifier="MTReportDesignerSectionLayoutSettingsViewControllerIdentifier" id="7dU-9p-e74" customClass="MTReportDesignerSectionLayoutSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="d9l-91-N2c">
-                        <rect key="frame" x="0.0" y="74" width="540" height="546"/>
+                        <rect key="frame" x="0.0" y="74" width="600" height="526"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -126,14 +126,14 @@
                             <tableViewSection id="Wdl-j1-yl2">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="bcu-vs-vDf">
-                                        <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bcu-vs-vDf" id="R4t-zR-X10">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hFc-t7-zDW">
-                                                    <rect key="frame" x="459" y="7" width="51" height="31"/>
+                                                    <rect key="frame" x="519" y="7" width="51" height="31"/>
                                                     <animations/>
                                                     <connections>
                                                         <action selector="valueChangedVisibility:" destination="7dU-9p-e74" eventType="valueChanged" id="3mO-70-KSR"/>
@@ -162,14 +162,14 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="HkK-u2-4h9">
-                                        <rect key="frame" x="0.0" y="44" width="540" height="44"/>
+                                        <rect key="frame" x="0.0" y="44" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HkK-u2-4h9" id="JdE-Md-HWa">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ijh-KG-gaR">
-                                                    <rect key="frame" x="459" y="7" width="51" height="31"/>
+                                                    <rect key="frame" x="519" y="7" width="51" height="31"/>
                                                     <animations/>
                                                     <connections>
                                                         <action selector="valueChangedNewPageAfter:" destination="7dU-9p-e74" eventType="valueChanged" id="jTU-QT-Lji"/>
@@ -217,7 +217,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KKP-33-TV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-608" y="-1604"/>
+            <point key="canvasLocation" x="155" y="-548"/>
         </scene>
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
@@ -333,13 +333,8 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FNQ-e4-L3J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-599" y="-908"/>
+            <point key="canvasLocation" x="-467.96875" y="-532.03125"/>
         </scene>
     </scenes>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
-    </simulatedMetricsContainer>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>

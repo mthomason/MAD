@@ -43,7 +43,6 @@
 
 #import "MADDesignerStatusLabel.h"
 #import "MADBackgroundScrollView.h"
-
 #import "MADPromptManager.h"
 
 #import "MTQueryBuilderChooseFieldDelegate.h"
@@ -331,6 +330,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
+    self.scroller.scrollsToTop = YES;
+    self.scroller.scrollEnabled = YES;
+    self.scroller.userInteractionEnabled = YES;
+    self.scroller.indicatorStyle = UIScrollViewIndicatorStyleDefault;
+    self.scroller.maximumZoomScale = 4.0000f;
+    self.scroller.minimumZoomScale = 0.3000f;
+    self.scroller.bouncesZoom = NO;
+    
     self.hidesStatusBar = NO;
     
     MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
@@ -448,6 +455,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self.view addConstraints:constraints];
     
     self.scroller.container.backgroundColor = [UIColor clearColor];
+    self.scroller.backgroundColor = [UIColor clearColor];
 }
 
 - (void)setHidesStatusBar:(BOOL)hidesStatusBar {
@@ -787,9 +795,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    
+    void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
+            [self.view setNeedsDisplay];
+        };
+    } else {
+        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
+    }
+    [coordinator animateAlongsideTransition:transition completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self adjustContextOffsetForOpenPopover];
     }];
 }

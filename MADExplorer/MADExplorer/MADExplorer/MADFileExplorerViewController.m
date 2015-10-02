@@ -21,6 +21,7 @@ static NSString * const Downloading                             = @"Downloading"
     <MTDocumentCellProtocol, UIGestureRecognizerDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) MADCollectionViewLayoutGroupedDelegate *collectionViewDelegate;
+@property (nonatomic, strong) dispatch_queue_t queueCell;
 
 @end
 
@@ -40,6 +41,9 @@ static NSString * const Downloading                             = @"Downloading"
         MADFileLocationManager *filesCoordnator = [[MADFileLocationManager alloc] init];
         filesCoordnator.filesController.delegate = self;
         self.filesCoordnator = filesCoordnator;
+
+        dispatch_queue_t queueCell = dispatch_queue_create("com.everydayapps.mad.cell.image", DISPATCH_QUEUE_SERIAL);
+        self.queueCell = queueCell;
 
     }
     return self;
@@ -70,12 +74,12 @@ static NSString * const Downloading                             = @"Downloading"
 #pragma mark - MADCollectionViewLayoutFilesDelegate
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
     return metadata.URL.lastPathComponent.stringByDeletingPathExtension;
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
     return [self subtitleForMetadata:metadata];
 }
 
@@ -94,7 +98,7 @@ static NSString * const Downloading                             = @"Downloading"
 - (BOOL)isFileViewEditing { return self.editing; }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.filesCoordnator.filesController objectAtIndexedSubscript: indexPath.item];
+    return [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -104,7 +108,7 @@ static NSString * const Downloading                             = @"Downloading"
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.filesCoordnator.filesController ? self.filesCoordnator.filesController.count : 0;
+    return self.filesCoordnator.filesController ? (NSInteger)self.filesCoordnator.filesController.count : 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -161,7 +165,15 @@ static NSString * const Downloading                             = @"Downloading"
     
     [cell.labelTitle layoutIfNeeded];
     [cell.labelTitleSub layoutIfNeeded];
-    [cell loadPreviewImageForUrl:metadata.URL];
+
+    dispatch_async(self.queueCell, ^{
+        NSURL *thumbnailUrl = [UIDocument thumbnailUrlForMadUrl:metadata.URL];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
+        dispatch_sync(dispatch_get_main_queue(), ^(void) {
+            cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];
+        });
+    });
+
     
     [cell normalizeTint];
     

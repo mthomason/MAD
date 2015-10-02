@@ -36,8 +36,6 @@
 
 + (UIImage *)defaultThumbnail;
 
-- (void)loadPreviewImageForUrl:(NSURL *)url;
-
 - (void)normalizeTint;
 - (void)performSelectionAnimations;
 - (void)performDeselectionAnimations;
