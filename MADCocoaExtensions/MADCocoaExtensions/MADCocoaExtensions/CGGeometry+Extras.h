@@ -83,6 +83,26 @@ typedef NS_ENUM(NSUInteger, MADDirection) {
     noDirection
 };
 
+static inline CGPoint CGRectTopLeft(CGRect rect);
+static inline CGPoint CGRectTopLeft(CGRect rect) {
+    return rect.origin;
+}
+
+static inline CGPoint CGRectBottomLeft(CGRect rect);
+static inline CGPoint CGRectBottomLeft(CGRect rect) {
+    return CGPointMake(rect.origin.y + rect.size.height, rect.origin.x);
+}
+
+static inline CGPoint CGRectBottomRight(CGRect rect);
+static inline CGPoint CGRectBottomRight(CGRect rect) {
+    return CGPointMake(rect.origin.y + rect.size.height, rect.origin.x + rect.size.width);
+}
+
+static inline CGPoint CGRectTopRight(CGRect rect);
+static inline CGPoint CGRectTopRight(CGRect rect) {
+    return CGPointMake(rect.origin.y, rect.origin.x + rect.size.width);
+}
+
 static inline BOOL CGRectIsOffScreenWest(CGRect rect);
 static inline BOOL CGRectIsOffScreenWest(CGRect rect) {
     return rect.origin.x < CGPointZero.x;

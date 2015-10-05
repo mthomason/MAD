@@ -13,13 +13,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
-typedef NS_ENUM(NSUInteger, MNSConnectorPosition) {
-	MNSConnectorPositionA = 1,
-	MNSConnectorPositionB = 2,
-	MNSConnectorPositionC = 3,
-	MNSConnectorPositionD = 4
-};
-
 @interface MTConnectorView : UIView
 
 @property (nonatomic, strong) UIView *anchorViewLeft;
@@ -28,8 +21,6 @@ typedef NS_ENUM(NSUInteger, MNSConnectorPosition) {
 @property (nonatomic, strong) NSString *linkDescription;
 
 @property (nonatomic, assign) BOOL leftViewIsInital;
-@property (nonatomic, assign) MNSConnectorPosition connectorPosition;
-@property (nonatomic, assign) MNSConnectorPosition connectorPositionB;
 
 - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 
