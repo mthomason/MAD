@@ -51,13 +51,11 @@ static NSString * const keyTables                   = @"3";
 }
 
 - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID {
-    NSString *hash = objectID.URIRepresentation.absoluteString;
-    self.tableDefinations[hash] = tableDef;
+    self.tableDefinations[objectID.URIRepresentation.absoluteString] = tableDef;
 }
 
 - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
-    NSString *hash = objectID.URIRepresentation.absoluteString;
-    return self.tableDefinations[hash];
+    return self.tableDefinations[objectID.URIRepresentation.absoluteString];
 }
 
 @end

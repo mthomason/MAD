@@ -107,20 +107,6 @@ typedef void(^MTBlockResultVoid)(void);
     return self;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-
-    [self.dynamicAnimator removeAllBehaviors];
-    [self.viewControllersTables removeAllObjects];
-    [self.viewControllersLinks removeAllObjects];
-    [self.tableIds removeAllObjects];
-    [self.controllersForObjectIds removeAllObjects];
-    [self.controllersForObjectIdsLink removeAllObjects];
-    [self.attachmentBehaviorsTables removeAllObjects];
-    [self.attachmentBehaviorsLinks removeAllObjects];
-    [self.rootTables removeAllObjects];
-}
-
 - (void)commonInit {
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 1;
@@ -284,6 +270,11 @@ typedef void(^MTBlockResultVoid)(void);
                                                   object: self.document.activeDocumentModel.managedObjectContext];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self cleanupArrays];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if (animated) {
@@ -302,6 +293,24 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    [self archiveCache];
+    [self clearScreen];
+}
+
+- (void)cleanupArrays {
+    [self.dynamicAnimator removeAllBehaviors];
+    [self.viewControllersTables removeAllObjects];
+    [self.viewControllersLinks removeAllObjects];
+    [self.tableIds removeAllObjects];
+    [self.controllersForObjectIds removeAllObjects];
+    [self.controllersForObjectIdsLink removeAllObjects];
+    [self.attachmentBehaviorsTables removeAllObjects];
+    [self.attachmentBehaviorsLinks removeAllObjects];
+    [self.rootTables removeAllObjects];
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
