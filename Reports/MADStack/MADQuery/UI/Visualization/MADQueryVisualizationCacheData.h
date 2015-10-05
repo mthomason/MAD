@@ -14,10 +14,15 @@
 @interface MADQueryVisualizationCacheData : NSObject
     <NSCoding>
 
-@property (nonatomic, assign) CGPoint scrollViewContentOffset;
-@property (nonatomic, assign) CGFloat scrollViewZoomScale;
+    @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
+    @property (nonatomic, strong) NSOperationQueue *operationQueueCache;
 
-- (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID;
-- (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
+    @property (nonatomic, assign) CGPoint scrollViewContentOffset;
+    @property (nonatomic, assign) CGFloat scrollViewZoomScale;
+
+    - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDef forObjectID:(NSManagedObjectID *)objectID;
+    - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
+
+    + (NSString *)cacheFileNameForFileName:(NSString *)filename;
 
 @end

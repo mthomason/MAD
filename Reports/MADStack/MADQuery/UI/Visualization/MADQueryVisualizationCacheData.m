@@ -9,10 +9,19 @@
 #import "MADQueryVisualizationCacheData.h"
 #import <Foundation/NSCoder.h>
 #import <UIKit/UIGeometry.h>
+#import "MADQueryVisualizationDefination.h"
+#import "MADOperationArchiveData.h"
+
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADAppDelegate.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
+#import <MADFoundation/NSFileManager+Common.h>
 
 static NSString * const keyScrollViewContentOffset  = @"1";
 static NSString * const keyScrollViewZoomScale      = @"2";
 static NSString * const keyTables                   = @"3";
+static NSString * const CacheExt =                  @"qvvc";
 
 @interface MADQueryVisualizationCacheData ()
 
@@ -56,6 +65,11 @@ static NSString * const keyTables                   = @"3";
 
 - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
     return self.tableDefinations[objectID.URIRepresentation.absoluteString];
+}
+
++ (NSString *)cacheFileNameForFileName:(NSString *)filename {
+    NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)filename.hash];
+    return [fileName stringByAppendingPathExtension:CacheExt];
 }
 
 @end

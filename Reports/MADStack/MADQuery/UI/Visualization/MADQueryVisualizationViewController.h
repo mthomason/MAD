@@ -15,9 +15,7 @@
 @interface MADQueryVisualizationViewController : UIViewController
     <MADocumentProtocol>
 
-- (void)redraw;
-
-+ (NSString *)cacheFileNameForFileName:(NSString *)filename;
+    - (void)redraw;
 
 @end
 

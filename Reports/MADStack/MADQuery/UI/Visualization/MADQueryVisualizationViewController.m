@@ -165,12 +165,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 + (NSString *)cacheFileNameForDocument:(MADocument *)document {
-    return [self cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
-}
-
-+ (NSString *)cacheFileNameForFileName:(NSString *)filename {
-    NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)filename.hash];
-    return [fileName stringByAppendingPathExtension:CacheExt];
+    return [MADQueryVisualizationCacheData cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
 }
 
 - (void)viewDidLoad {
@@ -600,6 +595,8 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)dynamicAnimatorWillResume:(UIDynamicAnimator *)animator { }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator { }
+
+#pragma mark - Cache Operations
 
 - (void)updateCache {
     if (self.document != nil) {
