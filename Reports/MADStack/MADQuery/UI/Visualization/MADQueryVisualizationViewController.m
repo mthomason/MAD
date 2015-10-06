@@ -38,6 +38,8 @@
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
+#import "UIGestureRecognizer+AnchorPoint.h"
+
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
 NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundryLandscapeTop";
@@ -78,13 +80,12 @@ typedef void(^MTBlockResultVoid)(void);
 @property (nonatomic, strong) NSMutableDictionary *controllersForObjectIdsLink; //Only query links
 
 @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviorsTables;
-@property (nonatomic, strong) NSMutableDictionary *attachmentBehaviorsLinks;
 
 @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
 
-@property (nonatomic, strong) NSOperationQueue *operationQueueCache;
 
 @property (nonatomic, strong) UIDynamicAnimator *dynamicAnimator;
+@property (nonatomic, strong) NSOperationQueue *operationQueueCache;
 
 @end
 
@@ -131,9 +132,6 @@ typedef void(^MTBlockResultVoid)(void);
     NSMutableDictionary *attachmentBehaviorsTables = [[NSMutableDictionary alloc] init];
     self.attachmentBehaviorsTables = attachmentBehaviorsTables;
     
-    NSMutableDictionary *attachmentBehaviorsLinks = [[NSMutableDictionary alloc] init];
-    self.attachmentBehaviorsLinks = attachmentBehaviorsLinks;
-    
     NSMutableArray *rootTables = [[NSMutableArray alloc] init];
     self.rootTables = rootTables;
 
@@ -167,12 +165,12 @@ typedef void(^MTBlockResultVoid)(void);
     self.backgroundContainer.layer.borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
     //self.backgroundContainer.layer.borderColor = [UIColor lightGrayColor].CGColor;
     
-    UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
-    containerView.contentMode = UIViewContentModeScaleAspectFit;
-    containerView.autoresizesSubviews = NO;
-    containerView.translatesAutoresizingMaskIntoConstraints = NO;
-    containerView.opaque = NO;
-    containerView.backgroundColor = [UIColor clearColor];
+    UIView *contentView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
+    contentView.contentMode = UIViewContentModeScaleAspectFit;
+    contentView.autoresizesSubviews = NO;
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    contentView.opaque = NO;
+    contentView.backgroundColor = [UIColor clearColor];
     
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;
@@ -182,19 +180,19 @@ typedef void(^MTBlockResultVoid)(void);
     scrollView.delegate = self;
     scrollView.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
     scrollView.opaque = NO;
-    [scrollView addSubview:containerView];
+    [scrollView addSubview:contentView];
     
     [self.backgroundContainer addSubview:scrollView];
     
-    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:containerView andHeight:contentViewHeight];
-    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:containerView andWidth:contentViewWidth];
+    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:contentView andHeight:contentViewHeight];
+    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:contentView andWidth:contentViewWidth];
     
     NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
-    [containerView addConstraints:containerViewConstraints];
+    [contentView addConstraints:containerViewConstraints];
     
     
     NSDictionary *viewDictionary = @{@"sv" : scrollView,
-                                     @"cv" : containerView,
+                                     @"cv" : contentView,
                                      @"bg" : self.backgroundContainer};
     
     NSMutableArray *constraints = [NSMutableArray new];
@@ -220,7 +218,7 @@ typedef void(^MTBlockResultVoid)(void);
     [constraints removeAllObjects];
     
     self.scrollView = scrollView;
-    self.contentView = containerView;
+    self.contentView = contentView;
     
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
     animator.delegate = self;
@@ -302,7 +300,6 @@ typedef void(^MTBlockResultVoid)(void);
     [self.controllersForObjectIds removeAllObjects];
     [self.controllersForObjectIdsLink removeAllObjects];
     [self.attachmentBehaviorsTables removeAllObjects];
-    [self.attachmentBehaviorsLinks removeAllObjects];
     [self.rootTables removeAllObjects];
 }
 
@@ -550,10 +547,6 @@ typedef void(^MTBlockResultVoid)(void);
 
     //Add connections between MTQueryBuilderAdvancedSchemaViewController
     if ([leftTableViewController isEqual:rightTableViewController] == NO) {
-        UIAttachmentBehavior *attachmentBehavior = [MADQueryVisualizationViewController attachmentBehaviorLinkWithLeftViewController: leftTableViewController
-                                                                                                              andRightViewController: rightTableViewController];
-        [self.dynamicAnimator addBehavior:attachmentBehavior];
-        self.attachmentBehaviorsLinks[insertedQueryLinks.objectID.URIRepresentation] = attachmentBehavior;
         
         //Add animation layer
         [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];
@@ -640,41 +633,17 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - Gesture recognizer actions
 
-- (void)tapPiece:(UITapGestureRecognizer *)gestureRecognizer {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    /*
-    if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
-        [self.contentView bringSubviewToFront:gestureRecognizer.view];
-        for (UIView *view in self.contentView.subviews) {
-            if ([view isKindOfClass:[MTConnectorView class]]) {
-                [self.contentView bringSubviewToFront:view];
-            }
-        }
-    }
-    [self.view setNeedsDisplay];*/
-}
-
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    UIWindow *window = [[UIApplication sharedApplication] windows][0];
-    CGPoint gestureLocation = [gestureRecognizer locationInView:window];
-    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[gestureRecognizer.view.objectIdTag.URIRepresentation];
-    attachmentBehavior.anchorPoint = [window convertPoint:gestureLocation toView:self.contentView];
-     MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[gestureRecognizer.view.objectIdTag.URIRepresentation];
-    viewController.view.center = attachmentBehavior.anchorPoint;
-
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        [self.contentView bringSubviewToFront:gestureRecognizer.view];
-        [self.contentView.subviews enumerateObjectsWithOptions:0 usingBlock:^(__kindof UIView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([view isKindOfClass:[MTConnectorView class]]) {
-                [self.contentView bringSubviewToFront:view];
-            }
-        }];
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    
+    UIWindow __weak *window = [[UIApplication sharedApplication] windows][0];
+    gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
+                                                  toView: self.contentView];
+    [self didMoveFieldRect:self.controllersForObjectIds[gestureRecognizer.view.objectIdTag.URIRepresentation]
+                  animated:NO];
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [self updateCache];
     }
-    //[self.dynamicAnimator updateItemUsingCurrentState:viewController];
-
 }
 
 #pragma mark - Change UI on IR Diagram
@@ -828,7 +797,6 @@ typedef void(^MTBlockResultVoid)(void);
     [orphanedQueryTables minusSet:startingPoints];  // Should only be one newly orphaned table.
     
     RptqQueryLinks *deletedLink = (RptqQueryLinks *)[self.document.managedObjectContext objectWithID:deletedQueryLinks.objectID];
-    UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsLinks[deletedQueryLinks.objectID.URIRepresentation];
     
     for (RptqQueryTable *table in orphanedQueryTables) {
         
@@ -858,9 +826,6 @@ typedef void(^MTBlockResultVoid)(void);
         }
     }
     
-    [self.dynamicAnimator removeBehavior:attachmentBehavior];
-    [self.attachmentBehaviorsLinks removeObjectForKey:deletedQueryLinks.objectID];
-    
     UIViewController *linkViewController = self.controllersForObjectIdsLink[deletedLink.objectID.URIRepresentation];
     if (linkViewController != nil) {
         [self removeViewController:linkViewController];
@@ -885,15 +850,10 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)addGesturesToViewController:(UIViewController *)viewController {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPiece:)];
-    tapGesture .delegate = self;
-    tapGesture.numberOfTapsRequired = 1;
-    [viewController.view addGestureRecognizer:tapGesture];
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
     panGesture.delegate = self;
     [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
-    [tapGesture requireGestureRecognizerToFail:panGesture];
     [viewController.view addGestureRecognizer:panGesture];
 }
 
@@ -1029,7 +989,7 @@ typedef void(^MTBlockResultVoid)(void);
         
         RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:controller.tableObjectId
                                                        managedObjectContext:self.document.managedObjectContext];
-        NSLog(@"%s\t\t%@", __PRETTY_FUNCTION__, queryTable.tableAlias);
+        NSLog(@"%s\t\t\t\t%@", __PRETTY_FUNCTION__, queryTable.tableAlias);
         for (RptqQueryLinks *queryLink in queryTable.inQuery.hasQueryLinks) {
             if ([queryLink.hasLeftField.inQueryTable isEqualTo:queryTable] ||
                 [queryLink.hasRightField.inQueryTable isEqualTo:queryTable]) {
