@@ -60,7 +60,6 @@ typedef void(^MTBlockResultVoid)(void);
 <UIGestureRecognizerDelegate,
     UIScrollViewDelegate,
     UIPopoverControllerDelegate,
-    UIDynamicAnimatorDelegate,
     MADQueryVisualizationSchemaDelegate,
     MTViewControllerProtocol>
 
@@ -221,7 +220,6 @@ typedef void(^MTBlockResultVoid)(void);
     self.contentView = contentView;
     
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
-    animator.delegate = self;
     self.dynamicAnimator = animator;
     
 }
@@ -558,18 +556,6 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewControllerDidFinish:(id)sender {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [self dismissViewControllerAnimated:YES completion:^{ }];
-}
-
-#pragma mark - UIDynamicAnimatorDelegate
-
-- (void)dynamicAnimatorWillResume:(UIDynamicAnimator *)animator {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-}
-
-- (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
 }
 
 #pragma mark - Cache Operations
