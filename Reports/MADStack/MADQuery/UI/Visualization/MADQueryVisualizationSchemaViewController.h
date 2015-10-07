@@ -23,7 +23,7 @@
 @class MTSchemaFieldCell, NSManagedObjectID, MADocument;
 
 @interface MADQueryVisualizationSchemaViewController : MADViewController
-    <UIDynamicItem, MADocumentProtocol>
+    <MADocumentProtocol>
 
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, strong) IBOutlet UIToolbar *toolbar;

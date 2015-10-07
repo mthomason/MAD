@@ -13,7 +13,7 @@ static NSString * const MTQueryBuilderAdvancedSchemaViewControllerIdentifier = @
 
 @implementation MADQueryVisualizationSchemaViewController (Designer)
 
-+ (instancetype)advancedSchemaViewController {
++ (instancetype)newAdvancedSchemaViewController {
     UIStoryboard *designer = [UIStoryboard Designer];
     return [designer instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier];
 }

@@ -13,7 +13,7 @@
 
 @interface MADQueryVisualizationSchemaViewController (Designer)
 
-+ (instancetype)advancedSchemaViewController;
++ (instancetype)newAdvancedSchemaViewController;
 
 @end
 

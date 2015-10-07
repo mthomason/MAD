@@ -147,7 +147,7 @@
                  withTransitionCoordinator: coordinator];
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self.containerView setNeedsDisplay];
+        //[self.containerView setNeedsDisplay];
         [self.navigationItem.titleView sizeToFit];
         [self.navigationItem.titleView setNeedsLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
