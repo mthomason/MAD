@@ -263,7 +263,7 @@ typedef void(^MTBlockResultVoid)(void);
                 [self.cacheData addTableDefination:tableDefination forObjectID:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
             }
             if (tableDefination.root) {
-                [self.rootTables addObject:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId.URIRepresentation.absoluteString];
+                [self.rootTables addObject:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
             }
             childContoller.view.frame = CGRectMake(tableDefination.center.x, tableDefination.center.y, childContoller.view.frame.size.width, childContoller.view.frame.size.height);
             childContoller.view.center = tableDefination.center;
@@ -376,19 +376,19 @@ typedef void(^MTBlockResultVoid)(void);
                 if (![updatedTable.inQuery.objectID isEqual:updatedQuery.objectID]) {
 
                     //Table was remvoed from query... so remove it from screen.
-                    UIViewController *viewController = self.controllersForObjectIdsLink[updatedTable.objectID.URIRepresentation];
+                    UIViewController *viewController = self.controllersForObjectIdsLink[updatedTable.objectID];
                     
                     if ([viewController isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
                         
-                        [self.rootTables removeObject:updatedTable.objectID.URIRepresentation.absoluteString];
-                        [self.cacheData.tableDefinations removeObjectForKey:updatedTable.objectID.URIRepresentation.absoluteString];
+                        [self.rootTables removeObject:updatedTable.objectID];
+                        [self.cacheData removeTableDefinationForObjectID:updatedTable.objectID];
                         [self removeViewController:viewController];
                         
                         for (RptqQueryLinks *link in updatedQuery.hasQueryLinks) {
                             if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
                                 [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
                                 
-                                UIViewController *linkViewController = self.controllersForObjectIdsLink[link.objectID.URIRepresentation];
+                                UIViewController *linkViewController = self.controllersForObjectIdsLink[link.objectID];
                                 if (linkViewController != nil) {
                                     [self removeViewController:linkViewController];
                                 }
@@ -398,7 +398,7 @@ typedef void(^MTBlockResultVoid)(void);
                         
                     } else if ([viewController.view isKindOfClass:[MTConnectorView class]]) {
                         
-                        UIViewController *viewController = self.controllersForObjectIdsLink[updatedTable.objectID.URIRepresentation];
+                        UIViewController *viewController = self.controllersForObjectIdsLink[updatedTable.objectID];
                         CGPoint center = viewController.view.center;
 
                         __weak UIViewController *weakViewController = viewController;
@@ -436,7 +436,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
     //Going to assume that it's a top level table.
-    [self.rootTables addObject:insertedQueryTable.objectID.URIRepresentation.absoluteString];
+    [self.rootTables addObject:insertedQueryTable.objectID];
     
     CGPoint insertTableAnchorPoint = CGPointMake(CGPointZero.x + 500, self.contentView.bounds.size.height / (self.rootTables.count + 2) * (self.rootTables.count + 1));
     
@@ -450,10 +450,10 @@ typedef void(^MTBlockResultVoid)(void);
     MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:insertedQueryLinks.inQuery];
     
     RptqQueryTable *leftTable = insertedQueryLinks.hasLeftField.inQueryTable;
-    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIdsLink[leftTable.objectID.URIRepresentation];
+    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIdsLink[leftTable.objectID];
     
     RptqQueryTable *rightTable = insertedQueryLinks.hasRightField.inQueryTable;
-    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIdsLink[rightTable.objectID.URIRepresentation];
+    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIdsLink[rightTable.objectID];
     
     // Remove starting point connection if one of the tables is in the link.
     BOOL startingPointRemoved = NO;
@@ -523,7 +523,7 @@ typedef void(^MTBlockResultVoid)(void);
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
                 
-                MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIdsLink[((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
+                MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIdsLink[(NSManagedObjectID *)tableIdVertext.object];
                 MADQueryVisualizationTableDefination *tableDef = [[MADQueryVisualizationTableDefination alloc] init];
                 tableDef.center = viewController.view.center;
                 tableDef.root = [queryDef.startingPoints containsObject: ((NSManagedObjectID *)tableIdVertext.object).URIRepresentation];
@@ -577,7 +577,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIWindow __weak *window = [[UIApplication sharedApplication] windows][0];
     gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
                                                   toView: self.contentView];
-    [self didMoveFieldRect:self.controllersForObjectIdsLink[gestureRecognizer.view.objectIdTag.URIRepresentation]
+    [self didMoveFieldRect:self.controllersForObjectIdsLink[gestureRecognizer.view.objectIdTag]
                   animated:NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [self updateCache];
@@ -633,7 +633,7 @@ typedef void(^MTBlockResultVoid)(void);
                 RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
                 BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
                 if (topLevel) {
-                    [self.rootTables addObject:table.objectID.URIRepresentation.absoluteString];
+                    [self.rootTables addObject:table.objectID];
                 }
 
                 MADQueryVisualizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:table.objectID];
@@ -680,21 +680,21 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)deleteQueryTable:(RptqQueryTable *)deletedQueryTable {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    //BOOL startingPointTable = [self.rootTables containsObject:deletedQueryTable.objectID.URIRepresentation.absoluteString];
+    //BOOL startingPointTable = [self.rootTables containsObject:deletedQueryTable.objectID];
     //if (startingPointTable) {
     //    CGPoint offScreen = CGPointMakeRandomOffscreen(400.0000f);
-        //UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[deletedQueryTable.objectID.URIRepresentation];
+        //UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[deletedQueryTable.objectID];
         //attachmentBehavior.anchorPoint = offScreen;
     //}
     
     if (deletedQueryTable.inQuery != nil) {
-        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIdsLink[deletedQueryTable.objectID.URIRepresentation];
+        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIdsLink[deletedQueryTable.objectID];
         if (viewController != nil) {
             [viewController willMoveToParentViewController:nil];
             [viewController.view removeFromSuperview];
             [viewController removeFromParentViewController];
             [viewController didMoveToParentViewController:nil];
-            [self.controllersForObjectIdsLink removeObjectForKey:deletedQueryTable.objectID.URIRepresentation];
+            [self.controllersForObjectIdsLink removeObjectForKey:deletedQueryTable.objectID];
         }
     }
 }
@@ -727,7 +727,7 @@ typedef void(^MTBlockResultVoid)(void);
     for (RptqQueryTable *table in orphanedQueryTables) {
         
         RptqQueryTable *tableRightDeletedLink = table;
-        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIdsLink[tableRightDeletedLink.objectID.URIRepresentation];
+        MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIdsLink[tableRightDeletedLink.objectID];
         
         // Is there a link still pointing to the view controller after the delete, or
         //   do we need to make it top level?
@@ -739,7 +739,7 @@ typedef void(^MTBlockResultVoid)(void);
         //anchorBehaviorNew.length = 0.0000f;
         //[self.dynamicAnimator addBehavior:anchorBehaviorNew];
         //self.attachmentBehaviorsTables[tableRightDeletedLink.objectID.URIRepresentation] = anchorBehaviorNew;
-        [self.rootTables addObject: tableRightDeletedLink.objectID.URIRepresentation.absoluteString];
+        [self.rootTables addObject: tableRightDeletedLink.objectID];
         
         // Disable collision behaviors before reposition
         // Reposition existing tables
@@ -752,11 +752,11 @@ typedef void(^MTBlockResultVoid)(void);
         }
     }
     
-    UIViewController *linkViewController = self.controllersForObjectIdsLink[deletedLink.objectID.URIRepresentation];
+    UIViewController *linkViewController = self.controllersForObjectIdsLink[deletedLink.objectID];
     if (linkViewController != nil) {
         [self removeViewController:linkViewController];
     }
-    [self.controllersForObjectIdsLink removeObjectForKey:deletedLink.objectID.URIRepresentation];
+    [self.controllersForObjectIdsLink removeObjectForKey:deletedLink.objectID];
 }
 
 #pragma mark - UI Items
@@ -827,7 +827,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     if (root) viewController.toolbar.backgroundColor = [UIColor blueColor];
     
-    self.controllersForObjectIdsLink[table.objectID.URIRepresentation] = viewController;
+    self.controllersForObjectIdsLink[table.objectID] = viewController;
 
     [self addGesturesToViewController:viewController];
     NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:viewController.view andWidth:schemaViewWidth];
@@ -862,7 +862,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIViewController *connectorViewController = [[UIViewController alloc] init];
     connectorViewController.view = connectorView;
     
-    self.controllersForObjectIdsLink[link.objectID.URIRepresentation] = connectorViewController;
+    self.controllersForObjectIdsLink[link.objectID] = connectorViewController;
     
     if (animated == NO) {
         [self layoutQueryLinkViewController:link];
@@ -926,11 +926,11 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
 
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID.URIRepresentation];
+    UIViewController *controller = self.controllersForObjectIdsLink[queryLink.objectID];
     MTConnectorView *connectorView = (MTConnectorView *)controller.view;
     const CGFloat paddingLeft = 44.0000f;
     
-    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIdsLink[queryLink.hasLeftField.inQueryTable.objectID.URIRepresentation];
+    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIdsLink[queryLink.hasLeftField.inQueryTable.objectID];
     CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:queryLink.hasLeftField.objectID inView:leftTableViewController.view];
     CGFloat leftTableBottomY = leftTableViewController.schemaTableViewController.frame.origin.y + leftTableViewController.schemaTableViewController.frame.size.height;
     
@@ -944,7 +944,7 @@ typedef void(^MTBlockResultVoid)(void);
     leftCellAnchorPoint.x += paddingLeft;
     leftCellAnchorPoint.y += 0.0000f;
     
-    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIdsLink[queryLink.hasRightField.inQueryTable.objectID.URIRepresentation];
+    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIdsLink[queryLink.hasRightField.inQueryTable.objectID];
     CGRect rightCellFrameInTable = [rightTableViewController rectForFieldWithObjectId:queryLink.hasRightField.objectID
                                                                                inView:rightTableViewController.view];
     CGFloat rightTableBottomY = rightTableViewController.schemaTableViewController.frame.origin.y + rightTableViewController.schemaTableViewController.frame.size.height;

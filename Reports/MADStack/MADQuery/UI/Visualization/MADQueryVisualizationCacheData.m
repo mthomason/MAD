@@ -67,6 +67,10 @@ static NSString * const CacheExt =                  @"qvvc";
     return self.tableDefinations[objectID.URIRepresentation.absoluteString];
 }
 
+- (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID {
+    [self.tableDefinations removeObjectForKey:objectID.URIRepresentation.absoluteString];
+}
+
 + (NSString *)cacheFileNameForFileName:(NSString *)filename {
     NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)filename.hash];
     return [fileName stringByAppendingPathExtension:CacheExt];

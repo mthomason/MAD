@@ -20,9 +20,8 @@
     @property (nonatomic, assign) CGPoint scrollViewContentOffset;
     @property (nonatomic, assign) CGFloat scrollViewZoomScale;
 
-    @property (nonatomic, strong, readonly) NSMutableDictionary *tableDefinations;
-
     - (void)addTableDefination:(MADQueryVisualizationTableDefination *)tableDefination forObjectID:(NSManagedObjectID *)objectID;
+    - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID;
     - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID;
 
     + (NSString *)cacheFileNameForFileName:(NSString *)filename;
