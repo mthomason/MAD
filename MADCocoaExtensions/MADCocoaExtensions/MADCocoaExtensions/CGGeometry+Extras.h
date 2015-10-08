@@ -408,6 +408,12 @@ CGCornerBottomLeftPointInRect(CGRect frame) {
 	return CGPointMake(frame.origin.x, frame.origin.y + frame.size.height);	
 }
 
+CG_INLINE CGPoint CGCenterRect(CGRect rect);
+CG_INLINE CGPoint CGCenterRect(CGRect rect) {
+    return CGPointMake((rect.origin.x + rect.size.width) / 2.0000f,
+                       (rect.origin.y + rect.size.height) / 2.0000f);
+}
+
 CG_INLINE CGPoint CGCornerBottomRightPointInRect(CGRect frame);
 CG_INLINE CGPoint
 CGCornerBottomRightPointInRect(CGRect frame) {

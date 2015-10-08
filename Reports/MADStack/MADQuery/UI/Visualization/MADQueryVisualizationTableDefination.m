@@ -15,6 +15,14 @@ static NSString * const keyRoot = @"r";
 
 @implementation MADQueryVisualizationTableDefination
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.root = YES;
+        self.center = CGPointZero;
+    }
+    return self;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
         _center = [decoder decodeCGPointForKey:keyCenter];
@@ -33,6 +41,11 @@ static NSString * const keyRoot = @"r";
     result.center = self.center;
     result.root = self.root;
     return result;
+}
+
++ (instancetype)newTableDefination {
+    MADQueryVisualizationTableDefination *tableDefination = [[self alloc] init];
+    return tableDefination;
 }
 
 @end

@@ -227,7 +227,7 @@
                         <viewControllerLayoutGuide type="top" id="YJF-Ji-72c"/>
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="X8d-qj-glr">
+                    <view key="view" contentMode="scaleToFill" id="X8d-qj-glr" customClass="MADViewDebugging">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
