@@ -254,6 +254,10 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self layout];
+}
+
+- (void)layout {
     for (UIViewController *childContoller in self.childViewControllers) {
         if ([childContoller isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
             MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
@@ -432,6 +436,21 @@ typedef void(^MTBlockResultVoid)(void);
     [self.view layoutIfNeeded];
 }
 
+- (void)removeConnectionController:(UIViewController *)viewController {
+    CGPoint center = viewController.view.center;
+    __weak UIViewController *weakViewController = viewController;
+    [UIView animateWithDuration:0.3000f delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        weakViewController.view.bounds = CGRectZero;
+        weakViewController.view.center = center;
+        weakViewController.view.transform = CGAffineTransformSwing();
+    } completion:^(BOOL finished) {
+        [weakViewController willMoveToParentViewController:nil];
+        [weakViewController.view removeFromSuperview];
+        [weakViewController removeFromParentViewController];
+        [weakViewController didMoveToParentViewController:nil];
+    }];
+}
+
 - (void)insertQueryTable:(RptqQueryTable *)insertedQueryTable {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
@@ -549,17 +568,17 @@ typedef void(^MTBlockResultVoid)(void);
         [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
         result = nil;
     } else {
-        id r = nil;
+        id resultFromTryBlock = nil;
         @try {
-            r = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            resultFromTryBlock = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
         @catch (NSException *exception) {
             NSError *cleanup = nil;
             [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:&cleanup];
         }
         @finally {
-            if ([r isKindOfClass:[MADQueryVisualizationCacheData class]]) {
-                result = r;
+            if ([resultFromTryBlock isKindOfClass:[MADQueryVisualizationCacheData class]]) {
+                result = resultFromTryBlock;
             } else {
                 [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileUrl error:error];
                 result = nil;
@@ -719,37 +738,14 @@ typedef void(^MTBlockResultVoid)(void);
         }
     }
     
-//    NSSet *startingPoints = [NSSet setWithArray:self.rootTables];   //FIXME: This uses URLS, and the rest of this code expects tables.
     [orphanedQueryTables minusSet:self.rootTables];  // Should only be one newly orphaned table.
     
     RptqQueryLinks *deletedLink = (RptqQueryLinks *)[self.document.managedObjectContext objectWithID:deletedQueryLinks.objectID];
     
     for (RptqQueryTable *table in orphanedQueryTables) {
-        
-        RptqQueryTable *tableRightDeletedLink = table;
-        MADQueryVisualizationSchemaViewController *viewController = self.controllersByObjectID[tableRightDeletedLink.objectID];
-        
-        // Is there a link still pointing to the view controller after the delete, or
-        //   do we need to make it top level?
-        
-        CGPoint attachmentPoint = CGPointMake(CGPointZero.x + self.contentView.frame.size.width,
-                                              CGPointZero.y + self.contentView.frame.size.height / 2.0000f);
-        
-        //UIAttachmentBehavior *anchorBehaviorNew = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToAnchor:attachmentPoint];
-        //anchorBehaviorNew.length = 0.0000f;
-        //[self.dynamicAnimator addBehavior:anchorBehaviorNew];
-        //self.attachmentBehaviorsTables[tableRightDeletedLink.objectID.URIRepresentation] = anchorBehaviorNew;
-        [self.rootTables addObject: tableRightDeletedLink.objectID];
-        
-        // Disable collision behaviors before reposition
-        // Reposition existing tables
-        CGFloat segHeight = (self.contentView.bounds.size.height / (self.rootTables.count + 1));
-        NSUInteger counter = 0;
-        for (NSString *queryTable in self.rootTables) {
-            //UIAttachmentBehavior *attachmentBehavior = self.attachmentBehaviorsTables[queryTable];
-            //attachmentBehavior.anchorPoint = CGPointMake(CGPointZero.x, segHeight * (counter + 1) - 22.0000f);
-            counter++;
-        }
+        MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:table.objectID];
+        tableDefination.root = YES;
+        [self.rootTables addObject: table.objectID];
     }
     
     UIViewController *linkViewController = self.controllersByObjectID[deletedLink.objectID];
@@ -800,19 +796,23 @@ typedef void(^MTBlockResultVoid)(void);
     } else if ([viewController.view isKindOfClass:[MTConnectorView class]]) {
         
         CGPoint center = viewController.view.center;
-        __weak UIViewController *weakViewController = viewController;
         [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            weakViewController.view.bounds = CGRectZero;
-            weakViewController.view.center = center;
-            weakViewController.view.transform = swingTransform;
+            viewController.view.bounds = CGRectZero;
+            viewController.view.center = center;
+            viewController.view.transform = swingTransform;
         } completion:^(BOOL finished) {
-            [weakViewController willMoveToParentViewController:nil];
-            [weakViewController.view removeFromSuperview];
-            [weakViewController removeFromParentViewController];
-            [weakViewController didMoveToParentViewController:nil];
+            if (finished) {
+                [viewController willMoveToParentViewController:nil];
+                [viewController.view removeFromSuperview];
+                [viewController removeFromParentViewController];
+                [viewController didMoveToParentViewController:nil];
+                [self layout];
+            }
         }];
     }
 }
+
+
 
 - (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table
                                                                         center:(CGPoint)center

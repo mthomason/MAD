@@ -25,8 +25,8 @@
 @interface MADQueryVisualizationSchemaViewController : MADViewController
     <MADocumentProtocol>
 
-@property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
-@property (nonatomic, strong) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;
+@property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 

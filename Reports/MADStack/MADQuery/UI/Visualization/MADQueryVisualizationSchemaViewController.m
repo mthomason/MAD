@@ -102,6 +102,8 @@
     [super awakeFromNib];
 }
 
+- (BOOL)shouldPresentInFullscreen { UIPresentationController return YES; }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.schemaTableViewController.dataSource = self;
