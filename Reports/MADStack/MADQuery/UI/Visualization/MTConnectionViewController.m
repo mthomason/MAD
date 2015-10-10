@@ -65,7 +65,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
-    
     UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     transitionContext.containerView.backgroundColor = [UIColor clearColor];

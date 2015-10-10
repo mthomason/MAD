@@ -41,6 +41,8 @@
 
 #import "MADQueryVisualizationSchemaPresentationController.h"
 
+#import "MADQueryVisualizationSchemaAnimatedTransitioning.h"
+
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
 NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundryLandscapeTop";
@@ -108,20 +110,27 @@ typedef void(^MTBlockResultVoid)(void);
     return CGSizeMake(schemaViewWidth, schemaViewHeight);
 }
 
-/*- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator NS_AVAILABLE_IOS(8_0) {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-}*/
-
-/*
- This method is called when the view controller's trait collection is changed by its parent.
- 
- If you override this method, you should either call super to propagate the change to children or manually forward the change to children.
- */
-/*- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator NS_AVAILABLE_IOS(8_0) {
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-}*/
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
 
-#pragma mark - 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
+        
+        for (UIViewController *subviewController in self.childViewControllers) {
+            [self didMoveFieldRect: subviewController animated: YES];
+        }
+        
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [self.view setNeedsDisplay];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+    }
+}
+
+#pragma mark - MADQueryVisualizationSchemaPresentationDelegate
 
 - (MADQueryVisualizationTableDefination *)tableDefinationForObjectID:(NSManagedObjectID *)objectID {
     return [self.cacheData tableDefinationForObjectID:objectID];
@@ -134,37 +143,6 @@ typedef void(^MTBlockResultVoid)(void);
                       schemaViewWidth,
                       schemaViewHeight);
 }
-
-#pragma mark - UIViewControllerTransitioningDelegate
-
-/*- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    
-}
-
-- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    
-}
-
-- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id <UIViewControllerAnimatedTransitioning>)animator {
-    
-}
-
-- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id <UIViewControllerAnimatedTransitioning>)animator {
-    
-}*/
-
-/*- (nullable UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
-                                                               presentingViewController:(UIViewController *)presenting
-                                                                   sourceViewController:(UIViewController *)source NS_AVAILABLE_IOS(8_0) {
-    if ([presented isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
-        UIPresentationController *presentationController = [[MADQueryVisualizationSchemaPresentationController alloc] initWithObjectID:((MADQueryVisualizationSchemaViewController *)presenting).tableObjectId
-                                                                                                               presentedViewController:presented
-                                                                                                              presentingViewController:self];
-        return presentationController;
-    } else {
-        return nil;
-    }
-}*/
 
 - (void)dealloc {
     _operationQueueCache.underlyingQueue = nil;
@@ -271,9 +249,6 @@ typedef void(^MTBlockResultVoid)(void);
     self.contentView = contentView;
     
     self.initalLoad = YES;
-    
-//    self.transitioningDelegate = self;
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -330,37 +305,14 @@ typedef void(^MTBlockResultVoid)(void);
 
     self.scrollView.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);
     self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.height);
-    [self layout];
+    [self layoutQueryTables];
+    [self layoutQueryLinks];
 }
 
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    //[self layout];
-}
-
-- (void)layout {
-    /*[self.childViewControllers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(__kindof UIViewController * _Nonnull childContoller, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([childContoller isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
-            MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
-            if (tableDefination == nil) {
-                tableDefination = [MADQueryVisualizationTableDefination newTableDefination];
-                tableDefination.center = CGCenterRect(self.scrollView.bounds);
-                [self.cacheData addTableDefination:tableDefination forObjectID:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
-            }
-            if (tableDefination.root) {
-                [self.rootTables addObject:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
-            }
-            childContoller.view.frame = CGRectMake(tableDefination.center.x - childContoller.view.frame.size.width / 2,
-                                                   tableDefination.center.y - childContoller.view.frame.size.height / 2,
-                                                   childContoller.view.frame.size.width,
-                                                   childContoller.view.frame.size.height);
-            childContoller.view.center = tableDefination.center;
-        }
-    }];*/
-    [self layoutQueryTables];
-    [self layoutQueryLinks];
 }
 
 - (void)layoutQueryTables {
@@ -409,26 +361,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { }
 
-
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        
-        for (UIViewController *subviewController in self.childViewControllers) {
-            [self didMoveFieldRect: subviewController animated: YES];
-        }
-        
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            [self.view setNeedsDisplay];
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
-    }
-}
-
 #pragma mark Scroll view helper
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
@@ -440,11 +372,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - NSManagedObjectContext observer
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
-    NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
-    NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-    NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
@@ -551,6 +479,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)removeConnectionController:(UIViewController *)viewController {
     CGPoint center = viewController.view.center;
     __weak UIViewController *weakViewController = viewController;
+
     [UIView animateWithDuration:0.3000f delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
         weakViewController.view.bounds = CGRectZero;
         weakViewController.view.center = center;
@@ -780,8 +709,6 @@ typedef void(^MTBlockResultVoid)(void);
     } else {
         [self displayQuery:query animated:animated];
     }
-    //[self.contentView setNeedsLayout];
-    //[self.contentView setNeedsDisplay];
 }
 
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
@@ -894,7 +821,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)removeViewController:(UIViewController *)viewController {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     [viewController willMoveToParentViewController:nil];
     [viewController.view removeFromSuperview];
     [viewController removeFromParentViewController];
@@ -983,7 +909,8 @@ typedef void(^MTBlockResultVoid)(void);
     
     UIViewController *connectorViewController = [[UIViewController alloc] init];
     connectorViewController.view = connectorView;
-    
+    connectorViewController.transitioningDelegate = self;
+
     self.controllersByObjectID[link.objectID] = connectorViewController;
     
     if (animated == NO) {
