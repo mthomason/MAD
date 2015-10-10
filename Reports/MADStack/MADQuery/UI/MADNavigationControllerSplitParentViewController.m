@@ -62,7 +62,7 @@
 }
 
 - (void)viewDidLayoutSubviews {
-    [super viewWillLayoutSubviews];
+    [super viewDidLayoutSubviews];
     self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x,
                                           CGPointZero.y + self.topLayoutGuide.length,
                                           self.navigationBar.frame.size.width,
