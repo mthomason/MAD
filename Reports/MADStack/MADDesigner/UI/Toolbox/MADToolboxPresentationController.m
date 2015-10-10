@@ -179,7 +179,6 @@
 
 - (void)containerViewDidLayoutSubviews {
     [super containerViewDidLayoutSubviews];
-    
 }
 
 - (BOOL)shouldPresentInFullscreen { return YES; }

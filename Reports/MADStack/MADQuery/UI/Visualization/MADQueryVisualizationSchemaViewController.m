@@ -102,7 +102,7 @@
     [super awakeFromNib];
 }
 
-- (BOOL)shouldPresentInFullscreen { UIPresentationController return YES; }
+- (BOOL)shouldPresentInFullscreen { return YES; }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
