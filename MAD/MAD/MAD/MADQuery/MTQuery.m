@@ -343,7 +343,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
               };
 }
 
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid {
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid {
     NSMutableDictionary *queryDefination = [NSMutableDictionary dictionaryWithDictionary:queryDefinationSelect];
     NSNumber *limitw = @(limit);
     NSNumber *offsetw = @(offset);
@@ -358,7 +358,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     }
     return  queryDefination;
 }
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset {
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
     return [self queryDefinitionSelect:queryDefinationSelect withLimit:limit andOffset:offset dropRowid:NO];
 }
 

@@ -531,7 +531,7 @@
     return [MTQuery queryDefinitionSelect:self.columnKeys tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
 }
 
-- (NSDictionary *)queryDefinationSelectWithLimit:(NSInteger)limit andOffset:(NSInteger)offset {
+- (NSDictionary *)queryDefinationSelectWithLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
     return [MTQuery queryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
 }
 
@@ -582,7 +582,7 @@
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
     [self initalizeGroupKeys];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
-    NSInteger groupLevel = 0;
+    NSUInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
         NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : [self idColumnKeyForGroupLocation:groupLevel],
                                          MTQueryKeyPredicateValue : key};
@@ -638,7 +638,7 @@
 }
 
 // FIXME: Return error handler... remove credentals
-- (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
+- (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefination];

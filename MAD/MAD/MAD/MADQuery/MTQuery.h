@@ -183,9 +183,9 @@ extern NSString * const MADIdentifierROWID;
 - (BOOL)partOfTransactionSet;
 
 + (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid;
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid;
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset;
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
 + (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
