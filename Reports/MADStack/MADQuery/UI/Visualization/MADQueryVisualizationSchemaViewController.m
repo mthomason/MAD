@@ -15,6 +15,7 @@
 #import "MTTitleView.h"
 #import "UIView+NSObjectIdTag.h"
 #import "MTSchemaFieldCell.h"
+#import "NSLayoutConstraint+QueryVisualization.h"
 
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
@@ -28,6 +29,9 @@
 @property (nonatomic, strong) UIFont *detailFont;
 
 @end
+
+const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
+const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 @implementation MADQueryVisualizationSchemaViewController
 
@@ -115,6 +119,11 @@
     self.view.layer.shadowOpacity = 1.0000f;
     self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
+    
+    NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
+    NSLayoutConstraint *height = [NSLayoutConstraint schemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
+    NSArray *constraints = @[width, height];
+    [self.view addConstraints:constraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

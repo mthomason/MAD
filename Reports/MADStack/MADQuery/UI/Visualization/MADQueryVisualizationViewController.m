@@ -18,8 +18,6 @@
 #import "MADQueryVisualizationSchemaViewController.h"
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
 
-#import "MADWatermarkView.h"
-
 #import "CGAffineTransform+Common.h"
 #import "UIView+NSObjectIdTag.h"
 
@@ -51,9 +49,6 @@ NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundr
 NSString * const MTIdentifierCollisionBoundryRight = @"MTIdentifierCollisionBoundryLandscapeRight";
 NSString * const MTIdentifierCollisionBoundryBottom = @"MTIdentifierCollisionBoundryLandscapeBottom";
 NSString * const MTIdentifierCollisionBoundryLeft = @"MTIdentifierCollisionBoundryLandscapeLeft";
-
-static const CGFloat schemaViewWidth = 120.0000f;
-static const CGFloat schemaViewHeight = 140.0000f;
 
 static NSString * const CacheExt = @"qvvc";
 
@@ -102,17 +97,15 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - UIContentContainer
 
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
-    return CGSizeMake(schemaViewWidth, schemaViewHeight);
+    return CGSizeMake(MADSchemaViewDefaultWidth, MADSchemaViewDefaultHeight);
 }
 
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
         
         for (UIViewController *subviewController in self.childViewControllers) {
@@ -133,10 +126,10 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (CGRect)frameOfItemWithObjectID:(NSManagedObjectID *)objectID {
     MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
-    return CGRectMake(tableDefination.center.x - schemaViewWidth / 2,
-                      tableDefination.center.y - schemaViewHeight / 2,
-                      schemaViewWidth,
-                      schemaViewHeight);
+    return CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2,
+                      tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
+                      MADSchemaViewDefaultWidth,
+                      MADSchemaViewDefaultHeight);
 }
 
 #pragma mark - NSObject
@@ -252,14 +245,12 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self cleanupArrays];
+    [self.controllersByObjectID removeAllObjects];
+    [self.rootTables removeAllObjects];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.height);
     [self layoutQueryTables];
     [self layoutQueryLinks];
@@ -267,12 +258,10 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self archiveCache];
     [self clearScreen];
 }
@@ -302,12 +291,6 @@ typedef void(^MTBlockResultVoid)(void);
     for (RptqQueryLinks *queryLink in self.document.activeDocumentModel.query.hasQueryLinks) {
         [self layoutQueryLinkViewController:queryLink];
     }
-}
-
-- (void)cleanupArrays {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self.controllersByObjectID removeAllObjects];
-    [self.rootTables removeAllObjects];
 }
 
 #pragma mark - UIPopoverControllerDelegate
@@ -419,7 +402,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Cache Operations
 
 - (void)updateCache {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.document != nil) {
         MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
         cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
@@ -441,13 +423,11 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)archiveCache {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADOperationArchiveData *operation = [[MADOperationArchiveData alloc] initWithURL:self.localCacheFileUrl andObject:self.cacheData];
     [self.operationQueueCache addOperation:operation];
 }
 
 - (MADQueryVisualizationCacheData *)loadCache {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADQueryVisualizationCacheData *result;
     NSError * _Nullable __autoreleasing * _Nullable error = nil;
     NSData *data = [[NSData alloc] initWithContentsOfURL:self.localCacheFileUrl options:NSDataReadingUncached error:error];
@@ -509,7 +489,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Change UI on IR Diagram
 
 - (void)clearScreen {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     for (UIViewController *viewController in self.childViewControllers) {
         [self removeViewController:viewController];
     }
@@ -583,6 +562,8 @@ typedef void(^MTBlockResultVoid)(void);
     }
 }
 
+// FIXME: Display query with a layout... this method is called when there is NO CACHE...
+//          Right now, views end up in the center...
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
     MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
     NSInteger tableCounter = 0;
@@ -655,7 +636,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - View Controller Container Data
 
 - (void)removeViewController:(UIViewController *)viewController {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [viewController willMoveToParentViewController:nil];
     [viewController.view removeFromSuperview];
     [viewController removeFromParentViewController];
@@ -664,12 +644,12 @@ typedef void(^MTBlockResultVoid)(void);
     [self.view layoutIfNeeded];
 }
 
-- (MADQueryVisualizationSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table
-                                                                        center:(CGPoint)center
-                                                                          root:(BOOL)root
-                                                                      animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    MADQueryVisualizationSchemaViewController __strong *viewController = [MADQueryVisualizationSchemaViewController newAdvancedSchemaViewController];
+- (void)addSchemaViewControllerForTable:(RptqQueryTable *)table
+                                 center:(CGPoint)center
+                                   root:(BOOL)root
+                               animated:(BOOL)animated {
+    
+    MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController newAdvancedSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
     viewController.tableObjectId = table.objectID;
@@ -683,21 +663,14 @@ typedef void(^MTBlockResultVoid)(void);
     [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
     [viewController.view addGestureRecognizer:panGesture];
     
-    NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:viewController.view andWidth:schemaViewWidth];
-    NSLayoutConstraint *height = [NSLayoutConstraint schemaViewHeightForView:viewController.view andHeight:schemaViewHeight];
-    NSArray *constraints = @[width, height];
-    
     [viewController willMoveToParentViewController:self];
     [self addChildViewController:viewController];
     viewController.view.center = center;
     [self.scrollView.contentView addSubview:viewController.view];
-    [self.scrollView.contentView addConstraints:constraints];
     [viewController didMoveToParentViewController:self];
-    return viewController;
 }
 
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;

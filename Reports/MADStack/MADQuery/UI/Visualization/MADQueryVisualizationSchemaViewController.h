@@ -17,10 +17,13 @@
 #import "MADocumentProtocol.h"
 
 @protocol MADQueryVisualizationSchemaDelegate
-- (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
+    - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
 @class MTSchemaFieldCell, NSManagedObjectID, MADocument;
+
+extern const CGFloat MADSchemaViewDefaultWidth;
+extern const CGFloat MADSchemaViewDefaultHeight;
 
 @interface MADQueryVisualizationSchemaViewController : MADViewController
     <MADocumentProtocol>
