@@ -406,6 +406,7 @@
 		4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */; settings = {ASSET_TAGS = (); }; };
 		4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */; settings = {ASSET_TAGS = (); }; };
 		4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */; settings = {ASSET_TAGS = (); }; };
+		4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC91BC9E26600ABE231 /* MADQueryVisualizationContentView.m */; settings = {ASSET_TAGS = (); }; };
 		4C401CD41BAE043A00BAE5FC /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284A91BADEAAD00775B72 /* MAD.framework */; };
 		4C401CD51BAE046800BAE5FC /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9374611BAD43BB00D6BD62 /* MADDataStructures.framework */; };
 		4C401ED81BAE5E9000BAE5FC /* MTStoreKitController+Features.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EB91BAE5E9000BAE5FC /* MTStoreKitController+Features.m */; settings = {ASSET_TAGS = (); }; };
@@ -1807,6 +1808,8 @@
 		4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationPresentationController.m; sourceTree = "<group>"; };
 		4C3DCBC51BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaAnimatedTransitioning.m; sourceTree = "<group>"; };
+		4C3DCBC81BC9E26600ABE231 /* MADQueryVisualizationContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationContentView.h; sourceTree = "<group>"; };
+		4C3DCBC91BC9E26600ABE231 /* MADQueryVisualizationContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationContentView.m; sourceTree = "<group>"; };
 		4C401EB81BAE5E9000BAE5FC /* MTStoreKitController+Features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTStoreKitController+Features.h"; sourceTree = "<group>"; };
 		4C401EB91BAE5E9000BAE5FC /* MTStoreKitController+Features.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTStoreKitController+Features.m"; sourceTree = "<group>"; };
 		4C401EBA1BAE5E9000BAE5FC /* MTStoreKitController+NonRenewableLicensing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTStoreKitController+NonRenewableLicensing.h"; sourceTree = "<group>"; };
@@ -3086,6 +3089,8 @@
 				4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */,
 				4C3DCBC51BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.h */,
 				4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */,
+				4C3DCBC81BC9E26600ABE231 /* MADQueryVisualizationContentView.h */,
+				4C3DCBC91BC9E26600ABE231 /* MADQueryVisualizationContentView.m */,
 			);
 			path = Visualization;
 			sourceTree = "<group>";
@@ -6453,6 +6458,7 @@
 				4C8DE2521BAFA92C00AD1111 /* MADNavigationBarFixedSize.m in Sources */,
 				4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */,
 				4C40203F1BAE92F200BAE5FC /* NSAttributedString+Common.m in Sources */,
+				4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */,
 				4C26B9C81BAF123A00456DC8 /* MADTabBar.m in Sources */,
 				4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */,
 				4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */,
