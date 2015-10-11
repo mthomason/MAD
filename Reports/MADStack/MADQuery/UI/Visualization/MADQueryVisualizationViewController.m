@@ -43,6 +43,7 @@
 
 #import "MADQueryVisualizationSchemaAnimatedTransitioning.h"
 #import "MADQueryVisualizationContentView.h"
+#import "MADQueryVisualizationScrollView.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -51,8 +52,6 @@ NSString * const MTIdentifierCollisionBoundryRight = @"MTIdentifierCollisionBoun
 NSString * const MTIdentifierCollisionBoundryBottom = @"MTIdentifierCollisionBoundryLandscapeBottom";
 NSString * const MTIdentifierCollisionBoundryLeft = @"MTIdentifierCollisionBoundryLandscapeLeft";
 
-static const CGFloat contentViewWidth = 1024.0000f;
-static const CGFloat contentViewHeight = 1024.0000f;
 static const CGFloat schemaViewWidth = 120.0000f;
 static const CGFloat schemaViewHeight = 140.0000f;
 
@@ -72,8 +71,7 @@ typedef void(^MTBlockResultVoid)(void);
 
     @property (nonatomic, weak) IBOutlet UIView *backgroundContainer;
 
-    @property (nonatomic, strong) MADWatermarkScrollView *scrollView;
-    @property (nonatomic, weak) UIView *contentView;
+    @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
     @property (nonatomic, strong) NSMutableSet *rootTables;
 
@@ -178,30 +176,22 @@ typedef void(^MTBlockResultVoid)(void);
     self.definesPresentationContext = NO;
     
     self.backgroundContainer.layer.borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
-
-    MADQueryVisualizationContentView *contentView = [[MADQueryVisualizationContentView alloc] initWithFrame:self.backgroundContainer.bounds];
     
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;
     self.view.opaque = YES;
     
-    MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
+    MADQueryVisualizationScrollView *scrollView = [[MADQueryVisualizationScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
     scrollView.delegate = self;
     scrollView.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
     scrollView.opaque = NO;
-    [scrollView addSubview:contentView];
+
     
     [self.backgroundContainer addSubview:scrollView];
     
-    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:contentView andHeight:contentViewHeight];
-    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:contentView andWidth:contentViewWidth];
-    
-    NSArray *containerViewConstraints = @[layoutConstraintSizeHeight, layoutConstraintSizeWidth];
-    [contentView addConstraints:containerViewConstraints];
     
     
     NSDictionary *viewDictionary = @{@"sv" : scrollView,
-                                     @"cv" : contentView,
                                      @"bg" : self.backgroundContainer};
     
     NSMutableArray *constraints = [NSMutableArray new];
@@ -219,15 +209,10 @@ typedef void(^MTBlockResultVoid)(void);
     [self.backgroundContainer addConstraints:constraints];
     [constraints removeAllObjects];
     
-    NSArray *constraints3 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[cv]|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:viewDictionary];
-    NSArray *constraints4 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[cv]|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:viewDictionary];
-    [constraints addObjectsFromArray:constraints3];
-    [constraints addObjectsFromArray:constraints4];
     [scrollView addConstraints:constraints];
     [constraints removeAllObjects];
     
     self.scrollView = scrollView;
-    self.contentView = contentView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -275,7 +260,6 @@ typedef void(^MTBlockResultVoid)(void);
     [super viewWillLayoutSubviews];
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    self.scrollView.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);
     self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.height);
     [self layoutQueryTables];
     [self layoutQueryLinks];
@@ -364,7 +348,7 @@ typedef void(^MTBlockResultVoid)(void);
             
             //Going to assume that it's a top level table.
             [self.rootTables addObject:((RptqQueryTable *)insertedObject).objectID];
-            CGPoint insertTableAnchorPoint = CGPointMake(CGPointZero.x + 500, self.contentView.bounds.size.height / (self.rootTables.count + 2) * (self.rootTables.count + 1));
+            CGPoint insertTableAnchorPoint = CGPointMake(CGPointZero.x + 500, self.scrollView.contentView.bounds.size.height / (self.rootTables.count + 2) * (self.rootTables.count + 1));
             [self addSchemaViewControllerForTable:insertedObject center:insertTableAnchorPoint root:YES animated:YES];
             [self.view layoutIfNeeded];
         }
@@ -514,7 +498,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     UIWindow __weak *window = [[UIApplication sharedApplication] windows][0];
     gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
-                                                  toView: self.contentView];
+                                                  toView: self.scrollView.contentView];
     [self didMoveFieldRect:self.controllersByObjectID[gestureRecognizer.view.objectIdTag]
                   animated:NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -529,7 +513,7 @@ typedef void(^MTBlockResultVoid)(void);
     for (UIViewController *viewController in self.childViewControllers) {
         [self removeViewController:viewController];
     }
-    for (UIView *subview in self.contentView.subviews) {
+    for (UIView *subview in self.scrollView.contentView.subviews) {
         [subview removeFromSuperview];
     }
 }
@@ -607,7 +591,7 @@ typedef void(^MTBlockResultVoid)(void);
         if (tableIdVertext.object != nil) {
             RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
             BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
-            [self addSchemaViewControllerForTable:table center:self.contentView.center root:topLevel animated:animated];
+            [self addSchemaViewControllerForTable:table center:self.scrollView.contentView.center root:topLevel animated:animated];
             if (topLevel) {
                 [self.rootTables addObject:table.objectID.URIRepresentation];
             }
@@ -706,8 +690,8 @@ typedef void(^MTBlockResultVoid)(void);
     [viewController willMoveToParentViewController:self];
     [self addChildViewController:viewController];
     viewController.view.center = center;
-    [self.contentView addSubview:viewController.view];
-    [self.contentView addConstraints:constraints];
+    [self.scrollView.contentView addSubview:viewController.view];
+    [self.scrollView.contentView addConstraints:constraints];
     [viewController didMoveToParentViewController:self];
     return viewController;
 }
@@ -736,7 +720,7 @@ typedef void(^MTBlockResultVoid)(void);
     }
     
     
-    [self.contentView addSubview:connectorView];
+    [self.scrollView.contentView addSubview:connectorView];
 
     MTBlockResultVoid animateTwo = ^() {
         connectorView.frame = desiredFrame;
@@ -793,7 +777,7 @@ typedef void(^MTBlockResultVoid)(void);
     } else if (leftCellFrameInTable.origin.y < leftTableViewController.schemaTableViewController.frame.origin.y) {
         leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableViewController.schemaTableViewController.frame.origin.y, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
     }
-    CGRect leftCellFrameInView = [self.contentView convertRect:leftCellFrameInTable fromView:leftTableViewController.view];
+    CGRect leftCellFrameInView = [self.scrollView.contentView convertRect:leftCellFrameInTable fromView:leftTableViewController.view];
     CGPoint leftCellAnchorPoint = CGCenterOfRect(leftCellFrameInView);
     leftCellAnchorPoint.x += paddingLeft;
     leftCellAnchorPoint.y += 0.0000f;
@@ -809,7 +793,7 @@ typedef void(^MTBlockResultVoid)(void);
         rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableViewController.schemaTableViewController.frame.origin.y, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
     }
     
-    CGRect rightCellFrameInView = [self.contentView convertRect:rightCellFrameInTable fromView:rightTableViewController.view];
+    CGRect rightCellFrameInView = [self.scrollView.contentView convertRect:rightCellFrameInTable fromView:rightTableViewController.view];
     CGPoint rightCellAnchorPoint = CGCenterOfRect(rightCellFrameInView);
     rightCellAnchorPoint.x -= paddingLeft;
     rightCellAnchorPoint.y += -2.0000f;
@@ -873,6 +857,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset { }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView { return self.contentView; }
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView { return self.scrollView.contentView; }
 
 @end

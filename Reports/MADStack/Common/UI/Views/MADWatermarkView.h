@@ -12,10 +12,6 @@
 #import <UIKit/UIView.h>
 #import <UIKit/UIScrollView.h>
 
-@interface MADWatermarkScrollView : UIScrollView
-
-@end
-
 @interface MADWatermarkView : UIView
 
 @end
