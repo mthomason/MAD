@@ -393,7 +393,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)openFileWithUrl:(NSURL *)url {
     [self.openFileDelegate openDocumentAtURL:url completionHandler:^(BOOL success, UIManagedDocument *document) {
         if (success) {
-            self.fileManager.openDocument = document;
             [self performSelectorOnMainThread:@selector(handleFileOpenCompletion:) withObject:self waitUntilDone:NO];
         }
         [self reenable];

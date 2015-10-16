@@ -365,12 +365,13 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    self.fileManager.openDocument = document;
     
     __weak MADOpenFileViewController *weakself = self;
-    [document openWithCompletionHandler:^(BOOL success) {
+    [weakself.fileManager.openDocument openWithCompletionHandler:^(BOOL success) {
         
-        if (success) [document activeDocumentModel];
-        handler(success, document);
+        if (success) [((MADocument *)weakself.fileManager.openDocument) activeDocumentModel];
+        handler(success, weakself.fileManager.openDocument);
         [weakself reenable];
     }];
 }
