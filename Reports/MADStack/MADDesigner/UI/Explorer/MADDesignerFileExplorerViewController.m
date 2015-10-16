@@ -59,10 +59,10 @@ NSString * const MADUtiType                                     = @"com.everyday
 @property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
 @property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
 
-@property (nonatomic, strong) MADQueryBuilderSplitViewController *splitViewController;
+@property (nonatomic, strong)   MADQueryBuilderSplitViewController *splitViewController;
 
-@property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
-@property (atomic, assign) BOOL aboutViewControllerOnScreen;
+@property (nonatomic, assign)   BOOL shouldShowAddDocumentPopover;
+@property (atomic, assign)      BOOL aboutViewControllerOnScreen;
 
 @end
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C3DCC461BCAFA7E00ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC451BCAFA7E00ABE231 /* MADFoundation.framework */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C70149F1BACDC6800301713 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7014941BACDC6800301713 /* MADMySQL.framework */; settings = {ASSET_TAGS = (); }; };
 		4C7014A41BACDC6800301713 /* MADMySQLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7014A31BACDC6800301713 /* MADMySQLTests.m */; };
@@ -226,7 +227,6 @@
 		4C9374021BAD2A8300D6BD62 /* MysqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */; settings = {ASSET_TAGS = (); }; };
 		4C9374031BAD2A8300D6BD62 /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */; settings = {ASSET_TAGS = (); }; };
 		4C9374411BAD333400D6BD62 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C70152D1BACDC9900301713 /* libmysqlclient.a */; };
-		4C9374501BAD35C300D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C93744B1BAD35AB00D6BD62 /* MADFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -237,30 +237,10 @@
 			remoteGlobalIDString = 4C7014931BACDC6800301713;
 			remoteInfo = MADMySQL;
 		};
-		4C93744A1BAD35AB00D6BD62 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C9374451BAD35AA00D6BD62 /* MADFoundation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4C93729A1BACFC9200D6BD62;
-			remoteInfo = MADFoundation;
-		};
-		4C93744C1BAD35AB00D6BD62 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C9374451BAD35AA00D6BD62 /* MADFoundation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4C9372A41BACFC9200D6BD62;
-			remoteInfo = MADFoundationTests;
-		};
-		4C93744E1BAD35B900D6BD62 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C9374451BAD35AA00D6BD62 /* MADFoundation.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C9372991BACFC9200D6BD62;
-			remoteInfo = MADFoundation;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C3DCC451BCAFA7E00ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C7014941BACDC6800301713 /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
 		4C7014991BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -519,7 +499,6 @@
 		4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlRollbackException.m; path = MADMySQL/MysqlRollbackException.m; sourceTree = "<group>"; };
 		4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlServer.m; path = MADMySQL/MysqlServer.m; sourceTree = "<group>"; };
 		4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlUpdate.m; path = MADMySQL/MysqlUpdate.m; sourceTree = "<group>"; };
-		4C9374451BAD35AA00D6BD62 /* MADFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADFoundation.xcodeproj; path = ../MADFoundation/MADFoundation.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,7 +506,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C9374501BAD35C300D6BD62 /* MADFoundation.framework in Frameworks */,
+				4C3DCC461BCAFA7E00ABE231 /* MADFoundation.framework in Frameworks */,
 				4C9374411BAD333400D6BD62 /* libmysqlclient.a in Frameworks */,
 				4C9373CB1BAD28AC00D6BD62 /* libc++.tbd in Frameworks */,
 			);
@@ -926,18 +905,9 @@
 		4C93743D1BAD2FFC00D6BD62 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C9374451BAD35AA00D6BD62 /* MADFoundation.xcodeproj */,
+				4C3DCC451BCAFA7E00ABE231 /* MADFoundation.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4C9374461BAD35AA00D6BD62 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4C93744B1BAD35AB00D6BD62 /* MADFoundation.framework */,
-				4C93744D1BAD35AB00D6BD62 /* MADFoundationTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1165,7 +1135,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C93744F1BAD35B900D6BD62 /* PBXTargetDependency */,
 			);
 			name = MADMySQL;
 			productName = MADMySQL;
@@ -1217,12 +1186,6 @@
 			mainGroup = 4C70148A1BACDC6800301713;
 			productRefGroup = 4C7014951BACDC6800301713 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 4C9374461BAD35AA00D6BD62 /* Products */;
-					ProjectRef = 4C9374451BAD35AA00D6BD62 /* MADFoundation.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				4C7014931BACDC6800301713 /* MADMySQL */,
@@ -1230,23 +1193,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		4C93744B1BAD35AB00D6BD62 /* MADFoundation.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MADFoundation.framework;
-			remoteRef = 4C93744A1BAD35AB00D6BD62 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4C93744D1BAD35AB00D6BD62 /* MADFoundationTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MADFoundationTests.xctest;
-			remoteRef = 4C93744C1BAD35AB00D6BD62 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4C7014921BACDC6800301713 /* Resources */ = {
@@ -1303,11 +1249,6 @@
 			isa = PBXTargetDependency;
 			target = 4C7014931BACDC6800301713 /* MADMySQL */;
 			targetProxy = 4C7014A01BACDC6800301713 /* PBXContainerItemProxy */;
-		};
-		4C93744F1BAD35B900D6BD62 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = MADFoundation;
-			targetProxy = 4C93744E1BAD35B900D6BD62 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

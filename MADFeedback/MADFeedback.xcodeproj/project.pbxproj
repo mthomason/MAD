@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C3DCC481BCAFABC00ABE231 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC471BCAFABC00ABE231 /* MADCocoaExtensions.framework */; };
 		4C401F401BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F351BAE780300BAE5FC /* Info.plist */; settings = {ASSET_TAGS = (); }; };
 		4C401F411BAE780300BAE5FC /* MADFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F361BAE780300BAE5FC /* MADFeedback.h */; settings = {ASSET_TAGS = (); }; };
 		4C401F421BAE780300BAE5FC /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */; settings = {ASSET_TAGS = (); }; };
@@ -17,7 +18,6 @@
 		4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */; settings = {ASSET_TAGS = (); }; };
 		4C401F491BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F3F1BAE780300BAE5FC /* Info.plist */; settings = {ASSET_TAGS = (); }; };
 		4C401F4A1BAE78A100BAE5FC /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F4C1BAE791B00BAE5FC /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C401F4B1BAE791B00BAE5FC /* MADCocoaExtensions.framework */; };
 		4C8DCFA01B8FCD4D0078563C /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */; };
 		4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB31B90C9F50078563C /* UIKit.framework */; };
 		4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC035E61B90FF99001A3CC5 /* MessageUI.framework */; };
@@ -34,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C3DCC471BCAFABC00ABE231 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C401F351BAE780300BAE5FC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C401F361BAE780300BAE5FC /* MADFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedback.h; sourceTree = "<group>"; };
 		4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFeedbackFrustration.h; sourceTree = "<group>"; };
@@ -44,7 +45,6 @@
 		4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Feedback.m"; sourceTree = "<group>"; };
 		4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackTests.m; sourceTree = "<group>"; };
 		4C401F3F1BAE780300BAE5FC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C401F4B1BAE791B00BAE5FC /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8DCF9F1B8FCD4D0078563C /* MADFeedback.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADFeedback.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8DCFB31B90C9F50078563C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -56,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C401F4C1BAE791B00BAE5FC /* MADCocoaExtensions.framework in Frameworks */,
+				4C3DCC481BCAFABC00ABE231 /* MADCocoaExtensions.framework in Frameworks */,
 				4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */,
 				4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */,
 			);
@@ -119,7 +119,7 @@
 		4C8DCFFC1B90DF1E0078563C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C401F4B1BAE791B00BAE5FC /* MADCocoaExtensions.framework */,
+				4C3DCC471BCAFABC00ABE231 /* MADCocoaExtensions.framework */,
 				4C8DCFB31B90C9F50078563C /* UIKit.framework */,
 				4CC035E61B90FF99001A3CC5 /* MessageUI.framework */,
 			);

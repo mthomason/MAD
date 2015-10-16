@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */; };
+		4C3DCC351BCAF72100ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */; };
+		4C3DCC391BCAF74200ABE231 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */; };
+		4C3DCC3A1BCAF74200ABE231 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC371BCAF74200ABE231 /* MADSqlite3.framework */; };
+		4C3DCC3B1BCAF74200ABE231 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC381BCAF74200ABE231 /* MADTdsClient.framework */; };
+		4C3DCC3E1BCAF75B00ABE231 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC3C1BCAF75B00ABE231 /* MADBarcodes.framework */; };
+		4C3DCC3F1BCAF75B00ABE231 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC3D1BCAF75B00ABE231 /* MADDataStructures.framework */; };
+		4C3DCC421BCAF77800ABE231 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC411BCAF77800ABE231 /* MADFileManager.framework */; };
 		4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CD81BAE3AF800BAE5FC /* MTPaper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401D251BAE3AF800BAE5FC /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CD91BAE3AF800BAE5FC /* MTPaper.m */; settings = {ASSET_TAGS = (); }; };
 		4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */; settings = {ASSET_TAGS = (); }; };
@@ -348,16 +356,8 @@
 		4CC284A01BADE9F700775B72 /* RptqRelationship+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284681BADE98F00775B72 /* RptqRelationship+Extras.m */; settings = {ASSET_TAGS = (); }; };
 		4CC284A11BADE9F800775B72 /* RptqUserCredentals+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284691BADE98F00775B72 /* RptqUserCredentals+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284A21BADE9FB00775B72 /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2846A1BADE98F00775B72 /* RptqUserCredentals+Extras.m */; settings = {ASSET_TAGS = (); }; };
-		4CC284C01BADEB3E00775B72 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284BF1BADEB3E00775B72 /* MADTdsClient.framework */; };
 		4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C11BADEB6100775B72 /* libsybdb.a */; };
 		4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C31BADEBA500775B72 /* CoreText.framework */; };
-		4CC284C61BADEBAF00775B72 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C51BADEBAF00775B72 /* MADFileManager.framework */; };
-		4CC284C81BADEBB600775B72 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C71BADEBB600775B72 /* MADCocoaExtensions.framework */; };
-		4CC284CA1BADEBBE00775B72 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C91BADEBBE00775B72 /* MADBarcodes.framework */; };
-		4CC284CC1BADEBC600775B72 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284CB1BADEBC600775B72 /* MADDataStructures.framework */; };
-		4CC284CE1BADEBCA00775B72 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284CD1BADEBCA00775B72 /* MADSqlite3.framework */; };
-		4CC284D01BADEBD600775B72 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284CF1BADEBD600775B72 /* MADMySQL.framework */; };
-		4CC284D21BADEBE500775B72 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284D11BADEBE400775B72 /* MADFoundation.framework */; };
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; settings = {ASSET_TAGS = (); }; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
@@ -374,6 +374,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
+		4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
+		4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADMySQL.framework"; sourceTree = "<group>"; };
+		4C3DCC371BCAF74200ABE231 /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADSqlite3.framework"; sourceTree = "<group>"; };
+		4C3DCC381BCAF74200ABE231 /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADTdsClient.framework"; sourceTree = "<group>"; };
+		4C3DCC3C1BCAF75B00ABE231 /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADBarcodes.framework"; sourceTree = "<group>"; };
+		4C3DCC3D1BCAF75B00ABE231 /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADDataStructures.framework"; sourceTree = "<group>"; };
+		4C3DCC411BCAF77800ABE231 /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFileManager.framework"; sourceTree = "<group>"; };
 		4C401CD81BAE3AF800BAE5FC /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaper.h; path = MAD/MADPaper/MTPaper.h; sourceTree = "<group>"; };
 		4C401CD91BAE3AF800BAE5FC /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaper.m; path = MAD/MADPaper/MTPaper.m; sourceTree = "<group>"; };
 		4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA0.h; path = MAD/MADPaper/MTPaperA0.h; sourceTree = "<group>"; };
@@ -719,16 +727,8 @@
 		4CC284681BADE98F00775B72 /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqRelationship+Extras.m"; path = "MAD/rptq/RptqRelationship+Extras.m"; sourceTree = "<group>"; };
 		4CC284691BADE98F00775B72 /* RptqUserCredentals+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqUserCredentals+Extras.h"; path = "MAD/rptq/RptqUserCredentals+Extras.h"; sourceTree = "<group>"; };
 		4CC2846A1BADE98F00775B72 /* RptqUserCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqUserCredentals+Extras.m"; path = "MAD/rptq/RptqUserCredentals+Extras.m"; sourceTree = "<group>"; };
-		4CC284BF1BADEB3E00775B72 /* MADTdsClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADTdsClient.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADTdsClient.framework"; sourceTree = "<group>"; };
 		4CC284C11BADEB6100775B72 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
 		4CC284C31BADEBA500775B72 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		4CC284C51BADEBAF00775B72 /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFileManager.framework"; sourceTree = "<group>"; };
-		4CC284C71BADEBB600775B72 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
-		4CC284C91BADEBBE00775B72 /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADBarcodes.framework"; sourceTree = "<group>"; };
-		4CC284CB1BADEBC600775B72 /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADDataStructures.framework"; sourceTree = "<group>"; };
-		4CC284CD1BADEBCA00775B72 /* MADSqlite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADSqlite3.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADSqlite3.framework"; sourceTree = "<group>"; };
-		4CC284CF1BADEBD600775B72 /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADMySQL.framework"; sourceTree = "<group>"; };
-		4CC284D11BADEBE400775B72 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4CF781441BADE5EA0050A67D /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781471BADE5EA0050A67D /* MAD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
 		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -742,14 +742,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CC284D21BADEBE500775B72 /* MADFoundation.framework in Frameworks */,
-				4CC284D01BADEBD600775B72 /* MADMySQL.framework in Frameworks */,
-				4CC284CE1BADEBCA00775B72 /* MADSqlite3.framework in Frameworks */,
-				4CC284CC1BADEBC600775B72 /* MADDataStructures.framework in Frameworks */,
-				4CC284CA1BADEBBE00775B72 /* MADBarcodes.framework in Frameworks */,
-				4CC284C81BADEBB600775B72 /* MADCocoaExtensions.framework in Frameworks */,
-				4CC284C01BADEB3E00775B72 /* MADTdsClient.framework in Frameworks */,
-				4CC284C61BADEBAF00775B72 /* MADFileManager.framework in Frameworks */,
+				4C3DCC421BCAF77800ABE231 /* MADFileManager.framework in Frameworks */,
+				4C3DCC3E1BCAF75B00ABE231 /* MADBarcodes.framework in Frameworks */,
+				4C3DCC3F1BCAF75B00ABE231 /* MADDataStructures.framework in Frameworks */,
+				4C3DCC391BCAF74200ABE231 /* MADMySQL.framework in Frameworks */,
+				4C3DCC3A1BCAF74200ABE231 /* MADSqlite3.framework in Frameworks */,
+				4C3DCC3B1BCAF74200ABE231 /* MADTdsClient.framework in Frameworks */,
+				4C3DCC351BCAF72100ABE231 /* MADFoundation.framework in Frameworks */,
+				4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */,
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
 				4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */,
 			);
@@ -1202,15 +1202,15 @@
 		4CC284D41BADEC7F00775B72 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4CC284D11BADEBE400775B72 /* MADFoundation.framework */,
-				4CC284CF1BADEBD600775B72 /* MADMySQL.framework */,
-				4CC284CD1BADEBCA00775B72 /* MADSqlite3.framework */,
-				4CC284CB1BADEBC600775B72 /* MADDataStructures.framework */,
-				4CC284C91BADEBBE00775B72 /* MADBarcodes.framework */,
-				4CC284C71BADEBB600775B72 /* MADCocoaExtensions.framework */,
-				4CC284C51BADEBAF00775B72 /* MADFileManager.framework */,
+				4C3DCC411BCAF77800ABE231 /* MADFileManager.framework */,
+				4C3DCC3C1BCAF75B00ABE231 /* MADBarcodes.framework */,
+				4C3DCC3D1BCAF75B00ABE231 /* MADDataStructures.framework */,
+				4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */,
+				4C3DCC371BCAF74200ABE231 /* MADSqlite3.framework */,
+				4C3DCC381BCAF74200ABE231 /* MADTdsClient.framework */,
+				4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */,
+				4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */,
 				4CC284C31BADEBA500775B72 /* CoreText.framework */,
-				4CC284BF1BADEB3E00775B72 /* MADTdsClient.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

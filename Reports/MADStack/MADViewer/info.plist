@@ -47,17 +47,17 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.0.1</string>
+	<string>8.0.351</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>7.0.1</string>
+	<string>8.0.351</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADRev</key>
 	<string>1376</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 EVERYDAY APPS LLC.  All rights reserved.</string>
+	<string>Copyright © 2015 EVERYDAY APPS LLC.  All rights reserved.</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

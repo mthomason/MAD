@@ -117,16 +117,8 @@
 		4C66C1611BA887EB00663575 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4C66C1621BA887F500663575 /* Libraries */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		4C66C1621BA887F500663575 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Libraries;
 			sourceTree = "<group>";
 		};
 		4C66C1631BA8880600663575 /* freetds */ = {

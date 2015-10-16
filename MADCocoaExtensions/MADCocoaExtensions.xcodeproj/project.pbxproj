@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C3DCC271BCAF63400ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */; };
 		4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; settings = {ASSET_TAGS = (); }; };
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
@@ -49,7 +50,6 @@
 		4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205A21BA7E2A2000E6A59 /* MTMath.m */; settings = {ASSET_TAGS = (); }; };
 		4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205D01BA7E308000E6A59 /* CFNetwork.framework */; };
 		4C5205D61BA7E5FF000E6A59 /* UILabel+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205851BA7E2A2000E6A59 /* UILabel+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C9372D81BAD07E800D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
 		4C5205621BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -108,7 +109,6 @@
 		4C5205A11BA7E2A2000E6A59 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = MADCocoaExtensions/MTMath.h; sourceTree = "<group>"; };
 		4C5205A21BA7E2A2000E6A59 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTMath.m; path = MADCocoaExtensions/MTMath.m; sourceTree = "<group>"; };
 		4C5205D01BA7E308000E6A59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C9372D81BAD07E800D6BD62 /* MADFoundation.framework in Frameworks */,
+				4C3DCC271BCAF63400ABE231 /* MADFoundation.framework in Frameworks */,
 				4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,7 +226,7 @@
 		4C5205CF1BA7E2FA000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C9372D71BAD07E800D6BD62 /* MADFoundation.framework */,
+				4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */,
 				4C5205D01BA7E308000E6A59 /* CFNetwork.framework */,
 			);
 			name = Frameworks;
