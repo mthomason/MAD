@@ -146,9 +146,18 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
                                               managedObjectContext: self.document.managedObjectContext];
+   
+    
     self.titleView.label.text = table.alias;
     self.titleView.label.font = self.titleFont;
     self.titleView.label.textColor = [UIColor whiteColor];
+    
+    [self.hasFieldsObjectIds removeAllObjects];
+
+    NSArray *fields = [table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
+    for (RptqQueryField *field in fields) {
+        [self.hasFieldsObjectIds addObject:field.objectID];
+    }
 }
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
@@ -195,19 +204,6 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
-                                                   managedObjectContext: self.document.managedObjectContext];
-    
-    [self.hasFieldsObjectIds removeAllObjects];
-    if (queryTable != nil) {
-        
-        NSArray *fields = [queryTable.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
-        for (RptqQueryField *field in fields) {
-            [self.hasFieldsObjectIds addObject:field.objectID];
-        }
-        
-    }
     return self.hasFieldsObjectIds.count;
 }
 
