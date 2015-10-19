@@ -109,7 +109,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) MTRulerView *ruler;
 @property (nonatomic, strong) MADPromptManager *promptManager;
 
-@property (nonatomic, weak) IBOutlet UIView *toolbox;                               //iPhone only
 @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
@@ -124,7 +123,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
-@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintToolbarHeight;
 
 @property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelHeightContainer;
 @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsSidesBorder;
@@ -151,7 +149,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
 @property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
 
-@property (nonatomic, weak)   IBOutlet UIToolbar *toolbarBottom;                          //iPhone only
 @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
 
 @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
@@ -363,8 +360,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
     
-    self.toolbox.backgroundColor = [UIColor clearColor];
-    
     self.boundsOnDisappear = CGRectZero;
     self.zoomScaleRestore = -1.0000f;
     self.shownAndHidden = NO;
@@ -418,18 +413,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
     self.navigationControllerSectionLayoutSettings.preferredContentSize =  CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
     
-    NSLayoutConstraint *viewToolbarHeightHidden = [NSLayoutConstraint toolbarHeightHidden: self.toolbarBottom];
-    NSLayoutConstraint *toolboxHeightHidden = [NSLayoutConstraint toolboxHeightHidden: self.toolbox];
-    NSLayoutConstraint *toolBoxViewBottom = [NSLayoutConstraint toolBoxBottom: self.toolbox container: self.view];
     NSLayoutConstraint *viewScrollerTop = [NSLayoutConstraint viewScrollerTop: self.scroller view: self.topLayoutGuide];
-    NSLayoutConstraint *toolbarBottomToToolboxView = [NSLayoutConstraint viewBottom: self.toolbarBottom container: self.toolbox];
-    [constraints addObject: viewToolbarHeightHidden];
-    [constraints addObject: toolboxHeightHidden];
-    [constraints addObject: toolBoxViewBottom];
     [constraints addObject: viewScrollerTop];
-    [constraints addObject: toolbarBottomToToolboxView];
-    
-    self.layoutConstraintToolbarHeight = viewToolbarHeightHidden;
     
     NSMutableSet *selectedObjectIds = [NSMutableSet new];
     self.selectedObjectIds = selectedObjectIds;
