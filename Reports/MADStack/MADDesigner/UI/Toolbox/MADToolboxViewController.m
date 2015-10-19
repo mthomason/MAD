@@ -201,7 +201,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
     viewControllerToShow.view.frame = self.view.bounds;
     
-    NSAssert(viewControllerToHide == nil, @"No view controller to hide.");
     __weak MADToolboxViewController *weakself = self;
     [self addChildViewController:viewControllerToShow];
     [viewControllerToHide willMoveToParentViewController:nil];
@@ -267,8 +266,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
 
     viewControllerToShow.view.frame = self.view.bounds;
-    
-    NSAssert(viewControllerToHide == nil, @"No view controller to hide.");
     
     __weak MADToolboxViewController *weakself = self;
     [self addChildViewController:viewControllerToShow];
