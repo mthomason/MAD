@@ -535,6 +535,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
                                                                            target: nil
                                                                            action: nil];
+            barButtonItem.isAccessibilityElement = NO;
         } else {
             barButtonItem = (UIBarButtonItem *)self.rightBarButtonItemHolderWhileActivity;
         }

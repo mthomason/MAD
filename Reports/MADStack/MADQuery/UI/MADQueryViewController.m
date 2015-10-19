@@ -1377,6 +1377,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     header.labelTitle.text = NSLocalizedString(@"Database Information", @"Database Information");
     header.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     header.buttonAdd.hidden = YES;
+    header.buttonAdd.isAccessibilityElement = NO;
     return header;
 }
 
@@ -1387,6 +1388,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [header.buttonAdd addTarget: self
                          action: @selector(addTable:)
                forControlEvents: UIControlEventTouchUpInside];
+    header.buttonAdd.isAccessibilityElement = YES;
+    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table.", @"Adds a new table.");
     return header;
 }
 
@@ -1397,6 +1401,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [header.buttonAdd addTarget: self
                          action: @selector(addLink:)
                forControlEvents: UIControlEventTouchUpInside];
+    header.buttonAdd.isAccessibilityElement = YES;
+    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table join.", @"Adds a new table join.");
     return header;
 }
 
@@ -1408,6 +1415,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [header.buttonAdd addTarget: self
                          action: selector
                forControlEvents: UIControlEventTouchUpInside];
+    header.buttonAdd.isAccessibilityElement = YES;
+    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new query grouping.", @"Adds a new query grouping.");
     return header;
 }
 
@@ -1418,6 +1428,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     header.buttonAdd.enabled = NO;
     header.buttonAdd.hidden = YES;
     [header.labelTitle sizeToFit];
+    header.buttonAdd.isAccessibilityElement = NO;
     return header;
 }
 
@@ -1428,12 +1439,14 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     header.labelTitle.text = title;
     [header.buttonAdd addTarget: self action: selector forControlEvents: UIControlEventTouchUpInside];
     [header.labelTitle sizeToFit];
+    header.buttonAdd.isAccessibilityElement = YES;
+    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a predicate to filter the query results.", @"Adds a predicate to filter the query results.");
     return header;
 }
 
 - (MTViewTableHeader *)tableHeader {
-    CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight);
-    MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:rect];
+    MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight)];
     return tableHeader;
 }
 
