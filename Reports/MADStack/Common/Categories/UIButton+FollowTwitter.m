@@ -8,6 +8,8 @@
 
 #import "UIButton+FollowTwitter.h"
 #import "NSAttributedString+Common.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <UIKit/UIAccessibility.h>
 
 @implementation UIButton (FollowTwitter)
 
@@ -35,6 +37,10 @@
             b.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 32.0000f);
             break;
     }
+    b.accessibilityLabel = NSLocalizedString(@"Twitter Follow", @"Twitter Follow");
+    b.accessibilityHint = NSLocalizedString(@"Follow us on Twitter.", @"Follow us on Twitter.");
+    b.isAccessibilityElement = YES;
+    b.accessibilityTraits = UIAccessibilityTraitButton;
     [b addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     [b setAttributedTitle:followOnTwitter forState:UIControlStateNormal];
     return b;

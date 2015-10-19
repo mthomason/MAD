@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIButton.h>
 #import "MADSizeGeneral.h"
 
 @interface UIButton (FollowTwitter)
