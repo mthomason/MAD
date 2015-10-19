@@ -62,7 +62,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 0.4500f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
-
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(rename:)];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
@@ -267,16 +267,16 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 - (void)startWobble {
     if (self.wobbling == NO) {
         self.wobbling = YES;
-        NSInteger randomInt = arc4random_uniform(500);
+        u_int32_t randomInt = arc4random_uniform(500);
         float r = (randomInt / 500.0000f) + 0.5000f;
-        CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-        CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
+        CGAffineTransform leftWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+        CGAffineTransform rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
         
         self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-        [UIView animateWithDuration:0.1 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             self.transform = leftWobble;
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.1
+            [UIView animateWithDuration:0.2
                                   delay:0
                                 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionBeginFromCurrentState
                              animations:^{
@@ -293,6 +293,67 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     self.wobbling = NO;
     [self.layer removeAllAnimations];
     self.transform = CGAffineTransformIdentity;
+}
+
+-(BOOL)shouldGroupAccessibilityChildren{
+    return YES;
+}
+
+- (BOOL)isAccessibilityElement {
+    return NO;
+}
+
+- (NSString *)accessibilityHint {
+    NSString *documentHint = self.wobbling ? NSLocalizedString(@"Selects document named %@.", @"Selects document named %@.") : NSLocalizedString(@"Opens document named %@.", @"Opens document named %@.");
+    return [NSString stringWithFormat: documentHint, self.labelTitle.text];
+}
+
+- (NSString *)accessibilityLabel {
+    NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
+    return [NSString stringWithFormat: documentName, self.labelTitle.text];
+}
+
+- (NSInteger)accessibilityElementCount {
+    return 2;
+}
+
+- (NSInteger)indexOfAccessibilityElement:(id)element {
+    if ([element isKindOfClass:[UIImageView class]]) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+- (id)accessibilityElementAtIndex:(NSInteger)index {
+    switch (index) {
+        case 0: {
+            NSString *documentHint = self.wobbling ? NSLocalizedString(@"Selects document named %@.", @"Selects document named %@.") : NSLocalizedString(@"Opens document named %@.", @"Opens document named %@.");
+            NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
+            self.imagePreview.isAccessibilityElement = YES;
+            self.imagePreview.accessibilityHint = [NSString stringWithFormat: documentHint, self.labelTitle.text];
+            self.imagePreview.accessibilityLabel = [NSString stringWithFormat: documentName, self.labelTitle.text];
+            self.imagePreview.accessibilityTraits = UIAccessibilityTraitButton;
+            return self.imagePreview;
+            break;
+        }
+        case 1: {
+            NSString *documentName = NSLocalizedString(@"Document %@", @"Document %@");
+            self.labelTitle.isAccessibilityElement = YES;
+            self.labelTitle.accessibilityLabel = [NSString stringWithFormat: documentName, self.labelTitle.text];
+            self.labelTitle.accessibilityHint = NSLocalizedString(@"Renames document.", @"Renames document.");;
+            self.labelTitle.accessibilityTraits = UIAccessibilityTraitButton;
+            return self.labelTitle;
+            break;
+        }
+        default:
+            return nil;
+            break;
+    }
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    return UIAccessibilityTraitButton;
 }
 
 @end

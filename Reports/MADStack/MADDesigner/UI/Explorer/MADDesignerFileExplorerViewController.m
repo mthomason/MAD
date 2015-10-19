@@ -126,6 +126,9 @@ NSString * const MADUtiType                                     = @"com.everyday
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     MADAppDelegate delegate = [UIApplication AppDelegate];
     titleView.text = [delegate name];
+    titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
+    titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+    
     self.navigationItem.titleView = titleView;
     self.navigationItem.hidesBackButton = YES;
     
@@ -135,6 +138,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     self.openFileDelegate = self;
     self.aboutViewControllerOnScreen = NO;
 
+    self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
+    self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
     self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 
 }

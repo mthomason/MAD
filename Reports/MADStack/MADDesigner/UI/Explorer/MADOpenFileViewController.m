@@ -50,7 +50,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 @property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
 @property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemAction;
-@property (nonatomic, strong) IBOutlet  UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, strong)           UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemInformationDocument;
 @property (nonatomic, strong)           UIBarButtonItem *barButtonItemEditDone;
 @property (nonatomic, weak)   IBOutlet  UIBarButtonItem *barButtonItemTrash;
@@ -225,6 +225,13 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     UIBarButtonItem *editButton = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
     self.barButtonItemEdit = editButton;
+    self.barButtonItemEdit.accessibilityHint = NSLocalizedString(@"Enables document list edit mode.", @"Enables document list edit mode.");
+    self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
+    self.barButtonItemAction.accessibilityHint = NSLocalizedString(@"Preforms an action on the selected document.", @"Preforms an action on the selected document.");
+    self.barButtonItemDuplicate.accessibilityHint = NSLocalizedString(@"Duplicates the selected documents.", @"Duplicates the selected documents.");
+    self.barButtonItemInformationDocument.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
+    self.barButtonItemInformation.accessibilityHint = NSLocalizedString(@"Displays application information.", @"Displays application information.");
+    self.barButtonItemAbout.accessibilityHint = NSLocalizedString(@"Displays application about screen.", @"Displays application about screen.");
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
 }
 
