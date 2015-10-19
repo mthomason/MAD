@@ -106,14 +106,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UIScrollViewDelegate,
     UIImagePickerControllerDelegate>
 
-@property (nonatomic, strong) MTRulerView *ruler;
-@property (nonatomic, strong) MADPromptManager *promptManager;
-
 @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-@property (nonatomic, assign) BOOL editAggregate;
+@property (nonatomic, strong) MTRulerView *ruler;
+@property (nonatomic, strong) MADPromptManager *promptManager;
 
 @property (nonatomic, strong) NSArray *sectionViewsArray;
 @property (nonatomic, strong) NSArray *sectionControlViewsArray;
@@ -153,10 +151,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
 
-@property (nonatomic, assign) BOOL toolboxVisible;
-@property (nonatomic, assign) BOOL sectionSettingsVisible;
-@property (nonatomic, assign) BOOL insetsSetup;
-@property (nonatomic, assign) BOOL shownAndHidden;
+@property (nonatomic, assign) bool editAggregate;
+@property (nonatomic, assign) bool toolboxVisible;
+@property (nonatomic, assign) bool sectionSettingsVisible;
+@property (nonatomic, assign) bool insetsSetup;
+@property (nonatomic, assign) bool shownAndHidden;
+@property (nonatomic, assign) bool lastMenuItemSelectRequiresElementView;
 
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditDynamicLabel;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditAggregateFunction;
@@ -166,10 +166,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
-
-@property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
-
-@property (nonatomic, weak) UINavigationBar *navigationBar;
 
 @property (nonatomic, assign) CGFloat zoomScaleRestore;
 @property (nonatomic, assign) CGRect boundsOnDisappear;
@@ -329,17 +325,17 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.hidesStatusBar = NO;
     
     MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
+    transitioningDelegate.popoverPresentationControllerDelegate = self;
+    transitioningDelegate.passthroughContainer = self.scroller;
+
     MADToolboxTransitioningDelegate *settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
-    
+    settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
+
     UINavigationController *navigationControllerToolbox = [UINavigationController navigationControllerToolbox];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
-    
-    transitioningDelegate.popoverPresentationControllerDelegate = self;
-    transitioningDelegate.passthroughContainer = self.scroller;
-    
-    settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    
+    navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
+
     MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
     viewControllerToolbox.clearsBackground = [self padLike];
     viewControllerToolbox.document = self.document;
@@ -362,12 +358,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     self.boundsOnDisappear = CGRectZero;
     self.zoomScaleRestore = -1.0000f;
-    self.shownAndHidden = NO;
-    self.editAggregate = NO;
+    self.shownAndHidden = false;
+    self.editAggregate = false;
         
-    self.insetsSetup = NO;
-    self.toolboxVisible = NO;
-    self.sectionSettingsVisible = NO;
+    self.insetsSetup = false;
+    self.toolboxVisible = false;
+    self.sectionSettingsVisible = false;
     
     [self contentViewRemoveAllConstraints];
     [self scrollerRemoveAllConstraints];
@@ -406,12 +402,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewControllerSectionLayoutSettings];
     navigationController.transitioningDelegate = settingsTransitioningDelegate;
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
-    
     self.navigationControllerSectionLayoutSettings = navigationController;
-    self.settingsTransitioningDelegate = settingsTransitioningDelegate;
-    
-    self.navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
     self.navigationControllerSectionLayoutSettings.preferredContentSize =  CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
+    
+    self.settingsTransitioningDelegate = settingsTransitioningDelegate;
     
     NSLayoutConstraint *viewScrollerTop = [NSLayoutConstraint viewScrollerTop: self.scroller view: self.topLayoutGuide];
     [constraints addObject: viewScrollerTop];
@@ -437,7 +431,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [self addObservers];
     
-    self.lastMenuItemSelectRequiresElementView = NO;
+    self.lastMenuItemSelectRequiresElementView = false;
     self.zoomScaleRestore = self.scroller.zoomScale;
     [self.scroller setZoomScale: 1.0000f animated: NO];
     
@@ -613,9 +607,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if ([self insetsSetup] == NO) {
-        self.insetsSetup = YES;
-    }
+    if (self.insetsSetup == false) self.insetsSetup = true;
     
     [self setScrollersEnabled:YES];
     
@@ -638,11 +630,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [self removeObservers];
     
-    [self.ruler removeFromSuperview];
-    for (UIView *view in [self sectionViewsArray]) {
-        [view removeFromSuperview];
-    }
-    for (UIView *view in [self sectionControlViewsArray]) {
+    NSArray *viewsToRemove = [self.sectionViewsArray arrayByAddingObjectsFromArray:self.sectionControlViewsArray];
+    viewsToRemove = [self.sectionViewsArray arrayByAddingObject:self.ruler];
+    for (UIView *view in viewsToRemove) {
         [view removeFromSuperview];
     }
     
@@ -651,7 +641,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self.layoutConstraintsSectionsSidesBorder removeAllObjects];
     [self.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
     
-    self.shownAndHidden = YES;
+    self.shownAndHidden = true;
     [self.document saveContext];
 }
 
@@ -1137,14 +1127,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)willHideMenuNotification:(NSNotification *)notification { }
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    if ([self lastMenuItemSelectRequiresElementView] == NO) {
+    if ([self lastMenuItemSelectRequiresElementView] == false) {
         if (self.lastElementViewToShowMenu) {
             [self deselectElementView: self.lastElementViewToShowMenu animated: YES];
             [self.selectedObjectIds removeObject: self.lastElementViewToShowMenu.objectIdTag];
             [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
         }
     }
-    self.lastMenuItemSelectRequiresElementView = NO;
+    self.lastMenuItemSelectRequiresElementView = false;
 }
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 - (void)willShowMenuNotification:(NSNotification *)notification { }
@@ -1271,7 +1261,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     [self deselectAllElementsAnimated:YES];
-    self.lastMenuItemSelectRequiresElementView = YES;
+    self.lastMenuItemSelectRequiresElementView = true;
     [self selectElementView:(MADDesignerElementView *)[self viewForObjectID:cell.objectIdTag]];
 }
 
@@ -1342,7 +1332,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)editDocumentObjectAggregate:(RptqDocumentObject *)object {
     self.aggregateToEdit = object.isAggregate;
-    self.editAggregate = YES;
+    self.editAggregate = true;
     
     UIView *viewToEdit = [self viewForObjectID: object.objectID];
     
@@ -1389,8 +1379,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     UIPopoverPresentationController *popoverController = barcodeViewController.popoverPresentationController;
     popoverController.delegate = self;
-    popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
-                                                    toView: self.scroller.container];
+    popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds toView: self.scroller.container];
     popoverController.sourceView = self.scroller.container;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:barcodeViewController animated:YES completion:nil];
@@ -2323,7 +2312,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     if (self.sectionSettingsVisible &&
         self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.sectionSettingsVisible = NO;
+        self.sectionSettingsVisible = false;
         [self dismissViewControllerAnimated: YES
                                  completion: NULL];
         [self removeBorderFromAllSectionViews];
@@ -2338,7 +2327,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     if (self.toolboxVisible &&
         self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
         
-        self.toolboxVisible = NO;
+        self.toolboxVisible = false;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
         [self.document.managedObjectContext save:nil];
@@ -2514,8 +2503,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)setDisplayActive {
     [self setHidesStatusBar: NO];
-    self.sectionSettingsVisible = NO;
-    self.toolboxVisible = NO;
+    self.sectionSettingsVisible = false;
+    self.toolboxVisible = false;
     self.barButtonAddReportObject.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
     [self enableTabBarItems];
@@ -2951,8 +2940,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (IBAction)showToolbox {
     
-    self.toolboxVisible = YES;
-    self.sectionSettingsVisible = NO;
+    self.toolboxVisible = true;
+    self.sectionSettingsVisible = false;
     
     self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -2981,7 +2970,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)showSectionSettingsFromLabel:(UILabel *)label {
     
-    self.toolboxVisible = NO;
+    self.toolboxVisible = false;
     self.settingsTransitioningDelegate.sourceRect = label.frame;
     self.settingsTransitioningDelegate.sourceView = self.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -2991,8 +2980,8 @@ static const inline CGSize sizePopoverFonts() {
     self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     
-    if (self.sectionSettingsVisible == NO) {
-        self.sectionSettingsVisible = YES;
+    if (self.sectionSettingsVisible == false) {
+        self.sectionSettingsVisible = true;
         [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES
                          completion: ^{
                              [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
