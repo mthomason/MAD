@@ -122,9 +122,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) NSArray *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
 @property (nonatomic, strong) NSArray *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
 
-@property (nonatomic, strong) NSArray *layoutConstraintsToolboxVisiable;
-@property (nonatomic, strong) NSArray *layoutConstraintsToolboxHidden;
-
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintToolbarHeight;
@@ -153,7 +150,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) NSMutableDictionary *sectionViews;
 @property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
 @property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
-@property (nonatomic, strong) NSMutableDictionary *collectionViewReuseIdentifiers;
 
 @property (nonatomic, weak)   IBOutlet UIToolbar *toolbarBottom;                          //iPhone only
 @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
@@ -180,21 +176,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @property (nonatomic, assign) CGFloat zoomScaleRestore;
 @property (nonatomic, assign) CGRect boundsOnDisappear;
-@property (nonatomic, assign) CGPoint contentOffsetOnShowToolbox;
-@property (nonatomic, assign) CGFloat zoomScaleOnShowToolbox;
 
 @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
-
-@property (nonatomic, weak)   UIViewController *childViewController;
 
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
 
 @property (nonatomic, strong) NSSet *passthoughContainers;
 
-@property (nonatomic, strong) UIGestureRecognizer *strayTouchGesture;
-
-@property (nonatomic, weak)   UILabel *lastSelectedLabel;
+@property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
+@property (nonatomic, weak) UILabel *lastSelectedLabel;
 
 @property (nonatomic, strong) NSSet *visibleElementViews;
 
@@ -427,13 +418,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
     self.navigationControllerSectionLayoutSettings.preferredContentSize =  CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
     
-    NSLayoutConstraint *layoutConstraintToolboxHeight = nil;
-    if (self.toolbox) {
-        layoutConstraintToolboxHeight = [NSLayoutConstraint toolBoxView:self.toolbox height:[self toolboxHeightCalculated]];
-    }
-    
-    self.layoutConstraintsToolboxVisiable =  layoutConstraintToolboxHeight != nil ? @[layoutConstraintToolboxHeight] : @[];
-    
     NSLayoutConstraint *viewToolbarHeightHidden = [NSLayoutConstraint toolbarHeightHidden: self.toolbarBottom];
     NSLayoutConstraint *toolboxHeightHidden = [NSLayoutConstraint toolboxHeightHidden: self.toolbox];
     NSLayoutConstraint *toolBoxViewBottom = [NSLayoutConstraint toolBoxBottom: self.toolbox container: self.view];
@@ -445,8 +429,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [constraints addObject: viewScrollerTop];
     [constraints addObject: toolbarBottomToToolboxView];
     
-    NSArray *layoutConstraintsToolboxHidden = @[toolboxHeightHidden, constraintScrollerBottom];
-    self.layoutConstraintsToolboxHidden = layoutConstraintsToolboxHidden;
     self.layoutConstraintToolbarHeight = viewToolbarHeightHidden;
     
     NSMutableSet *selectedObjectIds = [NSMutableSet new];
@@ -482,12 +464,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
 
     self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
     self.sectionViews = dictionarySections;
     self.sectionControlViews = dictionarySectionControls;
-    self.collectionViewReuseIdentifiers = collectionViewReuseIdentifiers;
     
     [self.scroller.container addSubview:self.ruler];
     
