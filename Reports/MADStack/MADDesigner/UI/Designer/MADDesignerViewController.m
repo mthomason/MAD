@@ -158,11 +158,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, assign) bool shownAndHidden;
 @property (nonatomic, assign) bool lastMenuItemSelectRequiresElementView;
 
-@property (nonatomic, strong) NSManagedObjectID *objectIdEditDynamicLabel;
-@property (nonatomic, strong) NSManagedObjectID *objectIdEditAggregateFunction;
-@property (nonatomic, strong) NSManagedObjectID *objectIdEditBarcode;
-@property (nonatomic, strong) NSManagedObjectID *objectIdEditImage;
-@property (nonatomic, strong) NSManagedObjectID *objectIdJustDisplayed;
+@property (nonatomic, copy) NSManagedObjectID *objectIdEditDynamicLabel;
+@property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
+@property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
+@property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
 
 @property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
@@ -1072,7 +1071,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                     MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
                         attributes.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
-                        self.objectIdJustDisplayed = documentObject.objectID;
+                        self.objectIdJustDisplayed = documentObject.objectID.copy;
                         [layoutManager positionItem:attributes];
                         [section.collectionViewLayout invalidateLayout];
                     }
@@ -1088,7 +1087,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                     MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
                         attributes.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
-                        self.objectIdJustDisplayed = documentObject.objectID;
+                        self.objectIdJustDisplayed = documentObject.objectID.copy;
                         [layoutManager positionItem:attributes];
                         [section.collectionViewLayout invalidateLayout];
                     }
@@ -1387,12 +1386,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)editDocumentObjectImage:(RptqDocumentObject *)object {
-    self.objectIdEditImage = object.objectID;
+    self.objectIdEditImage = object.objectID.copy;
 }
 
 - (void)editDocumentObjectLabelDynamic:(RptqDocumentObject *)object {
     
-    self.objectIdEditDynamicLabel = object.objectID;
+    self.objectIdEditDynamicLabel = object.objectID.copy;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
@@ -1538,7 +1537,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             if (self.objectIdJustDisplayed != nil) {
                 
-                if (self.objectIdJustDisplayed == documentObject.objectID) {
+                if ([self.objectIdJustDisplayed isEqual: documentObject.objectID]) {
                     [elementView flash:^(BOOL finished) { if (finished) self.objectIdJustDisplayed = nil; }];
                     
                 }
@@ -2058,16 +2057,15 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)saveBarcodeLabel:(MTViewControllerBarcode *)viewController {
     
-    if ([self objectIdEditBarcode]  != nil) {
+    if (self.objectIdEditBarcode  != nil) {
         
         MTBarcode *barcode = [viewController barcode];
         
         NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
-        NSManagedObjectID *objectId = [self objectIdEditBarcode];
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:self.objectIdEditBarcode];
         RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
         [barcodeObject updateWithBarcode: barcode fieldOne: viewController.queryField1 fieldTwo: viewController.queryField2];
-        [self setObjectIdEditBarcode:nil];
+        self.objectIdEditBarcode = nil;
         
     } else {
         
@@ -2225,7 +2223,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
         MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
         la.objectID = documentObject.objectID;
-        self.objectIdJustDisplayed = la.objectID;
+        self.objectIdJustDisplayed = la.objectID.copy;
         la.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
         [layoutManager addItem:la];
         [layoutManager layout];
