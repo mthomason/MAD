@@ -1697,13 +1697,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
     NSIndexSet *deleteSections = nil;
     if (oldLayoutSectionTypes.count > newLayoutSectionTypes.count) {
-        NSInteger secctr = 0;
+        NSUInteger secctr = 0;
         BOOL startIndexSet = NO;
         NSInteger startIndex = -1;
-        NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
+        NSInteger lengtho = oldLayoutSectionTypes.count - newLayoutSectionTypes.count;
         for (NSNumber *typenum in oldLayoutSectionTypes) {
-            MTQuerySections stsection = [typenum integerValue];
-            if (secctr < [newLayoutSectionTypes count]) {
+            MTQuerySections stsection = typenum.unsignedIntegerValue;
+            if (secctr < newLayoutSectionTypes.count) {
                 if (stsection == [newLayoutSectionTypes[secctr] integerValue]) {
                     secctr++;
                 } else {
