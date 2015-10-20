@@ -7,9 +7,13 @@
 //
 
 #import "MTCollectionViewCellElement.h"
+#import "MADDesignerElementView.h"
+#import "MADDesignerElementView.h"
 #import "UIView+NSObjectIdTag.h"
 
 @interface MTCollectionViewCellElement ()
+
+@property (nonatomic, weak) MADDesignerElementView *elementView;
 
 @end
 
@@ -111,6 +115,25 @@
 
 - (void)delete:(id)sender {
     [self.delegate deleteDocumentObjectRepresentedByCell:self];
+}
+
+- (void)addElementView:(MADDesignerElementView *)elementView {
+    [self.contentView addSubview:elementView];
+    self.elementView = elementView;
+}
+
+#pragma mark - Accessibility
+
+- (BOOL)isAccessibilityElement {
+    return YES;
+}
+
+- (NSString *)accessibilityHint {
+    return NSLocalizedString(@"Shows toolbox.", @"Shows toolbox.");
+}
+
+- (NSString *)accessibilityLabel {
+    return self.elementView.displayStringAttributed.string;
 }
 
 @end

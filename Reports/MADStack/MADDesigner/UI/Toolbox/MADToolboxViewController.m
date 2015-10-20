@@ -322,4 +322,8 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (BOOL)accessibilityPerformEscape {
+    return [self.navigationController.presentationController accessibilityPerformEscape];
+}
+
 @end

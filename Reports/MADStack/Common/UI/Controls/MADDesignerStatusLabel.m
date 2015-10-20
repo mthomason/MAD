@@ -17,7 +17,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 
 @interface MADDesignerStatusLabel ()
 
-@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, weak) UILabel *label;
 
 @end
 
@@ -48,19 +48,21 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 }
 
 - (void)show {
-    __weak MADDesignerStatusLabel *weakself = self;
     [UIView animateWithDuration:MADViewDetailSmallAnimationDuration animations:^{
-        weakself.alpha = MADAlphaVisible;
+        self.alpha = MADAlphaVisible;
     }];
 }
 
 - (void)hide {
-    __weak MADDesignerStatusLabel *weakself = self;
     [UIView animateWithDuration:MADViewDetailSmallAnimationDuration
                           delay:MADViewDetailSmallAnimationDelay
                         options:UIViewAnimationOptionCurveEaseOut animations:^{
-        weakself.alpha = MADAlphaHidden;
+        self.alpha = MADAlphaHidden;
     } completion:nil];
+}
+
+- (BOOL)isAccessibilityElement {
+    return NO;
 }
 
 @end

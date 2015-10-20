@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
 
-@class MTCollectionViewCellElement;
+@class MTCollectionViewCellElement, MADDesignerElementView;
 
 @protocol MTCollectionViewCellElementDelegate
 
@@ -26,6 +26,7 @@
 @interface MTCollectionViewCellElement : UICollectionViewCell
 
 @property (nonatomic, weak) id <MTCollectionViewCellElementDelegate> delegate;
+- (void)addElementView:(MADDesignerElementView *)elementView;
 
 @end
 

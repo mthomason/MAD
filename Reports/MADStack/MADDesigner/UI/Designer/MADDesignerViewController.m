@@ -111,6 +111,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
 @property (nonatomic, strong) MTRulerView *ruler;
+@property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
 @property (nonatomic, strong) MADPromptManager *promptManager;
 
 @property (nonatomic, strong) NSArray *sectionViewsArray;
@@ -168,8 +169,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @property (nonatomic, assign) CGFloat zoomScaleRestore;
 @property (nonatomic, assign) CGRect boundsOnDisappear;
-
-@property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
 
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
 @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
@@ -552,7 +551,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [self.scroller.container addSubview:sectionView];
             [self.scroller.container addSubview:sectionViewLabel];
             [passthroughContainers addObject:sectionView];
-            
+            sectionView.sectionLabel = sectionViewLabel;
         }
     }
     
@@ -1533,7 +1532,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                 [self applyBorderToView:elementView];
             }
             
-            [cell.contentView addSubview:elementView];
+            [cell addElementView:elementView];
             
             if (self.objectIdJustDisplayed != nil) {
                 

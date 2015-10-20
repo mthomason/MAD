@@ -145,4 +145,8 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
     return CGSizeMake(self.bounds.size.width, MTReportDesignerRulerHeight);
 }
 
+- (BOOL)isAccessibilityElement {
+    return NO;
+}
+
 @end

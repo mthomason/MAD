@@ -13,6 +13,8 @@
 
 @protocol MTDocumentSectionViewDelegate;
 
+@class MADDesignerSectionLabel;
+
 typedef NS_ENUM(NSUInteger, MADBorderState) {
     MADBorderStateNormal,
     MADBorderStateSelected,
@@ -23,6 +25,7 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) id <MTDocumentSectionViewDelegate> sectionDelegate;
+@property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
 
 @property (nonatomic, assign) BOOL visible;
 @property (nonatomic, assign) BOOL selected;

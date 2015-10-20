@@ -224,4 +224,11 @@
                                                       }];
 }
 
+- (BOOL)accessibilityPerformEscape {
+    [self dismiss];
+    NSString *announcement = NSLocalizedString(@"Dismissing toolbox.", @"Dismissing toolbox.");
+    UIAccessibilityPostNotification( UIAccessibilityAnnouncementNotification, announcement);
+    return YES;
+}
+
 @end

@@ -41,6 +41,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 
 @property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
 @property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
+@property (nonatomic, assign) bool accessibile;
 
 @end
 
@@ -51,6 +52,8 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     MTReportDesignerSectionViewLayoutLiquid *layout = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
 
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
+        
+        self.accessibile = true;
         
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:1];
@@ -179,5 +182,39 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         [self setNeedsDisplay];
     }
 }
+
+#pragma mark - Accessibility
+
+- (NSArray <UIAccessibilityCustomAction *> *)accessibilityCustomActions {
+    NSString *toggleAccessibilityName = NSLocalizedString(@"Access section elements.", @"Access section elements.");
+    UIAccessibilityCustomAction *toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName:toggleAccessibilityName target:self selector:@selector(toggleAccessibility:)];
+    return @[toggleAccessibility];
+}
+
+- (BOOL)isAccessibilityElement {
+    return NO;
+}
+
+- (NSInteger)accessibilityElementCount {
+    return [self.dataSource collectionView:self numberOfItemsInSection:0] + 1;
+}
+
+- (NSInteger)indexOfAccessibilityElement:(id)element {
+    return [element isKindOfClass:[UICollectionViewCell class]] ? [self indexPathForCell:element].item + 1 : 0;
+}
+
+- (id)accessibilityElementAtIndex:(NSInteger)index {
+    if (index == 0) {
+        return self.sectionLabel;
+    } else {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:index + 1 inSection:0];
+        return [self cellForItemAtIndexPath:path];
+    }
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    return UIAccessibilityTraitButton;
+}
+
 
 @end
