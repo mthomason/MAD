@@ -39,7 +39,7 @@
         if (self.monitoredDirectoryFileDescriptor >= 0) {
             self.directoryMonitorQueue = dispatch_queue_create("com.everydayapps.mad.filesystem.watcher", DISPATCH_QUEUE_CONCURRENT);
             
-            unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
+            unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB;
             self.directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, (uintptr_t)self.monitoredDirectoryFileDescriptor, mask, self.directoryMonitorQueue);
             
             dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
