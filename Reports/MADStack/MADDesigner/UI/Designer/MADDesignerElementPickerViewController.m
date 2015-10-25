@@ -23,20 +23,9 @@
 
 #import "MADDesignerViewController.h"
 
-#import "MADObjectIdentifier.h"
-
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
-
-NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectChartCollectionViewCell = @"MTIdentiferDocumentObjectChartCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectAggregateCollectionViewCell = @"MTIdentiferDocumentObjectAggregateCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentiferDocumentObjectDataCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectWhitespaceCollectionViewCell = @"MTIdentiferDocumentObjectWhitespaceCollectionViewCell";
-NSString * const MTIdentiferDocumentObjectBarcodeCollectionViewCell = @"MTIdentiferDocumentObjectBarcodeCollectionViewCell";
+#import "MADDocumentObjectCollectionViewCell.h"
 
 NSInteger const MTViewTagAggregateFunctions = 2003;
 NSInteger const MTViewTagGroupByOptions = 2011;
@@ -54,7 +43,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
-@property (nonatomic, assign) BOOL showFieldOrFormulaFormulaPickerViewerController;
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
 @property (nonatomic, strong) NSArray *dataSource;
@@ -67,42 +55,11 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 #pragma mark - Storyboard Interactions
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
-                         withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     return NO;
 }
 
-/*- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    return action == @selector(unwindToDesigner:) ?
-            (UIViewController *)self.objectSelectorDelegate :
-            [super viewControllerForUnwindSegueAction: action
-                                   fromViewController: fromViewController
-                                           withSender: sender];
-}*/
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    /*if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
-        
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate =  self;
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushStaticLabelNew"]) {
-        
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushAggregateLabelNew"]) {
-        
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushBarcodeLabelNew"]) {
-        
-        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
-        
-    }*/
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
         [segue.destinationViewController setDocument:self.document];
     }
@@ -119,6 +76,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"MAD Objects", @"Title of the document object select");
+    titleView.accessibilityLabel = NSLocalizedString(@"Object Selector", @"Object Selector");
+    
     self.navigationItem.titleView = titleView;
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     self.navigationController.view.opaque = NO;
@@ -134,49 +93,19 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     self.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     
-    NSMutableArray *dataSource = [[NSMutableArray alloc] init];
-    
-    MADObjectIdentifier *labelDynamic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectDataCollectionViewCell
-                                                                                 andTag: MTDocumentObjectTypeLabelDynamic];
-    
-    MADObjectIdentifier *labelStatic = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectLabelCollectionViewCell
-                                                                                andTag: MTDocumentObjectTypeLabelStatic];
-    
-    MADObjectIdentifier *aggregate = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectAggregateCollectionViewCell
-                                                                              andTag: MTDocumentObjectTypeAggregate];
-    
-    MADObjectIdentifier *image = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectImageCollectionViewCell
-                                                                          andTag: MTDocumentObjectTypeImage];
-    
-    MADObjectIdentifier *whitespace = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectWhitespaceCollectionViewCell
-                                                                               andTag: MTDocumentObjectTypeWhtiespace];
-    [dataSource addObject:labelDynamic];
-    [dataSource addObject:labelStatic];
-    [dataSource addObject:aggregate];
-    [dataSource addObject:image];
-    [dataSource addObject:whitespace];
+    NSMutableArray *dataSource = [[NSMutableArray alloc] initWithCapacity:6];
+    NSNumber *labelDynamic = [NSNumber numberWithShort:MTDocumentObjectTypeLabelDynamic];
+    NSNumber *labelStatic = [NSNumber numberWithShort:MTDocumentObjectTypeLabelStatic];
+    NSNumber *aggregate = [NSNumber numberWithShort:MTDocumentObjectTypeAggregate];
+    NSNumber *image = [NSNumber numberWithShort:MTDocumentObjectTypeImage];
+    NSNumber *whitespace = [NSNumber numberWithShort:MTDocumentObjectTypeWhtiespace];
+    NSArray *defaults = @[labelDynamic, labelStatic, aggregate, image, whitespace];
+    [dataSource addObjectsFromArray:defaults];
     
     if ([[MTStoreKitController sharedObject] isBarcodeDesignerEnabled]) {
-        MADObjectIdentifier *barcode = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectBarcodeCollectionViewCell
-                                                                                andTag: MTDocumentObjectTypeBarcode];
+        NSNumber *barcode = [NSNumber numberWithShort: MTDocumentObjectTypeBarcode];
         [dataSource addObject:barcode];
     }
-    
-    /*
-     MADObjectIdentifier *groupKey = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectGroupKeyCollectionViewCell
-     andTag: MTDocumentObjectTypeGroupKey];
-     
-     MADObjectIdentifier *chart = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectChartCollectionViewCell
-     andTag: MTDocumentObjectTypeChart];
-     
-     MADObjectIdentifier *formula = [[MADObjectIdentifier alloc] initWithIdentifier: MTIdentiferDocumentObjectFormulaCollectionViewCell
-     andTag: MTDocumentObjectTypeFormula];
-     
-     [dataSource addObject:groupKey];
-     [dataSource addObject:chart];
-     [dataSource addObject:formula];
-     */
-    
     
     self.dataSource = dataSource;
 }
@@ -192,52 +121,62 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-
-    switch (cell.tag) {
-
-        case MTDocumentObjectTypeImage: {
-            UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-            imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            imagePicker.delegate = (id <UINavigationControllerDelegate ,UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
-            imagePicker.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
-            
-            [self presentViewController:imagePicker animated:YES completion:NULL];
+    NSNumber *madob = self.dataSource[indexPath.row];
+ 
+    switch (madob.shortValue) {
+        case MTDocumentObjectTypeAggregate:
+            [self performSegueWithIdentifier:@"MTIdentifierSeguePushAggregateLabelNew" sender:self];
             break;
-        }
-            
+        case MTDocumentObjectTypeBarcode:
+            [self performSegueWithIdentifier:@"MTIdentifierSeguePushBarcodeLabelNew" sender:self];
+            break;
+        case  MTDocumentObjectTypeLabelDynamic:
+            [self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:self];
+            break;
+        case MTDocumentObjectTypeLabelStatic:
+            [self performSegueWithIdentifier:@"MTIdentifierSeguePushStaticLabelNew" sender:self];
+            break;
+        case MTDocumentObjectTypeImage:
+            [self presentImagePicker];
+            break;
         default:
             break;
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *result = nil;
-    MADObjectIdentifier *madob = self.dataSource[indexPath.row];
-    NSString *cellIdentifier = madob.identifier;
-    result = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    if ([result selectedBackgroundView] == nil) {
+- (void)presentImagePicker {
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePicker.delegate = (id <UINavigationControllerDelegate ,UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
+    imagePicker.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    [self presentViewController:imagePicker animated:YES completion:NULL];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSNumber *madob = self.dataSource[indexPath.row];
+    static NSString *MADIdentiferDocumentObjectCell = @"MADIdentiferDocumentObjectCell";
+    MADDocumentObjectCollectionViewCell *result = (MADDocumentObjectCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:MADIdentiferDocumentObjectCell forIndexPath:indexPath];
+    result.type = madob.shortValue;
+    if (result.selectedBackgroundView == nil) {
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
         UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
         selectedBackgroundView.backgroundColor = bgColor;
         result.selectedBackgroundView = selectedBackgroundView;
     }
-    result.contentView.tag = madob.tag;
+    result.contentView.tag = madob.shortValue;
     return result;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSInteger result = 0;
     switch (section) {
         case 0:
-            result = self.dataSource.count;
+            return self.dataSource.count;
             break;
         default:
+            return 0;
             break;
     }
-    return result;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -251,8 +190,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 }
 
 #pragma mark - Actions
-
-
 
 #pragma mark
 #pragma mark - Aggregate Functions View Controller Delegate Protocol
@@ -399,7 +336,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
                     NSString *navigationItemTitle = NSLocalizedString(@"Formula Selector", @"Formula Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [self setShowFieldOrFormulaFormulaPickerViewerController:YES];
                     [self.navigationBar pushNavigationItem:itemToPush animated:YES];
                     break;
 
@@ -449,6 +385,13 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         default:
             break;
     }
+}
+
+#pragma mark - Accessibility
+
+- (BOOL)accessibilityPerformEscape {
+    [self.objectSelectorDelegate viewControllerDidFinish: self];
+    return self.objectSelectorDelegate != nil;
 }
 
 @end

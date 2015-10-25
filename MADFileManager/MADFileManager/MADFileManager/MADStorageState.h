@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSUInteger, MADAppStorage) {
+typedef NS_ENUM(short, MADAppStorage) {
     MADAppStorageNotSet = 0,
-    MADAppStorageCloud,
-    MADAppStorageLocal
+    MADAppStorageCloud = 1,
+    MADAppStorageLocal = 2
 };
 
 @interface MADStorageState : NSObject

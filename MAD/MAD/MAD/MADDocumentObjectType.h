@@ -9,7 +9,7 @@
 #ifndef MAD_MADDocumentObjectType_h
 #define MAD_MADDocumentObjectType_h
 
-typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
+typedef NS_ENUM(short, MTDocumentObjectType) {
     MTDocumentObjectTypeLabelDynamic = 0,
     MTDocumentObjectTypeLabelStatic = 1,
     MTDocumentObjectTypeImage = 2,

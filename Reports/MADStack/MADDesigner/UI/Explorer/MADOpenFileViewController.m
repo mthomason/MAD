@@ -458,7 +458,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [cell.activityIndicator stopAnimating];
     }
 }
-
+/*
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
    NSURL *fileUrl = [self documentForIndexPath:indexPath];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
@@ -479,7 +479,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         });
     });
 }
-
+*/
 - (void)selectionsUpdated {
     switch (self.collectionView.indexPathsForSelectedItems.count) {
         case 0:
@@ -607,7 +607,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         }
     } completion:^(BOOL finished) {
         if (finished) {
-            [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
+//            [self.collectionView reloadItemsAtIndexPaths:self.collectionView.indexPathsForVisibleItems];
             completion(YES, nil);
         }
     }];

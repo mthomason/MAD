@@ -1677,7 +1677,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 #pragma mark - MUIViewControllerDelegate
 
-- (void)viewControllerDidFinish:(id)sender { }
+- (void)viewControllerDidFinish:(id)sender {
+    [self setDisplayActive];
+    self.hidesStatusBar = NO;
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
 
 #pragma mark - MADDesignerElementPickerDelegate
 
@@ -1693,7 +1697,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType inputType:(MTAggregateFunctionInputType)inputType inputObject:(NSManagedObjectID *)inputObject
                                                groupType:(MTAggregateGroupByType)groupType groupNumber:(NSNumber *)groupNumber {
     [self setDisplayActive];
-    
+
     NSNumber *functionTypeNumber = @(functionType);
     NSNumber *groupTypeNumber = @(groupType);
     NSNumber *inputTypeNumber = @(inputType);
@@ -2910,7 +2914,9 @@ static const inline CGSize sizePopoverFonts() {
     popoverController.delegate = self;
     popoverController.barButtonItem = sender;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    [self presentViewController: navigationController animated: YES completion: nil];
+    [self presentViewController: navigationController animated: YES completion:^{
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, pickerController);
+    }];
     [self setDisplayInactive];
     
 }

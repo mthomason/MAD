@@ -51,9 +51,11 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     MADCollectionViewLayoutGroupedDelegate *delegate = [[MADCollectionViewLayoutGroupedDelegate alloc] init];
     delegate.delegate = self;
     self.collectionViewDelegate = delegate;
+    
     self.collectionView.delegate = self.collectionViewDelegate;
     self.collectionView.dataSource = self;
 }
@@ -98,20 +100,25 @@ static NSString * const Downloading                             = @"Downloading"
 - (BOOL)isFileViewEditing { return self.editing; }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"\t%s\tItem:\t%ld", __PRETTY_FUNCTION__, (long)indexPath.item);
     return [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
 }
 
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     return self.filesCoordnator.filesController ? (NSInteger)self.filesCoordnator.filesController.count : 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"\t%s\tItem:\t%ld", __PRETTY_FUNCTION__, (long)indexPath.item);
+    
     static NSString * MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
     
@@ -122,10 +129,11 @@ static NSString * const Downloading                             = @"Downloading"
     NSString *filename = metadata.name;
     cell.labelTitle.text = filename;
     
-    BOOL notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    
-    BOOL downloading = metadata.ubiquitousItemIsDownloading;
-    BOOL uploading = metadata.ubiquitousItemIsUploading;
+    bool notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
+    bool downloading = metadata.ubiquitousItemIsDownloading;
+    bool uploading = metadata.ubiquitousItemIsUploading;
+    bool uploaded = metadata.ubiquitousItemIsUploaded;
+    CGFloat p = metadata.ubiquitousItemPercentUploaded;
     
     if (downloading) {
         cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);
@@ -166,13 +174,13 @@ static NSString * const Downloading                             = @"Downloading"
     [cell.labelTitle layoutIfNeeded];
     [cell.labelTitleSub layoutIfNeeded];
 
-    dispatch_async(self.queueCell, ^{
+    //dispatch_async(self.queueCell, ^{
         NSURL *thumbnailUrl = [UIDocument thumbnailUrlForMadUrl:metadata.URL];
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-        dispatch_sync(dispatch_get_main_queue(), ^(void) {
+    //    dispatch_sync(dispatch_get_main_queue(), ^(void) {
             cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];
-        });
-    });
+    //    });
+    //});
 
     
     [cell normalizeTint];

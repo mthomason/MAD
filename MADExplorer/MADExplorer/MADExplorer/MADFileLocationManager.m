@@ -27,6 +27,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 @implementation MADFileLocationManager
 
 - (instancetype)init {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *yes = @YES;
@@ -42,15 +43,16 @@ static NSString * const MADFirstLaunch                                     = @"M
 #pragma mark - Ubiquity Identity Token Handling (Account Change Info)
 
 - (BOOL)hasUbiquityIdentityChanged {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     BOOL hasChanged = NO;
     
     id<NSObject, NSCopying, NSCoding> currentToken = [NSFileManager defaultManager].ubiquityIdentityToken;
     id<NSObject, NSCopying, NSCoding> storedToken = [self storedUbiquityIdentityToken];
     
-    BOOL currentTokenNilStoredNonNil = !currentToken && storedToken;
-    BOOL storedTokenNilCurrentNonNil = !storedToken && currentToken;
-    BOOL currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
+    bool currentTokenNilStoredNonNil = !currentToken && storedToken;
+    bool storedTokenNilCurrentNonNil = !storedToken && currentToken;
+    bool currentNotEqualStored = currentToken && storedToken && ![currentToken isEqual:storedToken];
     
     if (currentTokenNilStoredNonNil || storedTokenNilCurrentNonNil || currentNotEqualStored) {
         [self persistAccount];
@@ -61,6 +63,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (id<NSObject, NSCopying, NSCoding>)storedUbiquityIdentityToken {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     id<NSObject, NSCopying, NSCoding> storedToken = nil;
     
     // Determine if the iCloud account associated with this device has changed since the last time the user launched the app.
@@ -74,6 +77,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)persistAccount {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     id<NSObject, NSCopying, NSCoding> token = [NSFileManager defaultManager].ubiquityIdentityToken;
     if (token) {
         NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
@@ -86,11 +90,12 @@ static NSString * const MADFirstLaunch                                     = @"M
 #pragma mark - Overrides
 
 - (MADAppStorage)storageOption {
-    NSInteger value = [[NSUserDefaults standardUserDefaults] integerForKey:MADAppConfigurationUserDefaultsStorageOption];
-    return (MADAppStorage)value;
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    return (MADAppStorage)[[NSUserDefaults standardUserDefaults] integerForKey:MADAppConfigurationUserDefaultsStorageOption];
 }
 
 - (void)setStorageOption:(MADAppStorage)storageOption {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [[NSUserDefaults standardUserDefaults] setInteger:storageOption forKey:MADAppConfigurationUserDefaultsStorageOption];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -229,6 +234,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     if (accountChanged || self.filesController == nil) {
         if (!self.filesController) {
@@ -250,6 +256,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 #pragma mark - Document Operations
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self.storageOption != MADAppStorageCloud) {
         // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
         return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:self.groupIdentifier firstQueryUpdateHandler:firstQueryHandler];
@@ -259,6 +266,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self.storageOption != MADAppStorageCloud) {
         // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
         return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:self.groupIdentifier firstQueryUpdateHandler:firstQueryHandler];
@@ -268,8 +276,10 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension firstQueryHandler:firstQueryHandler];
+    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension
+                                                                                          firstQueryHandler:firstQueryHandler];
     MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
                                                                                 delegateQueue:[NSOperationQueue mainQueue]
                                                                                sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {
@@ -279,8 +289,10 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
-    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent firstQueryHandler:firstQueryHandler];
+    id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent
+                                                                                              firstQueryHandler:firstQueryHandler];
     MADFilesController *filesController = [[MADFilesController alloc] initWithFileCoordinator:fileCoordinator
                                                                                 delegateQueue:[NSOperationQueue mainQueue]
                                                                                sortComparator:^NSComparisonResult(MADMetaData *lhs, MADMetaData *rhs) {

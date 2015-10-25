@@ -205,6 +205,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 #pragma mark - NSMetadataQuery Notifications
 
 - (void)metadataQueryDidFinishGathering:(NSNotification *)notification {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [self.metadataQuery disableUpdates];
 
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
@@ -230,6 +231,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)metadataQueryDidUpdate:(NSNotification *)notification {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [self.metadataQuery disableUpdates];
     
     NSArray *insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey];
@@ -252,11 +254,16 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+
     [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
                                                         object: nil];
 }
 
-- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification { }
+- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
+    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+
+}
 
 #pragma mark - Convenience
 

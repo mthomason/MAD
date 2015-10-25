@@ -175,8 +175,6 @@
     NSError *coordinatorError = nil;
     
     BOOL successfulSecurityScopedResourceAccess = [source startAccessingSecurityScopedResource];
-    __block NSError *moveError = nil;
-    __block BOOL success = NO;
     NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
     [coordinator coordinateWritingItemAtURL: source
                                     options: NSFileCoordinatorWritingForMoving
@@ -185,7 +183,8 @@
                                       error: &coordinatorError
                                  byAccessor: ^(NSURL *accessorSource, NSURL *accessorDestination) {
                                      
-                                     success = [[NSFileManager defaultManager] moveItemAtURL: accessorSource
+                                     __block NSError *moveError = nil;
+                                     BOOL success = [[NSFileManager defaultManager] moveItemAtURL: accessorSource
                                                                                        toURL: accessorDestination
                                                                                        error: &moveError];
                                      if (success) {
