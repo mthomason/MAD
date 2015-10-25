@@ -63,11 +63,14 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
         [segue.destinationViewController setDocument:self.document];
     }
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, segue.destinationViewController.accessibilityElements.firstObject);
 }
 
 - (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     [super performSegueWithIdentifier:identifier sender:sender];
 }
+
+
 
 #pragma mark - View lifecycle
 
