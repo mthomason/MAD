@@ -10,20 +10,24 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import <Foundation/Foundation.h>
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "UIViewController+Designer.h"
 
+static NSString * const MADTextVisible         = @"Visible";
+static NSString * const MADTextVisibleHint     = @"Toggles visibility.";
+static NSString * const MADTextFormFeed        = @"Form Feed";
+static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
+
 @interface MTReportDesignerSectionLayoutSettingsViewController ()
 
-@property (nonatomic, weak) IBOutlet UILabel *labelHeight;
-@property (nonatomic, weak) IBOutlet UILabel *labelNumberOfRows;
-
-@property (nonatomic, weak) IBOutlet UIStepper *heightStepper;
-@property (nonatomic, weak) IBOutlet UIStepper *rowsStepper;
-
+@property (nonatomic, weak) IBOutlet UILabel *labelVisible;
+@property (nonatomic, weak) IBOutlet UILabel *labelFormFeed;
 @property (nonatomic, weak) IBOutlet UISwitch *switchFormFeed;
 @property (nonatomic, weak) IBOutlet UISwitch *switchVisibility;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellVisibility;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellFormFeed;
 
 @end
 
@@ -33,16 +37,25 @@
     return (MTReportDesignerSectionLayoutSettingsViewController *)[UIViewController layoutSettingsViewController];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-
+    self.labelVisible.text = NSLocalizedString(MADTextVisible, MADTextVisible);
+    self.labelFormFeed.text = NSLocalizedString(MADTextFormFeed, MADTextFormFeed);
+    self.labelVisible.isAccessibilityElement = NO;
+    self.labelFormFeed.isAccessibilityElement = NO;
+    self.switchVisibility.isAccessibilityElement = NO;
+    self.switchFormFeed.isAccessibilityElement = NO;
+    self.cellVisibility.isAccessibilityElement = YES;
+    self.cellFormFeed.isAccessibilityElement = YES;
+    self.cellVisibility.accessibilityLabel = self.labelVisible.text;
+    self.cellVisibility.accessibilityHint = NSLocalizedString(MADTextVisibleHint, MADTextVisibleHint);
+    self.cellVisibility.accessibilityTraits = self.cellVisibility.accessibilityTraits | UIAccessibilityTraitButton;
+    self.cellFormFeed.accessibilityLabel = self.labelFormFeed.text;
+    self.cellFormFeed.accessibilityHint = NSLocalizedString(MADTextFormFeedHint, MADTextFormFeedHint);
+    self.cellFormFeed.accessibilityTraits = self.cellFormFeed.accessibilityTraits | UIAccessibilityTraitButton;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,48 +75,14 @@
     [self updateDisplay];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-
 - (void)updateDisplay {
     self.switchFormFeed.on = self.initalFormFeedEnabled;
     self.switchVisibility.on = self.initalVisibility;
-    self.heightStepper.value = self.initalHeightValue * 2;
-    self.rowsStepper.value = self.initalNumberOfRows;
-    
-    [self setNumberOfRowsLabel: self.initalNumberOfRows];
-    [self setHeighLabel: self.initalHeightValue];
-    
 }
 
-- (void)setHeighLabel:(double)height {
-    NSString *localizedFormatString = NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts");
-    NSString *localizedHeight = [NSString stringWithFormat:localizedFormatString, height];
-    self.labelHeight.text = localizedHeight;
-}
-
-- (void)setNumberOfRowsLabel:(double)numberOfRows {
-    NSNumber *numberOfRowsWrapper = @(numberOfRows);
-    NSString *localizedNumberOfRows = [NSNumberFormatter localizedStringFromNumber: numberOfRowsWrapper
-                                                                       numberStyle: NSNumberFormatterSpellOutStyle];
-    NSString *localizedFormatString = NSLocalizedString(@"Rows: %@", @"Something like - Rows: two");
-    NSString *localizedHeight = [NSString stringWithFormat:localizedFormatString, localizedNumberOfRows];
-    self.labelNumberOfRows.text = localizedHeight;
-}
-
-- (IBAction)heightChanged:(id)sender {
-    double stepperValue = [self stepperValueNormalized];
-    [self setHeighLabel: stepperValue];
-    [self.delegate sectionLayoutDidUpdateHeight: stepperValue];
-}
+- (IBAction)heightChanged:(id)sender { }
 
 - (IBAction)numberOfRowsChanged:(UIStepper *)sender {
-    [self setNumberOfRowsLabel:sender.value];
     [self.delegate sectionLayoutDidUpdateNumberOfRows:(NSUInteger)sender.value];
 }
 
@@ -115,18 +94,32 @@
     [self.delegate layoutSettings: self newPageAfter: self.switchFormFeed.isOn];
 }
 
-#pragma mark - Helpers
-
-- (double)stepperValueNormalized {
-    return self.heightStepper.value / 2;
-}
-
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0:
+            [self.switchVisibility setOn:!self.switchVisibility.on animated:YES];
+            break;
+        case 1:
+            [self.switchFormFeed setOn:!self.switchFormFeed.on animated:YES];
+            break;
+        default:
+            break;
+    }
+}
 
-- (IBAction)switchNewPageAfter:(id)sender {
+- (IBAction)switchNewPageAfter:(id)sender { }
 
+#pragma mark - Accessibility
+
+- (BOOL)accessibilityPerformEscape {
+    if ([self.delegate respondsToSelector:@selector(sectionLayoutSettingsDidFinish:)]) {
+        [self.delegate sectionLayoutSettingsDidFinish:self];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

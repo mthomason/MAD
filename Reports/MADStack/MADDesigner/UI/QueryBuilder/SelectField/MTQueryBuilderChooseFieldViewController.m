@@ -30,6 +30,8 @@
 // Use the uniformRowHeight property if the pinch gesture should change all row heights simultaneously.
 @property (nonatomic, assign) NSInteger uniformRowHeight;
 
+@property (nonatomic, strong) NSArray *sortDescriptors;
+
 @end
 
 #define DEFAULT_ROW_HEIGHT 44
@@ -38,6 +40,15 @@
 @implementation MTQueryBuilderChooseFieldViewController
 
 @synthesize unwindViewController;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
+        NSArray *descriptors = @[namesAccending];
+        self.sortDescriptors = descriptors;
+    }
+    return self;
+}
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
                  fromViewController:(UIViewController *)fromViewController
@@ -86,37 +97,36 @@
 
     self.openSectionIndex = NSNotFound;
     RptqDocument *document = [self.document activeDocumentModel];
-    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-    RptqQuery *query = [database.hasQueries anyObject];
-    NSSet *queryTables = [query hasQueryTables];
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+    RptqQuery *query = database.hasQueries.anyObject;
 
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *queryTablesArray = [queryTables sortedArrayUsingDescriptors:@[namesAccending]];
-    [self setDataTables:queryTablesArray];
+    NSArray *names = @[namesAccending];
+    NSArray *dataTables = [query.hasQueryTables sortedArrayUsingDescriptors:names];
     
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.dataTables = dataTables;
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Select Field", @"Title of form that allows you to choose the name of a database field.");
     self.navigationItem.titleView = titleView;
-
-
+    self.tableView.isAccessibilityElement = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated]; 
 	
-    NSUInteger numberOfSectionsInTable = [self numberOfSectionsInTableView:self.tableView];
-	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != numberOfSectionsInTable)) {
+	if (self.sectionInfoArray == nil || self.sectionInfoArray.count <= 0) {
 		
 		NSMutableArray *infoArray = [[NSMutableArray alloc] init];
 		
-		for (RptqQueryTable *queryTable in [self dataTables]) {
+		for (RptqQueryTable *queryTable in self.dataTables) {
 			RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[RptqDatabaseSchemaFieldSelectorManager alloc] initWithTable: queryTable];
 			sectionInfo.open = NO;
 			
             NSNumber *defaultRowHeight = @DEFAULT_ROW_HEIGHT;
-			NSInteger countOfQuotations = [[[sectionInfo table] hasQueryFields] count];
+			NSInteger countOfQuotations = sectionInfo.table.hasQueryFields.count;
 			for (NSInteger i = 0; i < countOfQuotations; i++) {
 				[sectionInfo insertObject:defaultRowHeight inRowHeightsAtIndex:i];
 			}
@@ -134,44 +144,37 @@
 
 #pragma mark Table view data source and delegate
 
+- (NSUInteger)numberOfRowsInSection:(NSInteger)section {
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
+    return sectionInfo.open ? sectionInfo.table.hasQueryFields.count : 0;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
-    return [[self dataTables] count];
+    return self.dataTables.count;
 }
 
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
-    
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
-	
-    return sectionInfo.open ? sectionInfo.table.hasQueryFields.count : 0;
+    return [self numberOfRowsInSection:section];;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
     
     static NSString *CellIdentifier = @"UITableViewCellFieldWithType";
-    
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (!cell) {
-        
-        UINib *quoteCellNib = [UINib nibWithNibName:@"UITableViewCellFieldWithType" bundle:nil];
-        [quoteCellNib instantiateWithOwner:self options:nil];
-        cell = [self fieldCells];
-        [self setFieldCells: nil];
-        
-    }
-    
-    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = (RptqDatabaseSchemaFieldSelectorManager *)[self sectionInfoArray][indexPath.section];
-    NSSet *fields = [[fieldSelectorManager table] hasQueryFields];
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
-    NSArray *descriptors = @[namesAccending];
-    NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:descriptors];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton;
+    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = (RptqDatabaseSchemaFieldSelectorManager *)self.sectionInfoArray[indexPath.section];
+    NSArray *fieldsArray = [fieldSelectorManager.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
 
-    RptqDatabaseSchemaField *field = [fieldsArray[indexPath.row] databaseSchemaField];
+    RptqQueryField *field = fieldsArray[indexPath.row];
+    RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
     if (field) {
-        cell.textLabel.text = [field name];
-        cell.detailTextLabel.text = [field fieldTypeDisplay].lowercaseString;
+        cell.textLabel.text = schemaField.name;
+        cell.detailTextLabel.text = schemaField.fieldTypeDisplay.lowercaseString;
+        cell.accessibilityLabel = cell.textLabel.text;
+        cell.accessibilityHint = NSLocalizedString(@"Selects field.", @"Selects field.");
     }
 
     return cell;
@@ -179,22 +182,21 @@
 
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][section];
-    if (![sectionInfo headerView]) {
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
+    if (!sectionInfo.headerView) {
         CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, HEADER_HEIGHT);
         UIViewTableSectionHeaderDatabaseTable *vsht = [[UIViewTableSectionHeaderDatabaseTable alloc] initWithFrame: rect
                                                                                                              title: sectionInfo.table.alias
                                                                                                            section: section
                                                                                                           delegate: self];
-        [sectionInfo setHeaderView: vsht];
+        sectionInfo.headerView = vsht;
     }
     return [sectionInfo headerView];
 }
 
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
-    
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][indexPath.section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[indexPath.section];
     return [[sectionInfo objectInRowHeightsAtIndex:indexPath.row] floatValue];
 }
 
@@ -211,7 +213,7 @@
 
 - (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryField *queryField = nil;
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][indexPath.section];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[indexPath.section];
     NSUInteger row = indexPath.row;
     if (sectionInfo.table.hasQueryFields.count > row) {
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
@@ -226,17 +228,19 @@
 
 - (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
 	
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][sectionOpened];
-	
-	[sectionInfo setOpen: YES];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[sectionOpened];
+    sectionInfo.open = YES;
     
     /*
      Create an array containing the index paths of the rows to insert: These correspond to the rows for each quotation in the current section.
      */
-    NSInteger countOfRowsToInsert = [[sectionInfo fields] count];
+    NSInteger countOfRowsToInsert = sectionInfo.fields.count;
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i < countOfRowsToInsert; i++) {
-        [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:sectionOpened]];
+        @autoreleasepool {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:sectionOpened];
+            [indexPathsToInsert addObject:indexPath];
+        }
     }
     
     /*
@@ -247,7 +251,7 @@
     NSInteger previousOpenSectionIndex = self.openSectionIndex;
     if (previousOpenSectionIndex != NSNotFound) {
 		
-		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = [self sectionInfoArray][previousOpenSectionIndex];
+		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = self.sectionInfoArray[previousOpenSectionIndex];
         previousOpenSection.open = NO;
         [previousOpenSection.headerView toggleOpenWithUserAction:NO];
         NSUInteger countOfRowsToDelete = previousOpenSection.fields.count;
@@ -265,8 +269,7 @@
     if (previousOpenSectionIndex == NSNotFound || sectionOpened < previousOpenSectionIndex) {
         insertAnimation = UITableViewRowAnimationTop;
         deleteAnimation = UITableViewRowAnimationBottom;
-    }
-    else {
+    } else {
         insertAnimation = UITableViewRowAnimationBottom;
         deleteAnimation = UITableViewRowAnimationTop;
     }
@@ -276,7 +279,7 @@
     [self.tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
     [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
     [self.tableView endUpdates];
-    [self setOpenSectionIndex: sectionOpened];
+    self.openSectionIndex = sectionOpened;
     [self updateSize];
 }
 
@@ -286,28 +289,49 @@
     /*
      Create an array of the index paths of the rows in the section that was closed, then delete those rows from the table view.
      */
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][sectionClosed];
-	
-	[sectionInfo setOpen: NO];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[sectionClosed];
+    sectionInfo.open = NO;
 
     NSInteger countOfRowsToDelete = [self.tableView numberOfRowsInSection:sectionClosed];
-    
     if (countOfRowsToDelete > 0) {
         NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
         for (NSInteger i = 0; i < countOfRowsToDelete; i++) {
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:sectionClosed]];
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:sectionClosed];
+            [indexPathsToDelete addObject:path];
         }
         [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
     }
-    [self setOpenSectionIndex: NSNotFound];
+    self.openSectionIndex = NSNotFound;
     [self updateSize];
+}
+
+CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
+CG_INLINE CGFloat heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
+    return (numTables * HEADER_HEIGHT) + (numFields * DEFAULT_ROW_HEIGHT);
 }
 
 - (void)updateSize {
     RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.openSectionIndex == NSNotFound ? nil : self.sectionInfoArray[self.openSectionIndex];
-    CGFloat height = (self.sectionInfoArray.count * HEADER_HEIGHT) + (sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count * DEFAULT_ROW_HEIGHT);
-    self.preferredContentSize = CGSizeMake(320.0000f, height);
-    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, height);
+    self.preferredContentSize = CGSizeMake(320.0000f, heightForSectionInfo(self.sectionInfoArray.count, sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count));
+    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, heightForSectionInfo(self.sectionInfoArray.count, sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count));
+}
+
+#pragma mark - Accessibility
+
+- (BOOL)isAccessibilityElement {
+    return NO;
+}
+
+- (NSInteger)accessibilityElementCount {
+    return self.sectionInfoArray.count;
+}
+
+- (NSArray *)accessibilityElements {
+    NSMutableArray *accessibilityElements = [[NSMutableArray alloc] initWithCapacity:self.sectionInfoArray.count];
+    for (RptqDatabaseSchemaFieldSelectorManager *sectionInfo in self.sectionInfoArray) {
+        [accessibilityElements addObject: sectionInfo.headerView];
+    }
+    return accessibilityElements;
 }
 
 @end

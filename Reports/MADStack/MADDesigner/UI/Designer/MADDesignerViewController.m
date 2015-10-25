@@ -630,7 +630,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     NSArray *viewsToRemove = [self.sectionViewsArray arrayByAddingObjectsFromArray:self.sectionControlViewsArray];
     viewsToRemove = [self.sectionViewsArray arrayByAddingObject:self.ruler];
-    for (UIView *view in viewsToRemove) {
+    for (id view in self.scroller.container.subviews) {
+        if ([view isKindOfClass:[MADDesignerSectionView class]]) {
+            [((MADDesignerSectionView *)view).sectionLabel removeFromSuperview];
+        }
         [view removeFromSuperview];
     }
     
@@ -909,6 +912,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 #pragma mark - MTReportDesignerSectionLayoutSettingsDelegate
+
+- (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller {
+    [self hideToolbox];
+}
 
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];

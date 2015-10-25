@@ -41,6 +41,7 @@
         CGRectInset(titleLabelFrame, 0.0000f, 5.0000f);
 
         UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
+        label.isAccessibilityElement = NO;
         [label setText: title];
         [label setFont: [UIFont boldSystemFontOfSize:17.0000f]];
         [label setTextColor: [UIColor tintColorBlue]];
@@ -49,9 +50,12 @@
         [self setTitleLabel: label];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.isAccessibilityElement = NO;
         button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);
-        [button setImage:[UIImage imageNamed:@"MADImageCarat"] forState:UIControlStateNormal];
-        [button setImage:[UIImage imageNamed:@"MADImageCaratOpen"] forState:UIControlStateSelected];
+        UIImage *caratOpen = [UIImage imageNamed:@"MADImageCaratOpen"];
+        UIImage *caratClosed = [UIImage imageNamed:@"MADImageCarat"];
+        [button setImage:caratClosed forState:UIControlStateNormal];
+        [button setImage:caratOpen forState:UIControlStateSelected];
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
         [self setDisclosureButton: button];
@@ -69,10 +73,10 @@
 
 - (void)toggleOpenWithUserAction:(BOOL)userAction {
     
-    [[self disclosureButton] setSelected: ![[self disclosureButton] isSelected]];
+    [self.disclosureButton setSelected: ![self.disclosureButton isSelected]];
     
     if (userAction) {
-        if ([[self disclosureButton] isSelected]) {
+        if ([self.disclosureButton isSelected]) {
             if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
                 [self.delegate sectionHeaderView:self sectionOpened:[self section]];
             }
@@ -87,18 +91,34 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
-    [[self titleLabel] setTextColor:[UIColor whiteColor]];
+    UIColor *color = [UIColor whiteColor];
+    self.titleLabel.textColor = color;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
-    [[self titleLabel] setTextColor:[UIColor tintColorBlue]];
+    UIColor *color = [UIColor tintColorBlue];
+    self.titleLabel.textColor = color;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesCancelled:touches withEvent:event];
-    [[self titleLabel] setTextColor:[UIColor tintColorBlue]];
+    UIColor *color = [UIColor tintColorBlue];
+    self.titleLabel.textColor = color;
 }
 
+#pragma mark - Accessibility
+
+- (BOOL)isAccessibilityElement {
+    return YES;
+}
+
+- (NSString *)accessibilityLabel {
+    return self.titleLabel.text;
+}
+
+- (NSString *)accessibilityHint {
+    return NSLocalizedString(@"Toggles database field visibility.", @"Toggles database field visibility.");
+}
 
 @end

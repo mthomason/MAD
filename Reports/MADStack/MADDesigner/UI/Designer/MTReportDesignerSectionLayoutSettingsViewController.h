@@ -15,14 +15,15 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 
 @class MTReportDesignerSectionLayoutSettingsViewController;
 
-@protocol MTReportDesignerSectionLayoutSettingsDelegate
-- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
-- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
-          newPageAfter:(BOOL)newPageAfter;
+@protocol MTReportDesignerSectionLayoutSettingsDelegate <NSObject>
+
+    - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
+    - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+              newPageAfter:(BOOL)newPageAfter;
 @optional
-- (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
-- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
-- (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller;
+    - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
+    - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
+    - (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller;
 @end
 
 @interface MTReportDesignerSectionLayoutSettingsViewController : UITableViewController
