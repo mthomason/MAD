@@ -46,13 +46,18 @@
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
+static NSString * const MADTextReadRecords = @"Read %@ records.";
+static NSString * const MADTextFormattingPage = @"Formatting page %@.";
+static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
+
 @interface MADViewerController ()
     <UIPopoverControllerDelegate,
+        UIPrintInteractionControllerDelegate,
+        UIStateRestoring,
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
         MTTabBarImageProtocol,
-        UIPrintInteractionControllerDelegate,
-        MTActivityItemProviderDelegate, UIStateRestoring>
+        MTActivityItemProviderDelegate>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -213,6 +218,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     self.progressView = progressView;
 
     [self.toolbarSideRight addSubview:self.pageSlider];
+    
+    self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
 }
 
 - (void)initializeVerticalSlider {
@@ -225,8 +232,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
     UIToolbar *vertToolbar = [[UIToolbar alloc] init];
 
-    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * M_PI);
-    vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * M_PI);
+    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
+    vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
     
     self.pageSlider = vertSlider;
     self.toolbarSideRight = vertToolbar;
@@ -556,9 +563,13 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 - (void)sliderChangedPage:(id)sender {
 
     UISlider *slider = (UISlider *)sender;
-    long int sliderIndex = lroundf([slider value]);
-    if ((unsigned long)sliderIndex != self.currentPageIndex) {
-        self.currentPageIndex = sliderIndex;
+    [self moveToPageAtIndex:lroundf(slider.value)];
+}
+
+- (BOOL)moveToPageAtIndex:(NSUInteger)index {
+    BOOL result = NO;
+    if ((unsigned long)index != self.currentPageIndex && index != NSNotFound) {
+        self.currentPageIndex = index;
         [self updatePageStatus];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                                                                 pageNumber: self.currentPageIndex + 1
@@ -572,16 +583,18 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO completion:^(BOOL finished) {
-            if (finished) {
-                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
-                [pageOne.view setNeedsDisplay];
-                [reportViewer.labelDateLastRefreshed setHidden:NO];
-                reportViewer.updatingOfTimerIsPaused = NO;
-                reportViewer.isRefreshing = NO;
-                reportViewer = nil;
-            }
-        }];
+                            if (finished) {
+                                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
+                                [pageOne.view setNeedsDisplay];
+                                [reportViewer.labelDateLastRefreshed setHidden:NO];
+                                reportViewer.updatingOfTimerIsPaused = NO;
+                                reportViewer.isRefreshing = NO;
+                                reportViewer = nil;
+                            }
+                        }];
+        result = YES;
     }
+    return result;
 }
 
 - (IBAction)sliderPageDidFinishDrag:(id)sender {
@@ -596,18 +609,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
         [self.document.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish: self];
-}
-
-static UIImageView *captureSnapshotOfView (UIView *targetView) {
-    UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, YES, 0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [targetView.layer renderInContext:context];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
-    snapshotView.frame = targetView.frame;
-    return snapshotView;
 }
 
 - (void)localDidRotate {
@@ -1241,10 +1242,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 break;
         }
         
-        if ([self timerLabelTimeSinceRefreh] != nil) {
-            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-                if ([[self timerLabelTimeSinceRefreh] isValid]) {
-                    [[self timerLabelTimeSinceRefreh] invalidate];
+        if (self.timerLabelTimeSinceRefreh != nil) {
+            if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
+                if ([self.timerLabelTimeSinceRefreh isValid]) {
+                    [self.timerLabelTimeSinceRefreh invalidate];
                 }
             }
             [self setTimerLabelTimeSinceRefreh:nil];
@@ -1271,25 +1272,27 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
-    NSString *formatString = NSLocalizedString(@"Read %@ records.", @"Read %@ records.");
+    NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
-    NSString *formatString = NSLocalizedString(@"Formatting page %@.", @"Formatting page %@.");
+    NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
 }
 
-- (void)updatePageStatus {
-    NSString *localizedPageOfPagesFormat = NSLocalizedString(@"Page %1@ of %2@ pages.", @"Page %1@ of %2@ pages.");
-    NSNumber *startPageN = @([self currentPageIndex] + 1);
-    NSNumber *endPageN = @([self numberOfPages]);
-    NSString *startPage = [NSNumberFormatter localizedStringFromNumber:startPageN numberStyle:NSNumberFormatterDecimalStyle];
-    NSString *endPage = [NSNumberFormatter localizedStringFromNumber:endPageN numberStyle:NSNumberFormatterDecimalStyle];
+- (NSString *)localizedStringForInteger:(NSUInteger)integer {
+    NSNumber *number = @(integer);
+    return [NSNumberFormatter localizedStringFromNumber: number numberStyle: NSNumberFormatterDecimalStyle];
+}
 
+- (void)updatePageStatus {
+    NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY, MADTextPageXofY);
+    NSString *startPage = [self localizedStringForInteger:self.currentPageIndex + 1];
+    NSString *endPage = [self localizedStringForInteger:self.numberOfPages];
     NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, startPage, endPage];
     [self updateStatusWithPageNumber:localizedPageOfPages];
 }
@@ -1321,5 +1324,59 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (UIViewController *)activeViewController {
     return self;
 }
+
+static UIImageView *captureSnapshotOfView (UIView *targetView) {
+    UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, YES, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [targetView.layer renderInContext:context];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
+    snapshotView.frame = targetView.frame;
+    return snapshotView;
+}
+
+#pragma mark - UIAccessibility
+
+- (BOOL)accessibilityScroll:(UIAccessibilityScrollDirection)direction {
+    switch (direction) {
+        case UIAccessibilityScrollDirectionNext:
+        case UIAccessibilityScrollDirectionRight:
+            return [self moveToPageAtIndex:self.currentPageIndex + 1];
+            break;
+        case UIAccessibilityScrollDirectionPrevious:
+        case UIAccessibilityScrollDirectionLeft:
+            return [self moveToPageAtIndex:self.currentPageIndex - 1];
+            break;
+        default:
+            return NO;
+            break;
+    }
+}
+
+- (BOOL)accessibilityPerformEscape {
+    [self.viewControllerDelegate viewControllerDidFinish:nil];
+    return YES;
+}
+
+- (BOOL)isAccessibilityElement {
+    return NO;
+}
+/*
+- (NSInteger)accessibilityElementCount {
+    return 1;
+}
+
+- (id)accessibilityElementAtIndex:(NSInteger)index {
+    return self.parentViewController.view;
+}
+
+- (NSArray *)accessibilityElements {
+    self.parentViewController.view.isAccessibilityElement = YES;
+    self.parentViewController.view.accessibilityLabel = @"Report";
+    NSArray *elements = @[self.parentViewController.view];
+    return elements;
+}*/
 
 @end

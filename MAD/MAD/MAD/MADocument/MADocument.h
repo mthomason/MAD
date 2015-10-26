@@ -31,9 +31,6 @@ typedef NS_ENUM(NSUInteger, MTQuerySections) {
 };
 
 extern NSString * const MADMimeType;
-extern NSString * const MTReportSectionType;
-extern NSString * const MTReportDetailRowId;
-extern NSString * const MTReportGroupLevel;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,

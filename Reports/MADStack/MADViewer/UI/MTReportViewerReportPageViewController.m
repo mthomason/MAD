@@ -15,21 +15,22 @@
 #import "NSDate+Extras.h"
 
 @interface MTReportViewerReportPageViewController ()
+    <UIAccessibilityReadingContent>
 
-@property (nonatomic, assign) NSUInteger pageNumber;
-@property (nonatomic, assign) NSUInteger numberOfPages;
-@property (nonatomic, assign) BOOL showPageNumberDisplay;
+    @property (nonatomic, assign) NSUInteger pageNumber;
+    @property (nonatomic, assign) NSUInteger numberOfPages;
+    @property (nonatomic, assign) BOOL showPageNumberDisplay;
 
-@property (nonatomic, strong) UIView *pageNumberDisplay;
-@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
+    @property (nonatomic, strong) UIView *pageNumberDisplay;
+    @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
-@property (nonatomic, strong) UIView *timeSinceRefreshView;
-@property (nonatomic, strong) UIView *pageNumberView;
-@property (nonatomic, strong) UILabel *timeSinceRefrehLabel;
+    @property (nonatomic, strong) UIView *timeSinceRefreshView;
+    @property (nonatomic, strong) UIView *pageNumberView;
+    @property (nonatomic, strong) UILabel *timeSinceRefrehLabel;
 
-@property (nonatomic, assign) BOOL displayDebuggingInfo;
+    @property (nonatomic, assign) BOOL displayDebuggingInfo;
 
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) MADocument *document;
 
 @end
 
@@ -66,7 +67,7 @@
     UIColor *whiteColor = [UIColor whiteColor];
     renderedReportView.backgroundColor = whiteColor;
     renderedReportView.delegate = self;
-    [self setView:renderedReportView];
+    self.view = renderedReportView;
 }
 
 - (void)viewDidLoad {
@@ -80,6 +81,12 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    self.view.isAccessibilityElement = YES;
+    NSString *numberOfPages = [NSNumberFormatter localizedStringFromNumber: @(self.pageNumber)
+                                                               numberStyle: NSNumberFormatterSpellOutStyle];
+    NSString *formatString = NSLocalizedString(@"Page %@", @"Page %@");
+    NSString *formattedString = [NSString stringWithFormat:formatString, numberOfPages];
+    self.view.accessibilityLabel = formattedString;
     if ([self showPageNumberDisplay]) {
         if ([self displayDebuggingInfo]) {
             [self addTimerView];
@@ -240,11 +247,12 @@
     UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
     numberView.backgroundColor = bgColor;
     [numberView setUserInteractionEnabled:NO];
-    [labelView setUserInteractionEnabled:NO];
+    labelView.userInteractionEnabled = NO;
     labelView.backgroundColor = [UIColor clearColor];
-    [numberView layer].cornerRadius =  6.0000f;
+    numberView.layer.cornerRadius =  6.0000f;
     [numberView addSubview:labelView];
-    [numberView setAlpha:0.0000f];
+    numberView.alpha = 0.0000f;
+    
     [self.view addSubview:numberView];
     [self setPageNumberView:numberView];
     
@@ -265,6 +273,23 @@
         }
     }];
     return nil;
+}
+
+- (NSInteger)accessibilityLineNumberForPoint:(CGPoint)point {
+    return 1;
+}
+
+
+- (NSString * _Nullable)accessibilityContentForLineNumber:(NSInteger)lineNumber {
+    return @"Content for line number";
+}
+
+- (CGRect)accessibilityFrameForLineNumber:(NSInteger)lineNumber {
+    return self.view.frame;
+}
+
+- (NSString * _Nullable)accessibilityPageContent {
+    return @"Content for line number";
 }
 
 @end

@@ -1867,4 +1867,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return result;
 }
 
+#pragma mark - UIAccessibility
+
+- (BOOL)accessibilityPerformEscape {
+    [self.delegate viewControllerDidFinish:nil];
+    return YES;
+}
+
 @end

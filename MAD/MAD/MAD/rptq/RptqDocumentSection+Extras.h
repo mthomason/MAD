@@ -10,19 +10,9 @@
 #define Reports_RptqDocumentSection_Extras_h
 
 #import <UIKit/UIKit.h>
+#import <MAD/MADDocumentSectionType.h>
 #import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocumentSection.h"
-
-//Do not change these enum values, as they are used in core data.
-typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
-	MNSDocumentSectionTypeReportHeader = 1,
-	MNSDocumentSectionTypeReportFooter = 2,
-	MNSDocumentSectionTypePageHeader = 3,
-	MNSDocumentSectionTypePageFooter = 4,
-    MNSDocumentSectionTypeBody = 5,
-    MNSDocumentSectionTypeGroupHeader = 6,
-    MNSDocumentSectionTypeGroupFooter = 7,
-};
 
 typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,

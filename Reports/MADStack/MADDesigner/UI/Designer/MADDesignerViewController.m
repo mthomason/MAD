@@ -765,6 +765,17 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     }];
 }
 
+#pragma mark - UIAccessibility
+
+- (BOOL)accessibilityPerformEscape {
+    [self.delegate viewControllerDidFinish:nil];
+    return YES;
+}
+
+- (BOOL)accessibilityScroll:(UIAccessibilityScrollDirection)direction {
+    return direction == UIAccessibilityScrollDirectionUp || direction == UIAccessibilityScrollDirectionDown;
+}
+
 #pragma mark - UINavigationControllerDelegate
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
@@ -862,6 +873,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [self adjustScroller];
     }
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
+    NSString *formatter = NSLocalizedString(@"Scrolled to %@.", @"Scrolled to %@.");
+    NSString *message = [NSString stringWithFormat: formatter, NSStringFromCGPoint(scrollView.contentOffset)];
+    UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, message);
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
@@ -2901,7 +2915,7 @@ static const inline CGSize sizePopoverFonts() {
     NSError *error = nil;
     [self.document.managedObjectContext save:&error];
     if (![self dismissAllPopovers]) {
-        [self.delegate viewControllerDidFinish:@(NO)];
+        [self.delegate viewControllerDidFinish:nil];
     } else {
         [self deselectAllElementsAnimated:YES];
     }

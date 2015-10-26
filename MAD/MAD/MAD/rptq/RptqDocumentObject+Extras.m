@@ -212,7 +212,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 #pragma mark - Member
 
 - (MTDocumentObjectType)getType {
-    return self.type.unsignedIntegerValue;
+    return self.type.shortValue;
 }
 
 - (NSString *)designerRepresentationText {

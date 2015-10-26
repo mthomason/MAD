@@ -58,10 +58,13 @@
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
 
+#import "NSDictionary+MADReportObjectRepresentation.h"
+
 @interface MTReportViewerPrintPageRenderer ()
 
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
+@property (nonatomic, strong) MTDataTable *dataTable;
 
 @property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
 
@@ -69,10 +72,7 @@
 @property (nonatomic, assign) CGSize printableSize;
 @property (nonatomic, assign) CGSize cachedPageSize;
 @property (nonatomic, assign) CGRect cachedPageRect;
-@property (nonatomic, assign) BOOL showWaterMark;
-@property (nonatomic, assign) BOOL debugMode;
-
-@property (nonatomic, strong) MTDataTable *dataTable;
+@property (nonatomic, assign) bool showWaterMark;
 
 @end
 
@@ -95,8 +95,7 @@
 
 - (void)initCommon {
     
-    self.showWaterMark = NO;
-    self.debugMode = NO;
+    self.showWaterMark = false;
 
     self.cachedPageSize = CGSizeZero;
     self.cachedPageRect = CGRectZero;
@@ -126,14 +125,12 @@
     size = size * scale;
     cornerSize = cornerSize * scale;
     CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
-    CGSize trueSize = CGSizeMake(imageSizeWidth, size);
-    CGRect zoomRect = CGRectMake(0.0000f, 0.0000f, trueSize.width, trueSize.height);
+    CGRect zoomRect = CGRectMake(CGPointZero.x, CGPointZero.y, imageSizeWidth, size);
     CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
     CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
     CGPoint startPoint = CGPointMake(pathRect.origin.x, startPointY);
-    CGFloat topRightPointX = pathRect.origin.x + pathRect.size.width;
-    CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
-    CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
+    CGPoint topRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, pathRect.origin.y);
+    CGPoint bottomRightPoint = CGPointMake(pathRect.origin.x + pathRect.size.width, startPointY);
     
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0000f);
     
@@ -168,7 +165,7 @@
         for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
             NSInteger zigNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
             CGFloat zigReal = zigNumber / scale;
-            CGFloat zigDistance = pow(zigNumber, 1.0001) + zigReal;
+            CGFloat zigDistance = (CGFloat)pow(zigNumber, 1.0001) + zigReal;
             CGFloat zigX = topRightPoint.x - zigDistance;
             CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
             CGPoint zigPoint = CGPointMake(zigX, zigY);
@@ -194,7 +191,7 @@
             NSInteger zagNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
             CGFloat zagReal = zagNumber / scale;
             CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
-            CGFloat zagDistance = pow(zagNumber, 1.0001) + zagReal;
+            CGFloat zagDistance = (CGFloat)pow(zagNumber, 1.0001) + zagReal;
             CGFloat zagY = bottomRightPoint.y - zagDistance;
             CGPoint zagPoint = CGPointMake(zagX, zagY);
             CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
@@ -326,17 +323,11 @@
             NSInteger layoutSectionCounter = 0;
             NSInteger readGroupIndex = 0;
 
-            NSNumber *detailRowId = nil;
-            
             for (NSDictionary *pageSection in [self.reportFormatter layoutEnumeratorForPage:pageIndex]) {
-                NSUInteger groupLevel = [pageSection[MTReportGroupLevel] unsignedIntegerValue];
-                
-                MNSDocumentSectionType typeDocumentSection = [pageSection[[MTReportFormatter KeyReportSectionType]] unsignedIntegerValue];
-                RptqDocumentSection *documentSection = [document documentSectionForType:typeDocumentSection andLevel:groupLevel];
 
-                
+                RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
                 CGFloat sizeHeight = documentSection.visibility.boolValue ? [self.reportFormatter heightForSection:documentSection] : CGSizeZero.height;
-                switch (typeDocumentSection) {
+                switch (pageSection.sectionType) {
                     case MNSDocumentSectionTypePageFooter: {
                         BOOL lastPage = pageIndex == numberOfPages - 1;
                         if (lastPage) {
@@ -359,253 +350,21 @@
                 [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
                 
                 if (numberOfGroups > 0) {
-                    NSArray *keys = [self.reportFormatter keysForCachedID:pageSection[MTReportDetailRowId]];
+                    NSArray *keys = [self.reportFormatter keysForCachedID:pageSection.detailRowId];
                     [groupLevelKeys setArray:keys];
                 }
-                if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter && groupLevel == [self.reportFormatter numberOfGroups] - 1) {
+                if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter && pageSection.groupLevel == [self.reportFormatter numberOfGroups] - 1) {
                     readGroupIndex++;
                 }
                 
                 if (documentSection.visibility.boolValue) {
-                    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+                    for (RptqDocumentSectionRows *row in documentSection.hasRows) {
                         
-                        for (RptqDocumentObject *item in [row hasObjects]) {
+                        for (RptqDocumentObject *item in row.hasObjects) {
                             
                             @autoreleasepool {
                                 
-                                id drawingObject = nil;
-                                
-                                switch ([item getType]) {
-                                        
-                                    case MTDocumentObjectTypeAggregate: {
-                                        
-                                        RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
-                                        RptqQueryField *queryField = [aggregateField aggregateField];
-                                        NSString *fieldKey = [database safeQueryField: queryField.databaseSchemaField.name
-                                                                             andTable: queryField.inQueryTable.queryAlias];
-                                        
-                                        NSArray *groupKeys;
-                                        NSUInteger groupCount = [aggregateField.groupNumber unsignedIntegerValue];
-                                        if (groupCount < [groupLevelKeys count]) {
-                                            NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
-                                            groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
-                                        }
-                                        
-                                        MTAggregateFunctionType functionType = aggregateField.function.unsignedIntegerValue;
-                                        MTDataType aggregateType = queryField.databaseSchemaField.dataType.unsignedIntegerValue;
-                                        
-                                        BOOL calculateInMemory = functionType == MTAggregateFunctionTypeFirst ||
-                                                                 functionType == MTAggregateFunctionTypeLast;
-                                        
-                                        id aggregateResult;
-                                        
-                                        if (calculateInMemory == NO) {
-                                            
-                                            aggregateResult = [self.dataTable resultsForAggregateType: aggregateField.groupType.unsignedIntegerValue
-                                                                                             function: aggregateField.function.unsignedIntegerValue
-                                                                                             fieldKey: fieldKey
-                                                                                            groupKeys: groupKeys
-                                                                                               rowids: [self.reportFormatter rowidsForPage:pageIndex]];
-                                            
-                                        } else {    //Handle first and last
-                                            
-                                            NSArray *dataForGroup = nil;
-                                            NSDictionary *dataOfInterest = nil;
-                                            
-                                            switch (aggregateField.groupType.unsignedIntegerValue) {
-                                                case MTAggregateGroupByTypeSection: {
-                                                    if (aggregateField.groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
-                                                        NSRange rangeForLevel = NSMakeRange(0, aggregateField.groupNumber.unsignedIntegerValue + 1);
-                                                        NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
-                                                        dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
-                                                    } else {
-                                                        dataForGroup = @[];
-                                                    }
-                                                    switch (functionType) {
-                                                        case MTAggregateFunctionTypeFirst:
-                                                            dataOfInterest = ([dataForGroup count] >= 1) ? dataForGroup[0] : @{fieldKey:@""};
-                                                            break;
-                                                        case MTAggregateFunctionTypeLast:
-                                                            dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup lastObject] : @{fieldKey:@""};
-                                                            break;
-                                                        default:
-                                                            dataOfInterest = @{fieldKey:@""};
-                                                            break;
-                                                    }
-                                                    break;
-                                                }
-                                                case MTAggregateGroupByTypePage: {
-                                                    switch (functionType) {
-                                                        case MTAggregateFunctionTypeFirst: {
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            //don't get data from report formattter
-                                                            //get it from data table
-                                                            
-                                                                NSNumber *firstRowid = nil;
-                                                                for (NSDictionary *pageSection in self.reportFormatter.reportLayout[pageIndex]) {
-                                                                    NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
-                                                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
-                                                                        firstRowid = pageSection[MTReportDetailRowId];
-                                                                        break;
-                                                                    }
-                                                                }
-                                                                dataOfInterest =  firstRowid != nil ? [self.dataTable dataForCacheId:firstRowid] : nil;
-                                                            break;
-                                                        }
-                                                        case MTAggregateFunctionTypeLast: {
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            NSNumber *lastRowid = nil;
-                                                            for (NSDictionary *pageSection in [self.reportFormatter.reportLayout[pageIndex] reverseObjectEnumerator]) {
-                                                                NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
-                                                                if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
-                                                                    lastRowid = pageSection[MTReportDetailRowId];
-                                                                    break;
-                                                                }
-                                                            }
-                                                            dataOfInterest = lastRowid != nil ? [self.dataTable dataForCacheId:lastRowid] : nil;
-                                                            break;
-                                                            
-                                                    }
-                                                        default:
-                                                            dataOfInterest = @{fieldKey:@""};
-                                                            break;
-                                                    }
-                                                    break;
-                                                }
-                                                case MTAggregateGroupByTypeReport: {
-                                                    switch (functionType) {
-                                                        case MTAggregateFunctionTypeFirst: {
-                                                            
-                                                            NSNumber *firstRowid = nil;
-                                                            for (NSDictionary *pageSection in self.reportFormatter.reportLayout[0]) {
-                                                                NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
-                                                                if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
-                                                                    firstRowid = pageSection[MTReportDetailRowId];
-                                                                    break;
-                                                                }
-                                                            }
-                                                            dataOfInterest =  firstRowid != nil ? [self.dataTable dataForCacheId:firstRowid] : nil;
-                                                            break;
-                                                        }
-                                                        case MTAggregateFunctionTypeLast: {
-                                                            
-                                                            NSNumber *lastRowid = nil;
-                                                            for (NSDictionary *pageSection in [self.reportFormatter.reportLayout[[self.reportFormatter numberOfPages] - 1] reverseObjectEnumerator]) {
-                                                                NSNumber *section = pageSection[[MTReportFormatter KeyReportSectionType]];
-                                                                if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
-                                                                    lastRowid = pageSection[MTReportDetailRowId];
-                                                                    break;
-                                                                }
-                                                            }
-                                                            dataOfInterest = lastRowid != nil ? [self.dataTable dataForCacheId:lastRowid] : nil;
-                                                            break;
-                                                        }
-                                                        default:
-                                                            dataOfInterest = @{fieldKey:@""};
-                                                            break;
-                                                    }
-                                                    break;
-                                                }
-                                                default:
-                                                    break;
-                                            }
-                                            aggregateResult = dataOfInterest[fieldKey];
-                                        }
-                                        
-                                        drawingObject = [NSString stringWithString:[item formattedString:aggregateType
-                                                                                                forValue:aggregateResult]];
-                                        if ([drawingObject isEqualToString:MTNullIdentifier]) {
-                                            drawingObject = @"";
-                                        }
-                                        
-                                        break;
-                                    }
-                                        
-                                    case MTDocumentObjectTypeImage: {
-                                        drawingObject = [[item isImage] image];
-                                        break;
-                                    }
-                                        
-                                    case MTDocumentObjectTypeBarcode: {
-                                        detailRowId = pageSection[MTReportDetailRowId];
-                                        NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
-
-                                        RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
-                                        RptqQueryField *queryField1 = barcodeObject.referencesField1;
-                                        RptqQueryField *queryField2 = barcodeObject.referencesField2;
-                                        NSString *tableFieldKey1 = [database safeQueryField: queryField1.databaseSchemaField.name
-                                                                                   andTable: queryField1.inQueryTable.queryAlias];
-                                        NSString *tableFieldKey2 = [database safeQueryField: queryField2.databaseSchemaField.name
-                                                                                   andTable: queryField2.inQueryTable.queryAlias];
-                                        id value1 = rowData[tableFieldKey1];
-                                        id value2 = rowData[tableFieldKey2];
-                                        MTDataType dataType1 = queryField1.databaseSchemaField.dataType.unsignedIntegerValue;
-                                        MTDataType dataType2 = queryField2.databaseSchemaField.dataType.unsignedIntegerValue;
-                                        NSString *input1 = [item formattedString:dataType1 forValue:value1];
-                                        if ([input1 isEqualToString:MTNullIdentifier]) {
-                                            input1 = @"";
-                                        }
-                                        NSString *input2 = [item formattedString:dataType2 forValue:value2];
-                                        if ([input2 isEqualToString:MTNullIdentifier]) {
-                                            input2 = @"";
-                                        }
-                                        MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject];
-                                        
-                                        [barcode setInput:              input1];
-                                        [barcode setPrimaryData:        input2];
-                                        drawingObject = barcode;
-                                        break;
-                                    }
-                                        
-                                    case MTDocumentObjectTypeLabelDynamic: {
-                                        detailRowId = pageSection[MTReportDetailRowId];
-                                        NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
-                                        if (rowData != nil) {
-                                            RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
-                                            RptqQueryField *queryField = [labelDataField referencesQueryField];
-                                            NSString *tableFieldKey = [database safeQueryField: queryField.databaseSchemaField.name
-                                                                                      andTable: queryField.inQueryTable.queryAlias];
-                                            id value = rowData[tableFieldKey];
-                                            RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
-                                            NSNumber *dataTypeNumber = [schemaField dataType];
-                                            MTDataType dataType = dataTypeNumber.unsignedIntegerValue;
-                                            drawingObject = [NSString stringWithString:[item formattedString:dataType forValue:value]];
-                                            if ([drawingObject isEqualToString:MTNullIdentifier]) {
-                                                drawingObject = @"";
-                                            }
-                                        } else {
-                                            drawingObject = @"";
-                                        }
-                                        break;
-                                    }
-                                        
-                                    case MTDocumentObjectTypeLabelStatic: {
-                                        drawingObject = [NSString stringWithString:item.isLabel.text];
-                                        break;
-                                    }
-                                        
-                                    default: {
-                                        drawingObject = @"";
-                                        break;
-                                    }
-                                }
+                                id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
                                 
                                 CGFloat originPointXPadding = item.originx.floatValue + sectionRect.origin.x + item.spacingLeft;
                                 CGFloat originPointYPadding = item.originy.floatValue + sectionRect.origin.y + item.spacingTop;
@@ -634,17 +393,250 @@
                     }
                 }
                 
-                if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
                     rowIndex++;
                 }
                 originY += sizeHeight;
-                if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter) {
+                if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter) {
                     [groupLevelKeys removeAllObjects];
                 }
             }
             layoutSectionCounter++;
         }
     }
+}
+
+- (id)drawingObjectForDatabase:(MTDatabase *)database
+                     pageIndex:(NSUInteger)pageIndex
+                groupLevelKeys:(NSArray *)groupLevelKeys
+                   detailRowId:(NSNumber *)detailRowId
+                       andItem:(RptqDocumentObject *)item {
+
+    id drawingObject = nil;
+    switch (item.getType) {
+            
+        case MTDocumentObjectTypeAggregate: {
+            
+            RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
+            RptqQueryField *queryField = [aggregateField aggregateField];
+            NSString *fieldKey = [database safeQueryField: queryField.databaseSchemaField.name
+                                                 andTable: queryField.inQueryTable.queryAlias];
+            
+            NSArray *groupKeys;
+            NSUInteger groupCount = [aggregateField.groupNumber unsignedIntegerValue];
+            if (groupCount < [groupLevelKeys count]) {
+                NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
+                groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
+            }
+            
+            MTAggregateFunctionType functionType = aggregateField.function.unsignedIntegerValue;
+            MTDataType aggregateType = queryField.databaseSchemaField.dataType.unsignedIntegerValue;
+            
+            BOOL calculateInMemory = functionType == MTAggregateFunctionTypeFirst ||
+            functionType == MTAggregateFunctionTypeLast;
+            
+            id aggregateResult;
+            
+            if (calculateInMemory == NO) {
+                
+                aggregateResult = [self.dataTable resultsForAggregateType: aggregateField.groupType.unsignedIntegerValue
+                                                                 function: aggregateField.function.unsignedIntegerValue
+                                                                 fieldKey: fieldKey
+                                                                groupKeys: groupKeys
+                                                                   rowids: [self.reportFormatter rowidsForPage:pageIndex]];
+                
+            } else {    //Handle first and last
+                
+                NSArray *dataForGroup = nil;
+                NSDictionary *dataOfInterest = nil;
+                
+                switch (aggregateField.groupType.unsignedIntegerValue) {
+                    case MTAggregateGroupByTypeSection: {
+                        if (aggregateField.groupNumber.unsignedIntegerValue < groupLevelKeys.count) {
+                            NSRange rangeForLevel = NSMakeRange(0, aggregateField.groupNumber.unsignedIntegerValue + 1);
+                            NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
+                            dataForGroup = [self.dataTable objectsForGroupKeys:groupKeys];
+                        } else {
+                            dataForGroup = @[];
+                        }
+                        switch (functionType) {
+                            case MTAggregateFunctionTypeFirst:
+                                dataOfInterest = ([dataForGroup count] >= 1) ? dataForGroup[0] : @{fieldKey:@""};
+                                break;
+                            case MTAggregateFunctionTypeLast:
+                                dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup lastObject] : @{fieldKey:@""};
+                                break;
+                            default:
+                                dataOfInterest = @{fieldKey:@""};
+                                break;
+                        }
+                        break;
+                    }
+                    case MTAggregateGroupByTypePage: {
+                        switch (functionType) {
+                            case MTAggregateFunctionTypeFirst: {
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                //don't get data from report formattter
+                                //get it from data table
+                                
+                                NSNumber *firstRowid = nil;
+                                for (NSDictionary *pageSection in self.reportFormatter.reportLayout[pageIndex]) {
+                                    NSNumber *section = pageSection[MTReportSectionType];
+                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                        firstRowid = pageSection[MTReportDetailRowId];
+                                        break;
+                                    }
+                                }
+                                dataOfInterest =  firstRowid != nil ? [self.dataTable dataForCacheId:firstRowid] : nil;
+                                break;
+                            }
+                            case MTAggregateFunctionTypeLast: {
+                                
+                                
+                                
+                                
+                                
+                                NSNumber *lastRowid = nil;
+                                for (NSDictionary *pageSection in [self.reportFormatter.reportLayout[pageIndex] reverseObjectEnumerator]) {
+                                    NSNumber *section = pageSection[MTReportSectionType];
+                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                        lastRowid = pageSection[MTReportDetailRowId];
+                                        break;
+                                    }
+                                }
+                                dataOfInterest = lastRowid != nil ? [self.dataTable dataForCacheId:lastRowid] : nil;
+                                break;
+                                
+                            }
+                            default:
+                                dataOfInterest = @{fieldKey:@""};
+                                break;
+                        }
+                        break;
+                    }
+                    case MTAggregateGroupByTypeReport: {
+                        switch (functionType) {
+                            case MTAggregateFunctionTypeFirst: {
+                                
+                                NSNumber *firstRowid = nil;
+                                for (NSDictionary *pageSection in self.reportFormatter.reportLayout[0]) {
+                                    NSNumber *section = pageSection[MTReportSectionType];
+                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                        firstRowid = pageSection[MTReportDetailRowId];
+                                        break;
+                                    }
+                                }
+                                dataOfInterest =  firstRowid != nil ? [self.dataTable dataForCacheId:firstRowid] : nil;
+                                break;
+                            }
+                            case MTAggregateFunctionTypeLast: {
+                                
+                                NSNumber *lastRowid = nil;
+                                for (NSDictionary *pageSection in [self.reportFormatter.reportLayout[[self.reportFormatter numberOfPages] - 1] reverseObjectEnumerator]) {
+                                    NSNumber *section = pageSection[MTReportSectionType];
+                                    if (section.unsignedIntegerValue == MNSDocumentSectionTypeBody) {
+                                        lastRowid = pageSection[MTReportDetailRowId];
+                                        break;
+                                    }
+                                }
+                                dataOfInterest = lastRowid != nil ? [self.dataTable dataForCacheId:lastRowid] : nil;
+                                break;
+                            }
+                            default:
+                                dataOfInterest = @{fieldKey:@""};
+                                break;
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                aggregateResult = dataOfInterest[fieldKey];
+            }
+            
+            drawingObject = [NSString stringWithString:[item formattedString:aggregateType
+                                                                    forValue:aggregateResult]];
+            if ([drawingObject isEqualToString:MTNullIdentifier]) {
+                drawingObject = @"";
+            }
+            
+            break;
+        }
+            
+        case MTDocumentObjectTypeImage: {
+            drawingObject = item.isImage.image;
+            break;
+        }
+            
+        case MTDocumentObjectTypeBarcode: {
+            NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
+            
+            NSString *tableFieldKey1 = [database safeQueryField: item.isBarcode.referencesField1.databaseSchemaField.name
+                                                       andTable: item.isBarcode.referencesField1.inQueryTable.queryAlias];
+            NSString *tableFieldKey2 = [database safeQueryField: item.isBarcode.referencesField2.databaseSchemaField.name
+                                                       andTable: item.isBarcode.referencesField2.inQueryTable.queryAlias];
+            id value1 = rowData[tableFieldKey1];
+            id value2 = rowData[tableFieldKey2];
+            MTDataType dataType1 = item.isBarcode.referencesField1.databaseSchemaField.dataType.unsignedIntegerValue;
+            MTDataType dataType2 = item.isBarcode.referencesField2.databaseSchemaField.dataType.unsignedIntegerValue;
+            NSString *input1 = [item formattedString:dataType1 forValue:value1];
+            if ([input1 isEqualToString:MTNullIdentifier]) {
+                input1 = @"";
+            }
+            NSString *input2 = [item formattedString:dataType2 forValue:value2];
+            if ([input2 isEqualToString:MTNullIdentifier]) {
+                input2 = @"";
+            }
+            MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:item.isBarcode];
+            barcode.input = input1;
+            barcode.primaryData = input2;
+            drawingObject = barcode;
+            break;
+        }
+            
+        case MTDocumentObjectTypeLabelDynamic: {
+            NSDictionary *rowData = [NSDictionary dictionaryWithDictionary: [self.dataTable dataForCacheId:detailRowId]];
+            if (rowData != nil) {
+                
+                NSString *tableFieldKey = [database safeQueryField: item.isLabelDataField.referencesQueryField.databaseSchemaField.name
+                                                          andTable: item.isLabelDataField.referencesQueryField.inQueryTable.queryAlias];
+                id value = rowData[tableFieldKey];
+                MTDataType dataType = item.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.unsignedIntegerValue;
+                drawingObject = [NSString stringWithString:[item formattedString:dataType forValue:value]];
+                if ([drawingObject isEqualToString:MTNullIdentifier]) {
+                    drawingObject = @"";
+                }
+            } else {
+                drawingObject = @"";
+            }
+            break;
+        }
+            
+        case MTDocumentObjectTypeLabelStatic: {
+            drawingObject = [NSString stringWithString:item.isLabel.text];
+            break;
+        }
+            
+        default: {
+            drawingObject = @"";
+            break;
+        }
+    }
+
+    return drawingObject;
 }
 
 - (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
@@ -686,7 +678,7 @@
             
             CGContextSaveGState(ctx);
             {
-                static CGFloat angle315Degrees = 7.0000f * M_PI / 4.0000f;
+                static CGFloat angle315Degrees = 7.0000f * (CGFloat)M_PI / 4.0000f;
                 CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ?
                                       y :
                                       y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));

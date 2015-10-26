@@ -34,7 +34,9 @@ extern NSString * const MTDocumentObjectDefinationField2;
 + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
 
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
-- (MTDocumentObjectType)getType;
+
+@property (readonly) MTDocumentObjectType getType;
+
 - (CGSize)size;
 - (NSString *)designerRepresentationText;
 - (CGRect)paddingViewFrame;

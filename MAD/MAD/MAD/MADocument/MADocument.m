@@ -114,11 +114,6 @@ NSString * const MTDocumentInfoKeyMetaEditor            = @"editor";
 NSString * const MTDocumentInfoKeyMetaFileVersion       = @"fileversion";
 NSString * const MTDocumentInfoKeyMetaDateCreated       = @"datacreated";
 
-//Keys stored in the cache.  Short and unique.
-NSString * const MTReportSectionType                    = @"a";
-NSString * const MTReportGroupLevel                     = @"b";
-NSString * const MTReportDetailRowId                    = @"d";
-
 NSString * const MADMimeType                            = @"application/vnd.everydayapps.mad";
 
 NSString * const MADFileNameMetaPlist                   = @"meta.plist";

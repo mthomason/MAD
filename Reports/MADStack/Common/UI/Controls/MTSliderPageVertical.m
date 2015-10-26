@@ -22,8 +22,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIImage *thumbImage = [MTSliderPageVertical sliderImageEnabled];
-        [self setThumbImage:thumbImage forState:UIControlStateNormal];
         UIImage *blank = [UIImage new];
+        [self setThumbImage:thumbImage forState:UIControlStateNormal];
         [self setMinimumTrackImage:blank forState:UIControlStateNormal];
         [self setMaximumTrackImage:blank forState:UIControlStateNormal];
         
@@ -93,7 +93,7 @@
     if (numberOfTicks < 0) { numberOfTicks = 0; }
 
     if (numberOfTicks > self.maximumValue) {
-        numberOfTicks = floor(self.maximumValue) + 1;
+        numberOfTicks = floorf(self.maximumValue) + 1;
     }
 
     BOOL everyOther = numberOfTicks > 5;
@@ -156,8 +156,7 @@
 
 - (void)rotateBoundingSize:(CGSize)boundingSize inContext:(CGContextRef)context {
     CGAffineTransform affineTransformTranslate1 = CGAffineTransformMakeTranslation(boundingSize.width / 2.0000f, boundingSize.width / 2.0000f);
-    CGFloat angle = 3.0000f / 2.0000f * M_PI;
-    CGAffineTransform rotate = CGAffineTransformMakeRotation(angle);
+    CGAffineTransform rotate = CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
     CGAffineTransform affineTransformTranslateBack = CGAffineTransformMakeTranslation(-boundingSize.width / 2.0000f, -boundingSize.width / 2.0000f);
     CGContextConcatCTM(context, affineTransformTranslate1);
     CGContextConcatCTM(context, rotate);

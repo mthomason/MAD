@@ -35,7 +35,6 @@ extern NSString * const MTNullIdentifier;
 - (instancetype)initWithQuery: (MTQuery *)query layout: (MADocument *)layout options: (MTReportFormatterOptions)options;
 + (instancetype)reportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
                                  options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED;
-+ (NSValue *)KeyReportSectionType;
 
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
