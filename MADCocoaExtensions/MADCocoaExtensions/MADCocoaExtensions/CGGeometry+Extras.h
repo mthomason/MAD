@@ -385,7 +385,7 @@ CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger o
 CG_INLINE CGPoint CGPointRoundPointToGrid(CGPoint point);
 CG_INLINE CGPoint
 CGPointRoundPointToGrid(CGPoint point) {
-    return CGPointMake(round(point.x / 10.0000f) * 10.0000f, round(point.y / 10.0000f) * 10.0000f);
+    return CGPointMake((CGFloat)round(point.x / 10.0000f) * 10.0000f, (CGFloat)round(point.y / 10.0000f) * 10.0000f);
 }
 
 CG_INLINE CGPoint CGCornerTopLeftPointInRect(CGRect frame);
@@ -495,7 +495,7 @@ CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
 CG_INLINE CGFloat CGDistance(CGPoint p1, CGPoint p2);
 CG_INLINE CGFloat
 CGDistance(CGPoint p1, CGPoint p2) {
-	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
+	return (CGFloat)sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
 }
 
 CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2);
@@ -519,7 +519,7 @@ CG_INLINE CGFloat CGInterceptBySlope(CGPoint p2, CGFloat m) {
 CG_INLINE CGFloat CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
 CG_INLINE CGFloat
 CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
-	if (t2 - t1 != 0) return (CGDistance(p1, p2) / ((t2 - t1) * 3));
+	if (t2 - t1 != 0) return (CGDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
 	else return 0;
 }
 
