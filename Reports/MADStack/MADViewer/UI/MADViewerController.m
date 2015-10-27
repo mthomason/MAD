@@ -64,11 +64,8 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 @property (nonatomic, strong) IBOutlet UIView *sliderView;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSliderView;
 
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemPrint;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemRefresh;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemActivity;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
 @property (nonatomic, strong) IBOutlet UILabel *labelDateLastRefreshed;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
@@ -446,7 +443,7 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
         [self.snapshotBeforeRotation setFrame:framePreservingHeight];
         
         if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
-            ((MTReportViewerReportPageView *)displayView).drawBlankPage = YES;
+            ((MTReportViewerReportPageView *)displayView).drawBlankPage = true;
         }
         
         [displayView setNeedsDisplay];
@@ -620,7 +617,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 
         if (displayView) {
             if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
-                [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+                ((MTReportViewerReportPageView *)displayView).drawBlankPage = false;
             }
         }
         [displayView setNeedsDisplay];
@@ -656,8 +653,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 }
 
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
-    [self.printPageRendererReport drawPageAtIndex: pageIndex
-                                           inRect: printableRect];
+    [self.printPageRendererReport drawPageAtIndex: pageIndex inRect: printableRect];
 }
 
 #pragma mark - Document Interaction Controller Delegate
@@ -681,9 +677,9 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 - (void)setDisplayActive {
     
     [self setPageingEnabled:YES];
-    
-    [self.pageSlider setEnabled:YES];
-    [self.pageSlider setTintColor:[UIColor tintColorRed]];
+
+    UIColor *red = [UIColor tintColorRed];
+    self.pageSlider.tintColor = red;
 
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     UITabBarItem *item;
@@ -691,10 +687,8 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
         item.enabled = YES;
     }
     
+    self.pageSlider.enabled = YES;
     self.barButtonItemRefresh.enabled = YES;
-    self.barButtonItemDone.enabled = YES;
-    self.barButtonItemPrint.enabled = YES;
-    self.barButtonItemSendToPdf.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
     
     [self setIsRefreshing:NO];
@@ -722,15 +716,11 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 
     self.isRefreshing = YES;
     self.barButtonItemRefresh.enabled = NO;
-    self.barButtonItemDone.enabled = NO;
-    self.barButtonItemPrint.enabled = NO;
-    self.barButtonItemSendToPdf.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     [self setUpdatingOfTimerIsPaused:YES];
     NSString *refreshing = NSLocalizedString(@"Refreshing data.", @"Refreshing data.");
     self.labelDateLastRefreshed.text = refreshing;
     [self.labelDateLastRefreshed setNeedsDisplay];
-    self.barButtonItemDone.enabled = NO;
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
@@ -746,8 +736,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 
     self.didRefreshBeforeReaload = YES;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
-    
-    self.barButtonItemDone.enabled = NO;
 
     if (self.isRefreshing == NO) {
         self.startedRefresh = YES;
@@ -997,7 +985,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 
             blockViewer2.isRefreshing = NO;
             blockViewer2.startedRefresh = NO;
-            blockViewer2.barButtonItemDone.enabled = YES;
             [blockViewer2 updateRecordsReadStatus];
             
             doc2.reportFormatter.didRefresh = NO;
@@ -1044,7 +1031,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
         pageViewControllerLast.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         pageViewControllerLast.view.translatesAutoresizingMaskIntoConstraints = YES;
         if (pageViewControllerLast != nil && [pageViewControllerLast respondsToSelector:@selector(pageNumber)]) {
-            visiblePageNumber = pageViewControllerLast.pageNumber;
+            visiblePageNumber = pageViewControllerLast.reportPageNumber;
         }
         if (visiblePageNumber + 1 <= self.numberOfPages) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
@@ -1067,7 +1054,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     if (viewerViewController.pageIsAnimating == NO) {
         NSUInteger visiblePageNumber = 0;
         if (pageViewControllerPrevious != nil && [pageViewControllerPrevious respondsToSelector:@selector(pageNumber)]) {
-            visiblePageNumber = pageViewControllerPrevious.pageNumber;
+            visiblePageNumber = pageViewControllerPrevious.reportPageNumber;
         }
         if (visiblePageNumber - 1 > 0) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
@@ -1101,7 +1088,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
         [pageViewController setPageIsAnimating:NO];
         if (pageViewController.viewControllers.count > 0) {
             MTReportViewerReportPageViewController *viewController = pageViewController.viewControllers[0];
-            [pageViewController setCurrentPageIndex: viewController.pageNumber - 1];
+            [pageViewController setCurrentPageIndex: viewController.reportPageNumber - 1];
             [pageViewController updatePageStatus];
             [pageViewController.pageSlider setValue: pageViewController.currentPageIndex
                                            animated: YES];
