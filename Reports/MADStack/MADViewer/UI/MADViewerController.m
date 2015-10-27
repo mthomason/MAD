@@ -67,7 +67,6 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
-@property (nonatomic, strong) IBOutlet UILabel *labelDateLastRefreshed;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
 
 @property (nonatomic, assign) NSUInteger numberOfPages;
@@ -280,8 +279,6 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     
     _lastCacheDate = nil;
     
-    self.labelDateLastRefreshed.text = @"";
-
     self.pageIsAnimating = NO;
     self.startedRefresh = NO;
     
@@ -583,7 +580,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
                             if (finished) {
                                 [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
                                 [pageOne.view setNeedsDisplay];
-                                [reportViewer.labelDateLastRefreshed setHidden:NO];
                                 reportViewer.updatingOfTimerIsPaused = NO;
                                 reportViewer.isRefreshing = NO;
                                 reportViewer = nil;
@@ -694,9 +690,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
     self.barButtonItemRefresh.enabled = YES;
-    self.labelDateLastRefreshed.hidden = NO;
-    self.labelDateLastRefreshed.text = @"";
-    [self.labelDateLastRefreshed setNeedsDisplay];
 
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
 
@@ -718,9 +711,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     self.barButtonItemRefresh.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     [self setUpdatingOfTimerIsPaused:YES];
-    NSString *refreshing = NSLocalizedString(@"Refreshing data.", @"Refreshing data.");
-    self.labelDateLastRefreshed.text = refreshing;
-    [self.labelDateLastRefreshed setNeedsDisplay];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
