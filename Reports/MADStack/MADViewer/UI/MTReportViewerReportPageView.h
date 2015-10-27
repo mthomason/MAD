@@ -13,10 +13,19 @@
 #import <MAD/MTReportViewerPrintPageRenderer.h>
 #import "MTPrintingProtocol.h"
 
+@protocol MADReportViewerReportPageViewProtocol <NSObject>
+
+- (NSUInteger)pageNumber;
+- (NSUInteger)numberOfPages;
+- (NSDate * _Nullable)lastCacheDate;
+
+@end
+
 @interface MTReportViewerReportPageView : UIView
 
 @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
-@property (nonatomic, assign) BOOL drawBlankPage;
+@property (nonatomic, weak) id <MADReportViewerReportPageViewProtocol> delegatePage;
+@property (nonatomic, assign) bool drawBlankPage;
 
 @end
 
