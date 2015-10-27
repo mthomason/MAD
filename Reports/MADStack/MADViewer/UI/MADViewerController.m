@@ -61,18 +61,11 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
-@property (nonatomic, strong) IBOutlet UIView *sliderView;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSliderView;
-
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
-
 @property (nonatomic, assign) NSUInteger numberOfPages;
 @property (nonatomic, assign) NSUInteger currentPageIndex;
-
-@property (nonatomic, assign) CGRect lastLayoutBounds;
 
 @property (nonatomic, strong) NSDate *lastCacheDate;
 @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
@@ -83,12 +76,6 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 @property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
 
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
-
-@property (nonatomic, strong) UIImageView *snapshotBeforeRotation;
-@property (nonatomic, strong) UIImageView *snapshotAfterRotation;
-
-@property (nonatomic, assign) CGRect frameBeforeRotation;
-@property (nonatomic, assign) CGRect frameAfterRotation;
 
 @property (nonatomic, strong) MTSliderPageVertical *pageSlider;
 
@@ -109,11 +96,10 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
 @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
-@property (nonatomic, assign) BOOL shouldShowPrintDialog;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 
-@property (nonatomic, assign) BOOL didRefreshBeforeReaload;
-@property (nonatomic, assign) BOOL activityExporting;
+@property (nonatomic, assign) bool didRefreshBeforeReaload;
+@property (nonatomic, assign) bool activityExporting;
 
 @end
 
@@ -188,15 +174,22 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 
 - (void)initalize {
     
-    self.activityExporting = NO;
-    self.didRefreshBeforeReaload = NO;
+    self.activityExporting = false;
+    self.didRefreshBeforeReaload = false;
     
     NSAttributedString *lineReturnString = [[NSAttributedString alloc] initWithString:@"\n"];
     self.lineReturnString = lineReturnString;
     
     [self initializeVerticalSlider];
-    [self initalizeLabelStatus];
 
+    UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
+    [labelStatus setNumberOfLines:3];
+    labelStatus.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    
+    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+    self.barButtonLabelStatus = barButtonLabelStatus;
+    self.labelStatus = labelStatus;
+    
     NSAttributedString *statusMessage1 = [NSAttributedString new];
     NSAttributedString *statusMessage2 = [NSAttributedString new];
     NSAttributedString *statusMessage3 = [NSAttributedString new];
@@ -233,16 +226,6 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     
     self.pageSlider = vertSlider;
     self.toolbarSideRight = vertToolbar;
-}
-
-- (void)initalizeLabelStatus {
-    UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
-    [labelStatus setNumberOfLines:3];
-    labelStatus.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    
-    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
-    self.barButtonLabelStatus = barButtonLabelStatus;
-    self.labelStatus = labelStatus;
 }
 
 #pragma mark - UIViewController Standard Callbacks
@@ -297,10 +280,11 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
                     animated: NO
                   completion: ^(BOOL finished) { }];
     
-    [self addPageSliderToView];
+    [self.view addSubview:self.toolbarSideRight];
+    [self.view bringSubviewToFront:self.toolbarSideRight];
     
-    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray: [self toolbarItems]];
-    [toolbarItems insertObject: [self barButtonLabelStatus] atIndex: 0];
+    NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
+    [toolbarItems insertObject: self.barButtonLabelStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
     
     [self setTintColorForToolbar:self.navigationController.toolbar];
@@ -365,20 +349,15 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     CGFloat itemsMargin = 8.0000f;
     NSUInteger counter = 0;
     for (UIBarButtonItem *barButtonItem in [[self.navigationController toolbar] items]) {
-        if (barButtonItem != [self barButtonItemSliderView]) {
-            NSString *viewSelector = NSStringFromSelector(@selector(view));
-            UIView *view = [barButtonItem valueForKey:viewSelector];
-            if (view != nil) {
-                CGFloat width = view? [view frame].size.width : (CGFloat)0.0;
-                nonSliderButtonsWidth += width + itemsMargin;
-            } else {
-                nonSliderButtonsWidth += [barButtonItem width];
-            }
+        NSString *viewSelector = NSStringFromSelector(@selector(view));
+        UIView *view = [barButtonItem valueForKey:viewSelector];
+        if (view != nil) {
+            nonSliderButtonsWidth += (view ? view.frame.size.width : CGSizeZero.width) + itemsMargin;
+        } else {
+            nonSliderButtonsWidth += barButtonItem.width;
         }
         counter++;
     }
-    self.barButtonItemSliderView.width = self.navigationController.toolbar.frame.size.width - nonSliderButtonsWidth - (itemsMargin * counter + 1);
-    [self.sliderView setFrame:CGRectMake(self.sliderView.frame.origin.x, self.sliderView.frame.origin.y, self.barButtonItemSliderView.width, self.sliderView.frame.size.height)];
     [self.navigationController.toolbar setNeedsLayout];
     [self.view bringSubviewToFront:self.toolbarSideRight];
     [self layoutSubviewSliderPagination];
@@ -391,53 +370,52 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     [super willTransitionToTraitCollection: newCollection
                  withTransitionCoordinator: coordinator];
     
-    if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == NO) {
+    UIImageView *snapshotViewBeforeRotation = nil, *snapshotViewAfterRotation = nil;
+    if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == false) {
+        
+        CGRect frameBeforeRotation, frameAfterRotation;
+
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
+
+        frameBeforeRotation = displayView.frame;
         
-        [self setFrameBeforeRotation: [displayView frame]];
-        
-        [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
-        [displayView insertSubview:self.snapshotBeforeRotation aboveSubview:displayView];
-        
+        snapshotViewBeforeRotation = captureSnapshotOfView(displayView);
+
+        [displayView insertSubview:snapshotViewBeforeRotation aboveSubview:displayView];
         [displayView setNeedsDisplay];
         
-        CGRect oldBounds = displayView.bounds;
-        [self redrawWithFrame:oldBounds];
+        frameAfterRotation = displayView.bounds;
+        [self redrawWithFrame:frameAfterRotation];
         
         pageViewController = [self currentPageviewController];
         displayView = (MTReportViewerReportPageView *)pageViewController.view;
         
-        [self setFrameAfterRotation: oldBounds];
         [UIView setAnimationsEnabled:NO];
-        [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
+        snapshotViewAfterRotation = captureSnapshotOfView(displayView);
         
+        CGRect framePreservingHeight = CGRectMake(frameBeforeRotation.origin.x, frameBeforeRotation.origin.y,
+                                                  frameBeforeRotation.size.width, snapshotViewAfterRotation.frame.size.height);
         
-        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x, self.frameBeforeRotation.origin.y,
-                                                  self.frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+        snapshotViewAfterRotation.frame = framePreservingHeight;
         
-        self.snapshotAfterRotation.frame = framePreservingHeight;
-        
-        UIImage *imageBeforeRotation = self.snapshotBeforeRotation.image;
-        imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        
-        UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
-        imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        UIImage *imageBeforeRotation = [snapshotViewBeforeRotation.image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        UIImage *imageAfterRotation = [snapshotViewAfterRotation.image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
         
         [UIView setAnimationsEnabled:YES];
         
-        if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
-            [self.snapshotAfterRotation setAlpha:0.0000f];
-            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:self.snapshotBeforeRotation];
-            [self.snapshotAfterRotation setAlpha:1.0000f];
+        if (imageAfterRotation.size.height < imageBeforeRotation.size.height) {
+            snapshotViewAfterRotation.alpha = 0.0000f;
+            [displayView insertSubview:snapshotViewAfterRotation aboveSubview:snapshotViewBeforeRotation];
+            snapshotViewAfterRotation.alpha = 1.0000f;
         } else {
-            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:self.snapshotBeforeRotation];
-            [self.snapshotBeforeRotation setAlpha:0.0000f];
+            [displayView insertSubview:snapshotViewAfterRotation aboveSubview:snapshotViewBeforeRotation];
+            snapshotViewBeforeRotation.alpha = 0.0000f;
         }
         
-        [self.snapshotAfterRotation setFrame:self.frameAfterRotation];
-        framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
-        [self.snapshotBeforeRotation setFrame:framePreservingHeight];
+        snapshotViewAfterRotation.frame = frameAfterRotation;
+        framePreservingHeight = CGRectMake(frameAfterRotation.origin.x, frameAfterRotation.origin.y, frameAfterRotation.size.width, snapshotViewAfterRotation.frame.size.height);
+        snapshotViewBeforeRotation.frame = framePreservingHeight;
         
         if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
             ((MTReportViewerReportPageView *)displayView).drawBlankPage = true;
@@ -450,7 +428,23 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
         [self.navigationItem.titleView sizeToFit];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.navigationItem.titleView sizeToFit];
-        [self localDidRotate];
+
+        if (self.activityExporting == false) {
+            
+            MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+            UIView *displayView = [pageViewController view];
+            
+            if (displayView) {
+                if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
+                    ((MTReportViewerReportPageView *)displayView).drawBlankPage = false;
+                }
+            }
+            [displayView setNeedsDisplay];
+            
+            [snapshotViewBeforeRotation removeFromSuperview];
+            [snapshotViewAfterRotation removeFromSuperview];
+        }
+        
     }];
     
 }
@@ -458,17 +452,13 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 #pragma mark - add controls
 
 - (void)addProgressViewToView {
+    self.progressView.progress = 0.0000f;
     [self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
 }
 
 - (void)removeProgressViewFromView {
     [self.progressView removeFromSuperview];
-}
-
-- (void)addPageSliderToView {
-    [self.view addSubview:self.toolbarSideRight];
-    [self.view bringSubviewToFront:self.toolbarSideRight];
 }
 
 #pragma mark - properties
@@ -604,25 +594,6 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     [self.viewControllerDelegate viewControllerDidFinish: self];
 }
 
-- (void)localDidRotate {
-
-    if (self.activityExporting == NO) {
-        
-        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-        UIView *displayView = [pageViewController view];
-
-        if (displayView) {
-            if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
-                ((MTReportViewerReportPageView *)displayView).drawBlankPage = false;
-            }
-        }
-        [displayView setNeedsDisplay];
-        
-        [self.snapshotBeforeRotation removeFromSuperview];
-        [self.snapshotAfterRotation removeFromSuperview];
-    }
-}
-
 - (MTReportViewerReportPageViewController *)currentPageviewController {
     return [self pageViewControllerAtIndex: self.currentPageIndex];
 }
@@ -638,7 +609,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 }
 
 - (BOOL)shouldReprocess {
-    return self.isRefreshing == NO && self.startedRefresh == NO && self.activityExporting == NO;
+    return self.isRefreshing == NO && self.startedRefresh == NO && self.activityExporting == false;
 }
 
 - (void)redrawWithFrame:(CGRect)frame {
@@ -724,7 +695,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 
 - (IBAction)refresh:(id)sender {
 
-    self.didRefreshBeforeReaload = YES;
+    self.didRefreshBeforeReaload = true;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
 
     if (self.isRefreshing == NO) {
@@ -830,7 +801,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 }
 
 - (IBAction)activity:(id)sender {
-    self.activityExporting = YES;
+    self.activityExporting = true;
     self.pageSlider.enabled = NO;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
@@ -851,7 +822,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
         
         if (completed || (completed == NO && activityType == nil)) {
             weakself.pageSlider.enabled = YES;
-            weakself.activityExporting = NO;
+            weakself.activityExporting = false;
             [weakself enableTabBarItems];
         } else {
             if (activityType.length > 0) {  // Long running activity
@@ -870,17 +841,17 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
                                 weakself.pageSlider.enabled = YES;
-                                weakself.activityExporting = NO;
+                                weakself.activityExporting = false;
                                 [weakself enableTabBarItems];
                             }];
                         }
                     }
                 }
                 weakself.pageSlider.enabled = YES;
-                weakself.activityExporting = NO;
+                weakself.activityExporting = false;
             } else {    // Cancel button
                 weakself.pageSlider.enabled = YES;
-                weakself.activityExporting = NO;
+                weakself.activityExporting = false;
                 [weakself enableTabBarItems];
             }
         }
@@ -985,7 +956,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
                 if (blockViewer2.didRefreshBeforeReaload) {
                     notification.alertBody = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
                     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                    blockViewer2.didRefreshBeforeReaload = NO;
+                    blockViewer2.didRefreshBeforeReaload = false;
                 }
                 
                 NSNumber *bgtask = @(blockViewer2.backgroundTaskIdRefresh);
