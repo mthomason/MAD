@@ -288,7 +288,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self addDetailToReportLayout];
     [self addReportFooterToReportLayout];
     
-    NSArray <NSDictionary *> *tlfp = [NSArray arrayWithArray:self.pageLayoutTemporary];
+    NSArray <__kindof NSDictionary *> *tlfp = [NSArray arrayWithArray:self.pageLayoutTemporary];
     [self.reportLayout addObject:tlfp];
     
     NSArray *tdfp = [NSArray arrayWithArray:self.pageIndexesTemporary];

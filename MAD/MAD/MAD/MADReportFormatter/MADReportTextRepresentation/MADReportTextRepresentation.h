@@ -12,6 +12,6 @@
 
 @interface MADReportTextRepresentation : NSObject
 
-@property (nonatomic, strong, getter=hasPages) NSArray <MADReportPageRepresentation *> *pages;
+@property (nonatomic, strong, getter=hasPages) NSArray <__kindof MADReportPageRepresentation *> *pages;
 
 @end

@@ -79,7 +79,7 @@
 @property (nonatomic, assign) bool accessibilityCacheNeedsUpdate;
 @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
 @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
-@property (nonatomic, strong) NSArray <MADAccessibilityLine *> *accessibilityItems;
+@property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 
 @end
 

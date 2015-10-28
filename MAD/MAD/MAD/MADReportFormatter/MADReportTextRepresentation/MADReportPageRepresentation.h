@@ -12,6 +12,6 @@
 
 @interface MADReportPageRepresentation : NSObject
 
-@property (nonatomic, strong, getter=hasLines) NSArray <MADReportLineRepresentation *> *lines;
+@property (nonatomic, strong, getter=hasLines) NSArray <__kindof MADReportLineRepresentation *> *lines;
 
 @end
