@@ -11,7 +11,7 @@
 @implementation UIPageViewController (Extras)
 
 - (void)setPageingEnabled:(BOOL)enabled {
-    for (UIGestureRecognizer *gestureRecognizer in [self gestureRecognizers]) {
+    for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
             [gestureRecognizer setEnabled:enabled];
     }
 }
