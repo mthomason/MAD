@@ -432,18 +432,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - properties
 
-- (NSShadow *)statusLabelShadow {
-    NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowColor = [UIColor colorWithRed:0.0000f
-                                         green:0.00000f
-                                          blue:0.0000f
-                                         alpha:0.8000f];
-    shadow.shadowOffset = CGSizeMake(0.0000f, 1.0000f);
-    shadow.shadowBlurRadius = 5.0000f;
-    return shadow;
-}
-
-
 - (void)handleGestureTapSlider:(UIGestureRecognizer *)tap {
     UISlider *slider = (UISlider *)tap.view;
     if (slider.highlighted == NO) {
