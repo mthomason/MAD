@@ -25,6 +25,7 @@
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTDataTable.h>
 #import "MUIViewControllerDelegate.h"
+#import "MADProgressView.h"
 
 #import "MADNavigationBarTitleView.h"
 #import "MTReportViewerReportPageView.h"
@@ -46,9 +47,12 @@
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
-static NSString * const MADTextReadRecords = @"Read %@ records.";
 static NSString * const MADTextFormattingPage = @"Formatting page %@.";
-static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
+static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
+static NSString * const MADTextReadRecords = @"\nRead %@ records.";
+
+static const CGFloat MADSliderPaginationWidth = 40.0000f;
+static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @interface MADViewerController ()
     <UIPopoverControllerDelegate,
@@ -70,11 +74,6 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 @property (nonatomic, strong) NSDate *lastCacheDate;
 @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
-@property (nonatomic, assign) BOOL startedRefresh;
-@property (nonatomic, assign) BOOL pageIsAnimating;
-@property (atomic,    assign) BOOL isRefreshing;
-@property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
-
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
 @property (nonatomic, strong) MTSliderPageVertical *pageSlider;
@@ -84,22 +83,23 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 @property (nonatomic, strong) UIBarButtonItem *barButtonLabelStatus;
 
 @property (nonatomic, strong) UILabel *labelStatus;
-
 @property (nonatomic, strong) NSAttributedString *statusMessage1;
 @property (nonatomic, strong) NSAttributedString *statusMessage2;
 @property (nonatomic, strong) NSAttributedString *statusMessage3;
 
-@property (nonatomic, strong) UIProgressView *progressView;
-
-@property (nonatomic, strong) NSAttributedString *lineReturnString;
+@property (nonatomic, strong) UIProgressView *progressView; // FIXME: Not implmented.
 
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
 @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 
+@property (atomic, assign, getter=isRefreshing) bool refreshing;
 @property (nonatomic, assign) bool didRefreshBeforeReaload;
 @property (nonatomic, assign) bool activityExporting;
+@property (nonatomic, assign) bool startedRefresh;
+@property (nonatomic, assign) bool pageIsAnimating;
+@property (nonatomic, assign) bool updatingOfTimerIsPaused;
 
 @end
 
@@ -177,13 +177,10 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     self.activityExporting = false;
     self.didRefreshBeforeReaload = false;
     
-    NSAttributedString *lineReturnString = [[NSAttributedString alloc] initWithString:@"\n"];
-    self.lineReturnString = lineReturnString;
-    
     [self initializeVerticalSlider];
 
     UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
-    [labelStatus setNumberOfLines:3];
+    labelStatus.numberOfLines = 3;
     labelStatus.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
@@ -200,9 +197,7 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     UIBarButtonItem *barButtonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
     self.barButtonItemRefresh = barButtonRefresh;
     
-    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-    progressView.trackTintColor = [UIColor tintColorRed];
-    progressView.tintColor = [UIColor tintColorBlue];
+    UIProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     progressView.progress = 0.0000f;
     self.progressView = progressView;
 
@@ -250,20 +245,19 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
-
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = self.title;
     self.navigationItem.titleView = titleView;
     
     _timerLabelTimeSinceRefreh = nil;
     
-    self.isRefreshing = NO;
-    self.updatingOfTimerIsPaused = NO;
+    self.refreshing = false;
+    self.updatingOfTimerIsPaused = false;
     
     _lastCacheDate = nil;
     
-    self.pageIsAnimating = NO;
-    self.startedRefresh = NO;
+    self.pageIsAnimating = false;
+    self.startedRefresh = false;
     
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.dataSource = self;
@@ -275,10 +269,8 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
 
-    [self setViewControllers: blankPageArray
-                   direction: UIPageViewControllerNavigationDirectionForward
-                    animated: NO
-                  completion: ^(BOOL finished) { }];
+    [self setViewControllers: blankPageArray direction: UIPageViewControllerNavigationDirectionForward
+                    animated: NO completion: ^(BOOL finished) { }];
     
     [self.view addSubview:self.toolbarSideRight];
     [self.view bringSubviewToFront:self.toolbarSideRight];
@@ -286,9 +278,12 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
     [toolbarItems insertObject: self.barButtonLabelStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
+    self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
     
-    [self setTintColorForToolbar:self.navigationController.toolbar];
-    [self setTintColorForSidebar:self.toolbarSideRight];
+    UIImage *blank = [UIImage new];
+    [self.toolbarSideRight setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    [self.toolbarSideRight setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
+    self.toolbarSideRight.backgroundColor = [UIColor tintColorWhiteAlpha];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -346,13 +341,12 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     CGFloat nonSliderButtonsWidth = CGSizeZero.width;
-    CGFloat itemsMargin = 8.0000f;
     NSUInteger counter = 0;
     for (UIBarButtonItem *barButtonItem in [[self.navigationController toolbar] items]) {
         NSString *viewSelector = NSStringFromSelector(@selector(view));
         UIView *view = [barButtonItem valueForKey:viewSelector];
         if (view != nil) {
-            nonSliderButtonsWidth += (view ? view.frame.size.width : CGSizeZero.width) + itemsMargin;
+            nonSliderButtonsWidth += (view ? view.frame.size.width : CGSizeZero.width) + MADBarButtonItemsMargin;
         } else {
             nonSliderButtonsWidth += barButtonItem.width;
         }
@@ -482,7 +476,7 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 
 - (NSDictionary *)attributesStatusLabelCentered {
     NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyleCentered setAlignment:NSTextAlignmentLeft];
+    paragraphStyleCentered.alignment = NSTextAlignmentLeft;
     return @{
              NSParagraphStyleAttributeName : paragraphStyleCentered
              };
@@ -518,20 +512,6 @@ static NSString * const MADTextPageXofY = @"Page %1@ of %2@ pages.";
 - (UIImage *)tabBarImage {
     return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
 }
-
-- (void)setTintColorForToolbar:(UIToolbar *)toolbar {
-    //toolbar.barTintColor = [UIColor tintColorBlue];
-    toolbar.tintColor = [UIColor tintColorWhite];
-}
-
-- (void)setTintColorForSidebar:(UIToolbar *)toolbar {
-    UIImage *blank = [UIImage new];
-    [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-    [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    toolbar.backgroundColor = [UIColor tintColorWhiteAlpha];
-}
-
-const CGFloat MADSliderPaginationWidth = 40.0000f;
 
 - (void)layoutSubviewSliderPagination {
     self.toolbarSideRight.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth,
@@ -570,8 +550,8 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
                             if (finished) {
                                 [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
                                 [pageOne.view setNeedsDisplay];
-                                reportViewer.updatingOfTimerIsPaused = NO;
-                                reportViewer.isRefreshing = NO;
+                                reportViewer.updatingOfTimerIsPaused = false;
+                                reportViewer.refreshing = false;
                                 reportViewer = nil;
                             }
                         }];
@@ -609,7 +589,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 }
 
 - (BOOL)shouldReprocess {
-    return self.isRefreshing == NO && self.startedRefresh == NO && self.activityExporting == false;
+    return self.refreshing == false && self.startedRefresh == false && self.activityExporting == false;
 }
 
 - (void)redrawWithFrame:(CGRect)frame {
@@ -658,8 +638,8 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     self.barButtonItemRefresh.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
     
-    [self setIsRefreshing:NO];
-    [self setUpdatingOfTimerIsPaused:NO];
+    self.refreshing = false;
+    self.updatingOfTimerIsPaused = false;
     self.barButtonItemRefresh.enabled = YES;
 
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
@@ -670,18 +650,19 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     
     [self setPageingEnabled:NO];
     
-    [self.pageSlider setEnabled:NO];
-    [self.pageSlider setTintColor:[UIColor lightGrayColor]];
+    self.pageSlider.enabled = NO;
+    UIColor *tintColor = [UIColor lightGrayColor];
+    self.pageSlider.tintColor = tintColor;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = NO;
     }
 
-    self.isRefreshing = YES;
     self.barButtonItemRefresh.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
-    [self setUpdatingOfTimerIsPaused:YES];
+    self.refreshing = true;
+    self.updatingOfTimerIsPaused = false;
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
@@ -698,9 +679,9 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     self.didRefreshBeforeReaload = true;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
 
-    if (self.isRefreshing == NO) {
-        self.startedRefresh = YES;
-        self.isRefreshing = YES;
+    if (self.isRefreshing == false) {
+        self.startedRefresh = true;
+        self.refreshing = true;
         [self setDisplayInactive];
         
         MTDatabase *database = self.document.mainDatabase;
@@ -912,10 +893,9 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     dispatch_async(queuePriorityBackground, ^{
         
         [blockViewer watchFormatter: weakdoc.reportFormatter];
-        BOOL startedRefresh = blockViewer.startedRefresh;
-        
-        weakdoc.reportFormatter.didRefresh = startedRefresh;
-        [weakdoc.reportFormatter formatForSize:viewBounds contentChanged:startedRefresh];
+
+        weakdoc.reportFormatter.didRefresh = blockViewer.startedRefresh;
+        [weakdoc.reportFormatter formatForSize:viewBounds contentChanged:blockViewer.startedRefresh];
         
         MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: weakdoc.reportFormatter
                                                                                                                    dataTable: weakdoc.mainDataTable];
@@ -944,8 +924,8 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
                                     animated: NO
                                   completion: nil];
 
-            blockViewer2.isRefreshing = NO;
-            blockViewer2.startedRefresh = NO;
+            blockViewer2.refreshing = false;
+            blockViewer2.startedRefresh = false;
             [blockViewer2 updateRecordsReadStatus];
             
             doc2.reportFormatter.didRefresh = NO;
@@ -987,7 +967,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
        viewControllerAfterViewController:(MTReportViewerReportPageViewController *)pageViewControllerLast {
     
     MTReportViewerReportPageViewController *result = nil;
-    if (viewerViewController.pageIsAnimating == NO) {
+    if (viewerViewController.pageIsAnimating == false) {
         NSUInteger visiblePageNumber = 0;
         pageViewControllerLast.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         pageViewControllerLast.view.translatesAutoresizingMaskIntoConstraints = YES;
@@ -1012,7 +992,7 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
       viewControllerBeforeViewController:(MTReportViewerReportPageViewController *)pageViewControllerPrevious {
     
     MTReportViewerReportPageViewController *result = nil;
-    if (viewerViewController.pageIsAnimating == NO) {
+    if (viewerViewController.pageIsAnimating == false) {
         NSUInteger visiblePageNumber = 0;
         if (pageViewControllerPrevious != nil && [pageViewControllerPrevious respondsToSelector:@selector(pageNumber)]) {
             visiblePageNumber = pageViewControllerPrevious.reportPageNumber;
@@ -1040,33 +1020,27 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
 
 #pragma mark - UIPageViewControllerDelegate
 
-- (void)pageViewController:(MADViewerController *)pageViewController
-        didFinishAnimating:(BOOL)finished
-   previousViewControllers:(NSArray *)previousViewControllers
+- (void)pageViewController:(MADViewerController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed {
     
     if (completed || finished) {
-        [pageViewController setPageIsAnimating:NO];
+        pageViewController.pageIsAnimating = false;
         if (pageViewController.viewControllers.count > 0) {
             MTReportViewerReportPageViewController *viewController = pageViewController.viewControllers[0];
             [pageViewController setCurrentPageIndex: viewController.reportPageNumber - 1];
             [pageViewController updatePageStatus];
-            [pageViewController.pageSlider setValue: pageViewController.currentPageIndex
-                                           animated: YES];
+            [pageViewController.pageSlider setValue: pageViewController.currentPageIndex animated: YES];
         }
     }
-    
 }
 
-- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController
-                   spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
-    pageViewController.pageIsAnimating = NO;
+- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+    pageViewController.pageIsAnimating = false;
     return UIPageViewControllerSpineLocationMin;
 }
 
-- (void)pageViewController:(MADViewerController *)pageViewController
-    willTransitionToViewControllers:(NSArray *)pendingViewControllers {
-    pageViewController.pageIsAnimating = YES;
+- (void)pageViewController:(MADViewerController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
+    pageViewController.pageIsAnimating = true;
     
 }
 
@@ -1128,21 +1102,18 @@ const CGFloat MADSliderPaginationWidth = 40.0000f;
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
 
-    if ([[recordsReadMessage string] length] > 0) {
-        [status appendAttributedString:self.lineReturnString];
+    if (recordsReadMessage.string.length > 0) {
         [status appendAttributedString:recordsReadMessage];
     }
 
-    if ([[numberOfPagesMessage string] length] > 0) {
-        [status appendAttributedString:self.lineReturnString];
+    if (numberOfPagesMessage.string.length > 0) {
         [status appendAttributedString:numberOfPagesMessage];
     }
     
-    NSRange range = NSMakeRange(0, [status length]);
     NSDictionary *attributes = [NSDictionary dictionaryWithDictionary:[self attributesStatusLabelCentered]];
-    [status addAttributes:attributes range:range];
+    [status addAttributes:attributes range:NSMakeRange(0, status.length)];
     
-    [self.labelStatus setAttributedText:status];
+    self.labelStatus.attributedText = status;
 }
 
 - (void)updateLateRefreshedLabel:(id)sender {
