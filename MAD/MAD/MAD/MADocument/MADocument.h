@@ -35,7 +35,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase;
+        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase, UIPrintPageRenderer;
 
 @protocol MADActivityProtocol;
 
@@ -48,6 +48,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 @property (nonatomic, assign) BOOL limitResultsDesignMode;
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
+@property (readonly) UIPrintPageRenderer *printerPrintPageRender;
+
 @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
 
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
@@ -73,8 +75,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (void)regenThumbnail;
 
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
-
-- (UIPrintPageRenderer *)printerPrintPageRender;
 
 - (NSURL *)cachedDataUrl;
 - (UIImage *)fullyRenderedThumbnail;

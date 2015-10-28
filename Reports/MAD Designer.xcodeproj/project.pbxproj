@@ -766,6 +766,7 @@
 		4C94ADE317C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		4C994F111BDCA3A90058627A /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {ASSET_TAGS = (); }; };
+		4C994F391BE082730058627A /* MADLabelStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F381BE082730058627A /* MADLabelStatus.m */; settings = {ASSET_TAGS = (); }; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -1896,6 +1897,8 @@
 		4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectCollectionViewCell.m; sourceTree = "<group>"; };
 		4C994F0E1BDC9FDB0058627A /* MADToggleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToggleTableViewCell.h; sourceTree = "<group>"; };
 		4C994F0F1BDC9FDB0058627A /* MADToggleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToggleTableViewCell.m; sourceTree = "<group>"; };
+		4C994F371BE082730058627A /* MADLabelStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelStatus.h; sourceTree = "<group>"; };
+		4C994F381BE082730058627A /* MADLabelStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelStatus.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -3634,6 +3637,8 @@
 				4C4020FC1BAE98C300BAE5FC /* MTReportViewerReportPageView.m */,
 				4C4020FD1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.h */,
 				4C4020FE1BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m */,
+				4C994F371BE082730058627A /* MADLabelStatus.h */,
+				4C994F381BE082730058627A /* MADLabelStatus.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -5663,6 +5668,7 @@
 				4C26BA311BAF999800456DC8 /* MADUser.m in Sources */,
 				4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
+				4C994F391BE082730058627A /* MADLabelStatus.m in Sources */,
 				4C26B9FD1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4C4020391BAE92F200BAE5FC /* MADQueryVisualizationSchemaViewController+Designer.m in Sources */,
 				4C40205B1BAE92F200BAE5FC /* UIStoryboard+Designer.m in Sources */,

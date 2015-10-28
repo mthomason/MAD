@@ -44,6 +44,8 @@
 
 #import "MTStoreKitController+Features.h"
 
+#import "MADLabelStatus.h"
+
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
@@ -64,6 +66,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTActivityItemProviderDelegate>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
+@property (nonatomic, strong) MTSliderPageVertical *pageSlider;
+@property (nonatomic, strong) MADLabelStatus *labelStatus;
+@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
@@ -76,22 +81,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
-@property (nonatomic, strong) MTSliderPageVertical *pageSlider;
-
 @property (nonatomic, strong) UIToolbar *toolbarSideRight;
 
 @property (nonatomic, strong) UIBarButtonItem *barButtonLabelStatus;
 
-@property (nonatomic, strong) UILabel *labelStatus;
-@property (nonatomic, strong) NSAttributedString *statusMessage1;
-@property (nonatomic, strong) NSAttributedString *statusMessage2;
-@property (nonatomic, strong) NSAttributedString *statusMessage3;
-
 @property (nonatomic, strong) UIProgressView *progressView; // FIXME: Not implmented.
-
-@property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
-@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
-
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 
 @property (atomic, assign, getter=isRefreshing) bool refreshing;
@@ -177,22 +171,25 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.activityExporting = false;
     self.didRefreshBeforeReaload = false;
     
-    [self initializeVerticalSlider];
-
-    UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
-    labelStatus.numberOfLines = 3;
-    labelStatus.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
+    [vertSlider addTarget:self action:@selector(handleSliderChangedPage:) forControlEvents:UIControlEventValueChanged];
+    [vertSlider addTarget:self action:@selector(handleSliderDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     
+    UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureTapSlider:)];
+    [vertSlider addGestureRecognizer:sliderTapped];
+    
+    UIToolbar *vertToolbar = [[UIToolbar alloc] init];
+    
+    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
+    vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
+    
+    self.pageSlider = vertSlider;
+    self.toolbarSideRight = vertToolbar;
+    
+    MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
     self.barButtonLabelStatus = barButtonLabelStatus;
     self.labelStatus = labelStatus;
-    
-    NSAttributedString *statusMessage1 = [NSAttributedString new];
-    NSAttributedString *statusMessage2 = [NSAttributedString new];
-    NSAttributedString *statusMessage3 = [NSAttributedString new];
-    self.statusMessage1 = statusMessage1;
-    self.statusMessage2 = statusMessage2;
-    self.statusMessage3 = statusMessage3;
     
     UIBarButtonItem *barButtonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
     self.barButtonItemRefresh = barButtonRefresh;
@@ -204,23 +201,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self.toolbarSideRight addSubview:self.pageSlider];
     
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
-}
-
-- (void)initializeVerticalSlider {
-    MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];    
-    [vertSlider addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
-    [vertSlider addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapped:)];
-    [vertSlider addGestureRecognizer:sliderTapped];
-
-    UIToolbar *vertToolbar = [[UIToolbar alloc] init];
-
-    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
-    vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
-    
-    self.pageSlider = vertSlider;
-    self.toolbarSideRight = vertToolbar;
 }
 
 #pragma mark - UIViewController Standard Callbacks
@@ -236,30 +216,26 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    NSLog(@"%@", self.tabBarController);
-    NSLog(@"%@", self.navigationController);
-    NSLog(@"%@", self.navigationController.tabBarController);
     
-    self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+    UIColor *backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.view.backgroundColor = backgroundColor;
     
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    UIColor *whiteColor = [UIColor tintColorWhite];
+    self.navigationController.toolbar.tintColor = whiteColor;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
     titleView.text = self.title;
     self.navigationItem.titleView = titleView;
-    
-    _timerLabelTimeSinceRefreh = nil;
-    
+
+    self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     self.refreshing = false;
     self.updatingOfTimerIsPaused = false;
-    
-    _lastCacheDate = nil;
-    
     self.pageIsAnimating = false;
     self.startedRefresh = false;
+    self.timerLabelTimeSinceRefreh = nil;
+    self.lastCacheDate = nil;
     
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.dataSource = self;
     self.delegate = self;
     
@@ -278,7 +254,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
     [toolbarItems insertObject: self.barButtonLabelStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
-    self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
     
     UIImage *blank = [UIImage new];
     [self.toolbarSideRight setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
@@ -457,31 +432,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - properties
 
-- (NSDictionary *)attributesStatusLabelBold {
-    UIColor *textColor = [UIColor whiteColor];
-    UIFont *fontBold = [UIFont boldSystemFontOfSize:8.0000f];
-    return @{
-             NSForegroundColorAttributeName : textColor,
-             NSFontAttributeName : fontBold,
-             };
-}
-- (NSDictionary *)attributesStatusLabelLight {
-    UIColor *textColor = [UIColor whiteColor];
-    UIFont *font = [UIFont systemFontOfSize:8.0000f];
-    return @{
-             NSForegroundColorAttributeName : textColor,
-             NSFontAttributeName : font,
-             };
-}
-
-- (NSDictionary *)attributesStatusLabelCentered {
-    NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyleCentered.alignment = NSTextAlignmentLeft;
-    return @{
-             NSParagraphStyleAttributeName : paragraphStyleCentered
-             };
-}
-
 - (NSShadow *)statusLabelShadow {
     NSShadow *shadow = [[NSShadow alloc] init];
     shadow.shadowColor = [UIColor colorWithRed:0.0000f
@@ -494,7 +444,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 
-- (void)sliderTapped:(UIGestureRecognizer *)tap {
+- (void)handleGestureTapSlider:(UIGestureRecognizer *)tap {
     UISlider *slider = (UISlider *)tap.view;
     if (slider.highlighted == NO) {
         CGPoint pt = [tap locationInView: slider];
@@ -502,16 +452,23 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         float delta = percentage * (slider.maximumValue - slider.minimumValue);
         float value = slider.minimumValue + delta;
         [slider setValue:value animated:YES];
-        [self sliderPageDidFinishDrag:slider];
-        [self sliderChangedPage:slider];
+        [self handleSliderDidFinishDrag:slider];
+        [self handleSliderChangedPage:slider];
     }
+}
+
+- (void)handleSliderChangedPage:(id)sender {
+    UISlider *slider = (UISlider *)sender;
+    [self moveToPageAtIndex:lroundf(slider.value)];
+}
+
+- (void)handleSliderDidFinishDrag:(UISlider *)sender {
+    sender.value = lroundf(sender.value);               // Sets your slider to this value
 }
 
 #pragma mark - MTTabBarImageProtocol
 
-- (UIImage *)tabBarImage {
-    return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
-}
+- (UIImage *)tabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
 
 - (void)layoutSubviewSliderPagination {
     self.toolbarSideRight.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth,
@@ -522,12 +479,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                        CGPointZero.y,
                                        MADSliderPaginationWidth,
                                        self.view.frame.size.height);
-}
-
-- (void)sliderChangedPage:(id)sender {
-
-    UISlider *slider = (UISlider *)sender;
-    [self moveToPageAtIndex:lroundf(slider.value)];
 }
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
@@ -558,10 +509,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         result = YES;
     }
     return result;
-}
-
-- (IBAction)sliderPageDidFinishDrag:(id)sender {
-    ((UISlider *)sender).value = lroundf(((UISlider *)sender).value);               // Sets your slider to this value
 }
 
 - (IBAction)done:(id)sender {
@@ -1046,76 +993,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Status Label
 
-- (void)updateStatusWithTime:(NSString *)timeMessage {
-    if ([NSThread isMainThread] == NO) {
-        __weak MADViewerController *weakSelf = self;
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakSelf updateStatusWithTime:timeMessage];
-        });
-    } else {
-        
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
-        self.statusMessage1 = attributedString;
-        [self updateStatusLabel: self.statusMessage1
-             recordsReadMessage: self.statusMessage2
-        andNumberOfPagesMessage: self.statusMessage3];
-    }
-}
-
-
-- (void)updateStatusWithRecordsRead:(NSString *)message {
-    if ([NSThread isMainThread] == NO) {
-        __weak MADViewerController *weakSelf = self;
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakSelf updateStatusWithRecordsRead:message];
-        });
-    } else {
-        
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message
-                                                                               attributes:self.attributesStatusLabelLight];
-        self.statusMessage2 = attributedString;
-        [self updateStatusLabel: self.statusMessage1
-             recordsReadMessage: self.statusMessage2
-        andNumberOfPagesMessage: self.statusMessage3];
-    }
-}
-
-- (void)updateStatusWithPageNumber:(NSString *)message {
-    if ([NSThread isMainThread] == NO) {
-        __weak MADViewerController *weakSelf = self;
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakSelf updateStatusWithPageNumber:message];
-        });
-    } else {
-        
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesStatusLabelLight]];
-        self.statusMessage3 = attributedString;
-        [self updateStatusLabel: self.statusMessage1
-             recordsReadMessage: self.statusMessage2
-        andNumberOfPagesMessage: self.statusMessage3];
-    }
-}
-
-- (void)updateStatusLabel:(NSAttributedString *)timeMessage
-       recordsReadMessage:(NSAttributedString *)recordsReadMessage
-  andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
-    
-    NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
-
-    if (recordsReadMessage.string.length > 0) {
-        [status appendAttributedString:recordsReadMessage];
-    }
-
-    if (numberOfPagesMessage.string.length > 0) {
-        [status appendAttributedString:numberOfPagesMessage];
-    }
-    
-    NSDictionary *attributes = [NSDictionary dictionaryWithDictionary:[self attributesStatusLabelCentered]];
-    [status addAttributes:attributes range:NSMakeRange(0, status.length)];
-    
-    self.labelStatus.attributedText = status;
-}
-
 - (void)updateLateRefreshedLabel:(id)sender {
     if (self.lastCacheDate == nil) {
         
@@ -1130,11 +1007,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     if (self.lastCacheDate == nil) {
-        [self updateStatusWithTime:@"No Cache"];
+        [self.labelStatus updateStatusWithTime:@"No Cache"];
     } else {
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
         NSString *display = [dateStringAndInterval former];
-        [self updateStatusWithTime:display];
+        [self.labelStatus updateStatusWithTime:display];
         
         MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
         
@@ -1193,14 +1070,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-    [self updateStatusWithRecordsRead:readRecords];
+    [self.labelStatus updateStatusWithRecordsRead:readRecords];
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-    [self updateStatusWithRecordsRead:readRecords];
+    [self.labelStatus updateStatusWithRecordsRead:readRecords];
 }
 
 - (NSString *)localizedStringForInteger:(NSUInteger)integer {
@@ -1213,7 +1090,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSString *startPage = [self localizedStringForInteger:self.currentPageIndex + 1];
     NSString *endPage = [self localizedStringForInteger:self.numberOfPages];
     NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, startPage, endPage];
-    [self updateStatusWithPageNumber:localizedPageOfPages];
+    [self.labelStatus updateStatusWithPageNumber:localizedPageOfPages];
 }
 
 - (void)setMaxNumberOfPages:(NSUInteger)numberOfPages {
