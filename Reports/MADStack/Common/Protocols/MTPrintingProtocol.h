@@ -15,9 +15,6 @@
 
 @required
 
-@optional
-
-- (void)drawView:(id)sender inRect:(CGRect)rect;
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect;
 
 @end

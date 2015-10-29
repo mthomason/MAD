@@ -46,7 +46,6 @@
     renderedReportView.backgroundColor = whiteColor;
     renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;
-    renderedReportView.delegate = self;
     renderedReportView.delegatePage = self;
     self.view = renderedReportView;
 }
@@ -73,7 +72,7 @@
     [super viewWillLayoutSubviews];
 }
 
-- (void)drawView:(id)sender inRect:(CGRect)rect {
+- (void)drawViewInRect:(CGRect)rect {
     [self.delegate drawPage:self.reportPageNumber - 1 inRect:rect];
 }
 

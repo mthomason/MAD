@@ -212,4 +212,27 @@
     return [MTPair pairWithFormer:result andLatter:resultType];
 }
 
++ (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution {
+    switch (resolution) {
+        case MTDateResolutionDay:
+            return 86400.0;
+            break;
+        case MTDateResolutionHour:
+            return 3600.0;
+            break;
+        case MTDateResolutionMinute:
+            return 60.0;
+            break;
+        case MTDateResolutionSecond:
+            return 1.0;
+            break;
+        case MTDateResolutionMillisecond:
+            return 0.1;
+            break;
+        default:
+            return 86400.0;
+            break;
+    }
+}
+
 @end

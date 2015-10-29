@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, MTDateResolution) {
 
 + (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate;
 
++ (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution;
+
 @end
 
 #endif

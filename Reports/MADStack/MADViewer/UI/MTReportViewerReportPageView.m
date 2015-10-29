@@ -13,8 +13,10 @@
 #import "MTReportViewerReportPageView.h"
 #import <MADDataStructures/MTPair.h>
 #import "NSDate+Extras.h"
+#import "MADTextPosition.h"
 
 static NSString * const PageNumber = @"Page %@";
+static NSString * const MADTextNoCache = @"No Cache";
 
 static const CGFloat PageCounterWidth = 99.0000f;
 static const CGFloat PageCounterHeight = 33.0000f;
@@ -41,7 +43,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
             }
         }
     }
-    _delegate = nil;
+    //_delegate = nil;
     _delegatePage = nil;
 }
 
@@ -84,21 +86,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)drawRect:(CGRect)rect {
     if (!self.drawBlankPage) {
-        [self.delegate drawView:self inRect:rect];
+        [self.delegatePage drawViewInRect:rect];
     }
-}
-
-#pragma mark - Accessibility
-
-- (BOOL)isAccessibilityElement {
-    return YES;
-}
-
-- (NSString *)accessibilityLabel {
-    NSString *pageNumber = [NSNumberFormatter localizedStringFromNumber: @([self.delegatePage pageNumber])
-                                                               numberStyle: NSNumberFormatterSpellOutStyle];
-    NSString *formatString = NSLocalizedString(PageNumber, PageNumber);
-    return [NSString stringWithFormat:formatString, pageNumber.capitalizedString];
 }
 
 #pragma mark
@@ -199,34 +188,15 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
     NSDate * _Nullable lastCacheDate = [self.delegatePage lastCacheDate];
     if (lastCacheDate == nil) {
-        self.timeSinceRefrehLabel.text = @"No Cache";
+        NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
+        self.timeSinceRefrehLabel.text = noCache;
         
     } else {
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:lastCacheDate];
         self.timeSinceRefrehLabel.text = dateStringAndInterval.former;
         MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
         
-        NSTimeInterval updateLabelInSeconds;
-        switch (resolution) {
-            case MTDateResolutionDay:
-                updateLabelInSeconds = 86400.0;
-                break;
-            case MTDateResolutionHour:
-                updateLabelInSeconds = 3600.0;
-                break;
-            case MTDateResolutionMinute:
-                updateLabelInSeconds = 60.0;
-                break;
-            case MTDateResolutionSecond:
-                updateLabelInSeconds = 1.0;
-                break;
-            case MTDateResolutionMillisecond:
-                updateLabelInSeconds = 0.1;
-                break;
-            default:
-                updateLabelInSeconds = 86400;
-                break;
-        }
+        NSTimeInterval updateLabelInSeconds = [NSDate timeIntervalForResolution:resolution];
         
         if (self.timerLabelTimeSinceRefreh != nil) {
             if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
@@ -244,5 +214,147 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     }
 }
 
+#pragma mark - UITextInput
+#pragma mark Required
+
+/* Methods for manipulating text.
+   Reports don't allow text to be manipulated. */
+- (nullable NSString *)textInRange:(UITextRange *)range { return nil; }
+- (void)replaceRange:(UITextRange *)range withText:(NSString *)text { }
+
+/* Text may have a selection, either zero-length (a caret) or ranged.  Editing operations are
+ * always performed on the text from this selection.  nil corresponds to no selection. */
+
+//@property (nullable, readwrite, copy) UITextRange *selectedTextRange;
+
+/* If text can be selected, it can be marked. Marked text represents provisionally
+ * inserted text that has yet to be confirmed by the user.  It requires unique visual
+ * treatment in its display.  If there is any marked text, the selection, whether a
+ * caret or an extended range, always resides witihin.
+ *
+ * Setting marked text either replaces the existing marked text or, if none is present,
+ * inserts it from the current selection. */
+
+//@property (nullable, nonatomic, readonly) UITextRange *markedTextRange; // Nil if no marked text.
+//@property (nullable, nonatomic, copy) NSDictionary *markedTextStyle; // Describes how the marked text should be drawn.
+
+- (void)setMarkedText:(nullable NSString *)markedText selectedRange:(NSRange)selectedRange { /* selectedRange is a range within the markedText */ }
+- (void)unmarkText {}
+
+/* The end and beginning of the the text document. */
+//@property (nonatomic, readonly) UITextPosition *beginningOfDocument;
+//@property (nonatomic, readonly) UITextPosition *endOfDocument;
+
+/* Methods for creating ranges and positions. */
+- (nullable UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition {}
+- (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset {}
+- (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset {}
+
+/* Simple evaluation of positions */
+- (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other {}
+- (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition {}
+
+/* A system-provied input delegate is assigned when the system is interested in input changes. */
+//@property (nullable, nonatomic, weak) id <UITextInputDelegate> inputDelegate;
+
+/* A tokenizer must be provided to inform the text input system about text units of varying granularity. */
+//@property (nonatomic, readonly) id <UITextInputTokenizer> tokenizer;
+
+/* Layout questions. */
+- (nullable UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction {}
+- (nullable UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction {}
+
+/* Writing direction */
+- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {}
+- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range {}
+
+/* Geometry used to provide, for example, a correction rect. */
+- (CGRect)firstRectForRange:(UITextRange *)range {}
+- (CGRect)caretRectForPosition:(UITextPosition *)position {}
+- (NSArray *)selectionRectsForRange:(UITextRange *)range {}       // Returns an array of UITextSelectionRects
+
+/* Hit testing. */
+- (nullable UITextPosition *)closestPositionToPoint:(CGPoint)point {}
+- (nullable UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range {}
+- (nullable UITextRange *)characterRangeAtPoint:(CGPoint)point {}
+
+#pragma mark Optional
+
+- (BOOL)shouldChangeTextInRange:(UITextRange *)range replacementText:(NSString *)text {   /* return NO to not change text */ }
+
+/* Text styling information can affect, for example, the appearance of a correction rect.
+ * Returns a dictionary containing NSAttributedString keys. */
+- (nullable NSDictionary<NSString *,id> *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {
+    
+}
+
+/* To be implemented if there is not a one-to-one correspondence between text positions within range and character offsets into the associated string. */
+- (nullable UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset {
+    
+}
+
+- (NSInteger)characterOffsetOfPosition:(UITextPosition *)position withinRange:(UITextRange *)range {
+    
+}
+
+/* An affiliated view that provides a coordinate system for all geometric values in this protocol.
+ * If unimplmeented, the first view in the responder chain will be selected. */
+//@property (nonatomic, readonly) __kindof UIView *textInputView;
+
+/* Selection affinity determines whether, for example, the insertion point appears after the last
+ * character on a line or before the first character on the following line in cases where text
+ * wraps across line boundaries. */
+//@property (nonatomic) UITextStorageDirection selectionAffinity;
+
+/* This is an optional method for clients that wish to support dictation phrase alternatives. If
+ * they do not implement this method, dictation will just insert the most likely interpretation
+ * of what was spoken via -insertText:.
+ * dictationResult is an array of UIDictationPhrases. */
+- (void)insertDictationResult:(NSArray<UIDictationPhrase *> *)dictationResult {
+    
+}
+
+/* These are optional methods for clients that wish to know when there are pending dictation results. */
+- (void)dictationRecordingDidEnd {
+    
+}
+- (void)dictationRecognitionFailed {
+    
+}
+
+/* The following three optional methods are for clients that wish to support a placeholder for
+ * pending dictation results. -insertDictationPlaceholder must return a reference to the
+ * placeholder. This reference will be used to identify the placeholder by the other methods
+ * (there may be more than one placeholder). */
+- (id)insertDictationResultPlaceholder {
+    
+}
+- (CGRect)frameForDictationResultPlaceholder:(id)placeholder {
+    
+}
+/* willInsertResult will be NO if the recognition failed. */
+- (void)removeDictationResultPlaceholder:(id)placeholder willInsertResult:(BOOL)willInsertResult {}
+
+/* The following three optional methods are for clients that wish to display a floating cursor to
+ * guide user manipulation of the selected text range via the system-provided keyboard. If a client
+ * does not implement these methods, user feedback will be limited to the outcome after setting the
+ * selected text range using positions resulting from hit testing. */
+- (void)beginFloatingCursorAtPoint:(CGPoint)point { }
+- (void)updateFloatingCursorAtPoint:(CGPoint)point { }
+- (void)endFloatingCursor { }
+
+
+#pragma mark - Accessibility
+
+- (BOOL)isAccessibilityElement {
+    return YES;
+}
+
+- (NSString *)accessibilityLabel {
+    NSString *pageNumber = [NSNumberFormatter localizedStringFromNumber: @([self.delegatePage pageNumber])
+                                                            numberStyle: NSNumberFormatterSpellOutStyle];
+    NSString *formatString = NSLocalizedString(PageNumber, PageNumber);
+    return [NSString stringWithFormat:formatString, pageNumber.capitalizedString];
+}
 
 @end

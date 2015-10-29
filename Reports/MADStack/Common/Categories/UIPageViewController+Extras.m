@@ -12,7 +12,7 @@
 
 - (void)setPageingEnabled:(BOOL)enabled {
     for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
-            [gestureRecognizer setEnabled:enabled];
+            gestureRecognizer.enabled = enabled;
     }
 }
 

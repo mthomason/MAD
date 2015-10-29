@@ -53,6 +53,8 @@ static NSString * const MADTextFormattingPage = @"Formatting page %@.";
 static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
 static NSString * const MADTextReadRecords = @"\nRead %@ records.";
 
+static NSString * const MADTextNoCache = @"No Cache";
+
 static const CGFloat MADSliderPaginationWidth = 40.0000f;
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
@@ -459,14 +461,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (UIImage *)tabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
 
 - (void)layoutSubviewSliderPagination {
-    self.toolbarSideRight.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth,
-                                             CGPointZero.y,
-                                             MADSliderPaginationWidth,
-                                             self.view.frame.size.height);
-    self.pageSlider.frame = CGRectMake(CGPointZero.x,
-                                       CGPointZero.y,
-                                       MADSliderPaginationWidth,
-                                       self.view.frame.size.height);
+    self.toolbarSideRight.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth, CGPointZero.y,
+                                             MADSliderPaginationWidth, self.view.frame.size.height);
+    self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                       MADSliderPaginationWidth, self.view.frame.size.height);
 }
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
@@ -564,18 +562,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.pageSlider.tintColor = red;
 
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
-    UITabBarItem *item;
-    for (item in tabBarItems) {
+    for (UITabBarItem *item in tabBarItems) {
         item.enabled = YES;
     }
     
     self.pageSlider.enabled = YES;
     self.barButtonItemRefresh.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
-    
     self.refreshing = false;
     self.updatingOfTimerIsPaused = false;
-    self.barButtonItemRefresh.enabled = YES;
 
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
 
@@ -585,7 +580,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self setPageingEnabled:NO];
     
-    self.pageSlider.enabled = NO;
     UIColor *tintColor = [UIColor lightGrayColor];
     self.pageSlider.tintColor = tintColor;
     
@@ -594,6 +588,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         item.enabled = NO;
     }
 
+    self.pageSlider.enabled = NO;
     self.barButtonItemRefresh.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     self.refreshing = true;
@@ -982,64 +977,39 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Status Label
 
 - (void)updateLateRefreshedLabel:(id)sender {
-    if (self.lastCacheDate == nil) {
-        
+
+    if (self.lastCacheDate == nil) {    // Find last cache date
         NSURL *cachedDataUrl = [self.document cachedDataUrl];
-        NSString *cachedDataPath = [cachedDataUrl path];
         NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataUrl.path error:&error];
         if (error == nil) {
-            NSDate *lastD = [attributes fileModificationDate];
-            [self setLastCacheDate: lastD];
+            self.lastCacheDate = attributes.fileModificationDate;
         }
     }
-    
-    if (self.lastCacheDate == nil) {
-        [self.labelStatus updateStatusWithTime:@"No Cache"];
+
+    MTDateResolution resolution;
+    if (self.lastCacheDate == nil) {    // No Cache exist, so return quickly.
+        NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
+        [self.labelStatus updateStatusWithTime:noCache];
+        return;
     } else {
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
-        NSString *display = [dateStringAndInterval former];
-        [self.labelStatus updateStatusWithTime:display];
-        
-        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
-        
-        NSTimeInterval updateLabelInSeconds;
-        
-        switch (resolution) {
-            case MTDateResolutionDay:
-                updateLabelInSeconds = 86400.0;
-                break;
-            case MTDateResolutionHour:
-                updateLabelInSeconds = 3600.0;
-                break;
-            case MTDateResolutionMinute:
-                updateLabelInSeconds = 60.0;
-                break;
-            case MTDateResolutionSecond:
-                updateLabelInSeconds = 1.0;
-                break;
-            case MTDateResolutionMillisecond:
-                updateLabelInSeconds = 0.1;
-                break;
-            default:
-                updateLabelInSeconds = 86400;
-                break;
-        }
-        
-        if (self.timerLabelTimeSinceRefreh != nil) {
-            if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-                if ([self.timerLabelTimeSinceRefreh isValid]) {
-                    [self.timerLabelTimeSinceRefreh invalidate];
-                }
-            }
-            [self setTimerLabelTimeSinceRefreh:nil];
-        }
-        
-        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
-                                                    selector: @selector(updateLateRefreshedLabel:) userInfo:nil
-                                                     repeats: NO];
-        [self setTimerLabelTimeSinceRefreh:t];
+        [self.labelStatus updateStatusWithTime:dateStringAndInterval.former];
+        resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
     }
+    if (self.timerLabelTimeSinceRefreh != nil) {
+        if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
+            if ([self.timerLabelTimeSinceRefreh isValid]) {
+                [self.timerLabelTimeSinceRefreh invalidate];
+            }
+        }
+        self.timerLabelTimeSinceRefreh = nil;
+    }
+    
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [NSDate timeIntervalForResolution:resolution]
+                                                  target: self selector: @selector(updateLateRefreshedLabel:) userInfo:nil
+                                                 repeats: NO];
+    self.timerLabelTimeSinceRefreh = t;
 }
 
 - (void)updateRecordsReadStatus {
@@ -1068,15 +1038,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self.labelStatus updateStatusWithRecordsRead:readRecords];
 }
 
-- (NSString *)localizedStringForInteger:(NSUInteger)integer {
-    NSNumber *number = @(integer);
-    return [NSNumberFormatter localizedStringFromNumber: number numberStyle: NSNumberFormatterDecimalStyle];
-}
-
 - (void)updatePageStatus {
     NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY, MADTextPageXofY);
-    NSString *startPage = [self localizedStringForInteger:self.currentPageIndex + 1];
-    NSString *endPage = [self localizedStringForInteger:self.numberOfPages];
+    NSNumber *numberOfPages = @(self.numberOfPages);
+    NSNumber *currentPageNumber = @(self.currentPageIndex + 1);
+    NSString *startPage = [NSNumberFormatter localizedStringFromNumber: currentPageNumber numberStyle: NSNumberFormatterDecimalStyle];
+    NSString *endPage = [NSNumberFormatter localizedStringFromNumber: numberOfPages numberStyle: NSNumberFormatterDecimalStyle];
     NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, startPage, endPage];
     [self.labelStatus updateStatusWithPageNumber:localizedPageOfPages];
 }
@@ -1088,8 +1055,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             [weakSelf setMaxNumberOfPages:numberOfPages];
         });
     } else {
-        if (round([self.pageSlider maximumValue]) != round(numberOfPages)) {
-            [self.pageSlider setMaximumValue:numberOfPages];
+        if (round(self.pageSlider.maximumValue) != round(numberOfPages)) {
+            self.pageSlider.maximumValue = numberOfPages;
         }
     }
     [self updatePageStatus];

@@ -18,7 +18,6 @@
 @class MADocument;
 
 @interface MTReportViewerReportPageViewController : UIViewController
-    <MTPrintingProtocol>
 
 @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 
