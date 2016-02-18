@@ -7,11 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MADTextRepresentationProtocol.h"
 
-@class MADReportLineRepresentation;
+@class MADReportSectionRepresentation;
 
 @interface MADReportPageRepresentation : NSObject
+    <MADTextRepresentationProtocol>
 
-@property (nonatomic, strong, getter=hasLines) NSArray <__kindof MADReportLineRepresentation *> *lines;
+    @property (readonly) NSUInteger numberOfSections;
+
+    - (nonnull instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections NS_DESIGNATED_INITIALIZER;
+    - (void)addSection:(nonnull MADReportSectionRepresentation *)section;
 
 @end

@@ -9,15 +9,16 @@
 #ifndef Reports_MTPrintPageRendererReport_h
 #define Reports_MTPrintPageRendererReport_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UIPrintPageRenderer.h>
 
-@class MTReportFormatter, MTDataTable;
+@class MADReportTextRepresentation, MTReportFormatter, MTDataTable, UIImage;
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
-- (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits;
+
+@property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
+
 - (UIImage *)thumbnailWithRect:(CGRect)rect
                           size:(CGFloat)size
                     edgeEffect:(BOOL)edgeEffect

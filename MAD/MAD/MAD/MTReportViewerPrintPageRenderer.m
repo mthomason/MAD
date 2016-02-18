@@ -13,6 +13,7 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
+#import <MADFoundation/MTDataTable.h>
 
 #import "MADocument.h"
 #import "MTDatabaseConnection.h"
@@ -53,7 +54,6 @@
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
 #import "MTDatabase.h"
-#import <MADFoundation/MTDataTable.h>
 
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
@@ -61,6 +61,11 @@
 #import "NSDictionary+MADReportObjectRepresentation.h"
 
 #import "MADAccessibilityLine.h"
+#import "MADReportTextRepresentation.h"
+#import "MADReportPageRepresentation.h"
+#import "MADReportSectionRepresentation.h"
+#import "MADReportSectionRowsRepresentation.h"
+#import "MADReportLineRepresentation.h"
 
 @interface MTReportViewerPrintPageRenderer ()
 
@@ -81,6 +86,9 @@
 @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
 @property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 
+@property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
+@property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
+
 @end
 
 @implementation MTReportViewerPrintPageRenderer
@@ -90,17 +98,19 @@
 }
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         [self initCommon];
         self.dataTable = dataTable;
         self.printableSize = printableAreaSize;
         self.reportFormatter = reportFormatter;
+        
     }
     return self;
 }
 
 - (void)initCommon {
+    const char *queueName = [[NSStringFromClass(self.class) stringByAppendingString:@"DispatchConcurrentBackground"] cStringUsingEncoding:NSUTF8StringEncoding];
+    self.textRepresentationQueue =  dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
     
     self.showWaterMark = false;
     self.accessibilityCacheNeedsUpdate = false;
@@ -123,8 +133,14 @@
     }
 }
 
-- (UIImage *)thumbnailWithRect:(CGRect)rect
-                          size:(CGFloat)size
+- (MADReportTextRepresentation *)textRepresentation {
+    if (_textRepresentation == nil) {
+        _textRepresentation = [[MADReportTextRepresentation alloc] initWithPageCount:self.reportFormatter.numberOfPages];
+    }
+    return _textRepresentation;
+}
+
+- (UIImage *)thumbnailWithRect:(CGRect)rect size:(CGFloat)size
                     edgeEffect:(BOOL)edgeEffect
                     zoomEffect:(BOOL)zoomEffect
                   squareEffect:(BOOL)squareEffect
@@ -308,67 +324,120 @@
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
-    
-    NSUInteger rowIndex = 0;
+
+    if (pageIndex >= self.reportFormatter.numberOfPages) {
+        return;
+    }
+
+    NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
     RptqDocument *document = [self.reportFormatter.layout activeDocumentModel];
     RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
 
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:databaseSchemas.ownedByUser];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
-
-    NSUInteger numberOfPages = self.reportFormatter.numberOfPages;
-    if (pageIndex < numberOfPages) {
+    
+    CGFloat originY = pageRect.origin.y;
+    NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
+    
+    NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumeratorForPage:pageIndex];
+    NSArray *pageSections = layoutEnumerator.allObjects;
+    MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:pageSections.count];
+    for (NSDictionary *pageSection in pageSections) {
         
-        CGFloat originY = pageRect.origin.y;
-        NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
+        RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
         
-        NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumeratorForPage:pageIndex];
-        for (NSDictionary *pageSection in layoutEnumerator) {
-            
-            RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
-            
-            CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document pageRect:pageRect numberOfPages:numberOfPages pageIndex:pageIndex offset:&originY];
-            
-            [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
-            
-            NSArray *groupLevelKeys = [self groupLevelKeysForDetailRow:pageSection.detailRowId];
-            if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter && pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {
-                readGroupCounter++;
-            }
-            
-            if (documentSection.visibility.boolValue) {
-                for (RptqDocumentSectionRows *row in documentSection.hasRows) {
-                    for (RptqDocumentObject *item in row.hasObjects) {
-                        @autoreleasepool {
-                            id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
-                            [self displayDrawingObject:drawingObject forItem:item inSectionRect:sectionRect];
-                        }
-                    }
-                }
-            }
-            
-            if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
-                rowIndex++;
-            }
-            originY += sectionRect.size.height;
+        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document
+                                                        pageRect:pageRect numberOfPages:self.reportFormatter.numberOfPages
+                                                       pageIndex:pageIndex offset:&originY];
+        
+        [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
+        
+        if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter && pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {
+            readGroupCounter++;
         }
+        
+        MADReportSectionRepresentation *sectionRepresentation = [self drawSection:documentSection pageRect:pageRect
+                                                                      pageSection:pageSection document:document
+                                                                           onPage:pageIndex withDatabase:database offset:&originY
+                                                                 offsetElement:&offsetElement offsetCharacter:&offsetCharacter];
+        [pageRepresentation addSection:sectionRepresentation];
+        
+        if (pageSection.sectionType == MNSDocumentSectionTypeBody) {
+            rowIndex++;
+        }
+        originY += sectionRect.size.height;
         layoutSectionCounter++;
     }
-    self.accessibilityCacheNeedsUpdate = true;
-    self.accessibilityCurrentPageIndex = pageIndex;
-    self.accessibilityCurrentPageRect = pageRect;
-
-    //NSArray *accessibilityDrawingObjectsOnPageAtIndex = [self accessibilityDrawingObjectsOnPageAtIndex:pageIndex inPageRect:pageRect];
-    //NSLog(@"%@", accessibilityDrawingObjectsOnPageAtIndex);
+    
+    
+    [self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
+    
 }
 
-- (void)updateAccessibilityItems {
+- (MADReportSectionRepresentation *)drawSection:(RptqDocumentSection *)documentSection pageRect:(CGRect)pageRect
+                                    pageSection:(NSDictionary *)pageSection document:(RptqDocument *)document
+                                         onPage:(NSUInteger)pageIndex withDatabase:(MTDatabase *)database offset:(CGFloat *)originY
+                                  offsetElement:(NSUInteger *)offsetElement offsetCharacter:(NSUInteger *)offsetCharacter {
+    
+    NSOrderedSet *rows = documentSection.hasRows;
+    MADReportSectionRepresentation *sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
+    sectionRepresentation.type = pageSection.sectionType;
+    sectionRepresentation.elementOffset = *(offsetElement);
+    
+    if ((sectionRepresentation.visibility = documentSection.visibility.boolValue)) {
+        CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document
+                                                        pageRect:pageRect numberOfPages:self.reportFormatter.numberOfPages
+                                                       pageIndex:pageIndex offset:originY];
+        
+        NSArray *groupLevelKeys = [self groupLevelKeysForDetailRow:pageSection.detailRowId];
+        for (RptqDocumentSectionRows *row in rows) {
+            NSOrderedSet *items = row.hasObjects;
+            MADReportSectionRowsRepresentation *rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
+                        
+            for (RptqDocumentObject *item in items) {
+                @autoreleasepool {
+                    id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
+                    
+                    CGRect elementCanvasRect = CGRectMake(item.originx.floatValue + sectionRect.origin.x + item.spacingLeft,
+                                                          item.originy.floatValue + sectionRect.origin.y + item.spacingTop,
+                                                          item.sizewidth.floatValue + item.spacingRight,
+                                                          item.sizeheight.floatValue + item.spacingBottom);
+                    
+                    if ([drawingObject isKindOfClass:[NSString class]]) {
+                        
+                        NSDictionary *attributes = [item attributesForDrawingText];
+                        [drawingObject drawWithRect: elementCanvasRect
+                                            options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                         attributes: attributes
+                                            context: nil];
+                        attributes = nil;
+                    } else {
+                        [drawingObject drawInRect:elementCanvasRect];
+                    }
+                    
+                    MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
+                                                                                                                 type:item.getType
+                                                                                                                frame:elementCanvasRect];
+                    [rowRepresentation addLine:line];
+                    line.elementOffset = *(offsetElement);
+                    (*(offsetElement))++;
+                    
+                }
+            }
+            [sectionRepresentation addRow:rowRepresentation];
+        }
+    }
+    return sectionRepresentation;
+}
+
+
+/*- (void)updateAccessibilityItems {
     if (!self.accessibilityCacheNeedsUpdate) return;
     NSArray *items = [self accessibilityDrawingObjectsOnPageAtIndex:self.accessibilityCurrentPageIndex inPageRect:self.accessibilityCurrentPageRect];
     self.accessibilityItems = [NSArray arrayWithArray:items];
     self.accessibilityCacheNeedsUpdate = false;
-}
-
+}*/
+/*
 NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLine *  _Nonnull obj1, MADAccessibilityLine *  _Nonnull obj2) {
     // Sort from left to right.
     if (obj1.frame.origin.y < obj2.frame.origin.y) {
@@ -417,7 +486,8 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                     for (RptqDocumentObject *item in row.hasObjects) {
                         @autoreleasepool {
                             id drawingObject = [self drawingObjectForDatabase:database pageIndex:pageIndex groupLevelKeys:groupLevelKeys detailRowId:pageSection.detailRowId andItem:item];
-                            MADAccessibilityLine *line = [[MADAccessibilityLine alloc] initWithlabel:drawingObject
+                            MADAccessibilityLine *line = [[MADAccessibilityLine alloc] initWithValue:drawingObject
+                                                                                                type:item.getType
                                                                                             andFrame:CGRectMake(item.originx.floatValue + sectionRect.origin.x + item.spacingLeft,
                                                                                                                                        item.originy.floatValue + sectionRect.origin.y + item.spacingTop,
                                                                                                                                        item.sizewidth.floatValue + item.spacingRight,
@@ -440,7 +510,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     }
     return accessibilityDrawingObjects;
 }
-
+*/
 - (NSArray *)groupLevelKeysForDetailRow:(NSNumber *)detailRowID {
     if (self.reportFormatter.numberOfGroups > 0) {
         NSArray *keys = [self.reportFormatter keysForCachedID:detailRowID];
@@ -456,7 +526,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
                                pageRect:(CGRect)pageRect
                           numberOfPages:(NSUInteger)numberOfPages
                               pageIndex:(NSUInteger)pageIndex
-                                 offset:(CGFloat*)originY {
+                                 offset:(CGFloat *)originY {
 
     CGFloat sizeHeight = documentSection.visibility.boolValue ? [self.reportFormatter heightForSection:documentSection] : CGSizeZero.height;
     switch (pageSection.sectionType) {
@@ -801,10 +871,6 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 }
 
 #pragma mark
-
-- (NSString *)textRepresentation {
-    return @"";
-}
 
 - (id)debugQuickLookObject {
     return [self textRepresentation];

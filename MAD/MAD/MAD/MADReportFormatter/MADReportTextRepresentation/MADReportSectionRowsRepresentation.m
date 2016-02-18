@@ -1,0 +1,79 @@
+//
+//  MADReportSectionRowsRepresentation.m
+//  MAD
+//
+//  Created by Michael Thomason on 10/30/15.
+//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MADReportSectionRowsRepresentation.h"
+#import <UIKit/UIGeometry.h>
+#import "MADReportLineRepresentation.h"
+
+@interface MADReportSectionRowsRepresentation ()
+
+    @property (nonatomic, strong, getter=hasLines) NSMutableSet <__kindof MADReportLineRepresentation *> *lines;
+
+@end
+
+@implementation MADReportSectionRowsRepresentation
+
+@synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
+
+- (instancetype)init {
+    return [self initWithNumberOfSectionRowElements:0];
+}
+
+- (instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount {
+    if (self = [super init]) {
+        NSMutableSet *lines = elementCount > 0 ? [[NSMutableSet alloc] initWithCapacity:elementCount] :
+                                                    [NSMutableSet new];
+        self.lines = lines;
+    }
+    return self;
+}
+
+- (void)addLine:(nonnull MADReportLineRepresentation *)line {
+    [self.lines addObject:line];
+}
+
+- (NSArray <__kindof MADReportLineRepresentation *> *)allLines {
+    return [self.lines.allObjects sortedArrayUsingComparator:accessibilityLineComparson];
+}
+
+- (NSUInteger)isItemCount { return self.lines.count; }
+
+#pragma mark - Helper
+
+//FIXME: Put these in order before storing them... perhaps on background queue...
+
+NSComparator accessibilityLineComparson = ^NSComparisonResult(MADReportLineRepresentation *  _Nonnull obj1, MADReportLineRepresentation *  _Nonnull obj2) {
+    // Sort from left to right.
+    if (obj1.frame.origin.y < obj2.frame.origin.y) {
+        return NSOrderedAscending;
+    } else if (obj1.frame.origin.y == obj2.frame.origin.y && obj1.frame.origin.x < obj2.frame.origin.x) {
+        return NSOrderedAscending;
+    } else {
+        return NSOrderedDescending;
+    }
+};
+
+#pragma mark - MADTextRepresentationProtocol
+
+- (NSUInteger)characterCount {
+    NSUInteger characterCount = 0;
+    for (MADReportLineRepresentation *line in self.lines) {
+        characterCount += [line characterCount];
+    }
+    return characterCount;
+}
+
+- (NSUInteger)elementCount {
+    NSUInteger elementCount = 0;
+    for (MADReportLineRepresentation *line in self.lines) {
+        elementCount += [line elementCount];
+    }
+    return elementCount;
+}
+
+@end

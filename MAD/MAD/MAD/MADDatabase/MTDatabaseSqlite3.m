@@ -26,9 +26,9 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 @interface MTDatabaseSqlite3 ()
 
 @property (nonatomic, readwrite, assign) sqlite3 *database;
-@property (assign) sqlite3_stmt *bulkStatement;
+@property (atomic, assign) sqlite3_stmt *bulkStatement;
 
-@property (nonatomic, assign) BOOL isOpen;
+@property (nonatomic, assign, getter=isOpen) bool open;
 @property (nonatomic, strong) NSCalendar *currentCalandar;
 
 @end
@@ -44,6 +44,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
     if (self) {
         _database = NULL;
         _bulkStatement = NULL;
+        _open = false;
         NSCalendar *currentCalandar = [NSCalendar currentCalendar];
         [self setCurrentCalandar:currentCalandar];
     }
@@ -57,7 +58,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 - (void)openDatabaseWithFlags:(int)flags {
     NSError *error = nil;
     //Open conneciton... closed in dealloc.
-    if (self.isOpen == NO) {
+    if (!self.isOpen) {
        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
         BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
@@ -75,7 +76,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
             NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
             error = [NSError errorWithDomain:@"MTSqlite3" code:4832 title:title andMessage:message];
         }
-        [self setIsOpen:YES];
+        self.open = true;
     }
 }
 

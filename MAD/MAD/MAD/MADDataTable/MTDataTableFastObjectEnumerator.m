@@ -18,10 +18,10 @@
 
 @interface MTDataTableFastObjectEnumerator ()
 
-@property (assign) sqlite3_stmt *statement;
+@property (atomic, assign) sqlite3_stmt *statement;
+@property (atomic, assign) bool empty;
 @property (nonatomic, strong) NSDictionary *columns;
 @property (nonatomic, strong) NSArray *columnKeys;
-@property (assign) BOOL empty;
 
 @property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
 @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
@@ -46,8 +46,8 @@
         [self setDatabaseForQuery:database];
 
         NSUInteger numberOfColumns = [columnKeys count];
-        BOOL empty = numberOfColumns == 0;
-        [self setEmpty:empty];
+        bool empty = numberOfColumns == 0;
+        self.empty = empty;
         if (!empty) {
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
@@ -56,10 +56,13 @@
             sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL);
             sqlite3_free(queryString);
         }
-        [self setColumnKeys:columnKeys];
-        [self setColumns:columns];
-        [self setAddRowId:YES];
-        [self setSingleColumnNoWrapper:NO];
+        
+        NSArray *retainedColumKeys = [NSArray arrayWithArray:columnKeys];
+        self.columnKeys = retainedColumKeys;
+        NSDictionary *retainedColumns = [NSDictionary dictionaryWithDictionary:columns];
+        self.columns = retainedColumns;
+        self.addRowId = YES;
+        self.singleColumnNoWrapper = NO;
 
     }
     return self;
@@ -72,7 +75,7 @@ void sqliteCallback(void *foo, const char* statement) {
 
 - (NSArray *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    if ([self empty] == NO) {
+    if (!self.empty) {
         while (sqlite3_step(_statement) == SQLITE_ROW) {
             NSDictionary *newObject = [NSDictionary dictionaryWithDictionary:[self currentObject]];
             [results addObject:newObject];
@@ -83,7 +86,7 @@ void sqliteCallback(void *foo, const char* statement) {
 
 - (id)nextObject {
     BOOL success;
-    if ([self empty] == NO) {
+    if (!self.empty) {
         success = sqlite3_step(_statement) == SQLITE_ROW;
     } else {
         success = NO;

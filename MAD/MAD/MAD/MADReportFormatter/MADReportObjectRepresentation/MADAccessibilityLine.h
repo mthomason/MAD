@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIGeometry.h>
+#import "MADDocumentObjectType.h"
 
 @interface MADAccessibilityLine : NSObject
 
-    - (instancetype)initWithlabel:(NSString *)label andFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithValue:(id)value type:(MTDocumentObjectType)type andFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
     @property (readonly) NSString *label;
     @property (readonly) CGRect frame;
+    @property (nonatomic, assign, readonly) MTDocumentObjectType type;
 
 @end

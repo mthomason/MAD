@@ -11,29 +11,29 @@
 @interface MADAccessibilityLine ()
 
 @property (nonatomic, strong) NSValue *rect;
-@property (nonatomic, copy) NSString *text;
+@property (nonatomic, strong) id value;
+@property (nonatomic, assign, readwrite) MTDocumentObjectType type;
 
 @end
 
 @implementation MADAccessibilityLine
 
 - (instancetype)init {
-    return [self initWithlabel:@"" andFrame:CGRectZero];
+    return [self initWithValue:@"" type:MTDocumentObjectTypeLabelStatic andFrame:CGRectZero];
 }
 
-- (instancetype)initWithlabel:(NSString *)label andFrame:(CGRect)frame {
+- (instancetype)initWithValue:(id)value type:(MTDocumentObjectType)type andFrame:(CGRect)frame {
     if (self = [super init]) {
+
         NSValue *r = [NSValue valueWithCGRect:frame];
         self.rect = r;
-        
-        NSString *t = label.copy;
-        self.text = t;
-        
+        self.value = value;
+        self.type = type;
     }
     return self;
 }
 
-- (NSString *)label { return self.text; }
+- (NSString *)label { return [self.value debugDescription]; }
 
 - (CGRect)frame { return self.rect.CGRectValue; }
 

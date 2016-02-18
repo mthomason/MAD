@@ -769,6 +769,7 @@
 		4C994F391BE082730058627A /* MADLabelStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F381BE082730058627A /* MADLabelStatus.m */; settings = {ASSET_TAGS = (); }; };
 		4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F3B1BE28CF50058627A /* MADTextPosition.m */; settings = {ASSET_TAGS = (); }; };
 		4C994F421BE28E790058627A /* MADTextRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F411BE28E790058627A /* MADTextRange.m */; settings = {ASSET_TAGS = (); }; };
+		4C994F4E1BE47EC10058627A /* MADTextInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F4D1BE47EC10058627A /* MADTextInputController.m */; settings = {ASSET_TAGS = (); }; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -1905,6 +1906,8 @@
 		4C994F3B1BE28CF50058627A /* MADTextPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTextPosition.m; sourceTree = "<group>"; };
 		4C994F401BE28E790058627A /* MADTextRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextRange.h; sourceTree = "<group>"; };
 		4C994F411BE28E790058627A /* MADTextRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTextRange.m; sourceTree = "<group>"; };
+		4C994F4C1BE47EC10058627A /* MADTextInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextInputController.h; sourceTree = "<group>"; };
+		4C994F4D1BE47EC10058627A /* MADTextInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTextInputController.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -3649,6 +3652,8 @@
 				4C994F411BE28E790058627A /* MADTextRange.m */,
 				4C994F3A1BE28CF50058627A /* MADTextPosition.h */,
 				4C994F3B1BE28CF50058627A /* MADTextPosition.m */,
+				4C994F4C1BE47EC10058627A /* MADTextInputController.h */,
+				4C994F4D1BE47EC10058627A /* MADTextInputController.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -5664,6 +5669,7 @@
 				4C26B9C71BAF123A00456DC8 /* MADViewControllerSQL.m in Sources */,
 				4C26BA251BAF150F00456DC8 /* MTQueryVisualizationLinkDefination.m in Sources */,
 				4C26B9F81BAF14A500456DC8 /* MADDesignerElementPickerViewController.m in Sources */,
+				4C994F4E1BE47EC10058627A /* MADTextInputController.m in Sources */,
 				4C4020FF1BAE98C300BAE5FC /* MADViewerController.m in Sources */,
 				4C26BA6F1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
 				4C40203A1BAE92F200BAE5FC /* MADQueryVisualizationViewController+Designer.m in Sources */,

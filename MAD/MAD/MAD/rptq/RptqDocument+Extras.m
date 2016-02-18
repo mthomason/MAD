@@ -107,52 +107,43 @@
     return self.hasDatabaseSchemas.anyObject;
 }
 
-- (RptqQuery *)defaultQuery {
-    return [[self defaultDatabase] defaultQuery];
-}
+- (RptqQuery *)defaultQuery { return self.defaultDatabase.defaultQuery; }
 
 - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level {
     
-    RptqDocumentSection *documentSection = nil;
     switch (type) {
             
         case MNSDocumentSectionTypeBody:
-            documentSection = [self hasDetailSection];
+            return self.hasDetailSection;
             break;
             
         case MNSDocumentSectionTypePageHeader:
-            documentSection = [self hasPageHeaderSection];
+            return self.hasPageHeaderSection;
             break;
             
         case MNSDocumentSectionTypePageFooter:
-            documentSection = [self hasPageFooterSection];
+            return self.hasPageFooterSection;
             break;
             
         case MNSDocumentSectionTypeReportHeader:
-            documentSection = [self hasReportHeaderSection];
+            return self.hasReportHeaderSection;
             break;
             
         case MNSDocumentSectionTypeReportFooter:
-            documentSection = [self hasReportFooterSection];
+            return self.hasReportFooterSection;
             break;
             
-        case MNSDocumentSectionTypeGroupHeader: {
-            RptqQuery *query = [[self defaultDatabase] defaultQuery];
-            documentSection = [RptqDocumentSection groupHeaderForLevel: level
-                                                                 query: query];
+        case MNSDocumentSectionTypeGroupHeader:
+            return [RptqDocumentSection groupHeaderForLevel: level query: self.defaultDatabase.defaultQuery];
             break;
-        }
-        case MNSDocumentSectionTypeGroupFooter: {
-            RptqQuery *query = [[self defaultDatabase] defaultQuery];
-            documentSection = [RptqDocumentSection groupFooterForLevel: level
-                                                                 query: query];
+        case MNSDocumentSectionTypeGroupFooter:
+            return [RptqDocumentSection groupFooterForLevel: level query: self.defaultDatabase.defaultQuery];
             break;
-        }
         default:
             NSAssert(false, @"Unknown type");
+            return nil;
             break;
     }
-    return documentSection;
 }
 
 

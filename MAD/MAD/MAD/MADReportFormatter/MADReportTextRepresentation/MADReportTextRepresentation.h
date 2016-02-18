@@ -7,11 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MADTextRepresentationProtocol.h"
 
 @class MADReportPageRepresentation;
 
 @interface MADReportTextRepresentation : NSObject
+    <MADTextRepresentationProtocol>
 
-@property (nonatomic, strong, getter=hasPages) NSArray <__kindof MADReportPageRepresentation *> *pages;
+    @property (readonly) NSUInteger numberOfPages;
+
+    - (instancetype)initWithPageCount:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+
+    - (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex;
+    - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex;
 
 @end

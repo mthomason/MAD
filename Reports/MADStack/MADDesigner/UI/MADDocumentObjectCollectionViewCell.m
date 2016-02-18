@@ -9,20 +9,6 @@
 #import "MADDocumentObjectCollectionViewCell.h"
 #import <MAD/MADDocumentObjectType.h>
 
-static NSString * const MADTitleDynamic     = @"Data Label";
-static NSString * const MADTitleStatic      = @"Static Label";
-static NSString * const MADTitleWhitespace  = @"Whitespace";
-static NSString * const MADTitleAggregate   = @"Aggregate";
-static NSString * const MADTitleImage       = @"Image";
-static NSString * const MADTitleBarcode     = @"Barcode";
-
-static NSString * const MADDetailDynamic     = @"Add a dynamic data field label.";
-static NSString * const MADDetailStatic      = @"Add a static text document object.";
-static NSString * const MADDetailWhitespace  = @"Add an empty element.";
-static NSString * const MADDetailAggregate   = @"Add a grouping of data.";
-static NSString * const MADDetailImage       = @"Add a static image.";
-static NSString * const MADDetailBarcode     = @"Add a barcode element.";
-
 @implementation MADDocumentObjectCollectionViewCell
 
 - (void)awakeFromNib {
@@ -124,22 +110,22 @@ static NSString * const MADDetailBarcode     = @"Add a barcode element.";
 }
 
 
-+ (NSString *)TitleDynamic      { return NSLocalizedString(MADTitleDynamic, MADTitleDynamic); }
-+ (NSString *)DetailDynamic     { return NSLocalizedString(MADDetailDynamic, MADDetailDynamic); }
++ (NSString *)TitleDynamic      { return NSLocalizedString(MADDocumentObjectTypeTitleDynamic, MADDocumentObjectTypeTitleDynamic); }
++ (NSString *)DetailDynamic     { return NSLocalizedString(MADDocumentObjectTypeAddDetailDynamic, MADDocumentObjectTypeAddDetailDynamic); }
 
-+ (NSString *)TitleStatic       { return NSLocalizedString(MADTitleStatic, MADTitleStatic); }
-+ (NSString *)DetailStatic      { return NSLocalizedString(MADDetailStatic, MADDetailStatic); }
++ (NSString *)TitleStatic       { return NSLocalizedString(MADDocumentObjectTypeTitleStatic, MADDocumentObjectTypeTitleStatic); }
++ (NSString *)DetailStatic      { return NSLocalizedString(MADDocumentObjectTypeAddDetailStatic, MADDocumentObjectTypeAddDetailStatic); }
 
-+ (NSString *)TitleWhitespace   { return NSLocalizedString(MADTitleWhitespace, MADTitleWhitespace); }
-+ (NSString *)DetailWhitespace  { return NSLocalizedString(MADDetailWhitespace, MADDetailWhitespace); }
++ (NSString *)TitleWhitespace   { return NSLocalizedString(MADDocumentObjectTypeTitleWhitespace, MADDocumentObjectTypeTitleWhitespace); }
++ (NSString *)DetailWhitespace  { return NSLocalizedString(MADDocumentObjectTypeAddDetailWhitespace, MADDocumentObjectTypeAddDetailWhitespace); }
 
-+ (NSString *)TitleAggregate    { return NSLocalizedString(MADTitleAggregate, MADTitleAggregate); }
-+ (NSString *)DetailAggregate   { return NSLocalizedString(MADDetailAggregate, MADDetailAggregate); }
++ (NSString *)TitleAggregate    { return NSLocalizedString(MADDocumentObjectTypeTitleAggregate, MADDocumentObjectTypeTitleAggregate); }
++ (NSString *)DetailAggregate   { return NSLocalizedString(MADDocumentObjectTypeAddDetailAggregate, MADDocumentObjectTypeAddDetailAggregate); }
 
-+ (NSString *)TitleImage        { return NSLocalizedString(MADTitleImage, MADTitleImage); }
-+ (NSString *)DetailImage       { return NSLocalizedString(MADDetailImage, MADDetailImage); }
++ (NSString *)TitleImage        { return NSLocalizedString(MADDocumentObjectTypeTitleImage, MADDocumentObjectTypeTitleImage); }
++ (NSString *)DetailImage       { return NSLocalizedString(MADDocumentObjectTypeAddDetailImage, MADDocumentObjectTypeAddDetailImage); }
 
-+ (NSString *)TitleBarcode      { return NSLocalizedString(MADTitleBarcode, MADTitleBarcode); }
-+ (NSString *)DetailBarcode     { return NSLocalizedString(MADDetailBarcode, MADDetailBarcode); }
++ (NSString *)TitleBarcode      { return NSLocalizedString(MADDocumentObjectTypeTitleBarcode, MADDocumentObjectTypeTitleBarcode); }
++ (NSString *)DetailBarcode     { return NSLocalizedString(MADDocumentObjectTypeAddDetailBarcode, MADDocumentObjectTypeAddDetailBarcode); }
 
 @end

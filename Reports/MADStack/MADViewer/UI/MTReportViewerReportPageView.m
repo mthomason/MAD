@@ -243,10 +243,23 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 /* The end and beginning of the the text document. */
 //@property (nonatomic, readonly) UITextPosition *beginningOfDocument;
+
+- (UITextPosition *)beginningOfDocument {
+    MADTextPosition *beginningOfDocument = [MADTextPosition BeginningOfDocument];
+    return beginningOfDocument;
+}
 //@property (nonatomic, readonly) UITextPosition *endOfDocument;
 
+- (UITextPosition *)endOfDocument {
+    
+}
+
 /* Methods for creating ranges and positions. */
-- (nullable UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition {}
+- (nullable UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition {
+
+    
+    
+}
 - (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset {}
 - (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset {}
 

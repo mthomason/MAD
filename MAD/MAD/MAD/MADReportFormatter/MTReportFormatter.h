@@ -54,10 +54,10 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 
 @property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
-
 @property (nonatomic, weak, readonly) MADocument *layout;
-@property (nonatomic, assign, readonly) NSUInteger numberOfPages;
-@property (nonatomic, assign, readonly) NSUInteger numberOfGroups;
+
+@property (readonly) NSUInteger numberOfPages;
+@property (readonly) NSUInteger numberOfGroups;
 
 //  These are the rowids by page.  These point to data in the cache.
 //      Once these arrays are populated, they are used by the print page render to

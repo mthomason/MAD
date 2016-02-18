@@ -16,12 +16,9 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
 @property (nonatomic, strong, readwrite) NSURL *openUrl;
 
-
 @end
 
 @implementation MADOpenDocumentManager
-
-@dynamic openDocument;
 
 - (void)dealloc {
     [self.openFiles removeAllObjects];

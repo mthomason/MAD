@@ -135,9 +135,9 @@
                                                  error: &error];
     NSMutableArray *results = nil;
     if (error == nil) {
-        NSInteger resultsCount = [dataTable count];
+        NSUInteger resultsCount = [dataTable count];
         results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-        for (NSInteger i=0; i<[dataTable count]; i++) {
+        for (NSUInteger i=0; i<[dataTable count]; i++) {
             @autoreleasepool {
                 NSString *tableName = [dataTable objectAtRow:i column:0];
                 MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
@@ -167,9 +167,9 @@
                                                          error: &fetchError];
             NSMutableArray *results = nil;
             if (fetchError == nil) {
-                NSInteger resultsCount = [dataTable count];
+                NSUInteger resultsCount = [dataTable count];
                 results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-                for (NSInteger i=0; i<[dataTable count]; i++) {
+                for (NSUInteger i=0; i<[dataTable count]; i++) {
                     @autoreleasepool {
                         NSString *tableName = [dataTable objectAtRow:i column:0];
                         MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
@@ -199,10 +199,10 @@
 
     MTDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn error:&errorShowColumns];
     if (errorShowColumns == nil) {
-        NSInteger resultsCount = [dataTable count];
+        NSUInteger resultsCount = [dataTable count];
         resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
         
-        for (NSInteger i=0; i<[dataTable numberOfRows]; i++) {
+        for (NSUInteger i=0; i<[dataTable numberOfRows]; i++) {
             NSString *name = [dataTable objectAtRow:i column:0];
             NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
             MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
@@ -256,10 +256,10 @@
                                                           onConnection: conn
                                                                  error: &errorShowColumns];
                     if (errorShowColumns == nil) {
-                        NSInteger resultsCount = [dataTable count];
+                        NSUInteger resultsCount = [dataTable count];
                         resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
                         
-                        for (NSInteger i=0; i<[dataTable numberOfRows]; i++) {
+                        for (NSUInteger i=0; i<[dataTable numberOfRows]; i++) {
                             NSString *name = [dataTable objectAtRow:i column:0];
                             NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
                             MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
@@ -280,8 +280,8 @@
                                 [databaseField setFieldTypeNative:nativeColumnType];
                                 MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: nativeColumnType];
                                 [databaseField setFieldType:fieldType];
-                                [databaseField setWidth:[[dataColumn dataLength] integerValue]];
-                                [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
+                                [databaseField setWidth:[[dataColumn dataLength] unsignedIntegerValue]];
+                                [databaseField setDecimals:[[dataColumn dataPercision] unsignedIntegerValue]];
                                 [databaseField setPrimaryKey:[dataColumn isPrimaryKey]];
                             }
                         }
