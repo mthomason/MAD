@@ -16,7 +16,7 @@ By default, the software comes in Design Mode. This limits query results. Enable
 		<key>apple-id</key>
 		<string>1008054444</string>
 		<key>available</key>
-		<true/>
+		<false/>
 	</dict>
 	<dict>
 		<key>product-id</key>

@@ -11,7 +11,6 @@
 @interface MTStoreKitController (Features)
 
 @property (readonly, getter=isReportingLimited)             BOOL reportingLimited;
-@property (readonly, getter=isReportingEnabledAndDesired)   BOOL reportingEnabledAndDesired;
 @property (readonly, getter=isReportingEnabled)             BOOL reportingEnabled;
 @property (readonly, getter=isBarcodeDesignerEnabled)       BOOL barcodeDesignerEnabled;
 

@@ -186,8 +186,9 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
 #pragma mark - UICollectionViewFlowLayout Delegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(collectionView.bounds.size.width >= 480 ? (collectionView.bounds.size.width / 2.0) - (8.0000f * 3) : collectionView.bounds.size.width - 8.0000f * 2,
-                      220.0000f);
+    return CGSizeMake(collectionView.bounds.size.width >= 480 ?
+                      (collectionView.bounds.size.width / 2.0000f) - (8.0000f * 3) :
+                      collectionView.bounds.size.width - 8.0000f * 2, 220.0000f);
 }
 
 @end

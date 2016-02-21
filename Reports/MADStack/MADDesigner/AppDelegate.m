@@ -28,6 +28,8 @@
 
 #import "MADDesignerFileExplorerViewController.h"
 
+#import "ACTReporter.h"
+
 @class MADTransparentPresentationController;
 
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
@@ -186,11 +188,16 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     [self initalizeAppearance];
     
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-    //    dispatch_async(dispatch_get_main_queue(), ^{
-            [self runOperations];
-    //    });
-    //});
+    [self runOperations];
+    
+    // MAD Designer Install
+    // Google iOS first open tracking snippet
+    // Add this code to your application delegate's
+    // application:didFinishLaunchingWithOptions: method.
+    [ACTConversionReporter reportWithConversionID: @"1010527409"
+                                            label: @"IK1iCOW3gmQQsdnt4QM"
+                                            value: @"10.00"
+                                     isRepeatable: NO];
     
     return YES;
 }

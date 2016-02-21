@@ -6,13 +6,6 @@
       name = "Resources">
       <Group
          location = "container:"
-         name = "Lbraries">
-         <FileRef
-            location = "group:Scrimpter/Scrimpter.xcodeproj">
-         </FileRef>
-      </Group>
-      <Group
-         location = "container:"
          name = "Frameworks">
          <FileRef
             location = "group:MADFeedback/MADFeedback.xcodeproj">
