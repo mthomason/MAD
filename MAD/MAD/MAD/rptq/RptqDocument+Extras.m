@@ -66,14 +66,14 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
+    request.sortDescriptors = @[sortDescriptor];
+    request.fetchLimit = 1;
+    
     NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqDocument *lastObject = [fetchResults lastObject];
-        identifier = lastObject.identifier.unsignedIntegerValue + 1;
+        identifier = ((RptqDocument *)fetchResults.lastObject).identifier.unsignedIntegerValue + 1;
     }
     NSNumber *identifierObj = @(identifier);
     self.identifier = identifierObj;
@@ -107,7 +107,9 @@
     return self.hasDatabaseSchemas.anyObject;
 }
 
-- (RptqQuery *)defaultQuery { return self.defaultDatabase.defaultQuery; }
+- (MTPaperType)paperType {
+    return self.papersize.unsignedShortValue;
+}
 
 - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level {
     
@@ -300,11 +302,6 @@
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     return [section producesFormFeed];
-}
-
-- (RptqQuery *)query {
-    RptqDatabase *database = self.hasDatabaseSchemas.anyObject;
-    return database.hasQueries.anyObject;
 }
 
 - (void)addDatabase:(MTDatabase *)database

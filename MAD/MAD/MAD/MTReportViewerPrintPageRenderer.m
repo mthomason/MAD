@@ -324,7 +324,6 @@
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
-
     if (pageIndex >= self.reportFormatter.numberOfPages) {
         return;
     }

@@ -8,6 +8,10 @@
 
 #import "MADLabelStatus.h"
 
+static NSString * const MADTextReadRecords = @"\nRead %@ records.";
+static NSString * const MADTextFormattingPage = @"Formatting page %@.";
+static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
+
 @interface MADLabelStatus ()
 
     @property (nonatomic, strong) NSAttributedString *statusMessage1;
@@ -32,6 +36,16 @@
     return self;
 }
 
+- (void)updatePageStatus:(NSUInteger)numberOfPages currentPageIndex:(NSUInteger)currentPageIndex {
+    NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY, MADTextPageXofY);
+    NSNumber *numberOfPagesNumber = @(numberOfPages);
+    NSNumber *currentPageNumber = @(currentPageIndex + 1);
+    NSString *startPage = [NSNumberFormatter localizedStringFromNumber: currentPageNumber numberStyle: NSNumberFormatterDecimalStyle];
+    NSString *endPage = [NSNumberFormatter localizedStringFromNumber: numberOfPagesNumber numberStyle: NSNumberFormatterDecimalStyle];
+    NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, startPage, endPage];
+    [self updateStatusWithPageNumber:localizedPageOfPages];
+}
+
 - (void)updateStatusWithTime:(NSString *)timeMessage {
     if ([NSThread isMainThread] == NO) {
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -47,6 +61,19 @@
     }
 }
 
+- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
+    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    [self updateStatusWithRecordsRead:readRecords];
+}
+
+- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
+    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    [self updateStatusWithRecordsRead:readRecords];
+}
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
     if ([NSThread isMainThread] == NO) {

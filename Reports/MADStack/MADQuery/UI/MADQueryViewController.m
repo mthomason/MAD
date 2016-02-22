@@ -141,7 +141,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - NSObject
 
 - (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [MADQueryViewController deleteCoreDataCache];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -150,7 +149,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     self = [super initWithCoder:aDecoder];
     if (self) {
         
@@ -218,7 +216,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)viewDidLoad {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
 
@@ -381,7 +378,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
-                        RptqQuery *query = self.document.activeDocumentModel.defaultQuery;
+                        RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
                         RptqDocumentSection *section = [query documentSectionForRow: self.lastSelectedRowNumber];
                         tvc.initalHeightValue = section.height.floatValue;
                         tvc.initalVisibility = section.visibility.boolValue;
@@ -1791,7 +1788,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    RptqQueryGroup *groupToRemove = [self.document.activeDocumentModel.defaultQuery queryGroupForIndex:indexPath.row];
+    RptqQueryGroup *groupToRemove = [self.document.activeDocumentModel.defaultDatabase.defaultQuery queryGroupForIndex:indexPath.row];
     [self.document removeGroup:groupToRemove];
 }
 

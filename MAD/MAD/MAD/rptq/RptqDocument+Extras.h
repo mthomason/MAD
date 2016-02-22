@@ -14,6 +14,7 @@
 #import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocument.h"
 #import "RptqDocumentSection+Extras.h"
+#import "MTPaper.h"
 
 @class NSManagedObjectContext, MTDatabase, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;
 
@@ -22,9 +23,7 @@
 + (instancetype)documentFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-@property (readonly) RptqQuery *query;  //Default... works for one query reports.
-- (RptqQuery *)defaultQuery;
-- (RptqDatabase *)defaultDatabase;
+@property (readonly)RptqDatabase *defaultDatabase;
 
 - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
 
@@ -40,6 +39,8 @@
 - (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination;
 - (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
 - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
+
+- (MTPaperType)paperType;
 
 @end
 

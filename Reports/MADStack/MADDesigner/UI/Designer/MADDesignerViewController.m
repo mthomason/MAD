@@ -232,7 +232,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     if (self = [super initWithCoder:aDecoder]) {
         
@@ -308,7 +307,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)viewDidLoad {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
@@ -2150,7 +2148,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
-    RptqQuery *query = [self.document.activeDocumentModel defaultQuery];
+    RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
     RptqDocumentSection *documentSection = [query documentSectionForRow: reportDesigner.lastSelectedSectionControlPanel];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
     if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&

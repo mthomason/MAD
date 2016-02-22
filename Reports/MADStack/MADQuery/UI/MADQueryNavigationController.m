@@ -27,15 +27,11 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
-    if (self = [super initWithCoder:aDecoder]) {
-
-    }
+    if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
 - (void)viewDidLoad {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     for (UIViewController *viewController in self.viewControllers) {
         if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {

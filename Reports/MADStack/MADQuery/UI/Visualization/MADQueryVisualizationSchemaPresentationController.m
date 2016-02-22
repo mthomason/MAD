@@ -28,7 +28,6 @@
 }
 
 - (CGRect)frameOfPresentedViewInContainerView {
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, NSStringFromCGRect([self.delegatePresentation frameOfItemWithObjectID: self.objectID]));
     return [self.delegatePresentation frameOfItemWithObjectID: self.objectID];
 }
 
@@ -41,23 +40,12 @@
 }
 
 - (void)presentationTransitionWillBegin {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self.containerView addSubview:self.presentedViewController.view];
-    //id <UIViewControllerTransitionCoordinatorContext> transitionCoordinator =
-    //                    [[self presentingViewController] transitionCoordinator];
+    [self.containerView addSubview:self.presentedViewController.view]; }
 
-}
+- (void)presentationTransitionDidEnd:(BOOL)completed { }
 
-- (void)presentationTransitionDidEnd:(BOOL)completed {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dismissalTransitionWillBegin { }
 
-- (void)dismissalTransitionWillBegin {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)dismissalTransitionDidEnd:(BOOL)completed {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dismissalTransitionDidEnd:(BOOL)completed { }
 
 @end

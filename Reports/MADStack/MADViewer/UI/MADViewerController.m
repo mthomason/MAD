@@ -43,13 +43,11 @@
 #import "NSDate+Extras.h"
 #import "MTStoreKitController+Features.h"
 #import "MADPageSlider.h"
+#import <MAD/MTPaper.h>
 
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
-static NSString * const MADTextFormattingPage = @"Formatting page %@.";
-static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
-static NSString * const MADTextReadRecords = @"\nRead %@ records.";
 
 static NSString * const MADTextNoCache = @"No Cache";
 
@@ -81,8 +79,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
-
-@property (nonatomic, strong) UIBarButtonItem *barButtonLabelStatus;
 
 @property (nonatomic, strong) UIProgressView *progressView; // FIXME: Not implmented.
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
@@ -175,8 +171,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.barButtonItemRefresh = barButtonRefresh;
 
     MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
-    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
-    self.barButtonLabelStatus = barButtonLabelStatus;
     self.labelStatus = labelStatus;
     
     self.activityExporting = false;
@@ -227,11 +221,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.delegate = self;
     
     self.currentPageIndex = 0;
-    [self updatePageStatus];
+    [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
     
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
-
     [self setViewControllers: blankPageArray direction: UIPageViewControllerNavigationDirectionForward
                     animated: NO completion: ^(BOOL finished) { }];
     
@@ -239,7 +232,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self.view bringSubviewToFront:self.slider];
     
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
-    [toolbarItems insertObject: self.barButtonLabelStatus atIndex: 0];
+    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:self.labelStatus];
+    [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
     
 }
@@ -249,20 +243,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     
     // MARK: Reporting feature (number of results in main query)
-    MADocument *mad = self.document;
-    mad.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-
-    [mad initalizeMainQuery:[mad activeDocumentModel]];
-    //[self reload];
-    [self loadFromCache:self.view.bounds.size];
-    [self layoutSubviewSliderPagination];
-    [self updateLateRefreshedLabel:self];
+    self.document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    [self.document initalizeMainQuery:[self.document activeDocumentModel]];
+    [self loadFromCache: self.document.paper.paperSize /*self.view.bounds.size*/];
     
     if ([self printPageRendererReport] == nil) {
         [self.document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
@@ -270,6 +255,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                                                                            dataTable: self.document.mainDataTable];
         [self setPrintPageRendererReport: prtingPageRendererReport];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self layoutSubviewSliderPagination];
+    [self updateLateRefreshedLabel:self];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -417,10 +409,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     BOOL result = NO;
     if ((unsigned long)index != self.currentPageIndex && index != NSNotFound) {
         self.currentPageIndex = index;
-        [self updatePageStatus];
+        [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                                                                pageNumber: self.currentPageIndex + 1
-                                                                                                                   ofPages: self.numberOfPages];
+                                                              pageNumber: index + 1
+                                                                 ofPages: self.numberOfPages];
+        //MTReportViewerReportPageViewController *pageOne = [self currentPageviewController];
         pageOne.view.frame = self.view.bounds;
         pageOne.delegate = self;
         
@@ -474,7 +467,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)redrawWithFrame:(CGRect)frame {
     if ([self shouldReprocess]) {
         [self setDisplayActive];
-        [self reloadWithSize:frame.size];
+        [self reloadWithSize: self.document.paper.paperSize /*frame.size*/];
     }
 }
 
@@ -502,12 +495,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
     NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
-    [self updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
+    [self.labelStatus updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
 }
 
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
     NSNumber *rowNumber = sender.userInfo[MTDatabaseNumberOfRowsReadKey];
-    [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
+    [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
 #pragma mark - UI Updates
@@ -563,9 +556,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)updateNumberOfPages {
-    NSUInteger numberOfPages = self.document.reportFormatter.numberOfPages;
-    self.numberOfPages = numberOfPages;
-    self.maxNumberOfPages = numberOfPages > 0 ? (numberOfPages - 1) : 0;
+    self.numberOfPages = self.document.reportFormatter.numberOfPages;
+    self.maxNumberOfPages = self.numberOfPages > 0 ? (self.numberOfPages - 1) : 0;
     [self setDisplayActive];
 }
 
@@ -751,21 +743,22 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)reload {
     __weak MADViewerController *blockself = self;
+    CGSize size = self.document.paper.paperSize;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockself reloadWithSize:blockself.view.bounds.size];
+            [blockself reloadWithSize:size /*blockself.view.bounds.size*/];
         });
     });
 }
 
 - (void)loadFromCache:(CGSize)viewBounds {
     
-    //[self setDisplayInactive];
+    [self.document activeDocumentModel];
     [self.document prepareForQuery];
     
     self.document.reportFormatter.didRefresh = NO;
-    [self.document.reportFormatter loadFromCacheWithSize:viewBounds];
+    [self.document.reportFormatter loadFromCacheWithSize: viewBounds];
     
     MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
                                                                                                                dataTable: self.document.mainDataTable];
@@ -773,7 +766,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self updateNumberOfPages];
     
-    MTReportViewerReportPageViewController *pageOne = [self currentPageViewController];
+    MTReportViewerReportPageViewController *pageOne = [MTReportViewerReportPageViewController PageViewControllerWithDocument: self.document
+                                                                                                                  pageNumber: self.currentPageNumber
+                                                                                                                     ofPages: self.document.reportFormatter.numberOfPages
+                                                                                                                       frame: self.view.bounds
+                                                                                                                 andDelegate: self];
     NSArray *viewControllers = @[pageOne];
     
     [self setViewControllers: viewControllers
@@ -821,7 +818,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             
             [blockViewer2 updateNumberOfPages];
             
-            MTReportViewerReportPageViewController *pageOne = [blockViewer2 currentPageViewController];
+            MTReportViewerReportPageViewController *pageOne = [MTReportViewerReportPageViewController PageViewControllerWithDocument: blockViewer2.document
+                                                                                                                          pageNumber: blockViewer2.currentPageNumber
+                                                                                                                             ofPages: blockViewer2.numberOfPages
+                                                                                                                               frame: blockViewer2.view.bounds
+                                                                                                                         andDelegate: blockViewer2];
+
             NSArray *viewControllers = @[pageOne];
             
             [blockViewer2 setViewControllers: viewControllers
@@ -931,7 +933,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (pageViewController.viewControllers.count > 0) {
             MTReportViewerReportPageViewController *viewController = pageViewController.viewControllers[0];
             [pageViewController setCurrentPageIndex: viewController.reportPageNumber - 1];
-            [pageViewController updatePageStatus];
+            [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
             [pageViewController.slider.pageSlider setValue: pageViewController.currentPageIndex animated: YES];
         }
     }
@@ -993,32 +995,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         });
     } else {
         NSNumber *numberOfResults = @([self.document.mainDataTable numberOfRows]);
-        [self updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
+        [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
     }
-}
-
-- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
-    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
-    NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
-    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-    [self.labelStatus updateStatusWithRecordsRead:readRecords];
-}
-
-- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
-    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
-    NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
-    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-    [self.labelStatus updateStatusWithRecordsRead:readRecords];
-}
-
-- (void)updatePageStatus {
-    NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY, MADTextPageXofY);
-    NSNumber *numberOfPages = @(self.numberOfPages);
-    NSNumber *currentPageNumber = @(self.currentPageIndex + 1);
-    NSString *startPage = [NSNumberFormatter localizedStringFromNumber: currentPageNumber numberStyle: NSNumberFormatterDecimalStyle];
-    NSString *endPage = [NSNumberFormatter localizedStringFromNumber: numberOfPages numberStyle: NSNumberFormatterDecimalStyle];
-    NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, startPage, endPage];
-    [self.labelStatus updateStatusWithPageNumber:localizedPageOfPages];
 }
 
 - (void)setMaxNumberOfPages:(NSUInteger)numberOfPages {
@@ -1032,7 +1010,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             self.slider.pageSlider.maximumValue = numberOfPages;
         }
     }
-    [self updatePageStatus];
+    [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
 }
 
 #pragma mark - UIPopoverControllerDelegate
@@ -1106,14 +1084,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 }
 
-- (MTReportViewerReportPageViewController *)currentPageViewController {
-    MTReportViewerReportPageViewController *pageViewController = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                                                                       pageNumber: (self.currentPageIndex + 1)
-                                                                                                                          ofPages: self.numberOfPages];
-    pageViewController.view.frame = self.view.bounds;
-    pageViewController.delegate = self;
-    return pageViewController;
-}
+- (NSUInteger)currentPageNumber { return self.currentPageIndex + 1; }
 
 #pragma mark - Custom
 

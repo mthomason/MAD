@@ -412,7 +412,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         lastRowid = sqlite3_column_int(_statementCount, 0) + 1;
         sqlite3_reset(_statementCount);
     }
-    NSLog(@"Count %@: %d", self.identifier, lastRowid);
     return lastRowid;
 }
 

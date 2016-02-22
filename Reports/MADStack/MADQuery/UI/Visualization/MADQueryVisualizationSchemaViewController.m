@@ -69,7 +69,6 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self commonInit];

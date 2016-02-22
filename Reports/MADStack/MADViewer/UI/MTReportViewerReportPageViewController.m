@@ -26,11 +26,24 @@
 
 @implementation MTReportViewerReportPageViewController
 
++ (instancetype)PageViewControllerWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages
+                                         frame:(CGRect)frame andDelegate:(id <MTPrintingProtocol>)delegate {
+    
+    MTReportViewerReportPageViewController *pageViewController = [[self alloc] initWithDocument: document
+                                                                                     pageNumber: pageNumber
+                                                                                        ofPages: numberOfPages];
+    pageViewController.view.frame = frame;
+    pageViewController.delegate = delegate;
+    return pageViewController;
+
+}
+
 - (void)dealloc {
     _delegate = nil;
 }
 
 - (instancetype)initWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
+
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.document = document;
@@ -38,9 +51,11 @@
         self.reportNumberOfPages = numberOfPages;
     }
     return self;
+
 }
 
 - (void)loadView {
+
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:CGRectZero];
     UIColor *whiteColor = [UIColor whiteColor];
     renderedReportView.backgroundColor = whiteColor;
@@ -48,6 +63,7 @@
     renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;
     renderedReportView.delegatePage = self;
     self.view = renderedReportView;
+
 }
 
 - (void)viewDidLoad {

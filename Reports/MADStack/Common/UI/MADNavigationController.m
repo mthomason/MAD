@@ -19,7 +19,6 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) {
         
     }
@@ -27,7 +26,6 @@
 }
 
 - (void)viewDidLoad {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     if ([self.topViewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
         NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);

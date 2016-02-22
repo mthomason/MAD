@@ -10,6 +10,9 @@
 
 @interface MADLabelStatus : UILabel
 
+- (void)updatePageStatus:(NSUInteger)numberOfPages currentPageIndex:(NSUInteger)currentPageIndex;
+- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs;
+- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs;
 - (void)updateStatusWithTime:(NSString *)timeMessage;
 - (void)updateStatusWithRecordsRead:(NSString *)message;
 - (void)updateStatusWithPageNumber:(NSString *)message;

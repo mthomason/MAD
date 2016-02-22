@@ -33,13 +33,11 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
 - (void)viewDidLoad {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     self.lastSelectedIndex = -1;
@@ -50,7 +48,6 @@ const int8_t MADIndexViewer = 2;
         }
     }
     self.view.backgroundColor = [UIColor purpleColor];
-    
     UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                              target:self action:@selector(viewControllerDidFinish:)];
     [self.navigationItem setLeftBarButtonItem:dismiss animated:NO];
@@ -71,19 +68,15 @@ const int8_t MADIndexViewer = 2;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-//    self.topLayoutGuide.length = self.navigationController.topLayoutGuide.length;
 }
 
-- (id <UILayoutSupport>)topLayoutGuide {
-    return self.navigationController.topLayoutGuide;
-}
+- (id <UILayoutSupport>)topLayoutGuide { return self.navigationController.topLayoutGuide; }
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.selectedViewController;
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    NSLog(@"%@", self.querySplitViewController);
     [self.querySplitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
     [self.viewControllerDelegate viewControllerDidFinish:sender];
 }
@@ -121,7 +114,6 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (MADQueryBuilderSplitViewController *)querySplitViewController {
-    NSLog(@"%@", self.viewControllers[MADIndexQuery]);
     return (MADQueryBuilderSplitViewController *)self.viewControllers[MADIndexQuery];
 }
 

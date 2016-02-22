@@ -47,7 +47,7 @@
 }
 
 - (void)initalizeDisplayAttributesWithColor:(UIColor *)tintColor {
-    UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];//[UIFont systemFontOfSize:9.0000f];
+    UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
     NSShadow *shadow = [[NSShadow alloc] init];
     UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
     [shadow setShadowColor:shadowColor];

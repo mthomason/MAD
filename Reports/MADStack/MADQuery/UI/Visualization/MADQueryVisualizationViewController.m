@@ -288,7 +288,7 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)layoutQueryLinks {
-    for (RptqQueryLinks *queryLink in self.document.activeDocumentModel.query.hasQueryLinks) {
+    for (RptqQueryLinks *queryLink in self.document.activeDocumentModel.defaultDatabase.defaultQuery.hasQueryLinks) {
         [self layoutQueryLinkViewController:queryLink];
     }
 }
@@ -303,13 +303,9 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - NSManagedObjectContext Observer
 
-- (void)managedObjectContextWillSave:(NSNotification *)notification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)managedObjectContextWillSave:(NSNotification *)notification { }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
@@ -406,7 +402,7 @@ typedef void(^MTBlockResultVoid)(void);
         MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
         cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
         cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
-        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:self.document.activeDocumentModel.query];
+        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:self.document.activeDocumentModel.defaultDatabase.defaultQuery];
         for (MTPair *pair in queryDef.topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
@@ -521,9 +517,9 @@ typedef void(^MTBlockResultVoid)(void);
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.localCacheFileUrl.path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
             self.cacheData = schemaLocations;
-            [self displayQuery:documentReport.activeDocumentModel.query withSchemaHints:schemaLocations animated:animated];
+            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery withSchemaHints:schemaLocations animated:animated];
         } else {
-            [self displayQuery:documentReport.activeDocumentModel.query animated:animated];
+            [self displayQuery:documentReport.activeDocumentModel.defaultDatabase.defaultQuery animated:animated];
         }
     }
 }
@@ -720,7 +716,6 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Layout
 
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if ([sender isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
         MADQueryVisualizationSchemaViewController *controller = (MADQueryVisualizationSchemaViewController *)sender;
         
@@ -737,7 +732,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     MTConnectorView *connectorView = self.controllersByObjectID[queryLink.objectID];
     const CGFloat paddingLeft = 44.0000f;
     

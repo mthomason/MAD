@@ -23,6 +23,9 @@
 
 @property (nonatomic, assign, readonly) NSUInteger reportPageNumber;
 
++ (instancetype)PageViewControllerWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages
+                                         frame:(CGRect)frame andDelegate:(id <MTPrintingProtocol>)delegate;
+
 - (instancetype)initWithDocument:(MADocument *)document
                       pageNumber:(NSUInteger)pageNumber
                          ofPages:(NSUInteger)numberOfPages;

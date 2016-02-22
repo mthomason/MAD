@@ -15,19 +15,19 @@
 #import "MADBarcodeType.h"
 #import "zint.h"
 
-typedef NS_ENUM(NSUInteger, MTBarcodeSizingMode) {
+typedef NS_ENUM(unsigned char, MTBarcodeSizingMode) {
     MTBarcodeSizingModeAutomaticResizing     = 1,
     MTBarcodeSizingModeSpecificSize          = 2,
     MTBarcodeSizingModeSpecificErrorLevel    = 3
 };
 
-typedef NS_ENUM(NSUInteger, MTBarcodeBorderStyle) {
+typedef NS_ENUM(unsigned char, MTBarcodeBorderStyle) {
     MTBarcodeBorderStyleNone    = 0,
     MTBarcodeBorderStyleBind    = BARCODE_BIND,
     MTBarcodeBorderStyleBox     = BARCODE_BOX
 };
 
-typedef NS_ENUM(NSUInteger, MTBarcodeDataInputType) {
+typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
     MTBarcodeDataTypeUnicode = UNICODE_MODE,
     MTBarcodeDataTypeData = DATA_MODE,
     MTBarcodeDataTypeGs1 = GS1_MODE

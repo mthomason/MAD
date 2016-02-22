@@ -26,26 +26,13 @@
     self.madFile = fileURL;
     
     NSString *title = [self.madFile.lastPathComponent stringByDeletingPathExtension];
-    [self setTitle:title];
-    
-    NSLog(@"%@", context);
+    self.title = title;
     
     MADocument *document = [[MADocument alloc] initWithFileURL:self.madFile];
     self.document = document;
     [self.document openWithCompletionHandler:^(BOOL success) {
-        
         [self.document activeDocumentModel];
-        NSLog(@"%@", success ? @"YES" : @"NO");
-        
     }];
-    //AAPLListInfo *listInfo = context;
-    //self.listDocument = [[AAPLListDocument alloc] initWithFileURL:listInfo.URL];
-    
-    //[self setTitle:listInfo.name];
-    //[self setUpInterfaceTable];
-    
-    // Configure interface objects here.
-    
 }
 
 - (void)willActivate {

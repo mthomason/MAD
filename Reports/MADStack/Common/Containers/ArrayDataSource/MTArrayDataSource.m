@@ -56,10 +56,6 @@
     return [self itemAtIndex:indexPath.row];
 }
 
-- (id) :(NSUInteger)index {
-    return self.items[index];
-}
-
 - (void)removeObjectsInArray:(NSArray *)array {
     [self.items removeObjectsInArray:array];
 }

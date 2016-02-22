@@ -64,15 +64,12 @@
     }
 }
 
-- (RptqQuery *)defaultQuery {
-    return [[self hasQueries] anyObject];
-}
+- (RptqQuery *)defaultQuery { return self.hasQueries.anyObject; }
 
 - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name {
-    
     RptqDatabaseSchemaTable *result = nil;
-    for (RptqDatabaseSchemaTable *table in [self hasTables]) {
-        if ([[table name] isEqualToString:name]) {
+    for (RptqDatabaseSchemaTable *table in self.hasTables) {
+        if ([table.name isEqualToString:name]) {
             result = table;
             break;
         }
@@ -110,20 +107,21 @@
 
     RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
                                    insertIntoManagedObjectContext:objectContext];
-    [database setDatabaseDriverType: driverIdentifier];
-    [database setIdentifier:connectionId];
+
+    NSString *databaseDriverType = [NSString stringWithString: driverIdentifier];
+    database.databaseDriverType = databaseDriverType;
+    database.identifier = connectionId;
     return database;
 }
 
 #pragma mark - MTProtocolCompare
 
-- (BOOL)isEqualTo:(id)sender {
+- (BOOL)isEqualTo:(RptqDatabase *)sender {
     BOOL result;
     if ([self isEqual:sender]) {
         result = YES;
     } else {
-        RptqDatabase *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:sender.identifier];
     }
     return result;
 }

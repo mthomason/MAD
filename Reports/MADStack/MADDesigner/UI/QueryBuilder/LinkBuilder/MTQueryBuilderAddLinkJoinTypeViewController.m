@@ -167,7 +167,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    MNSLinkType linktype = NSNotFound;
+    MNSLinkType linktype = MNSLinkTypeUnknown;
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeInnerJoin]) {
@@ -192,7 +192,7 @@
         linktype = MNSLinkTypeFullOuterJoin;
     }
     
-    if ((NSInteger)linktype != NSNotFound) {
+    if ((NSInteger)linktype != MNSLinkTypeUnknown) {
         [self checkLinkType:linktype];
         [self.delegate viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype
                                                                    from: self.document];

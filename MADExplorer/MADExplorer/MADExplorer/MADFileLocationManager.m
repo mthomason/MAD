@@ -234,7 +234,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (void)configureFilesController:(BOOL)accountChanged storageOptionChangeHandler:(void (^)(void))storageOptionChangeHandler {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     if (accountChanged || self.filesController == nil) {
         if (!self.filesController) {
@@ -256,7 +256,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 #pragma mark - Document Operations
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self.storageOption != MADAppStorageCloud) {
         // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
         return [[MADLocalFileCoordinator alloc] initWithPathExtension:pathExtension identifier:self.groupIdentifier firstQueryUpdateHandler:firstQueryHandler];
@@ -266,7 +266,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (id<MADFileCoordinator>)listsCoordinatorForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self.storageOption != MADAppStorageCloud) {
         // This will be called if the storage option is either `AAPLAppStorageLocal` or `AAPLAppStorageNotSet`.
         return [[MADLocalFileCoordinator alloc] initWithLastPathComponent:lastPathComponent identifier:self.groupIdentifier firstQueryUpdateHandler:firstQueryHandler];
@@ -276,7 +276,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (MADFilesController *)filesControllerForCurrentConfigurationWithPathExtension:(NSString *)pathExtension firstQueryHandler:(void (^)(void))firstQueryHandler {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithPathExtension:pathExtension
                                                                                           firstQueryHandler:firstQueryHandler];
@@ -289,7 +289,7 @@ static NSString * const MADFirstLaunch                                     = @"M
 }
 
 - (MADFilesController *)filesControllerForCurrentConfigurationWithLastPathComponent:(NSString *)lastPathComponent firstQueryHandler:(void (^)(void))firstQueryHandler {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     
     id<MADFileCoordinator> fileCoordinator = [self listsCoordinatorForCurrentConfigurationWithLastPathComponent:lastPathComponent
                                                                                               firstQueryHandler:firstQueryHandler];
