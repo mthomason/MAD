@@ -24,6 +24,9 @@
 - (instancetype)initWithIdentifier:(NSString *)identifier;
 - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;
 
+- (void)initalizeDatabase;
+- (void)finalizeDatabase;
+
 - (NSURL *)url;
 - (id)objectAtIndex:(NSUInteger)index;
 - (void)addObject:(id)object;

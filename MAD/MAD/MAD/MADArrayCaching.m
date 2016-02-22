@@ -48,11 +48,29 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 @implementation MADArrayCaching
 
 - (void)dealloc {
+    if (_statementInsert != NULL) {
+        sqlite3_finalize(_statementInsert);
+        sqlite3_finalize(_statementSelect);
+        sqlite3_finalize(_statementCount);
+        sqlite3_finalize(_statementEnumer);
+        _statementCount = NULL;
+        _statementEnumer = NULL;
+        _statementInsert = NULL;
+        _statementSelect = NULL;
+    }
+    sqlite3_close_v2(_database.databaseHandle);
+}
+
+- (void)finalizeDatabase {
     sqlite3_finalize(_statementInsert);
     sqlite3_finalize(_statementSelect);
     sqlite3_finalize(_statementCount);
     sqlite3_finalize(_statementEnumer);
-    sqlite3_close(_database.databaseHandle);
+    _statementCount = NULL;
+    _statementEnumer = NULL;
+    _statementInsert = NULL;
+    _statementSelect = NULL;
+    sqlite3_close_v2(_database.databaseHandle);
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
@@ -68,8 +86,6 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
         
         NSString *i = [NSString stringWithString:identifier];
         [self setIdentifier:i];
-        
-        [self initalizeDatabase];
     }
     return self;
 }
@@ -88,7 +104,6 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
         NSString *i = [NSString stringWithString:identifier];
         self.identifier = i;
         self.cachedDelegate = cachedDelegate;
-        [self initalizeDatabase];
     }
     return self;
 }
@@ -106,7 +121,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     
     NSURL *url = [self url];
     BOOL createDatabase = [[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO;
-    [self reopenDatabaseAtUrl:[self url]];
+    [self reopenDatabaseAtUrl:url];
     if (createDatabase == NO) {
         createDatabase = [self.database tableExist:MTArrayCachedTableName] == NO;
     }
@@ -392,10 +407,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSUInteger)count {
     NSUInteger lastRowid = 0;
-    if (sqlite3_step(_statementCount) == SQLITE_ROW) {
+    int stepResult = sqlite3_step(_statementCount);
+    if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
         lastRowid = sqlite3_column_int(_statementCount, 0) + 1;
         sqlite3_reset(_statementCount);
     }
+    NSLog(@"Count %@: %d", self.identifier, lastRowid);
     return lastRowid;
 }
 
