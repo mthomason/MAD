@@ -157,6 +157,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
 
+@property (nonatomic, strong, readwrite) MTPaper *paper;
+
 @end
 
 @implementation MADocument
@@ -513,8 +515,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable {
     RptqDocument *document = [self activeDocumentModel];
-    RptqQuery *query = [document defaultQuery];
-    [query addQueryTableBasedOnSchemaTable:schemaTable];
+    [document.defaultDatabase.defaultQuery addQueryTableBasedOnSchemaTable:schemaTable];
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
@@ -728,6 +729,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         }
         
         self.documentObjectID = document.objectID;
+        
+        MTPaper *paper = [[MTPaper alloc] initWithType: document.paperType];
+        self.paper = paper;
         
         if (self.mainDatabase == nil) {
             [self initalizeMainDatabase:document];

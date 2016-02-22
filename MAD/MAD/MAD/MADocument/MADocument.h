@@ -35,7 +35,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase, UIPrintPageRenderer;
+        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase, UIPrintPageRenderer, MTPaper;
 
 @protocol MADActivityProtocol;
 
@@ -62,6 +62,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 @property (readonly) RptqDocument *activeDocumentModel;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
+@property (nonatomic, strong, readonly) MTPaper *paper;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
 - (void)saveContext;
