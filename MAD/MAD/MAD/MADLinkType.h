@@ -9,7 +9,7 @@
 #ifndef MAD_MADLinkType_h
 #define MAD_MADLinkType_h
 
-typedef NS_ENUM(NSUInteger, MNSLinkType) {
+typedef NS_ENUM(unsigned char, MNSLinkType) {
     MNSLinkTypeInnerJoin = 0,
     MNSLinkTypeEquiJoin = 1,
     MNSLinkTypeNaturalJoin = 2,
@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
     MNSLinkTypeLeftOuterJoin = 4,
     MNSLinkTypeRightOuterJoin = 5,
     MNSLinkTypeFullOuterJoin = 6,
+    MNSLinkTypeUnknown = 7,
 };
 
 #endif

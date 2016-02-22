@@ -462,7 +462,7 @@
                                 for (NSUInteger i = 0; i <= [*linkDepth unsignedIntegerValue]; i++) {
                                     [result appendString:@"\t"];
                                 }
-                                NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:[[queryLink jointypeenum] unsignedIntegerValue]];
+                                NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:queryLink.jointypeenum.unsignedCharValue];
                                 [result appendFormat:@" %@ ", sqlForLink];
                                 
                                 RptqQueryField *rightField = queryLink.hasRightField;
