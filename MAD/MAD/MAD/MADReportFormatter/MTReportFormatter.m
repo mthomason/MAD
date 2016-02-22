@@ -11,6 +11,7 @@
 #endif
 
 #import "MTReportFormatter.h"
+#import "MTReportFormatterState.h"
 #import "MADocument.h"
 #import "MTQueryFull.h"
 
@@ -41,22 +42,6 @@
 #import "NSDictionary+MADReportObjectRepresentation.h"
 
 NSString * const MTNullIdentifier = @"(null)";
-
-@interface MTReportFormatterState : NSObject
-
-    @property (nonatomic, assign) NSUInteger groupCounter;
-    @property (nonatomic, assign) NSUInteger pageCounter;
-    @property (nonatomic, assign) NSUInteger rowCounter;
-    @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
-    @property (nonatomic, strong) NSNumber *detailRowId;
-    @property (nonatomic, strong) NSNumber *detailRowIdLast;
-    @property (nonatomic, strong) NSArray *sortDescriptors;
-    @property (nonatomic, strong) RptqDocument *document;   //Valid for one run of the state machine.
-
-@end
-
-@implementation MTReportFormatterState
-@end
 
 @interface MTReportFormatter ()
 
@@ -95,8 +80,7 @@ NSString * const MTNullIdentifier = @"(null)";
     self.machineState.detailRowIdLast = @(0);
     self.machineState.sortDescriptors = sortDescriptors;
     self.machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
-    RptqDocument *document = [self.layout activeDocumentModel];
-    self.machineState.document = document;
+    self.machineState.document = [self.layout activeDocumentModel];
 }
 
 - (NSArray *)keysForCachedID:(NSNumber *)rowid {
@@ -334,12 +318,26 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)loadLayoutAndIndexesFromCache {
+    
+    if (self.reportIndexes != nil) {
+        [self.reportIndexes finalizeDatabase];
+        self.reportIndexes = nil;
+    }
+    if (self.reportLayout != nil) {
+        [self.reportLayout finalizeDatabase];
+        self.reportLayout = nil;
+    }
+
     MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportIndexes]
                                                             cachedDelegate: self.cachedDelegate];
+    [ixarray initalizeDatabase];
     [self setReportIndexes:ixarray];
+    
     MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportLayout]
                                                             cachedDelegate: self.cachedDelegate];
+    [lyarray initalizeDatabase];
     [self setReportLayout:lyarray];
+    
     [self cleanupTemporaryReportIndexes];
 }
 
