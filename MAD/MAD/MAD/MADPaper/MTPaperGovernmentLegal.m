@@ -16,14 +16,15 @@
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        CGFloat width = CGFloatPointsForInches(8.5000f);
-        CGFloat height = CGFloatPointsForInches(14.0000f);
-        CGSize letter = CGSizeMake(width, height);
-        [self setPaperSize:letter];
-    }
+    if (self) { }
     return self;
 }
+
+- (CGSize)paperSize { return [MTPaperGovernemntLegal size]; }
++ (CGSize)size { return [MTPaper sizeGovernmentLegal]; }
+
+- (MTPaperType)paperType { return [MTPaperGovernemntLegal type]; }
++ (MTPaperType)type { return MTPaperTypeGovernmentLegal; };
 
 @end
 

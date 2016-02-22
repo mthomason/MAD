@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-typedef NS_ENUM(NSUInteger, MTPaperType) {
+typedef NS_ENUM(unsigned short, MTPaperType) {
     MTPaperTypeLetter = 2,
     MTPaperTypeGovernmentLetter = 3,
     MTPaperTypeGovernmentLegal = 5,
@@ -57,14 +57,18 @@ typedef NS_ENUM(NSUInteger, MTPaperType) {
 
 - (instancetype)initWithType:(MTPaperType)papertype NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, assign) MTPaperType paperType;
-@property (nonatomic, assign) CGSize paperSize;
+@property (nonatomic, assign, readonly) MTPaperType paperType;
+@property (nonatomic, assign, readonly) CGSize paperSize;
+
++ (MTPaperType)type;
++ (CGSize)size;
 
 + (CGRect)rectLetter;
 + (CGRect)rectGovernemntLetter;
 + (CGRect)rectGovernmentLegal;
 + (CGSize)sizeLetter;
 + (CGSize)sizeGovernmentLetter;
++ (CGSize)sizeGovernmentLegal;
 + (CGSize)sizeLegal;
 + (CGSize)sizeA0;
 + (CGSize)sizeA1;

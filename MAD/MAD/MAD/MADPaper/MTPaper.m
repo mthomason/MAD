@@ -58,12 +58,16 @@
 @implementation MTPaper
 
 - (instancetype)init {
-    if (self = [super init]) {
-        self.paperSize = CGSizeMake(CGFloatPointsForInches(8.5000f),
-                                    CGFloatPointsForInches(11.0000f));
-        self.paperType = MTPaperTypeLetter;
-    }
+    if (self = [super init]) { }
     return self;
+}
+
++ (CGSize)size {
+    return [MTPaperLetter size];
+}
+
++ (MTPaperType)type {
+    return MTPaperTypeLetter;
 }
 
 - (instancetype)initWithType:(MTPaperType)papertype {
@@ -219,12 +223,10 @@
             break;
 
         default:
-            result = self = [super init];
+            result = [[MTPaperLetter alloc] init];
             break;
     }
-    if (result) {
-        result.paperType = papertype;
-    }
+    
     return result;
 }
 
@@ -242,6 +244,10 @@
 
 + (CGRect)rectGovernmentLegal {
     return [self boundsForSize:[MTPaper sizeLegal]];
+}
+
++ (CGSize)sizeGovernmentLegal {
+    return [self rectGovernmentLegal].size;
 }
 
 + (CGSize)sizeLetter {

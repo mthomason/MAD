@@ -16,13 +16,14 @@
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        
-        self.paperSize = CGSizeMake(CGFloatPointsForInches(8.5000f),
-                                    CGFloatPointsForInches(11.0000f));
-        
-    }
+    if (self) { }
     return self;
 }
+
+- (CGSize)paperSize { return [MTPaperLetter size]; }
++ (CGSize)size { return [MTPaper sizeLetter]; }
+
+- (MTPaperType)paperType { return [MTPaperLetter type]; }
++ (MTPaperType)type { return MTPaperTypeLetter; };
 
 @end

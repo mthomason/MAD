@@ -16,15 +16,14 @@
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        
-        CGFloat width = CGFloatPointsForMillimeters(297.0000f);
-        CGFloat height = CGFloatPointsForMillimeters(420.0000f);
-        CGSize size = CGSizeMake(width, height);
-        [self setPaperSize:size];
-        
-    }
+    if (self) { }
     return self;
 }
+
+- (CGSize)paperSize { return [MTPaperA3 size]; }
++ (CGSize)size { return [MTPaper sizeA3]; }
+
+- (MTPaperType)paperType { return [MTPaperA3 type]; }
++ (MTPaperType)type { return MTPaperTypeA3; };
 
 @end
