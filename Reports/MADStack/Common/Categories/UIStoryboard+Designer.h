@@ -13,15 +13,7 @@
 
 @interface UIStoryboard (Designer)
 
-+ (instancetype)About;
-+ (instancetype)InformationTable;
-+ (instancetype)DocumentInfo;
-+ (instancetype)NewDocument;
 + (instancetype)Designer;
-+ (instancetype)Licensing;
-+ (instancetype)Toolbox;
-+ (instancetype)ObjectSelector;
-+ (instancetype)QueryVisualization;
 
 @end
 

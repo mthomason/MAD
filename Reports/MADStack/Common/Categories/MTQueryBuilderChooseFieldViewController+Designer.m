@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryBuilderChooseFieldViewController+Designer.h"
-#import "UIStoryboard+Designer.h"
+#import "UIStoryboard+ObjectSelector.h"
 
 static NSString * const MainIdentifier = @"UITableViewControllerChooseFieldDataObject";
 

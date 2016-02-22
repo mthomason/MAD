@@ -7,14 +7,19 @@
 //
 
 #import "UINavigationController+Designer.h"
+#import "UIStoryboard+Licensing.h"
 #import "UIStoryboard+Designer.h"
+#import "UIStoryboard+InformationTable.h"
+#import "UIStoryboard+NewDocument.h"
+#import "UIStoryboard+Toolbox.h"
+#import "UIStoryboard+ObjectSelector.h"
 
 static NSString * const FontPicker      = @"MADIdentifierStoryboardFontPicker";
-static NSString * const AggregateAdd    = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
-static NSString * const ElementPicker   = @"MADIdentifierNavigationControllerDocumentObjectSelector";
 static NSString * const NewDocument     = @"MADIdentifierOpenDocumentStart";
 static NSString * const AppInformation  = @"MADIdentifierInformationNavigationController";
 static NSString * const Licensing       = @"MTNavigationControllerLicensing";
+static NSString * const AggregateAdd        = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
+static NSString * const ElementPicker       = @"MADIdentifierNavigationControllerDocumentObjectSelector";
 
 @implementation UINavigationController (Designer)
 

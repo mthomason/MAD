@@ -202,6 +202,8 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
     self.pageIndexesTemporary = temporaryDataForPage;
     
+    //[self loadLayoutAndIndexesFromCache];
+    
     if (self.layout) {
         [self.layout initalizeSectionLayoutManagers:self.machineState.document];
         NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
@@ -209,6 +211,8 @@ NSString * const MTNullIdentifier = @"(null)";
     } else {
         [self setLayoutHeightsBySectionKey:nil];
     }
+    
+    
     
 }
 
@@ -249,6 +253,11 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)reformatForSize:(CGSize)printableSize {
     [self formatForSize:printableSize contentChanged:NO];
+}
+
+- (void)loadFromCacheWithSize:(CGSize)printableSize {
+    [self setLayoutSize:printableSize];
+    [self loadLayoutAndIndexesFromCache];
 }
 
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {

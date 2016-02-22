@@ -9,6 +9,10 @@
 #import "MADTabBarController.h"
 #import "MADNavigationBarTitleView.h"
 
+#import "MADQueryBuilderSplitViewController.h"
+#import "MADDesignerViewController.h"
+#import "MADViewerController.h"
+
 const int8_t MADIndexQuery = 0;
 const int8_t MADIndexDesigner = 1;
 const int8_t MADIndexViewer = 2;
@@ -29,13 +33,13 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
 - (void)viewDidLoad {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     self.lastSelectedIndex = -1;
@@ -46,6 +50,11 @@ const int8_t MADIndexViewer = 2;
         }
     }
     self.view.backgroundColor = [UIColor purpleColor];
+    
+    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                             target:self action:@selector(viewControllerDidFinish:)];
+    [self.navigationItem setLeftBarButtonItem:dismiss animated:NO];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -71,6 +80,12 @@ const int8_t MADIndexViewer = 2;
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.selectedViewController;
+}
+
+- (void)viewControllerDidFinish:(id)sender {
+    NSLog(@"%@", self.querySplitViewController);
+    [self.querySplitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
+    [self.viewControllerDelegate viewControllerDidFinish:sender];
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -104,5 +119,19 @@ const int8_t MADIndexViewer = 2;
     titleView.text = text;
     self.navigationItem.titleView = titleView;
 }
+
+- (MADQueryBuilderSplitViewController *)querySplitViewController {
+    NSLog(@"%@", self.viewControllers[MADIndexQuery]);
+    return (MADQueryBuilderSplitViewController *)self.viewControllers[MADIndexQuery];
+}
+
+- (MADDesignerViewController *)designerViewController {
+    return (MADDesignerViewController *)((UINavigationController *)self.viewControllers[MADIndexDesigner]).topViewController;
+}
+
+- (MADViewerController *)viewerViewController {
+    return (MADViewerController *)((UINavigationController *)self.viewControllers[MADIndexViewer]).topViewController;
+}
+
 
 @end

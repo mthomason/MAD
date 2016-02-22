@@ -1371,7 +1371,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
     popoverController.delegate = self;
-    
     popoverController.sourceRect = [viewToEdit convertRect:viewToEdit.bounds
                                                     toView:self.scroller.container];
     popoverController.sourceView = self.scroller.container;

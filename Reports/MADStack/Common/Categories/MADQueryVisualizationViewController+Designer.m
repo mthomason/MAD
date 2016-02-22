@@ -7,7 +7,7 @@
 //
 
 #import "MADQueryVisualizationViewController+Designer.h"
-#import "UIStoryboard+Designer.h"
+#import "UIStoryboard+QueryVisualization.h"
 
 static NSString * const identifier = @"MADStoryboardIDQueryVisulization";
 

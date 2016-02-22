@@ -8,7 +8,7 @@
 
 #import "MADToolboxViewController.h"
 #import "MTToolboxViewControllerProtocol.h"
-#import "UIStoryboard+Designer.h"
+#import "UIStoryboard+Toolbox.h"
 #import "UINavigationController+Designer.h"
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";

@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-@interface MTSliderPageVertical : UISlider
+@interface MADSliderPageVertical : UISlider
 
 @end
 

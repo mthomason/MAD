@@ -7,7 +7,7 @@
 //
 
 #import "MADDocumentInformationTableViewController+Designer.h"
-#import "UIStoryboard+Designer.h"
+#import "UIStoryboard+DocumentInformation.h"
 
 static NSString * const DocInfo = @"MADIdentifierDocumentInformationTableViewController";
 

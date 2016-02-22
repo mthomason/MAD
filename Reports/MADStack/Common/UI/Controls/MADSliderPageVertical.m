@@ -6,22 +6,22 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTSliderPageVertical.h"
+#import "MADSliderPageVertical.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "UIImage+ImageEffects.h"
 
-@interface MTSliderPageVertical ()
+@interface MADSliderPageVertical ()
 
 @property (nonatomic, strong) NSDictionary *stringAttributes;
 
 @end
 
-@implementation MTSliderPageVertical
+@implementation MADSliderPageVertical
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        UIImage *thumbImage = [MTSliderPageVertical sliderImageEnabled];
+        UIImage *thumbImage = [MADSliderPageVertical sliderImageEnabled];
         UIImage *blank = [UIImage new];
         [self setThumbImage:thumbImage forState:UIControlStateNormal];
         [self setMinimumTrackImage:blank forState:UIControlStateNormal];
@@ -132,10 +132,10 @@
     [super setEnabled:enabled];
     UIImage *thumbImage = nil;
     if (enabled) {
-        thumbImage = [MTSliderPageVertical sliderImageEnabled];
+        thumbImage = [MADSliderPageVertical sliderImageEnabled];
         [self setDisplayEnabled];
     } else {
-        thumbImage = [MTSliderPageVertical sliderImageDisabled];
+        thumbImage = [MADSliderPageVertical sliderImageDisabled];
         [self setDisplayDisabled];
     }
     [self setThumbImage:thumbImage forState:UIControlStateNormal];

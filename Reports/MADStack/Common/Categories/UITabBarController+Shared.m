@@ -11,7 +11,7 @@
 
 static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
 
-@implementation UITabBarController (Shared)
+@implementation MADTabBarController (Shared)
 
 + (instancetype)mainTabBarController {
     UIStoryboard *designer = [UIStoryboard Designer];

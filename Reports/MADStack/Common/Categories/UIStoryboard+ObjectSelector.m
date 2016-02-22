@@ -1,0 +1,20 @@
+//
+//  UIStoryboard+Designer.m
+//  MAD Designer
+//
+//  Created by Michael Thomason on 6/14/15.
+//  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#import "UIStoryboard+ObjectSelector.h"
+#import "MADNavigationController.h"
+
+static NSString * const ObjectSelector      = @"MADStoryboardObjectSelector";
+
+@implementation UIStoryboard (Designer)
+
++ (instancetype)ObjectSelector {
+    return [self storyboardWithName: ObjectSelector bundle: [NSBundle mainBundle]];
+}
+
+@end

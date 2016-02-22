@@ -40,6 +40,8 @@ extern NSString * const MTNullIdentifier;
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
 - (void)reformatForSize:(CGSize)printableSize;
 
+- (void)loadFromCacheWithSize:(CGSize)printableSize;;
+
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 - (NSArray *)layoutForPage:(NSUInteger)page;
 
@@ -70,6 +72,7 @@ extern NSString * const MTNullIdentifier;
 
 //  Use this to cache in location other than default.
 @property (nonatomic, strong) NSString *overrideIdentifier;
+
 
 @end
 

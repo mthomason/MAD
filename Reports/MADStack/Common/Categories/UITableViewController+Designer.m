@@ -7,7 +7,7 @@
 //
 
 #import "UITableViewController+Designer.h"
-#import "UIStoryboard+Designer.h"
+#import "UIStoryboard+About.h"
 
 static NSString * const About = @"MADIdentifierAboutViewController";
 

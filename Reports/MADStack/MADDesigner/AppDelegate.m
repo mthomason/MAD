@@ -194,10 +194,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     // Google iOS first open tracking snippet
     // Add this code to your application delegate's
     // application:didFinishLaunchingWithOptions: method.
-    [ACTConversionReporter reportWithConversionID: @"1010527409"
-                                            label: @"IK1iCOW3gmQQsdnt4QM"
-                                            value: @"10.00"
-                                     isRepeatable: NO];
+    //[ACTConversionReporter reportWithConversionID: @"1010527409"
+    //                                        label: @"IK1iCOW3gmQQsdnt4QM"
+    //                                        value: @"10.00"
+    //                                 isRepeatable: NO];
     
     return YES;
 }

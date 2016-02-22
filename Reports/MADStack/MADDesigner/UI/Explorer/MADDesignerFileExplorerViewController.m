@@ -34,8 +34,10 @@
 
 #import "UINavigationController+MADQuery.h"
 #import "UIStoryboard+Designer.h"
+#import "UIStoryboard+Query.h"
 
 #import "MADNavigationController.h"
+#import "MADTabBarController.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -63,6 +65,8 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 @property (nonatomic, assign)   BOOL shouldShowAddDocumentPopover;
 @property (atomic, assign)      BOOL aboutViewControllerOnScreen;
+
+@property (nonatomic, weak) MADTabBarController *tabController;
 
 @end
 
@@ -202,42 +206,12 @@ NSString * const MADUtiType                                     = @"com.everyday
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] ||
         [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
         
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
-            tabBarController.view.tintColor = [UIColor tintColorRed];
-            
-            UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-            MADQueryBuilderSplitViewController *queryBuilderContainerController = (MADQueryBuilderSplitViewController *)[navController topViewController];
-            queryBuilderContainerController.viewControllerDelegate = self;
-            
-            UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
-            reportDesignerViewController.delegate = self;
-            
-            UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
-            reportViewerViewController.viewControllerDelegate = self ;
-            
-        } else {
-            
-            UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
-            tabBarController.view.tintColor = [UIColor greenColor];
-            [UITabBar appearance].tintColor = [UIColor redColor];
-            
-            UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-            
-            MADQueryBuilderSplitViewController *queryBuilderContainerController = (MADQueryBuilderSplitViewController *)navController.topViewController;
-            queryBuilderContainerController.viewControllerDelegate = self;
-            
-            UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)navController2.topViewController;
-            reportDesignerViewController.delegate = self;
-            
-            UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MADViewerController *reportViewerViewController = (MADViewerController *)navController3.topViewController;
-            reportViewerViewController.viewControllerDelegate = self;
-            
-        }
+        MADTabBarController *tabBarController = (MADTabBarController *)segue.destinationViewController;
+        tabBarController.view.tintColor = [UIColor tintColorRed];
+        tabBarController.querySplitViewController.viewControllerDelegate = self;
+        tabBarController.designerViewController.delegate = self;
+        tabBarController.viewerViewController.viewControllerDelegate = self;
+        self.tabController = tabBarController;
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryBuilderSplitViewController class]]) {
         
@@ -290,7 +264,6 @@ NSString * const MADUtiType                                     = @"com.everyday
     [self closeDocument:self.traitCollection completion:^(BOOL success) {
         [weakself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:weakself waitUntilDone:NO];
     }];
-    [self.splitViewController.detailNavigationController popToRootViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
     
     self.shouldShowAddDocumentPopover = YES;
@@ -319,10 +292,11 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-    UITabBarController *tabBarController = [UITabBarController mainTabBarController];
+    MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
     tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent;
     tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    tabBarController.viewControllerDelegate = self;
     
     NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
     ((id <MADocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
@@ -330,7 +304,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     // FIXME: UISplitViewController has retain cycle, and can't be dealloc without issues.  This is
     //          a work around.  We are keeping one split view controller alive.
     if (self.splitViewController == nil) {
-        UIStoryboard *storyboardQuery = [UIStoryboard storyboardWithName:@"MADQuery" bundle:NULL];
+        UIStoryboard *storyboardQuery = [UIStoryboard Query];
         MADQueryBuilderSplitViewController *splitViewController =  [storyboardQuery instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
         splitViewController.viewControllerDelegate = self;
         self.splitViewController = splitViewController;
@@ -356,9 +330,6 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
-    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                             target:self action:@selector(viewControllerDidFinish:)];
-    [tabBarController.navigationItem setLeftBarButtonItem:dismiss animated:NO];
 
     [self presentViewController:navigationController animated:YES completion:nil];
 }

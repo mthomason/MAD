@@ -23,6 +23,8 @@
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 @property (readonly) UINavigationController *detailNavigationController;
+@property (readonly) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
+@property (readonly) MADQueryViewController *queryBuilderController;
 
 @end
 

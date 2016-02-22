@@ -55,7 +55,6 @@
     return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
 }
 
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 
@@ -95,7 +94,6 @@
 }
 
 - (void)viewDidLoad {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
@@ -111,26 +109,22 @@
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
     self.detailNavigationController.navigationBarHidden = NO;
-    
-    MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
-    queryVisualizationViewController.document = self.document;
-
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
     [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [UIColor tintColorWhite];
 
+    self.queryBuilderControllerAdvanced.document = self.document;
 }
 
 - (UINavigationController *)detailNavigationController {
     return (UINavigationController *)self.viewControllers[0];
 }
 
-- (MADQueryViewController *)queryBuilderController {
-    UINavigationController *navigationController = [self detailNavigationController];
-    return (MADQueryViewController *)navigationController.topViewController;
-}
-
 - (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
     return self.viewControllers[1];
+}
+
+- (MADQueryViewController *)queryBuilderController {
+    return (MADQueryViewController *)self.detailNavigationController.topViewController;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -13,7 +13,7 @@ NSString * const MADHandleStoryboardViewer  = @"MADViewer";
 @implementation UIStoryboard (Viewer)
 
 + (UIStoryboard *)viewer {
-    return [UIStoryboard storyboardWithName:MADHandleStoryboardViewer bundle:nil];
+    return [self storyboardWithName:MADHandleStoryboardViewer bundle:nil];
 }
 
 @end

@@ -10,8 +10,9 @@
 #define Reports_UITabBarController_Shared_h
 
 #import <UIKit/UIKit.h>
+#import "MADTabBarController.h"
 
-@interface UITabBarController (Shared)
+@interface MADTabBarController (Shared)
 
 + (instancetype)mainTabBarController;
 

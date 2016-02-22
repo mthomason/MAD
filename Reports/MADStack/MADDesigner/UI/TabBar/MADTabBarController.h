@@ -11,15 +11,24 @@
 
 #import <UIKit/UIKit.h>
 #import "MADocumentProtocol.h"
+#import "MUIViewControllerDelegate.h"
 
 extern const int8_t MADIndexQuery;
 extern const int8_t MADIndexDesigner;
 extern const int8_t MADIndexViewer;
 
 @class MADocument;
+@class MADQueryBuilderSplitViewController;
+@class MADDesignerViewController;
+@class MADViewerController;
 
 @interface MADTabBarController : UITabBarController
-    <MADocumentProtocol>
+    <MADocumentProtocol, MTViewControllerProtocol>
+
+@property (readonly) MADQueryBuilderSplitViewController * querySplitViewController;
+@property (readonly) MADDesignerViewController * designerViewController;
+@property (readonly) MADViewerController * viewerViewController;
+@property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
 @end
 
