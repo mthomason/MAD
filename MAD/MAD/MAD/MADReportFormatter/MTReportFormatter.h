@@ -40,7 +40,7 @@ extern NSString * const MTNullIdentifier;
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
 - (void)reformatForSize:(CGSize)printableSize;
 
-- (void)loadFromCacheWithSize:(CGSize)printableSize;;
+- (void)loadFromCacheWithSize:(CGSize)printableSize;
 
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 - (NSArray *)layoutForPage:(NSUInteger)page;
