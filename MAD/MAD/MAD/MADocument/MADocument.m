@@ -978,7 +978,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)regenThumbnail {
     [[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path];
-    BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned == YES || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
+    BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.thumbnailURL.path] == NO) {
         UIImage *thumbnail = [self fullyRenderedThumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);

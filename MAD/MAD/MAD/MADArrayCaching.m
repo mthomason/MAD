@@ -120,12 +120,12 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 - (void)initalizeDatabase {
     
     NSURL *url = [self url];
-    BOOL createDatabase = [[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO;
+    BOOL createDatabase = ![[NSFileManager defaultManager] fileExistsAtPath:url.path];
     [self reopenDatabaseAtUrl:url];
-    if (createDatabase == NO) {
-        createDatabase = [self.database tableExist:MTArrayCachedTableName] == NO;
+    if (!createDatabase) {
+        createDatabase = ![self.database tableExist:MTArrayCachedTableName];
     }
-    if ([self.database tableExist:MTArrayCachedTableName] == NO) {
+    if (![self.database tableExist:MTArrayCachedTableName]) {
         MTDataColumn *columnKey = [MADArrayCaching columnKey];
         MTDataColumn *columnValue = [MADArrayCaching columnValue];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnKey identifier] createTable:YES unique:NO];
@@ -421,7 +421,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSArray *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    if ([self isEmpty] == NO) {
+    if (![self isEmpty]) {
         while (sqlite3_step(_statementEnumer) == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
                                                  length: sqlite3_column_bytes(_statementEnumer, 0)];

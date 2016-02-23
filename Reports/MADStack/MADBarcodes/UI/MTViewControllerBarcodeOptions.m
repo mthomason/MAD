@@ -759,7 +759,7 @@
             MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
             [strongself setSampleDataTable:dt];
             NSAssert((strongself.selectingField1 == NO && strongself.selectingField2 == NO) == NO, @"Must be setting one or the other.");
-            NSAssert((strongself.selectingField1 == YES && strongself.selectingField2 == YES) == NO, @"Can't be setting both at the same time, now can we?");
+            NSAssert((strongself.selectingField1 && strongself.selectingField2) == NO, @"Can't be setting both at the same time, now can we?");
             if (strongself.selectingField1) {
                 NSArray *allObjects = [strongself.sampleDataTable allObjects];
                 [strongself setSampleBarcodeData:allObjects];

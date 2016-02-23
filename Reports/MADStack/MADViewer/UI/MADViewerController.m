@@ -591,7 +591,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     UIActivityViewControllerCompletionWithItemsHandler activityViewControllerCompletionWithItemsHandler =
     ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
-        if (completed || (completed == NO && activityType == nil)) {
+        if (completed || (!completed && activityType == nil)) {
             weakself.slider.pageSlider.enabled = YES;
             weakself.activityExporting = false;
             [weakself enableTabBarItems];
