@@ -13,6 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MADDataStructures/MADDataStructures.h>
 #import <MAD/MADocument.h>
+#import <MAD/MTPaper.h>
 #import "MTPrintingProtocol.h"
 
 @class MADocument;

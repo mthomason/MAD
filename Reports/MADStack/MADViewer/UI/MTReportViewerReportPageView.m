@@ -337,10 +337,12 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 - (id)insertDictationResultPlaceholder {
     
 }
+
 - (CGRect)frameForDictationResultPlaceholder:(id)placeholder {
     
 }
-/* willInsertResult will be NO if the recognition failed. */
+
+/* InsertResult will be NO if the recognition failed. */
 - (void)removeDictationResultPlaceholder:(id)placeholder willInsertResult:(BOOL)willInsertResult {}
 
 /* The following three optional methods are for clients that wish to display a floating cursor to

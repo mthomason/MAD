@@ -27,6 +27,7 @@
 		4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
 		4C009F8A1B01D16E00F22BFF /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C009F821B01BBFC00F22BFF /* libmysqlclient.a */; };
+		4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */; };
 		4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0A077019C95EAC0059E1D9 /* StoreKit.framework */; };
 		4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
@@ -1221,6 +1222,8 @@
 		4C00818E14B83E92003DF437 /* UIImageWrench20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageWrench20.png; path = Reports/UIImageWrench20.png; sourceTree = "<group>"; };
 		4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageWrench20@2x.png"; path = "Reports/UIImageWrench20@2x.png"; sourceTree = "<group>"; };
 		4C009F821B01BBFC00F22BFF /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = libMysqlClientObjC/MysqlClientObjC/../../../Compressor/library/libmysqlclient/libmysqlclient.a; sourceTree = "<group>"; };
+		4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentScroller.h; sourceTree = "<group>"; };
+		4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentScroller.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
@@ -3512,6 +3515,8 @@
 				4C401F581BAE7EB500BAE5FC /* MADSliderPageVertical.m */,
 				4CC886191C7ABFE4003E18D2 /* MADPageSlider.h */,
 				4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */,
+				4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */,
+				4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -5775,6 +5780,7 @@
 				4C26BA311BAF999800456DC8 /* MADUser.m in Sources */,
 				4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
+				4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */,
 				4C994F391BE082730058627A /* MADLabelStatus.m in Sources */,
 				4C26B9FD1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4C4020391BAE92F200BAE5FC /* MADQueryVisualizationSchemaViewController+Designer.m in Sources */,

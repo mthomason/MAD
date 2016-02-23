@@ -18,8 +18,7 @@
 @implementation MADPageSlider
 
 - (instancetype)init {
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
-    if (self = [super initWithEffect:blurEffect]) {
+    if (self = [super init]) {
         
         MADSliderPageVertical *vertSlider = [[MADSliderPageVertical alloc] init];
         [vertSlider addTarget:self action:@selector(handleSliderChangedPage:) forControlEvents:UIControlEventValueChanged];
@@ -30,11 +29,13 @@
         
         vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
         self.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
-        [self.contentView addSubview:vertSlider];
+        [self addSubview:vertSlider];
         
-        self.slider = vertSlider;
+        UIImage *blank = [UIImage new];
+        [self setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
         self.backgroundColor = [UIColor clearColor];
-    
+        self.slider = vertSlider;
         
     }
     return self;

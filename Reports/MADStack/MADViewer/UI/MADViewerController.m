@@ -300,24 +300,22 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
-              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    
-    [super willTransitionToTraitCollection: newCollection
-                 withTransitionCoordinator: coordinator];
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     UIImageView *snapshotViewBeforeRotation = nil, *snapshotViewAfterRotation = nil;
     if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == false) {
         
         CGRect frameBeforeRotation, frameAfterRotation;
-
+        
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
-
+        
         frameBeforeRotation = displayView.frame;
         
         snapshotViewBeforeRotation = captureSnapshotOfView(displayView);
-
+        
         [displayView insertSubview:snapshotViewBeforeRotation aboveSubview:displayView];
         [displayView setNeedsDisplay];
         
@@ -362,9 +360,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.navigationItem.titleView sizeToFit];
+        [self.slider setNeedsDisplay];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.navigationItem.titleView sizeToFit];
-
+        
         if (self.activityExporting == false) {
             
             MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
@@ -382,6 +381,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         
     }];
+}
+
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    
     
 }
 

@@ -13,7 +13,7 @@
 #import "MTReportViewerReportPageViewController.h"
 #import "MTReportViewerReportPageView.h"
 #import "NSDate+Extras.h"
-#import <MAD/MTPaper.h>
+#import "MADDocumentScroller.h"
 
 @interface MTReportViewerReportPageViewController ()
     <UIAccessibilityReadingContent, UIScrollViewDelegate, MADReportViewerReportPageViewProtocol>
@@ -30,6 +30,8 @@
 
 @implementation MTReportViewerReportPageViewController
 
+#pragma mark - Static Constructors
+
 + (instancetype)PageViewControllerWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages
                                          frame:(CGRect)frame andDelegate:(id <MTPrintingProtocol>)delegate {
     
@@ -41,6 +43,8 @@
     return pageViewController;
 
 }
+
+#pragma mark - NSObject
 
 - (void)dealloc {
     _delegate = nil;
@@ -62,17 +66,9 @@ const CGFloat PageEdgeInsetMargin = 3.0000f;
 
 - (void)loadView {
 
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    scrollView.backgroundColor = [UIColor lightGrayColor];
-    scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    scrollView.translatesAutoresizingMaskIntoConstraints = YES;
-    scrollView.showsHorizontalScrollIndicator = YES;
-    scrollView.showsVerticalScrollIndicator = YES;
-    scrollView.indicatorStyle = UIScrollViewIndicatorStyleBlack;
+    MADDocumentScroller *scrollView = [[MADDocumentScroller alloc] initWithFrame:CGRectZero];
     scrollView.contentSize = self.document.paper.paperSize;
     scrollView.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin);
-    scrollView.bounces = YES;
-    scrollView.alwaysBounceVertical = YES;
     scrollView.delegate = self;
     
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:self.document.paper.bounds];

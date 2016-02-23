@@ -16,7 +16,7 @@
 
 @class MADSliderPageVertical;
 
-@interface MADPageSlider : UIVisualEffectView
+@interface MADPageSlider : UIToolbar
 
 @property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
 @property (readonly) MADSliderPageVertical *pageSlider;
