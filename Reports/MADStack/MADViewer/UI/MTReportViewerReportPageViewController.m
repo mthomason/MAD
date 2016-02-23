@@ -30,6 +30,36 @@
 
 @implementation MTReportViewerReportPageViewController
 
+#pragma mark - Static Helpers
+
+static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
+    return 1 +  ( l2 - l1 - (m * 2) )  / l1;
+}
+
+static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength, CGFloat layoutGuideLength, CGFloat margin);
+static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength, CGFloat layoutGuideLength, CGFloat margin) {
+    return parentViewLength > subViewLength ? ((parentViewLength - subViewLength) / 2.0000f) + margin : layoutGuideLength + margin;
+}
+
+static inline CGFloat maximumZoomScaleForPaperInContainer(CGSize paper, CGSize container, CGFloat margin);
+static inline CGFloat maximumZoomScaleForPaperInContainer(CGSize paper, CGSize container, CGFloat margin) {
+    return MAX(zoomScale(paper.width, container.width, margin),
+               zoomScale(paper.height, container.height, margin));
+}
+
+static inline CGFloat minimumZoomScaleForPaperInContainer(CGSize paper, CGSize container, CGFloat margin);
+static inline CGFloat minimumZoomScaleForPaperInContainer(CGSize paper, CGSize container, CGFloat margin) {
+    return MIN(zoomScale(paper.width, container.width, margin),
+               zoomScale(paper.height, container.height, margin));
+}
+
++ (UIEdgeInsets)ScrollIndicatorInsetForScrollView:(UIScrollView *)scrollView insets:(UIEdgeInsets)insets {
+    return UIEdgeInsetsMake(edgeInsetForScrollIndicator(scrollView.bounds.size.height, scrollView.contentSize.height, insets.top, PageEdgeInsetMargin),
+                            edgeInsetForScrollIndicator(scrollView.bounds.size.width, scrollView.contentSize.width, insets.left, PageEdgeInsetMargin),
+                            edgeInsetForScrollIndicator(scrollView.bounds.size.height, scrollView.contentSize.height, insets.bottom, PageEdgeInsetMargin),
+                            edgeInsetForScrollIndicator(scrollView.bounds.size.width, scrollView.contentSize.width, insets.right, PageEdgeInsetMargin));
+}
+
 #pragma mark - Static Constructors
 
 + (instancetype)PageViewControllerWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages
@@ -103,23 +133,6 @@ const CGFloat PageEdgeInsetMargin = 3.0000f;
     [super viewDidDisappear:animated];
 }
 
-static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength, CGFloat layoutGuideLength);
-static inline CGFloat edgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength, CGFloat layoutGuideLength) {
-    return parentViewLength > subViewLength ? ((parentViewLength - subViewLength) / 2.0000f) + PageEdgeInsetMargin : layoutGuideLength + PageEdgeInsetMargin;
-}
-
-static inline CGFloat maximumZoomScaleForPaperInContainer(CGSize paper, CGSize container);
-static inline CGFloat maximumZoomScaleForPaperInContainer(CGSize paper, CGSize container) {
-    return MAX((1 + ((((container.width - paper.width)  - (PageEdgeInsetMargin * 2))  / paper.width))),
-               (1 + ((((container.height - paper.height)  - (PageEdgeInsetMargin * 2) ) / paper.height))));
-}
-
-static inline CGFloat minimumZoomScaleForPaperInContainer(CGSize paper, CGSize container);
-static inline CGFloat minimumZoomScaleForPaperInContainer(CGSize paper, CGSize container) {
-    return MIN((1 + ((((container.width - paper.width)  - (PageEdgeInsetMargin * 2))  / paper.width))),
-               (1 + ((((container.height - paper.height)  - (PageEdgeInsetMargin * 2) ) / paper.height))));
-}
-
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     if (self.initalLayout) {
@@ -127,8 +140,8 @@ static inline CGFloat minimumZoomScaleForPaperInContainer(CGSize paper, CGSize c
         self.scrollView.scrollIndicatorInsets = [MTReportViewerReportPageViewController ScrollIndicatorInsetForScrollView:self.scrollView
                                                                                                                    insets: UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width)];
         
-        self.scrollView.maximumZoomScale = maximumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.view.bounds.size);
-        self.scrollView.minimumZoomScale = minimumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.view.bounds.size);
+        self.scrollView.maximumZoomScale = maximumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.view.bounds.size, PageEdgeInsetMargin);
+        self.scrollView.minimumZoomScale = minimumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.view.bounds.size, PageEdgeInsetMargin);
     }
 }
 
@@ -159,13 +172,6 @@ static inline CGFloat minimumZoomScaleForPaperInContainer(CGSize paper, CGSize c
     scrollView.scrollIndicatorInsets = [MTReportViewerReportPageViewController ScrollIndicatorInsetForScrollView:scrollView
                                                                                                           insets: UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width)];
     
-}
-
-+ (UIEdgeInsets)ScrollIndicatorInsetForScrollView:(UIScrollView *)scrollView insets:(UIEdgeInsets)insets {
-    return UIEdgeInsetsMake(edgeInsetForScrollIndicator(scrollView.bounds.size.height, scrollView.contentSize.height, insets.top),
-                                                                         edgeInsetForScrollIndicator(scrollView.bounds.size.width, scrollView.contentSize.width, insets.left),
-                                                                         edgeInsetForScrollIndicator(scrollView.bounds.size.height, scrollView.contentSize.height, insets.bottom),
-                                                                         edgeInsetForScrollIndicator(scrollView.bounds.size.width, scrollView.contentSize.width, insets.right));
 }
 
 #pragma mark - UIAccessibility

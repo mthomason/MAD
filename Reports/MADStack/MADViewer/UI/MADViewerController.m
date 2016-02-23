@@ -448,16 +448,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return result;
 }
 
-- (IBAction)done:(id)sender {
-    NSError *error = nil;
-    
-    [self.document.managedObjectContext save:&error];
-    if (error != nil) {
-        [self.document.managedObjectContext save:&error];
-    }
-    [self.viewControllerDelegate viewControllerDidFinish: self];
-}
-
 - (MTReportViewerReportPageViewController *)currentPageviewController {
     return [self pageViewControllerAtIndex: self.currentPageIndex];
 }
@@ -571,6 +561,96 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Actions
 
+- (IBAction)done:(id)sender {
+    NSError *error = nil;
+    
+    [self.document.managedObjectContext save:&error];
+    if (error != nil) {
+        [self.document.managedObjectContext save:&error];
+    }
+    [self.viewControllerDelegate viewControllerDidFinish: self];
+}
+
+- (IBAction)activity:(id)sender {
+    self.activityExporting = true;
+    self.slider.pageSlider.enabled = NO;
+    
+    MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
+    activityItemProviderPdf.delegate = self;
+    NSArray *activityItems = @[activityItemProviderPdf];
+    [self setActivityItemProviderPdf:activityItemProviderPdf];
+    
+    MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
+    printPreview.delegate = self;
+    
+    NSArray *applicationActivities = @[printPreview];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
+                                                                                         applicationActivities:applicationActivities];
+    
+    __weak __block MADViewerController *weakself = self;
+    UIActivityViewControllerCompletionWithItemsHandler activityViewControllerCompletionWithItemsHandler =
+    ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        
+        if (completed || (completed == NO && activityType == nil)) {
+            weakself.slider.pageSlider.enabled = YES;
+            weakself.activityExporting = false;
+            [weakself enableTabBarItems];
+        } else {
+            if (activityType.length > 0) {  // Long running activity
+                if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
+                    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                    if (sharedController) {
+                        sharedController.delegate = weakself;
+                        UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
+                        sharedController.printPageRenderer = printPageRender;
+                        sharedController.delegate = self.document;
+                        __weak MADViewerController *weakself = self;
+                        if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorRed];
+                            [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
+                                weakself.slider.pageSlider.enabled = YES;
+                                weakself.activityExporting = false;
+                                [weakself enableTabBarItems];
+                            }];
+                        }
+                    }
+                }
+                weakself.slider.pageSlider.enabled = YES;
+                weakself.activityExporting = false;
+            } else {    // Cancel button
+                weakself.slider.pageSlider.enabled = YES;
+                weakself.activityExporting = false;
+                [weakself enableTabBarItems];
+            }
+        }
+    };
+    activityViewController.completionWithItemsHandler = activityViewControllerCompletionWithItemsHandler;
+    activityViewController.modalPresentationStyle = UIModalPresentationPopover;
+    
+    UIPopoverPresentationController *ppc = activityViewController.popoverPresentationController;
+    ppc.barButtonItem = sender;
+    
+    __weak MADViewerController *weakSelf = self;
+    [self presentViewController:activityViewController animated:YES completion:^{
+        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    }];
+    [self disableTabBarItems];
+}
+
+- (IBAction)reload {
+    __weak MADViewerController *blockself = self;
+    CGSize size = self.document.paper.paperSize;
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [blockself reloadWithSize:size];
+        });
+    });
+}
+
 - (IBAction)refresh:(id)sender {
     
     self.didRefreshBeforeReaload = true;
@@ -631,109 +711,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return activityItemProviderPdf;
 }
 
-- (void)showPrintDialog {
-    if ([NSThread isMainThread] == NO) {
-        __weak MADViewerController *weakself = self;
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
-                [weakself.popoverControllerActivity dismissPopoverAnimated:YES];
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
-                        if (sharedController) {
-                            [self.document setActivityDelegate:weakself];
-                            UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
-                            sharedController.printPageRenderer = printPageRender;
-                            sharedController.delegate = self.document;
-                            __weak MADViewerController *weakself2 = weakself;
-                            void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
-                            ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-                                weakself2.slider.pageSlider.enabled = YES;
-                                [weakself2 enableTabBarItems];
-                            };
-                            [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
-                                        completionHandler:completionHandler];
-                        }
-                    });
-                });
-            });
-        });
-    }
-}
-
-- (IBAction)activity:(id)sender {
-    self.activityExporting = true;
-    self.slider.pageSlider.enabled = NO;
-    
-    MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
-    activityItemProviderPdf.delegate = self;
-    NSArray *activityItems = @[activityItemProviderPdf];
-    [self setActivityItemProviderPdf:activityItemProviderPdf];
-    
-    MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
-    printPreview.delegate = self;
-
-    NSArray *applicationActivities = @[printPreview];
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
-                                                                                         applicationActivities:applicationActivities];
-    
-    __weak __block MADViewerController *weakself = self;
-    UIActivityViewControllerCompletionWithItemsHandler activityViewControllerCompletionWithItemsHandler =
-                ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        
-        if (completed || (completed == NO && activityType == nil)) {
-            weakself.slider.pageSlider.enabled = YES;
-            weakself.activityExporting = false;
-            [weakself enableTabBarItems];
-        } else {
-            if (activityType.length > 0) {  // Long running activity
-                if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
-                    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
-                    if (sharedController) {
-                        sharedController.delegate = weakself;
-                        UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
-                        sharedController.printPageRenderer = printPageRender;
-                        sharedController.delegate = self.document;
-                        __weak MADViewerController *weakself = self;
-                        if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
-                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorRed];
-                            [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
-                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
-                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
-                                weakself.slider.pageSlider.enabled = YES;
-                                weakself.activityExporting = false;
-                                [weakself enableTabBarItems];
-                            }];
-                        }
-                    }
-                }
-                weakself.slider.pageSlider.enabled = YES;
-                weakself.activityExporting = false;
-            } else {    // Cancel button
-                weakself.slider.pageSlider.enabled = YES;
-                weakself.activityExporting = false;
-                [weakself enableTabBarItems];
-            }
-        }
-    };
-    activityViewController.completionWithItemsHandler = activityViewControllerCompletionWithItemsHandler;
-    activityViewController.modalPresentationStyle = UIModalPresentationPopover;
-
-    UIPopoverPresentationController *ppc = activityViewController.popoverPresentationController;
-    ppc.barButtonItem = sender;
-    
-    __weak MADViewerController *weakSelf = self;
-    [self presentViewController:activityViewController animated:YES completion:^{
-        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
-    }];
-    [self disableTabBarItems];
-}
-
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
     return self;
 }
@@ -747,17 +724,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.popoverControllerActivity dismissPopoverAnimated:YES];
         completionHandler(YES);
     }
-}
-
-- (void)reload {
-    __weak MADViewerController *blockself = self;
-    CGSize size = self.document.paper.paperSize;
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockself reloadWithSize:size /*blockself.view.bounds.size*/];
-        });
-    });
 }
 
 - (void)loadFromCache:(CGSize)viewBounds {
@@ -996,29 +962,63 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)updateRecordsReadStatus {
-    if ([NSThread isMainThread] == NO) {
+    if ([NSThread isMainThread]) {
+        NSNumber *numberOfResults = @([self.document.mainDataTable numberOfRows]);
+        [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
+    } else {
         __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateRecordsReadStatus];
         });
-    } else {
-        NSNumber *numberOfResults = @([self.document.mainDataTable numberOfRows]);
-        [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
     }
 }
 
 - (void)setMaxNumberOfPages:(NSUInteger)numberOfPages {
-    if ([NSThread isMainThread] == NO) {
+    if ([NSThread isMainThread]) {
+        if (round(self.slider.pageSlider.maximumValue) != round(numberOfPages)) {
+            self.slider.pageSlider.maximumValue = numberOfPages;
+        }
+    } else {
         __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf setMaxNumberOfPages:numberOfPages];
         });
-    } else {
-        if (round(self.slider.pageSlider.maximumValue) != round(numberOfPages)) {
-            self.slider.pageSlider.maximumValue = numberOfPages;
-        }
     }
     [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
+}
+
+#pragma mark - MTActivityItemProviderDelegate
+
+- (void)showPrintDialog {
+    __weak MADViewerController *weakself = self;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            
+            [weakself.popoverControllerActivity dismissPopoverAnimated:YES];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                    if (sharedController) {
+                        [self.document setActivityDelegate:weakself];
+                        UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
+                        sharedController.printPageRenderer = printPageRender;
+                        sharedController.delegate = self.document;
+                        __weak MADViewerController *weakself2 = weakself;
+                        void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+                        ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+                            weakself2.slider.pageSlider.enabled = YES;
+                            [weakself2 enableTabBarItems];
+                        };
+                        [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
+                                                 completionHandler:completionHandler];
+                    }
+                });
+            });
+        });
+    });
 }
 
 #pragma mark - UIPopoverControllerDelegate

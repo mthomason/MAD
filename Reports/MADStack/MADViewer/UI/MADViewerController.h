@@ -24,7 +24,11 @@
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 
-- (void)reload;
+- (IBAction)reload;
+- (IBAction)refresh:(id)sender;
+- (IBAction)zoomToActualSize:(id)sender;
+- (IBAction)zoomToFit:(id)sender;
+- (IBAction)zoomToFullScreen:(id)sender;
 
 @end
 
