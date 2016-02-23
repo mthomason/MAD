@@ -13,12 +13,14 @@
 #import <MAD/MTReportViewerPrintPageRenderer.h>
 #import "MTPrintingProtocol.h"
 
+@class MTReportViewerPrintPageRenderer;
+
 @protocol MADReportViewerReportPageViewProtocol <NSObject>
 
 - (NSUInteger)pageNumber;
 - (NSUInteger)numberOfPages;
 - (NSDate * _Nullable)lastCacheDate;
-- (void)drawViewInRect:(CGRect)rect;
+- (MTReportViewerPrintPageRenderer * _Nullable)printPageRender;
 
 @end
 

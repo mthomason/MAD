@@ -113,6 +113,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
 }
 
+#pragma mark - MTPrintingProtocol
+
+- (MTReportViewerPrintPageRenderer *)printPageRender {
+    return self.printPageRendererReport;
+}
+
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
@@ -469,10 +475,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self setDisplayActive];
         [self reloadWithSize: self.document.paper.paperSize /*frame.size*/];
     }
-}
-
-- (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
-    [self.printPageRendererReport drawPageAtIndex: pageIndex inRect: printableRect];
 }
 
 #pragma mark - Document Interaction Controller Delegate

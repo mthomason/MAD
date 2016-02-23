@@ -14,6 +14,7 @@
 #import <MADDataStructures/MTPair.h>
 #import "NSDate+Extras.h"
 #import "MADTextPosition.h"
+#import <MAD/MTReportViewerPrintPageRenderer.h>
 
 static NSString * const PageNumber = @"Page %@";
 static NSString * const MADTextNoCache = @"No Cache";
@@ -43,31 +44,21 @@ static const CGFloat PageCounterBuffer = 10.0000f;
             }
         }
     }
-    //_delegate = nil;
     _delegatePage = nil;
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self initalize];
-    }
+    if (self = [super init]) { [self initalize]; }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initalize];
-    }
+    if (self = [super initWithCoder:aDecoder]) { [self initalize]; }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self initalize];
-    }
+    if (self = [super initWithFrame:frame]) { [self initalize]; }
     return self;
 }
 
@@ -86,7 +77,10 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)drawRect:(CGRect)rect {
     if (!self.drawBlankPage) {
-        [self.delegatePage drawViewInRect:rect];
+        //[[self.delegatePage printPageRender] drawPageAtIndex:pageIndex inRect:rect];
+        //[self.printPageRendererReport drawPageAtIndex: pageIndex inRect: printableRect];
+        MTReportViewerPrintPageRenderer *printPageRender = [self.delegatePage printPageRender];
+        [printPageRender drawPageAtIndex:self.delegatePage.pageNumber - 1 inRect:rect];
     }
 }
 
@@ -188,6 +182,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
     NSDate * _Nullable lastCacheDate = [self.delegatePage lastCacheDate];
     if (lastCacheDate == nil) {
+        
         NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
         self.timeSinceRefrehLabel.text = noCache;
         

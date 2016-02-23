@@ -11,12 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
+@class MTReportViewerPrintPageRenderer;
+
 @protocol MTPrintingProtocol <NSObject>
-
 @required
-
-- (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect;
-
+- (MTReportViewerPrintPageRenderer *)printPageRender;
 @end
 
 #endif

@@ -60,6 +60,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 @property (readonly) RptqDocument *activeDocumentModel;
+@property (readonly) NSURL *cachedDataUrl;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 @property (nonatomic, strong, readonly) MTPaper *paper;
@@ -77,7 +78,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
-- (NSURL *)cachedDataUrl;
 - (UIImage *)fullyRenderedThumbnail;
 
 - (void)initalizeMainQuery:(RptqDocument *)document;

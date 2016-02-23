@@ -54,6 +54,8 @@
 
 }
 
+#pragma mark - UIViewController Protocol
+
 - (void)loadView {
 
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:CGRectZero];
@@ -88,14 +90,9 @@
     [super viewWillLayoutSubviews];
 }
 
-- (void)drawViewInRect:(CGRect)rect {
-    [self.delegate drawPage:self.reportPageNumber - 1 inRect:rect];
-}
+#pragma mark - UIAccessibility
 
-- (NSInteger)accessibilityLineNumberForPoint:(CGPoint)point {
-    return 1;
-}
-
+- (NSInteger)accessibilityLineNumberForPoint:(CGPoint)point { return 1; }
 
 - (NSString * _Nullable)accessibilityContentForLineNumber:(NSInteger)lineNumber {
     return @"Content for line number";
@@ -121,16 +118,21 @@
 
 - (NSDate * _Nullable)lastCacheDate {
     if (self.reportLastCacheDate == nil) {
-        NSURL *cachedDataUrl = [self.document cachedDataUrl];
-        NSString *cachedDataPath = [cachedDataUrl path];
         NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: self.document.cachedDataUrl.path
+                                                                                    error: &error];
         if (error == nil) {
             NSDate *lastD = [attributes fileModificationDate];
             self.reportLastCacheDate = lastD;
         }
     }
     return self.reportLastCacheDate;
+}
+
+#pragma mark - MTPrintingProtocol
+
+- (MTReportViewerPrintPageRenderer *)printPageRender {
+    return [self.delegate printPageRender];
 }
 
 @end
