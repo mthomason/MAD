@@ -267,7 +267,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super viewDidAppear:animated];
     [self layoutSubviewSliderPagination];
     [self updateLateRefreshedLabel:self];
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

@@ -59,6 +59,7 @@ typedef NS_ENUM(unsigned short, MTPaperType) {
 
 @property (nonatomic, assign, readonly) MTPaperType paperType;
 @property (nonatomic, assign, readonly) CGSize paperSize;
+@property (nonatomic, assign, readonly) CGRect bounds;
 
 + (MTPaperType)type;
 + (CGSize)size;

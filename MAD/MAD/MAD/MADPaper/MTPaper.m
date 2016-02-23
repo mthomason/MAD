@@ -230,6 +230,8 @@
     return result;
 }
 
+- (CGRect)bounds { return [MTPaper boundsForSize:self.paperSize]; }
+
 + (CGRect)boundsForSize:(CGSize)size {
     return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
 }

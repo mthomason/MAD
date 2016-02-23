@@ -723,11 +723,10 @@ NSString * const MTNullIdentifier = @"(null)";
             id subData = data[keys[0]];
             NSArray *subKeys = nil;
             if (keys.count > 1) {
-                NSRange range = NSMakeRange(1, keys.count - 1);
-                NSIndexSet *set = [NSIndexSet indexSetWithIndexesInRange:range];
+                NSIndexSet *set = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, keys.count - 1)];
                 subKeys = [keys objectsAtIndexes:set];
                 resultData = [MTReportFormatter dataForGroupData:subData andKeys:subKeys];
-            } else if ([keys count] == 1) {
+            } else if (keys.count == 1) {
                 resultData = subData;
             } else {
                 resultData = subData;

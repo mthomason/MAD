@@ -818,10 +818,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         
         [self adjustScroller];
         [self.scroller.container invalidateIntrinsicContentSize];
-        CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
-        CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
-        self.scroller.container.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                                                     scrollView.contentSize.height * 0.5 + offsetY);
+        CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
+        CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
+        self.scroller.container.center = CGPointMake(scrollView.contentSize.width * 0.5000f + offsetX,
+                                                     scrollView.contentSize.height * 0.5000f + offsetY);
         
         [self.view setNeedsUpdateConstraints];
         
