@@ -17,19 +17,21 @@
 #import "MTPrintingProtocol.h"
 
 @class MADocument;
+@class MADPageViewAttributes;
 
-@interface MTReportViewerReportPageViewController : UIViewController
+@interface MADReportPageViewController : UIViewController
 
-@property (nonatomic, weak) id <MTPrintingProtocol> delegate;
+    @property (nonatomic, weak) id <MTPrintingProtocol> delegate;
 
-@property (nonatomic, assign, readonly) NSUInteger reportPageNumber;
+    @property (nonatomic, weak, readonly) UIView *documentView;
+    @property (readonly) UIScrollView *documentScroller;
+    @property (nonatomic, strong, readonly) MADPageViewAttributes *pageViewAttributes;
 
-+ (instancetype)PageViewControllerWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages
-                                         frame:(CGRect)frame andDelegate:(id <MTPrintingProtocol>)delegate;
-
-- (instancetype)initWithDocument:(MADocument *)document
-                      pageNumber:(NSUInteger)pageNumber
-                         ofPages:(NSUInteger)numberOfPages;
++ (instancetype)PageViewControllerWithDocument:(MADocument *)document
+                                pageAttributes:(MADPageViewAttributes *)pageAttributes
+                                         frame:(CGRect)frame
+                                   andDelegate:(id <MTPrintingProtocol>)delegate;
+- (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
 
 @end
 

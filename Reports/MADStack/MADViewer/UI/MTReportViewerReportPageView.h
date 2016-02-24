@@ -15,19 +15,22 @@
 
 @class MTReportViewerPrintPageRenderer;
 
-@protocol MADReportViewerReportPageViewProtocol <NSObject>
+@protocol MADReportPageViewProtocol <NSObject>
 
-- (NSUInteger)pageNumber;
-- (NSUInteger)numberOfPages;
-- (NSDate * _Nullable)lastCacheDate;
-- (MTReportViewerPrintPageRenderer * _Nullable)printPageRender;
+    @required
+    - (NSUInteger)pageNumber;
+    - (NSDate * _Nullable)lastCacheDate;
+    - (MTReportViewerPrintPageRenderer * _Nullable)printPageRender;
+
+    @optional
+    - (NSUInteger)numberOfPages;
 
 @end
 
-@interface MTReportViewerReportPageView : UIView
+@interface MADReportPageView : UIView
 
-@property (nonatomic, weak) id <MADReportViewerReportPageViewProtocol> delegatePage;
-@property (nonatomic, assign) bool drawBlankPage;
+    @property (nonatomic, weak) id <MADReportPageViewProtocol> delegatePage;
+    @property (nonatomic, assign) bool drawBlankPage;
 
 @end
 

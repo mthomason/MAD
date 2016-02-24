@@ -91,6 +91,7 @@
 		4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
 		4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
+		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
 		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4C26B9531BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */; };
@@ -1230,6 +1231,8 @@
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CarbonBlock.ttf; path = ../StaticResources/Fonts/CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../StaticResources/Fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
+		4C18BC721C7E29BD000DF79C /* MADPageViewAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewAttributes.h; sourceTree = "<group>"; };
+		4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewAttributes.m; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
 		4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = MADFeedback.framework; path = "/Users/mthomason/Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFeedback.framework"; sourceTree = "<absolute>"; };
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -3693,6 +3696,8 @@
 				4C994F3B1BE28CF50058627A /* MADTextPosition.m */,
 				4C994F4C1BE47EC10058627A /* MADTextInputController.h */,
 				4C994F4D1BE47EC10058627A /* MADTextInputController.m */,
+				4C18BC721C7E29BD000DF79C /* MADPageViewAttributes.h */,
+				4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -5835,6 +5840,7 @@
 				4C401F7A1BAE7EB500BAE5FC /* MADWatermarkView.m in Sources */,
 				4C26BA581BAF99F000456DC8 /* MADResizeHandles.m in Sources */,
 				4C26BA5C1BAF99F000456DC8 /* MTAggregateFunctionsViewController.m in Sources */,
+				4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */,
 				4C26B9C51BAF123A00456DC8 /* MADFontSelectorViewController.m in Sources */,
 				4C4020EC1BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C401F761BAE7EB500BAE5FC /* MADBackgroundScrollView.m in Sources */,

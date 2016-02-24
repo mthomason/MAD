@@ -832,7 +832,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)handledScrollViewDidEndZooming:(UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
     if ([scrollView isEqual:self.scroller]) {
         
-        CGFloat scaleWithScreen = scale * self.scroller.traitCollection.displayScale;
+        CGFloat scaleWithScreen = scale * scrollView.traitCollection.displayScale;
         
         self.ruler.contentScaleFactor = scaleWithScreen;
         

@@ -23,7 +23,7 @@ static const CGFloat PageCounterWidth = 99.0000f;
 static const CGFloat PageCounterHeight = 33.0000f;
 static const CGFloat PageCounterBuffer = 10.0000f;
 
-@interface MTReportViewerReportPageView ()
+@interface MADReportPageView ()
 
     @property (nonatomic, weak) UILabel *timeSinceRefrehLabel;
     @property (nonatomic, strong) UIView *timeSinceRefreshView;
@@ -34,7 +34,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 @end
 
-@implementation MTReportViewerReportPageView
+@implementation MADReportPageView
 
 - (void)dealloc {
     if (_timerLabelTimeSinceRefreh != nil) {
@@ -67,7 +67,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         self.firstTime = false;
         if (self.displaysCacheTimer) {
             [self addTimerView];
-            [self updateLateRefreshedLabel:self];
+            [self uiUpdateTimeSinceLastRefresh:self];
         }
         if (self.displaysPageCounter) {
             [self displayPageCounterIndicator];
@@ -77,8 +77,6 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)drawRect:(CGRect)rect {
     if (!self.drawBlankPage) {
-        //[[self.delegatePage printPageRender] drawPageAtIndex:pageIndex inRect:rect];
-        //[self.printPageRendererReport drawPageAtIndex: pageIndex inRect: printableRect];
         MTReportViewerPrintPageRenderer *printPageRender = [self.delegatePage printPageRender];
         [printPageRender drawPageAtIndex:self.delegatePage.pageNumber - 1 inRect:rect];
     }
@@ -93,50 +91,55 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     self.firstTime = true;
 }
 
-#pragma mark
+#pragma mark - Page Counter
 
-- (UIView *)displayPageCounterIndicator {
+- (void)displayPageCounterIndicator {
 
-    UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
-                                                                  CGPointZero.y + PageCounterBuffer,
-                                                                  PageCounterWidth,
-                                                                  PageCounterHeight)];
-    UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
-    numberView.backgroundColor = bgColor;
-    numberView.userInteractionEnabled = NO;
-    numberView.alpha = 0.0000f;
-    numberView.layer.cornerRadius =  6.0000f;
-    
-    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                   PageCounterWidth, PageCounterHeight)];
-    labelView.text = [NSString stringWithFormat: @"%lu of %lu",
-                                                    (unsigned long)[self.delegatePage pageNumber],
-                                                    (unsigned long)[self.delegatePage numberOfPages]];
-    labelView.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f];
-    labelView.textColor = [UIColor whiteColor];
-    labelView.textAlignment = NSTextAlignmentCenter;
-    labelView.userInteractionEnabled = NO;
-    labelView.backgroundColor = [UIColor clearColor];
-    [numberView addSubview:labelView];
-    
-    [self addSubview:numberView];
-
-    [UIView animateWithDuration:0.3000f delay:0.0000f
-                        options:UIViewAnimationOptionCurveEaseIn animations:^{
-                            
-                            numberView.alpha = 1.0000f;
-                            
-                        } completion:^(BOOL finished) {
-                            
-                            if (finished) {
-                                [UIView animateWithDuration:0.30000f delay:1.0000f
-                                                    options:UIViewAnimationOptionCurveEaseOut animations:^{
-                                                        numberView.alpha = 0.0000f;
-                                                    } completion:nil];
-                            }
-                        }];
-    return nil;
+    if ([self.delegatePage respondsToSelector:@selector(numberOfPages)]) {
+        UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
+                                                                      CGPointZero.y + PageCounterBuffer,
+                                                                      PageCounterWidth,
+                                                                      PageCounterHeight)];
+        UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
+        numberView.backgroundColor = bgColor;
+        numberView.userInteractionEnabled = NO;
+        numberView.alpha = 0.0000f;
+        numberView.layer.cornerRadius =  6.0000f;
+        
+        UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                       PageCounterWidth, PageCounterHeight)];
+        labelView.text = [NSString stringWithFormat: @"%lu of %lu",
+                          (unsigned long)[self.delegatePage pageNumber],
+                          (unsigned long)[self.delegatePage numberOfPages]];
+        labelView.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f];
+        labelView.textColor = [UIColor whiteColor];
+        labelView.textAlignment = NSTextAlignmentCenter;
+        labelView.userInteractionEnabled = NO;
+        labelView.backgroundColor = [UIColor clearColor];
+        [numberView addSubview:labelView];
+        
+        [self addSubview:numberView];
+        
+        [UIView animateWithDuration:0.3000f delay:0.0000f
+                            options:UIViewAnimationOptionCurveEaseIn animations:^{
+                                
+                                numberView.alpha = 1.0000f;
+                                
+                            } completion:^(BOOL finished) {
+                                
+                                if (finished) {
+                                    [UIView animateWithDuration:0.30000f delay:1.0000f
+                                                        options:UIViewAnimationOptionCurveEaseOut animations:^{
+                                                            numberView.alpha = 0.0000f;
+                                                        } completion:^(BOOL finished) {
+                                                            [numberView removeFromSuperview];
+                                                        }];
+                                }
+                            }];
+    }
 }
+
+#pragma mark - Timer
 
 - (void)addTimerView {
     if (self.timeSinceRefreshView == nil) {
@@ -178,7 +181,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     }
 }
 
-- (void)updateLateRefreshedLabel:(id)sender {
+- (void)uiUpdateTimeSinceLastRefresh:(id)sender {
 
     NSDate * _Nullable lastCacheDate = [self.delegatePage lastCacheDate];
     if (lastCacheDate == nil) {
@@ -203,7 +206,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         }
         
         NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
-                                                    selector: @selector(updateLateRefreshedLabel:) userInfo:nil
+                                                    selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil
                                                      repeats: NO];
         self.timerLabelTimeSinceRefreh = t;
     }

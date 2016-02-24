@@ -10,10 +10,10 @@
 
 @interface MADOperationInstallSampleDocument ()
 
-@property (nonatomic, copy) NSString *filename;
-@property (nonatomic, copy) NSString *fileExtension;
-@property (nonatomic, copy) NSString *groupIdentifier;
-@property (nonatomic, copy) NSString *installFlag;
+@property (nonatomic, strong) NSString *filename;
+@property (nonatomic, strong) NSString *fileExtension;
+@property (nonatomic, strong) NSString *groupIdentifier;
+@property (nonatomic, strong) NSString *installFlag;
 
 @end
 
@@ -21,10 +21,19 @@
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
     if (self = [super init]) {
-        self.filename = filename.copy;
-        self.fileExtension = fileExtension.copy;
-        self.groupIdentifier = groupIdentifier.copy;
-        self.installFlag = installFlag.copy;
+        
+        NSString *fn = [NSString stringWithString:filename];
+        self.filename = fn;
+        
+        NSString *fe = [NSString stringWithString:fileExtension];
+        self.fileExtension = fe;
+        
+        NSString *gi = [NSString stringWithString:groupIdentifier];
+        self.groupIdentifier = gi;
+        
+        NSString *ii = [NSString stringWithString:installFlag];
+        self.installFlag = ii;
+        
     }
     return self;
 }
