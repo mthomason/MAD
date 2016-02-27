@@ -125,36 +125,14 @@ NSString * const MTNullIdentifier = @"(null)";
     return layoutIdentifier;
 }
 
-- (NSString *)nameHorizontalReportLayoutCache {
-    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", sizeString];
-}
-- (NSString *)nameVirticalReportLayoutCache {
-    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lv", sizeString];
-}
-- (NSString *)nameHorizontalReportIndexes {
+- (NSString *)nameCurrentReportIndexes {
     NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "ih", sizeString];
 }
-- (NSString *)nameVirticalReportIndexes {
-    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "iv", sizeString];
-}
 
-- (NSString *)nameCurrentReportIndexes {
-    if ([self isLandscape]) {
-        return [self nameHorizontalReportIndexes];
-    } else {
-        return [self nameVirticalReportIndexes];
-    }
-}
 - (NSString *)nameCurrentReportLayout {
-    if ([self isLandscape]) {
-        return [self nameHorizontalReportLayoutCache];
-    } else {
-        return [self nameVirticalReportLayoutCache];
-    }
+    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", sizeString];
 }
 
 - (void)setCachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
