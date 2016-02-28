@@ -1223,7 +1223,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                 [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
             }
             
-            UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+            UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
             UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
             visualEffectsView.frame = navigationController.view.bounds;
             visualEffectsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

@@ -44,7 +44,7 @@
         <!--Viewer Controller-->
         <scene sceneID="iMy-DU-OrK">
             <objects>
-                <pageViewController restorationIdentifier="MADIdentifierRestorationViewerViewController" storyboardIdentifier="MADIdentifierStoryboardViewerViewController" autoresizesArchivedViewToFullSize="NO" modalPresentationStyle="currentContext" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="ERc-MK-TMQ" customClass="MADViewerController" sceneMemberID="viewController">
+                <pageViewController restorationIdentifier="MADIdentifierRestorationViewerViewController" storyboardIdentifier="MADIdentifierStoryboardViewerViewController" autoresizesArchivedViewToFullSize="NO" modalPresentationStyle="currentContext" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="ERc-MK-TMQ" customClass="MADViewerController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="fixedSpace" id="fni-VY-x1j"/>

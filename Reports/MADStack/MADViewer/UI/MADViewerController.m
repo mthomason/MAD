@@ -187,11 +187,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.activityExporting = false;
     self.didRefreshBeforeReaload = false;
     
-    MADPageSlider *pageSlider = [[MADPageSlider alloc] init];
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
     pageSlider.sliderDelegate = self;
     self.toolbarSlider = pageSlider;
     
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
+
+//    self.transitionStyle = UIPageViewControllerTransitionStyleScroll;
 }
 
 #pragma mark - MADPageSliderDelegate
@@ -471,14 +474,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setPageingEnabled:YES];
     
     UIColor *red = [UIColor tintColorRed];
-    self.toolbarSlider.pageSlider.tintColor = red;
+    self.toolbarSlider.tintColor = red;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = YES;
     }
     
-    self.toolbarSlider.pageSlider.enabled = YES;
+    self.toolbarSlider.enabled = YES;
     self.barButtonItemRefresh.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
     self.refreshing = false;
@@ -493,14 +496,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setPageingEnabled:NO];
     
     UIColor *tintColor = [UIColor lightGrayColor];
-    self.toolbarSlider.pageSlider.tintColor = tintColor;
+    self.toolbarSlider.tintColor = tintColor;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = NO;
     }
     
-    self.toolbarSlider.pageSlider.enabled = NO;
+    self.toolbarSlider.enabled = NO;
     self.barButtonItemRefresh.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     self.refreshing = true;
@@ -530,7 +533,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (IBAction)activity:(id)sender {
     self.activityExporting = true;
-    self.toolbarSlider.pageSlider.enabled = NO;
+    self.toolbarSlider.enabled = NO;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
     activityItemProviderPdf.delegate = self;
@@ -549,7 +552,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
         if (completed || (!completed && activityType == nil)) {
-            weakself.toolbarSlider.pageSlider.enabled = YES;
+            weakself.toolbarSlider.enabled = YES;
             weakself.activityExporting = false;
             [weakself enableTabBarItems];
         } else {
@@ -568,17 +571,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
-                                weakself.toolbarSlider.pageSlider.enabled = YES;
+                                weakself.toolbarSlider.enabled = YES;
                                 weakself.activityExporting = false;
                                 [weakself enableTabBarItems];
                             }];
                         }
                     }
                 }
-                weakself.toolbarSlider.pageSlider.enabled = YES;
+                weakself.toolbarSlider.enabled = YES;
                 weakself.activityExporting = false;
             } else {    // Cancel button
-                weakself.toolbarSlider.pageSlider.enabled = YES;
+                weakself.toolbarSlider.enabled = YES;
                 weakself.activityExporting = false;
                 [weakself enableTabBarItems];
             }
@@ -909,13 +912,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return result;
 }
 
-- (NSInteger)presentationCountForPageViewController:(MADViewerController *)pageViewController {
+/*- (NSInteger)presentationCountForPageViewController:(MADViewerController *)pageViewController {
     return pageViewController.numberOfPages;
 }
 
 - (NSInteger)presentationIndexForPageViewController:(MADViewerController *)pageViewController {
     return pageViewController.currentPageIndex;
-}
+}*/
 
 #pragma mark - UIPageViewControllerDelegate
 
@@ -1002,8 +1005,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)uiUpdateNumberOfPages:(NSUInteger)numberOfPages {
     if ([NSThread isMainThread]) {
-        if (round(self.toolbarSlider.pageSlider.maximumValue) != round(numberOfPages)) {
-            self.toolbarSlider.pageSlider.maximumValue = numberOfPages;
+        if (round(self.toolbarSlider.maximumValue) != round(numberOfPages)) {
+            self.toolbarSlider.maximumValue = numberOfPages;
         }
     } else {
         __weak MADViewerController *weakSelf = self;
@@ -1036,7 +1039,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         __weak MADViewerController *weakself2 = weakself;
                         void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                         ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-                            weakself2.toolbarSlider.pageSlider.enabled = YES;
+                            weakself2.toolbarSlider.enabled = YES;
                             [weakself2 enableTabBarItems];
                         };
                         [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
