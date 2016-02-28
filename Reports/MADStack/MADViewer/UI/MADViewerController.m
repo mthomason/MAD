@@ -305,86 +305,30 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size
-       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    UIImageView *snapshotViewBeforeRotation = nil, *snapshotViewAfterRotation = nil;
-    if ([self.tabBarController.selectedViewController isEqual: self.navigationController] && self.activityExporting == false) {
-        
-        CGRect frameBeforeRotation, frameAfterRotation;
-        
-        MADReportPageViewController *pageViewController = [self currentPageviewController];
-        MADReportPageView *displayView = (MADReportPageView *)pageViewController.view;
-        
-        frameBeforeRotation = displayView.frame;
-        
-        snapshotViewBeforeRotation = captureSnapshotOfView(displayView);
-        
-        [displayView insertSubview:snapshotViewBeforeRotation aboveSubview:displayView];
-        [displayView setNeedsDisplay];
-        
-        frameAfterRotation = displayView.bounds;
-        [self redrawWithFrame:frameAfterRotation];
-        
-        pageViewController = [self currentPageviewController];
-        displayView = (MADReportPageView *)pageViewController.view;
-        
-        [UIView setAnimationsEnabled:NO];
-        snapshotViewAfterRotation = captureSnapshotOfView(displayView);
-        
-        CGRect framePreservingHeight = CGRectMake(frameBeforeRotation.origin.x, frameBeforeRotation.origin.y,
-                                                  frameBeforeRotation.size.width, snapshotViewAfterRotation.frame.size.height);
-        
-        snapshotViewAfterRotation.frame = framePreservingHeight;
-        
-        UIImage *imageBeforeRotation = [snapshotViewBeforeRotation.image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        UIImage *imageAfterRotation = [snapshotViewAfterRotation.image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        
-        [UIView setAnimationsEnabled:YES];
-        
-        if (imageAfterRotation.size.height < imageBeforeRotation.size.height) {
-            snapshotViewAfterRotation.alpha = 0.0000f;
-            [displayView insertSubview:snapshotViewAfterRotation aboveSubview:snapshotViewBeforeRotation];
-            snapshotViewAfterRotation.alpha = 1.0000f;
-        } else {
-            [displayView insertSubview:snapshotViewAfterRotation aboveSubview:snapshotViewBeforeRotation];
-            snapshotViewBeforeRotation.alpha = 0.0000f;
-        }
-        
-        snapshotViewAfterRotation.frame = frameAfterRotation;
-        framePreservingHeight = CGRectMake(frameAfterRotation.origin.x, frameAfterRotation.origin.y, frameAfterRotation.size.width, snapshotViewAfterRotation.frame.size.height);
-        snapshotViewBeforeRotation.frame = framePreservingHeight;
-        
-        if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
-            ((MADReportPageView *)displayView).drawBlankPage = true;
-        }
-        
-        [displayView setNeedsDisplay];
+    BOOL shouldReprocess = ( (/*[self.tabBarController.selectedViewController isEqual: self.navigationController] && */self.activityExporting == false)
+                            && [self shouldReprocess] );
+    
+    if (shouldReprocess) {
+        [self reloadStepOne];
+        [self reloadStepTwo:self.document.paper.paperSize];
+        [self reloadStepThree];
     }
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+
         [self.navigationItem.titleView sizeToFit];
         [self.slider setNeedsDisplay];
+        
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
         [self.navigationItem.titleView sizeToFit];
-        
         if (self.activityExporting == false) {
-            
             MADReportPageViewController *pageViewController = [self currentPageviewController];
-            UIView *displayView = [pageViewController view];
-            
-            if (displayView) {
-                if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
-                    ((MADReportPageView *)displayView).drawBlankPage = false;
-                }
-            }
-            [displayView setNeedsDisplay];
-            
-            [snapshotViewBeforeRotation removeFromSuperview];
-            [snapshotViewAfterRotation removeFromSuperview];
+            [pageViewController.view setNeedsDisplay];
         }
-        
     }];
 }
 
@@ -796,78 +740,85 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
 }
 
-- (void)reloadWithSize:(CGSize)viewBounds {
-    
+- (void)reloadStepOne {
     if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
         self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
     }
     
     [self setDisplayInactive];
-    
-    __weak MADViewerController *blockViewer = self;
-    
     [self.document prepareForQuery];
+}
+
+- (void)reloadStepTwo:(CGSize)size {
+    [self watchFormatter: self.document.reportFormatter];
     
-    __weak MADocument *weakdoc = self.document;
+    self.document.reportFormatter.didRefresh = self.startedRefresh;
+    [self.document.reportFormatter formatForSize:size contentChanged:self.startedRefresh];
+    
+    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
+                                                                                                               dataTable: self.document.mainDataTable];
+    self.printPageRendererReport = printPageRender;
+    [self ignoreFormatter: self.document.reportFormatter];
+    
+}
+
+- (void)reloadStepThree {
+    [self uiUpdateNumberOfPages];
+    
+    MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
+    pageAttributes.pageNumber = self.currentPageNumber;
+    pageAttributes.numberOfPages = self.numberOfPages;
+    
+    // FIXME: Don't reset the display size to the paper size.
+    pageAttributes.contentSizeInital = document.paper.paperSize;
+    pageAttributes.zoomScaleInital = 1.0000f;
+    pageAttributes.contentScaleFactor = 0.0;
+    
+    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: self.document
+                                                                                        pageAttributes: pageAttributes
+                                                                                                 frame: self.view.bounds
+                                                                                           andDelegate: self];
+    
+    NSArray *viewControllers = @[pageOne];
+    
+    [self setViewControllers: viewControllers
+                           direction: UIPageViewControllerNavigationDirectionForward
+                            animated: NO completion: nil];
+    
+    self.refreshing = false;
+    self.startedRefresh = false;
+    [self uiUpdateRecordsRead];
+    self.document.reportFormatter.didRefresh = NO;
+    if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
+        
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        if (self.didRefreshBeforeReaload) {
+            notification.alertBody = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
+            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+            self.didRefreshBeforeReaload = false;
+        }
+        
+        NSNumber *bgtask = @(self.backgroundTaskIdRefresh);
+        self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+        [[UIApplication sharedApplication] handoffBackground:bgtask];
+    }
+
+}
+
+- (void)reloadWithSize:(CGSize)viewBounds {
+    
+    [self reloadStepOne];
+    __weak MADViewerController *blockViewer = self;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
-        
-        [blockViewer watchFormatter: weakdoc.reportFormatter];
 
-        weakdoc.reportFormatter.didRefresh = blockViewer.startedRefresh;
-        [weakdoc.reportFormatter formatForSize:viewBounds contentChanged:blockViewer.startedRefresh];
-        
-        MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: weakdoc.reportFormatter
-                                                                                                                   dataTable: weakdoc.mainDataTable];
-        blockViewer.printPageRendererReport = printPageRender;
-        [blockViewer ignoreFormatter: weakdoc.reportFormatter];
-
-        __weak MADocument *doc2 = weakdoc;
+        [blockViewer reloadStepTwo:viewBounds];
         __weak MADViewerController *blockViewer2 = blockViewer;
-        
+
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [blockViewer2 uiUpdateNumberOfPages];
-            
-            MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
-            pageAttributes.pageNumber = blockViewer2.currentPageNumber;
-            pageAttributes.numberOfPages = blockViewer2.numberOfPages;
-            
-            // FIXME: Don't reset the display size to the paper size.
-            pageAttributes.contentSizeInital = document.paper.paperSize;
-            pageAttributes.zoomScaleInital = 1.0000f;
-            pageAttributes.contentScaleFactor = 0.0;
-
-            MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: blockViewer2.document
-                                                                                                pageAttributes: pageAttributes
-                                                                                                         frame: blockViewer2.view.bounds
-                                                                                                   andDelegate: blockViewer2];
-            
-            NSArray *viewControllers = @[pageOne];
-            
-            [blockViewer2 setViewControllers: viewControllers
-                                   direction: UIPageViewControllerNavigationDirectionForward
-                                    animated: NO completion: nil];
-
-            blockViewer2.refreshing = false;
-            blockViewer2.startedRefresh = false;
-            [blockViewer2 uiUpdateRecordsRead];
-            doc2.reportFormatter.didRefresh = NO;
-            
-            if (blockViewer2.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
-                
-                UILocalNotification *notification = [[UILocalNotification alloc] init];
-                if (blockViewer2.didRefreshBeforeReaload) {
-                    notification.alertBody = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
-                    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                    blockViewer2.didRefreshBeforeReaload = false;
-                }
-                
-                NSNumber *bgtask = @(blockViewer2.backgroundTaskIdRefresh);
-                blockViewer2.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-                [[UIApplication sharedApplication] handoffBackground:bgtask];
-            }
+            [blockViewer2 reloadStepThree];
             
         });
     });
