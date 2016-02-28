@@ -209,8 +209,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIColor *backgroundColor = [UIColor groupTableViewBackgroundColor];
-    self.view.backgroundColor = backgroundColor;
+    self.view.backgroundColor = [UIColor lightGrayColor];
     
     UIColor *whiteColor = [UIColor tintColorWhite];
     self.navigationController.toolbar.tintColor = whiteColor;
@@ -265,12 +264,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
                                                                                                                            dataTable: self.document.mainDataTable];
-        [self setPrintPageRendererReport: prtingPageRendererReport];
+        self.printPageRendererReport = prtingPageRendererReport;
     }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self layoutSubviewSliderPagination];
     [self uiUpdateTimeSinceLastRefresh:self];
 }
 
@@ -316,7 +316,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-
+        //    MADReportPageViewController *pageViewController = [self currentPageviewController];
+        //    [pageViewController.view setNeedsDisplay];
         [self.navigationItem.titleView sizeToFit];
         [self layoutSubviewSliderPagination];
         [self.toolbarSlider setNeedsLayout];
@@ -328,10 +329,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.navigationItem.titleView sizeToFit];
         [self layoutSubviewSliderPagination];
         [self.toolbarSlider setNeedsLayout];
-        if (self.activityExporting == false) {
-            MADReportPageViewController *pageViewController = [self currentPageviewController];
-            [pageViewController.view setNeedsDisplay];
-        }
+        //    MADReportPageViewController *pageViewController = [self currentPageviewController];
+        //    [pageViewController.view setNeedsDisplay];
     }];
 }
 
@@ -390,6 +389,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                                   andPageAttributtes: pageAttributes];
 
         pageOne.view.frame = self.view.bounds;
+        pageOne.view.backgroundColor = self.view.backgroundColor;
         pageOne.delegate = self;
         
         __block MADViewerController *reportViewer = self;
@@ -865,6 +865,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
             result = [[MADReportPageViewController alloc] initWithDocument:document andPageAttributtes:pageAttributes];
             result.delegate = self;
+            result.view.backgroundColor = self.view.backgroundColor;
             result.view.frame = self.view.bounds;
             result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
             result.view.translatesAutoresizingMaskIntoConstraints = YES;
@@ -895,6 +896,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             pageAttributes.contentScaleFactor = pageViewControllerPrevious.documentView.contentScaleFactor;
 
             result = [[MADReportPageViewController alloc] initWithDocument:document andPageAttributtes:pageAttributes];
+            result.view.backgroundColor = self.view.backgroundColor;
 
             result.delegate =  self;
             result.view.frame = self.view.bounds;
