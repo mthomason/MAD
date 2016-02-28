@@ -30,8 +30,6 @@ extern NSString * const MTNullIdentifier;
 
 @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-- (void)initalizeStateMachine;
-
 - (instancetype)initWithQuery: (MTQuery *)query layout: (MADocument *)layout options: (MTReportFormatterOptions)options;
 + (instancetype)reportFormatterWithQuery: (MTQuery *)query layout: (MADocument *)layout
                                  options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED;

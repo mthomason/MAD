@@ -85,7 +85,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (NSArray *)keysForCachedID:(NSNumber *)rowid {
     NSDictionary *row = [self.datasource dataForCacheId: rowid];
-    return [NSArray arrayWithArray:[self keyValuesForResultRow:row]];
+    NSArray *keyValues = [self keyValuesForResultRow:row];
+    return [NSArray arrayWithArray:keyValues];
 }
 
 - (void)dealloc { }
@@ -114,15 +115,9 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)layoutIdentifier {
-    NSUInteger layoutIdentifier;
-    if (self.overrideIdentifier == nil) {
-        NSURL *url = [self.layout.documentObjectID URIRepresentation];
-        NSString *s = [url absoluteString];
-        layoutIdentifier = [s hash];
-    } else {
-        layoutIdentifier = [self.overrideIdentifier hash];
-    }
-    return layoutIdentifier;
+    return self.overrideIdentifier == nil ?
+                    self.layout.documentObjectID.URIRepresentation.absoluteString.hash :
+                    self.overrideIdentifier.hash;
 }
 
 - (NSString *)nameCurrentReportIndexes {
@@ -164,8 +159,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
     self.pageIndexesTemporary = temporaryDataForPage;
     
-    //[self loadLayoutAndIndexesFromCache];
-    
     if (self.layout) {
         [self.layout initalizeSectionLayoutManagers:self.machineState.document];
         NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
@@ -173,9 +166,6 @@ NSString * const MTNullIdentifier = @"(null)";
     } else {
         [self setLayoutHeightsBySectionKey:nil];
     }
-    
-    
-    
 }
 
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect {
@@ -193,16 +183,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (BOOL)needsFormat {
-    BOOL updatedData = NO;
-    
     NSAssert([self datasource] != nil, @"We need a datatable way before here");
-    
-    if ([self didRefresh] ||
-        [self cachedIndexesExist] == NO ||
-        [self.datasource cacheExist] == NO) {
-        updatedData = YES;
-    }
-    return updatedData;
+    return ([self didRefresh] || [self cachedIndexesExist] == NO || [self.datasource cacheExist] == NO) ? YES : NO;
 }
 
 - (void)formatForSize:(CGSize)printableSize {
