@@ -15,9 +15,12 @@ static NSString * const ConstTestStringValue = @"0";
 @interface MADSliderPageVertical ()
 
 @property (nonatomic, strong) NSDictionary *stringAttributes;
-@property (nonatomic, strong) NSArray <UILabel *>*labels;
+@property (nonatomic, strong) NSMutableArray <UILabel *>*labels;
 @property (nonatomic, assign) CGFloat stringHeight;
 @property (nonatomic, strong) UIColor *drawingColor;
+
+@property (nonatomic, assign) CGRect lastRect;
+@property (nonatomic, assign) unsigned long lastNumberOfTicks;
 
 @end
 
@@ -27,9 +30,6 @@ static NSString * const ConstTestStringValue = @"0";
     
     if (self = [super initWithFrame:frame]) {
         
-        NSArray *labels = @[];
-        self.labels = labels;
-
         UIImage *thumbImage = [MADSliderPageVertical sliderImageEnabled];
         UIImage *blank = [UIImage new];
         [self setThumbImage:thumbImage forState:UIControlStateNormal];
@@ -63,6 +63,10 @@ static NSString * const ConstTestStringValue = @"0";
         self.stringHeight = [self boundsForAttributedString:testString].height;
 
         self.stringAttributes = attributes;
+        
+        self.labels = nil;
+        //self.
+        
     }
     return self;
 }
@@ -77,66 +81,93 @@ static NSString * const ConstTestStringValue = @"0";
 
 - (void)setMaximumValue:(float)maximumValue {
     [super setMaximumValue:maximumValue];
-    [self setNeedsDisplay];
+    if (self.labels == nil) {
+        
+        NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity:
+                                  availableLabelSlots(MAX(self.frame.size.width, self.frame.size.height), self.stringHeight, self.maximumValue) / 2 + 1
+                                  ];
+        self.labels = labels;
+
+    }
+    [self setNeedsLayout];
 }
 
 - (void)setMinimumValue:(float)minimumValue {
     [super setMinimumValue:minimumValue];
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
+}
+
+inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight);
+inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight) {
+    return viewSizeHeight / elementSizeHeight;
+}
+inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue);
+inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue) {
+    if (numberOfTicksCalc(viewSizeHeight, elementSizeHeight) <= 0) {
+        return 0;
+    } else if (numberOfTicksCalc(viewSizeHeight, elementSizeHeight) > maximumValue) {
+        return (unsigned long)floor(maximumValue);
+    } else {
+        return (unsigned long)numberOfTicksCalc(viewSizeHeight, elementSizeHeight) - 1;
+    }
 }
 
 
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
-    for (UIView *label in self.labels) {
-        [label removeFromSuperview];
+    
+    if (self.labels == nil) {
+        return;
     }
     
     CGRect rect = self.frame;
-    NSMutableString *pageNumber = [[NSMutableString alloc] initWithString:@"0"];
-    
-    double numberOfTicks = (rect.size.height / self.stringHeight) - 1;
-    if (numberOfTicks < 0) {
-        numberOfTicks = 0;
-    } else if (numberOfTicks > self.maximumValue) {
-        numberOfTicks = floorf(self.maximumValue) + 1;
+    unsigned long numberOfTicks = availableLabelSlots(rect.size.height, self.stringHeight, self.maximumValue);
+    if (CGRectEqualToRect(rect, self.lastRect) && numberOfTicks == self.lastNumberOfTicks) {
+        return;
     }
+
+    self.lastRect = rect;
+    self.lastNumberOfTicks = numberOfTicks;
+    
+    for (UIView *label in self.labels) {
+        [label removeFromSuperview];
+    }
+    [self.labels removeAllObjects];
     
     static CGFloat offsetTopBottom = 8.0000f;
-    CGFloat distanceBetweenTicks = numberOfTicks > 1 ? ((rect.size.height - offsetTopBottom*2) / numberOfTicks) - self.stringHeight : CGSizeZero.height;
+    CGFloat distanceBetweenTicks = numberOfTicks > 1 ?
+                ((rect.size.height - offsetTopBottom*2) / numberOfTicks) - self.stringHeight : CGSizeZero.height;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
     
-    double tickValue = [self maximumValue] / (numberOfTicks - 1);
-    NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)((numberOfTicks/2) + (((int)numberOfTicks) % 2))];
-    for (NSInteger i=0; i<numberOfTicks; i++) {
-        
-        [pageNumber setString: [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)]];
-        
+    double tickValue = self.maximumValue / (numberOfTicks - 1);
+
+    NSDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:self.stringAttributes];
+    [attributes setValue:self.drawingColor forKey:NSForegroundColorAttributeName];
+
+    for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
-            NSDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:self.stringAttributes];
-            [attributes setValue:self.drawingColor forKey:NSForegroundColorAttributeName];
+            NSString *pageNumber = [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
             NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: pageNumber
                                                                                    attributes: attributes];
-
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight)];
-            label.attributedText = attributedString;
             label.backgroundColor = [UIColor greenColor];
             label.textAlignment = NSTextAlignmentRight;
-            [labels addObject:label];
+            label.attributedText = attributedString;
             label.transform = CGAffineTransformRotate(label.transform, 3 * M_PI / 2);
             label.transform = CGAffineTransformTranslate(label.transform,
                                                          label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
                                                          label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
             label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x , drawingPoint.y + offsetTopBottom);
+            label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            label.translatesAutoresizingMaskIntoConstraints = YES;
+            //label.layout
+            
             [self addSubview:label];
+            [self.labels addObject:label];
         }
         drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + self.stringHeight + distanceBetweenTicks);
     }
-    
-    NSArray *l = [NSArray arrayWithArray:labels];
-    self.labels = l;
     
 }
 
