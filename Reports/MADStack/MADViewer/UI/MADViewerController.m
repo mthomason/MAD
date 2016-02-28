@@ -81,7 +81,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark User Interface
 
-@property (nonatomic, strong) MADPageSlider *slider;
+@property (nonatomic, strong) MADPageSlider *toolbarSlider;
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 @property (nonatomic, strong) MADLabelStatus *labelStatus;
 @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
@@ -189,7 +189,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     MADPageSlider *pageSlider = [[MADPageSlider alloc] init];
     pageSlider.sliderDelegate = self;
-    self.slider = pageSlider;
+    self.toolbarSlider = pageSlider;
     
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
 }
@@ -239,8 +239,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setViewControllers: blankPageArray direction: UIPageViewControllerNavigationDirectionForward
                     animated: NO completion: ^(BOOL finished) { }];
     
-    [self.view addSubview:self.slider];
-    [self.view bringSubviewToFront:self.slider];
+    [self.view addSubview:self.toolbarSlider];
+    [self.view bringSubviewToFront:self.toolbarSlider];
     
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:self.labelStatus];
@@ -252,13 +252,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [self layoutSubviewSliderPagination];
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
     
     // MARK: Reporting feature (number of results in main query)
     self.document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
     [self.document initalizeMainQuery:[self.document activeDocumentModel]];
-    [self loadFromCache: self.document.paper.paperSize /*self.view.bounds.size*/];
+    [self loadFromCache: self.document.paper.paperSize];
     
     if ([self printPageRendererReport] == nil) {
         [self.document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
@@ -270,7 +271,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self layoutSubviewSliderPagination];
     [self uiUpdateTimeSinceLastRefresh:self];
 }
 
@@ -299,9 +299,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         counter++;
     }
-    [self.navigationController.toolbar setNeedsLayout];
-    [self.view bringSubviewToFront:self.slider];
-    [self layoutSubviewSliderPagination];
+    [self.view bringSubviewToFront:self.toolbarSlider];
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
@@ -320,11 +318,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 
         [self.navigationItem.titleView sizeToFit];
-        [self.slider setNeedsDisplay];
+        [self layoutSubviewSliderPagination];
+        [self.toolbarSlider setNeedsLayout];
+        [self.navigationController.toolbar setNeedsLayout];
         
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
+        [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
+        [self layoutSubviewSliderPagination];
+        [self.toolbarSlider setNeedsLayout];
         if (self.activityExporting == false) {
             MADReportPageViewController *pageViewController = [self currentPageviewController];
             [pageViewController.view setNeedsDisplay];
@@ -360,10 +363,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (UIImage *)tabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
 
 - (void)layoutSubviewSliderPagination {
-    self.slider.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth, CGPointZero.y,
-                                             MADSliderPaginationWidth, self.view.frame.size.height);
-    self.slider.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
-                                       MADSliderPaginationWidth, self.view.frame.size.height);
+    self.toolbarSlider.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.view.frame.size.height);
+    self.toolbarSlider.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.view.frame.size.height);
 }
 
 - (nullable MADReportPageViewController *)visiblePageViewController {
@@ -392,13 +393,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         pageOne.delegate = self;
         
         __block MADViewerController *reportViewer = self;
-        [self.view bringSubviewToFront:self.slider];
+        [self.view bringSubviewToFront:self.toolbarSlider];
         NSArray *viewControllers = @[pageOne];
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO completion:^(BOOL finished) {
                             if (finished) {
-                                [reportViewer.view bringSubviewToFront:reportViewer.slider];
+                                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSlider];
                                 [pageOne.view setNeedsDisplay];
                                 reportViewer.updatingOfTimerIsPaused = false;
                                 reportViewer.refreshing = false;
@@ -470,14 +471,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setPageingEnabled:YES];
     
     UIColor *red = [UIColor tintColorRed];
-    self.slider.pageSlider.tintColor = red;
+    self.toolbarSlider.pageSlider.tintColor = red;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = YES;
     }
     
-    self.slider.pageSlider.enabled = YES;
+    self.toolbarSlider.pageSlider.enabled = YES;
     self.barButtonItemRefresh.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
     self.refreshing = false;
@@ -492,14 +493,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self setPageingEnabled:NO];
     
     UIColor *tintColor = [UIColor lightGrayColor];
-    self.slider.pageSlider.tintColor = tintColor;
+    self.toolbarSlider.pageSlider.tintColor = tintColor;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = NO;
     }
     
-    self.slider.pageSlider.enabled = NO;
+    self.toolbarSlider.pageSlider.enabled = NO;
     self.barButtonItemRefresh.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     self.refreshing = true;
@@ -529,7 +530,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (IBAction)activity:(id)sender {
     self.activityExporting = true;
-    self.slider.pageSlider.enabled = NO;
+    self.toolbarSlider.pageSlider.enabled = NO;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
     activityItemProviderPdf.delegate = self;
@@ -548,7 +549,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
         if (completed || (!completed && activityType == nil)) {
-            weakself.slider.pageSlider.enabled = YES;
+            weakself.toolbarSlider.pageSlider.enabled = YES;
             weakself.activityExporting = false;
             [weakself enableTabBarItems];
         } else {
@@ -567,17 +568,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
-                                weakself.slider.pageSlider.enabled = YES;
+                                weakself.toolbarSlider.pageSlider.enabled = YES;
                                 weakself.activityExporting = false;
                                 [weakself enableTabBarItems];
                             }];
                         }
                     }
                 }
-                weakself.slider.pageSlider.enabled = YES;
+                weakself.toolbarSlider.pageSlider.enabled = YES;
                 weakself.activityExporting = false;
             } else {    // Cancel button
-                weakself.slider.pageSlider.enabled = YES;
+                weakself.toolbarSlider.pageSlider.enabled = YES;
                 weakself.activityExporting = false;
                 [weakself enableTabBarItems];
             }
@@ -925,7 +926,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             MADReportPageViewController *viewController = pageViewController.viewControllers[0];
             [pageViewController setCurrentPageIndex: viewController.pageViewAttributes.pageNumber - 1];
             [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
-            [pageViewController.slider.pageSlider setValue: pageViewController.currentPageIndex animated: YES];
+            [pageViewController.toolbarSlider.pageSlider setValue: pageViewController.currentPageIndex animated: YES];
         }
     }
 
@@ -999,8 +1000,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)uiUpdateNumberOfPages:(NSUInteger)numberOfPages {
     if ([NSThread isMainThread]) {
-        if (round(self.slider.pageSlider.maximumValue) != round(numberOfPages)) {
-            self.slider.pageSlider.maximumValue = numberOfPages;
+        if (round(self.toolbarSlider.pageSlider.maximumValue) != round(numberOfPages)) {
+            self.toolbarSlider.pageSlider.maximumValue = numberOfPages;
         }
     } else {
         __weak MADViewerController *weakSelf = self;
@@ -1033,7 +1034,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         __weak MADViewerController *weakself2 = weakself;
                         void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                         ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-                            weakself2.slider.pageSlider.enabled = YES;
+                            weakself2.toolbarSlider.pageSlider.enabled = YES;
                             [weakself2 enableTabBarItems];
                         };
                         [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
@@ -1058,7 +1059,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (UIViewController *)activeViewController {
     return self;
 }
-
+/*
+static UIImageView *captureSnapshotOfView (UIView *targetView);
 static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, YES, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -1069,7 +1071,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
     snapshotView.frame = targetView.frame;
     return snapshotView;
-}
+}*/
 
 #pragma mark - UIAccessibility
 
