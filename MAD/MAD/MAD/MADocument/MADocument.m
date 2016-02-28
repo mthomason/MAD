@@ -989,9 +989,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (NSArray *)sortDescriptors {
     RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     if (self.mainDatabase == nil) [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
-    RptqDatabase *database = [document defaultDatabase];
-    RptqQuery *rquery = [database defaultQuery];
-    return [rquery sortDescriptorsForDatabase:self.mainDatabase];
+    return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.mainDatabase];
 }
 
 - (UIPrintPageRenderer *)printerPrintPageRender {
