@@ -10,17 +10,26 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "UIImage+ImageEffects.h"
 
+static NSString * const ConstTestStringValue = @"0";
+
 @interface MADSliderPageVertical ()
 
 @property (nonatomic, strong) NSDictionary *stringAttributes;
+@property (nonatomic, strong) NSArray <UILabel *>*labels;
+@property (nonatomic, assign) CGFloat stringHeight;
+@property (nonatomic, strong) UIColor *drawingColor;
 
 @end
 
 @implementation MADSliderPageVertical
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        NSArray *labels = @[];
+        self.labels = labels;
+
         UIImage *thumbImage = [MADSliderPageVertical sliderImageEnabled];
         UIImage *blank = [UIImage new];
         [self setThumbImage:thumbImage forState:UIControlStateNormal];
@@ -33,36 +42,37 @@
         self.continuous = YES;
         self.tintColor = [UIColor tintColorRed];
         self.value = 0.0000f;
+        self.backgroundColor = [UIColor yellowColor];
+        
+        UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
+        NSShadow *shadow = [[NSShadow alloc] init];
+        UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
+        shadow.shadowColor = shadowColor;
+        shadow.shadowOffset = CGSizeMake(0.0000f, 1.0000f);
+        shadow.shadowBlurRadius = 5.0000f;
+        NSNumber *strokeWidth = @(-1.0000f);
+        NSDictionary *attributes = @{
+                                     NSFontAttributeName : font,
+                                     NSStrokeWidthAttributeName : strokeWidth,
+                                     NSStrokeColorAttributeName : [UIColor lightTextColor],
+                                     NSShadowAttributeName : shadow,
+                                     };
+        
+        NSAttributedString *testString = [[NSAttributedString alloc] initWithString: ConstTestStringValue
+                                                                         attributes: attributes];
+        self.stringHeight = [self boundsForAttributedString:testString].height;
 
+        self.stringAttributes = attributes;
     }
     return self;
 }
 
 - (void)setDisplayEnabled {
-    [self initalizeDisplayAttributesWithColor:[UIColor tintColorRed]];
+    self.drawingColor = [UIColor tintColorRed];
 }
 
 - (void)setDisplayDisabled {
-    [self initalizeDisplayAttributesWithColor:[UIColor lightGrayColor]];
-}
-
-- (void)initalizeDisplayAttributesWithColor:(UIColor *)tintColor {
-    UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
-    NSShadow *shadow = [[NSShadow alloc] init];
-    UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
-    [shadow setShadowColor:shadowColor];
-    [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
-    [shadow setShadowBlurRadius:5.0000f];
-    NSDictionary *attributes = @{
-                                 NSForegroundColorAttributeName : tintColor,
-                                 NSFontAttributeName : font,
-                                 NSStrokeWidthAttributeName : @(-1.0000f),
-                                
-                                 NSStrokeColorAttributeName : [UIColor lightTextColor],
-                                 NSShadowAttributeName : shadow,
-                                 };
-    [self setStringAttributes:attributes];
-
+    self.drawingColor = [UIColor lightGrayColor];
 }
 
 - (void)setMaximumValue:(float)maximumValue {
@@ -75,49 +85,59 @@
     [self setNeedsDisplay];
 }
 
-- (void)drawRect:(CGRect)rect {
 
-    CGContextRef context = UIGraphicsGetCurrentContext();
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    for (UIView *label in self.labels) {
+        [label removeFromSuperview];
+    }
     
+    CGRect rect = self.frame;
     NSMutableString *pageNumber = [[NSMutableString alloc] initWithString:@"0"];
     
-    NSAttributedString *testString = [[NSAttributedString alloc] initWithString:pageNumber attributes:[self stringAttributes]];
-    CGFloat stringHeight = [self boundsForAttributedString:testString].height;
-    
-    CGFloat offsetHeight = (stringHeight / 1.333f);
-    rect.origin = CGPointMake(rect.origin.x, rect.origin.y + offsetHeight);
-    rect.size = CGSizeMake(rect.size.height, rect.size.width - offsetHeight * 2.0000f);
-
-    CGFloat numberOfTicks = (rect.size.height / stringHeight) - 1;
-    
-    if (numberOfTicks < 0) { numberOfTicks = 0; }
-
-    if (numberOfTicks > self.maximumValue) {
+    double numberOfTicks = (rect.size.height / self.stringHeight) - 1;
+    if (numberOfTicks < 0) {
+        numberOfTicks = 0;
+    } else if (numberOfTicks > self.maximumValue) {
         numberOfTicks = floorf(self.maximumValue) + 1;
     }
-
-    BOOL everyOther = numberOfTicks > 5;
-    if (everyOther && (NSInteger)numberOfTicks % 2 == 0) {
-        numberOfTicks--;
-    }
     
-    CGFloat distanceBetweenTicks = numberOfTicks > 1 ?
-                            (rect.size.height - (stringHeight * numberOfTicks)) / (numberOfTicks - 1) :
-                            CGSizeZero.height;
+    static CGFloat offsetTopBottom = 8.0000f;
+    CGFloat distanceBetweenTicks = numberOfTicks > 1 ? ((rect.size.height - offsetTopBottom*2) / numberOfTicks) - self.stringHeight : CGSizeZero.height;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
-
-    double tickValue = [self maximumValue] / (numberOfTicks - 1);
     
+    double tickValue = [self maximumValue] / (numberOfTicks - 1);
+    NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)((numberOfTicks/2) + (((int)numberOfTicks) % 2))];
     for (NSInteger i=0; i<numberOfTicks; i++) {
         
-            [pageNumber setString: [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)]];
+        [pageNumber setString: [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)]];
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:pageNumber attributes:[self stringAttributes]];
-        if (everyOther && i % 2 == 0) {
-            [self drawString:attributedString atPoint:drawingPoint inContext:context];
+        if (i % 2 == 0) {
+            NSDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:self.stringAttributes];
+            [attributes setValue:self.drawingColor forKey:NSForegroundColorAttributeName];
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: pageNumber
+                                                                                   attributes: attributes];
+
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight)];
+            label.attributedText = attributedString;
+            label.backgroundColor = [UIColor greenColor];
+            label.textAlignment = NSTextAlignmentRight;
+            [labels addObject:label];
+            label.transform = CGAffineTransformRotate(label.transform, 3 * M_PI / 2);
+            label.transform = CGAffineTransformTranslate(label.transform,
+                                                         label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
+                                                         label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
+            label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x , drawingPoint.y + offsetTopBottom);
+            [self addSubview:label];
         }
-        drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + stringHeight + distanceBetweenTicks);
+        drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + self.stringHeight + distanceBetweenTicks);
     }
+    
+    NSArray *l = [NSArray arrayWithArray:labels];
+    self.labels = l;
+    
 }
 
 + (UIImage *)sliderImageEnabled {
