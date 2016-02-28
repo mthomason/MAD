@@ -13,13 +13,16 @@
 
 @interface MTReportFormatterState : NSObject
 
-@property (nonatomic, assign) NSUInteger groupCounter;
-@property (nonatomic, assign) NSUInteger pageCounter;
-@property (nonatomic, assign) NSUInteger rowCounter;
-@property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
-@property (nonatomic, strong) NSNumber *detailRowId;
-@property (nonatomic, strong) NSNumber *detailRowIdLast;
-@property (nonatomic, strong) NSArray *sortDescriptors;
-@property (nonatomic, strong) RptqDocument *document;   //Valid for one run of the state machine.
+    @property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, strong) RptqDocument *document;   //Valid for one run of the state machine.
+
+    @property (nonatomic, assign) NSUInteger groupCounter;
+    @property (nonatomic, assign) NSUInteger pageCounter;
+    @property (nonatomic, assign) NSUInteger rowCounter;
+
+    @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
+
+    @property (nonatomic, strong) NSNumber *detailRowId;
+    @property (nonatomic, strong) NSNumber *detailRowIdLast;
 
 @end
