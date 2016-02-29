@@ -123,18 +123,18 @@
     NSDictionary *superPlist = [super plist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
     NSString *keySortIndex = [MTDataTableVirtual keySortIndex];
-    plist[keySortIndex] = [self sortIndex];
+    plist[keySortIndex] = self.sortIndex;
     return plist;
 }
 
 - (void)addColumn:(MTDataColumn *)column {
     NSString *identifier = [[NSString alloc] initWithString:[column identifier]];
-    [[self columnKeys] addObject:identifier];
-    [self columns][identifier] = column;
+    [self.columnKeys addObject:identifier];
+    self.columns[identifier] = column;
 }
 
 - (NSArray *)allObjects {
-    return [self sortIndex];
+    return self.sortIndex;
 }
 
 
@@ -155,8 +155,8 @@
 
 - (NSUInteger)sortedIndexForIndex:(NSUInteger)index {
     NSUInteger sortedIndex;
-    if ([[self sortDescriptors] count] > 0) {
-        sortedIndex = [[self sortIndex] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+    if ([self.sortDescriptors count] > 0) {
+        sortedIndex = [self.sortIndex indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj[@"~rowid~"] unsignedIntegerValue] == index) {
                 *stop = YES;
                 return YES;
@@ -178,20 +178,20 @@
 }
 
 - (NSEnumerator *)objectEnumerator {
-    return [[self sortIndex] objectEnumerator];
+    return [self.sortIndex objectEnumerator];
 }
 
 - (NSEnumerator *)columnsEnumerator {
-    return [[self columns] objectEnumerator];
+    return [self.columns objectEnumerator];
 }
 
 - (id)objectAtRow:(NSUInteger)row {
-    return [self sortIndex][row];
+    return self.sortIndex[row];
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
-    NSString *fieldKey = [self columnKeys][column];
-    MTDataColumn *dataInColumn = [self columns][fieldKey];
+    NSString *fieldKey = self.columnKeys[column];
+    MTDataColumn *dataInColumn = self.columns[fieldKey];
     NSUInteger sortedIndex = [self sortedIndexForIndex:row];
     id objectForField = [dataInColumn objectAtIndex:sortedIndex];
     return objectForField;
@@ -200,9 +200,9 @@
 - (id)objectAtIndex:(NSUInteger)index {
     NSUInteger sortedIndex = [self sortedIndexForIndex:index];
     
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[[self columnKeys] count]];
-    for (NSString *fieldKey in [self columnKeys]) {
-        NSArray *dataInColumn = [self columns][fieldKey];
+    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[self.columnKeys count]];
+    for (NSString *fieldKey in self.columnKeys) {
+        NSArray *dataInColumn = self.columns[fieldKey];
         id objectForField = dataInColumn[sortedIndex];
         data[fieldKey] = objectForField;
     }
@@ -216,34 +216,34 @@
     NSUInteger numberOfRows = [self rowCounter];
     NSNumber *ogRowIndex = @(numberOfRows);
     for (id object in row) {
-        NSString *key = [self columnKeys][index];
-        MTDataColumn *column = [self columns][key];
+        NSString *key = self.columnKeys[index];
+        MTDataColumn *column = self.columns[key];
         [column addObject:object];
         indexedRow[key] = object;
         indexedRow[@"~rowid~"] = ogRowIndex;
         index++;
     }
-    [[self sortIndex] addObject:indexedRow];
+    [self.sortIndex addObject:indexedRow];
     numberOfRows++;
     [self setRowCounter:numberOfRows];
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
-    for (id key in [self columnKeys]) {
-        MTDataColumn *column = [self columns][key];
+    for (id key in self.columnKeys) {
+        MTDataColumn *column = self.columns[key];
         id obj = row[key];
         if (obj == nil) obj = @"";
         [column addObject:obj];
     }
-    [[self sortIndex] addObject:row];
+    [self.sortIndex addObject:row];
     NSUInteger numberOfRows = [self rowCounter] + 1;
     [self setRowCounter:numberOfRows];
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
-    [[self sortIndex] sortUsingDescriptors:sortDescriptors];
-    [[self sortDescriptors] removeAllObjects];
-    [[self sortDescriptors] addObjectsFromArray:sortDescriptors];
+    [self.sortIndex sortUsingDescriptors:sortDescriptors];
+    [self.sortDescriptors removeAllObjects];
+    [self.sortDescriptors addObjectsFromArray:sortDescriptors];
 }
 
 - (NSUInteger)count {
@@ -251,7 +251,7 @@
 }
 
 - (NSUInteger)numberOfColumns {
-    return [[self columnKeys] count];
+    return [self.columnKeys count];
 }
 
 + (NSString *)keySortIndex {
@@ -262,18 +262,18 @@
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     NSRange range = NSMakeRange(row, limit);
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
-    return [[self sortIndex] objectsAtIndexes:indexSet];
+    return [self.sortIndex objectsAtIndexes:indexSet];
 }
 
 - (void)removeAllObjects {
-    for (MTDataColumn *column in [[self columns] objectEnumerator]) {
+    for (MTDataColumn *column in [self.columns objectEnumerator]) {
         [column removeAllObjects];
     }
-    [[self columns] removeAllObjects];
-    [[self columnKeys] removeAllObjects];
-    [[self sortIndex] removeAllObjects];
-    [[self sortDescriptors] removeAllObjects];
-    [self setRowCounter:0];
+    [self.columns removeAllObjects];
+    [self.columnKeys removeAllObjects];
+    [self.sortIndex removeAllObjects];
+    [self.sortDescriptors removeAllObjects];
+    self.rowCounter = 0;
 }
 
 - (void)beginBulkInsert {}

@@ -27,9 +27,6 @@
 @property (nonatomic, assign) NSInteger openSectionIndex;
 @property (nonatomic, assign) CGFloat initialPinchHeight;
 
-// Use the uniformRowHeight property if the pinch gesture should change all row heights simultaneously.
-@property (nonatomic, assign) NSInteger uniformRowHeight;
-
 @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end

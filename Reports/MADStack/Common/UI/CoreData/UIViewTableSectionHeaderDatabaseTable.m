@@ -14,18 +14,16 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *disclosureButton;
 @property (nonatomic, assign) NSInteger section;
-@property (nonatomic, weak) id <SectionHeaderViewDelegate> delegate;
+@property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
 
 @end
 
 @implementation UIViewTableSectionHeaderDatabaseTable
 
 
-- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
+- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <MADSectionHeaderViewDelegate>)delegate {
     
-    self = [self initWithFrame:frame];
-    
-    if (self) {
+    if (self = [self initWithFrame:frame]) {
         
         // Set up the tap gesture recognizer.
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
@@ -35,30 +33,34 @@
         [self setUserInteractionEnabled: YES];
         
         [self setSection: sectionNumber];
-        CGRect titleLabelFrame = [self bounds];
+        CGRect titleLabelFrame = self.bounds;
         titleLabelFrame.origin.x += 35.00000f;
         titleLabelFrame.size.width -= 35.0000f;
         CGRectInset(titleLabelFrame, 0.0000f, 5.0000f);
 
         UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
         label.isAccessibilityElement = NO;
-        [label setText: title];
-        [label setFont: [UIFont boldSystemFontOfSize:17.0000f]];
-        [label setTextColor: [UIColor tintColorBlue]];
+        label.text = title;
+        UIFont *font = [UIFont boldSystemFontOfSize:17.0000f];
+        label.font = font;
+        UIColor *blueColor = [UIColor tintColorBlue];
+        label.textColor = blueColor;
         label.backgroundColor =  [UIColor clearColor];
         [self addSubview:label];
-        [self setTitleLabel: label];
+        self.titleLabel = label;
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.isAccessibilityElement = NO;
         button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);
+        
         UIImage *caratOpen = [UIImage imageNamed:@"MADImageCaratOpen"];
         UIImage *caratClosed = [UIImage imageNamed:@"MADImageCarat"];
         [button setImage:caratClosed forState:UIControlStateNormal];
         [button setImage:caratOpen forState:UIControlStateSelected];
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
-        [self setDisclosureButton: button];
+        
+        self.disclosureButton = button;
         
         self.backgroundColor = [UIColor groupTableViewBackgroundColor];
     }

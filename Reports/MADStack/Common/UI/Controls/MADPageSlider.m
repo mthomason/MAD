@@ -17,13 +17,16 @@ static NSString * const ConstTestStringValue = @"0";
     @property (nonatomic, weak) MADSliderPageVertical *slider;
 
     @property (nonatomic, strong) UIVibrancyEffect *effectVibrancy;
+    @property (nonatomic, strong) UIVisualEffectView *vibrancyView;
 
-    @property (nonatomic, strong) NSMutableArray <UIVisualEffectView *>*labels;
+    @property (nonatomic, strong) NSMutableArray <UILabel *>*labels;
     @property (nonatomic, assign) CGFloat stringHeight;
     @property (nonatomic, strong) UIColor *drawingColor;
 
     @property (nonatomic, assign) CGRect lastRect;
     @property (nonatomic, assign) unsigned long lastNumberOfTicks;
+
+    @property (nonatomic, strong) NSShadow *shadow;
 
 @end
 
@@ -47,9 +50,17 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (instancetype)initWithEffect:(UIBlurEffect *)effect {
     if (self = [super initWithEffect:effect]) {
+        self.contentView.tintColor = [UIColor blueColor];
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
+        self.effectVibrancy = vibrancy;
         
-
-
+        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
+        vibrancyView.frame = self.frame;
+        vibrancyView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        vibrancyView.contentView.tintColor = [UIColor redColor];
+        [self.contentView addSubview:vibrancyView];
+        self.vibrancyView = vibrancyView;
+        
         MADSliderPageVertical *vertSlider = [[MADSliderPageVertical alloc] init];
         [vertSlider addTarget:self action:@selector(handleSliderChangedPage:) forControlEvents:UIControlEventValueChanged];
         [vertSlider addTarget:self action:@selector(handleSliderDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
@@ -61,21 +72,20 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
         self.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
         [self.contentView addSubview:vertSlider];
         
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [[UIColor edaBlueLight] colorWithAlphaComponent:0.3333f];
         self.slider = vertSlider;
         
         UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
         NSShadow *shadow = [[NSShadow alloc] init];
         UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
         shadow.shadowColor = shadowColor;
-        shadow.shadowOffset = CGSizeMake(0.0000f, 1.0000f);
-        shadow.shadowBlurRadius = 5.0000f;
+        shadow.shadowOffset = CGSizeMake(0.0000f, -1.0000f);
+        self.shadow = shadow;
+        
         NSNumber *strokeWidth = @(-1.0000f);
         NSDictionary *attributes = @{
                                      NSFontAttributeName : font,
                                      NSStrokeWidthAttributeName : strokeWidth,
-                                     NSStrokeColorAttributeName : [UIColor lightTextColor],
-                                     NSShadowAttributeName : shadow,
                                      };
         
         NSAttributedString *testString = [[NSAttributedString alloc] initWithString: ConstTestStringValue
@@ -84,8 +94,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
         self.stringHeight = [self boundsForAttributedString:testString].height;
         self.labels = nil;
         
-        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
-        self.effectVibrancy = vibrancy;
+
 
     }
     return self;
@@ -93,6 +102,8 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+
     
     if (self.labels == nil) {
         return;
@@ -120,34 +131,32 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
     double tickValue = self.maximumValue / (numberOfTicks - 1);
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
-            NSString *pageNumber = [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
-            UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:self.effectVibrancy];
-            visualEffectView.tintColor = [UIColor redColor];
-            visualEffectView.frame = CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight);
             
+            NSString *pageNumber = [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight)];
+            label.backgroundColor = [UIColor clearColor];
             label.textAlignment = NSTextAlignmentRight;
             label.text = pageNumber;
             label.font = [UIFont boldSystemFontOfSize:9.0000f];
-            //label.textColor = [UIColor whiteColor];
+            label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.8];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             label.translatesAutoresizingMaskIntoConstraints = YES;
             label.tintColor = self.drawingColor;
-            
-            [visualEffectView.contentView addSubview:label];
 
-
-            visualEffectView.transform = CGAffineTransformTranslate(visualEffectView.transform,
-                                                         visualEffectView.frame.origin.x > 0 ? -1 * visualEffectView.frame.origin.x : visualEffectView.frame.origin.x,
-                                                         visualEffectView.frame.origin.y > 0 ? -1 * visualEffectView.frame.origin.y : visualEffectView.frame.origin.y);
+            label.transform = CGAffineTransformTranslate(label.transform,
+                                                         label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
+                                                         label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
             
-            visualEffectView.transform = CGAffineTransformTranslate(visualEffectView.transform, drawingPoint.x , drawingPoint.y + offsetTopBottom);
+            label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x , drawingPoint.y + offsetTopBottom);
             
-            visualEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            visualEffectView.translatesAutoresizingMaskIntoConstraints = YES;
-            
-            [self.contentView addSubview:visualEffectView];
-            [self.labels addObject:visualEffectView];
+            label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            label.translatesAutoresizingMaskIntoConstraints = YES;
+            label.layer.shadowOpacity = 6.0;
+            label.layer.shadowRadius = 0.0;
+            label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
+            label.layer.shadowColor = [UIColor tintColorBlue].CGColor;
+            [self.vibrancyView addSubview:label];
+            [self.labels addObject:label];
         }
         drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + self.stringHeight + distanceBetweenTicks);
     }

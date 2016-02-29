@@ -21,7 +21,7 @@
 @interface MTQueryBuilderChooseFieldViewController : MADTableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
-        SectionHeaderViewDelegate,
+        MADSectionHeaderViewDelegate,
         MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
