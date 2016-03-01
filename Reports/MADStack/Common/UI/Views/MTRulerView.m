@@ -13,12 +13,9 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
 
 @interface MTRulerView ()
 
-@property (nonatomic, strong) NSDictionary *attributes;
-@property (nonatomic, strong) NSDictionary *attributesMetric;
-@property (nonatomic, assign) CGFloat thinLineWidth;
-@property (nonatomic, assign) CGFloat lineWidth;
-@property (nonatomic, assign) CGFloat eigthInchInPoints;
-@property (nonatomic, assign) CGFloat cmInPoints;
+static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints);
+static inline double cmInPoints();
+static inline double eigthInchInPoints();
 
 @end
 
@@ -41,34 +38,23 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
     return self;
 }
 
+static inline double eigthInchInPoints() {
+    return 72.0000f / 8.0000f;
+}
+
+static inline double cmInPoints() {
+    return (72.0000f / 1.0000f) / 2.5400f;
+}
+
+static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
+    return i * offsetInPoints;
+}
+
 - (void)commonInit {
     self.layer.borderWidth = [UIView borderWidthThin];
     self.layer.borderColor = [UIColor blackColor].CGColor;
     self.backgroundColor = [UIColor whiteColor];
-    UIFont *font = [UIFont systemFontOfSize: 5.0000f];
-    UIFont *font2 = [UIFont systemFontOfSize: 4.0000f];
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraphStyle.lineBreakMode = NSLineBreakByClipping;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    NSDictionary *attributes = @{
-                                 NSFontAttributeName : font,
-                                 NSParagraphStyleAttributeName : paragraphStyle
-                                     };
-    NSDictionary *attributes2 = @{
-                                 NSFontAttributeName : font2,
-                                 NSParagraphStyleAttributeName : paragraphStyle
-                                 };
-    self.attributes = attributes;
-    self.attributesMetric = attributes2;
     
-    CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
-    self.thinLineWidth = thinLineWidth;
-    self.lineWidth = 1.0000f;
-    
-    self.eigthInchInPoints = 72.0000f / 8.0000f;
-    self.cmInPoints = (72.0000f / 1.0000f) / 2.5400f;
-
     self.layer.borderWidth = [UIView borderWidthThin];
     self.layer.borderColor = [UIColor borderColor].CGColor;
     self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -80,53 +66,68 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGMutablePathRef pathInchMarks = CGPathCreateMutable();
     
-    for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / [self eigthInchInPoints]; i++) {
+    UIFont *fontStandard = [UIFont systemFontOfSize: 5.0000f];
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyle.lineBreakMode = NSLineBreakByClipping;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName : fontStandard,
+                                 NSParagraphStyleAttributeName : paragraphStyle
+                                 };
+    
+    CGFloat length = 0.0000f;
+    CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
+    static const CGFloat lineWidth = 1.0000f;
+    for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / eigthInchInPoints(); i++) {
         @autoreleasepool {
-            CGFloat xPoint = i * [self eigthInchInPoints];
-            CGFloat length = 0.0000f;
+            length = 0.0000f;
             if ((i % 8) == 0) {
-                CGRect locationRect = CGRectMake(xPoint - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
+                CGRect locationRect = CGRectMake(xPoint(i, eigthInchInPoints()) - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
                 NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 8];
-                [s drawInRect:locationRect withAttributes:[self attributes]];
+                [s drawInRect:locationRect withAttributes:attributes];
                 length = 1.0000f;
-                CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
+                CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
             } else if (i % 2) {
                 length = 4.0000f;
-                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
+                CGContextSetLineWidth(currentContext, thinLineWidth);
             } else if (i % 4) {
                 length = 3.0000f;
-                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
+                CGContextSetLineWidth(currentContext, thinLineWidth);
             } else {
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
+                CGContextSetLineWidth(currentContext, thinLineWidth);
             }
-            CGPathMoveToPoint(pathInchMarks, NULL, xPoint, rect.size.height);
-            CGPathAddLineToPoint(pathInchMarks, NULL, xPoint, rect.size.height - length);
+            CGPathMoveToPoint(pathInchMarks, NULL, xPoint(i, eigthInchInPoints()), rect.size.height);
+            CGPathAddLineToPoint(pathInchMarks, NULL, xPoint(i, eigthInchInPoints()), rect.size.height - length);
         }
     }
     
+    UIFont *fontMetric = [UIFont systemFontOfSize: 4.0000f];
+    NSDictionary *attributesMetric = @{
+                                       NSFontAttributeName : fontMetric,
+                                       NSParagraphStyleAttributeName : paragraphStyle
+                                       };
     CGFloat offsetInPoints = (72.0000f / 2.5400f) / 10.0000f;   //One cm
     CGMutablePathRef pathCmMarks = CGPathCreateMutable();
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
         @autoreleasepool {
-            CGFloat length = 0.0000f;
-            CGFloat xPointC = i * ([self cmInPoints] / 10.0000f);
+            length = 0.0000f;
             if ((i % 10) == 0) {
-                CGRect locationRect = CGRectMake(xPointC - 5.000f, 1.0000f, 10.0000f, 5.0000f);
+                CGRect locationRect = CGRectMake(xPoint(i, cmInPoints() / 10.0000f) - 5.000f, 1.0000f, 10.0000f, 5.0000f);
                 NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 10];
-                [s drawInRect:locationRect withAttributes:[self attributesMetric]];
+                [s drawInRect:locationRect withAttributes:attributesMetric];
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
+                CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
             } else if (i % 5) {
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
+                CGContextSetLineWidth(currentContext, thinLineWidth);
             } else {
                 length = 3.0000f;
-                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
+                CGContextSetLineWidth(currentContext, thinLineWidth);
             }
-            CGFloat xPoint = i * offsetInPoints;
-            CGPathMoveToPoint(pathCmMarks, NULL, xPoint, CGPointZero.y);
-            CGPathAddLineToPoint(pathCmMarks, NULL, xPoint, CGPointZero.y + length);
+            CGPathMoveToPoint(pathCmMarks, NULL, xPoint(i, offsetInPoints), CGPointZero.y);
+            CGPathAddLineToPoint(pathCmMarks, NULL, xPoint(i, offsetInPoints), CGPointZero.y + length);
         }
     }
     
@@ -134,6 +135,7 @@ const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
     CGContextAddPath(currentContext, pathInchMarks);
     
     [[UIColor blackColor] setStroke];
+    
     CGContextDrawPath(currentContext, kCGPathStroke);
 
     CGPathRelease(pathInchMarks);

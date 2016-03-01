@@ -239,9 +239,9 @@
 }
 
 - (void)initalizeGroupKeys {
-        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:[[self sortDescriptors] count]];
-        for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
-            NSUInteger index = [self.columnKeys indexOfObject: [sortDescriptor key]];
+        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.sortDescriptors.count];
+        for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
+            NSUInteger index = [self.columnKeys indexOfObject: sortDescriptor.key];
             if (index != NSNotFound) {
                 NSNumber *columnIndex = @(index);
                 [groupKeys addObject:columnIndex];
@@ -290,7 +290,7 @@
     
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"Error %@", error);
+        NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
@@ -312,7 +312,7 @@
     
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"Error %@", error);
+        NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
@@ -420,11 +420,11 @@
 - (void)createIndex {
     
     NSArray *sortDescriptors = [[self dataDelegate] sortDescriptors];
-    [[self sortDescriptors] setArray:sortDescriptors];
-    [self sortUsingDescriptors:[self sortDescriptors]];
+    [self.sortDescriptors setArray:sortDescriptors];
+    [self sortUsingDescriptors:self.sortDescriptors];
     
     NSUInteger sortDescCtr = self.sortDescriptors.count;
-    NSArray *sortDescriptorGroups = [self sortDescriptorIndexGroupsForSortDescriptors:[self sortDescriptors]];
+    NSArray *sortDescriptorGroups = [self sortDescriptorIndexGroupsForSortDescriptors:self.sortDescriptors];
     
     NSUInteger groupCounter = 0;
     for (NSArray *sortDescriptors in sortDescriptorGroups) {
@@ -528,7 +528,7 @@
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return [MTQuery queryDefinitionSelect:self.columnKeys tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
+    return [MTQuery queryDefinitionSelect:self.columnKeys tableName:[self tableName] sortDescriptors:self.sortDescriptors];
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
@@ -567,9 +567,10 @@
 
         if (success) {  //Expect success to == NO in normal working conditions.
             success = sqlite3_step(statement) == SQLITE_ROW;
-            result = [self currentObject:statement];
+            result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
             NSNumber *cid = [NSNumber numberWithInteger:cacheId.integerValue];
-            self.lastDataForCacheId = [MTPair pairWithFormer:cid andLatter:result];
+            MTPair *lastDataForCacheId = [MTPair pairWithFormer:cid andLatter:result];
+            self.lastDataForCacheId = lastDataForCacheId;
         }
         
         sqlite3_finalize(statement);
@@ -581,7 +582,7 @@
 
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
     [self initalizeGroupKeys];
-    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
+    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
     NSUInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
         NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : [self idColumnKeyForGroupLocation:groupLevel],
@@ -603,7 +604,7 @@
                                   @(MTQuerySelectFieldKeys) : self.columnKeys,
                                   @(MTQuerySelectTableName) : [self tableName],
                                   @(MTQuerySelectPredicates) : whereClause,
-                                  @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
+                                  @(MTQuerySelectSortDescriptors) : self.sortDescriptors,
                                   @(MTQuerySelectFieldDescriptors) : self.columns
                                   
                                   };
@@ -656,7 +657,7 @@
         if (success) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 @autoreleasepool {
-                    NSDictionary *currentObject = [self currentObject:statement];
+                    NSDictionary *currentObject = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
                     [results addObject:currentObject];
                 }
             }
@@ -724,7 +725,7 @@
     NSDictionary *options = @{
                               @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : self.columnKeys,
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : self.sortDescriptors,
                               };
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
@@ -737,7 +738,7 @@
                               @(MTQueryCacheSelectLimitOffsetParamatersColumns) : self.columns,
                               @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : columnKeys,
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : self.sortDescriptors,
                               };
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
@@ -748,7 +749,7 @@
     
     NSDictionary *options = @{
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : self.sortDescriptors,
                               };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
@@ -769,8 +770,8 @@
 }
 
 - (NSArray *)columnKeysForSortDescriptors {
-    NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:[[self sortDescriptors] count]];
-    for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
+    NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:[self.sortDescriptors count]];
+    for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
         [columnKeys addObject:[sortDescriptor key]];
     }
     return columnKeys;
@@ -975,7 +976,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (id)currentObject:(sqlite3_stmt *)statement {
-    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[self.columns count]];
+    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
     int columnCounter = 0;
     for (NSString *key in self.columnKeys) {
         MTDataColumn *dataColumn = self.columns[key];
@@ -1023,7 +1024,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSNumber *keyColumn = @(MTQuerySelectColumns);
     
     NSString *tableName = [NSString stringWithString:[self tableName]];
-    NSArray *sortDescs = [NSArray arrayWithArray:[self sortDescriptors]];
+    NSArray *sortDescs = [NSArray arrayWithArray:self.sortDescriptors];
     NSDictionary *columns = [NSDictionary dictionaryWithDictionary:self.columns];
     
     NSDictionary *options = @{

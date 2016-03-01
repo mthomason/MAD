@@ -34,8 +34,6 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
 @property (nonatomic, assign) BOOL clearsBackground;
 
-- (void)chooseFont:(MADFont *)font;
-
 @end
 
 #endif

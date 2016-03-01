@@ -483,42 +483,55 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 - (NSDictionary *)attributesForDrawingText {
-    MADFont *font = [[MADFont alloc] initWithFamilyName:[self fontname]
-                                         andPointSize:[[self fontsize] floatValue]
-                                               isBold:[[self bold] boolValue]
-                                             isItalic:[[self italic] boolValue]];
-    UIFont *customFont = [font font];
+
+    UIFontDescriptor *f = [UIFontDescriptor fontDescriptorWithName:self.fontname size:self.fontsize.floatValue];
     
+    if (self.italic.boolValue) {
+        UIFontDescriptor *fontWithTraits = [f fontDescriptorWithSymbolicTraits: UIFontDescriptorTraitItalic];
+        if (fontWithTraits) {
+            f = fontWithTraits;
+        }
+    }
+    
+    if (self.bold.boolValue) {
+        UIFontDescriptor *fontWithTraits = [f fontDescriptorWithSymbolicTraits: UIFontDescriptorTraitBold];
+        if (fontWithTraits) {
+            f = fontWithTraits;
+        }
+    }
+
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    
     // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    switch ([[self horizontalAlignment] integerValue]) {
+    switch (self.horizontalAlignment.integerValue) {
         case MTHorizontalAlignmentLeft:
-            [paragraphStyle setAlignment:NSTextAlignmentLeft];
+            paragraphStyle.alignment = NSTextAlignmentLeft;
             break;
         case MTHorizontalAlignmentRight:
-            [paragraphStyle setAlignment:NSTextAlignmentRight];
+            paragraphStyle.alignment = NSTextAlignmentRight;
             break;
         case MTHorizontalAlignmentCenter:
-            [paragraphStyle setAlignment:NSTextAlignmentCenter];
+            paragraphStyle.alignment = NSTextAlignmentCenter;
             break;
         case MTHorizontalAlignmentJustified:
-            [paragraphStyle setAlignment:NSTextAlignmentJustified];
+            paragraphStyle.alignment = NSTextAlignmentJustified;
             break;
         case MTHorizontalAlignmentNatrual:
-            [paragraphStyle setAlignment:NSTextAlignmentNatural];
+            paragraphStyle.alignment = NSTextAlignmentNatural;
             break;
         default:
-            [paragraphStyle setAlignment:NSTextAlignmentLeft];
+            paragraphStyle.alignment = NSTextAlignmentLeft;
             break;
     }
     
     NSNumber *baselineOffset = @(0.0000f);
     NSNumber *underlineStyle = self.underline.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     NSNumber *strikethroughStyle = self.strike.boolValue ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+
+    UIFont *customFont = [UIFont fontWithDescriptor:f size:0.0];
+
     return  @{
               NSFontAttributeName : customFont,
               NSBaselineOffsetAttributeName : baselineOffset,

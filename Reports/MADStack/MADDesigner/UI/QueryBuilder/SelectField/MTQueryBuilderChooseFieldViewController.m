@@ -152,7 +152,7 @@
 
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self numberOfRowsInSection:section];;
+    return [self numberOfRowsInSection:section];
 }
 
 
