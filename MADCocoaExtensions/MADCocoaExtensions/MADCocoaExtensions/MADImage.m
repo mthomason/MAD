@@ -7,7 +7,7 @@
 //
 
 #import "MADImage.h"
-#import "UIDevice+Hack.h"
+#import "MADDevice.h"
 
 @implementation MADImage
 
@@ -22,7 +22,7 @@
     [source drawInRect:rect blendMode:kCGBlendModeNormal alpha:1.0000f];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, [color CGColor]);
-    if ([UIDevice isRetnaDisplay]) {
+    if ([MADDevice isRetnaDisplay]) {
         CGContextStrokeRectWithWidth(context, rect, 0.5000f);
     } else {
         CGContextStrokeRectWithWidth(context, rect, 1.0000f);
