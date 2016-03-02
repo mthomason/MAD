@@ -9,12 +9,5 @@
 #ifndef MADExtensions_UILabel_Constructors_h
 #define MADExtensions_UILabel_Constructors_h
 
-#import <UIKit/UIKit.h>
-
-@interface UILabel (Constructors)
-
-+ (instancetype)documentCaption:(CGRect)frame width:(CGFloat)width NS_RETURNS_RETAINED;
-
-@end
 
 #endif

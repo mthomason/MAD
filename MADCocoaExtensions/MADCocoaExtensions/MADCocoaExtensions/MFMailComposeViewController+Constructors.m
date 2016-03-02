@@ -7,7 +7,7 @@
 //
 
 #import "MFMailComposeViewController+Constructors.h"
-#import "UIColor+EverydayApps.h"
+#import "MADColor.h"
 
 @implementation MFMailComposeViewController (Constructors)
 
@@ -18,7 +18,7 @@
     MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
     mailComposer.subject = title;
     [mailComposer setMessageBody:body isHTML:NO];
-    mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    mailComposer.navigationController.navigationBar.barTintColor = [MADColor tintColorAnalogous4];
     
     if (userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
