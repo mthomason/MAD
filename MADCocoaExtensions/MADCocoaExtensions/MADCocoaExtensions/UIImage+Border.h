@@ -11,11 +11,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIImage (Border)
+@interface MADImage : UIImage
 
-+ (UIImage *)imageWithBorder:(UIImage *)source;
-+ (UIImage *)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color;
-+ (UIImage *)imageMadeSquare:(UIImage *)source;
++ (instancetype)imageWithBorder:(UIImage *)source NS_RETURNS_NOT_RETAINED;
++ (instancetype)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color NS_RETURNS_NOT_RETAINED;
++ (instancetype)imageMadeSquare:(UIImage *)source NS_RETURNS_NOT_RETAINED;
 
 @end
 

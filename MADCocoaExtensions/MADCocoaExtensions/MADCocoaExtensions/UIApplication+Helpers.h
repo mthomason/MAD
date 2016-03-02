@@ -11,10 +11,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIApplication (Helpers)
+@interface MADStackViewController : UIViewController
 
-+ (id)topViewController;
-- (id)topViewController;
++ (instancetype)topViewController NS_RETURNS_NOT_RETAINED;
 
 @end
 

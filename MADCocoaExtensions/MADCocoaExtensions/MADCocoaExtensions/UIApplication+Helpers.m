@@ -8,14 +8,10 @@
 
 #import "UIApplication+Helpers.h"
 
-@implementation UIApplication (Helpers)
+@implementation MADStackViewController
 
-+ (id)topViewController {
-    return [[UIApplication sharedApplication] topViewController];
-}
-
-- (id)topViewController {
-    UIViewController *viewController = self.keyWindow.rootViewController;
++ (instancetype)topViewController NS_RETURNS_NOT_RETAINED {
+    id viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     if ([viewController isKindOfClass:([UINavigationController  class])]) {
         if (((UINavigationController *)viewController).visibleViewController != nil) {
             viewController = ((UINavigationController *)viewController).visibleViewController;

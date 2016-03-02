@@ -9,13 +9,9 @@
 #import <UIKit/UIKit.h>
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
-@interface UIDocument (thumbnailURL)
+@interface MADFilename : NSString
 
-- (NSURL *)thumbnailURL;
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
-+ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
-+ (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
-+ (NSString *)filenameId:(NSUInteger)tag;
++ (instancetype)newFilenameId:(NSUInteger)tag;
++ (instancetype)newFilenameForMadUrl:(NSURL *)madUrl;
 
 @end
