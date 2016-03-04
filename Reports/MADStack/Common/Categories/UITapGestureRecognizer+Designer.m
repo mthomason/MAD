@@ -8,12 +8,12 @@
 
 #import "UITapGestureRecognizer+Designer.h"
 
-@implementation UIGestureRecognizer (Designer)
+@implementation MADTapGestureRecognizer
 
-+ (instancetype)sectionToggleWithTarget:(id)target
-                                 action:(SEL)action
-                               delegate:(id<UIGestureRecognizerDelegate>)delegate {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: target action: action];
++ (instancetype)newTapGestureRecognizerSectionToggleWithTarget:(id)target
+                                                        action:(SEL)action
+                                                      delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
     tap.delaysTouchesBegan = YES;
@@ -22,10 +22,10 @@
     return tap;
 }
 
-+ (instancetype)elementTouchWithTarget:(id)target
-                                action:(SEL)action
-                              delegate:(id<UIGestureRecognizerDelegate>)delegate {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: target action: action];
++ (instancetype)newTapGestureRecognizerElementTouchWithTarget:(id)target
+                                                       action:(SEL)action
+                                                     delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
     tap.delaysTouchesBegan = YES;
@@ -34,10 +34,10 @@
     return tap;
 }
 
-+ (instancetype)strayTouchWithTarget:(id)target
-                              action:(SEL)action
-                            delegate:(id<UIGestureRecognizerDelegate>)delegate {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: target action: action];
++ (instancetype)newTapGestureRecognizerStrayTouchWithTarget:(id)target
+                                                     action:(SEL)action
+                                                   delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
     tap.numberOfTapsRequired = 1;
     tap.numberOfTouchesRequired = 1;
     tap.delegate = delegate;
@@ -45,22 +45,28 @@
     return tap;
 }
 
-+ (instancetype)elementPan:(id)target
+@end
+
+@implementation MADPanGestureRecognizer
+
++ (instancetype)newPanGestureRecognizerElement:(id)target
                     action:(SEL)action
                   delegate:(id<UIGestureRecognizerDelegate>)delegate {
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: target
-                                                                                 action: action];
+    MADPanGestureRecognizer *panGesture = [[self alloc] initWithTarget: target action: action];
     panGesture.minimumNumberOfTouches = 1;
     panGesture.maximumNumberOfTouches = 2;
     panGesture.delegate = delegate;
     return panGesture;
 }
 
-+ (instancetype)elementPinch:(id)target
+@end
+
+@implementation MADPinchGestureRecognizer
+
++ (instancetype)newPinchGestureRecognizerElement:(id)target
                       action:(SEL)action
                     delegate:(id<UIGestureRecognizerDelegate>)delegate {
-    UIPinchGestureRecognizer *panGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: target
-                                                                                     action: action];
+    MADPinchGestureRecognizer *panGesture = [[self alloc] initWithTarget: target action: action];
     panGesture.delegate = delegate;
     return panGesture;
 }
