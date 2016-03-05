@@ -11,7 +11,7 @@
 
 @class UIViewTableSectionHeaderDatabaseTable;
 
-@protocol SectionHeaderViewDelegate <NSObject>
+@protocol MADSectionHeaderViewDelegate <NSObject>
 @optional
 - (void)sectionHeaderView: (UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened: (NSInteger)section;
 - (void)sectionHeaderView: (UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed: (NSInteger)section;

@@ -11,34 +11,6 @@
 #endif
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import <MAD/RptqDocument.h>
-#import <MAD/RptqDatabase.h>
-
-#import <MAD/RptqFieldSelectorManager.h>
-
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqDatabaseSchemaField+Extras.h>
-//#import <MAD/RptqQuery+Extras.h>
-
-#import <MAD/RptqQueryField.h>
-
-//#import <MAD/RptqQueryGroup.h>
-//#import <MAD/RptqQueryGroup+Extras.h>
-
-//#import <MAD/RptqQueryLinks.h>
-//#import <MAD/RptqQueryLinks+Extras.h>
-
-//#import <MAD/RptqQueryPredicate.h>
-//#import <MAD/RptqQueryPredicate+Extras.h>
-
-#import <MAD/RptqQueryTable.h>
-//#import <MAD/RptqQueryTable+Extras.h>
-
-//#import <MAD/RptqQuerySort.h>
-//#import <MAD/RptqQueryCache.h>
-
-
 #import "MADNavigationBarTitleView.h"
 
 #pragma mark -
@@ -54,9 +26,6 @@
 
 @property (nonatomic, assign) NSInteger openSectionIndex;
 @property (nonatomic, assign) CGFloat initialPinchHeight;
-
-// Use the uniformRowHeight property if the pinch gesture should change all row heights simultaneously.
-@property (nonatomic, assign) NSInteger uniformRowHeight;
 
 @property (nonatomic, strong) NSArray *sortDescriptors;
 

@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderChooseFieldViewController_h
 
 #import <UIKit/UIKit.h>
-#import <MAD/MADocument.h>
+#import <MAD/MAD.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "MADViewController.h"
 #import "MTUnwindProtocol.h"
@@ -21,7 +21,7 @@
 @interface MTQueryBuilderChooseFieldViewController : MADTableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
-        SectionHeaderViewDelegate,
+        MADSectionHeaderViewDelegate,
         MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
