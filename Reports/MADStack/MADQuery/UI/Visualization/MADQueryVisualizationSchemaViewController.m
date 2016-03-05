@@ -140,7 +140,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    [self.view setObjectIdTag: tableObjectId];
+    [self.view setObjectIdTag: tableObjectId.copy];
     self.cachedTableObjectId = tableObjectId;
     
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
