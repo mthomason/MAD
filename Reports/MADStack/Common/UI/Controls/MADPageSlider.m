@@ -138,7 +138,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
             label.textAlignment = NSTextAlignmentRight;
             label.text = pageNumber;
             label.font = [UIFont boldSystemFontOfSize:9.0000f];
-            label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.8000f];
+            label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.8];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             label.translatesAutoresizingMaskIntoConstraints = YES;
             label.tintColor = self.drawingColor;

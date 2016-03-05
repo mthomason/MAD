@@ -14,14 +14,42 @@
 #import "UIViewController+UI.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/MADFont.h>
+#import <MAD/MADFonts.h>
 
 @interface MADFontSelectorViewController()
 
-@property (nonatomic, strong) MADFont *initalSelectedFont;
+@property (nonatomic, strong) NSString *familyName;
+@property (nonatomic, strong) MADFonts *madFonts;
 
 @end
 
 @implementation MADFontSelectorViewController
+
+- (instancetype)initWithStyle:(UITableViewStyle)style {
+    if (self = [super initWithStyle:style]) {
+        [self initalize];
+    }
+    return self;
+}
+
+-  (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (void)initalize {
+    MADFonts *fonts = [[MADFonts alloc] init];
+    self.madFonts = fonts;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -32,6 +60,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
     self.navigationController.navigationBar.alpha = 1.0000f;
@@ -45,8 +74,6 @@
         self.tableView.backgroundView = nil;
     }
 
-    [self checkSelectedFont:self.initalSelectedFont];
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -72,6 +99,28 @@
 }
 
 #pragma mark -
+#pragma mark Table view datasource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.madFonts.familyNames.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *reusableCellWithIdentifier = @"MADFontSelectorDefaultCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCellWithIdentifier forIndexPath:indexPath];
+    
+    if (cell) {
+        NSString *familyName = self.madFonts.familyNames[indexPath.row];
+        cell.textLabel.text = familyName;
+        cell.textLabel.font = [UIFont fontWithName: familyName
+                                              size: cell.textLabel.font.pointSize];
+        cell.accessoryType = [self.familyName isEqualToString:familyName] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    }
+    
+    return cell;
+}
+
+#pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -80,88 +129,23 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
+    for (UITableViewCell *visibleCell in tableView.visibleCells) {
+        visibleCell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if ([cell isEqual:[self tableViewCellFontAmericanTypewriter]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyAmericanTypewriter];
-    } else if ([cell isEqual:[self tableViewCellFontArial]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyArial];
-    } else if ([cell isEqual:[self tableViewCellFontCourierNew]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourierNew];
-    } else if ([cell isEqual:[self tableViewCellFontCourier]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourier];
-    } else if ([cell isEqual:[self tableViewCellFontGeorgia]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyGeorgia];
-    } else if ([cell isEqual:[self tableViewCellFontHelvetica]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelvetica];
-    } else if ([cell isEqual:[self tableViewCellFontHelveticaNeue]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelveticaNeue];
-    } else if ([cell isEqual:[self tableViewCellFontTimesNewRoman]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTimesNewRoman];
-    } else if ([cell isEqual:[self tableViewCellFontTrebuchet]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTrebuchet];
-    } else if ([cell isEqual:[self tableViewCellFontVerdana]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyVerdana];
-    } else if ([cell isEqual:[self tableViewCellFontZapfino]]) {
-        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyZapfino];
-    }              
-    
-    if (cell.accessoryType != UITableViewCellAccessoryCheckmark) {
-        [self uncheckAllCells];
-        
-        //Check this box, or not (could test)
-        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    }
-    
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
+    NSString *familyName = self.madFonts.familyNames[indexPath.row];
+    [self.delegate uITableViewControllerDidUpdateFontToFontWithName:familyName];
 }
 
-- (void)checkSelectedFont:(MADFont *)font {
-    [self uncheckAllCells];
-    
-    if ([font.familyName isEqualToString:MTFontFamilyAmericanTypewriter]) {
-        [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyArial]) {
-        [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyCourierNew]) {
-        [[self tableViewCellFontCourierNew] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyCourier]) {
-        [[self tableViewCellFontCourier] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyGeorgia]) {
-        [[self tableViewCellFontGeorgia] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyHelvetica]) {
-        [[self tableViewCellFontHelvetica] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyHelveticaNeue]) {
-        [[self tableViewCellFontHelveticaNeue] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyTimesNewRoman]) {
-        [[self tableViewCellFontTimesNewRoman] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyTrebuchet]) {
-        [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyVerdana]) {
-        [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    } else if ([font.familyName isEqualToString:MTFontFamilyZapfino]) {
-        [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryCheckmark];
-    }
-}
-
-- (void)setSelectedFont:(MADFont *)font {
-    [self setInitalSelectedFont:font];
-}
-
-- (void)uncheckAllCells {
-    [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontCourierNew] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontCourier] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontGeorgia] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontHelvetica] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontHelveticaNeue] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontTimesNewRoman] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryNone];
-    [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryNone];
+- (void)setSelectedFamilyName:(NSString *)name {
+    NSString *familyName = [NSString stringWithString:name];
+    self.familyName = familyName;
 }
 
 @end

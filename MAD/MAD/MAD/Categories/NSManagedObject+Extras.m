@@ -26,7 +26,7 @@
 
 - (BOOL)saveContext {
     NSError *__autoreleasing error = nil;
-    [[self managedObjectContext] save:&error];
+    [self.managedObjectContext save:&error];
     NSAssert(error == nil, @"%s\n%@ failed to save context with error %@.\n\t", __PRETTY_FUNCTION__, self, error);
     return error == nil;
 }
