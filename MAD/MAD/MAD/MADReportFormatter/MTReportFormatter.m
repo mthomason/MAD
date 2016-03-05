@@ -667,6 +667,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)numberOfPages {
+    NSLog(@"Number of pages: %d", self.reportLayout.count);
     return self.reportLayout.count;
 }
 
