@@ -8,8 +8,6 @@
 
 #import "MTCollectionViewCellElement.h"
 #import "MADDesignerElementView.h"
-#import "MADDesignerElementView.h"
-#import "UIView+NSObjectIdTag.h"
 
 @interface MTCollectionViewCellElement ()
 

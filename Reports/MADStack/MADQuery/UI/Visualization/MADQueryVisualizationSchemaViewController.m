@@ -13,13 +13,14 @@
 #import "MADQueryVisualizationSchemaViewController.h"
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
-#import "UIView+NSObjectIdTag.h"
+#import "MADManagedObjectView.h"
 #import "MTSchemaFieldCell.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
 
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
+@property (nonatomic, strong, readwrite) IBOutlet MADManagedObjectView *view;
 @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSMutableArray *hasFieldsObjectIds;
@@ -34,8 +35,13 @@ const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
 const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 @implementation MADQueryVisualizationSchemaViewController
-
+//MADManagedObjectView
 @synthesize document;
+@dynamic view;
+
+//- (MADManagedObjectView *)view {
+//    return self.view;
+//}
 
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
@@ -56,17 +62,11 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
-- (CGPoint)center {
-    return self.view.center;
-}
+- (CGPoint)center { return self.view.center; }
 
-- (CGRect)bounds {
-    return self.view.bounds;
-}
+- (CGRect)bounds { return self.view.bounds; }
 
-- (CGAffineTransform)transform {
-    return self.view.transform;
-}
+- (CGAffineTransform)transform { return self.view.transform; }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -140,7 +140,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    [self.view setObjectIdTag:tableObjectId];
+    [self.view setObjectIdTag: tableObjectId];
     self.cachedTableObjectId = tableObjectId;
     
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId

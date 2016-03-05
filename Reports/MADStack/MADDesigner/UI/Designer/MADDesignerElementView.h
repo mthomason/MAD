@@ -12,10 +12,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
+#import "MADManagedObjectView.h"
 
 @class RptqDocumentObject, MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 
-@interface MADDesignerElementView : UIView
+@interface MADDesignerElementView : MADManagedObjectView
     <UIGestureRecognizerDelegate>
 
 @property (assign) BOOL displayWobbling;

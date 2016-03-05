@@ -9,7 +9,7 @@
 #import "MADDesignerElementView.h"
 #import "MTElementCanvas.h"
 #import "MADResizeHandles.h"
-#import "UIView+NSObjectIdTag.h"
+#import "MADManagedObjectView.h"
 #import "MTResizeHandleView.h"
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>

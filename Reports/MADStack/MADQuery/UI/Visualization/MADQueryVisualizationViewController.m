@@ -19,7 +19,7 @@
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
 
 #import "CGAffineTransform+Common.h"
-#import "UIView+NSObjectIdTag.h"
+#import "MADManagedObjectView.h"
 
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADQueryVisualizationTableDefination.h"
@@ -472,9 +472,10 @@ typedef void(^MTBlockResultVoid)(void);
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     UIWindow __weak *window = [[UIApplication sharedApplication] windows][0];
+    UIView<MADManagedObjectViewProtocol> __weak * view = (UIView<MADManagedObjectViewProtocol> *)gestureRecognizer.view;
     gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
                                                   toView: self.scrollView.contentView];
-    [self didMoveFieldRect:self.controllersByObjectID[gestureRecognizer.view.objectIdTag]
+    [self didMoveFieldRect:self.controllersByObjectID[view.objectIdTag]
                   animated:NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [self updateCache];

@@ -20,14 +20,14 @@ static NSString * const keyContentScaleFactor   = @"f";
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
-        _pageNumber = [decoder decodeInt64ForKey:keyPageNumber];
-        _numberOfPages = [decoder decodeInt64ForKey:keyNumberOfPages];
-        _contentOffsetInital = [decoder decodeCGPointForKey:keyOffsetInital];
-        _contentSizeInital = [decoder decodeCGSizeForKey:keySizeInital];
-        _zoomScaleInital = [decoder decodeDoubleForKey:keyZoomScaleInital];
+        _pageNumber = (NSUInteger)[decoder decodeInt64ForKey:keyPageNumber];
+        _numberOfPages = (NSUInteger)[decoder decodeInt64ForKey:keyNumberOfPages];
+        _contentOffsetInital = (CGPoint)[decoder decodeCGPointForKey:keyOffsetInital];
+        _contentSizeInital = (CGSize)[decoder decodeCGSizeForKey:keySizeInital];
+        _zoomScaleInital = (CGFloat)[decoder decodeDoubleForKey:keyZoomScaleInital];
         NSTimeInterval reportLastCacheDate = [decoder decodeDoubleForKey:keyReportLastCacheDate];
         _reportLastCacheDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:reportLastCacheDate];
-        _contentScaleFactor = [decoder decodeDoubleForKey:keyContentScaleFactor];
+        _contentScaleFactor = (CGFloat)[decoder decodeDoubleForKey:keyContentScaleFactor];
 
     }
     return self;

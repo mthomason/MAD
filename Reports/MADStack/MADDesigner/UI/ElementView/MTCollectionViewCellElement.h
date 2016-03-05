@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
+#import "MADManagedObjectView.h"
 
 @class MTCollectionViewCellElement, MADDesignerElementView;
 
@@ -23,7 +24,7 @@
 
 @end
 
-@interface MTCollectionViewCellElement : UICollectionViewCell
+@interface MTCollectionViewCellElement : MADManagedObjectCollectionViewCell
 
 @property (nonatomic, weak) id <MTCollectionViewCellElementDelegate> delegate;
 - (void)addElementView:(MADDesignerElementView *)elementView;
