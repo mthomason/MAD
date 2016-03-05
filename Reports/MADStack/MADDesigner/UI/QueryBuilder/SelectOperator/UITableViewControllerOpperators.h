@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
+//#import <MAD/RptqQueryPredicate+Extras.h>
 
 @class UITableViewControllerOpperators;
 

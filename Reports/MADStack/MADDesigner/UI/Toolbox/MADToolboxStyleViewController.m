@@ -11,6 +11,13 @@
 #endif
 
 #import "MADToolboxStyleViewController.h"
+#import <CoreData/CoreData.h>
+#import <MAD/MADocument.h>
+#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+Extras.h>
+#import <MAD/NSManagedObject+Extras.h>
+#import <MAD/MADFont.h>
+#import <MAD/MTAlignment.h>
 #import "MADControlState.h"
 #import "UIViewController+UI.h"
 

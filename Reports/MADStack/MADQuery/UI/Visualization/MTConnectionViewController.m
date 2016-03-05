@@ -11,6 +11,11 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import <MAD/MADConstants.h>
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MTErrorContainer.h>
 #import "UIApplication+Extras.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"

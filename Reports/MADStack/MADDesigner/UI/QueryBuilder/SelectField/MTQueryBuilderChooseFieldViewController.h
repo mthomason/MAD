@@ -10,7 +10,7 @@
 #define Reports_MTQueryBuilderChooseFieldViewController_h
 
 #import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
+#import <MAD/MADocument.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "MADViewController.h"
 #import "MTUnwindProtocol.h"

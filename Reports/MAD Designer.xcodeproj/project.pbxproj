@@ -94,6 +94,7 @@
 		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
 		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		4C2480991C8B0FD60058E6B4 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2480981C8B0FD60058E6B4 /* MAD.framework */; };
 		4C26B9531BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */; };
 		4C26B9541BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9521BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m */; };
 		4C26B9681BAF11C800456DC8 /* MADOperationArchiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */; };
@@ -427,32 +428,12 @@
 		4C42DD4B1BCB0A1C0082D8E3 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD421BCB0A1B0082D8E3 /* MADBarcodes.framework */; };
 		4C42DD4C1BCB0A1C0082D8E3 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD431BCB0A1B0082D8E3 /* MADCocoaExtensions.framework */; };
 		4C42DD4D1BCB0A1C0082D8E3 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD441BCB0A1B0082D8E3 /* MADDataStructures.framework */; };
-		4C42DD4F1BCB0A1C0082D8E3 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD461BCB0A1B0082D8E3 /* MADFileManager.framework */; };
 		4C42DD501BCB0A1C0082D8E3 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD471BCB0A1B0082D8E3 /* MADFoundation.framework */; };
-		4C42DD511BCB0A1C0082D8E3 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD481BCB0A1B0082D8E3 /* MADMySQL.framework */; };
-		4C42DD521BCB0A1C0082D8E3 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD491BCB0A1C0082D8E3 /* MADSqlite3.framework */; };
 		4C42DD531BCB0A1C0082D8E3 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD4A1BCB0A1C0082D8E3 /* MADTdsClient.framework */; };
 		4C42DD571BCB0AB60082D8E3 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD561BCB0AB50082D8E3 /* MADExplorer.framework */; };
-		4C42DD581BCB0ADB0082D8E3 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD561BCB0AB50082D8E3 /* MADExplorer.framework */; };
-		4C42DD591BCB0ADB0082D8E3 /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD561BCB0AB50082D8E3 /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C42DD5A1BCB0ADB0082D8E3 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD541BCB0AA70082D8E3 /* MAD.framework */; };
-		4C42DD5B1BCB0ADB0082D8E3 /* MAD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD541BCB0AA70082D8E3 /* MAD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C42DD5C1BCB0ADB0082D8E3 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD421BCB0A1B0082D8E3 /* MADBarcodes.framework */; };
-		4C42DD5D1BCB0ADB0082D8E3 /* MADBarcodes.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD421BCB0A1B0082D8E3 /* MADBarcodes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C42DD5E1BCB0ADB0082D8E3 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD431BCB0A1B0082D8E3 /* MADCocoaExtensions.framework */; };
-		4C42DD5F1BCB0ADB0082D8E3 /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD431BCB0A1B0082D8E3 /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C42DD601BCB0ADB0082D8E3 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD441BCB0A1B0082D8E3 /* MADDataStructures.framework */; };
-		4C42DD611BCB0ADB0082D8E3 /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD441BCB0A1B0082D8E3 /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C42DD621BCB0ADB0082D8E3 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD461BCB0A1B0082D8E3 /* MADFileManager.framework */; };
-		4C42DD631BCB0ADB0082D8E3 /* MADFileManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD461BCB0A1B0082D8E3 /* MADFileManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C42DD641BCB0ADB0082D8E3 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD471BCB0A1B0082D8E3 /* MADFoundation.framework */; };
-		4C42DD651BCB0ADB0082D8E3 /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD471BCB0A1B0082D8E3 /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C42DD661BCB0ADB0082D8E3 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD481BCB0A1B0082D8E3 /* MADMySQL.framework */; };
-		4C42DD671BCB0ADB0082D8E3 /* MADMySQL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD481BCB0A1B0082D8E3 /* MADMySQL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C42DD681BCB0ADB0082D8E3 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD491BCB0A1C0082D8E3 /* MADSqlite3.framework */; };
-		4C42DD691BCB0ADB0082D8E3 /* MADSqlite3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD491BCB0A1C0082D8E3 /* MADSqlite3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4C42DD6A1BCB0ADB0082D8E3 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD4A1BCB0A1C0082D8E3 /* MADTdsClient.framework */; };
-		4C42DD6B1BCB0ADB0082D8E3 /* MADTdsClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD4A1BCB0A1C0082D8E3 /* MADTdsClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
@@ -1110,26 +1091,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C42DD411BCB09DE0082D8E3 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4C42DD6B1BCB0ADB0082D8E3 /* MADTdsClient.framework in Embed Frameworks */,
-				4C42DD591BCB0ADB0082D8E3 /* MADExplorer.framework in Embed Frameworks */,
-				4C42DD631BCB0ADB0082D8E3 /* MADFileManager.framework in Embed Frameworks */,
-				4C42DD5D1BCB0ADB0082D8E3 /* MADBarcodes.framework in Embed Frameworks */,
-				4C42DD5B1BCB0ADB0082D8E3 /* MAD.framework in Embed Frameworks */,
-				4C42DD5F1BCB0ADB0082D8E3 /* MADCocoaExtensions.framework in Embed Frameworks */,
-				4C42DD651BCB0ADB0082D8E3 /* MADFoundation.framework in Embed Frameworks */,
-				4C42DD671BCB0ADB0082D8E3 /* MADMySQL.framework in Embed Frameworks */,
-				4C42DD611BCB0ADB0082D8E3 /* MADDataStructures.framework in Embed Frameworks */,
-				4C42DD691BCB0ADB0082D8E3 /* MADSqlite3.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C6700B61BA133AB001C9D5A /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1238,6 +1199,7 @@
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C2213AD17D7947800BD36F5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4C23FC1A18FAEA24009F234F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
+		4C2480981C8B0FD60058E6B4 /* MAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAD.framework; path = "../MAD/build/Debug-iphoneos/MAD.framework"; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C26B94E1BAF0D4300456DC8 /* MADSectionHeaderViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionHeaderViewDelegate.h; sourceTree = "<group>"; };
@@ -2417,36 +2379,26 @@
 			files = (
 				4CBD287C1C76611400B1B16D /* AdSupport.framework in Frameworks */,
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
-				4C42DD5A1BCB0ADB0082D8E3 /* MAD.framework in Frameworks */,
+				4C2480991C8B0FD60058E6B4 /* MAD.framework in Frameworks */,
 				4C42DD681BCB0ADB0082D8E3 /* MADSqlite3.framework in Frameworks */,
 				4C42DD571BCB0AB60082D8E3 /* MADExplorer.framework in Frameworks */,
 				4C42DD4B1BCB0A1C0082D8E3 /* MADBarcodes.framework in Frameworks */,
 				4C42DD621BCB0ADB0082D8E3 /* MADFileManager.framework in Frameworks */,
 				4C42DD4C1BCB0A1C0082D8E3 /* MADCocoaExtensions.framework in Frameworks */,
-				4C42DD5C1BCB0ADB0082D8E3 /* MADBarcodes.framework in Frameworks */,
 				4C42DD661BCB0ADB0082D8E3 /* MADMySQL.framework in Frameworks */,
 				4C42DD4D1BCB0A1C0082D8E3 /* MADDataStructures.framework in Frameworks */,
-				4C42DD4F1BCB0A1C0082D8E3 /* MADFileManager.framework in Frameworks */,
-				4C42DD5E1BCB0ADB0082D8E3 /* MADCocoaExtensions.framework in Frameworks */,
 				4C42DD501BCB0A1C0082D8E3 /* MADFoundation.framework in Frameworks */,
-				4C42DD511BCB0A1C0082D8E3 /* MADMySQL.framework in Frameworks */,
-				4C42DD521BCB0A1C0082D8E3 /* MADSqlite3.framework in Frameworks */,
 				4C42DD531BCB0A1C0082D8E3 /* MADTdsClient.framework in Frameworks */,
 				4CBD28791C7660D500B1B16D /* GoogleConversionTracking.a in Frameworks */,
-				4C42DD601BCB0ADB0082D8E3 /* MADDataStructures.framework in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
-				4C42DD6A1BCB0ADB0082D8E3 /* MADTdsClient.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
-				4C42DD5A1BCB0ADB0082D8E3 /* MAD.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
 				4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */,
 				4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */,
-				4C42DD641BCB0ADB0082D8E3 /* MADFoundation.framework in Frameworks */,
 				4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
 				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
-				4C42DD581BCB0ADB0082D8E3 /* MADExplorer.framework in Frameworks */,
 				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4CD697001AD92458008A9ED3 /* QuickLook.framework in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
@@ -2972,6 +2924,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C2480981C8B0FD60058E6B4 /* MAD.framework */,
 				4CBD287B1C76611400B1B16D /* AdSupport.framework */,
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
@@ -4658,7 +4611,6 @@
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
-				4C42DD411BCB09DE0082D8E3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
