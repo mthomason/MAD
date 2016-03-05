@@ -1540,7 +1540,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [elementView addGestureRecognizer:pinchGesture];
             
             elementView.frame = cellFrame;
-            cell.objectIdTag = documentObject.objectID;
+            cell.objectIdTag = documentObject.objectID.copy;
             
             cell.userInteractionEnabled = YES;
             
@@ -1888,7 +1888,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
         case UIGestureRecognizerStateBegan: {
             
-            [self beginPanPiece:gestureRecognizer.view transition:^{
+            [self beginPanPiece:(MADDesignerElementView *)gestureRecognizer.view transition:^{
                 [self translatePanGesture:gestureRecognizer];
             } completion:^{
                 [self translatePanGesture:gestureRecognizer];
@@ -2898,7 +2898,7 @@ static const inline CGSize sizePopoverFonts() {
 + (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {
     MADDesignerSectionView *collectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectZero];
     ((MTReportDesignerSectionViewLayoutLiquid *)collectionView.collectionViewLayout).delegate = layoutDelegate;
-    [collectionView setObjectIdTag: section.objectID];
+    [collectionView setObjectIdTag: section.objectID.copy];
     collectionView.tag = section.identifier.integerValue;
     collectionView.visible = section.visibility.boolValue;
     collectionView.selected = NO;
