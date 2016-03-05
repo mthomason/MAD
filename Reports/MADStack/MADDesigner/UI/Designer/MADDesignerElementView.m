@@ -111,7 +111,7 @@
         self.canvasView = canvasView;
                 
         self.displayHighlighted = NO;
-        self.objectIdTag = documentObject.objectID;
+        self.objectIdTag = documentObject.objectID.copy;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
