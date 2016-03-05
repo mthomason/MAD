@@ -1019,26 +1019,6 @@
 		4CECBE5F1C867F910090FB8E /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CECBE551C867F910090FB8E /* MADTdsClient.framework */; };
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
-		4CF300A61C86D10200448B97 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300A51C86D10100448B97 /* MADMySQL.framework */; };
-		4CF300A71C86D10200448B97 /* MADMySQL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300A51C86D10100448B97 /* MADMySQL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300A91C86D10200448B97 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300A81C86D10200448B97 /* MADTdsClient.framework */; };
-		4CF300AA1C86D10200448B97 /* MADTdsClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300A81C86D10200448B97 /* MADTdsClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300AC1C86D10200448B97 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300AB1C86D10200448B97 /* MADSqlite3.framework */; };
-		4CF300AD1C86D10200448B97 /* MADSqlite3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300AB1C86D10200448B97 /* MADSqlite3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300AF1C86D10200448B97 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300AE1C86D10200448B97 /* MADBarcodes.framework */; };
-		4CF300B01C86D10200448B97 /* MADBarcodes.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300AE1C86D10200448B97 /* MADBarcodes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300B21C86D10200448B97 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300B11C86D10200448B97 /* MADCocoaExtensions.framework */; };
-		4CF300B31C86D10200448B97 /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300B11C86D10200448B97 /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300B51C86D10200448B97 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300B41C86D10200448B97 /* MADDataStructures.framework */; };
-		4CF300B61C86D10200448B97 /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300B41C86D10200448B97 /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300B81C86D10200448B97 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300B71C86D10200448B97 /* MADExplorer.framework */; };
-		4CF300B91C86D10200448B97 /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300B71C86D10200448B97 /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300BB1C86D10200448B97 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300BA1C86D10200448B97 /* MADFileManager.framework */; };
-		4CF300BC1C86D10200448B97 /* MADFileManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300BA1C86D10200448B97 /* MADFileManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300BE1C86D10200448B97 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300BD1C86D10200448B97 /* MADFoundation.framework */; };
-		4CF300BF1C86D10200448B97 /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300BD1C86D10200448B97 /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4CF300C11C86D10200448B97 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300C01C86D10200448B97 /* MAD.framework */; };
-		4CF300C21C86D10200448B97 /* MAD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF300C01C86D10200448B97 /* MAD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */; };
@@ -1149,26 +1129,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4CF300C31C86D10300448B97 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4CF300BF1C86D10200448B97 /* MADFoundation.framework in Embed Frameworks */,
-				4CF300AA1C86D10200448B97 /* MADTdsClient.framework in Embed Frameworks */,
-				4CF300BC1C86D10200448B97 /* MADFileManager.framework in Embed Frameworks */,
-				4CF300A71C86D10200448B97 /* MADMySQL.framework in Embed Frameworks */,
-				4CF300B91C86D10200448B97 /* MADExplorer.framework in Embed Frameworks */,
-				4CF300C21C86D10200448B97 /* MAD.framework in Embed Frameworks */,
-				4CF300B01C86D10200448B97 /* MADBarcodes.framework in Embed Frameworks */,
-				4CF300B31C86D10200448B97 /* MADCocoaExtensions.framework in Embed Frameworks */,
-				4CF300AD1C86D10200448B97 /* MADSqlite3.framework in Embed Frameworks */,
-				4CF300B61C86D10200448B97 /* MADDataStructures.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2378,27 +2338,19 @@
 				4CECBE571C867F910090FB8E /* MADBarcodes.framework in Frameworks */,
 				4CECBE581C867F910090FB8E /* MADCocoaExtensions.framework in Frameworks */,
 				4CECBE591C867F910090FB8E /* MADDataStructures.framework in Frameworks */,
-				4CF300B81C86D10200448B97 /* MADExplorer.framework in Frameworks */,
 				4CECBE5A1C867F910090FB8E /* MADExplorer.framework in Frameworks */,
 				4CECBE5B1C867F910090FB8E /* MADFileManager.framework in Frameworks */,
 				4CECBE5C1C867F910090FB8E /* MADFoundation.framework in Frameworks */,
 				4CECBE5D1C867F910090FB8E /* MADMySQL.framework in Frameworks */,
 				4CECBE5E1C867F910090FB8E /* MADSqlite3.framework in Frameworks */,
 				4CECBE5F1C867F910090FB8E /* MADTdsClient.framework in Frameworks */,
-				4CF300A61C86D10200448B97 /* MADMySQL.framework in Frameworks */,
-				4CF300BE1C86D10200448B97 /* MADFoundation.framework in Frameworks */,
 				4CBD287C1C76611400B1B16D /* AdSupport.framework in Frameworks */,
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
-				4CF300C11C86D10200448B97 /* MAD.framework in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
-				4CF300AF1C86D10200448B97 /* MADBarcodes.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
 				4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */,
 				4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */,
-				4CF300BB1C86D10200448B97 /* MADFileManager.framework in Frameworks */,
-				4CF300B21C86D10200448B97 /* MADCocoaExtensions.framework in Frameworks */,
-				4CF300B51C86D10200448B97 /* MADDataStructures.framework in Frameworks */,
 				4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
@@ -2406,7 +2358,6 @@
 				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4CD697001AD92458008A9ED3 /* QuickLook.framework in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
-				4CF300A91C86D10200448B97 /* MADTdsClient.framework in Frameworks */,
 				4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */,
 				4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */,
 				4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */,
@@ -2416,7 +2367,6 @@
 				4C359E281B08312500B3E9E0 /* libcrypto.a in Frameworks */,
 				4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */,
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,
-				4CF300AC1C86D10200448B97 /* MADSqlite3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4592,7 +4542,6 @@
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
-				4CF300C31C86D10300448B97 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
