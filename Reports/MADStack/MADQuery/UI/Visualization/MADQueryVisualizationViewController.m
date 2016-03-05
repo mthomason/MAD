@@ -670,7 +670,7 @@ typedef void(^MTBlockResultVoid)(void);
 
     MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;
-    connectorView.objectIdTag = link.objectID;
+    connectorView.objectIdTag = link.objectID.copy;
     
     self.controllersByObjectID[link.objectID] = connectorView;
     
