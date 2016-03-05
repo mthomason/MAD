@@ -601,14 +601,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (IBAction)reload {
-    __weak MADViewerController *blockself = self;
+//    __weak MADViewerController *blockself = self;
     CGSize size = self.document.paper.paperSize;
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockself reloadWithSize:size];
-        });
-    });
+//    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+//    dispatch_async(queuePriorityBackground, ^{
+//        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self reloadWithSize:size];
+//        });
+//    });
 }
 
 - (IBAction)refresh:(id)sender {
