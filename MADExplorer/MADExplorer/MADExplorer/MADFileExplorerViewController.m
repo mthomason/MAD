@@ -12,7 +12,6 @@
 #import "MTCollectionViewCellDocument.h"
 #import "MADFileLocationManager.h"
 #import "MADOpenDocumentManager.h"
-#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
@@ -176,7 +175,7 @@ static NSString * const Downloading                             = @"Downloading"
     [cell.labelTitleSub layoutIfNeeded];
 
     //dispatch_async(self.queueCell, ^{
-        NSURL *thumbnailUrl = [UIDocument thumbnailUrlForMadUrl:metadata.URL];
+        NSURL *thumbnailUrl = [self.fileExplorerDelegate thumbnailUrlForUrl:metadata.URL];
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
     //    dispatch_sync(dispatch_get_main_queue(), ^(void) {
             cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];

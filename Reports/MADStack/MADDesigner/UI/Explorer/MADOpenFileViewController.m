@@ -12,12 +12,12 @@
 
 #import "MADOpenFileViewController.h"
 #import <MessageUI/MessageUI.h>
-#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADDataStructures/MTPair.h>
 #import <MADFoundation/NSURL+Document.h>
+#import <MAD/MADocument.h>
 
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
@@ -618,6 +618,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 - (void)filesController:(MADFilesController *)filesController didFailRemovingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
 
 - (void)filesController:(MADFilesController *)filesController didFailDuplicatingListInfo:(MADFileInfo *)listInfo withError:(NSError *)error { }
+
+#pragma mark - MADFileExplorerDelegate
+
+- (NSURL *)thumbnailUrlForUrl:(NSURL *)fileUrl {
+    return [MADocument thumbnailUrlForMadUrl:fileUrl];
+}
 
 - (void)editFile:(id)sender {
     [self activateEditMode:sender];

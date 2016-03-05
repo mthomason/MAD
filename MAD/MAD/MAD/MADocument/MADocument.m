@@ -103,6 +103,7 @@ NSString * const MTDocumentThumbnailFileName            = @"img";
 NSString * const MTDocumentVersionFileName              = @"ver";
 NSString * const MTDocumentTypenFileName                = @"typ";
 NSString * const MTDocumentParentContextName            = @"moc";
+NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 
 NSString * const MTDocumentInfoKeyThumbnail             = @"thumbnail";
 NSString * const MTDocumentInfoKeyThumbnailStandard     = @"thumbnail.png";
@@ -163,6 +164,21 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @end
 
 @implementation MADocument
+
++ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
+    return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
+                      andRetinaDisplay: [UIDevice isRetnaDisplay]];
+}
+
++ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
+    NSString *name = [UIDevice isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
+    
+    NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
+    
+    NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
+    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
+}
 
 #pragma mark - NSObject
 
@@ -451,7 +467,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
             UIImage *extraImage = [UIImage imageWithData:imageData];
-            NSString *key = [UIDevice isRetnaDisplay] ? MTDocumentInfoKeyThumbnailRetna : MTDocumentInfoKeyThumbnailStandard;
+            NSString *key = [UIDevice isRetnaDisplay] ?
+                                    MTDocumentInfoKeyThumbnailRetna :
+                                    MTDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
         }
     }
@@ -467,6 +485,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     self.extraInformation[MTDocumentInfoKeyVersion] = lastVersion;
     
     return YES;
+}
+
+- (NSURL *)thumbnailURL {
+    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension
+                            andRetinaDisplay: [UIDevice isRetnaDisplay]];
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {

@@ -17,6 +17,7 @@
 
 @protocol MADFileExplorerDelegate <NSObject>
 
+    - (NSURL *)thumbnailUrlForUrl:(NSURL *)fileUrl;
     - (void)editFile:(id)sender;
     - (void)emailFile:(id)sender;
     - (void)renameFile:(id)sender;

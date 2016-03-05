@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, MTQuerySections) {
 
 extern NSString * const MADMimeType;
 extern NSString * const MTDocumentInfoKeyThumbnail;
+extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
@@ -64,6 +65,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 @property (nonatomic, strong, readonly) MTPaper *paper;
+
++ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
 - (void)saveContext;
