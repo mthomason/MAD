@@ -18,6 +18,8 @@
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol, UITableViewDelegate> delegate;
 
++ (instancetype)AboutTableViewController;
+
 - (IBAction)cancel:(id)sender;
 - (IBAction)done:(id)sender;
 

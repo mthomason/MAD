@@ -62,7 +62,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT %s(%@) FROM %@",
                             functionName([self functionType]), [self columnKey], [self tableName]];

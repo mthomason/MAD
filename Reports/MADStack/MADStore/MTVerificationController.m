@@ -2,6 +2,9 @@
 #include <Security/Security.h>
 #include <AssertMacros.h>
 
+
+#import "MADData.h"
+
 #import "MTVerificationController.h"
 #import "ossl_typ.h"
 #import "pkcs7.h"
@@ -11,6 +14,7 @@
 #import "evp.h"
 #import "ReceiptAttribute.h"
 //#import "asn_application.h"
+
 #import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
@@ -216,7 +220,7 @@ static MTVerificationController *sharedSingleton;
 #pragma mark
 #pragma mark NSURLConnection - Trust validation
 
-- (BOOL)validateTrust:(SecTrustRef)trust error:(NSError **)error {
+- (BOOL)validateTrust:(SecTrustRef)trust error:(NSError * _Nullable *)error {
     
     // Include some Security framework SPIs
     extern CFStringRef kSecTrustInfoExtendedValidationKey;
@@ -351,8 +355,8 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
      purchase_info_string and signature_string are base64 encoded JSON blobs that need to
      be decoded.
      */
-    NSData *purchaseInfoData = [NSData dataFromBase64String:purchase_info_string];
-    NSData *signatureData = [NSData dataFromBase64String:signature_string];
+    NSData *purchaseInfoData = [MADData dataFromBase64String:purchase_info_string];
+    NSData *signatureData = [MADData dataFromBase64String:signature_string];
     
     //Why test after conversion?  Because with ARC, I can't test before it!!!
     require([purchase_info_string canBeConvertedToEncoding:NSASCIIStringEncoding] &&
@@ -470,14 +474,14 @@ outLabel:
 #pragma mark Base 64 encoding
 
 - (NSString *)encodeBase64:(const uint8_t *)input length:(NSInteger)length {
-    NSData *dataToEncode = [NSData dataWithBytes:input length:length];
+    MADData *dataToEncode = [MADData dataWithBytes:input length:length];
     //MTLog(@"encodeBase64: %@", [dataToEncode base64EncodedString]);
     return [dataToEncode base64EncodedString];
 }
 
 
 - (NSString *)decodeBase64:(NSString *)input length:(NSInteger *)length {
-    NSData *decodedData = [NSData dataFromBase64String:input];
+    NSData *decodedData = [MADData dataFromBase64String:input];
     NSString *decodedString = [[NSString alloc] initWithData:decodedData
                                                      encoding:NSUTF8StringEncoding];
     //MTLog(@"decodeBase64: %@", decodedString);

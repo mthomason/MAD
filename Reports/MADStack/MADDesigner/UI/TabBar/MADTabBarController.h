@@ -21,14 +21,21 @@ extern const int8_t MADIndexViewer;
 @class MADQueryBuilderSplitViewController;
 @class MADDesignerViewController;
 @class MADViewerController;
+@class MADTabBarController;
 
 @interface MADTabBarController : UITabBarController
     <MADocumentProtocol, MTViewControllerProtocol>
 
-@property (readonly) MADQueryBuilderSplitViewController * querySplitViewController;
-@property (readonly) MADDesignerViewController * designerViewController;
-@property (readonly) MADViewerController * viewerViewController;
-@property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+    @property (nullable, readonly) MADQueryBuilderSplitViewController * querySplitViewController;
+    @property (nullable, readonly) MADDesignerViewController * designerViewController;
+    @property (nullable, readonly) MADViewerController * viewerViewController;
+    @property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
+
+
+    - (void)enableTabBarItems;
+    - (void)disableTabBarItems;
+
+    + (instancetype _Nonnull)TabBarControllerMain;
 
 @end
 

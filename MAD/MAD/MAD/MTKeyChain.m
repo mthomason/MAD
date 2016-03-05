@@ -11,10 +11,10 @@
 #endif
 
 #import "MTKeyChain.h"
-#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MADError.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/NSThread+Extras.h>
-#import <MADCocoaExtensions/UIApplication+Helpers.h>
+#import <MADCocoaExtensions/MADStackViewController.h>
 
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
 typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);
@@ -142,7 +142,7 @@ static MTKeyChain *sharedSingleton = nil;
 + (NSError *)errorUserCanceled {
     NSString *title = NSLocalizedString(@"User Canceled", @"User Cancled");
     NSString *message = NSLocalizedString(@"User canceled save.", @"User canceled save.");
-    return [NSError errorWithDomain: @"MTKeyChain" code: MTKeyErrorUserCanceled title: title andMessage: message];
+    return [MADError errorWithDomain: @"MTKeyChain" code: MTKeyErrorUserCanceled title: title andMessage: message];
 }
 
 + (BOOL)credentialsExist:(NSString *)key {
@@ -172,7 +172,7 @@ static MTKeyChain *sharedSingleton = nil;
         NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
         if (keyUsername == nil || keyPassword == nil || ![username isEqualToString:keyUsername] || ![password isEqualToString:keyPassword]) {
             
-            UIAlertController *alertController = [UIAlertController saveCredentials:^(UIAlertAction *action) {
+            UIAlertController *alertController = [MADAlertController saveCredentials:^(UIAlertAction *action) {
                 
                 [self saveUsername: self.saveUsername andPassword: self.savePassword forKey: self.saveKey];
                 self.saveCompletion(YES, nil, self.saveUsername, self.savePassword);
@@ -181,8 +181,8 @@ static MTKeyChain *sharedSingleton = nil;
                 self.saveCompletion(NO, nil, nil, nil);
             }];
 
-          [NSThread safeSwitchToMainThread:^{
-                UIViewController *topViewController = [UIApplication topViewController];
+          [MADThread safeSwitchToMainThread:^{
+                UIViewController *topViewController = [MADStackViewController topViewController];
                 topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [topViewController  presentViewController: alertController animated: YES completion: nil];
             }];
@@ -198,12 +198,12 @@ static MTKeyChain *sharedSingleton = nil;
     if ([MTKeyChain credentialsExist:key]) {
         self.credentialsKey = key;
         
-        UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
+        UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
             [self deleteSavedPassword];
         } cancel:nil];
         
-        [NSThread safeSwitchToMainThread:^{
-            UIViewController *topViewController = viewController == nil ? [UIApplication topViewController] : viewController;
+        [MADThread safeSwitchToMainThread:^{
+            UIViewController *topViewController = viewController == nil ? [MADStackViewController topViewController] : viewController;
             topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
             [topViewController  presentViewController: alertController
                                              animated: YES
@@ -349,7 +349,7 @@ static MTKeyChain *sharedSingleton = nil;
     
     self.credentialsUsername = username;
     
-    UIAlertController *prompt = [UIAlertController promptForPasswordGivenUsername:username password:^(UITextField *textField) {
+    UIAlertController *prompt = [MADAlertController promptForPasswordGivenUsername:username password:^(UITextField *textField) {
         textField.delegate = self;
     } submit:^(NSString *password) {
         self.credentialsCompletion(YES, nil, username, password, NO);
@@ -358,7 +358,7 @@ static MTKeyChain *sharedSingleton = nil;
     }];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = [UIApplication topViewController];
+        UIViewController *topViewController = [MADStackViewController topViewController];
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: prompt animated: YES completion: nil];
     }];
@@ -367,7 +367,7 @@ static MTKeyChain *sharedSingleton = nil;
 
 - (void)promptForUsernameAndPassword {
     
-    UIAlertController *prompt = [UIAlertController promptForUsername:^(UITextField *textField) {
+    UIAlertController *prompt = [MADAlertController promptForUsername:^(UITextField *textField) {
         textField.delegate = self;
     } password:^(UITextField *textField) {
         textField.delegate = self;
@@ -379,7 +379,7 @@ static MTKeyChain *sharedSingleton = nil;
     }];
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = [UIApplication topViewController];
+        UIViewController *topViewController = [MADStackViewController topViewController];
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: prompt animated: YES completion: nil];
     }];

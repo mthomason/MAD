@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C0590CF1C7B6F3C00A1EC4A /* MTReportFormatterState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0590CD1C7B6F3C00A1EC4A /* MTReportFormatterState.h */; };
 		4C0590D01C7B6F3C00A1EC4A /* MTReportFormatterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590CE1C7B6F3C00A1EC4A /* MTReportFormatterState.m */; };
+		4C1EFA721C86A6D6000BACFD /* MADDocumentSectionType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EFA711C86A6D6000BACFD /* MADDocumentSectionType.m */; };
 		4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */; };
 		4C3DCC351BCAF72100ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */; };
 		4C3DCC391BCAF74200ABE231 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */; };
@@ -216,15 +217,13 @@
 		4C401E711BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E651BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m */; };
 		4C401E721BAE4F4000BAE5FC /* NSObject+DebugDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E661BAE4F4000BAE5FC /* NSObject+DebugDescription.h */; };
 		4C401E731BAE4F4000BAE5FC /* NSObject+DebugDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E671BAE4F4000BAE5FC /* NSObject+DebugDescription.m */; };
-		4C401E741BAE4F4000BAE5FC /* NSString+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E681BAE4F4000BAE5FC /* NSString+Extras.h */; };
-		4C401E751BAE4F4000BAE5FC /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E691BAE4F4000BAE5FC /* NSString+Extras.m */; };
 		4C994F261BDD96E40058627A /* MADReportLineRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F201BDD96E40058627A /* MADReportLineRepresentation.h */; };
 		4C994F271BDD96E40058627A /* MADReportLineRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F211BDD96E40058627A /* MADReportLineRepresentation.m */; };
 		4C994F281BDD96E40058627A /* MADReportPageRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F221BDD96E40058627A /* MADReportPageRepresentation.h */; };
 		4C994F291BDD96E40058627A /* MADReportPageRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F231BDD96E40058627A /* MADReportPageRepresentation.m */; };
 		4C994F2A1BDD96E40058627A /* MADReportTextRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F241BDD96E40058627A /* MADReportTextRepresentation.h */; };
 		4C994F2B1BDD96E40058627A /* MADReportTextRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F251BDD96E40058627A /* MADReportTextRepresentation.m */; };
-		4C994F2F1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F2D1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h */; };
+		4C994F2F1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F2D1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C994F301BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F2E1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m */; };
 		4C994F321BDDA1910058627A /* MADDocumentSectionType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F311BDDA0780058627A /* MADDocumentSectionType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C994F351BDDD85D0058627A /* MADAccessibilityLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C994F331BDDD85D0058627A /* MADAccessibilityLine.h */; };
@@ -241,7 +240,7 @@
 		4CC281FA1BADE80500775B72 /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F11BADE80500775B72 /* MADArrayCaching.m */; };
 		4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F21BADE80500775B72 /* MADConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC281FC1BADE80500775B72 /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F31BADE80500775B72 /* MADConstants.m */; };
-		4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC281FE1BADE80500775B72 /* MADLinkType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F51BADE80500775B72 /* MADLinkType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282401BADE81A00775B72 /* MADSectionLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282411BADE81A00775B72 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */; };
@@ -258,7 +257,7 @@
 		4CC282661BADE81E00775B72 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282291BADE81A00775B72 /* MTDataFormatter.m */; };
 		4CC282711BADE82000775B72 /* MTErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282341BADE81A00775B72 /* MTErrorContainer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282721BADE82000775B72 /* MTErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282351BADE81A00775B72 /* MTErrorContainer.m */; };
-		4CC282731BADE82000775B72 /* MADFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282361BADE81A00775B72 /* MADFont.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC282731BADE82000775B72 /* MADFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282361BADE81A00775B72 /* MADFont.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282741BADE82000775B72 /* MADFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282371BADE81A00775B72 /* MADFont.m */; };
 		4CC282751BADE82100775B72 /* MTKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282381BADE81A00775B72 /* MTKeyChain.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282761BADE82100775B72 /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282391BADE81A00775B72 /* MTKeyChain.m */; };
@@ -268,7 +267,7 @@
 		4CC2827A1BADE82200775B72 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */; };
 		4CC283B71BADE8C400775B72 /* MTReportViewerPrintPageRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283121BADE85000775B72 /* MTReportViewerPrintPageRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC283B81BADE8C500775B72 /* MTReportViewerPrintPageRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC283131BADE85000775B72 /* MTReportViewerPrintPageRenderer.m */; };
-		4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283141BADE85000775B72 /* MTTableFormatter.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283141BADE85000775B72 /* MTTableFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC283BA1BADE8C700775B72 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC283151BADE85000775B72 /* MTTableFormatter.m */; };
 		4CC283C71BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283C51BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC283C81BADE8EC00775B72 /* RptqDocumentSectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC283C61BADE8EA00775B72 /* RptqDocumentSectionEnumerator.m */; };
@@ -396,6 +395,7 @@
 /* Begin PBXFileReference section */
 		4C0590CD1C7B6F3C00A1EC4A /* MTReportFormatterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTReportFormatterState.h; path = MAD/MADReportFormatter/MTReportFormatterState.h; sourceTree = "<group>"; };
 		4C0590CE1C7B6F3C00A1EC4A /* MTReportFormatterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTReportFormatterState.m; path = MAD/MADReportFormatter/MTReportFormatterState.m; sourceTree = "<group>"; };
+		4C1EFA711C86A6D6000BACFD /* MADDocumentSectionType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDocumentSectionType.m; path = MAD/MADReportFormatter/MADReportObjectRepresentation/MADDocumentSectionType.m; sourceTree = "<group>"; };
 		4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADMySQL.framework"; sourceTree = "<group>"; };
@@ -485,43 +485,43 @@
 		4C401D731BAE3BD500BAE5FC /* MTQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCache.h; path = MAD/MADQuery/MTQueryCache.h; sourceTree = "<group>"; };
 		4C401D741BAE3BD500BAE5FC /* MTQueryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCache.m; path = MAD/MADQuery/MTQueryCache.m; sourceTree = "<group>"; };
 		4C401D751BAE3BD500BAE5FC /* MTQueryCacheAddColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheAddColumn.h; path = MAD/MADQuery/MTQueryCacheAddColumn.h; sourceTree = "<group>"; };
-		4C401D761BAE3BD500BAE5FC /* MTQueryCacheAddColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheAddColumn.m; path = MAD/MADQuery/MTQueryCacheAddColumn.m; sourceTree = "<group>"; };
+		4C401D761BAE3BD500BAE5FC /* MTQueryCacheAddColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheAddColumn.m; path = MAD/MADQuery/MTQueryCacheAddColumn.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D771BAE3BD500BAE5FC /* MTQueryCacheAddRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheAddRow.h; path = MAD/MADQuery/MTQueryCacheAddRow.h; sourceTree = "<group>"; };
-		4C401D781BAE3BD500BAE5FC /* MTQueryCacheAddRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheAddRow.m; path = MAD/MADQuery/MTQueryCacheAddRow.m; sourceTree = "<group>"; };
+		4C401D781BAE3BD500BAE5FC /* MTQueryCacheAddRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheAddRow.m; path = MAD/MADQuery/MTQueryCacheAddRow.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D791BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheAggregateFunction.h; path = MAD/MADQuery/MTQueryCacheAggregateFunction.h; sourceTree = "<group>"; };
-		4C401D7A1BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheAggregateFunction.m; path = MAD/MADQuery/MTQueryCacheAggregateFunction.m; sourceTree = "<group>"; };
+		4C401D7A1BAE3BD500BAE5FC /* MTQueryCacheAggregateFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheAggregateFunction.m; path = MAD/MADQuery/MTQueryCacheAggregateFunction.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D7B1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheBeginTransaction.h; path = MAD/MADQuery/MTQueryCacheBeginTransaction.h; sourceTree = "<group>"; };
-		4C401D7C1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheBeginTransaction.m; path = MAD/MADQuery/MTQueryCacheBeginTransaction.m; sourceTree = "<group>"; };
+		4C401D7C1BAE3BD500BAE5FC /* MTQueryCacheBeginTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheBeginTransaction.m; path = MAD/MADQuery/MTQueryCacheBeginTransaction.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D7D1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheDeleteAllFromTable.h; path = MAD/MADQuery/MTQueryCacheDeleteAllFromTable.h; sourceTree = "<group>"; };
-		4C401D7E1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheDeleteAllFromTable.m; path = MAD/MADQuery/MTQueryCacheDeleteAllFromTable.m; sourceTree = "<group>"; };
+		4C401D7E1BAE3BD500BAE5FC /* MTQueryCacheDeleteAllFromTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheDeleteAllFromTable.m; path = MAD/MADQuery/MTQueryCacheDeleteAllFromTable.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D7F1BAE3BD500BAE5FC /* MTQueryCacheDropTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheDropTable.h; path = MAD/MADQuery/MTQueryCacheDropTable.h; sourceTree = "<group>"; };
-		4C401D801BAE3BD500BAE5FC /* MTQueryCacheDropTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheDropTable.m; path = MAD/MADQuery/MTQueryCacheDropTable.m; sourceTree = "<group>"; };
+		4C401D801BAE3BD500BAE5FC /* MTQueryCacheDropTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheDropTable.m; path = MAD/MADQuery/MTQueryCacheDropTable.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D811BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheEndTransaction.h; path = MAD/MADQuery/MTQueryCacheEndTransaction.h; sourceTree = "<group>"; };
-		4C401D821BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheEndTransaction.m; path = MAD/MADQuery/MTQueryCacheEndTransaction.m; sourceTree = "<group>"; };
+		4C401D821BAE3BD500BAE5FC /* MTQueryCacheEndTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheEndTransaction.m; path = MAD/MADQuery/MTQueryCacheEndTransaction.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D831BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheIndexCreate.h; path = MAD/MADQuery/MTQueryCacheIndexCreate.h; sourceTree = "<group>"; };
-		4C401D841BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheIndexCreate.m; path = MAD/MADQuery/MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
+		4C401D841BAE3BD500BAE5FC /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheIndexCreate.m; path = MAD/MADQuery/MTQueryCacheIndexCreate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D851BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheIndexDrop.h; path = MAD/MADQuery/MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
-		4C401D861BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheIndexDrop.m; path = MAD/MADQuery/MTQueryCacheIndexDrop.m; sourceTree = "<group>"; };
+		4C401D861BAE3BD500BAE5FC /* MTQueryCacheIndexDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheIndexDrop.m; path = MAD/MADQuery/MTQueryCacheIndexDrop.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D871BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheJournalModeDefault.h; path = MAD/MADQuery/MTQueryCacheJournalModeDefault.h; sourceTree = "<group>"; };
-		4C401D881BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheJournalModeDefault.m; path = MAD/MADQuery/MTQueryCacheJournalModeDefault.m; sourceTree = "<group>"; };
+		4C401D881BAE3BD500BAE5FC /* MTQueryCacheJournalModeDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheJournalModeDefault.m; path = MAD/MADQuery/MTQueryCacheJournalModeDefault.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D891BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheJournalModeOverride.h; path = MAD/MADQuery/MTQueryCacheJournalModeOverride.h; sourceTree = "<group>"; };
-		4C401D8A1BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheJournalModeOverride.m; path = MAD/MADQuery/MTQueryCacheJournalModeOverride.m; sourceTree = "<group>"; };
+		4C401D8A1BAE3BD500BAE5FC /* MTQueryCacheJournalModeOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheJournalModeOverride.m; path = MAD/MADQuery/MTQueryCacheJournalModeOverride.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D8B1BAE3BD500BAE5FC /* MTQueryCacheSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSelect.h; path = MAD/MADQuery/MTQueryCacheSelect.h; sourceTree = "<group>"; };
-		4C401D8C1BAE3BD500BAE5FC /* MTQueryCacheSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSelect.m; path = MAD/MADQuery/MTQueryCacheSelect.m; sourceTree = "<group>"; };
+		4C401D8C1BAE3BD500BAE5FC /* MTQueryCacheSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSelect.m; path = MAD/MADQuery/MTQueryCacheSelect.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D8D1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSelectGroupKeys.h; path = MAD/MADQuery/MTQueryCacheSelectGroupKeys.h; sourceTree = "<group>"; };
-		4C401D8E1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSelectGroupKeys.m; path = MAD/MADQuery/MTQueryCacheSelectGroupKeys.m; sourceTree = "<group>"; };
+		4C401D8E1BAE3BD500BAE5FC /* MTQueryCacheSelectGroupKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSelectGroupKeys.m; path = MAD/MADQuery/MTQueryCacheSelectGroupKeys.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D8F1BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSelectLimitOffset.h; path = MAD/MADQuery/MTQueryCacheSelectLimitOffset.h; sourceTree = "<group>"; };
-		4C401D901BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSelectLimitOffset.m; path = MAD/MADQuery/MTQueryCacheSelectLimitOffset.m; sourceTree = "<group>"; };
+		4C401D901BAE3BD500BAE5FC /* MTQueryCacheSelectLimitOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSelectLimitOffset.m; path = MAD/MADQuery/MTQueryCacheSelectLimitOffset.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D911BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSelectRowId.h; path = MAD/MADQuery/MTQueryCacheSelectRowId.h; sourceTree = "<group>"; };
-		4C401D921BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSelectRowId.m; path = MAD/MADQuery/MTQueryCacheSelectRowId.m; sourceTree = "<group>"; };
+		4C401D921BAE3BD500BAE5FC /* MTQueryCacheSelectRowId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSelectRowId.m; path = MAD/MADQuery/MTQueryCacheSelectRowId.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D931BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSelectRowIds.h; path = MAD/MADQuery/MTQueryCacheSelectRowIds.h; sourceTree = "<group>"; };
-		4C401D941BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSelectRowIds.m; path = MAD/MADQuery/MTQueryCacheSelectRowIds.m; sourceTree = "<group>"; };
+		4C401D941BAE3BD500BAE5FC /* MTQueryCacheSelectRowIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSelectRowIds.m; path = MAD/MADQuery/MTQueryCacheSelectRowIds.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D951BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSyncDefault.h; path = MAD/MADQuery/MTQueryCacheSyncDefault.h; sourceTree = "<group>"; };
-		4C401D961BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSyncDefault.m; path = MAD/MADQuery/MTQueryCacheSyncDefault.m; sourceTree = "<group>"; };
+		4C401D961BAE3BD500BAE5FC /* MTQueryCacheSyncDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSyncDefault.m; path = MAD/MADQuery/MTQueryCacheSyncDefault.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D971BAE3BD500BAE5FC /* MTQueryCacheSyncOff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheSyncOff.h; path = MAD/MADQuery/MTQueryCacheSyncOff.h; sourceTree = "<group>"; };
-		4C401D981BAE3BD500BAE5FC /* MTQueryCacheSyncOff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheSyncOff.m; path = MAD/MADQuery/MTQueryCacheSyncOff.m; sourceTree = "<group>"; };
+		4C401D981BAE3BD500BAE5FC /* MTQueryCacheSyncOff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheSyncOff.m; path = MAD/MADQuery/MTQueryCacheSyncOff.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D991BAE3BD500BAE5FC /* MTQueryCacheVacuum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCacheVacuum.h; path = MAD/MADQuery/MTQueryCacheVacuum.h; sourceTree = "<group>"; };
-		4C401D9A1BAE3BD500BAE5FC /* MTQueryCacheVacuum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCacheVacuum.m; path = MAD/MADQuery/MTQueryCacheVacuum.m; sourceTree = "<group>"; };
+		4C401D9A1BAE3BD500BAE5FC /* MTQueryCacheVacuum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryCacheVacuum.m; path = MAD/MADQuery/MTQueryCacheVacuum.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401D9B1BAE3BD500BAE5FC /* MTQueryCustomNoResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryCustomNoResults.h; path = MAD/MADQuery/MTQueryCustomNoResults.h; sourceTree = "<group>"; };
 		4C401D9C1BAE3BD500BAE5FC /* MTQueryCustomNoResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryCustomNoResults.m; path = MAD/MADQuery/MTQueryCustomNoResults.m; sourceTree = "<group>"; };
 		4C401D9D1BAE3BD500BAE5FC /* MTQueryDefinitionField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryDefinitionField.h; path = MAD/MADQuery/MTQueryDefinitionField.h; sourceTree = "<group>"; };
@@ -537,11 +537,11 @@
 		4C401DA71BAE3BD500BAE5FC /* MTQueryDefinitionTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryDefinitionTable.h; path = MAD/MADQuery/MTQueryDefinitionTable.h; sourceTree = "<group>"; };
 		4C401DA81BAE3BD500BAE5FC /* MTQueryDefinitionTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryDefinitionTable.m; path = MAD/MADQuery/MTQueryDefinitionTable.m; sourceTree = "<group>"; };
 		4C401DA91BAE3BD500BAE5FC /* MTQueryFull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryFull.h; path = MAD/MADQuery/MTQueryFull.h; sourceTree = "<group>"; };
-		4C401DAA1BAE3BD500BAE5FC /* MTQueryFull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryFull.m; path = MAD/MADQuery/MTQueryFull.m; sourceTree = "<group>"; };
-		4C401DAB1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryMaxFieldLength.h; path = MAD/MADQuery/MTQueryMaxFieldLength.h; sourceTree = "<group>"; };
-		4C401DAC1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryMaxFieldLength.m; path = MAD/MADQuery/MTQueryMaxFieldLength.m; sourceTree = "<group>"; };
-		4C401DAD1BAE3BD500BAE5FC /* MTQuerySampleDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQuerySampleDataField.h; path = MAD/MADQuery/MTQuerySampleDataField.h; sourceTree = "<group>"; };
-		4C401DAE1BAE3BD500BAE5FC /* MTQuerySampleDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQuerySampleDataField.m; path = MAD/MADQuery/MTQuerySampleDataField.m; sourceTree = "<group>"; };
+		4C401DAA1BAE3BD500BAE5FC /* MTQueryFull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryFull.m; path = MAD/MADQuery/MTQueryFull.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4C401DAB1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MTQueryMaxFieldLength.h; path = MAD/MADQuery/MTQueryMaxFieldLength.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		4C401DAC1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQueryMaxFieldLength.m; path = MAD/MADQuery/MTQueryMaxFieldLength.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4C401DAD1BAE3BD500BAE5FC /* MTQuerySampleDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MTQuerySampleDataField.h; path = MAD/MADQuery/MTQuerySampleDataField.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		4C401DAE1BAE3BD500BAE5FC /* MTQuerySampleDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MTQuerySampleDataField.m; path = MAD/MADQuery/MTQuerySampleDataField.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C401DAF1BAE3BD500BAE5FC /* MTQuerySampleDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQuerySampleDataTable.h; path = MAD/MADQuery/MTQuerySampleDataTable.h; sourceTree = "<group>"; };
 		4C401DB01BAE3BD500BAE5FC /* MTQuerySampleDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQuerySampleDataTable.m; path = MAD/MADQuery/MTQuerySampleDataTable.m; sourceTree = "<group>"; };
 		4C401DB11BAE3BD500BAE5FC /* MTQuerySelectItemsForGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQuerySelectItemsForGroup.h; path = MAD/MADQuery/MTQuerySelectItemsForGroup.h; sourceTree = "<group>"; };
@@ -603,8 +603,6 @@
 		4C401E651BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectID+Extras.m"; path = "MAD/Categories/NSManagedObjectID+Extras.m"; sourceTree = "<group>"; };
 		4C401E661BAE4F4000BAE5FC /* NSObject+DebugDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+DebugDescription.h"; path = "MAD/Categories/NSObject+DebugDescription.h"; sourceTree = "<group>"; };
 		4C401E671BAE4F4000BAE5FC /* NSObject+DebugDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+DebugDescription.m"; path = "MAD/Categories/NSObject+DebugDescription.m"; sourceTree = "<group>"; };
-		4C401E681BAE4F4000BAE5FC /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extras.h"; path = "MAD/Categories/NSString+Extras.h"; sourceTree = "<group>"; };
-		4C401E691BAE4F4000BAE5FC /* NSString+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extras.m"; path = "MAD/Categories/NSString+Extras.m"; sourceTree = "<group>"; };
 		4C994F201BDD96E40058627A /* MADReportLineRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportLineRepresentation.h; sourceTree = "<group>"; };
 		4C994F211BDD96E40058627A /* MADReportLineRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportLineRepresentation.m; sourceTree = "<group>"; };
 		4C994F221BDD96E40058627A /* MADReportPageRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportPageRepresentation.h; sourceTree = "<group>"; };
@@ -783,6 +781,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */,
 				4C3DCC421BCAF77800ABE231 /* MADFileManager.framework in Frameworks */,
 				4C3DCC3E1BCAF75B00ABE231 /* MADBarcodes.framework in Frameworks */,
 				4C3DCC3F1BCAF75B00ABE231 /* MADDataStructures.framework in Frameworks */,
@@ -790,7 +789,6 @@
 				4C3DCC3A1BCAF74200ABE231 /* MADSqlite3.framework in Frameworks */,
 				4C3DCC3B1BCAF74200ABE231 /* MADTdsClient.framework in Frameworks */,
 				4C3DCC351BCAF72100ABE231 /* MADFoundation.framework in Frameworks */,
-				4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */,
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
 				4CC284C21BADEB6100775B72 /* libsybdb.a in Frameworks */,
 			);
@@ -1055,8 +1053,6 @@
 				4C401E651BAE4F4000BAE5FC /* NSManagedObjectID+Extras.m */,
 				4C401E661BAE4F4000BAE5FC /* NSObject+DebugDescription.h */,
 				4C401E671BAE4F4000BAE5FC /* NSObject+DebugDescription.m */,
-				4C401E681BAE4F4000BAE5FC /* NSString+Extras.h */,
-				4C401E691BAE4F4000BAE5FC /* NSString+Extras.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1140,6 +1136,7 @@
 				4C994F2D1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h */,
 				4C994F2E1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.m */,
 				4C994F311BDDA0780058627A /* MADDocumentSectionType.h */,
+				4C1EFA711C86A6D6000BACFD /* MADDocumentSectionType.m */,
 				4C994F331BDDD85D0058627A /* MADAccessibilityLine.h */,
 				4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */,
 			);
@@ -1347,6 +1344,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C994F2F1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h in Headers */,
 				4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */,
 				4C401E271BAE3DCB00BAE5FC /* MTDatabaseConnection.h in Headers */,
 				4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */,
@@ -1412,7 +1410,6 @@
 				4C401D541BAE3AF800BAE5FC /* MTPaperC1.h in Headers */,
 				4CC2846C1BADE99200775B72 /* RptqDatabase+Extras.h in Headers */,
 				4CC284851BADE9C100775B72 /* RptqDocumentObjectLabelDataField+Extras.h in Headers */,
-				4C401E741BAE4F4000BAE5FC /* NSString+Extras.h in Headers */,
 				4C401DCB1BAE3BD600BAE5FC /* MTQueryCacheJournalModeDefault.h in Headers */,
 				4C9D4B091C84306A00BB31CD /* MADFonts.h in Headers */,
 				4CC284271BADE95D00775B72 /* RptqQueryLinks.h in Headers */,
@@ -1502,7 +1499,6 @@
 				4C401D3E1BAE3AF800BAE5FC /* MTPaperB1.h in Headers */,
 				4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */,
 				4C994F461BE2B1320058627A /* MADReportSectionRepresentation.h in Headers */,
-				4C994F2F1BDD9A7E0058627A /* NSDictionary+MADReportObjectRepresentation.h in Headers */,
 				4C401D401BAE3AF800BAE5FC /* MTPaperB2.h in Headers */,
 				4C401DC91BAE3BD600BAE5FC /* MTQueryCacheIndexDrop.h in Headers */,
 				4C401D6C1BAE3AF800BAE5FC /* MTPaperLegal.h in Headers */,
@@ -1766,6 +1762,7 @@
 				4C401E301BAE3DCB00BAE5FC /* MTDatabaseDataBinding.m in Sources */,
 				4C401DC21BAE3BD600BAE5FC /* MTQueryCacheDeleteAllFromTable.m in Sources */,
 				4CC283B81BADE8C500775B72 /* MTReportViewerPrintPageRenderer.m in Sources */,
+				4C1EFA721C86A6D6000BACFD /* MADDocumentSectionType.m in Sources */,
 				4CC2846F1BADE99800775B72 /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4C401D3F1BAE3AF800BAE5FC /* MTPaperB1.m in Sources */,
 				4C401DBA1BAE3BD600BAE5FC /* MTQueryCacheAddColumn.m in Sources */,
@@ -1804,7 +1801,6 @@
 				4C401DC81BAE3BD600BAE5FC /* MTQueryCacheIndexCreate.m in Sources */,
 				4C401DD01BAE3BD600BAE5FC /* MTQueryCacheSelect.m in Sources */,
 				4CC284141BADE94200775B72 /* RptqDocumentObjectImage.m in Sources */,
-				4C401E751BAE4F4000BAE5FC /* NSString+Extras.m in Sources */,
 				4CC284731BADE99E00775B72 /* RptqDocument+Extras.m in Sources */,
 				4C401D471BAE3AF800BAE5FC /* MTPaperB5.m in Sources */,
 				4C401E2E1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.m in Sources */,

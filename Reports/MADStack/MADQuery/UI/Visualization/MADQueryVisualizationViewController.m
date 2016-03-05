@@ -21,7 +21,6 @@
 #import "CGAffineTransform+Common.h"
 #import "UIView+NSObjectIdTag.h"
 
-#import "UIViewController+Designer.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADQueryVisualizationTableDefination.h"
 
@@ -168,7 +167,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.definesPresentationContext = NO;
     
-    self.backgroundContainer.layer.borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+    self.backgroundContainer.layer.borderWidth = [MADDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
     
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;

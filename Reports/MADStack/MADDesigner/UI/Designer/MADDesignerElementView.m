@@ -13,6 +13,7 @@
 #import "MTResizeHandleView.h"
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -213,7 +214,7 @@
 - (void)flash:(void (^)(BOOL finished))completion {
     [UIView animateWithDuration: 0.6666f delay: 0.3333f options: UIViewAnimationOptionAutoreverse
                      animations: ^{
-                         self.backgroundColor = [[UIColor tintColorBlue] colorWithAlphaComponent:0.33333333];
+                         self.backgroundColor = [[MADColor tintColorBlue] colorWithAlphaComponent:0.33333333];
                      } completion:^(BOOL finished) {
                          if (finished) self.backgroundColor = [UIColor clearColor];
                          completion(finished);

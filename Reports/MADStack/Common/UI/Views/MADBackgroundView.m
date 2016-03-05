@@ -7,13 +7,13 @@
 //
 
 #import "MADBackgroundView.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 @implementation MADBackgroundView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *bgColor = [[UIColor edaBlackFiftyPercent] colorWithAlphaComponent:0.33333333f];
+        UIColor *bgColor = [[MADColor edaBlackFiftyPercent] colorWithAlphaComponent:0.33333333f];
         self.backgroundColor = bgColor;
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 5.0000f;

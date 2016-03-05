@@ -9,47 +9,43 @@
 /* Begin PBXBuildFile section */
 		4C3DCC271BCAF63400ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */; };
 		4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; settings = {ASSET_TAGS = (); }; };
+		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; };
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
-		4C5205A31BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205A41BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205A31BA7E2A2000E6A59 /* MADFilename.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205781BA7E2A2000E6A59 /* MADFilename.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205A41BA7E2A2000E6A59 /* MADFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205791BA7E2A2000E6A59 /* MADFilename.m */; };
 		4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; settings = {ASSET_TAGS = (); }; };
-		4C5205AA1BA7E2A2000E6A59 /* UIColor+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057F1BA7E2A2000E6A59 /* UIColor+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205AB1BA7E2A2000E6A59 /* UIColor+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205801BA7E2A2000E6A59 /* UIColor+Social.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */; };
+		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; };
 		4C5205AC1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m */; };
 		4C5205AE1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205831BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205AF1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205841BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205B11BA7E2A2000E6A59 /* UILabel+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205861BA7E2A2000E6A59 /* UILabel+Constructors.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205AF1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205841BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m */; };
 		4C5205B21BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205B31BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205B31BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m */; };
 		4C5205B41BA7E2A2000E6A59 /* UIAlertController+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205891BA7E2A2000E6A59 /* UIAlertController+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205B51BA7E2A2000E6A59 /* UIAlertController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058A1BA7E2A2000E6A59 /* UIAlertController+Constructors.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205B61BA7E2A2000E6A59 /* UIView+Animations.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52058B1BA7E2A2000E6A59 /* UIView+Animations.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205B71BA7E2A2000E6A59 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058C1BA7E2A2000E6A59 /* UIView+Animations.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205B51BA7E2A2000E6A59 /* UIAlertController+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058A1BA7E2A2000E6A59 /* UIAlertController+Constructors.m */; };
+		4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */; };
+		4C5205BA1BA7E2A2000E6A59 /* MADError.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058F1BA7E2A2000E6A59 /* MADError.m */; };
 		4C5205BB1BA7E2A2000E6A59 /* NSThread+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205901BA7E2A2000E6A59 /* NSThread+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205BC1BA7E2A2000E6A59 /* NSThread+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205911BA7E2A2000E6A59 /* NSThread+Extras.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205BE1BA7E2A2000E6A59 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205941BA7E2A2000E6A59 /* BDHost.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */; settings = {ASSET_TAGS = (); }; };
-		4C5205C31BA7E2A2000E6A59 /* UIImage+Border.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205981BA7E2A2000E6A59 /* UIImage+Border.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205C41BA7E2A2000E6A59 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205991BA7E2A2000E6A59 /* UIImage+Border.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205BC1BA7E2A2000E6A59 /* NSThread+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205911BA7E2A2000E6A59 /* NSThread+Extras.m */; };
+		4C5205BD1BA7E2A2000E6A59 /* MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205921BA7E2A2000E6A59 /* MADColor.m */; };
+		4C5205BE1BA7E2A2000E6A59 /* MADDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205931BA7E2A2000E6A59 /* MADDevice.m */; };
+		4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205941BA7E2A2000E6A59 /* BDHost.m */; };
+		4C5205C11BA7E2A2000E6A59 /* MADStackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205961BA7E2A2000E6A59 /* MADStackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205C21BA7E2A2000E6A59 /* MADStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205971BA7E2A2000E6A59 /* MADStackViewController.m */; };
+		4C5205C31BA7E2A2000E6A59 /* MADImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205981BA7E2A2000E6A59 /* MADImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205C41BA7E2A2000E6A59 /* MADImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205991BA7E2A2000E6A59 /* MADImage.m */; };
 		4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059B1BA7E2A2000E6A59 /* BDHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C71BA7E2A2000E6A59 /* CGGeometry+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205CA1BA7E2A2000E6A59 /* UIDevice+Hack.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205C81BA7E2A2000E6A59 /* MADError.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059D1BA7E2A2000E6A59 /* MADError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205C91BA7E2A2000E6A59 /* MADColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059E1BA7E2A2000E6A59 /* MADColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205CA1BA7E2A2000E6A59 /* MADDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059F1BA7E2A2000E6A59 /* MADDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205A01BA7E2A2000E6A59 /* MTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205CC1BA7E2A2000E6A59 /* MTMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205A11BA7E2A2000E6A59 /* MTMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205A21BA7E2A2000E6A59 /* MTMath.m */; settings = {ASSET_TAGS = (); }; };
+		4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205A21BA7E2A2000E6A59 /* MTMath.m */; };
 		4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5205D01BA7E308000E6A59 /* CFNetwork.framework */; };
-		4C5205D61BA7E5FF000E6A59 /* UILabel+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205851BA7E2A2000E6A59 /* UILabel+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CC2F5151C8686B200E022AD /* MADLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2F5131C8686B200E022AD /* MADLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CC2F5161C8686B200E022AD /* MADLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2F5141C8686B200E022AD /* MADLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,45 +66,42 @@
 		4C5205671BA7E1DC000E6A59 /* MADCocoaExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADCocoaExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCocoaExtensionsTests.m; sourceTree = "<group>"; };
 		4C52056E1BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDocument+thumbnailURL.h"; path = "MADCocoaExtensions/UIDocument+thumbnailURL.h"; sourceTree = "<group>"; };
-		4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDocument+thumbnailURL.m"; path = "MADCocoaExtensions/UIDocument+thumbnailURL.m"; sourceTree = "<group>"; };
+		4C5205781BA7E2A2000E6A59 /* MADFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFilename.h; path = MADCocoaExtensions/MADFilename.h; sourceTree = "<group>"; };
+		4C5205791BA7E2A2000E6A59 /* MADFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFilename.m; path = MADCocoaExtensions/MADFilename.m; sourceTree = "<group>"; };
 		4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Utilities.h"; path = "MADCocoaExtensions/UIViewController+Utilities.h"; sourceTree = "<group>"; };
 		4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Utilities.m"; path = "MADCocoaExtensions/UIViewController+Utilities.m"; sourceTree = "<group>"; };
 		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MacroVendColor.h; path = MADCocoaExtensions/MacroVendColor.h; sourceTree = "<group>"; };
-		4C52057F1BA7E2A2000E6A59 /* UIColor+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Social.h"; path = "MADCocoaExtensions/UIColor+Social.h"; sourceTree = "<group>"; };
-		4C5205801BA7E2A2000E6A59 /* UIColor+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Social.m"; path = "MADCocoaExtensions/UIColor+Social.m"; sourceTree = "<group>"; };
 		4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+Constructors.h"; path = "MADCocoaExtensions/NSNumberFormatter+Constructors.h"; sourceTree = "<group>"; };
 		4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumberFormatter+Constructors.m"; path = "MADCocoaExtensions/NSNumberFormatter+Constructors.m"; sourceTree = "<group>"; };
 		4C5205831BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+Constructors.h"; path = "MADCocoaExtensions/UIBarButtonItem+Constructors.h"; sourceTree = "<group>"; };
 		4C5205841BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBarButtonItem+Constructors.m"; path = "MADCocoaExtensions/UIBarButtonItem+Constructors.m"; sourceTree = "<group>"; };
-		4C5205851BA7E2A2000E6A59 /* UILabel+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+Constructors.h"; path = "MADCocoaExtensions/UILabel+Constructors.h"; sourceTree = "<group>"; };
-		4C5205861BA7E2A2000E6A59 /* UILabel+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+Constructors.m"; path = "MADCocoaExtensions/UILabel+Constructors.m"; sourceTree = "<group>"; };
 		4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MFMailComposeViewController+Constructors.h"; path = "MADCocoaExtensions/MFMailComposeViewController+Constructors.h"; sourceTree = "<group>"; };
 		4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MFMailComposeViewController+Constructors.m"; path = "MADCocoaExtensions/MFMailComposeViewController+Constructors.m"; sourceTree = "<group>"; };
 		4C5205891BA7E2A2000E6A59 /* UIAlertController+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertController+Constructors.h"; path = "MADCocoaExtensions/UIAlertController+Constructors.h"; sourceTree = "<group>"; };
 		4C52058A1BA7E2A2000E6A59 /* UIAlertController+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertController+Constructors.m"; path = "MADCocoaExtensions/UIAlertController+Constructors.m"; sourceTree = "<group>"; };
-		4C52058B1BA7E2A2000E6A59 /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Animations.h"; path = "MADCocoaExtensions/UIView+Animations.h"; sourceTree = "<group>"; };
-		4C52058C1BA7E2A2000E6A59 /* UIView+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Animations.m"; path = "MADCocoaExtensions/UIView+Animations.m"; sourceTree = "<group>"; };
 		4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CGGeometry+Extras.m"; path = "MADCocoaExtensions/CGGeometry+Extras.m"; sourceTree = "<group>"; };
-		4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Constructors.m"; path = "MADCocoaExtensions/NSError+Constructors.m"; sourceTree = "<group>"; };
+		4C52058F1BA7E2A2000E6A59 /* MADError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADError.m; path = MADCocoaExtensions/MADError.m; sourceTree = "<group>"; };
 		4C5205901BA7E2A2000E6A59 /* NSThread+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSThread+Extras.h"; path = "MADCocoaExtensions/NSThread+Extras.h"; sourceTree = "<group>"; };
 		4C5205911BA7E2A2000E6A59 /* NSThread+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSThread+Extras.m"; path = "MADCocoaExtensions/NSThread+Extras.m"; sourceTree = "<group>"; };
-		4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+EverydayApps.m"; path = "MADCocoaExtensions/UIColor+EverydayApps.m"; sourceTree = "<group>"; };
-		4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hack.m"; path = "MADCocoaExtensions/UIDevice+Hack.m"; sourceTree = "<group>"; };
+		4C5205921BA7E2A2000E6A59 /* MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColor.m; path = MADCocoaExtensions/MADColor.m; sourceTree = "<group>"; };
+		4C5205931BA7E2A2000E6A59 /* MADDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDevice.m; path = MADCocoaExtensions/MADDevice.m; sourceTree = "<group>"; };
 		4C5205941BA7E2A2000E6A59 /* BDHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BDHost.m; path = MADCocoaExtensions/BDHost.m; sourceTree = "<group>"; };
-		4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "MADCocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
-		4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+Helpers.m"; path = "MADCocoaExtensions/UIApplication+Helpers.m"; sourceTree = "<group>"; };
-		4C5205981BA7E2A2000E6A59 /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Border.h"; path = "MADCocoaExtensions/UIImage+Border.h"; sourceTree = "<group>"; };
-		4C5205991BA7E2A2000E6A59 /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Border.m"; path = "MADCocoaExtensions/UIImage+Border.m"; sourceTree = "<group>"; };
+		4C5205961BA7E2A2000E6A59 /* MADStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADStackViewController.h; path = MADCocoaExtensions/MADStackViewController.h; sourceTree = "<group>"; };
+		4C5205971BA7E2A2000E6A59 /* MADStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADStackViewController.m; path = MADCocoaExtensions/MADStackViewController.m; sourceTree = "<group>"; };
+		4C5205981BA7E2A2000E6A59 /* MADImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADImage.h; path = MADCocoaExtensions/MADImage.h; sourceTree = "<group>"; };
+		4C5205991BA7E2A2000E6A59 /* MADImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADImage.m; path = MADCocoaExtensions/MADImage.m; sourceTree = "<group>"; };
 		4C52059B1BA7E2A2000E6A59 /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = MADCocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "MADCocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
-		4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "MADCocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
-		4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+EverydayApps.h"; path = "MADCocoaExtensions/UIColor+EverydayApps.h"; sourceTree = "<group>"; };
-		4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hack.h"; path = "MADCocoaExtensions/UIDevice+Hack.h"; sourceTree = "<group>"; };
+		4C52059D1BA7E2A2000E6A59 /* MADError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADError.h; path = MADCocoaExtensions/MADError.h; sourceTree = "<group>"; };
+		4C52059E1BA7E2A2000E6A59 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColor.h; path = MADCocoaExtensions/MADColor.h; sourceTree = "<group>"; };
+		4C52059F1BA7E2A2000E6A59 /* MADDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDevice.h; path = MADCocoaExtensions/MADDevice.h; sourceTree = "<group>"; };
 		4C5205A01BA7E2A2000E6A59 /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLog.h; path = MADCocoaExtensions/MTLog.h; sourceTree = "<group>"; };
 		4C5205A11BA7E2A2000E6A59 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = MADCocoaExtensions/MTMath.h; sourceTree = "<group>"; };
 		4C5205A21BA7E2A2000E6A59 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTMath.m; path = MADCocoaExtensions/MTMath.m; sourceTree = "<group>"; };
 		4C5205D01BA7E308000E6A59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		4CC2F5131C8686B200E022AD /* MADLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabel.h; path = MADCocoaExtensions/MADLabel.h; sourceTree = "<group>"; };
+		4CC2F5141C8686B200E022AD /* MADLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabel.m; path = MADCocoaExtensions/MADLabel.m; sourceTree = "<group>"; };
+		4CC2F5171C86A11000E022AD /* MAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAD.framework; path = "../MAD/build/Debug-iphoneos/MAD.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +128,7 @@
 		4C5205531BA7E1DC000E6A59 = {
 			isa = PBXGroup;
 			children = (
+				4CC2F5171C86A11000E022AD /* MAD.framework */,
 				4C5205CE1BA7E2F3000E6A59 /* Resources */,
 				4C52055F1BA7E1DC000E6A59 /* MADCocoaExtensions */,
 				4C52056B1BA7E1DC000E6A59 /* MADCocoaExtensionsTests */,
@@ -173,44 +167,40 @@
 		4C5205771BA7E247000E6A59 /* MADCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */,
-				4C5205A01BA7E2A2000E6A59 /* MTLog.h */,
 				4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */,
 				4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */,
-				4C5205781BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h */,
-				4C5205791BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m */,
+				4C5205901BA7E2A2000E6A59 /* NSThread+Extras.h */,
+				4C5205911BA7E2A2000E6A59 /* NSThread+Extras.m */,
+				4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */,
+				4C5205A01BA7E2A2000E6A59 /* MTLog.h */,
 				4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */,
 				4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */,
-				4C52057F1BA7E2A2000E6A59 /* UIColor+Social.h */,
-				4C5205801BA7E2A2000E6A59 /* UIColor+Social.m */,
+				4C52059E1BA7E2A2000E6A59 /* MADColor.h */,
+				4C5205921BA7E2A2000E6A59 /* MADColor.m */,
 				4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h */,
 				4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m */,
 				4C5205831BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.h */,
 				4C5205841BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m */,
-				4C5205851BA7E2A2000E6A59 /* UILabel+Constructors.h */,
-				4C5205861BA7E2A2000E6A59 /* UILabel+Constructors.m */,
 				4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.h */,
 				4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m */,
 				4C5205891BA7E2A2000E6A59 /* UIAlertController+Constructors.h */,
 				4C52058A1BA7E2A2000E6A59 /* UIAlertController+Constructors.m */,
-				4C52058B1BA7E2A2000E6A59 /* UIView+Animations.h */,
-				4C52058C1BA7E2A2000E6A59 /* UIView+Animations.m */,
-				4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */,
-				4C5205901BA7E2A2000E6A59 /* NSThread+Extras.h */,
-				4C5205911BA7E2A2000E6A59 /* NSThread+Extras.m */,
-				4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */,
-				4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */,
-				4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */,
+				4C52059D1BA7E2A2000E6A59 /* MADError.h */,
+				4C52058F1BA7E2A2000E6A59 /* MADError.m */,
+				4C52059F1BA7E2A2000E6A59 /* MADDevice.h */,
+				4C5205931BA7E2A2000E6A59 /* MADDevice.m */,
 				4C5205941BA7E2A2000E6A59 /* BDHost.m */,
-				4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */,
-				4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */,
-				4C5205981BA7E2A2000E6A59 /* UIImage+Border.h */,
-				4C5205991BA7E2A2000E6A59 /* UIImage+Border.m */,
 				4C52059B1BA7E2A2000E6A59 /* BDHost.h */,
-				4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */,
-				4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */,
 				4C5205A11BA7E2A2000E6A59 /* MTMath.h */,
 				4C5205A21BA7E2A2000E6A59 /* MTMath.m */,
+				4C5205981BA7E2A2000E6A59 /* MADImage.h */,
+				4C5205991BA7E2A2000E6A59 /* MADImage.m */,
+				4C5205961BA7E2A2000E6A59 /* MADStackViewController.h */,
+				4C5205971BA7E2A2000E6A59 /* MADStackViewController.m */,
+				4C5205781BA7E2A2000E6A59 /* MADFilename.h */,
+				4C5205791BA7E2A2000E6A59 /* MADFilename.m */,
+				4CC2F5131C8686B200E022AD /* MADLabel.h */,
+				4CC2F5141C8686B200E022AD /* MADLabel.m */,
 			);
 			name = MADCocoaExtensions;
 			sourceTree = "<group>";
@@ -240,24 +230,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */,
-				4C5205D61BA7E5FF000E6A59 /* UILabel+Constructors.h in Headers */,
+				4CC2F5151C8686B200E022AD /* MADLabel.h in Headers */,
 				4C5205CC1BA7E2A2000E6A59 /* MTMath.h in Headers */,
 				4C5205AC1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.h in Headers */,
 				4C5205C71BA7E2A2000E6A59 /* CGGeometry+Extras.h in Headers */,
-				4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */,
-				4C5205CA1BA7E2A2000E6A59 /* UIDevice+Hack.h in Headers */,
+				4C5205C91BA7E2A2000E6A59 /* MADColor.h in Headers */,
+				4C5205CA1BA7E2A2000E6A59 /* MADDevice.h in Headers */,
 				4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */,
-				4C5205A31BA7E2A2000E6A59 /* UIDocument+thumbnailURL.h in Headers */,
-				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
-				4C5205C31BA7E2A2000E6A59 /* UIImage+Border.h in Headers */,
+				4C5205A31BA7E2A2000E6A59 /* MADFilename.h in Headers */,
+				4C5205C11BA7E2A2000E6A59 /* MADStackViewController.h in Headers */,
+				4C5205C31BA7E2A2000E6A59 /* MADImage.h in Headers */,
 				4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */,
 				4C5205B41BA7E2A2000E6A59 /* UIAlertController+Constructors.h in Headers */,
-				4C5205B61BA7E2A2000E6A59 /* UIView+Animations.h in Headers */,
 				4C5205BB1BA7E2A2000E6A59 /* NSThread+Extras.h in Headers */,
 				4C5205B21BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.h in Headers */,
 				4C5205AE1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.h in Headers */,
-				4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */,
-				4C5205AA1BA7E2A2000E6A59 /* UIColor+Social.h in Headers */,
+				4C5205C81BA7E2A2000E6A59 /* MADError.h in Headers */,
 				4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */,
 				4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */,
 			);
@@ -359,24 +347,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CC2F5161C8686B200E022AD /* MADLabel.m in Sources */,
 				4C5205BC1BA7E2A2000E6A59 /* NSThread+Extras.m in Sources */,
 				4C5205B51BA7E2A2000E6A59 /* UIAlertController+Constructors.m in Sources */,
-				4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */,
+				4C5205C21BA7E2A2000E6A59 /* MADStackViewController.m in Sources */,
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
-				4C5205A41BA7E2A2000E6A59 /* UIDocument+thumbnailURL.m in Sources */,
-				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
-				4C5205C41BA7E2A2000E6A59 /* UIImage+Border.m in Sources */,
+				4C5205A41BA7E2A2000E6A59 /* MADFilename.m in Sources */,
+				4C5205BD1BA7E2A2000E6A59 /* MADColor.m in Sources */,
+				4C5205C41BA7E2A2000E6A59 /* MADImage.m in Sources */,
 				4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */,
-				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
+				4C5205BA1BA7E2A2000E6A59 /* MADError.m in Sources */,
 				4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */,
-				4C5205B71BA7E2A2000E6A59 /* UIView+Animations.m in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+Constructors.m in Sources */,
 				4C5205AF1BA7E2A2000E6A59 /* UIBarButtonItem+Constructors.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,
 				4C5205B31BA7E2A2000E6A59 /* MFMailComposeViewController+Constructors.m in Sources */,
-				4C5205B11BA7E2A2000E6A59 /* UILabel+Constructors.m in Sources */,
-				4C5205AB1BA7E2A2000E6A59 /* UIColor+Social.m in Sources */,
-				4C5205BE1BA7E2A2000E6A59 /* UIDevice+Hack.m in Sources */,
+				4C5205BE1BA7E2A2000E6A59 /* MADDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

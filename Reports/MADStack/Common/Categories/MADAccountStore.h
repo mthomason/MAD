@@ -1,0 +1,17 @@
+//
+//  ACAccountStore+Social.h
+//  MAD Designer
+//
+//  Created by Michael Thomason on 6/24/15.
+//  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#import <Accounts/Accounts.h>
+#import <Social/Social.h>
+#import <MADCocoaExtensions/MADCocoaExtensions.h>
+
+@interface MADAccountStore : ACAccountStore
+
++ (void)twitterFollow:(NSString *)screenName completion:(void (^)(BOOL success, NSError *error))completion;
+
+@end

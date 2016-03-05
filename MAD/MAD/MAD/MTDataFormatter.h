@@ -10,8 +10,7 @@
 #define MAD_MTDataFormatter_h
 
 #import <Foundation/Foundation.h>
-
-@class RptqQuery, MTQuery, MTDataTable;
+#import <MAD/MTQuery.h>
 
 @interface MTDataFormatter : NSObject
 

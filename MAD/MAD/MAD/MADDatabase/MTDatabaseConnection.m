@@ -18,7 +18,6 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
 #import "MTQuery.h"
-#import "NSString+Extras.h"
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
@@ -26,6 +25,7 @@
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
 NSString * const MADIdentifierDatabaseTDS       = @"TDS";
 NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
+static NSString * const MADStringEmpty = @"";
 
 @interface MTDatabaseConnection ()
 
@@ -83,15 +83,15 @@ NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
     
     if ([[MTDatabaseConnectionMySql identifier] isEqualToString:typeIdentifier]) {
         
-        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: [NSString empty]
-                                                                  database: [NSString empty]
+        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: MADStringEmpty
+                                                                  database: MADStringEmpty
                                                                    andPort: 3306];
         
     } else if ([[MTDatabaseConnectionSqlServer identifier] isEqualToString:typeIdentifier]) {
         
-        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: [NSString empty]
-                                                                        server: [NSString empty]
-                                                                      database: [NSString empty]
+        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: MADStringEmpty
+                                                                        server: MADStringEmpty
+                                                                      database: MADStringEmpty
                                                                        andPort: 1433];
         
     } else if ([[MTDatabaseConnectionSqlite3 identifier] isEqualToString:typeIdentifier]) {

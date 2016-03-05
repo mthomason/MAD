@@ -20,11 +20,10 @@
 #import "MADStoreViewController.h"
 
 #import "MADDocumentInformationTableViewController.h"
-#import "MADDocumentInformationTableViewController+Designer.h"
+#import "MADAboutTableViewController.h"
 
 #import "UINavigationController+Designer.h"
-#import "UITabBarController+Shared.h"
-#import "UITableViewController+Designer.h"
+#import "MADTapGestureRecognizer.h"
 
 #import "MADNavigationBarTitleView.h"
 #import "MADWatermarkView.h"
@@ -33,7 +32,7 @@
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #import "UINavigationController+MADQuery.h"
-#import "UIStoryboard+Designer.h"
+#import "MADDesignerStoryboard.h"
 #import "UIStoryboard+Query.h"
 
 #import "MADNavigationController.h"
@@ -44,6 +43,9 @@ NSString * const MTSegueShowAddDocument                         = @"showAddDocum
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
+
+static NSString * const NewDocument     = @"MADIdentifierOpenDocumentStart";
+static NSString * const StoryboardNewDocument             = @"MADStoryboardNewDocument";
 
 @interface MADDesignerFileExplorerViewController ()
     <UIPopoverControllerDelegate,
@@ -92,12 +94,12 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (UIAlertController *)promotStorageOptionLocal:(void (^)())handlerLocal
                                           cloud:(void (^)())handlerCloud {
-    UIAlertController *alert = [UIAlertController promotStorageOptionLocal:handlerLocal cloud:handlerCloud];
+    UIAlertController *alert = [MADAlertController promotStorageOptionLocal:handlerLocal cloud:handlerCloud];
     return alert;
 }
 
 - (UIAlertController *)promotCloudSignOut:(void (^)(UIAlertAction *action))handler {
-    UIAlertController *alert = [UIAlertController promotCloudSignOut:handler];
+    UIAlertController *alert = [MADAlertController promotCloudSignOut:handler];
     return alert;
 }
 
@@ -207,7 +209,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
         
         MADTabBarController *tabBarController = (MADTabBarController *)segue.destinationViewController;
-        tabBarController.view.tintColor = [UIColor tintColorRed];
+        tabBarController.view.tintColor = [MADColor tintColorRed];
         tabBarController.querySplitViewController.viewControllerDelegate = self;
         tabBarController.designerViewController.delegate = self;
         tabBarController.viewerViewController.viewControllerDelegate = self;
@@ -292,7 +294,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
 
-    MADTabBarController *tabBarController = [MADTabBarController mainTabBarController];
+    MADTabBarController *tabBarController = [MADTabBarController TabBarControllerMain];
     tabBarController.navigationItem.prompt = document.fileURL.lastPathComponent;
     tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -310,7 +312,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         self.splitViewController = splitViewController;
     }
 
-    UIStoryboard *storyboard = [UIStoryboard Designer];
+    UIStoryboard *storyboard = [MADDesignerStoryboard DesignerStoryboard];
     
     MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
     designerViewController.delegate = self;
@@ -328,8 +330,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
     
-    navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
+    navigationController.navigationBar.barTintColor = [MADColor tintColorBlue];
+    navigationController.navigationBar.tintColor = [MADColor tintColorWhite];
 
     [self presentViewController:navigationController animated:YES completion:nil];
 }
@@ -368,7 +370,9 @@ NSString * const MADUtiType                                     = @"com.everyday
 #pragma mark - Actions
 
 - (IBAction)addDocument:(id)sender {
-    UINavigationController *navControl = [UINavigationController NewDocument];
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: StoryboardNewDocument bundle:mainBundle];
+    UINavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:NewDocument];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
     
     MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
@@ -385,7 +389,8 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (IBAction)info:(id)sender {
     UINavigationController *infoViewController = [UINavigationController AppInformation];
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
+    NSArray *defautPassthroughViews = [NSArray arrayWithArray:[self defaultPassthoughViews]];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:defautPassthroughViews];
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
@@ -402,9 +407,10 @@ NSString * const MADUtiType                                     = @"com.everyday
     } else {
         self.aboutViewControllerOnScreen = YES;
         
-        UITableViewController *aboutViewController = [UITableViewController About];
+        UITableViewController *aboutViewController = [MADAboutTableViewController AboutTableViewController];
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
+        NSArray *defautPassthroughViews = [NSArray arrayWithArray:[self defaultPassthoughViews]];
+        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:defautPassthroughViews];
         ppc.backgroundColor = [UIColor clearColor];
         ppc.delegate = self;
         ppc.barButtonItem = sender;
@@ -423,10 +429,11 @@ NSString * const MADUtiType                                     = @"com.everyday
         [metadataItems addObject:metadata];
     }
     
-    MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformation];
+    MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformationTableViewController];
     documentInformation.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
+    NSArray *defautPassthroughViews = [NSArray arrayWithArray:[self defaultPassthoughViews]];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:defautPassthroughViews];
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;

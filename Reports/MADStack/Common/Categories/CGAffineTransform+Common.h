@@ -18,7 +18,7 @@
 CG_INLINE CGAffineTransform CGAffineTransformSwing();
 CG_INLINE CGAffineTransform
 CGAffineTransformSwing() {
-    return CGAffineTransformRotate(CGAffineTransformIdentity, DEGREES_TO_RADIANS(180.0000f));
+    return CGAffineTransformRotate(CGAffineTransformIdentity, (CGFloat)DEGREES_TO_RADIANS(180.0000f));
 }
 
 #endif

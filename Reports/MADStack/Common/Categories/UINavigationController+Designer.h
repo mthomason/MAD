@@ -12,9 +12,6 @@
 
 + (instancetype)AppInformation;
 + (instancetype)Licensing;
-+ (instancetype)NewDocument;
-+ (instancetype)navigationControllerToolbox;
-+ (instancetype)navigationControllerFontPicker;
 + (instancetype)aggregateAdd;
 + (instancetype)elementPicker;
 

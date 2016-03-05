@@ -60,3 +60,18 @@
 - (BOOL)firstTimeViewWillLayoutSubviews {
     return self.viewWillLayoutSubviewsCounter == 1;
 }
+
+- (UITabBarItem *)tabBarItem {
+    UITabBarItem *tabBarItem = super.tabBarItem;
+    if ([self respondsToSelector:@selector(tabBarImage)] && tabBarItem && tabBarItem.image == nil) {
+        UIImage *tabBarImage = [self tabBarImage];
+        if (tabBarImage) {
+            UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            tabBarItem.image = tabBarImageOg;
+            tabBarItem.selectedImage = tabBarImage;
+            tabBarItem.title = self.title;
+        }
+    }
+    return tabBarItem;
+}
+

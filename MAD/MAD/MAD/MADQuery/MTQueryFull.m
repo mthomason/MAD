@@ -73,12 +73,12 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     [super getSqlWithError:error];
     return [self getSqlOnlyActiveFields:YES error:error];
 }
 
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
+- (NSString * _Nullable)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError * _Nullable *)error {
     
     //BOOL limitQueryResults =
     

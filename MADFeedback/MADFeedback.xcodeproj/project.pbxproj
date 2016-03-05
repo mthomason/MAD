@@ -8,19 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		4C3DCC481BCAFABC00ABE231 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC471BCAFABC00ABE231 /* MADCocoaExtensions.framework */; };
-		4C401F401BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F351BAE780300BAE5FC /* Info.plist */; settings = {ASSET_TAGS = (); }; };
-		4C401F411BAE780300BAE5FC /* MADFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F361BAE780300BAE5FC /* MADFeedback.h */; settings = {ASSET_TAGS = (); }; };
-		4C401F421BAE780300BAE5FC /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */; settings = {ASSET_TAGS = (); }; };
-		4C401F431BAE780300BAE5FC /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F441BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */; settings = {ASSET_TAGS = (); }; };
-		4C401F451BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F461BAE780300BAE5FC /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */; settings = {ASSET_TAGS = (); }; };
-		4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */; settings = {ASSET_TAGS = (); }; };
-		4C401F491BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F3F1BAE780300BAE5FC /* Info.plist */; settings = {ASSET_TAGS = (); }; };
-		4C401F4A1BAE78A100BAE5FC /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */; settings = {ASSET_TAGS = (); }; };
+		4C401F401BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F351BAE780300BAE5FC /* Info.plist */; };
+		4C401F411BAE780300BAE5FC /* MADFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F361BAE780300BAE5FC /* MADFeedback.h */; };
+		4C401F421BAE780300BAE5FC /* MADFeedbackFrustration.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F371BAE780300BAE5FC /* MADFeedbackFrustration.h */; };
+		4C401F431BAE780300BAE5FC /* MADFeedbackFrustration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F381BAE780300BAE5FC /* MADFeedbackFrustration.m */; };
+		4C401F441BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F391BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.h */; };
+		4C401F451BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3A1BAE780300BAE5FC /* MADFeedbackUncaughtExceptionHandler.m */; };
+		4C401F461BAE780300BAE5FC /* UIAlertController+Feedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401F3B1BAE780300BAE5FC /* UIAlertController+Feedback.h */; };
+		4C401F471BAE780300BAE5FC /* UIAlertController+Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3C1BAE780300BAE5FC /* UIAlertController+Feedback.m */; };
+		4C401F491BAE780300BAE5FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F3F1BAE780300BAE5FC /* Info.plist */; };
+		4C401F4A1BAE78A100BAE5FC /* FeedbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F3E1BAE780300BAE5FC /* FeedbackTests.m */; };
 		4C8DCFA01B8FCD4D0078563C /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */; };
 		4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCFB31B90C9F50078563C /* UIKit.framework */; };
 		4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC035E61B90FF99001A3CC5 /* MessageUI.framework */; };
+		4CECBE4B1C867F4C0090FB8E /* MADFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CECBE4B1C867F4C0090FB8E /* MADFeedback.framework in Frameworks */,
 				4C3DCC481BCAFABC00ABE231 /* MADCocoaExtensions.framework in Frameworks */,
 				4CC035E71B90FF99001A3CC5 /* MessageUI.framework in Frameworks */,
 				4C8DCFB41B90C9F50078563C /* UIKit.framework in Frameworks */,

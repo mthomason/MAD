@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSURL (Document)
+@interface MADURL : NSURL
 
 - (NSString *)filenameMinusExtention;
 - (NSURL *)uniqueUrl;

@@ -7,6 +7,7 @@
 //
 
 #import "MADToolboxNavigationController.h"
+#import "MADToolboxStoryboard.h"
 
 @interface MADToolboxNavigationController ()
     <UINavigationBarDelegate, UIBarPositioningDelegate>
@@ -23,6 +24,12 @@
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
++ (instancetype)ToolboxNavigationController {
+    UIStoryboard *storyboardToolbox = [MADToolboxStoryboard ToolboxStoryboard];
+    id navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
+    return navigationControllerToolbox;
 }
 
 @end

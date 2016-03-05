@@ -11,8 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MAD/MTDataFormatter.h>
-
-@class MTQuery;
+#import <MAD/MTQuery.h>
 
 @interface MTTableFormatter : MTDataFormatter
 

@@ -7,14 +7,14 @@
 //
 
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
-#import "UIStoryboard+Designer.h"
+#import "MADDesignerStoryboard.h"
 
 static NSString * const MTQueryBuilderAdvancedSchemaViewControllerIdentifier = @"MTQueryBuilderAdvancedSchemaViewControllerIdentifier";
 
 @implementation MADQueryVisualizationSchemaViewController (Designer)
 
 + (instancetype)newAdvancedSchemaViewController {
-    UIStoryboard *designer = [UIStoryboard Designer];
+    UIStoryboard *designer = [MADDesignerStoryboard DesignerStoryboard];
     return [designer instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier];
 }
 

@@ -50,9 +50,10 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
 
 - (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
     NSNumber *rowCounterWrapper = @(row);
-    return @{
-             MTDatabaseNumberOfRowsReadKey : rowCounterWrapper,
-             };
+    NSDictionary *parametersWithNumberOfRows = @{
+                                                 MTDatabaseNumberOfRowsReadKey : rowCounterWrapper,
+                                                };
+    return parametersWithNumberOfRows;
 }
 
 - (void)database:(id)database readRow:(NSUInteger)row {
@@ -63,7 +64,7 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
                                                                      object: database
                                                                    userInfo: parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
-        if ([self rowInterval] < RowIntervalInitalMax) {
+        if (self.rowInterval < RowIntervalInitalMax) {
             if (row > self.rowInterval) {
                 self.rowInterval = (NSUInteger)ceill((long double)self.rowInterval * 1.1);
             }

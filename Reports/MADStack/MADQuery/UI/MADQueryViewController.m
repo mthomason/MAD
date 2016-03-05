@@ -39,11 +39,8 @@
 #import "MADNavigationController.h"
 #import "MADViewControllerSQL.h"
 
-#import "UIViewController+tabBarItem.h"
-
 #import "NSParagraphStyle+CommonStyles.h"
-
-#import "UIViewController+UI.h"
+#import "MADTabBarController.h"
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
@@ -256,7 +253,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                      name: UIDocumentStateChangedNotification
                                                    object: self.document];
     }
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
 }
 
@@ -303,7 +300,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             viewController = segue.destinationViewController;
         }
         viewController.query = self.document.mainQuery;
-        [self disableTabBarItems];
+        [self.tabBarController disableTabBarItems];
         
     } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
         
@@ -389,7 +386,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
     [super dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -405,9 +402,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - MTQueryBuilderPredicateFormatDelegate
 
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
-    UIViewController *weakself = self;
+    
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
     
     [self.document.activeDocumentModel addPredicate:predicate];
@@ -442,13 +439,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 }
 
@@ -457,7 +454,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
 
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 
     [self.document.activeDocumentModel addQueryLink:link];
@@ -478,7 +475,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                        andSortOrder:(MNSSortOrder)sortOrder {
     
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 
     [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];
@@ -491,7 +488,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable {
 
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
@@ -653,7 +650,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
                 //result.accessoryType = UITableViewCellAccessoryDetailButton;
-                result.tintColor = [UIColor edaBlackTwentyFivePercent];
+                result.tintColor = [MADColor edaBlackTwentyFivePercent];
             }
             result.textLabel.numberOfLines = 0;
             break;
@@ -671,7 +668,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             result.textLabel.font = font;
             result.textLabel.backgroundColor = [UIColor whiteColor];
             result.indentationLevel = 1;
-            result.tintColor = [UIColor tintColorBlue];
+            result.tintColor = [MADColor tintColorBlue];
             result.backgroundColor = [UIColor whiteColor];
             break;
         }
@@ -706,7 +703,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
             NSDictionary *attributes = @{ NSFontAttributeName : font,
                                           NSParagraphStyleAttributeName : paragraphStyle };
-            UIColor *color = [UIColor tintColorBlue];
+            UIColor *color = [MADColor tintColorBlue];
             NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption,
                                              NSForegroundColorAttributeName :  color};
             NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
@@ -740,7 +737,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSDictionary *attributes = @{ NSFontAttributeName : font };
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
             NSDictionary *attributesLeft = @{ NSParagraphStyleAttributeName : paragraphStyleLeft };
-            UIColor *color = [UIColor tintColorBlue];
+            UIColor *color = [MADColor tintColorBlue];
             NSDictionary *attributesRight = @{ NSParagraphStyleAttributeName : paragraphStyleLeft, NSFontAttributeName : fontCaption, NSForegroundColorAttributeName :  color };
             NSRange rangeLeft = [messageText rangeOfString:fieldName];
             NSRange rangeRange = [messageText rangeOfString:sortFieldName];
@@ -778,7 +775,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSString *symbol = [predicate symbolForDisplay];
             NSString *messageText = [NSString stringWithFormat:formatString, leftFieldDisplay, symbol, rightFieldDisplay];
             NSDictionary *attributes = @{ NSFontAttributeName : font };
-            UIColor *color = [UIColor tintColorBlue];
+            UIColor *color = [MADColor tintColorBlue];
             NSDictionary *attributesCaption = @{ NSForegroundColorAttributeName :  color };
 
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText
@@ -1113,31 +1110,31 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)addConnection:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addTable:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addLink:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addPredicate:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addGroup:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 #pragma mark - Helper functions

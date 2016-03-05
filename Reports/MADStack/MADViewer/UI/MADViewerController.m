@@ -12,6 +12,8 @@
 
 #import "MADViewerController.h"
 #import <CoreData/CoreData.h>
+#import <MADCocoaExtensions/MADColor.h>
+#import <MADCocoaExtensions/MADError.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTReportFormatter.h>
@@ -38,10 +40,8 @@
 #import "MADNavigationBarTitleView.h"
 
 #import "UIApplication+Extras.h"
-#import "UIPageViewController+Extras.h"
-#import "UIViewController+UI.h"
-#import "UIViewController+tabBarItem.h"
-#import "NSDate+Extras.h"
+#import "MADTabBarController.h"
+#import "MADDate.h"
 #import "MTStoreKitController+Features.h"
 #import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
@@ -214,7 +214,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
-    UIColor *whiteColor = [UIColor tintColorWhite];
+    UIColor *whiteColor = [MADColor tintColorWhite];
     self.navigationController.toolbar.tintColor = whiteColor;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
@@ -473,7 +473,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self setPageingEnabled:YES];
     
-    UIColor *red = [UIColor tintColorRed];
+    UIColor *red = [MADColor tintColorRed];
     self.toolbarSlider.tintColor = red;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
@@ -554,7 +554,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (completed || (!completed && activityType == nil)) {
             weakself.toolbarSlider.enabled = YES;
             weakself.activityExporting = false;
-            [weakself enableTabBarItems];
+            [weakself.tabBarController enableTabBarItems];
         } else {
             if (activityType.length > 0) {  // Long running activity
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
@@ -566,14 +566,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         sharedController.delegate = self.document;
                         __weak MADViewerController *weakself = self;
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
-                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorRed];
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColor tintColorAnalogous4];
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColor tintColorRed];
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
-                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColor tintColorWhite];
                                 weakself.toolbarSlider.enabled = YES;
                                 weakself.activityExporting = false;
-                                [weakself enableTabBarItems];
+                                [weakself.tabBarController enableTabBarItems];
                             }];
                         }
                     }
@@ -583,7 +583,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             } else {    // Cancel button
                 weakself.toolbarSlider.enabled = YES;
                 weakself.activityExporting = false;
-                [weakself enableTabBarItems];
+                [weakself.tabBarController enableTabBarItems];
             }
         }
     };
@@ -595,9 +595,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     __weak MADViewerController *weakSelf = self;
     [self presentViewController:activityViewController animated:YES completion:^{
-        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [MADColor tintColorAnalogous4];
     }];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (IBAction)reload {
@@ -640,9 +640,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             } else {
                 
                 __weak MADViewerController *weakself2 = strongself;
-                [NSError presentError: error
-                     onViewController: strongself
-                           completion:^(BOOL success) {
+                [MADError presentError: error
+                      onViewController: strongself
+                            completion: ^(BOOL success) {
                                __strong MADViewerController *strongself2 = weakself2;
                                [[MTKeyChain sharedObject] deleteKey: self.document.mainDatabase.databaseConnection.connectionString
                                                 usingViewController: strongself2];
@@ -966,7 +966,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.labelStatus updateStatusWithTime:noCache];
         return;
     } else {
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
+        MTPair *dateStringAndInterval = [MADDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
         [self.labelStatus updateStatusWithTime:dateStringAndInterval.former];
         resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
     }
@@ -979,7 +979,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.timerLabelTimeSinceRefreh = nil;
     }
     
-    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [NSDate timeIntervalForResolution:resolution]
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDate timeIntervalForResolution:resolution]
                                                   target: self selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil
                                                  repeats: NO];
     self.timerLabelTimeSinceRefreh = t;
@@ -1040,7 +1040,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                         ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                             weakself2.toolbarSlider.enabled = YES;
-                            [weakself2 enableTabBarItems];
+                            [weakself2.tabBarController enableTabBarItems];
                         };
                         [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
                                                  completionHandler:completionHandler];
@@ -1058,7 +1058,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
 }
 
 - (UIViewController *)activeViewController {
@@ -1124,6 +1124,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (NSUInteger)currentPageNumber { return self.currentPageIndex + 1; }
+
+- (void)setPageingEnabled:(BOOL)enabled {
+    for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+        gestureRecognizer.enabled = enabled;
+    }
+}
 
 #pragma mark - Custom
 

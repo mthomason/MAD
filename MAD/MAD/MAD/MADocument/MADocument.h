@@ -14,10 +14,13 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIManagedDocument.h>
 #import <UIKit/UIPrintInteractionController.h>
-#import <MAD/MTReportFormatterDataSource.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
+#import <MAD/MTReportFormatter.h>
+//#import <<#header#>>
+
+//Do not change these enum values, as they are used in core data.
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
@@ -33,7 +36,7 @@ typedef NS_ENUM(NSUInteger, MTQuerySections) {
 extern NSString * const MADMimeType;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
-@class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
+@class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
         NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase, UIPrintPageRenderer, MTPaper;
 
@@ -96,6 +99,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (void)removeGuts; //Cleans any cache that may exist.
 
 - (NSString *)mimetype;
+
++ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay;
 
 @end
 

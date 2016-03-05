@@ -7,7 +7,7 @@
 //
 
 #import "MADDesignerStatusLabel.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 const CGFloat MADViewDetailSmallCornerRadius        =  3.0000f;
 const CGFloat MADViewDetailSmallAnimationDuration   =  0.3333f;
@@ -27,7 +27,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
     self = [super initWithFrame:frame];
     if (self) {
         self.layer.cornerRadius = MADViewDetailSmallCornerRadius;
-        self.backgroundColor = [UIColor edaBlackSeventyFivePercent];
+        self.backgroundColor = [MADColor edaBlackSeventyFivePercent];
         self.alpha = MADAlphaHidden;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, frame.size.width, frame.size.height)];
         label.textColor = [UIColor lightTextColor];

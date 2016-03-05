@@ -10,11 +10,14 @@
 #import "UIStoryboard+QueryVisualization.h"
 
 static NSString * const identifier = @"MADStoryboardIDQueryVisulization";
+static NSString * const QueryVisualization      = @"MADQueryVisualization";
 
 @implementation MADQueryVisualizationViewController (Designer)
 
+
 + (instancetype) QueryVisualizationViewController {
-    return [[UIStoryboard QueryVisualization] instantiateViewControllerWithIdentifier:identifier];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName: QueryVisualization bundle: NULL];
+    return [sb instantiateViewControllerWithIdentifier: identifier];
 }
 
 @end

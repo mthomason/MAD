@@ -11,9 +11,11 @@
 
 @implementation UIColor (PaperPatterns)
 
-+ (instancetype)paperHomemade {
-    UIImage *image = [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
-    return [UIColor colorWithPatternImage:image];
++ (instancetype)colorPaperHomemade {
+    NSString * const imageName = @"UIImagePatternHomemadePaper";
+    UIImage *image = [UIImage imageNamed: imageName];
+    UIColor *color = [UIColor colorWithPatternImage:image];
+    return color;
 }
 /*
 + (instancetype)paperAqua {

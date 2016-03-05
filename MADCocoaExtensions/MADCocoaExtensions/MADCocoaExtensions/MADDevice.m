@@ -13,7 +13,7 @@ const int MTModernOSMajorVersion = 8;
 @implementation MADDevice
 
 + (int)deviceSystemMajorVersion {
-    NSArray *versionComponents = [[self currentDevice].systemVersion componentsSeparatedByString:@"."];
+    NSArray *versionComponents = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
     NSString *versionComponentMajor = versionComponents[0];
     return [versionComponentMajor intValue];
 }
@@ -22,7 +22,7 @@ const int MTModernOSMajorVersion = 8;
     static BOOL _isPad;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _isPad = [[self currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+        _isPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
     });
     return _isPad;
 }

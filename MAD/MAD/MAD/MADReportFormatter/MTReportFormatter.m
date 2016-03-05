@@ -40,6 +40,7 @@
 #import "NSData+Comparson.h"
 
 #import "NSDictionary+MADReportObjectRepresentation.h"
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 NSString * const MTNullIdentifier = @"(null)";
 

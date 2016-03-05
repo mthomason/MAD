@@ -10,9 +10,10 @@
 #define Reports_RptqDocumentSection_Extras_h
 
 #import <UIKit/UIKit.h>
-#import <MAD/MADDocumentSectionType.h>
 #import <MADDataStructures/MADDataStructures.h>
+#import <MAD/MADocument.h>
 #import "RptqDocumentSection.h"
+#import "NSDictionary+MADReportObjectRepresentation.h"
 
 typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,

@@ -11,7 +11,6 @@
 #endif
 
 #import "MTTableFormatter.h"
-#import "MTQuery.h"
 
 @implementation MTTableFormatter
 

@@ -20,28 +20,28 @@
 
 @interface MTGraph : MTObject <MTProtocolLog>
 
-- (instancetype)init;
-- (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nullable)init;
+- (instancetype _Nullable)initWithVertices:(NSSet * _Nullable)vertices NS_DESIGNATED_INITIALIZER;
 
-- (MTVertex *)addVertexWithObject:(id)object;
-- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id)object andWeight:(NSNumber *)weight;
+- (MTVertex * _Null_unspecified)addVertexWithObject:(id _Nullable)object;
+- (MTEdge * _Null_unspecified)addEdgeWithOrigin:(MTVertex * _Null_unspecified)origin destination:(MTVertex * _Null_unspecified)destination object:(id _Null_unspecified)object andWeight:(NSNumber * _Null_unspecified)weight;
 
-- (void)removeVertex:(MTVertex *)vertex;
-- (void)removeEdge:(MTEdge *)edge;
+- (void)removeVertex:(MTVertex * _Null_unspecified)vertex;
+- (void)removeEdge:(MTEdge * _Null_unspecified)edge;
 
 - (NSUInteger)numberOfVertices;
 - (NSUInteger)numberOfEdges;
 
-- (NSArray *)allVertices;
-- (NSSet *)allEdges;
+- (NSArray * _Null_unspecified)allVertices;
+- (nonnull NSSet *)allEdges;
 
-- (MTVertex *)vertexForObject:(id)object;
+- (MTVertex * _Null_unspecified)vertexForObject:(id _Null_unspecified)object;
 
-- (NSArray *)breadthFirstSearch:(MTVertex *)root;
+- (NSArray * _Null_unspecified)breadthFirstSearch:(MTVertex * _Null_unspecified)root;
 
-- (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
+- (MTLinkedList * _Null_unspecified)depthFirstSearch:(MTVertex * _Null_unspecified)root;
 
-- (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
+- (MTLinkedList * _Null_unspecified)topologicalSortWithError:(NSError * _Nullable * _Nullable)anError isDirectedAcyclicGraph:(BOOL * _Nullable)isDirectedAcyclicGraph;
 
 @end
 

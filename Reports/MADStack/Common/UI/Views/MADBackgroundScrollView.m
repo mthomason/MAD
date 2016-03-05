@@ -7,8 +7,9 @@
 //
 
 #import "MADBackgroundScrollView.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import "MADContainerView.h"
 
 static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
 
@@ -38,7 +39,7 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
         self.delaysContentTouches = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
         
-        UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
+        MADContainerView *container = [[MADContainerView alloc] initWithFrame:CGRectZero];
         container.userInteractionEnabled = YES;
         container.translatesAutoresizingMaskIntoConstraints = NO;
         container.backgroundColor = [UIColor clearColor];
@@ -71,7 +72,7 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
         
         [self addConstraints:constraints];
         [self addGestureRecognizer:tap];
-        self.container = container;
+        self.backgroundContainer = container;
         self.doubleTapToZoom = tap;
         
     }
@@ -90,7 +91,7 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
         }
         [self setZoomScale:zoomScale animated:YES];
         [self.delegate scrollViewDidEndZooming: self
-                                      withView: self.container
+                                      withView: self.backgroundContainer
                                        atScale: zoomScale];
     }
 }

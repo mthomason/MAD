@@ -14,11 +14,14 @@
 #import "MADTableViewCellBase.h"
 
 #import "UIApplication+Extras.h"
-#import "UIButton+FollowTwitter.h"
-#import "ACAccountStore+Social.h"
+#import "MADButtonTwitter.h"
+#import "MADAccountStore.h"
 
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import "UIStoryboard+About.h"
+
+static NSString * const About = @"MADIdentifierAboutViewController";
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
@@ -30,6 +33,13 @@
 @implementation MADAboutTableViewController
 
 #pragma mark - Exit
+
++ (instancetype)AboutTableViewController {
+    UIStoryboard *storyboard = [UIStoryboard About];
+    MADAboutTableViewController *about = [storyboard instantiateViewControllerWithIdentifier:About];
+    about.modalPresentationStyle = UIModalPresentationPopover;
+    return about;
+}
 
 - (IBAction)unwindToAbout:(UIStoryboardSegue *)action { }
 
@@ -107,9 +117,9 @@
                         error:(NSError*)error {
 
     __weak MADAboutTableViewController *weakself = self;
-    [NSError presentError: error
-         onViewController: self
-               completion:^(BOOL success) {
+    [MADError presentError: error
+          onViewController: self
+                completion: ^(BOOL success) {
         if (success) {
             [weakself dismissViewControllerAnimated:YES completion:nil];
         }
@@ -140,7 +150,7 @@
 
         case 0:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.label.textColor = [UIColor edaBlueDark];
+            cell.label.textColor = [MADColor edaBlueDark];
             cell.label.text = @"MAD Designer";
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;
@@ -169,7 +179,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
-            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps) size:small];
+            UIButton *b = [MADButtonTwitter FolllowTwitterWithTarget:self action:@selector(followEverydayApps) size:small];
             cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
@@ -200,7 +210,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
-            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followMichael) size:small];
+            UIButton *b = [MADButtonTwitter FolllowTwitterWithTarget:self action:@selector(followMichael) size:small];
             cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
@@ -224,18 +234,18 @@
             
         }];
     }
-    [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
+    [MADAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
-            alert = [UIAlertController error:error];
+            alert = [MADAlertController error:error];
         } else if (success) {
             NSString *title = NSLocalizedString(@"Success", @"Success");
             NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
                                                         @"You are now Twitter following user %@.");
             NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [UIAlertController errorDisplayErrorWithTitle: title
-                                                          message: message
-                                                    andCompletion: ^(UIAlertAction *action) { }];
+            alert = [MADAlertController errorDisplayErrorWithTitle: title
+                                                           message: message
+                                                     andCompletion: ^(UIAlertAction *action) { }];
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];

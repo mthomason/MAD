@@ -11,11 +11,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIBarButtonItem (Constructors)
-+ (instancetype)buttonEdit:(id)target action:(SEL)action NS_RETURNS_RETAINED;
-+ (instancetype)buttonDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED;
-+ (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED;
-+ (instancetype)ActivityIndicator NS_RETURNS_RETAINED;
+@interface MADBarButtonItemCustom : UIBarButtonItem
+
++ (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action NS_RETURNS_RETAINED;
++ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED;
++ (instancetype)newBarButtonItemEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED;
++ (instancetype)newBarButtonItemActivityIndicator NS_RETURNS_RETAINED;
 
 @end
 

@@ -12,7 +12,7 @@
 
 #import "MTReportViewerReportPageView.h"
 #import <MADDataStructures/MTPair.h>
-#import "NSDate+Extras.h"
+#import "MADDate.h"
 #import "MADTextPosition.h"
 #import <MAD/MTReportViewerPrintPageRenderer.h>
 
@@ -190,11 +190,11 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         self.timeSinceRefrehLabel.text = noCache;
         
     } else {
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:lastCacheDate];
+        MTPair *dateStringAndInterval = [MADDate stringWithTimeIntervalSinceDate:lastCacheDate];
         self.timeSinceRefrehLabel.text = dateStringAndInterval.former;
         MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
         
-        NSTimeInterval updateLabelInSeconds = [NSDate timeIntervalForResolution:resolution];
+        NSTimeInterval updateLabelInSeconds = [MADDate timeIntervalForResolution:resolution];
         
         if (self.timerLabelTimeSinceRefreh != nil) {
             if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {

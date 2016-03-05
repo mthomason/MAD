@@ -12,7 +12,7 @@
 
 #import "MADToolboxStyleViewController.h"
 #import "MADControlState.h"
-#import "UIViewController+UI.h"
+#import "MADTabBarController.h"
 
 static NSString * const MADIdentifierStoryboardSeguePushFontPicker = @"MADIdentifierStoryboardSeguePushFontPicker";
 
@@ -578,7 +578,7 @@ static const CGFloat BorderWidth = 1.0000f;
             
             [self.segmentedControlHorizontalAlignment setSelectedSegmentIndex:horizontalAlignmentHolder.integerValue];
             [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:verticalAlignmentHolder.integerValue];
-                        
+            
             NSNumber *displayNumber = numberOfMarginTop == 1 ? marginTopHolder : nil;
             NSAttributedString *labelMarginTopAttributedText = [MADToolboxStrings newMarginTopForValue: displayNumber];
             self.labelMarginTop.attributedText = labelMarginTopAttributedText;
@@ -671,7 +671,7 @@ static const CGFloat BorderWidth = 1.0000f;
             /*
              if (controlStateHorizontalAlignment == MTControlStateAmbiguous) {
              [self.segmentedControlHorizontalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
-             UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
+             UIColor *tentColor = [[MADColor tintColor] colorWithAlphaComponent:0.5000f];
              self.segmentedControlHorizontalAlignment.backgroundColor = tentColor;
              } else {
              //[self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -681,7 +681,7 @@ static const CGFloat BorderWidth = 1.0000f;
              //UIImage *imageButtonSelected = [UIImage imageNamed:@"UIButtonSelected"];
              [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
              //[self.segmentedControlVerticalAlignment setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-             UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
+             UIColor *tentColor = [[MADColor tintColor] colorWithAlphaComponent:0.5000f];
              self.segmentedControlVerticalAlignment.backgroundColor = tentColor;
              } else {
              //[self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];

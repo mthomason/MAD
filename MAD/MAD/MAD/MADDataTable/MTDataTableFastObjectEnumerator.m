@@ -51,9 +51,8 @@
         if (!empty) {
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
-            const char *queryStringConstChar = [sql UTF8String];
-            char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
-            sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL);
+            char *queryString = sqlite3_mprintf(sql.UTF8String);
+            sqlite3_prepare_v2(self.databaseForQuery.databaseHandle, queryString, -1, &_statement, NULL);
             sqlite3_free(queryString);
         }
         
@@ -77,7 +76,7 @@ void sqliteCallback(void *foo, const char* statement) {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     if (!self.empty) {
         while (sqlite3_step(_statement) == SQLITE_ROW) {
-            NSDictionary *newObject = [NSDictionary dictionaryWithDictionary:[self currentObject]];
+            NSDictionary *newObject = [NSDictionary dictionaryWithDictionary: self.currentObject];
             [results addObject:newObject];
         }
     }
@@ -110,7 +109,7 @@ void sqliteCallback(void *foo, const char* statement) {
     if (state->state != 2) {
         state->itemsPtr = stackbuf;
         
-        [[self fastEnumerationObjects] removeAllObjects];
+        [self.fastEnumerationObjects removeAllObjects];
         
         for (i = 0; i<len; i++) {
             @autoreleasepool {
@@ -119,7 +118,7 @@ void sqliteCallback(void *foo, const char* statement) {
                     id co = [self currentObject];
                     if (co) {
                         stackbuf[i] = co;
-                        [[self fastEnumerationObjects] addObject:co];
+                        [self.fastEnumerationObjects addObject:co];
                     } else {
                         stackbuf[i] = nil;
                     }
@@ -141,14 +140,15 @@ void sqliteCallback(void *foo, const char* statement) {
 }
 
 - (id)currentObject {
-    NSMutableDictionary *currentObject = [self singleColumnNoWrapper] ? nil : [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
+    NSMutableDictionary *currentObject = self.singleColumnNoWrapper ?
+                                            nil : [[NSMutableDictionary alloc] initWithCapacity:self.columns.count];
     int columnCounter = 0;
     id columnValue;
-    for (id key in [self columnKeys]) {
+    for (id key in self.columnKeys) {
         
         @autoreleasepool {
             
-            MTDataColumn *dataColumn = [self columns][key];
+            MTDataColumn *dataColumn = self.columns[key];
             
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
             if (sqlite3DataType == SQLITE_NULL) {
@@ -161,7 +161,7 @@ void sqliteCallback(void *foo, const char* statement) {
                 columnValue = [NSNull null];
             }
             if (columnValue != nil && self.singleColumnNoWrapper == NO) {
-                [currentObject setValue:columnValue forKey:[dataColumn identifier]];
+                [currentObject setValue:columnValue forKey:dataColumn.identifier];
             }
             columnCounter++;
 

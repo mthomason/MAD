@@ -41,7 +41,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     NSString *result;
     if ([self.columnKeys count] > 0) {
         NSMutableString *sql = [NSMutableString stringWithString:@"SELECT "];

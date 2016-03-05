@@ -81,12 +81,12 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
         MADFeatures *features = [[MADFeatures alloc] init];
         NSArray *products = [features availableFeaturesProductIDs];
         
-        UIBarButtonItem *barButtonItem = [UIBarButtonItem ActivityIndicator];
+        UIBarButtonItem *barButtonItem = [MADBarButtonItemCustom newBarButtonItemActivityIndicator];
         [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 
         [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers:products completion:^(BOOL success, NSError *error) {
             if (!success && error) {
-                UIAlertController *alert = [UIAlertController error:error];
+                UIAlertController *alert = [MADAlertController error:error];
                 [self presentViewController:alert animated:YES completion:NULL];
             }
             [self.navigationItem setLeftBarButtonItem:nil animated:YES];
@@ -152,7 +152,7 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
         NSString *title = NSLocalizedString(@"You Got It", @"You Got It");
         NSString *message = NSLocalizedString(@"Access to this feature is a free gift for charter members. That's you! How rare is that?",
                                               @"Access to this feature is a free gift for charter members. That's you! How rare is that?");
-        UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle: title
+        UIAlertController *alert = [MADAlertController errorDisplayErrorWithTitle: title
                                               message: message
                                         andCompletion: ^(UIAlertAction *action) { }];
         [self presentViewController:alert animated:YES completion:NULL];
@@ -162,14 +162,14 @@ static NSString * const reuseIdentifier = @"MADProdcutFeatureDefault";
             NSString *title = NSLocalizedString(@"It's Yours", @"It's Yours");
             NSString *message = NSLocalizedString(@"You already got this feature. Make sure to collect them all.",
                                                   @"You already got this feature. Make sure to collect them all.");
-            UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle: title
+            UIAlertController *alert = [MADAlertController errorDisplayErrorWithTitle: title
                                                                              message: message
                                                                        andCompletion: ^(UIAlertAction *action) { }];
             [self presentViewController:alert animated:YES completion:NULL];
         } else {
             [[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
             [[MTStoreKitController sharedObject] purchaseProduct:product completion:^(BOOL success, NSError *error) {
-                UIAlertController *alert = success ? [UIAlertController nofityTransactionComplete] : [UIAlertController error:error];
+                UIAlertController *alert = success ? [MADAlertController nofityTransactionComplete] : [MADAlertController error:error];
                 [self presentViewController: alert animated: YES completion: nil];
                 [self.collectionView reloadData];
             }];

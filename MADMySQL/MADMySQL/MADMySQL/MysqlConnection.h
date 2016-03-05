@@ -19,13 +19,13 @@
     MysqlServer *server;
 }
 
-@property(readonly) MYSQL *connection;
+@property(readonly) MYSQL * _Null_unspecified connection;
 @property(readonly) BOOL transactionsEnabled;
-@property(readonly) MysqlServer *server;
+@property(readonly) MysqlServer * _Null_unspecified server;
 
-+ (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
-+ (MysqlConnection *)connectToServer:(MysqlServer *)server;
-+ (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError **)error;
++ (MysqlConnection * _Nullable)connectToServers:(NSArray * _Null_unspecified)arrayOfServers;
++ (MysqlConnection * _Null_unspecified)connectToServer:(MysqlServer * _Null_unspecified)server;
++ (MysqlConnection * _Null_unspecified)connectToServer:(MysqlServer * _Null_unspecified)server error:(NSError * _Nullable * _Nullable)error;
 
 - (void)enableTransactions;
 - (void)disableTransactions;

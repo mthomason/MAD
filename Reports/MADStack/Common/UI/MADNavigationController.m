@@ -8,7 +8,7 @@
 
 #import "MADNavigationController.h"
 #import "MADTransparentPresentationController.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 @implementation MADNavigationController
 
@@ -36,8 +36,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.toolbar.tintColor = [UIColor tintColorWhite];
-    self.toolbar.barTintColor = [UIColor tintColorBlue];
+    self.toolbar.tintColor = [MADColor tintColorWhite];
+    self.toolbar.barTintColor = [MADColor tintColorBlue];
     self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
     self.navigationBar.translucent = YES;

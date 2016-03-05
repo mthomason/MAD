@@ -7,7 +7,7 @@
 //
 
 #import "MADFilename.h"
-#import "UIDevice+Hack.h"
+#import "MADDevice.h"
 #import <MADFoundation/NSFileManager+Common.h>
 
 NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
@@ -15,12 +15,12 @@ NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 @implementation MADFilename
 
 + (instancetype)newFilenameId:(NSUInteger)tag {
-    id filenameId = [[self alloc] initWithFormat:@"%lu", (unsigned long)tag];
+    id filenameId = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)tag];
     return filenameId;
 }
 
 + (instancetype)newFilenameForMadUrl:(NSURL *)madUrl {
-    id filename = [[self alloc] initWithString:madUrl.lastPathComponent.stringByDeletingPathExtension];
+    id filename = [[NSString alloc] initWithString:madUrl.lastPathComponent.stringByDeletingPathExtension];
     return filename;
 }
 

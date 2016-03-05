@@ -3,7 +3,6 @@
 #define MAD_MTVerificationController_h
 
 #import <StoreKit/StoreKit.h>
-#import "NSData+Base64.h"
 
 #define IS_IOS6_AWARE (__IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_1)
 

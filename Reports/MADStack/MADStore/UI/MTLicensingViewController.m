@@ -14,7 +14,7 @@
 #import "MTVerificationController.h"
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MADError.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
@@ -68,13 +68,13 @@
     
     [self enableUserInterface];
     if ([UIApplication isMADDesigner]) {
-        [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+        [self viewBuyButtonsBackground].backgroundColor = [MADColor tintColorBlue];
         [self.buttonBuyNowDesignerOneYear setEnabled:success];
         [self.buttonBuyNowDesignerOneYear setHidden:NO];
         [self.buttonBuyNowDesignerOneMonth setEnabled:success];
         [self.buttonBuyNowDesignerOneMonth setHidden:NO];
     } else if ([UIApplication isMADViewer]) {
-        [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+        [self viewBuyButtonsBackground].backgroundColor = [MADColor tintColorBlue];
         [self.buttonBuyNowViewerOneYear setEnabled:success];
         [self.buttonBuyNowViewerOneYear setHidden:NO];
         [self.buttonBuyNowViewerOneMonth setEnabled:success];
@@ -125,13 +125,13 @@
         
         BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
         if ([UIApplication isMADDesigner]) {
-            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [MADColor tintColorBlue] : [MADColor tintColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:allowPurchase];
             [self.buttonBuyNowDesignerOneYear setHidden:!allowPurchase];
             [self.buttonBuyNowDesignerOneMonth setEnabled:allowPurchase];
             [self.buttonBuyNowDesignerOneMonth setHidden:!allowPurchase];
         } else if ([UIApplication isMADViewer]) {
-            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [MADColor tintColorBlue] : [MADColor tintColorBlue];
             [self.buttonBuyNowViewerOneMonth setEnabled:allowPurchase];
             [self.buttonBuyNowViewerOneMonth setHidden:!allowPurchase];
             [self.buttonBuyNowViewerOneYear setEnabled:allowPurchase];
@@ -148,11 +148,11 @@
         }];
         
         if ([UIApplication isMADDesigner]) {
-            [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = [MADColor tintColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:NO];
             [self.buttonBuyNowDesignerOneMonth setEnabled:NO];
         } else if ([UIApplication isMADViewer]) {
-            [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = [MADColor tintColorBlue];
             [self.buttonBuyNowViewerOneYear setEnabled:NO];
             [self.buttonBuyNowViewerOneMonth setEnabled:NO];
         }
@@ -198,7 +198,7 @@
         [self enableUserInterface];
         [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
         if (success == NO) {
-            [NSError presentError: error onViewController: self completion: NULL];
+            [MADError presentError: error onViewController: self completion: NULL];
         }
     };
     [self setStandardCompletion:completion];

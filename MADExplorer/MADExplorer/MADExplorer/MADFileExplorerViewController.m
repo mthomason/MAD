@@ -12,6 +12,10 @@
 #import "MTCollectionViewCellDocument.h"
 #import "MADFileLocationManager.h"
 #import "MADOpenDocumentManager.h"
+//#import <MAD/MADocument.h>
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/MADDevice.h>
+#import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";
@@ -175,7 +179,11 @@ static NSString * const Downloading                             = @"Downloading"
     [cell.labelTitleSub layoutIfNeeded];
 
     //dispatch_async(self.queueCell, ^{
-        NSURL *thumbnailUrl = [UIDocument thumbnailUrlForMadUrl:metadata.URL];
+    
+// FIXME: Get thumbnails working correctly
+    
+    NSURL *thumbnailUrl = [MADFileExplorerViewController thumbnailUrlForHandle: metadata.URL.lastPathComponent.stringByDeletingPathExtension
+                                           andRetinaDisplay: [MADDevice isRetnaDisplay]];
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
     //    dispatch_sync(dispatch_get_main_queue(), ^(void) {
             cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];
@@ -193,6 +201,17 @@ static NSString * const Downloading                             = @"Downloading"
     
     return cell;
 }
+
++ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
+    NSString *name = [MADDevice isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
+    
+    NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
+    
+    NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
+    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
+}
+
 
 #pragma mark - UISearchBarDelegate
 
@@ -230,7 +249,7 @@ static NSString * const Downloading                             = @"Downloading"
 
 - (NSNumberFormatter *)subtitleNumberFormatter {
     if (!_subtitleNumberFormatter) {
-        _subtitleNumberFormatter = [NSNumberFormatter twoDecimalPlaces];
+        _subtitleNumberFormatter = [MADNumberFormatter twoDecimalPlaces];
     }
     return _subtitleNumberFormatter;
 }

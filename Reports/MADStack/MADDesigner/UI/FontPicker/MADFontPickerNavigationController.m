@@ -8,6 +8,9 @@
 
 #import "MADFontPickerNavigationController.h"
 #import "MADFontSelectorViewController.h"
+#import "MADToolboxStoryboard.h"
+
+static NSString * const FontPicker      = @"MADIdentifierStoryboardFontPicker";
 
 @implementation MADFontPickerNavigationController
 
@@ -26,6 +29,13 @@
     [super viewDidAppear:animated];
     [self.visibleViewController.view setNeedsLayout];
 }
+
++ (instancetype)FontPickerNavigationController {
+    UIStoryboard *storyboard = [MADToolboxStoryboard ToolboxStoryboard];
+    return [storyboard instantiateViewControllerWithIdentifier:FontPicker];
+}
+
+
 /*
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
     [super pushViewController:viewController animated:animated];

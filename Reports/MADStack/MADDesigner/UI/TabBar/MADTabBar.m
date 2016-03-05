@@ -30,7 +30,7 @@
 }
 
 - (void)setup {
-    self.tintColor = [UIColor tintColorRed];
+    self.tintColor = [MADColor tintColorRed];
 }
 
 @end

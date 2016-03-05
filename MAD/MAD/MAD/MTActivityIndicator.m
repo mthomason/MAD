@@ -7,7 +7,7 @@
 //
 
 #import "MTActivityIndicator.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 @implementation MTActivityIndicator
 
@@ -25,7 +25,7 @@
         UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
                                            UIViewAutoresizingFlexibleWidth;
         self.layer.cornerRadius = 5.0000f;
-        UIColor *bgColor = [UIColor edaBlueLightBackground];
+        UIColor *bgColor = [MADColor edaBlueLightBackground];
         self.backgroundColor = bgColor;
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         

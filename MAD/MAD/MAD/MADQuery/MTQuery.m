@@ -56,11 +56,11 @@
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
-NSString * const MTQueryKeyType             = @"MTQueryKeyType";
-NSString * const MTQueryKeyObject           = @"MTQueryKeyObject";
-NSString * const MTQueryKeyPredicateColumn  = @"c";
-NSString * const MTQueryKeyPredicateValue   = @"v";
-NSString * const MADIdentifierROWID         = @"ROWID";
+NSString * const _Nonnull MTQueryKeyType             = @"MTQueryKeyType";
+NSString * const _Nonnull MTQueryKeyObject           = @"MTQueryKeyObject";
+NSString * const _Nonnull MTQueryKeyPredicateColumn  = @"c";
+NSString * const _Nonnull MTQueryKeyPredicateValue   = @"v";
+NSString * const _Nonnull MADIdentifierROWID         = @"ROWID";
 
 @interface MTQuery ()
 
@@ -235,13 +235,13 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     }
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString * _Nullable)getSqlWithError:(NSError * _Nullable *)error {
     [self.fields removeAllObjects];
     [self.fieldKeys removeAllObjects];
     return @"";
 }
 
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
+- (NSString * _Nullable)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError * _Nullable *)error {
     return @"";
 }
 
@@ -262,7 +262,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 #pragma mark - Helper functions for the query cache
 // FIXME: These are not yet useable for anything but Sqlite3.
 
-- (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
+- (NSString * _Nonnull)whereClauseWithParameters:(NSArray * _Nullable)whereClause {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     if ([whereClause count] > 0) {
         NSUInteger counter = 0, counterBinings = 0;
@@ -291,7 +291,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return sql;
 }
 
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
+- (NSString * _Nonnull)orderByClauseWithSortDescriptors:(NSArray * _Nullable)sortDescriptors {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     if ([sortDescriptors count] > 0) {
         NSUInteger sortCounter = 0;
@@ -329,7 +329,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MTDataColumn *)[self columns][columnHandle] columnType] unsignedIntegerValue];
+    return [[(MTDataColumn *)self.columns[columnHandle] columnType] unsignedIntegerValue];
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {

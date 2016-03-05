@@ -11,16 +11,16 @@
 
 #import <MessageUI/MessageUI.h>
 
-@interface MFMailComposeViewController (Constructors)
+@interface MADMailComposeViewController : MFMailComposeViewController
 
-+ (instancetype)title:(NSString *)title
-                 body:(NSString *)body
-   userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED;
++ (instancetype)initWithTitle:(NSString *)title
+                         body:(NSString *)body
+           userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED;
 
-+ (instancetype)body:(NSString *)body
-          attachment:(NSURL *)attachmentURL
-            mimeType:(NSString *)mimeType
-  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED;
++ (instancetype)initWithBody:(NSString *)body
+                  attachment:(NSURL *)attachmentURL
+                    mimeType:(NSString *)mimeType
+          userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED;
 
 @end
 

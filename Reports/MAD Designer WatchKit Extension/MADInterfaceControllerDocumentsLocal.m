@@ -8,7 +8,7 @@
 
 #import "MADInterfaceControllerDocumentsLocal.h"
 #import "MADRowTypeDocumentsLocal.h"
-#import "UIColor+EverydayApps.h"
+#import "MADColor.h"
 #import "NSFileManager+Common.h"
 
 @interface MADInterfaceControllerDocumentsLocal()

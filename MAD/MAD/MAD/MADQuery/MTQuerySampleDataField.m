@@ -30,26 +30,27 @@
 
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]], @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
         
-        RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
+        RptqUserCredentals *userCredentals = ((RptqDatabaseSchemaField *)object).inTable.inDatabase.ownedByUser;
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         db.delegate = self;
-        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[[[object objectID] URIRepresentation] absoluteString]];
+        
+        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[object objectID].URIRepresentation.absoluteString];
         self.datatable = dataTable;
-        [self setDatabase:db];
-        [self setQueryObject:object];
+        self.database = db;
+        self.queryObject = object;
         
     }
     return self;
 }
 
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString * _Nonnull)getSqlWithError:(NSError * _Nullable * _Nullable)error {
     [super getSqlWithError:error];
     NSString *key = [self.database fieldAliasForField: ((RptqDatabaseSchemaField *)self.queryObject).name
                                          andTableName: ((RptqDatabaseSchemaField *)self.queryObject).inTable.name];

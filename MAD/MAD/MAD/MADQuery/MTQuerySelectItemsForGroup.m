@@ -51,7 +51,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
 
     NSMutableString *sql = [NSMutableString stringWithString:@"SELECT "];
     NSUInteger columnCounter = 0;

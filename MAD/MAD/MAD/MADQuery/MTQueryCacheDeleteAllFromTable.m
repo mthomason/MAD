@@ -48,7 +48,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     return [NSString stringWithFormat:@"DELETE FROM %@", [self tableName]];
 }
 

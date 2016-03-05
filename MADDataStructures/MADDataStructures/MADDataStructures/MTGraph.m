@@ -198,7 +198,7 @@
 
 
 
-- (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
+- (MTLinkedList *)topologicalSortWithError:(NSError * _Nullable *)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
     
     NSNumber *counter = @(0);
     

@@ -16,9 +16,9 @@
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {
-        return [UIColor disabledColor];
+        return [MADColor disabledColor];
     } else if (selected && !visible) {
-        return [UIColor disabledColor];
+        return [MADColor disabledColor];
     } else if (selected && visible) {
         return [UIColor whiteColor];
     } else {
@@ -73,7 +73,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         self.allowsSelection = YES;
         self.allowsMultipleSelection = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.layer.borderColor = [UIColor borderColor].CGColor;
+        self.layer.borderColor = [MADColor borderColor].CGColor;
         self.backgroundView = nil;
         self.backgroundColor = [UIColor clearColor];
         
@@ -146,7 +146,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
             self.layer.borderWidth = 1.0000f;
             break;
         case MADBorderStateSelected:
-            self.layer.borderColor = [UIColor tintColorAnalogous4].CGColor;
+            self.layer.borderColor = [MADColor tintColorAnalogous4].CGColor;
             self.layer.borderWidth = 1.0000f;
             break;
         default:

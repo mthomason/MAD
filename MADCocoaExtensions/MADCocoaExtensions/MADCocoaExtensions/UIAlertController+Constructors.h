@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIAlertController (Constructors)
+@interface MADAlertController : UIAlertController
 
 + (instancetype)addedDocument;
 

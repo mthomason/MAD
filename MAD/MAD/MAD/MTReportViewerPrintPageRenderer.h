@@ -10,6 +10,8 @@
 #define Reports_MTPrintPageRendererReport_h
 
 #import <UIKit/UIPrintPageRenderer.h>
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/MADImage.h>
 
 @class MADReportTextRepresentation, MTReportFormatter, MTDataTable, UIImage;
 

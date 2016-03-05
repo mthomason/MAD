@@ -64,7 +64,7 @@
 #import "RptqDocumentSectionRows.h"
 
 #import "RptqDocumentObject.h"
-#import "RptqDocumentObject+Extras.h"
+#import <MAD/RptqDocumentObject+Extras.h>
 
 #import "RptqDocumentSectionEnumerator.h"
 #import "MADSectionLayoutManager.h"
@@ -75,6 +75,10 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADCocoaExtensions/MADFilename.h>
+#import <MADCocoaExtensions/MADDevice.h>
+#import <MADCocoaExtensions/NSThread+Extras.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -188,6 +192,19 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                            object: self];
 }
 
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
+    NSString *filenameId = [MADFilename newFilenameId:filename.hash];
+    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
+}
+
++ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl extention:(NSString *)extention {
+    NSString *filename = [madUrl.lastPathComponent stringByDeletingPathExtension];
+    NSString *destinationName = [filename stringByAppendingPathExtension:extention];
+    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
+    return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
+                                                    isDirectory: YES];
+}
+
 #pragma mark - UIDocument
 
 - (NSDictionary *)layoutHeightsBySectionKey {
@@ -218,12 +235,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         //[psc metadataForPersistentStore:psc];
         //NSURL *oldURL = [psc URLForPersistentStore:[[psc persistentStores]objectAtIndex:0]];
 
-        NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url];
+        NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url extention:MADFileExtentionMobleApplicationDocumentArchive];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         self.urlMetaPlaylist = urlMetaPlaylist;
         self.urlGuts = urlGuts;
         
-        NSString *filename = [MADocument fileNameForMadUrl:url];
+        MADFilename *filename = [MADFilename newFilenameForMadUrl:url];
         NSURL *urlCachedFilesDirectory = [MADocument cacheFilesDirectoryForFilename:filename];
         self.urlCachedFilesDirectory = urlCachedFilesDirectory;
         self.fileName = filename;
@@ -282,7 +299,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }];
 }
 
-- (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
+- (BOOL)readFromURL:(NSURL *)url error:(NSError * _Nullable *)outError {
 
     //Unpack files from binary NSData url to NSFileWrapper in tmp folder
     BOOL success = NO;
@@ -305,11 +322,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return success;
 }
 
-- (BOOL)writeContents:(id)contents
-        andAttributes:(NSDictionary *)additionalFileAttributes
-          safelyToURL:(NSURL *)url
-     forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                error:(NSError **)outError {
+- (BOOL)writeContents:(id)contents andAttributes:(NSDictionary *)additionalFileAttributes safelyToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation error:(NSError * _Nullable *)outError {
     
     [super writeContents:contents andAttributes:additionalFileAttributes
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
@@ -351,7 +364,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             NSError *errorWriting = nil;
             success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
         } else {
-            resultUrl = [self.fileURL uniqueUrl];
+            resultUrl = [((MADURL *)self.fileURL) uniqueUrl];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
         }
@@ -363,11 +376,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
-            [NSError presentError: err
+            [MADError presentError: err
                  onViewController: nil
                        completion: NULL];
         } else {
-            [NSError presentError: error
+            [MADError presentError: error
                  onViewController: nil
                        completion: NULL];
         }
@@ -393,9 +406,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return thumbnail;
 }
 
-- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url
-                            forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                                       error:(NSError **)outError {
+- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation error:(NSError * _Nullable *)outError {
 
     UIImage *thumbnail = [self fullyRenderedThumbnail];
     NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
@@ -419,6 +430,26 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return MADFileExtentionMobleApplicationDocument;
 }
 
+- (NSURL *)thumbnailURL {
+    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension
+                            andRetinaDisplay: [MADDevice isRetnaDisplay]];
+}
+
++ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
+    NSString *name = [MADDevice isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
+    
+    NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
+    
+    NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
+    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
+}
+
+
+
+
+
+
 #pragma mark UIManagedDocument
 
 - (NSManagedObjectModel *)managedObjectModel {
@@ -438,7 +469,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return MTPersistentStoreAliasMad;
 }
 
-- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError * _Nullable *)error {
 
     NSError *readError = nil;
     NSData *imageData = nil;
@@ -450,7 +481,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
             UIImage *extraImage = [UIImage imageWithData:imageData];
-            NSString *key = [UIDevice isRetnaDisplay] ? MTDocumentInfoKeyThumbnailRetna : MTDocumentInfoKeyThumbnailStandard;
+            NSString *key = [MADDevice isRetnaDisplay] ? MTDocumentInfoKeyThumbnailRetna : MTDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
         }
     }
@@ -468,7 +499,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return YES;
 }
 
-- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
+- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError * _Nullable *)error {
 
     if (self.extraInformation == nil) {
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
@@ -927,7 +958,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                 [weakself.mainDataTable cacheForGroupIdentifier:[delegate groupIdentifier]];
                 weakself.didRefresh = success;
                 
-                [NSThread completeOnMainThread:^(BOOL success, id error) {
+                [MADThread completeOnMainThread:^(BOOL success, id error) {
                     completion(success, error);
                 } withObject:error andSuccess:success];
                 
@@ -953,7 +984,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (successClosingReport) {
             [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
             NSError *error = [MADocument errorConnectionProblem];
-            [NSThread completeOnMainThread:completion withObject:error andSuccess:NO];
+            [MADThread completeOnMainThread:completion withObject:error andSuccess:NO];
         }
     }];
 }
@@ -961,19 +992,19 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 + (NSError *)errorConnectionProblem {
     NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
     NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
-    return [NSError errorWithDomain: @"MADocument"
-                               code: 36732
-                              title: title
-                         andMessage: message];
+    return [MADError errorWithDomain: @"MADocument"
+                                code: 36732
+                               title: title
+                          andMessage: message];
 }
 
 + (NSError *)errorFailedToOpenDocument {
     NSString *title = NSLocalizedString(@"Failed to open document.", @"Failed to open document.");
     NSString *message = NSLocalizedString(@"Document may be incomplete, missing, or corrupt.", @"Document may be incomplete, missing, or corrupt.");
-    return [NSError errorWithDomain: @"MADocument"
-                               code: 260
-                              title: title
-                         andMessage: message];
+    return [MADError errorWithDomain: @"MADocument"
+                                code: 260
+                               title: title
+                          andMessage: message];
 }
 
 - (void)regenThumbnail {
@@ -1131,23 +1162,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:self.urlGuts error:&error];
     
-}
-
-+ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *filename = [madUrl.lastPathComponent stringByDeletingPathExtension];
-    NSString *destinationName = [filename stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
-    return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
-                                                    isDirectory: YES];
-}
-
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [self filenameId:filename.hash];
-    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
-}
-
-+ (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
-    return madUrl.lastPathComponent.stringByDeletingPathExtension;
 }
 
 - (NSString *)mimetype {

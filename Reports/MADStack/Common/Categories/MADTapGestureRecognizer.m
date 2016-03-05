@@ -1,0 +1,74 @@
+//
+//  UITapGestureRecognizer+Designer.m
+//  MAD Designer
+//
+//  Created by Michael Thomason on 6/5/15.
+//  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MADTapGestureRecognizer.h"
+
+@implementation MADTapGestureRecognizer
+
++ (instancetype)newTapGestureRecognizerSectionToggleWithTarget:(id)target
+                                                        action:(SEL)action
+                                                      delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    tap.delaysTouchesBegan = YES;
+    tap.delaysTouchesEnded = NO;
+    tap.delegate = delegate;
+    return tap;
+}
+
++ (instancetype)newTapGestureRecognizerElementTouchWithTarget:(id)target
+                                                       action:(SEL)action
+                                                     delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    tap.delaysTouchesBegan = YES;
+    tap.delaysTouchesEnded = NO;
+    tap.delegate = delegate;
+    return tap;
+}
+
++ (instancetype)newTapGestureRecognizerStrayTouchWithTarget:(id)target
+                                                     action:(SEL)action
+                                                   delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADTapGestureRecognizer *tap = [[self alloc] initWithTarget: target action: action];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    tap.delegate = delegate;
+    tap.delaysTouchesBegan = YES;
+    return tap;
+}
+
+@end
+
+@implementation MADPanGestureRecognizer
+
++ (instancetype)newPanGestureRecognizerElement:(id)target
+                    action:(SEL)action
+                  delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADPanGestureRecognizer *panGesture = [[self alloc] initWithTarget: target action: action];
+    panGesture.minimumNumberOfTouches = 1;
+    panGesture.maximumNumberOfTouches = 2;
+    panGesture.delegate = delegate;
+    return panGesture;
+}
+
+@end
+
+@implementation MADPinchGestureRecognizer
+
++ (instancetype)newPinchGestureRecognizerElement:(id)target
+                      action:(SEL)action
+                    delegate:(id<UIGestureRecognizerDelegate>)delegate {
+    MADPinchGestureRecognizer *panGesture = [[self alloc] initWithTarget: target action: action];
+    panGesture.delegate = delegate;
+    return panGesture;
+}
+
+@end

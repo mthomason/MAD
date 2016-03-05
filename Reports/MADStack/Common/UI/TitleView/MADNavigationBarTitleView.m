@@ -8,7 +8,7 @@
 
 #import "MADNavigationBarTitleView.h"
 #import "NSParagraphStyle+CommonStyles.h"
-#import "NSAttributedString+Logo.h"
+#import "MADAttributedString.h"
 
 @implementation MADNavigationBarTitleView
 
@@ -31,7 +31,7 @@
 }
 
 - (void)setText:(NSString *)text {
-    NSAttributedString *attributedText = [NSAttributedString logoForTitle:text];
+    NSAttributedString *attributedText = [MADAttributedString newAttributedStringLogoForTitle:text];
     super.text = text;
     self.attributedText = attributedText;
     [self sizeToFit];

@@ -1485,7 +1485,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return result;
 }
 
-- (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error {
+- (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError * _Nullable *)error {
 
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;

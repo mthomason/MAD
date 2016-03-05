@@ -164,18 +164,18 @@
                 NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                 
                 if ([NSThread isMainThread]) {
-                    [NSError presentError:error onViewController:weakself2 completion:^(BOOL success) {
+                    [MADError presentError:error onViewController:weakself2 completion:^(BOOL success) {
                         __strong UIViewController *viewController = weakself2;
                         [[MTKeyChain sharedObject] deleteKey:key usingViewController:viewController];
                     }];
                 } else {
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [NSError presentError: error
-                             onViewController: weakself2
-                                   completion:^(BOOL success) {
-                                       __strong UIViewController *viewController = weakself2;
-                                       [[MTKeyChain sharedObject] deleteKey:key usingViewController:viewController];
-                                   }];
+                        [MADError presentError: error
+                              onViewController: weakself2
+                                    completion:^(BOOL success) {
+                                        __strong UIViewController *viewController = weakself2;
+                                        [[MTKeyChain sharedObject] deleteKey:key usingViewController:viewController];
+                                    }];
                     });
                 }
             }

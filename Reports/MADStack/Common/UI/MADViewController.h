@@ -11,25 +11,42 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MADViewController : UIViewController
 
+@protocol MTTabBarImageProtocol <NSObject>
+@optional
+- (UIImage *)tabBarImage;
+
+@end
+
+@class MADTabBarController;
+
+@interface MADViewController : UIViewController
+    <MTTabBarImageProtocol>
+
+#include "MADViewControllerBase.h"
+
+@end
+
+@interface MADPageViewController : UIPageViewController
+    <MTTabBarImageProtocol>
 #include "MADViewControllerBase.h"
 
 @end
 
 @interface MADTableViewController : UITableViewController
-
+    <MTTabBarImageProtocol>
 #include "MADViewControllerBase.h"
 
 @end
 
 @interface MADCollectionViewController : UICollectionViewController
-
+    <MTTabBarImageProtocol>
 #include "MADViewControllerBase.h"
 
 @end
 
 @interface MADSplitViewController : UISplitViewController
+    <MTTabBarImageProtocol>
 
 #include "MADViewControllerBase.h"
 

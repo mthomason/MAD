@@ -9,13 +9,13 @@
 #import "MFMailComposeViewController+Constructors.h"
 #import "MADColor.h"
 
-@implementation MFMailComposeViewController (Constructors)
+@implementation MADMailComposeViewController
 
 + (instancetype)title:(NSString *)title
                  body:(NSString *)body
    userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom NS_RETURNS_RETAINED {
     
-    MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
+    MADMailComposeViewController	*mailComposer = [[self alloc] init];
     mailComposer.subject = title;
     [mailComposer setMessageBody:body isHTML:NO];
     mailComposer.navigationController.navigationBar.barTintColor = [MADColor tintColorAnalogous4];
@@ -38,7 +38,7 @@
     NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
     NSString *documentTitle = [NSString stringWithFormat:formatString, attachmentURL.lastPathComponent];
     
-    MFMailComposeViewController	*mailComposer = [self title:documentTitle body:body userInterfaceIdiom:userInterfaceIdiom];
+    MADMailComposeViewController	*mailComposer = [self title:documentTitle body:body userInterfaceIdiom:userInterfaceIdiom];
 
     [mailComposer addAttachmentData:data mimeType:mimeType fileName:attachmentURL.lastPathComponent];
     return mailComposer;

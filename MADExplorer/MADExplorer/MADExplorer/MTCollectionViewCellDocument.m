@@ -12,8 +12,8 @@
 
 #import "MTCollectionViewCellDocument.h"
 #import "MADBackgroundViewSelected.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
+#import <MADCocoaExtensions/MADColor.h>
+#import <MADCocoaExtensions/MADFilename.h>
 
 NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
@@ -103,7 +103,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
     if (self) {
         
         self.wobbling = NO;
-        UIColor *colorTextNormal = [UIColor tintColorBlue];
+        UIColor *colorTextNormal = [MADColor tintColorBlue];
         UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
         self.bgColor = bgColor;
         

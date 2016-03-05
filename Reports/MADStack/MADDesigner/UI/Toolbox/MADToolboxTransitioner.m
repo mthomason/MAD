@@ -191,7 +191,6 @@
 
     toolboxNavigationController.view.frame = initialFrame;
 
-    //UINavigationController *designerNavigationController = (UINavigationController *)tabBarController.selectedViewController;
     UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
     [designer setHidesStatusBar: isToolboxVisible];
     [UIView animateWithDuration: [self transitionDuration:transitionContext]

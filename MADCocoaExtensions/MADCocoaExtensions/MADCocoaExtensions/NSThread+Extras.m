@@ -8,7 +8,7 @@
 
 #import "NSThread+Extras.h"
 
-@implementation NSThread (Extras)
+@implementation MADThread
 
 + (void)safeSwitchToMainThread:(void(^)())completion {
     if ([NSThread isMainThread]) {

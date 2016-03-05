@@ -12,7 +12,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MAD/MTTableFormatter.h>
-#import <MAD/MTReportFormatterDataSource.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 
@@ -20,6 +19,14 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone    = 0,
     MTReportFormatterOptionsMargin  = 1 << 0,
 };
+
+@protocol MTReportFormatterDataSource <NSObject>
+
+- (BOOL)cacheExist;
+- (NSEnumerator *)enumeratorForReportData;
+- (NSDictionary *)dataForCacheId:(NSNumber *)cachedID;
+
+@end
 
 extern NSString * const MTNullIdentifier;
 

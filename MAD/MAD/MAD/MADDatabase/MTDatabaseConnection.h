@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MADFileManager/MADFileManager.h>
+#import <MADCocoaExtensions/BDHost.h>
 
 extern NSString * const MADIdentifierDatabaseMySQL;
 extern NSString * const MADIdentifierDatabaseTDS;

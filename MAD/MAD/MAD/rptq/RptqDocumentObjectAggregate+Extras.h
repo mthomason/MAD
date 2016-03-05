@@ -10,8 +10,6 @@
 #define Reports_RptqDocumentObjectAggregate_Extras_h
 
 #import <MAD/RptqDocumentObjectAggregate.h>
-#import <MAD/MTAggregateFunctionInputType.h>
-
 #import <MADFoundation/MTAggregateFunctionType.h>
 #import <MADFoundation/MADAggregateGroupByType.h>
 #import <MADFoundation/MTDataType.h>
@@ -19,6 +17,12 @@
 extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
 extern NSString * const MTAggregateTypeKeyGroupNumber;
+
+typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType);
+typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
+    MTAggregateFunctionInputTypeField = 0,
+    MTAggregateFunctionInputTypeFormula
+};
 
 @interface RptqDocumentObjectAggregate (Extras)
 

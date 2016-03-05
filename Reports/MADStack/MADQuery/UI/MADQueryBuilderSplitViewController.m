@@ -19,7 +19,7 @@
 #import "MADViewControllerSQL.h"
 
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "UIViewController+UI.h"
+#import "MADTabBarController.h"
 
 #import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
@@ -108,7 +108,7 @@
 
     self.detailNavigationController.navigationBarHidden = NO;
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
-    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [UIColor tintColorWhite];
+    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [MADColor tintColorWhite];
 
     self.queryBuilderControllerAdvanced.document = self.document;
 }
@@ -172,7 +172,7 @@
         if ([segue isKindOfClass:popoverSegueClass]) {
             [[(UIStoryboardPopoverSegue *)segue popoverController] setDelegate:self];
             [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
-            [self disableTabBarItems];
+            [self.tabBarController disableTabBarItems];
         }
     }
 }
@@ -303,7 +303,7 @@
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
 }
 
 #pragma mark - Override

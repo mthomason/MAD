@@ -7,7 +7,7 @@
 //
 
 #import "UIViewTableSectionHeaderDatabaseTable.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 @interface UIViewTableSectionHeaderDatabaseTable ()
 
@@ -43,7 +43,7 @@
         label.text = title;
         UIFont *font = [UIFont boldSystemFontOfSize:17.0000f];
         label.font = font;
-        UIColor *blueColor = [UIColor tintColorBlue];
+        UIColor *blueColor = [MADColor tintColorBlue];
         label.textColor = blueColor;
         label.backgroundColor =  [UIColor clearColor];
         [self addSubview:label];
@@ -99,13 +99,13 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
-    UIColor *color = [UIColor tintColorBlue];
+    UIColor *color = [MADColor tintColorBlue];
     self.titleLabel.textColor = color;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesCancelled:touches withEvent:event];
-    UIColor *color = [UIColor tintColorBlue];
+    UIColor *color = [MADColor tintColorBlue];
     self.titleLabel.textColor = color;
 }
 
