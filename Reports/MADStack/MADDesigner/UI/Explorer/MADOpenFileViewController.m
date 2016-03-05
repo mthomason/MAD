@@ -364,6 +364,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - MFMailComposeViewController delegate protocol
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    
     [NSError presentError: error onViewController: self completion:^(BOOL success) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }];

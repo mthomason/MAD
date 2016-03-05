@@ -49,10 +49,8 @@
             } else {
                 NSString *title = NSLocalizedString(@"No Accounts Found", @"No Accounts Found");
                 NSString *message = NSLocalizedString(@"Please add a Twitter account to your device.", @"Please add a Twitter account to your device.");
-                NSError *noTwitterFound = [NSError errorWithDomain: @"MADSocial"
-                                                              code: 3782
-                                                             title: title
-                                                        andMessage: message];
+                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+                NSError *noTwitterFound = [NSError errorWithDomain: @"MADSocial" code: 3782 userInfo: errorUserInfo.userinfo];
                 completion(NO, noTwitterFound);
             }
             
@@ -60,10 +58,8 @@
             NSString *title = NSLocalizedString(@"Access Denied", @"Access Denied");
             NSString *message = NSLocalizedString(@"The software doesn't have access to your Twitter accounts.  Please check the permission in the Settings app.",
                                                   @"The software doesn't have access to your Twitter accounts.  Please check the permission in the Settings app.");
-            NSError *noTwitterFound = [NSError errorWithDomain: @"MADSocial"
-                                                          code: 3783
-                                                         title: title
-                                                    andMessage: message];
+            MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+            NSError *noTwitterFound = [NSError errorWithDomain: @"MADSocial" code: 3783 userInfo: errorUserInfo.userinfo];
             completion(NO, noTwitterFound);
         }
     }];

@@ -982,22 +982,20 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }];
 }
 
+static NSString * const MADDocumentErrorDomain = @"MADocument";
+
 + (NSError *)errorConnectionProblem {
     NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
     NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
-    return [NSError errorWithDomain: @"MADocument"
-                               code: 36732
-                              title: title
-                         andMessage: message];
+    MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+    return [NSError errorWithDomain: MADDocumentErrorDomain code: 36732 userInfo: errorUserInfo.userinfo];
 }
 
 + (NSError *)errorFailedToOpenDocument {
     NSString *title = NSLocalizedString(@"Failed to open document.", @"Failed to open document.");
     NSString *message = NSLocalizedString(@"Document may be incomplete, missing, or corrupt.", @"Document may be incomplete, missing, or corrupt.");
-    return [NSError errorWithDomain: @"MADocument"
-                               code: 260
-                              title: title
-                         andMessage: message];
+    MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+    return [NSError errorWithDomain: MADDocumentErrorDomain code: 260 userInfo: errorUserInfo.userinfo];
 }
 
 - (void)regenThumbnail {

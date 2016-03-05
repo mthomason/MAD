@@ -16,29 +16,33 @@
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
+@interface MADErrorUserInfo ()
+
+    @property (nonatomic, strong, readwrite) NSDictionary *userinfo;
+
+@end
+
+@implementation MADErrorUserInfo
+
+- (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message {
+    if (self = [super init]) {
+        NSString *m = message == nil ? @"" : [NSString stringWithString:message];
+        NSString *t = title == nil ? @"" : [NSString stringWithString:title];
+        NSDictionary *userinfo = [[NSDictionary alloc] initWithObjectsAndKeys: t, NSLocalizedDescriptionKey, m, NSLocalizedFailureReasonErrorKey, nil];
+        self.userinfo = userinfo;
+    }
+    return self;
+}
+
+- (NSError *)errorWithDomain: (NSString *)domain code: (NSInteger)code {
+    return [NSError errorWithDomain:domain code:code userInfo:self.userinfo];
+}
+
+@end
+
 @implementation NSError (Constructors)
 
-+ (instancetype)errorWithDomain: (NSString *)domain
-                           code: (NSInteger)code
-                          title: (NSString *)title
-                     andMessage: (NSString *)message {
-    NSDictionary *userInfo = [self userInfoWithTitle:title andMessage:message];
-    return [NSError errorWithDomain:domain code:code userInfo:userInfo];
-}
-
-+ (NSDictionary *)userInfoWithTitle:(NSString *)title
-                         andMessage:(NSString *)message {
-    
-    NSString *m = message == nil ? @"" : [NSString stringWithString:message];
-    NSString *t = title == nil ? @"" : [NSString stringWithString:title];
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : t,
-                               NSLocalizedFailureReasonErrorKey : m};
-    return userInfo;
-    
-}
-
-+ (void)presentError:(NSError *)error
-    onViewController:(UIViewController *)viewController
++ (void)presentError:(NSError *)error onViewController:(UIViewController *)viewController
           completion:(void (^)(BOOL success))completion {
     
     if (error == nil) {
@@ -68,8 +72,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                                                                    message: localizedDescription
                                                             preferredStyle: UIAlertControllerStyleAlert];
     
-    UIAlertAction *ok = [UIAlertAction actionWithTitle: dismissButtonTitle
-                                                 style: UIAlertActionStyleDefault
+    UIAlertAction *ok = [UIAlertAction actionWithTitle: dismissButtonTitle style: UIAlertActionStyleDefault
                                                handler:^(UIAlertAction *action) {
                                                    if (completion) {
                                                        completion(YES);

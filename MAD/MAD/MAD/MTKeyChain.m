@@ -142,7 +142,9 @@ static MTKeyChain *sharedSingleton = nil;
 + (NSError *)errorUserCanceled {
     NSString *title = NSLocalizedString(@"User Canceled", @"User Cancled");
     NSString *message = NSLocalizedString(@"User canceled save.", @"User canceled save.");
-    return [NSError errorWithDomain: @"MTKeyChain" code: MTKeyErrorUserCanceled title: title andMessage: message];
+    NSString *domain = @"MTKeyChain";
+    MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+    return [NSError errorWithDomain:domain code:MTKeyErrorUserCanceled userInfo:errorUserInfo.userinfo];
 }
 
 + (BOOL)credentialsExist:(NSString *)key {

@@ -99,9 +99,8 @@
                     MTDataTable *dataTable = [self dataTableForQuery:query];
                     [myFetch fetchWithCommand:queryString dataTable:&dataTable onConnection:dbconn error:&error];
                 }
-                error = error ? [NSError errorWithDomain:error.domain code:error.code
-                                                   title:error.localizedDescription
-                                              andMessage:error.localizedFailureReason] : nil;
+                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:error.localizedDescription andMessage:error.localizedFailureReason];
+                error = error ? [NSError errorWithDomain:error.domain code:error.code userInfo:errorUserInfo.userinfo] : nil;
                 completion(error == nil, error);
                 
             }
