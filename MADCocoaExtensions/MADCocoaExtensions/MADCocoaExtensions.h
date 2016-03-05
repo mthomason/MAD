@@ -22,6 +22,7 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UILabel+Constructors.h>
 #import <MADCocoaExtensions/UIDevice+Hack.h>
+#import <MADCocoaExtensions/MADFilename.h>
 
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>

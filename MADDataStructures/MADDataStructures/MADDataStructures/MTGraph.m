@@ -225,9 +225,11 @@
             *isDirectedAcyclicGraph = NO;
 
             if (anError != NULL) {
+                NSString *t = NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.");
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : t};
                 *anError = [NSError errorWithDomain: @"MTDataStructures"
                                                code: 1
-                                           userInfo: @{ NSLocalizedDescriptionKey : NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.")}];
+                                           userInfo: userInfo];
             }
             break;
         }
