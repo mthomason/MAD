@@ -16,30 +16,6 @@
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
-@interface MADErrorUserInfo ()
-
-    @property (nonatomic, strong, readwrite) NSDictionary *userinfo;
-
-@end
-
-@implementation MADErrorUserInfo
-
-- (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message {
-    if (self = [super init]) {
-        NSString *m = message == nil ? @"" : [NSString stringWithString:message];
-        NSString *t = title == nil ? @"" : [NSString stringWithString:title];
-        NSDictionary *userinfo = [[NSDictionary alloc] initWithObjectsAndKeys: t, NSLocalizedDescriptionKey, m, NSLocalizedFailureReasonErrorKey, nil];
-        self.userinfo = userinfo;
-    }
-    return self;
-}
-
-- (NSError *)errorWithDomain: (NSString *)domain code: (NSInteger)code {
-    return [NSError errorWithDomain:domain code:code userInfo:self.userinfo];
-}
-
-@end
-
 @implementation NSError (Constructors)
 
 + (void)presentError:(NSError *)error onViewController:(UIViewController *)viewController

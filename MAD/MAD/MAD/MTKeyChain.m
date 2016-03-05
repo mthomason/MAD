@@ -11,6 +11,7 @@
 #endif
 
 #import "MTKeyChain.h"
+#import "MADErrorUserInfo.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
 #import <MADCocoaExtensions/NSThread+Extras.h>

@@ -12,6 +12,7 @@
 
 #import "MTDatabaseSqlite3.h"
 
+#import "MADErrorUserInfo.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"

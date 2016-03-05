@@ -11,6 +11,8 @@
 		4C0590D01C7B6F3C00A1EC4A /* MTReportFormatterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590CE1C7B6F3C00A1EC4A /* MTReportFormatterState.m */; };
 		4C24809C1C8B20E00058E6B4 /* MADFonts.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C24809A1C8B20E00058E6B4 /* MADFonts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C24809B1C8B20E00058E6B4 /* MADFonts.m */; };
+		4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C2480B71C8B7C860058E6B4 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */; };
 		4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */; };
 		4C3DCC351BCAF72100ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */; };
 		4C3DCC391BCAF74200ABE231 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */; };
@@ -398,6 +400,8 @@
 		4C0590CE1C7B6F3C00A1EC4A /* MTReportFormatterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTReportFormatterState.m; path = MAD/MADReportFormatter/MTReportFormatterState.m; sourceTree = "<group>"; };
 		4C24809A1C8B20E00058E6B4 /* MADFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFonts.h; path = MAD/MADFonts.h; sourceTree = "<group>"; };
 		4C24809B1C8B20E00058E6B4 /* MADFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFonts.m; path = MAD/MADFonts.m; sourceTree = "<group>"; };
+		4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADErrorUserInfo.h; path = MAD/MADErrorUserInfo.h; sourceTree = "<group>"; };
+		4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADErrorUserInfo.m; path = MAD/MADErrorUserInfo.m; sourceTree = "<group>"; };
 		4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADMySQL.framework"; sourceTree = "<group>"; };
@@ -1111,6 +1115,8 @@
 				4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */,
 				4C994F501BE485F80058627A /* MADDocumentObjectType.m */,
 				4CC281F51BADE80500775B72 /* MADLinkType.h */,
+				4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */,
+				4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */,
 			);
 			name = MAD;
 			sourceTree = "<group>";
@@ -1496,6 +1502,7 @@
 				4C401D661BAE3AF800BAE5FC /* MTPaperC10.h in Headers */,
 				4C401D481BAE3AF800BAE5FC /* MTPaperB6.h in Headers */,
 				4C401D4E1BAE3AF800BAE5FC /* MTPaperB9.h in Headers */,
+				4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */,
 				4C401DD91BAE3BD700BAE5FC /* MTQueryCacheSyncDefault.h in Headers */,
 				4C401DD31BAE3BD600BAE5FC /* MTQueryCacheSelectLimitOffset.h in Headers */,
 				4C401DF51BAE3BD900BAE5FC /* MTQuerySelectItemsForGroup.h in Headers */,
@@ -1799,6 +1806,7 @@
 				4CC2849C1BADE9EF00775B72 /* RptqQuerySort+Extras.m in Sources */,
 				4CC2849A1BADE9EB00775B72 /* RptqQueryPredicate+Extras.m in Sources */,
 				4C401D4F1BAE3AF800BAE5FC /* MTPaperB9.m in Sources */,
+				4C2480B71C8B7C860058E6B4 /* MADErrorUserInfo.m in Sources */,
 				4C401DD61BAE3BD700BAE5FC /* MTQueryCacheSelectRowId.m in Sources */,
 				4C994F361BDDD85D0058627A /* MADAccessibilityLine.m in Sources */,
 				4C401DC81BAE3BD600BAE5FC /* MTQueryCacheIndexCreate.m in Sources */,

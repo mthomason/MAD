@@ -12,6 +12,7 @@
 
 #import "MADocument.h"
 
+#import "MADErrorUserInfo.h"
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
 

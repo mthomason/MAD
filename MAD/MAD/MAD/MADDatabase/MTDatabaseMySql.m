@@ -8,6 +8,7 @@
 
 #import "MTDatabaseMySql.h"
 
+#import "MADErrorUserInfo.h"
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
 
