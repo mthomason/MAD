@@ -392,9 +392,16 @@
 		4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */; };
 		4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C4020581BAE92F200BAE5FC /* UINavigationController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */; };
+<<<<<<< HEAD
 		4C40205F1BAE92F200BAE5FC /* MADTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020271BAE92F200BAE5FC /* MADTapGestureRecognizer.m */; };
 		4C4020601BAE92F200BAE5FC /* MADContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020291BAE92F200BAE5FC /* MADContainerView.m */; };
 		4C4020611BAE92F200BAE5FC /* MADManagedObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202B1BAE92F200BAE5FC /* MADManagedObjectView.m */; };
+=======
+		4C40205A1BAE92F200BAE5FC /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */; };
+		4C40205F1BAE92F200BAE5FC /* MADTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020271BAE92F200BAE5FC /* MADTapGestureRecognizer.m */; };
+		4C4020601BAE92F200BAE5FC /* MADContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020291BAE92F200BAE5FC /* MADContainerView.m */; };
+		4C4020611BAE92F200BAE5FC /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202B1BAE92F200BAE5FC /* UIView+NSObjectIdTag.m */; };
+>>>>>>> 0a2323e5616d276b13219302a96949345893ed16
 		4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020681BAE938500BAE5FC /* NSData+Base64.m */; };
 		4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */; };
 		4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020751BAE957D00BAE5FC /* MADUpgradeManager.m */; };
@@ -1652,12 +1659,22 @@
 		4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
 		4C4020181BAE92F200BAE5FC /* UINavigationController+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Designer.h"; sourceTree = "<group>"; };
 		4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Designer.m"; sourceTree = "<group>"; };
+<<<<<<< HEAD
+=======
+		4C40201C1BAE92F200BAE5FC /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
+		4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
+>>>>>>> 0a2323e5616d276b13219302a96949345893ed16
 		4C4020261BAE92F200BAE5FC /* MADTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTapGestureRecognizer.h; sourceTree = "<group>"; };
 		4C4020271BAE92F200BAE5FC /* MADTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTapGestureRecognizer.m; sourceTree = "<group>"; };
 		4C4020281BAE92F200BAE5FC /* MADContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADContainerView.h; sourceTree = "<group>"; };
 		4C4020291BAE92F200BAE5FC /* MADContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADContainerView.m; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		4C40202A1BAE92F200BAE5FC /* MADManagedObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectView.h; sourceTree = "<group>"; };
 		4C40202B1BAE92F200BAE5FC /* MADManagedObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectView.m; sourceTree = "<group>"; };
+=======
+		4C40202A1BAE92F200BAE5FC /* UIView+NSObjectIdTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+NSObjectIdTag.h"; sourceTree = "<group>"; };
+		4C40202B1BAE92F200BAE5FC /* UIView+NSObjectIdTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+NSObjectIdTag.m"; sourceTree = "<group>"; };
+>>>>>>> 0a2323e5616d276b13219302a96949345893ed16
 		4C4020671BAE938500BAE5FC /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		4C4020681BAE938500BAE5FC /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		4C4020691BAE938500BAE5FC /* NSNumber+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+Extras.h"; sourceTree = "<group>"; };
@@ -3296,12 +3313,22 @@
 				4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */,
 				4C4020181BAE92F200BAE5FC /* UINavigationController+Designer.h */,
 				4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */,
+<<<<<<< HEAD
+=======
+				4C40201C1BAE92F200BAE5FC /* UIScrollView+Extras.h */,
+				4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */,
+>>>>>>> 0a2323e5616d276b13219302a96949345893ed16
 				4C4020261BAE92F200BAE5FC /* MADTapGestureRecognizer.h */,
 				4C4020271BAE92F200BAE5FC /* MADTapGestureRecognizer.m */,
 				4C4020281BAE92F200BAE5FC /* MADContainerView.h */,
 				4C4020291BAE92F200BAE5FC /* MADContainerView.m */,
+<<<<<<< HEAD
 				4C40202A1BAE92F200BAE5FC /* MADManagedObjectView.h */,
 				4C40202B1BAE92F200BAE5FC /* MADManagedObjectView.m */,
+=======
+				4C40202A1BAE92F200BAE5FC /* UIView+NSObjectIdTag.h */,
+				4C40202B1BAE92F200BAE5FC /* UIView+NSObjectIdTag.m */,
+>>>>>>> 0a2323e5616d276b13219302a96949345893ed16
 			);
 			path = Categories;
 			sourceTree = "<group>";

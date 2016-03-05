@@ -61,7 +61,13 @@
 #import "NSLayoutConstraint+Designer.h"
 #import "UINavigationController+Designer.h"
 #import "MTQueryBuilderChooseFieldViewController+Designer.h"
+<<<<<<< HEAD
 #import "MADManagedObjectView.h"
+=======
+#import "UIView+NSObjectIdTag.h"
+#import "MADContainerView.h"
+#import "UIScrollView+Extras.h"
+>>>>>>> 0a2323e5616d276b13219302a96949345893ed16
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
