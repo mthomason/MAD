@@ -6,6 +6,8 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 FOUNDATION_EXPORT double MADVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
@@ -31,8 +33,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+Extras.h>
-
-#import <MAD/MADDocumentSectionType.h>
 
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>

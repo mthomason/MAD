@@ -8,9 +8,14 @@
 
 #import "MADDocumentInformationTableViewController.h"
 #import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
+#import <MADCocoaExtensions/MTMath.h>
 #import <MADFileManager/MADMetaData.h>
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
+#import "UIStoryboard+DocumentInformation.h"
+
+
+static NSString * const DocInfo = @"MADIdentifierDocumentInformationTableViewController";
 
 @interface MADDocumentInformationTableViewController ()
     <MADVibrantTableViewCellDelegate>
@@ -21,9 +26,14 @@
 
 @implementation MADDocumentInformationTableViewController
 
++ (instancetype)DocumentInformationTableViewController {
+    UIStoryboard *sb = [UIStoryboard DocumentInfo];
+    return [sb instantiateViewControllerWithIdentifier: DocInfo];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        NSNumberFormatter *numberFormatter = [NSNumberFormatter twoDecimalPlaces];
+        NSNumberFormatter *numberFormatter = [MADNumberFormatter twoDecimalPlaces];
         self.numberFormatter = numberFormatter;
     }
     return self;

@@ -7,7 +7,7 @@
 //
 
 #import "MADOpenFileSectionHeaderView.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";
@@ -76,7 +76,7 @@ NSString * const MADTextLocal = @"Local";
 
         self.activityIndicatorView = activityView;
         
-        UIColor *foregroundColor = [UIColor tintColorRed];
+        UIColor *foregroundColor = [MADColor tintColorRed];
         NSDictionary *attributesLocal = @{NSForegroundColorAttributeName : foregroundColor};
         
         NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
@@ -87,7 +87,7 @@ NSString * const MADTextLocal = @"Local";
                                                                                     attributes: attributesLocal];
         self.localizedAttrbiutedTextCloud = attributedStringCloud;
         
-        UIColor *blueColor = [UIColor headerColor];
+        UIColor *blueColor = [MADColor headerColor];
         self.backgroundColor = blueColor;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = foregroundColor;

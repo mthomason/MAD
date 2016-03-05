@@ -8,7 +8,7 @@
 
 #import "NSNumberFormatter+Constructors.h"
 
-@implementation NSNumberFormatter (Constructors)
+@implementation MADNumberFormatter
 
 + (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED {
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
@@ -16,7 +16,7 @@
     numberFormatter.maximumFractionDigits = 2;
     numberFormatter.decimalSeparator = @".";
     numberFormatter.groupingSeparator = @",";
-    return numberFormatter;
+    return (MADNumberFormatter *)numberFormatter;
 }
 
 @end

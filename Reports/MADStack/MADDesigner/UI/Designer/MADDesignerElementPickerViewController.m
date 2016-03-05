@@ -11,6 +11,7 @@
 #endif
 
 #import "MADDesignerElementPickerViewController.h"
+#import <MADCocoaExtensions/MADColor.h>
 #import "MADNavigationBarTitleView.h"
 
 #import "MTAggregateFunctionsViewController.h"
@@ -151,7 +152,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePicker.delegate = (id <UINavigationControllerDelegate ,UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
-    imagePicker.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    imagePicker.navigationBar.barTintColor = [MADColor tintColorAnalogous4];
     [self presentViewController:imagePicker animated:YES completion:NULL];
 }
 

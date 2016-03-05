@@ -7,11 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MADDocumentSectionType.h"
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
+
+typedef NS_ENUM(NSUInteger, MNSDocumentSectionType);
+typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
+    MNSDocumentSectionTypeReportHeader = 1,
+    MNSDocumentSectionTypeReportFooter = 2,
+    MNSDocumentSectionTypePageHeader = 3,
+    MNSDocumentSectionTypePageFooter = 4,
+    MNSDocumentSectionTypeBody = 5,
+    MNSDocumentSectionTypeGroupHeader = 6,
+    MNSDocumentSectionTypeGroupFooter = 7,
+};
 
 @interface NSDictionary (MADReportObjectRepresentation)
 

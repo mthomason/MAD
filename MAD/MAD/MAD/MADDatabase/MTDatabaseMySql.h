@@ -12,6 +12,7 @@
 #import "MTDatabase.h"
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTDataType.h>
+#import <MADCocoaExtensions/MADError.h>
 
 @class RptqDatabaseSchemaTable;
 

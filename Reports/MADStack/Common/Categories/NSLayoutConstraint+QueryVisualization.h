@@ -10,9 +10,9 @@
 
 @interface NSLayoutConstraint (QueryVisualization)
 
-+ (instancetype)heightForView:(UIView *)view andHeight:(CGFloat)height;
-+ (instancetype)widthForView:(UIView *)view andWidth:(CGFloat)width;
-+ (instancetype)schemaViewWidthForView:(UIView *)view andWidth:(CGFloat)width;
-+ (instancetype)schemaViewHeightForView:(UIView *)view andHeight:(CGFloat)height;
++ (instancetype)LayoutConstraintHeightForView:(UIView *)view andHeight:(CGFloat)height;
++ (instancetype)LayoutConstraintWidthForView:(UIView *)view andWidth:(CGFloat)width;
++ (instancetype)LayoutConstraintSchemaViewWidthForView:(UIView *)view andWidth:(CGFloat)width;
++ (instancetype)LayoutConstraintSchemaViewHeightForView:(UIView *)view andHeight:(CGFloat)height;
 
 @end

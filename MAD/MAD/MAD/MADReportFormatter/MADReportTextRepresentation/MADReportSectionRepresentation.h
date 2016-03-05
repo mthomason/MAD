@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MAD/MADDocumentSectionType.h>
+#import "MADDocumentSectionType.h"
 #import "MADTextRepresentationProtocol.h"
+#import "NSDictionary+MADReportObjectRepresentation.h"
 
 @class MADReportSectionRowsRepresentation;
 

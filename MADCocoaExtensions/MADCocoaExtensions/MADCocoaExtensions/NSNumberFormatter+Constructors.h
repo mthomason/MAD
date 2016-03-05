@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSNumberFormatter (Constructors)
+@interface MADNumberFormatter : NSNumberFormatter
 
 + (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED;
 

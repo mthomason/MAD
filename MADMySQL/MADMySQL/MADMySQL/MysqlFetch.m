@@ -47,7 +47,7 @@
  numberOfColumnsKey : numberOfColumns}];
  */
 
-- (MTDataTable *)fetchWithCommand:(NSString *)command dataTable:(MTDataTable **)dataTable onConnection:(MysqlConnection *)connection error:(NSError **)error {
+- (MTDataTable *)fetchWithCommand:(NSString *)command dataTable:(MTDataTable **)dataTable onConnection:(MysqlConnection *)connection error:(NSError * _Nullable *)error {
     return [self fetchWithCommand:command dataTable:dataTable onConnection:connection extendedNames:YES error:error];
 }
 
@@ -60,7 +60,7 @@
                         dataTable: (MTDataTable **)dataTable
                      onConnection: (MysqlConnection *)connection
                     extendedNames: (BOOL)useExtendedNames
-                            error: (NSError **)error
+                            error: (NSError * _Nullable *)error
                            /*status: (void (^)(NSString *status, CGFloat progress))status
                  beginBulkInserts: (void (^)())beginBulkInserts
                         addColumn: (MTDataColumn *)addColumn

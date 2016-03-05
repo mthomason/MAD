@@ -7,15 +7,15 @@
 //
 
 #import "MADProgressView.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 
 @implementation MADProgressView
 
 - (instancetype)initWithProgressViewStyle:(UIProgressViewStyle)style {
     if (self = [super initWithProgressViewStyle:style]) {
         UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-        progressView.trackTintColor = [UIColor tintColorRed];
-        progressView.tintColor = [UIColor tintColorBlue];
+        progressView.trackTintColor = [MADColor tintColorRed];
+        progressView.tintColor = [MADColor tintColorBlue];
         progressView.progress = 0.0000f;
     }
     return self;

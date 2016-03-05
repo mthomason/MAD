@@ -54,17 +54,15 @@
 #import "MADToolboxNavigationController.h"
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
+#import "MADTabBarController.h"
+#import "MADTapGestureRecognizer.h"
 
 #import "NSLayoutConstraint+Designer.h"
-#import "UITapGestureRecognizer+Designer.h"
 #import "UINavigationController+Designer.h"
-#import "MTViewControllerBarcode+Designer.h"
 #import "MTQueryBuilderChooseFieldViewController+Designer.h"
 #import "UIView+NSObjectIdTag.h"
-#import "UIViewController+UI.h"
-#import "UIViewController+tabBarItem.h"
+#import "MADContainerView.h"
 #import "UIScrollView+Extras.h"
-#import "UIView+Extras.h"
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
@@ -327,7 +325,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     MADToolboxTransitioningDelegate *settingsTransitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
 
-    UINavigationController *navigationControllerToolbox = [UINavigationController navigationControllerToolbox];
+    UINavigationController *navigationControllerToolbox = [MADToolboxNavigationController ToolboxNavigationController];
     navigationControllerToolbox.transitioningDelegate = transitioningDelegate;
     navigationControllerToolbox.modalPresentationStyle = UIModalPresentationCustom;
     navigationControllerToolbox.preferredContentSize = sizePopoverDefault();
@@ -367,7 +365,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
-    UIGestureRecognizer *tap = [UIGestureRecognizer strayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
+    UIGestureRecognizer *tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
     [tap requireGestureRecognizerToFail:tapGestureDoubleTap];
     [self.scroller addGestureRecognizer:tap];
     self.strayTouchGesture = tap;
@@ -375,13 +373,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.scroller.delegate = self;
     
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
-    NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint view:self.view containerLeft:self.scroller.container];
+    NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint view:self.view containerLeft:self.scroller.backgroundContainer];
     constraintContentLeft.priority = 999;
-    NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint view:self.view containerRight:self.scroller.container];
+    NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint view:self.view containerRight:self.scroller.backgroundContainer];
     constraintContentRight.priority = 999;
-    NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint view:self.scroller containerTop:self.scroller.container];
+    NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint view:self.scroller containerTop:self.scroller.backgroundContainer];
     NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint scroller:self.scroller bottom:self.bottomLayoutGuide];
-    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint content: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
+    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint content: self.scroller.backgroundContainer width: self.view.frame.size.width / self.scroller.zoomScale];
     [constraints addObject:constraintContentLeft];
     [constraints addObject:constraintContentRight];
     [constraints addObject:constraintContentTop];
@@ -390,7 +388,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     self.layoutConstraintContainerWidth = constraintWidth;
     
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController toolboxSettings];
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerSectionLayoutSettingsViewController viewControllerToolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
     
     self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
@@ -411,7 +409,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [self.view addConstraints:constraints];
     
-    self.scroller.container.backgroundColor = [UIColor clearColor];
+    self.scroller.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.scroller.backgroundColor = [UIColor clearColor];
 }
 
@@ -444,7 +442,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.sectionViews = dictionarySections;
     self.sectionControlViews = dictionarySectionControls;
     
-    [self.scroller.container addSubview:self.ruler];
+    [self.scroller.backgroundContainer addSubview:self.ruler];
     
     [self.view addSubview:self.statusLabelZoomScale];
     [self updateDisplayDetailZoomValue];
@@ -452,9 +450,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
     NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
     
-    NSArray *rulerConstraints = [NSLayoutConstraint ruler: self.ruler designer: self.scroller.container marginTop: MTReportDesignerBorderPaddingVertical heigh: MTReportDesignerRulerHeight];
+    NSArray *rulerConstraints = [NSLayoutConstraint ruler: self.ruler designer: self.scroller.backgroundContainer marginTop: MTReportDesignerBorderPaddingVertical heigh: MTReportDesignerRulerHeight];
     
-    NSArray *rulerSideConstraints = [NSLayoutConstraint ruler: self.ruler designer: self.scroller.container sideMargin: MTReportDesignerBorderPaddingSides];
+    NSArray *rulerSideConstraints = [NSLayoutConstraint ruler: self.ruler designer: self.scroller.backgroundContainer sideMargin: MTReportDesignerBorderPaddingSides];
     
     [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
     
@@ -470,7 +468,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     NSMutableSet *passthroughContainers = [[NSMutableSet alloc] initWithCapacity:sectionEnumerator.count];
     
-    CGFloat borderWidthThin = [UIView borderWidthThin];
+    const CGFloat borderWidthThin = [MADContainerView borderWidthThin];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         @autoreleasepool {
@@ -488,7 +486,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             MADDesignerSectionLabel *sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
             
-            UIGestureRecognizer *tapGestureRecognizer = [UIGestureRecognizer sectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
+            id tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
             
             [self.strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
             [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
@@ -526,8 +524,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [constraintsContainer addObject:lc1e];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1e];
             
-            NSLayoutConstraint *lc1 = [NSLayoutConstraint viewLeft:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
-            NSLayoutConstraint *lc2 = [NSLayoutConstraint viewRight:sectionView content:self.scroller.container padding:MTReportDesignerBorderPaddingSides];
+            NSLayoutConstraint *lc1 = [NSLayoutConstraint viewLeft:sectionView content:self.scroller.backgroundContainer padding:MTReportDesignerBorderPaddingSides];
+            NSLayoutConstraint *lc2 = [NSLayoutConstraint viewRight:sectionView content:self.scroller.backgroundContainer padding:MTReportDesignerBorderPaddingSides];
             NSArray *collectionViewConstraints = @[lc1, lc2];
             
             [constraintsScroller addObjectsFromArray:collectionViewConstraints];
@@ -546,8 +544,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             sectionCounter++;
             
-            [self.scroller.container addSubview:sectionView];
-            [self.scroller.container addSubview:sectionViewLabel];
+            [self.scroller.backgroundContainer addSubview:sectionView];
+            [self.scroller.backgroundContainer addSubview:sectionViewLabel];
             [passthroughContainers addObject:sectionView];
             sectionView.sectionLabel = sectionViewLabel;
         }
@@ -560,14 +558,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
-    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint view: self.scroller.container
+    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint view: self.scroller.backgroundContainer
                                                                                                              height: sectionHeights];
     [constraintsScroller addObject:layoutConstraintDesignerContentViewHeight];
     [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintDesignerContentViewHeight];
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
     
     
-    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint view: self.scroller.container
+    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [NSLayoutConstraint view: self.scroller.backgroundContainer
                                                                                                 containerBottom: self.scroller];
     
     [constraintsScroller addObject:layoutConstraintContentToScollerBottom];
@@ -576,10 +574,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.viewDidAppearDesignerScrollViewConstraints = viewDidAppearDesignerScrollViewConstraints;
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
     
     [self.scroller addConstraints: constraintsScroller];
-    [self.scroller.container addConstraints: constraintsContainer];
+    [self.scroller.backgroundContainer addConstraints: constraintsContainer];
     
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonAddReportObject animated:NO];
 
@@ -628,7 +626,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     NSArray *viewsToRemove = [self.sectionViewsArray arrayByAddingObjectsFromArray:self.sectionControlViewsArray];
     viewsToRemove = [self.sectionViewsArray arrayByAddingObject:self.ruler];
-    for (id view in self.scroller.container.subviews) {
+    for (id view in self.scroller.backgroundContainer.subviews) {
         if ([view isKindOfClass:[MADDesignerSectionView class]]) {
             [((MADDesignerSectionView *)view).sectionLabel removeFromSuperview];
         }
@@ -817,10 +815,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
         
         [self adjustScroller];
-        [self.scroller.container invalidateIntrinsicContentSize];
+        [self.scroller.backgroundContainer invalidateIntrinsicContentSize];
         CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
         CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
-        self.scroller.container.center = CGPointMake(scrollView.contentSize.width * 0.5000f + offsetX,
+        self.scroller.backgroundContainer.center = CGPointMake(scrollView.contentSize.width * 0.5000f + offsetX,
                                                      scrollView.contentSize.height * 0.5000f + offsetY);
         
         [self.view setNeedsUpdateConstraints];
@@ -890,7 +888,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.scroller.container;
+    return self.scroller.backgroundContainer;
 }
 
 - (void)adjustScroller {
@@ -1272,7 +1270,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: cell.objectIdTag
                                                                   managedObjectContext: self.document.activeDocumentModel.managedObjectContext];
-    return documentObject.type.integerValue;
+    return documentObject.type.shortValue;
 }
 
 
@@ -1370,8 +1368,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.sourceRect = [viewToEdit convertRect:viewToEdit.bounds
-                                                    toView:self.scroller.container];
-    popoverController.sourceView = self.scroller.container;
+                                                    toView:self.scroller.backgroundContainer];
+    popoverController.sourceView = self.scroller.backgroundContainer;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:navigationController animated:YES completion:nil];
     [self setDisplayInactive];
@@ -1382,7 +1380,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
+    MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode ViewControllerBarcode];
     barcodeViewController.document = self.document;
     barcodeViewController.delegate = self;
     
@@ -1395,8 +1393,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     UIPopoverPresentationController *popoverController = barcodeViewController.popoverPresentationController;
     popoverController.delegate = self;
-    popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds toView: self.scroller.container];
-    popoverController.sourceView = self.scroller.container;
+    popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds toView: self.scroller.backgroundContainer];
+    popoverController.sourceView = self.scroller.backgroundContainer;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:barcodeViewController animated:YES completion:nil];
     [self setDisplayInactive];
@@ -1421,8 +1419,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UIPopoverPresentationController *popoverController = chooseFieldViewController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
-                                                    toView: self.scroller.container];
-    popoverController.sourceView = self.scroller.container;
+                                                    toView: self.scroller.backgroundContainer];
+    popoverController.sourceView = self.scroller.backgroundContainer;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:chooseFieldViewController animated:YES completion:nil];
     [self setDisplayInactive];
@@ -1430,7 +1428,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)editDocumentObjectLabelStatic:(RptqDocumentObject *)object {
     
-    UIAlertController *alert = [UIAlertController editLabel:^(UITextField *textField) {
+    UIAlertController *alert = [MADAlertController editLabel:^(UITextField *textField) {
         textField.text = object.isLabel.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
     } completion:^(UIAlertAction *action, NSString *text) {
@@ -1531,9 +1529,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             
-            UIGestureRecognizer *panGesture = [UIGestureRecognizer elementPan:self action: @selector(handlePanPiece:) delegate:self];
+            id panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement: self
+                                                                             action: @selector(handlePanPiece:)
+                                                                           delegate: self];
             
-            UIGestureRecognizer *pinchGesture = [UIGestureRecognizer elementPinch: self action: @selector(handlePinchPiece:) delegate:self];
+            id pinchGesture = [MADPinchGestureRecognizer newPinchGestureRecognizerElement: self
+                                                                                   action: @selector(handlePinchPiece:)
+                                                                                 delegate: self];
 
             [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
             [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
@@ -2257,7 +2259,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         
     } completion:^(BOOL finished) {
         
-        [self.scroller.container setNeedsUpdateConstraints];
+        [self.scroller.backgroundContainer setNeedsUpdateConstraints];
         
     }];
 }
@@ -2275,7 +2277,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [self.document removeDocumentObject: objectId fromSection: sectionView.objectIdTag];
     } animationComplete:^(BOOL finished) {
         if (finished) {
-            [self.scroller.container invalidateIntrinsicContentSize];
+            [self.scroller.backgroundContainer invalidateIntrinsicContentSize];
             [self.view setNeedsUpdateConstraints];
         }
     } completion:^(BOOL finished) {
@@ -2289,11 +2291,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (CGRect)rectForSelectedElements {
     NSSet *views = [self selectedElementViews];
-    return [self.scroller.container popoverRectForSelectedViews:views];
+    return [self.scroller.backgroundContainer popoverRectForSelectedViews:views];
 }
 
 - (UIView *)viewForObjectID:(NSManagedObjectID *)objectID {
-    return [self.scroller.container viewWithTag: objectID.hash];
+    return [self.scroller.backgroundContainer viewWithTag: objectID.hash];
 }
 
 - (void)adjustContextOffsetForOpenPopover {
@@ -2375,7 +2377,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         piece.alpha = 0.80000f;
     }];
 
-    [self.scroller.container bringSubviewToFront: piece];
+    [self.scroller.backgroundContainer bringSubviewToFront: piece];
 
 
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
@@ -2399,7 +2401,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
     } animationComplete:^(BOOL finished) {
         if (finished) {
-            [self.scroller.container invalidateIntrinsicContentSize];
+            [self.scroller.backgroundContainer invalidateIntrinsicContentSize];
             [self.view setNeedsUpdateConstraints];
         }
     } completion:^(BOOL finished) {
@@ -2417,7 +2419,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
     //CGPoint locationInSection = CGPointZero;
-    for (UIView *subview in self.scroller.container.subviews) {
+    for (UIView *subview in self.scroller.backgroundContainer.subviews) {
         if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
             CGPoint location = [self.view convertPoint:gesture.view.frame.origin toView:subview];
             if ([subview pointInside:location withEvent:nil]) {
@@ -2432,10 +2434,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     //Section not found, so add to the first one.
     if (sectionView == nil) {
         CGFloat minDistance = CGFLOAT_MAX, distance;
-        for (UICollectionView *view in self.scroller.container.subviews) {
+        for (UICollectionView *view in self.scroller.backgroundContainer.subviews) {
             if ([view isKindOfClass: [MADDesignerSectionView class]]) {
                 CGPoint p1 = [self.view convertPoint:gesture.view.frame.origin toView:self.view];
-                CGPoint p2 = [self.scroller.container convertPoint:view.frame.origin toView:self.view];
+                CGPoint p2 = [self.scroller.backgroundContainer convertPoint:view.frame.origin toView:self.view];
                 if ((distance = CGDistance(p1, p2)) < minDistance) {
                     sectionView = (MADDesignerSectionView *)view;
                     minDistance = distance;
@@ -2445,7 +2447,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
         
         if (sectionView == nil) {
-            for (UICollectionView *view in self.scroller.container.subviews) {
+            for (UICollectionView *view in self.scroller.backgroundContainer.subviews) {
                 if ([view isKindOfClass: [MADDesignerSectionView class]]) {
                     sectionView = (MADDesignerSectionView *)view;
                     break;
@@ -2481,7 +2483,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
         } animationComplete:^(BOOL finished) {
             if (finished) {
-                [self.scroller.container invalidateIntrinsicContentSize];
+                [self.scroller.backgroundContainer invalidateIntrinsicContentSize];
                 [self.view setNeedsUpdateConstraints];
             }
         } completion:^(BOOL finished) {
@@ -2501,8 +2503,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         UIView *piece = gestureRecognizer.view;
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller.container];
-        locationInSuperview = [self.scroller.container convertPoint:locationInSuperview toView:self.view];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller.backgroundContainer];
+        locationInSuperview = [self.scroller.backgroundContainer convertPoint:locationInSuperview toView:self.view];
         piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
         piece.center = locationInSuperview;
     }
@@ -2526,13 +2528,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.toolboxVisible = false;
     self.barButtonAddReportObject.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
     self.barButtonAddReportObject.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
@@ -2540,7 +2542,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         if ([self.scroller respondsToSelector:@selector(setScrollEnabled:)]) {
             self.scroller.scrollEnabled = enabled;
             [self.scroller flashScrollIndicators];
-            for (UICollectionView *collectionView in [self.scroller.container subviews]) {
+            for (UICollectionView *collectionView in [self.scroller.backgroundContainer subviews]) {
                 if ([collectionView isKindOfClass: [UICollectionView class]]) {
                     collectionView.scrollEnabled = enabled;
                     [collectionView flashScrollIndicators];
@@ -2598,7 +2600,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (MADDesignerSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
     MADDesignerSectionView *documentSectionView = nil;
-    for (id subview in [self.scroller.container subviews]) {
+    for (id subview in [self.scroller.backgroundContainer subviews]) {
         if ([subview tag] == identifer && [subview isKindOfClass:[MADDesignerSectionView class]]) {
             documentSectionView = subview;
             break;
@@ -2699,9 +2701,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     view.enableResizing = YES;
     NSNumber *key = @(view.tag);
     self.borderAppliedToView[key] = @YES;
-    UIColor *tintColor = [UIColor tintColorAnalogous4];
+    UIColor *tintColor = [MADColor tintColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
-    view.layer.borderWidth = [UIView borderWidthThin];
+    view.layer.borderWidth = [MADContainerView borderWidthThin];
     
 }
 
@@ -2736,7 +2738,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                 elementView = [[MADDesignerElementView alloc] initWithDocumentObject: documentObject];
                 [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
                 
-                UIGestureRecognizer *tapGestureRecognizer = [UITapGestureRecognizer elementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
+                id tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerElementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
                 [elementView addGestureRecognizer:tapGestureRecognizer];
                 
             }
@@ -2748,9 +2750,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark Constraints Helpers
 
 - (void)contentViewRemoveAllConstraints {
-    NSArray *constraints = [self.scroller.container constraints];
+    NSArray *constraints = [self.scroller.backgroundContainer constraints];
     if (constraints.count > 0) {
-        [self.scroller.container removeConstraints:constraints];
+        [self.scroller.backgroundContainer removeConstraints:constraints];
     }
 }
 
@@ -2964,10 +2966,10 @@ static const inline CGSize sizePopoverFonts() {
     self.toolboxVisible = true;
     self.sectionSettingsVisible = false;
     
-    self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
+    self.toolboxTransitioningDelegate.sourceView = self.scroller.backgroundContainer;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.toolboxTransitioningDelegate.container = self.scroller.container;
+    self.toolboxTransitioningDelegate.container = self.scroller.backgroundContainer;
     self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
     self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
     self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
@@ -2993,10 +2995,10 @@ static const inline CGSize sizePopoverFonts() {
     
     self.toolboxVisible = false;
     self.settingsTransitioningDelegate.sourceRect = label.frame;
-    self.settingsTransitioningDelegate.sourceView = self.scroller.container;
+    self.settingsTransitioningDelegate.sourceView = self.scroller.backgroundContainer;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.settingsTransitioningDelegate.container = self.scroller.container;
+    self.settingsTransitioningDelegate.container = self.scroller.backgroundContainer;
     self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
     self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;

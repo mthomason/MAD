@@ -12,8 +12,11 @@
 
 #import "MTViewControllerBarcode.h"
 #import "MADNavigationBarTitleView.h"
+#import <MADCocoaExtensions/MADError.h>
+#import "UIStoryboard+ObjectSelector.h"
 
-NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
+static NSString * const MainIdentifier = @"MADIdentifierBarcodeViewController";
+static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()
     <MTDatabaseProtocol>
@@ -45,6 +48,12 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 @implementation MTViewControllerBarcode
 
 @synthesize unwindViewController;
+
++ (instancetype)ViewControllerBarcode {
+    UIStoryboard *storyboard = [UIStoryboard ObjectSelector];
+    id vc = [storyboard instantiateViewControllerWithIdentifier: MainIdentifier];
+    return vc;
+}
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
                  fromViewController:(UIViewController *)fromViewController
@@ -138,9 +147,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                     [[optionsViewController tableView] reloadData];
                 } else {
                     __weak MTViewControllerBarcode *weakself2 = strongself;
-                    [NSError presentError: error
-                         onViewController: strongself
-                               completion:^(BOOL success) {
+                    [MADError presentError: error
+                          onViewController: strongself
+                                completion: ^(BOOL success) {
                                    NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                                    [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself2];
                                }];
@@ -164,9 +173,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                     [[optionsViewController tableView] reloadData];
                 } else {
                     __weak MTViewControllerBarcode *weakself2 = strongself;
-                    [NSError presentError: error
-                         onViewController: strongself
-                               completion:^(BOOL success) {
+                    [MADError presentError: error
+                          onViewController: strongself
+                                completion: ^(BOOL success) {
                                    __strong MTViewControllerBarcode *strongself2 = weakself2;
                                    NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                                    [[MTKeyChain sharedObject] deleteKey:key usingViewController:strongself2];

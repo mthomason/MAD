@@ -51,7 +51,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     [super getSqlWithError:error];
     
     NSString *key = [self.database safeIdentifier:@"f1"];

@@ -11,8 +11,8 @@
 #endif
 
 #import "MADFontSelectorViewController.h"
-#import "UIViewController+UI.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import "MADTabBarController.h"
+#import <MADCocoaExtensions/MADColor.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADFonts.h>
 
@@ -62,7 +62,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
+    self.navigationController.navigationBar.barTintColor = [MADColor tintColorRed];
     self.navigationController.navigationBar.alpha = 1.0000f;
 }
 

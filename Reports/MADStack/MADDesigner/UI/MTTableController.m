@@ -63,11 +63,11 @@
     [super viewDidLoad];
 
     [self initalize];
-    self.collectionView.backgroundColor = [UIColor tintColorBlue];
+    self.collectionView.backgroundColor = [MADColor tintColorBlue];
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.alwaysBounceVertical = YES;
     
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor tintColorWhite];
+    self.navigationItem.rightBarButtonItem.tintColor = [MADColor tintColorWhite];
     
     self.toolbarItems = nil;
     self.navigationController.toolbarHidden = YES;
@@ -123,12 +123,12 @@
                     __strong MTTableController *strongself3 = weakSelf3;
                     __strong MTTableController *weakself4 = strongself3;
                     
-                    [NSError presentError: error
-                         onViewController: strongself3
-                               completion:^(BOOL success) {
-                                   NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                                   [[MTKeyChain sharedObject] deleteKey:key];
-                               }];
+                    [MADError presentError: error
+                          onViewController: strongself3
+                                completion:^(BOOL success) {
+                                    NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                                    [[MTKeyChain sharedObject] deleteKey:key];
+                                }];
                     
                 } else {
                     
@@ -137,12 +137,12 @@
                         __strong MTTableController *strongself3 = weakSelf3;
                         __strong MTTableController *weakself4 = strongself3;
                         
-                        [NSError presentError: error
-                             onViewController: strongself3
-                                   completion:^(BOOL success) {
-                                       NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                                       [[MTKeyChain sharedObject] deleteKey:key];
-                                   }];
+                        [MADError presentError: error
+                              onViewController: strongself3
+                                    completion:^(BOOL success) {
+                                        NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                                        [[MTKeyChain sharedObject] deleteKey:key];
+                                    }];
                         
                     });
                     

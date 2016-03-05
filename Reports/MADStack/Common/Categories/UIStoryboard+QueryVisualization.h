@@ -13,7 +13,7 @@
 
 @interface UIStoryboard (Designer)
 
-+ (instancetype)QueryVisualization;
+//+ (instancetype)QueryVisualization;
 
 @end
 

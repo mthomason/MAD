@@ -138,7 +138,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, width, progressView.frame.size.height);
     progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    progressView.progressTintColor = [UIColor tintColorAnalogous4];
+    progressView.progressTintColor = [MADColor tintColorAnalogous4];
     progressView.trackTintColor = [UIColor grayColor];
     return progressView;
 }
@@ -306,10 +306,10 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     
     NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
     NSArray *remaningErrors = [errors subarrayWithRange:range];
-    UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle:error.localizedDescription
-                                                                     message:error.localizedFailureReason
-                                                               andCompletion:^(UIAlertAction *action) {
-                                                                   if (remaningErrors.count > 0) {
+    UIAlertController *alert = [MADAlertController errorDisplayErrorWithTitle:error.localizedDescription
+                                                                      message:error.localizedFailureReason
+                                                                andCompletion:^(UIAlertAction *action) {
+                                                                if (remaningErrors.count > 0) {
                                                                        [MTConnectionViewController viewController:viewController
                                                                                                     displayErrors:remaningErrors
                                                                                                        completion:^(BOOL success) {

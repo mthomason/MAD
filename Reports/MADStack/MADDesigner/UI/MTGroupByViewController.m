@@ -12,6 +12,7 @@
 
 #import "MTGroupByViewController.h"
 #import "MADNavigationBarTitleView.h"
+#import <MADCocoaExtensions/MADError.h>
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 
@@ -58,7 +59,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     NSError *error = nil;
     [self.fetchedResultsControllerGroups performFetch:&error];
     if (error != nil) {
-        [NSError presentError: error
+        [MADError presentError: error
              onViewController: self
                    completion: NULL];
     }

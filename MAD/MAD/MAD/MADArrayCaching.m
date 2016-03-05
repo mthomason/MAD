@@ -17,15 +17,15 @@
 #import "MTDatabaseField.h"
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
-NSString * const MTArrayCachedTableName = @"ac";
-NSString * const MTArrayCachedColumnKey = @"ci";
-NSString * const MTArrayCachedColumnValue = @"ck";
-NSString * const MTArrayCachedExtension = @"madac";
+static NSString * const MTArrayCachedTableName = @"ac";
+static NSString * const MTArrayCachedColumnKey = @"ci";
+static NSString * const MTArrayCachedColumnValue = @"ck";
+static NSString * const MTArrayCachedExtension = @"madac";
 
-NSString * const MTArrayCachedQueryInsert = @"INSERT INTO %@ (%@, %@) VALUES (?1, ?2);";
-NSString * const MTArrayCachedQuerySelect = @"SELECT %@ FROM %@ WHERE %@ = ? LIMIT 1  OFFSET 0;";
-NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0;";
-NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
+static NSString * const MTArrayCachedQueryInsert = @"INSERT INTO %@ (%@, %@) VALUES (?1, ?2);";
+static NSString * const MTArrayCachedQuerySelect = @"SELECT %@ FROM %@ WHERE %@ = ? LIMIT 1  OFFSET 0;";
+static NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0;";
+static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 @interface MADArrayCaching ()
 

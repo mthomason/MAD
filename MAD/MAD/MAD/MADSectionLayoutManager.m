@@ -10,9 +10,10 @@
 #import "MADSectionLayoutAttributes.h"
 
 #import "RptqDocumentObject.h"
-#import "RptqDocumentObject+Extras.h"
+#import <MAD/RptqDocumentObject+Extras.h>
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MADSectionLayoutManager ()
 

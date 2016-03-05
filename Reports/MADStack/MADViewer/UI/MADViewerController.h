@@ -12,10 +12,11 @@
 #import <UIKit/UIKit.h>
 #import <MAD/MADActivityProtocol.h>
 #import "MADocumentProtocol.h"
+#import "MADViewController.h"
 
 @protocol MTViewControllerProtocol;
 
-@interface MADViewerController : UIPageViewController
+@interface MADViewerController : MADPageViewController
     <MADocumentProtocol,
         MADActivityProtocol,
         UIPageViewControllerDelegate,

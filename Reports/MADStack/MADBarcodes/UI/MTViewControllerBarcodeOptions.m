@@ -11,6 +11,8 @@
 #endif
 
 #import "MTViewControllerBarcodeOptions.h"
+#import <MADCocoaExtensions/MADError.h>
+
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MTTableViewControllerBarcodeExtraAztec.h"
@@ -771,9 +773,9 @@
 
         } else {
             __weak MTViewControllerBarcodeOptions *weakself2 = strongself;
-            [NSError presentError: error
-                 onViewController: self
-                       completion:^(BOOL success) {
+            [MADError presentError: error
+                  onViewController: self
+                        completion: ^(BOOL success) {
                            __strong MTViewControllerBarcodeOptions *strongself2 = weakself2;
                            NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                            [[MTKeyChain sharedObject] deleteKey:key usingViewController:strongself2];

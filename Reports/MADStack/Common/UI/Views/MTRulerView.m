@@ -7,7 +7,6 @@
 //
 
 #import "MTRulerView.h"
-#import "UIView+Extras.h"
 
 const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
 
@@ -51,12 +50,12 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
 }
 
 - (void)commonInit {
-    self.layer.borderWidth = [UIView borderWidthThin];
+    self.layer.borderWidth = 1.0000f;
     self.layer.borderColor = [UIColor blackColor].CGColor;
     self.backgroundColor = [UIColor whiteColor];
     
-    self.layer.borderWidth = [UIView borderWidthThin];
-    self.layer.borderColor = [UIColor borderColor].CGColor;
+    self.layer.borderWidth = 1.0000f;
+    self.layer.borderColor = [MADColor borderColor].CGColor;
     self.translatesAutoresizingMaskIntoConstraints = NO;
 
 }

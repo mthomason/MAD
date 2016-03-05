@@ -114,13 +114,13 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
     self.containerView.layer.cornerRadius =  3.0000f;
     self.containerView.clipsToBounds = YES;
     self.toolbar.backgroundColor = [UIColor darkGrayColor];
-    self.view.layer.shadowColor = [[UIColor edaBlueDark] CGColor];
+    self.view.layer.shadowColor = [[MADColor edaBlueDark] CGColor];
     self.view.layer.shadowOpacity = 1.0000f;
     self.view.layer.shadowRadius = 1.0000f;
     self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
     
-    NSLayoutConstraint *width = [NSLayoutConstraint schemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
-    NSLayoutConstraint *height = [NSLayoutConstraint schemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
+    NSLayoutConstraint *width = [NSLayoutConstraint LayoutConstraintSchemaViewWidthForView:self.view andWidth:MADSchemaViewDefaultWidth];
+    NSLayoutConstraint *height = [NSLayoutConstraint LayoutConstraintSchemaViewHeightForView:self.view andHeight:MADSchemaViewDefaultHeight];
     NSArray *constraints = @[width, height];
     [self.view addConstraints:constraints];
 }

@@ -67,7 +67,7 @@
 
 - (NSString *)databaseSchemaName {
     NSString *result = @"";
-    MNSDatabaseType databaseType = [[self inDatabase] databaseType];
+    MNSDatabaseType databaseType = [self.inDatabase databaseType];
     switch (databaseType) {
         
         case MNSDatabaseTypeMySQL:
@@ -82,16 +82,16 @@
         case MNSDatabaseTypeUnknown: {
             
             if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseMySQL]) {
-                result = [self mysql_database];
-                [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
+                result = self.mysql_database;
+                self.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMySQL);
                 
-            } else if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseTDS]) {
-                result = [self tds_database];
-                [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
+            } else if ([self.database_driver_type isEqualToString:MADIdentifierDatabaseTDS]) {
+                result = self.tds_database;
+                [self.inDatabase setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
                 
             } else if ([[self database_driver_type] isEqualToString:MADIdentifierDatabaseSqlite3]) {
                 result = [self mysql_database];
-                [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
+                [self.inDatabase setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
             }
             
             break;
@@ -106,7 +106,8 @@
 #pragma mark - Static
 
 + (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
-    NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
+    NSString *entityName = NSStringFromClass([RptqUserCredentals class]);
+    NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext: objectContext];
     id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
     return userCredentals;
 }

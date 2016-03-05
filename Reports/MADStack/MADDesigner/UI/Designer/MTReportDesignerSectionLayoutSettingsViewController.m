@@ -12,13 +12,14 @@
 
 #import <Foundation/Foundation.h>
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import "UIViewController+Designer.h"
+#import <MADCocoaExtensions/MADColor.h>
+#import "MADDesignerStoryboard.h"
 
 static NSString * const MADTextVisible         = @"Visible";
 static NSString * const MADTextVisibleHint     = @"Toggles visibility.";
 static NSString * const MADTextFormFeed        = @"Form Feed";
 static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
+static NSString * const MADIdentifierLayoutSettingsViewController = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
 
 @interface MTReportDesignerSectionLayoutSettingsViewController ()
 
@@ -33,8 +34,9 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 
 @implementation MTReportDesignerSectionLayoutSettingsViewController
 
-+ (instancetype)toolboxSettings {
-    return (MTReportDesignerSectionLayoutSettingsViewController *)[UIViewController layoutSettingsViewController];
++ (instancetype)viewControllerToolboxSettings {
+    UIStoryboard *designer = [MADDesignerStoryboard DesignerStoryboard];
+    return [designer instantiateViewControllerWithIdentifier:MADIdentifierLayoutSettingsViewController];
 }
 
 #pragma mark - View lifecycle
@@ -62,7 +64,7 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.opaque = YES;
-    self.navigationController.navigationBar.tintColor = [UIColor tintColorBlue];
+    self.navigationController.navigationBar.tintColor = [MADColor tintColorBlue];
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
                                                             self.tableView.scrollIndicatorInsets.left,
                                                             CGSizeZero.height,

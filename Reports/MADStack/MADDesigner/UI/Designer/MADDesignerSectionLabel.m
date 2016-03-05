@@ -7,7 +7,7 @@
 //
 
 #import "MADDesignerSectionLabel.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
 
@@ -31,7 +31,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         
         self.scale = 1.0000f;
 
-        UIColor *tintColor = [UIColor tintColorBlue];
+        UIColor *tintColor = [MADColor tintColorBlue];
         self.backgroundColor = [UIColor clearColor];
         self.textAlignment = NSTextAlignmentRight;
         self.lineBreakMode = NSLineBreakByClipping;
@@ -67,7 +67,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    UIColor *color = [UIColor tintColorBlue];
+    UIColor *color = [MADColor tintColorBlue];
     if (self.selected) {
         self.textColor = [color colorWithAlphaComponent:0.5000f];
     } else {
@@ -76,14 +76,14 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 }
 
 - (void)dimView {
-    UIColor *tintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [MADColor tintColorBlue];
     self.textColor = [tintColor colorWithAlphaComponent:0.500f];
     self.selected = YES;
 }
 
 - (void)normalView {
     
-    UIColor *tintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [MADColor tintColorBlue];
     self.textColor = tintColor;
     self.selected = NO;
 }

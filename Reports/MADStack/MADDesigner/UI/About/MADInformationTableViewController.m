@@ -10,9 +10,9 @@
 #import "MADTableViewCellAuto.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
-#import "ACAccountStore+Social.h"
-#import "UIButton+FollowTwitter.h"
-#import "NSAttributedString+Common.h"
+#import "MADAccountStore.h"
+#import "MADButtonTwitter.h"
+#import "MADAttributedString.h"
 
 @interface MADInformationTableViewController ()
     <MFMailComposeViewControllerDelegate>
@@ -23,7 +23,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     if (error) {
-        UIAlertController *alertController = [UIAlertController error:error];
+        UIAlertController *alertController = [MADAlertController error:error];
         [self showViewController:alertController sender:self];
     } else {
         [self dismissViewControllerAnimated:YES completion:^{
@@ -93,7 +93,7 @@
 }
 
 - (void)actionEmailUs {
-    MFMailComposeViewController *controller = [MFMailComposeViewController title:@"" body:@"" userInterfaceIdiom:self.traitCollection.userInterfaceIdiom];
+    MFMailComposeViewController *controller = [MADMailComposeViewController initWithTitle:@"" body:@"" userInterfaceIdiom:self.traitCollection.userInterfaceIdiom];
     controller.toRecipients = @[@"admin@everydayapps.com"];
     controller.subject = @"MAD Designer";
     if (self.popoverPresentationController != nil) {
@@ -141,7 +141,7 @@
         case 4: {
             cell.label.text = @"Twitter";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            UIButton *b = [UIButton FolllowTwitterWithTarget:self action:@selector(followEverydayApps)];
+            UIButton *b = [MADButtonTwitter FolllowTwitterWithTarget:self action:@selector(followEverydayApps)];
             cell.accessoryView = b;
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.userInteractionEnabled = YES;
@@ -163,18 +163,18 @@
         }];
     }
     NSString *user = @"EverydayApps";
-    [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
+    [MADAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
         UIAlertController *alert;
         if (!success && error) {
-            alert = [UIAlertController error:error];
+            alert = [MADAlertController error:error];
         } else if (success) {
             NSString *title = NSLocalizedString(@"Success", @"Success");
             NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
                                                         @"You are now Twitter following user %@.");
             NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [UIAlertController errorDisplayErrorWithTitle: title
-                                                          message: message
-                                                    andCompletion: ^(UIAlertAction *action) { }];
+            alert = [MADAlertController errorDisplayErrorWithTitle: title
+                                                           message: message
+                                                     andCompletion: ^(UIAlertAction *action) { }];
         }
         [self presentViewController:alert animated:YES completion:NULL];
     }];

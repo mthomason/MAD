@@ -70,7 +70,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 /*
     if ([[[self queryObject] hasQueryTables] count] > 0) {

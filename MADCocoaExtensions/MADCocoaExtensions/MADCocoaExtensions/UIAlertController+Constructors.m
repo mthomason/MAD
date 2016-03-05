@@ -76,15 +76,15 @@ NSString * const MADMessageEmptyQuery           = @"Add tables to the query and 
 
 typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 
-@implementation UIAlertController (Constructors)
+@implementation MADAlertController
 
 + (instancetype)addedDocument {
     NSString *newdoc = NSLocalizedString(MADTitleNewDocument, MADTitleNewDocument);
     NSString *addeddoc = NSLocalizedString(MADMessageNewDocument, MADMessageNewDocument);
     NSString *continueb = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: newdoc
-                                                                   message: addeddoc
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self alertControllerWithTitle: newdoc
+                                                       message: addeddoc
+                                                preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle: continueb
                                                  style: UIAlertActionStyleDefault
@@ -103,9 +103,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alertController = [self alertControllerWithTitle: title
+                                                                 message: message
+                                                          preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
@@ -135,9 +135,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alertController = [self alertControllerWithTitle: title
+                                                                 message: message
+                                                          preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
@@ -155,12 +155,12 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     [alertController addAction:actionCancel];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        [UIAlertController configureTextFieldForUsername:&textField];
+        [self configureTextFieldForUsername:&textField];
         usernameSetup(textField);
     }];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        [UIAlertController configureTextFieldForPassword:&textField];
+        [self configureTextFieldForPassword:&textField];
         passwordSetup(textField);
     }];
     
@@ -175,7 +175,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *keep = NSLocalizedString(MADButtonKeep, MADButtonKeep);
     NSString *remove = NSLocalizedString(MADButtonRemove, MADButtonRemove);
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
+    MADAlertController *alert = [self alertControllerWithTitle: title
                                                                    message: message
                                                             preferredStyle: UIAlertControllerStyleAlert];
     
@@ -199,9 +199,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alertController = [self alertControllerWithTitle: title
+                                                                 message: message
+                                                          preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
@@ -220,9 +220,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *title = NSLocalizedString(MADTitleCloudSignout, MADTitleCloudSignout);
     NSString *message = NSLocalizedString(MADMessageCloudSignout, MADMessageCloudSignout);
     NSString *ok = NSLocalizedString(MADTitleButtonDismiss, MADTitleButtonDismiss);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alertController = [self alertControllerWithTitle: title
+                                                                 message: message
+                                                          preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
                                                      handler: handler];
@@ -238,7 +238,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly);
     NSString *cloudActionTitle = NSLocalizedString(MADTitleButtonCloud, MADTitleButtonCloud);
     
-    UIAlertController *storageController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    MADAlertController *storageController = [self alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle style:UIAlertActionStyleDefault handler:handlerLocal];
     [storageController addAction:localOption];
@@ -257,9 +257,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     NSString *change = NSLocalizedString(MADButtonChange, MADButtonChange);
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self alertControllerWithTitle: title
+                                                       message: message
+                                                preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: change
                                                             style: UIAlertActionStyleDefault
@@ -283,9 +283,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *title = NSLocalizedString(MADTitleEmailConfigNot, MADTitleEmailConfigNot);
     NSString *message = NSLocalizedString(MADMessageEmailConfigNot, MADMessageEmailConfigNot);
     NSString *titleButton = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self alertControllerWithTitle: title
+                                                       message: message
+                                                preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle: titleButton
                                                  style: UIAlertActionStyleDefault
@@ -306,9 +306,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSLocalizedString(MADMessageDeleteItemsPlural, MADMessageDeleteItemsComment) :
     NSLocalizedString(MADMessageDeleteItem, MADMessageDeleteItemComment);
     NSString *message = [NSString stringWithFormat:messageTemplate, number];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleActionSheet];
+    MADAlertController *alert = [self alertControllerWithTitle: title
+                                                       message: message
+                                                preferredStyle: UIAlertControllerStyleActionSheet];
     NSString *titleCancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     NSString *titleDestructiveTemplate = itemCount > 1 ?
     NSLocalizedString(MADTitleDeleteItemsPlural, MADTitleDeleteItemsComment) :
@@ -334,9 +334,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *rename = NSLocalizedString(MADButtonRename, MADButtonRename);
     NSString *message = NSLocalizedString(MADMessageRename, MADMessageRename);
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self     alertControllerWithTitle: title
+                                                           message: message
+                                                    preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: rename
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
@@ -358,9 +358,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 + (instancetype)errorValidationFilename {
     NSString *title = NSLocalizedString(MADTitleErrorValidation, MADTitleErrorValidation);
     NSString *message = NSLocalizedString(MADMessageErrorValidFileName, MADMessageErrorValidFileName);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self alertControllerWithTitle: title
+                                                       message: message
+                                                preferredStyle: UIAlertControllerStyleAlert];
     
     NSString *dismiss = NSLocalizedString(MADTitleButtonDismiss, MADTitleButtonDismiss);
     UIAlertAction *ok = [UIAlertAction actionWithTitle: dismiss
@@ -373,9 +373,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 + (instancetype)errorFileExist {
     NSString *title = NSLocalizedString(MADTitleErrorFileExist, MADTitleErrorFileExist);
     NSString *message = NSLocalizedString(MADMessageErrorFileExist, MADMessageErrorFileExist);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self alertControllerWithTitle: title
+                                                       message: message
+                                                preferredStyle: UIAlertControllerStyleAlert];
     NSString *dismiss = NSLocalizedString(MADTitleButtonDismiss, MADTitleButtonDismiss);
     UIAlertAction *ok = [UIAlertAction actionWithTitle: dismiss
                                                  style: UIAlertActionStyleDefault
@@ -389,9 +389,9 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *message = NSLocalizedString(MADMessageEmptyQuery, MADMessageEmptyQuery);
     NSString *buttonTitle = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
-                                                                   message: message
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alert = [self alertControllerWithTitle: title
+                                                       message: message
+                                                preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle: buttonTitle
                                                  style: UIAlertActionStyleDefault
                                                handler: nil];
@@ -409,7 +409,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
                                    message:(NSString *)message
                              andCompletion:(void (^)(UIAlertAction *action))handlerContinue {
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+    MADAlertController *alertController = [self alertControllerWithTitle: title
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: ok
@@ -424,7 +424,7 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
     NSString *title = NSLocalizedString(MADTitleTransactionComplete, MADTitleTransactionComplete);
     NSString *message = NSLocalizedString(MADMessageSoftwareActivated, MADMessageSoftwareActivated);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
+    MADAlertController *alert = [self alertControllerWithTitle: title
                                                                    message: message
                                                             preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: ok

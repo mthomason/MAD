@@ -48,6 +48,7 @@
 #import "MTPaperC8.h"
 #import "MTPaperC9.h"
 #import "MTPaperC10.h"
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MTPaper ()
 

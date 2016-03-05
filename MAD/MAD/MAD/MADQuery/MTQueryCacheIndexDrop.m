@@ -39,7 +39,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     return [NSString stringWithFormat:@"DROP INDEX IF EXISTS main.%@", [self indexName]];
 }
 

@@ -31,7 +31,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.tableView.backgroundColor = [UIColor paperHomemade];
+    self.tableView.backgroundColor = [UIColor colorPaperHomemade];
 }
 
 - (void)viewDidLoad {
@@ -125,7 +125,7 @@
 - (IBAction)actionRefresh:(id)sender {
     [[MTVerificationController sharedInstance] refreshReceipt:^(BOOL success, NSError *error) {
         if (error != nil) {
-            UIAlertController *alert = [UIAlertController error:error];
+            UIAlertController *alert = [MADAlertController error:error];
             [self presentViewController:alert animated:YES completion:^{
                 
             }];

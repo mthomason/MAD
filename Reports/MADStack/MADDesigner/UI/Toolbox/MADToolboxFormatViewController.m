@@ -10,7 +10,7 @@
 
 #import "MTToolboxViewControllerProtocol.h"
 
-#import "UIViewController+UI.h"
+#import "MADTabBarController.h"
 
 @interface MADToolboxFormatViewController ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>

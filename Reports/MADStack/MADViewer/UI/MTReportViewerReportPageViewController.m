@@ -12,7 +12,7 @@
 
 #import "MTReportViewerReportPageViewController.h"
 #import "MTReportViewerReportPageView.h"
-#import "NSDate+Extras.h"
+#import "MADDate.h"
 #import "MADDocumentScroller.h"
 #import "MADPageViewAttributes.h"
 

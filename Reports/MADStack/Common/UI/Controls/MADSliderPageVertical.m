@@ -7,7 +7,7 @@
 //
 
 #import "MADSliderPageVertical.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADColor.h>
 #import "UIImage+ImageEffects.h"
 
 @interface MADSliderPageVertical ()
@@ -29,7 +29,7 @@
         self.maximumValue = 0.0000f;
         self.minimumValue = 0.0000f;
         self.continuous = YES;
-        self.tintColor = [UIColor tintColorRed];
+        self.tintColor = [MADColor tintColorRed];
         self.value = 0.0000f;
         self.backgroundColor = [UIColor clearColor];
         

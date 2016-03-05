@@ -11,8 +11,8 @@
 
 #import "MUIViewControllerDelegate.h"
 #import <QuartzCore/QuartzCore.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIDevice+Hack.h>
+#import <MADCocoaExtensions/MADColor.h>
+#import <MADCocoaExtensions/MADDevice.h>
 
 @interface MTLicensingViewController : UITableViewController
 

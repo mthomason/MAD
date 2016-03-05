@@ -10,19 +10,19 @@
 
 @implementation NSLayoutConstraint (QueryVisualization)
 
-+ (instancetype)schemaViewHeightForView:(UIView *)view andHeight:(CGFloat)height {
-    NSLayoutConstraint *constraint = [self heightForView:view andHeight:height];
++ (instancetype)LayoutConstraintSchemaViewHeightForView:(UIView *)view andHeight:(CGFloat)height {
+    NSLayoutConstraint *constraint = [self LayoutConstraintHeightForView:view andHeight:height];
     constraint.priority = UILayoutPriorityDefaultHigh;
     return constraint;
 }
 
-+ (instancetype)schemaViewWidthForView:(UIView *)view andWidth:(CGFloat)width {
-    NSLayoutConstraint *constraint = [self widthForView:view andWidth:width];
++ (instancetype)LayoutConstraintSchemaViewWidthForView:(UIView *)view andWidth:(CGFloat)width {
+    NSLayoutConstraint *constraint = [self LayoutConstraintWidthForView:view andWidth:width];
     constraint.priority = UILayoutPriorityDefaultHigh;
     return constraint;
 }
 
-+ (instancetype)heightForView:(UIView *)view andHeight:(CGFloat)height {
++ (instancetype)LayoutConstraintHeightForView:(UIView *)view andHeight:(CGFloat)height {
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view
                                                                   attribute:NSLayoutAttributeHeight
                                                                   relatedBy:NSLayoutRelationEqual
@@ -34,7 +34,7 @@
     return constraint;
 }
 
-+ (instancetype)widthForView:(UIView *)view andWidth:(CGFloat)width {
++ (instancetype)LayoutConstraintWidthForView:(UIView *)view andWidth:(CGFloat)width {
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view
                                                                   attribute:NSLayoutAttributeWidth
                                                                   relatedBy:NSLayoutRelationEqual

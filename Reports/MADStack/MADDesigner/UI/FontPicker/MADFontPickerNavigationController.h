@@ -10,4 +10,6 @@
 
 @interface MADFontPickerNavigationController : UINavigationController
 
++ (instancetype)FontPickerNavigationController;
+
 @end

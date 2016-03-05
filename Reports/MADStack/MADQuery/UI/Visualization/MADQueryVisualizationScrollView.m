@@ -21,6 +21,7 @@ static const CGFloat contentViewHeight = 1024.0000f;
 
 @implementation MADQueryVisualizationScrollView
 
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -60,8 +61,8 @@ static const CGFloat contentViewHeight = 1024.0000f;
     MADQueryVisualizationContentView *contentView = [[MADQueryVisualizationContentView alloc] initWithFrame:CGRectZero];
     [self addSubview:contentView];
 
-    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint heightForView:contentView andHeight:contentViewHeight];
-    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint widthForView:contentView andWidth:contentViewWidth];
+    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint LayoutConstraintHeightForView:contentView andHeight:contentViewHeight];
+    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint LayoutConstraintWidthForView:contentView andWidth:contentViewWidth];
     
     NSDictionary *viewDictionary = @{@"cv" : contentView};
     NSArray *layoutConstraintCenterX = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[cv]|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:viewDictionary];

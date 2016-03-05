@@ -10,6 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADExplorer/MADDocumentState.h>
+#import <MADCocoaExtensions/MADFilename.h>
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MADSaveFileProtocol.h"
 

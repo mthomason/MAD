@@ -18,7 +18,7 @@
 
 @protocol MysqlFetchDelegate
 @optional
-    - (MTDataTable *)dataTableForQuery:(MTQuery *)query;
+    - (MTDataTable * _Null_unspecified)dataTableForQuery:(MTQuery * _Null_unspecified)query;
     - (void)didFetchRow:(NSUInteger)row;
 @end
 
@@ -26,8 +26,10 @@
 
 @property (nonatomic, weak) id <MysqlFetchDelegate> delegate;
 
-//- (NSError *)performQuery:(MTQuery *)q onConnection:(MysqlConnection *)connection;
-- (MTDataTable *)fetchWithCommand:(NSString *)s dataTable:(MTDataTable **)dataTable onConnection:(MysqlConnection *)connection error:(NSError **)error;
+- (MTDataTable * _Null_unspecified)fetchWithCommand:(NSString * _Null_unspecified)s
+                                          dataTable:(MTDataTable * _Null_unspecified * _Null_unspecified)dataTable
+                                       onConnection:(MysqlConnection * _Null_unspecified)connection
+                                              error:(NSError * _Nullable * _Null_unspecified)error;
 
 @end
 

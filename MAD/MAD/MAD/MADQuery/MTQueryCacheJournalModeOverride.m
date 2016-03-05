@@ -26,7 +26,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     return @"PRAGMA journal_mode=WAL;";
 }
 

@@ -8,8 +8,9 @@
 
 #import "MADToolboxViewController.h"
 #import "MTToolboxViewControllerProtocol.h"
-#import "UIStoryboard+Toolbox.h"
 #import "UINavigationController+Designer.h"
+#import "MADFontPickerNavigationController.h"
+#import "MADToolboxStoryboard.h"
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
@@ -61,10 +62,10 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     if (self = [super initWithCoder:aDecoder]) {
         
         
-        UIStoryboard *storyboard = [UIStoryboard Toolbox];
+        UIStoryboard *storyboard = [MADToolboxStoryboard ToolboxStoryboard];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
         UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
-        UINavigationController *styleNavigationController = [UINavigationController navigationControllerFontPicker];
+        UINavigationController *styleNavigationController = [MADFontPickerNavigationController FontPickerNavigationController];
         
         self.layout = layout;
         self.format = format;
@@ -99,7 +100,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = YES;
     self.sceneSelector.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
+    self.navigationController.navigationBar.barTintColor = [MADColor tintColorBlue];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -133,12 +133,12 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
     MTQuerySelectColumns
 };
 
-extern NSString * const MTQueryKeyType;
-extern NSString * const MTQueryKeyObject;
+extern NSString * const _Nonnull MTQueryKeyType;
+extern NSString * const _Nonnull MTQueryKeyObject;
 
-extern NSString * const MTQueryKeyPredicateColumn;
-extern NSString * const MTQueryKeyPredicateValue;
-extern NSString * const MADIdentifierROWID;
+extern NSString * const _Nonnull MTQueryKeyPredicateColumn;
+extern NSString * const _Nonnull MTQueryKeyPredicateValue;
+extern NSString * const _Nonnull MADIdentifierROWID;
 
 @class MTDatabase, MTDataTable, RptqQuery;
 
@@ -146,47 +146,47 @@ extern NSString * const MADIdentifierROWID;
 
 @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-@property (nonatomic, strong, readwrite) MTDatabase *database;
+@property (nonatomic, strong, readwrite, nullable) MTDatabase *database;
 
-@property (nonatomic, strong) id queryObject;
-@property (nonatomic, strong) NSMutableDictionary *fields;
-@property (nonatomic, strong) NSMutableArray *fieldKeys;
+@property (nonatomic, strong, nullable) id queryObject;
+@property (nonatomic, strong, nullable) NSMutableDictionary *fields;
+@property (nonatomic, strong, nullable) NSMutableArray *fieldKeys;
 
 @property (nonatomic, assign, readonly) MTQueryType type;
 
-@property (nonatomic, strong) NSMutableArray *binaryBindings; // Used by database to bind NSData to insert statements
+@property (nonatomic, strong, nullable) NSMutableArray *binaryBindings; // Used by database to bind NSData to insert statements
 
-- (id)initWithQueryType:(MTQueryType)type object:(id)object;
+- (id _Null_unspecified)initWithQueryType:(MTQueryType)type object:(id _Null_unspecified)object;
 
-- (NSString *)getSqlWithError:(NSError **)error;
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
+- (NSString * _Nullable)getSqlWithError:(NSError * _Nullable * _Nullable)error;
+- (NSString * _Nullable)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError * _Nullable * _Nullable)error;    //Only on MTQueryFull
 
-- (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
-- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion;
+- (void)performQuery:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+- (void)performQueryWithDatabase:(MTDatabase * _Null_unspecified)database completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
 
-@property (nonatomic, strong) NSDictionary *columns;    //MTDataColumns by key
+@property (nonatomic, strong) NSDictionary * _Null_unspecified columns;    //MTDataColumns by key
 
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
-- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
-- (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
-- (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
+- (NSString * _Nonnull)whereClauseWithRowIds:(NSArray * _Nullable)rowids;
+- (NSString * _Nonnull)whereClauseWithParameters:(NSArray * _Nullable)whereClause;             //For "cache" sqltie3
+- (NSString * _Nonnull)orderByClauseWithSortDescriptors:(NSArray * _Nullable)sortDescriptors;  //For "cache" sqltie3
+- (NSUInteger)columnTypeForColumnHanle:(NSString * _Nonnull)columnHandle;            //For "cache" sqltie3
 
-- (instancetype)initWithObject:(id)object;
-- (NSString *)fieldKeyForIndex:(NSUInteger)index;
+- (instancetype _Nonnull)initWithObject:(id _Null_unspecified)object;
+- (NSString * _Nullable)fieldKeyForIndex:(NSUInteger)index;
 
 - (BOOL)returnsResults;
 
 - (BOOL)partOfTransactionSet;
 
-+ (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid;
-+ (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
-+ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
-+ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
++ (NSDictionary * _Nonnull)queryDefinitionFull:(RptqQuery * _Null_unspecified)query;
++ (NSDictionary * _Nonnull)queryDefinitionSelect:(NSDictionary * _Null_unspecified)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset dropRowid:(BOOL)droprowid;
++ (NSDictionary * _Nonnull)queryDefinitionSelect:(NSArray * _Null_unspecified)columnKeys tableName:(NSString * _Null_unspecified)tableName sortDescriptors:(NSArray * _Null_unspecified)sortDescriptors;
++ (NSDictionary * _Nonnull)queryDefinitionSelect:(NSDictionary * _Null_unspecified)queryDefinationSelect withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
++ (NSDictionary * _Nonnull)queryDefinitionCacheDeleteAllFromTable:(NSString * _Null_unspecified)table;
 
 @end
 

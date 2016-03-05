@@ -40,7 +40,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT *, ROWID FROM %@ ", self.tableName];
 
     [sql appendString:[self whereClauseWithRowIds:[self rowids]]];

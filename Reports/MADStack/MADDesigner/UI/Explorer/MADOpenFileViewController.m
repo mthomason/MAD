@@ -12,7 +12,12 @@
 
 #import "MADOpenFileViewController.h"
 #import <MessageUI/MessageUI.h>
-#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
+#import <MADCocoaExtensions/MADFilename.h>
+#import <MADCocoaExtensions/MADColor.h>
+#import <MADCocoaExtensions/MADError.h>
+#import <MADCocoaExtensions/UIBarButtonItem+Constructors.h>
+#import <MADCocoaExtensions/UIAlertController+Constructors.h>
+#import <MADCocoaExtensions/MFMailComposeViewController+Constructors.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
@@ -200,8 +205,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     [self setEditing:NO animated:NO];
     
-    self.navigationController.toolbar.barTintColor = [UIColor tintColorBlue];
-    self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
+    self.navigationController.toolbar.barTintColor = [MADColor tintColorBlue];
+    self.navigationController.toolbar.tintColor = [MADColor tintColorWhite];
     
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
         
@@ -222,8 +227,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     [toolbarButtons insertObject:self.barButtonItemDuplicate atIndex:1];
     
     [self setToolbarItems:toolbarButtons animated:NO];
-    
-    UIBarButtonItem *editButton = [UIBarButtonItem buttonEdit:self action:@selector(edit:)];
+
+    UIBarButtonItem *editButton = [MADBarButtonItemCustom newBarButtonItemEdit:self action:@selector(edit:)];
     self.barButtonItemEdit = editButton;
     self.barButtonItemEdit.accessibilityHint = NSLocalizedString(@"Enables document list edit mode.", @"Enables document list edit mode.");
     self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
@@ -364,7 +369,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 #pragma mark - MFMailComposeViewController delegate protocol
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [NSError presentError: error onViewController: self completion:^(BOOL success) {
+    [MADError presentError: error onViewController: self completion:^(BOOL success) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
 }
@@ -458,28 +463,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         [cell.activityIndicator stopAnimating];
     }
 }
-/*
-- (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
-   NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        dispatch_sync(dispatch_get_main_queue(), ^(void) {
-            
-            MTCollectionViewCellDocument *visibleCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            NSURL *url = [UIDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-            NSString *path = [url path];
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
-            if (image) {
-                visibleCell.imagePreview.image = image;
-            } else {
-                UIImage *defaultThumbnail = [MTCollectionViewCellDocument defaultThumbnail];
-                visibleCell.imagePreview.image = defaultThumbnail;
-            }
-            [visibleCell setNeedsLayout];
-            
-        });
-    });
-}
-*/
+
 - (void)selectionsUpdated {
     switch (self.collectionView.indexPathsForSelectedItems.count) {
         case 0:
@@ -764,17 +748,17 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)paste:(id)sender {
-    NSURL *url = [[UIPasteboard generalPasteboard] URL];
-    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+    UIPasteboard *generalPasteboard = [UIPasteboard generalPasteboard];
+    NSData *data = [[NSData alloc] initWithContentsOfURL:generalPasteboard.URL];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    NSURL *destinationUrl = [url uniqueUrl];
+    NSURL *destinationUrl = [(MADURL *)generalPasteboard.URL uniqueUrl];
     
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
     NSError* fileWrittingError = nil;
-    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:generalPasteboard.URL error:&fileWrittingError];
     if (fileWrittingError) {
         fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:generalPasteboard.URL error:&fileWrittingError];
     }
     [self.collectionView reloadData];
 }
@@ -825,7 +809,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (IBAction)delete:(id)sender {
     NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
-    UIAlertController *alertController = [UIAlertController deleteItems:selectedItems.count
+    UIAlertController *alertController = [MADAlertController deleteItems:selectedItems.count
                                                                 confirm:^(UIAlertAction *action) {
                                                                     for (NSIndexPath *selectedItem in selectedItems) {
                                                                         MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:selectedItem.item];
@@ -862,7 +846,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     MADMetaData *metaData = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
     
-    UIAlertController *alert = [UIAlertController renameDocument:^(UITextField *textField) {
+    UIAlertController *alert = [MADAlertController renameDocument:^(UITextField *textField) {
         
         textField.text = cellDocument.labelTitle.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
@@ -870,7 +854,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         
     } confirm:^(UIAlertAction *action, NSString *text) {
         
-        NSString *name = [NSURL fileNameFilter:text];
+        NSString *name = [MADURL fileNameFilter:text];
         if (name.length > 0) {
             NSURL *newUrl = [metaData.URL.URLByDeletingLastPathComponent URLByAppendingPathComponent:name isDirectory:NO];
             if ([[NSFileManager defaultManager] fileExistsAtPath:newUrl.path] == NO && [[NSFileManager defaultManager] isUbiquitousItemAtURL:newUrl] == NO) {
@@ -891,11 +875,11 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                     [self.filesCoordnator.filesController renameFileInfo:metaData toName:text];
                 }
             } else {
-                UIAlertController *alert = [UIAlertController errorFileExist];
+                UIAlertController *alert = [MADAlertController errorFileExist];
                 [self showViewController:alert sender:self];
             }
         } else {
-            UIAlertController *alert = [UIAlertController errorValidationFilename];
+            UIAlertController *alert = [MADAlertController errorValidationFilename];
             [self showViewController:alert sender:self];
         }
         
@@ -909,7 +893,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     if ([MFMailComposeViewController canSendMail] == NO) {
         
-        UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
+        UIAlertController *alert = [MADAlertController alertNotConfiguredForEmail];
         [self showViewController:alert sender:self];
         
     } else {
@@ -930,10 +914,10 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
                                                              @"The attached document can be opened with MAD Viewer.");
             NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
             [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
-            MFMailComposeViewController	*mailComposer = [MFMailComposeViewController body: messageBody
-                                                                               attachment: metadata.URL
-                                                                                 mimeType: mimeType
-                                                                       userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
+            MFMailComposeViewController	*mailComposer = [MADMailComposeViewController initWithBody: messageBody
+                                                                                        attachment: metadata.URL
+                                                                                          mimeType: mimeType
+                                                                                userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
             mailComposer.mailComposeDelegate = self;
             [self showViewController:mailComposer sender:self];
         }
@@ -1047,14 +1031,14 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (UIBarButtonItem *)barButtonItemEditDone {
     if (!_barButtonItemEditDone) {
-        _barButtonItemEditDone = [UIBarButtonItem buttonEditDone:self action:@selector(edit:)];
+        _barButtonItemEditDone = [MADBarButtonItemCustom newBarButtonItemEditDone:self action:@selector(edit:)];
     }
     return _barButtonItemEditDone;
 }
 
 - (UIBarButtonItem *)barButtonItemDuplicate {
     if (!_barButtonItemDuplicate) {
-        _barButtonItemDuplicate = [UIBarButtonItem buttonDuplicate:self action:@selector(actionDuplicate:)];
+        _barButtonItemDuplicate = [MADBarButtonItemCustom newBarButtonItemDuplicate:self action:@selector(actionDuplicate:)];
     }
     return _barButtonItemDuplicate;
 }

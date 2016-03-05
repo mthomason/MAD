@@ -49,7 +49,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString * _Nonnull)getSqlWithError:(NSError * _Nullable * _Nullable)error {
     NSError *sqlError = nil;
     [super getSqlWithError:&sqlError];
     *error = sqlError;
@@ -91,7 +91,7 @@
                                                                      andTableName: field.inTable.name];
                 NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
                 NSNumber *widthByField = widthsByField[ckey];
-                NSInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.integerValue;
+                NSUInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.unsignedIntegerValue;
                 MTDatabaseField *f = self.fields[okey];
                 f.calculatedWidth = maxSize;
             }];

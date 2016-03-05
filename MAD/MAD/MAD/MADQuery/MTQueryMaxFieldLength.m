@@ -49,7 +49,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     NSError *sqlError = nil;
     [super getSqlWithError:&sqlError];
     *error = sqlError;

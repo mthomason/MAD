@@ -228,7 +228,6 @@
             result = MNSDocumentSectionTypeGroupFooter;
         }
     }
-    
     return result;
 }
 

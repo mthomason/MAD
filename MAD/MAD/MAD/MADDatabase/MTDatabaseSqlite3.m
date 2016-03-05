@@ -74,7 +74,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = @(errorMessage);
             NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
-            error = [NSError errorWithDomain:@"MTSqlite3" code:4832 title:title andMessage:message];
+            error = [MADError errorWithDomain:@"MTSqlite3" code:4832 title:title andMessage:message];
         }
         self.open = true;
     }
@@ -549,7 +549,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         }
         if (success == NO) {
             NSString *title = NSLocalizedString(@"Error", @"Error");
-            error = [NSError errorWithDomain:@"MTDatabaseSqlite3" code:4784 title:title andMessage:message];
+            error = [MADError errorWithDomain:@"MTDatabaseSqlite3" code:4784 title:title andMessage:message];
         }
         sqlite3_free(sql);
         

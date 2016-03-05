@@ -23,7 +23,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                           title: (NSString *)title
                      andMessage: (NSString *)message {
     NSDictionary *userInfo = [self userInfoWithTitle:title andMessage:message];
-    return [NSError errorWithDomain:domain code:code userInfo:userInfo];
+    return (MADError *)[NSError errorWithDomain:domain code:code userInfo:userInfo];
 }
 
 + (NSDictionary *)userInfoWithTitle:(NSString *)title

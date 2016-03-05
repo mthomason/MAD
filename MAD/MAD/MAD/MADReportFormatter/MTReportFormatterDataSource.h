@@ -9,12 +9,6 @@
 #ifndef MAD_MTReportFormatterDataSource_h
 #define MAD_MTReportFormatterDataSource_h
 
-@protocol MTReportFormatterDataSource <NSObject>
 
-- (BOOL)cacheExist;
-- (NSEnumerator *)enumeratorForReportData;
-- (NSDictionary *)dataForCacheId:(NSNumber *)cachedID;
-
-@end
 
 #endif

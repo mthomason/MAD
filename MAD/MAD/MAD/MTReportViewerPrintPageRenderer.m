@@ -66,6 +66,7 @@
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADReportLineRepresentation.h"
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MTReportViewerPrintPageRenderer ()
 
@@ -242,7 +243,7 @@
     UIGraphicsEndImageContext();
     
     if (squareEffect) {
-        croppedImage = [UIImage imageMadeSquare:croppedImage];
+        croppedImage = [MADImage imageMadeSquare:croppedImage];
     }
     
     return croppedImage;

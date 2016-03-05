@@ -8,18 +8,14 @@
 
 #import "UINavigationController+Designer.h"
 #import "UIStoryboard+Licensing.h"
-#import "UIStoryboard+Designer.h"
 #import "UIStoryboard+InformationTable.h"
-#import "UIStoryboard+NewDocument.h"
-#import "UIStoryboard+Toolbox.h"
 #import "UIStoryboard+ObjectSelector.h"
 
-static NSString * const FontPicker      = @"MADIdentifierStoryboardFontPicker";
-static NSString * const NewDocument     = @"MADIdentifierOpenDocumentStart";
 static NSString * const AppInformation  = @"MADIdentifierInformationNavigationController";
 static NSString * const Licensing       = @"MTNavigationControllerLicensing";
 static NSString * const AggregateAdd        = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
 static NSString * const ElementPicker       = @"MADIdentifierNavigationControllerDocumentObjectSelector";
+
 
 @implementation UINavigationController (Designer)
 
@@ -34,22 +30,6 @@ static NSString * const ElementPicker       = @"MADIdentifierNavigationControlle
 + (instancetype)Licensing {
     UIStoryboard *storyboard = [UIStoryboard Licensing];
     return [storyboard instantiateViewControllerWithIdentifier:Licensing];
-}
-
-+ (instancetype)NewDocument {
-    UIStoryboard *storyboard = [UIStoryboard NewDocument];
-    return [storyboard instantiateViewControllerWithIdentifier:NewDocument];
-}
-
-+ (instancetype)navigationControllerToolbox {
-    UIStoryboard *storyboardToolbox = [UIStoryboard Toolbox];
-    UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
-    return navigationControllerToolbox;
-}
-
-+ (instancetype)navigationControllerFontPicker {
-    UIStoryboard *storyboard = [UIStoryboard Toolbox];
-    return [storyboard instantiateViewControllerWithIdentifier:FontPicker];
 }
 
 + (instancetype)aggregateAdd {

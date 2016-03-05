@@ -50,7 +50,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     return [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", [self tableName]];
 }
 

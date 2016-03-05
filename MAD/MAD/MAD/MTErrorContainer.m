@@ -7,7 +7,7 @@
 //
 
 #import "MTErrorContainer.h"
-#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MADError.h>
 
 @interface MTErrorContainer ()
 
@@ -61,7 +61,7 @@
     if (self.errors.count > 0) {
         NSError *errorToShow = self.errors.lastObject;
         [self.errors removeObject:errorToShow];
-        [NSError presentError: errorToShow
+        [MADError presentError: errorToShow
              onViewController: nil
                    completion: ^(BOOL success) {
                        if (success) {

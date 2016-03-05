@@ -34,10 +34,10 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
 
         NSNumber *limitO = object[@(MTQueryCacheSelectLimitOffsetParamatersLimit)];
-        self.limit = limitO ? [limitO integerValue] : NSNotFound;
+        self.limit = (limitO == nil) ? limitO.unsignedIntegerValue : NSNotFound;
 
         NSNumber *offsetO = object[@(MTQueryCacheSelectLimitOffsetParamatersOffset)];
-        self.offset = offsetO ? [offsetO integerValue] : NSNotFound;
+        self.offset = (offsetO == nil) ? offsetO.unsignedIntegerValue : NSNotFound;
         
         NSString *tableName = object[@(MTQueryCacheSelectLimitOffsetParamatersTableNames)];
         [self setTableName:tableName];
@@ -64,7 +64,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithError:(NSError * _Nullable *)error {
     [super getSqlWithError:error];
     NSString *result = nil;
     

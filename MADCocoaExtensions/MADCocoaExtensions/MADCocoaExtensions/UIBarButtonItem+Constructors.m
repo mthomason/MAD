@@ -8,38 +8,38 @@
 
 #import "UIBarButtonItem+Constructors.h"
 
-@implementation UIBarButtonItem (Constructors)
+@implementation MADBarButtonItemCustom
 
-+ (instancetype)buttonEdit:(id)target action:(SEL)action NS_RETURNS_RETAINED {
-    UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                          target: target
-                                                                          action: action];
++ (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action NS_RETURNS_RETAINED {
+    MADBarButtonItemCustom *edit = [[self alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                target: target
+                                                                action: action];
     return edit;
 }
 
-+ (instancetype)buttonDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED {
++ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action NS_RETURNS_RETAINED {
     UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
-    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
-                                                                               style: UIBarButtonItemStylePlain
-                                                                              target: target
-                                                                              action: action];
+    MADBarButtonItemCustom *barButtonItemDuplicate = [[self alloc] initWithImage: imageDuplcate
+                                                                     style: UIBarButtonItemStylePlain
+                                                                    target: target
+                                                                    action: action];
     barButtonItemDuplicate.enabled = NO;
     return barButtonItemDuplicate;
 }
 
-+ (instancetype)buttonEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED {
-    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
++ (instancetype)newBarButtonItemEditDone:(id)target action:(SEL)action NS_RETURNS_RETAINED {
+    MADBarButtonItemCustom *barButtonItemEditDone = [[self alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                                            target: target
                                                                                            action: action];
     return barButtonItemEditDone;
 }
 
-+ (instancetype)ActivityIndicator NS_RETURNS_RETAINED {
++ (instancetype)newBarButtonItemActivityIndicator NS_RETURNS_RETAINED {
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;
     activityIndicator.hidesWhenStopped = NO;
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    MADBarButtonItemCustom *barButtonItem = [[self alloc] initWithCustomView:activityIndicator];
     return barButtonItem;
 }
 

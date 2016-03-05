@@ -12,6 +12,7 @@
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import <MADCocoaExtensions/MADError.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
@@ -56,9 +57,9 @@
             [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
             [self.tableView reloadData];
         } else {
-            [NSError presentError: error
-                 onViewController: self
-                       completion:^(BOOL success) {
+            [MADError presentError: error
+                  onViewController: self
+                        completion: ^(BOOL success) {
                            NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                            [[MTKeyChain sharedObject] deleteKey:key];
                        }];
