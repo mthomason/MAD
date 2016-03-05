@@ -182,7 +182,7 @@ static MTKeyChain *sharedSingleton = nil;
             }];
 
           [NSThread safeSwitchToMainThread:^{
-                UIViewController *topViewController = [UIApplication topViewController];
+                UIViewController *topViewController = [MADStackViewController topViewController];
                 topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [topViewController  presentViewController: alertController animated: YES completion: nil];
             }];
@@ -203,7 +203,7 @@ static MTKeyChain *sharedSingleton = nil;
         } cancel:nil];
         
         [NSThread safeSwitchToMainThread:^{
-            UIViewController *topViewController = viewController == nil ? [UIApplication topViewController] : viewController;
+            UIViewController *topViewController = viewController == nil ? [MADStackViewController topViewController] : viewController;
             topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
             [topViewController  presentViewController: alertController
                                              animated: YES
@@ -358,7 +358,7 @@ static MTKeyChain *sharedSingleton = nil;
     }];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = [UIApplication topViewController];
+        UIViewController *topViewController = [MADStackViewController topViewController];
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: prompt animated: YES completion: nil];
     }];
@@ -379,7 +379,7 @@ static MTKeyChain *sharedSingleton = nil;
     }];
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = [UIApplication topViewController];
+        UIViewController *topViewController = [MADStackViewController topViewController];
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: prompt animated: YES completion: nil];
     }];

@@ -7,8 +7,7 @@
 //
 
 #import <MADDataStructures/MADDataStructures.h>
-
-@class RptqQuery;
+#import <MAD/MAD.h>
 
 @interface MTGraph (RptqQuery)
 

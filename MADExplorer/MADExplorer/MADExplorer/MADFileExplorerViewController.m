@@ -12,6 +12,7 @@
 #import "MTCollectionViewCellDocument.h"
 #import "MADFileLocationManager.h"
 #import "MADOpenDocumentManager.h"
+#import <MADCocoaExtensions/UIDocument+thumbnailURL.h>
 
 static NSString * const NotDownloaded                           = @"Not Downloaded";
 static NSString * const Syncing                                 = @"Syncing";

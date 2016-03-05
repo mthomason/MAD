@@ -48,7 +48,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
     UIViewController *displayController;
     if (viewController == nil) {
-        displayController = [[UIApplication sharedApplication] topViewController];
+        displayController = [MADStackViewController topViewController];
     } else {
         displayController = viewController;
     }

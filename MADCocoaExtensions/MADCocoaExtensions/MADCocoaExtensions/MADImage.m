@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIImage+Border.h"
+#import "MADImage.h"
 #import "UIDevice+Hack.h"
 
-@implementation UIImage (Border)
+@implementation MADImage
 
-+ (UIImage *)imageWithBorder:(UIImage *)source {
-    return [UIImage imageWithBorder:source usingColor:[UIColor blackColor]];
++ (instancetype)imageWithBorder:(UIImage *)source NS_RETURNS_NOT_RETAINED {
+    return [MADImage imageWithBorder:source usingColor:[UIColor blackColor]];
 }
 
-+ (UIImage *)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color {
++ (instancetype)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color NS_RETURNS_NOT_RETAINED {
     CGSize size = [source size];
     UIGraphicsBeginImageContext(size);
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
@@ -27,12 +27,12 @@
     } else {
         CGContextStrokeRectWithWidth(context, rect, 1.0000f);
     }
-    UIImage *result =  UIGraphicsGetImageFromCurrentImageContext();
+    id result =  UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return result;
 }
 
-+ (UIImage *)imageMadeSquare:(UIImage *)source {
++ (instancetype)imageMadeSquare:(UIImage *)source NS_RETURNS_NOT_RETAINED {
     CGSize size = CGSizeMake(MAX(source.size.width, source.size.height),
                              MAX(source.size.width, source.size.height));
     UIGraphicsBeginImageContext(size);
@@ -43,7 +43,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, [UIColor clearColor].CGColor);
     CGContextStrokeRectWithWidth(context, rect, 1.0000f);
-    UIImage *result =  UIGraphicsGetImageFromCurrentImageContext();
+    id result =  UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return result;
 }

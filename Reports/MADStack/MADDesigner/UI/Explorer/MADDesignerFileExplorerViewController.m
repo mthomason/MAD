@@ -10,7 +10,6 @@
 
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
-#import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADQueryBuilderSplitViewController.h"

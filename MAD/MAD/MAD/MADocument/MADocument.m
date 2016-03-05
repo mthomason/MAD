@@ -75,6 +75,7 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADCocoaExtensions/MADFilename.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -1142,7 +1143,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [self filenameId:filename.hash];
+    NSString *filenameId = [MADFilename newFilenameId:filename.hash];
     return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 

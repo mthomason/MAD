@@ -242,7 +242,7 @@
     UIGraphicsEndImageContext();
     
     if (squareEffect) {
-        croppedImage = [UIImage imageMadeSquare:croppedImage];
+        croppedImage = [MADImage imageMadeSquare:croppedImage];
     }
     
     return croppedImage;
