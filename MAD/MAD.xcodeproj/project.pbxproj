@@ -242,7 +242,6 @@
 		4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F21BADE80500775B72 /* MADConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC281FC1BADE80500775B72 /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F31BADE80500775B72 /* MADConstants.m */; };
 		4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CC281FE1BADE80500775B72 /* MADLinkType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F51BADE80500775B72 /* MADLinkType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282401BADE81A00775B72 /* MADSectionLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282411BADE81A00775B72 /* MADSectionLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */; };
 		4CC282421BADE81A00775B72 /* MADSectionLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -630,7 +629,6 @@
 		4CC281F21BADE80500775B72 /* MADConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADConstants.h; path = MAD/MADConstants.h; sourceTree = "<group>"; };
 		4CC281F31BADE80500775B72 /* MADConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADConstants.m; path = MAD/MADConstants.m; sourceTree = "<group>"; };
 		4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentObjectType.h; path = MAD/MADDocumentObjectType.h; sourceTree = "<group>"; };
-		4CC281F51BADE80500775B72 /* MADLinkType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLinkType.h; path = MAD/MADLinkType.h; sourceTree = "<group>"; };
 		4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSectionLayoutAttributes.h; path = MAD/MADSectionLayoutAttributes.h; sourceTree = "<group>"; };
 		4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSectionLayoutAttributes.m; path = MAD/MADSectionLayoutAttributes.m; sourceTree = "<group>"; };
 		4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSectionLayoutManager.h; path = MAD/MADSectionLayoutManager.h; sourceTree = "<group>"; };
@@ -1076,7 +1074,6 @@
 				4CC2820D1BADE81A00775B72 /* MTAlignment.h */,
 				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
 				4CC2820C1BADE81A00775B72 /* MTAggregateFunctionInputType.h */,
-				4CC281F51BADE80500775B72 /* MADLinkType.h */,
 				4CC281F21BADE80500775B72 /* MADConstants.h */,
 				4CC281F31BADE80500775B72 /* MADConstants.m */,
 				4CC282361BADE81A00775B72 /* MADFont.h */,
@@ -1481,7 +1478,6 @@
 				4C401E591BAE4E9400BAE5FC /* MTDataTableLocation.h in Headers */,
 				4C994F4A1BE33F300058627A /* MADReportSectionRowsRepresentation.h in Headers */,
 				4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */,
-				4CC281FE1BADE80500775B72 /* MADLinkType.h in Headers */,
 				4CC282711BADE82000775B72 /* MTErrorContainer.h in Headers */,
 				4C401E551BAE4E9400BAE5FC /* MTDataTableFast.h in Headers */,
 				4C401DDF1BAE3BD700BAE5FC /* MTQueryCustomNoResults.h in Headers */,

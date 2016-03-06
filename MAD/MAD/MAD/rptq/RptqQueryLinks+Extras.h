@@ -11,7 +11,6 @@
 
 #import "RptqQueryLinks.h"
 #import <MADDataStructures/MADDataStructures.h>
-#import <MAD/MADLinkType.h>
 
 extern NSString * const MNSJoinTypeInnerJoin;
 extern NSString * const MNSJoinTypeEquiJoin;
@@ -36,6 +35,17 @@ extern NSString * const MTLinkSqlCrossJoin;
 extern NSString * const MTLinkSqlLeftOuterJoin;
 extern NSString * const MTLinkSqlRightOuterJoin;
 extern NSString * const MTLinkSqlFullOuterJoin;
+
+typedef NS_ENUM(unsigned char, MNSLinkType) {
+    MNSLinkTypeInnerJoin = 0,
+    MNSLinkTypeEquiJoin = 1,
+    MNSLinkTypeNaturalJoin = 2,
+    MNSLinkTypeCrossJoin = 3,
+    MNSLinkTypeLeftOuterJoin = 4,
+    MNSLinkTypeRightOuterJoin = 5,
+    MNSLinkTypeFullOuterJoin = 6,
+    MNSLinkTypeUnknown = 7,
+};
 
 //#define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(/*@"⟕"*/@"", @"Inner-Join"), NSLocalizedString(/*@"θ-join"*/@"", @"Equi-Join"), NSLocalizedString(/*@"⋈"*/@"", @"Natural Join"), NSLocalizedString(/*@"Cross Join"*/@"", @"Cross Join"), NSLocalizedString(/*@"⟕"*/@"", @"Left Outer Join"), NSLocalizedString(/*@"⟖"*/, @"Right Outer Join"), NSLocalizedString(/*@"⟗"*/, @"Full Outer Join"), nil]
 

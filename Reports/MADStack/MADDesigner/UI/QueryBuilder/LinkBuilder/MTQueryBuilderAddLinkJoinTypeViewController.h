@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import <MAD/MADLinkType.h>
 #import <MAD/MTDatabaseConnection.h>
 
 @class MTQueryBuilderAddLinkJoinTypeViewController, MADocument;
