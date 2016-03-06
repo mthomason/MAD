@@ -38,7 +38,6 @@
 #import "MADNavigationBarTitleView.h"
 
 #import "UIApplication+Extras.h"
-#import "UIPageViewController+Extras.h"
 #import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "NSDate+Extras.h"
@@ -1124,6 +1123,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (NSUInteger)currentPageNumber { return self.currentPageIndex + 1; }
+
+- (void)setPageingEnabled:(BOOL)enabled {
+    for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+        gestureRecognizer.enabled = enabled;
+    }
+}
 
 #pragma mark - Custom
 
