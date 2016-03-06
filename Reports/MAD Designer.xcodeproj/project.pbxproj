@@ -427,10 +427,8 @@
 		4C42DD4C1BCB0A1C0082D8E3 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD431BCB0A1B0082D8E3 /* MADCocoaExtensions.framework */; };
 		4C42DD4D1BCB0A1C0082D8E3 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD441BCB0A1B0082D8E3 /* MADDataStructures.framework */; };
 		4C42DD501BCB0A1C0082D8E3 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD471BCB0A1B0082D8E3 /* MADFoundation.framework */; };
-		4C42DD531BCB0A1C0082D8E3 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD4A1BCB0A1C0082D8E3 /* MADTdsClient.framework */; };
 		4C42DD571BCB0AB60082D8E3 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD561BCB0AB50082D8E3 /* MADExplorer.framework */; };
 		4C42DD621BCB0ADB0082D8E3 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD461BCB0A1B0082D8E3 /* MADFileManager.framework */; };
-		4C42DD661BCB0ADB0082D8E3 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD481BCB0A1B0082D8E3 /* MADMySQL.framework */; };
 		4C42DD681BCB0ADB0082D8E3 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD491BCB0A1C0082D8E3 /* MADSqlite3.framework */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
@@ -2382,10 +2380,8 @@
 				4C42DD4B1BCB0A1C0082D8E3 /* MADBarcodes.framework in Frameworks */,
 				4C42DD621BCB0ADB0082D8E3 /* MADFileManager.framework in Frameworks */,
 				4C42DD4C1BCB0A1C0082D8E3 /* MADCocoaExtensions.framework in Frameworks */,
-				4C42DD661BCB0ADB0082D8E3 /* MADMySQL.framework in Frameworks */,
 				4C42DD4D1BCB0A1C0082D8E3 /* MADDataStructures.framework in Frameworks */,
 				4C42DD501BCB0A1C0082D8E3 /* MADFoundation.framework in Frameworks */,
-				4C42DD531BCB0A1C0082D8E3 /* MADTdsClient.framework in Frameworks */,
 				4CBD28791C7660D500B1B16D /* GoogleConversionTracking.a in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
