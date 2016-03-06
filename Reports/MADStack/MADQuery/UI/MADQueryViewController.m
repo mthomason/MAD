@@ -653,7 +653,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
                 //result.accessoryType = UITableViewCellAccessoryDetailButton;
-                result.tintColor = [UIColor edaBlackTwentyFivePercent];
+                result.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
             }
             result.textLabel.numberOfLines = 0;
             break;
@@ -671,7 +671,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             result.textLabel.font = font;
             result.textLabel.backgroundColor = [UIColor whiteColor];
             result.indentationLevel = 1;
-            result.tintColor = [UIColor tintColorBlue];
+            result.tintColor = [MADColorEverydayApps newColorBlue];
             result.backgroundColor = [UIColor whiteColor];
             break;
         }
@@ -706,7 +706,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
             NSDictionary *attributes = @{ NSFontAttributeName : font,
                                           NSParagraphStyleAttributeName : paragraphStyle };
-            UIColor *color = [UIColor tintColorBlue];
+            UIColor *color = [MADColorEverydayApps newColorBlue];
             NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption,
                                              NSForegroundColorAttributeName :  color};
             NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
@@ -740,7 +740,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSDictionary *attributes = @{ NSFontAttributeName : font };
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
             NSDictionary *attributesLeft = @{ NSParagraphStyleAttributeName : paragraphStyleLeft };
-            UIColor *color = [UIColor tintColorBlue];
+            UIColor *color = [MADColorEverydayApps newColorBlue];
             NSDictionary *attributesRight = @{ NSParagraphStyleAttributeName : paragraphStyleLeft, NSFontAttributeName : fontCaption, NSForegroundColorAttributeName :  color };
             NSRange rangeLeft = [messageText rangeOfString:fieldName];
             NSRange rangeRange = [messageText rangeOfString:sortFieldName];
@@ -778,7 +778,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSString *symbol = [predicate symbolForDisplay];
             NSString *messageText = [NSString stringWithFormat:formatString, leftFieldDisplay, symbol, rightFieldDisplay];
             NSDictionary *attributes = @{ NSFontAttributeName : font };
-            UIColor *color = [UIColor tintColorBlue];
+            UIColor *color = [MADColorEverydayApps newColorBlue];
             NSDictionary *attributesCaption = @{ NSForegroundColorAttributeName :  color };
 
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText

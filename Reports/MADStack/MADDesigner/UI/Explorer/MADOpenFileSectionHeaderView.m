@@ -76,7 +76,7 @@ NSString * const MADTextLocal = @"Local";
 
         self.activityIndicatorView = activityView;
         
-        UIColor *foregroundColor = [UIColor tintColorRed];
+        UIColor *foregroundColor = [MADColorEverydayApps newColorRed];
         NSDictionary *attributesLocal = @{NSForegroundColorAttributeName : foregroundColor};
         
         NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
@@ -87,7 +87,7 @@ NSString * const MADTextLocal = @"Local";
                                                                                     attributes: attributesLocal];
         self.localizedAttrbiutedTextCloud = attributedStringCloud;
         
-        UIColor *blueColor = [UIColor headerColor];
+        UIColor *blueColor = [MADColorEverydayApps newColorHeaderColor];
         self.backgroundColor = blueColor;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = foregroundColor;

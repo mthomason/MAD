@@ -42,7 +42,7 @@
         anchorLeft.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
         anchorRight.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         
-        UIColor *color = [UIColor tintColorRed];
+        UIColor *color = [MADColorEverydayApps newColorRed];
         [self setForgroundColor:color];
         
         [self setAnchorViewLeft:anchorLeft];

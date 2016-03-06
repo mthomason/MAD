@@ -62,7 +62,7 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.opaque = YES;
-    self.navigationController.navigationBar.tintColor = [UIColor tintColorBlue];
+    self.navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorBlue];
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,
                                                             self.tableView.scrollIndicatorInsets.left,
                                                             CGSizeZero.height,

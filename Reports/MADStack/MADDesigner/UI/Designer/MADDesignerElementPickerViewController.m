@@ -151,7 +151,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePicker.delegate = (id <UINavigationControllerDelegate ,UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
-    imagePicker.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    imagePicker.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
     [self presentViewController:imagePicker animated:YES completion:NULL];
 }
 

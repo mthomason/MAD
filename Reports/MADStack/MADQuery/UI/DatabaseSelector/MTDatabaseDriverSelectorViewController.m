@@ -95,7 +95,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
         default:
             break;
     }
-    [UITableViewCell appearance].textLabel.highlightedTextColor = [UIColor tintColorBlue];
+    [UITableViewCell appearance].textLabel.highlightedTextColor = [MADColorEverydayApps newColorBlue];
     return cell;
 }
 

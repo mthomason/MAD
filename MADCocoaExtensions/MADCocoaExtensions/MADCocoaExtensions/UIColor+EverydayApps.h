@@ -10,38 +10,39 @@
 #define Reports_UIColor_EverydayApps_h
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADColor.h>
 
-@interface UIColor(EverydayApps)
-
-+ (instancetype)edaBlackish;
-+ (instancetype)edaBlueDark;
-+ (instancetype)edaBlueLight;
-+ (instancetype)edaBlueDarkSelection;
-+ (instancetype)edaBlueLightSelection;
-+ (instancetype)edaBlackSeventyFivePercent;
-+ (instancetype)edaBlackFiftyPercent;
-+ (instancetype)edaBlackTwentyFivePercent;
-+ (instancetype)edaOrange;
-+ (instancetype)edaYellow;
-+ (instancetype)edaGreenDark;
-+ (instancetype)edaGreenLight;
-
-+ (instancetype)headerColor;
-+ (instancetype)tintColorWhiteAlpha;
-+ (instancetype)edaBlueLightBackground;
-+ (instancetype)edaTableHeaderBackground;
-+ (instancetype)tintColorBackground;
-+ (instancetype)tintColorBlue;
-+ (instancetype)tintColorRed;
-+ (instancetype)tintColorWhite;
-+ (instancetype)tintColorGold;
-+ (instancetype)tintColorGold2;
-
-+ (instancetype)disabledColor;
-
-+ (instancetype)tintColorAnalogous4;
-+ (instancetype)borderColor;
-
+ @interface MADColorEverydayApps : MADColor
+ 
+ + (UIColor *)newColorBlackish;
+ + (UIColor *)newColorBlueDark;
+ + (UIColor *)newColorBlueLight;
+ + (UIColor *)newColorBlueDarkSelection;
+ + (UIColor *)newColorBlueLightSelection;
+ + (UIColor *)newColorBlackSeventyFivePercent;
+ + (UIColor *)newColorBlackFiftyPercent;
+ + (UIColor *)newColorBlackTwentyFivePercent;
+ + (UIColor *)newColorOrange;
+ + (UIColor *)newColorYellow;
+ + (UIColor *)newColorGreenDark;
+ + (UIColor *)newColorGreenLight;
+ 
+ + (UIColor *)newColorHeaderColor;
+ + (UIColor *)newColorWhiteAlpha;
+ + (UIColor *)newColorBlueLightBackground;
+ + (UIColor *)newColorTableHeaderBackground;
+ + (UIColor *)newColorBackground;
+ + (UIColor *)newColorBlue;
+ + (UIColor *)newColorRed;
+ + (UIColor *)newColorWhite;
+ + (UIColor *)newColorGold;
+ + (UIColor *)newColorGold2;
+ 
+ + (UIColor *)newColorDisabledColor;
+ 
+ + (UIColor *)newColorAnalogous4;
+ + (UIColor *)newColorBorderColor;
+ 
 @end
 
 #endif

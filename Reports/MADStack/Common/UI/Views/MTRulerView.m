@@ -56,7 +56,7 @@ static inline CGFloat xPoint(NSInteger i, CGFloat offsetInPoints) {
     self.backgroundColor = [UIColor whiteColor];
     
     self.layer.borderWidth = [UIView borderWidthThin];
-    self.layer.borderColor = [UIColor borderColor].CGColor;
+    self.layer.borderColor = [MADColorEverydayApps newColorBorderColor].CGColor;
     self.translatesAutoresizingMaskIntoConstraints = NO;
 
 }

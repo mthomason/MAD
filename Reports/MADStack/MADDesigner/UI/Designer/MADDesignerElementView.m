@@ -213,7 +213,7 @@
 - (void)flash:(void (^)(BOOL finished))completion {
     [UIView animateWithDuration: 0.6666f delay: 0.3333f options: UIViewAnimationOptionAutoreverse
                      animations: ^{
-                         self.backgroundColor = [[UIColor tintColorBlue] colorWithAlphaComponent:0.33333333];
+                         self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333];
                      } completion:^(BOOL finished) {
                          if (finished) self.backgroundColor = [UIColor clearColor];
                          completion(finished);

@@ -20,7 +20,7 @@
 + (instancetype)FolllowTwitterWithTarget:(id)target action:(SEL)action size:(MADSizeGeneral)size {
     NSAttributedString *followOnTwitter = [NSAttributedString FollowUsOnTwitter];
     UIButton *b = [UIButton buttonWithType:UIButtonTypeSystem];
-    b.backgroundColor = [UIColor edaBlackTwentyFivePercent];
+    b.backgroundColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
     b.layer.cornerRadius = 5.0000f;
     b.clipsToBounds = YES;
     switch (size) {

@@ -29,7 +29,7 @@
         self.maximumValue = 0.0000f;
         self.minimumValue = 0.0000f;
         self.continuous = YES;
-        self.tintColor = [UIColor tintColorRed];
+        self.tintColor = [MADColorEverydayApps newColorRed];
         self.value = 0.0000f;
         self.backgroundColor = [UIColor clearColor];
         

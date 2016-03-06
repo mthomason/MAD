@@ -72,7 +72,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
         self.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
         [self.contentView addSubview:vertSlider];
         
-        self.backgroundColor = [[UIColor edaBlueLight] colorWithAlphaComponent:0.3333f];
+        self.backgroundColor = [[MADColorEverydayApps newColorBlueLight] colorWithAlphaComponent:0.3333f];
         self.slider = vertSlider;
         
         UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
@@ -154,7 +154,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
             label.layer.shadowOpacity = 6.0;
             label.layer.shadowRadius = 0.0;
             label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
-            label.layer.shadowColor = [UIColor tintColorBlue].CGColor;
+            label.layer.shadowColor = [MADColorEverydayApps newColorBlue].CGColor;
             [self.vibrancyView addSubview:label];
             [self.labels addObject:label];
         }
@@ -164,7 +164,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)setDisplayEnabled {
-    self.drawingColor = [UIColor tintColorRed];
+    self.drawingColor = [MADColorEverydayApps newColorRed];
 }
 
 - (void)setDisplayDisabled {

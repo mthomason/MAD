@@ -2699,7 +2699,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     view.enableResizing = YES;
     NSNumber *key = @(view.tag);
     self.borderAppliedToView[key] = @YES;
-    UIColor *tintColor = [UIColor tintColorAnalogous4];
+    UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
     view.layer.borderColor = tintColor.CGColor;
     view.layer.borderWidth = [UIView borderWidthThin];
     

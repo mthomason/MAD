@@ -36,8 +36,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.toolbar.tintColor = [UIColor tintColorWhite];
-    self.toolbar.barTintColor = [UIColor tintColorBlue];
+    self.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
+    self.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
     self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
     self.navigationBar.translucent = YES;

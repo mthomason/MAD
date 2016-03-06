@@ -18,7 +18,7 @@
     MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
     mailComposer.subject = title;
     [mailComposer setMessageBody:body isHTML:NO];
-    mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    mailComposer.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
     
     if (userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;

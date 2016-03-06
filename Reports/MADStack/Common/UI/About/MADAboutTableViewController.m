@@ -140,7 +140,7 @@
 
         case 0:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.label.textColor = [UIColor edaBlueDark];
+            cell.label.textColor = [MADColorEverydayApps newColorBlueDark];
             cell.label.text = @"MAD Designer";
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;

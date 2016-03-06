@@ -20,13 +20,13 @@
         UIView *view = nibContents.firstObject;
         view.frame = self.frame;
         
-        self.labelTitle.textColor = [UIColor tintColorRed];
-        self.buttonAdd.tintColor = [UIColor tintColorBlue];
+        self.labelTitle.textColor = [MADColorEverydayApps newColorRed];
+        self.buttonAdd.tintColor = [MADColorEverydayApps newColorBlue];
 
         [self addSubview:nibContents.firstObject];
         self.labelTitle.numberOfLines = 0;
         self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-        self.backgroundColor = [UIColor headerColor];
+        self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];
         
     }
     return self;

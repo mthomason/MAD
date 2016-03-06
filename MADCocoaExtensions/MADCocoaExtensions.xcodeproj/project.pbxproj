@@ -13,6 +13,8 @@
 		4C2480A71C8B2D7F0058E6B4 /* MADImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480A11C8B2D7F0058E6B4 /* MADImage.m */; };
 		4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */; };
+		4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B81C8BFA340058E6B4 /* MADColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C2480BB1C8BFA340058E6B4 /* MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B91C8BFA340058E6B4 /* MADColor.m */; };
 		4C3DCC271BCAF63400ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */; };
 		4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; };
@@ -71,6 +73,8 @@
 		4C2480A11C8B2D7F0058E6B4 /* MADImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADImage.m; path = MADCocoaExtensions/MADImage.m; sourceTree = "<group>"; };
 		4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabel.h; path = MADCocoaExtensions/MADLabel.h; sourceTree = "<group>"; };
 		4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabel.m; path = MADCocoaExtensions/MADLabel.m; sourceTree = "<group>"; };
+		4C2480B81C8BFA340058E6B4 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColor.h; path = MADCocoaExtensions/MADColor.h; sourceTree = "<group>"; };
+		4C2480B91C8BFA340058E6B4 /* MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColor.m; path = MADCocoaExtensions/MADColor.m; sourceTree = "<group>"; };
 		4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
@@ -206,7 +210,6 @@
 				4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */,
 				4C5205901BA7E2A2000E6A59 /* NSThread+Extras.h */,
 				4C5205911BA7E2A2000E6A59 /* NSThread+Extras.m */,
-				4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */,
 				4C52059F1BA7E2A2000E6A59 /* UIDevice+Hack.h */,
 				4C5205931BA7E2A2000E6A59 /* UIDevice+Hack.m */,
 				4C5205941BA7E2A2000E6A59 /* BDHost.m */,
@@ -215,8 +218,11 @@
 				4C52059B1BA7E2A2000E6A59 /* BDHost.h */,
 				4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */,
 				4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */,
+				4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */,
 				4C5205A11BA7E2A2000E6A59 /* MTMath.h */,
 				4C5205A21BA7E2A2000E6A59 /* MTMath.m */,
+				4C2480B81C8BFA340058E6B4 /* MADColor.h */,
+				4C2480B91C8BFA340058E6B4 /* MADColor.m */,
 			);
 			name = MADCocoaExtensions;
 			sourceTree = "<group>";
@@ -253,6 +259,7 @@
 				4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */,
 				4C5205CA1BA7E2A2000E6A59 /* UIDevice+Hack.h in Headers */,
 				4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */,
+				4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */,
 				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
 				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
 				4C5205CB1BA7E2A2000E6A59 /* MTLog.h in Headers */,
@@ -372,6 +379,7 @@
 				4C2480A51C8B2D7F0058E6B4 /* MADFilename.m in Sources */,
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
 				4C2480A71C8B2D7F0058E6B4 /* MADImage.m in Sources */,
+				4C2480BB1C8BFA340058E6B4 /* MADColor.m in Sources */,
 				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
 				4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,

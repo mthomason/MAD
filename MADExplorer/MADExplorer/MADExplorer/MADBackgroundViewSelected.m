@@ -13,7 +13,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *colorTextNormal = [UIColor tintColorBlue];
+        UIColor *colorTextNormal = [MADColorEverydayApps newColorBlue];
         UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
         self.backgroundColor = bgColor;
         self.clipsToBounds = YES;

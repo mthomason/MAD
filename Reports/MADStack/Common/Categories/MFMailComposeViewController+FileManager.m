@@ -15,7 +15,7 @@
     controller.mailComposeDelegate = mailComposeDelegate;
     controller.toRecipients = @[@"admin@everydayapps.com"];
     controller.subject = @"MAD Designer";
-    controller.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    controller.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
     return controller;
 }
 

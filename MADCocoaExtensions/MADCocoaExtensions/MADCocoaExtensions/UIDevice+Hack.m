@@ -12,31 +12,4 @@ const int MTModernOSMajorVersion = 8;
 
 @implementation UIDevice (Hack)
 
-+ (int)deviceSystemMajorVersion {
-    NSArray *versionComponents = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
-    NSString *versionComponentMajor = versionComponents[0];
-    return [versionComponentMajor intValue];
-}
-
-+ (BOOL)isPad {
-    static BOOL _isPad;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _isPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
-    });
-    return _isPad;
-}
-
-+ (BOOL)isLagacyOS {
-    return [UIDevice deviceSystemMajorVersion] < MTModernOSMajorVersion;
-}
-
-+ (BOOL)isModernOS {
-    return [UIDevice deviceSystemMajorVersion] >= MTModernOSMajorVersion;
-}
-
-+ (BOOL)isRetnaDisplay {
-    return [[UIScreen mainScreen] scale] > 1.5;
-}
-
 @end

@@ -67,6 +67,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @property (nonatomic, strong, readonly) MTPaper *paper;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
++ (BOOL)isRetnaDisplay;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
 - (void)saveContext;

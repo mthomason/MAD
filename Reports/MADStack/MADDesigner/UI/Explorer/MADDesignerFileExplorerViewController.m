@@ -207,7 +207,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
         
         MADTabBarController *tabBarController = (MADTabBarController *)segue.destinationViewController;
-        tabBarController.view.tintColor = [UIColor tintColorRed];
+        tabBarController.view.tintColor = [MADColorEverydayApps newColorRed];
         tabBarController.querySplitViewController.viewControllerDelegate = self;
         tabBarController.designerViewController.delegate = self;
         tabBarController.viewerViewController.viewControllerDelegate = self;
@@ -328,8 +328,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     
     MADNavigationController *navigationController = [[MADNavigationController alloc] initWithRootViewController:tabBarController];
     
-    navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
-    navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
+    navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
+    navigationController.navigationBar.tintColor = [MADColorEverydayApps newColorWhite];
 
     [self presentViewController:navigationController animated:YES completion:nil];
 }

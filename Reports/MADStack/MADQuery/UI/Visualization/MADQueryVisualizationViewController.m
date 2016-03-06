@@ -168,7 +168,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     self.definesPresentationContext = NO;
     
-    self.backgroundContainer.layer.borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+    self.backgroundContainer.layer.borderWidth = [MADocument isRetnaDisplay] ? 0.5000f : 1.0000f;
     
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;
@@ -179,10 +179,7 @@ typedef void(^MTBlockResultVoid)(void);
     scrollView.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
     scrollView.opaque = NO;
 
-    
     [self.backgroundContainer addSubview:scrollView];
-    
-    
     
     NSDictionary *viewDictionary = @{@"sv" : scrollView,
                                      @"bg" : self.backgroundContainer};

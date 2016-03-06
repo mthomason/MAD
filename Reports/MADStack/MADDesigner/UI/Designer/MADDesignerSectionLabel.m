@@ -31,7 +31,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         
         self.scale = 1.0000f;
 
-        UIColor *tintColor = [UIColor tintColorBlue];
+        UIColor *tintColor = [MADColorEverydayApps newColorBlue];
         self.backgroundColor = [UIColor clearColor];
         self.textAlignment = NSTextAlignmentRight;
         self.lineBreakMode = NSLineBreakByClipping;
@@ -67,7 +67,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    UIColor *color = [UIColor tintColorBlue];
+    UIColor *color = [MADColorEverydayApps newColorBlue];
     if (self.selected) {
         self.textColor = [color colorWithAlphaComponent:0.5000f];
     } else {
@@ -76,14 +76,14 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 }
 
 - (void)dimView {
-    UIColor *tintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [MADColorEverydayApps newColorBlue];
     self.textColor = [tintColor colorWithAlphaComponent:0.500f];
     self.selected = YES;
 }
 
 - (void)normalView {
     
-    UIColor *tintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [MADColorEverydayApps newColorBlue];
     self.textColor = tintColor;
     self.selected = NO;
 }

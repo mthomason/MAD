@@ -14,8 +14,8 @@
 - (instancetype)initWithProgressViewStyle:(UIProgressViewStyle)style {
     if (self = [super initWithProgressViewStyle:style]) {
         UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-        progressView.trackTintColor = [UIColor tintColorRed];
-        progressView.tintColor = [UIColor tintColorBlue];
+        progressView.trackTintColor = [MADColorEverydayApps newColorRed];
+        progressView.tintColor = [MADColorEverydayApps newColorBlue];
         progressView.progress = 0.0000f;
     }
     return self;

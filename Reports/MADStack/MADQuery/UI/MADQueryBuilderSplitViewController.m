@@ -108,7 +108,7 @@
 
     self.detailNavigationController.navigationBarHidden = NO;
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
-    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [UIColor tintColorWhite];
+    [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [MADColorEverydayApps newColorWhite];
 
     self.queryBuilderControllerAdvanced.document = self.document;
 }

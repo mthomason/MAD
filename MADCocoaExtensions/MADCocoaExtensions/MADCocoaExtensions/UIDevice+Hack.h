@@ -13,12 +13,6 @@
 
 @interface UIDevice (Hack)
 
-+ (BOOL)isPad;
-
-+ (BOOL)isLagacyOS;
-+ (BOOL)isModernOS;
-+ (BOOL)isRetnaDisplay;
-
 @end
 
 #endif

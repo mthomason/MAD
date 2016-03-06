@@ -27,7 +27,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
     self = [super initWithFrame:frame];
     if (self) {
         self.layer.cornerRadius = MADViewDetailSmallCornerRadius;
-        self.backgroundColor = [UIColor edaBlackSeventyFivePercent];
+        self.backgroundColor = [MADColorEverydayApps newColorBlackSeventyFivePercent];
         self.alpha = MADAlphaHidden;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, frame.size.width, frame.size.height)];
         label.textColor = [UIColor lightTextColor];

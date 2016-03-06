@@ -99,7 +99,7 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = YES;
     self.sceneSelector.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
+    self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

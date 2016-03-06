@@ -13,8 +13,6 @@
 
 @interface MADImage : UIImage
 
-+ (instancetype)imageWithBorder:(UIImage *)source NS_RETURNS_NOT_RETAINED;
-+ (instancetype)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color NS_RETURNS_NOT_RETAINED;
 + (instancetype)imageMadeSquare:(UIImage *)source NS_RETURNS_NOT_RETAINED;
 
 @end

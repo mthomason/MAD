@@ -25,7 +25,7 @@
         UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
                                            UIViewAutoresizingFlexibleWidth;
         self.layer.cornerRadius = 5.0000f;
-        UIColor *bgColor = [UIColor edaBlueLightBackground];
+        UIColor *bgColor = [MADColorEverydayApps newColorBlueLightBackground];
         self.backgroundColor = bgColor;
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         

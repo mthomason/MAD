@@ -13,7 +13,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *bgColor = [[UIColor edaBlackFiftyPercent] colorWithAlphaComponent:0.33333333f];
+        UIColor *bgColor = [[MADColorEverydayApps newColorBlackFiftyPercent] colorWithAlphaComponent:0.33333333f];
         self.backgroundColor = bgColor;
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 5.0000f;

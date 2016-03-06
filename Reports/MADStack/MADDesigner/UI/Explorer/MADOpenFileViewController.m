@@ -200,8 +200,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
     
     [self setEditing:NO animated:NO];
     
-    self.navigationController.toolbar.barTintColor = [UIColor tintColorBlue];
-    self.navigationController.toolbar.tintColor = [UIColor tintColorWhite];
+    self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
+    self.navigationController.toolbar.tintColor = [MADColorEverydayApps newColorWhite];
     
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
         

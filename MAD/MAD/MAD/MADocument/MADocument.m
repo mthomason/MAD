@@ -166,13 +166,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @implementation MADocument
 
++ (BOOL)isRetnaDisplay {
+    return [[UIScreen mainScreen] scale] > 1.5;
+}
+
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
     return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
-                      andRetinaDisplay: [UIDevice isRetnaDisplay]];
+                      andRetinaDisplay: [self isRetnaDisplay]];
 }
 
 + (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
-    NSString *name = [UIDevice isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
+    NSString *name = [self isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
     
     NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     
@@ -468,7 +472,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
             UIImage *extraImage = [UIImage imageWithData:imageData];
-            NSString *key = [UIDevice isRetnaDisplay] ?
+            NSString *key = [MADocument isRetnaDisplay] ?
                                     MTDocumentInfoKeyThumbnailRetna :
                                     MTDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
@@ -490,7 +494,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSURL *)thumbnailURL {
     return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension
-                            andRetinaDisplay: [UIDevice isRetnaDisplay]];
+                            andRetinaDisplay: [MADocument isRetnaDisplay]];
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
@@ -509,9 +513,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                          toURL: (NSURL *)absoluteURL
            originalContentsURL: (NSURL *)absoluteOriginalContentsURL
                          error: (NSError **)error {
+    
     BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
-    
-    
+
     if (content == [NSNull null] || self.documentStatus.isSuspended) {
         
         writeAdditionalContent  = NO;

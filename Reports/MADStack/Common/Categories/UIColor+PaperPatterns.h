@@ -13,7 +13,7 @@
 
 @interface UIColor (PaperPatterns)
 
-+ (instancetype)paperHomemade;
++ (UIColor *)paperHomemade;
 
 /*
 + (instancetype)paperAqua;

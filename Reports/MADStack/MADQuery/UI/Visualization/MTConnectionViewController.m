@@ -138,7 +138,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, width, progressView.frame.size.height);
     progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    progressView.progressTintColor = [UIColor tintColorAnalogous4];
+    progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
     progressView.trackTintColor = [UIColor grayColor];
     return progressView;
 }

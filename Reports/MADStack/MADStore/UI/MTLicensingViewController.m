@@ -68,13 +68,13 @@
     
     [self enableUserInterface];
     if ([UIApplication isMADDesigner]) {
-        [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+        [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
         [self.buttonBuyNowDesignerOneYear setEnabled:success];
         [self.buttonBuyNowDesignerOneYear setHidden:NO];
         [self.buttonBuyNowDesignerOneMonth setEnabled:success];
         [self.buttonBuyNowDesignerOneMonth setHidden:NO];
     } else if ([UIApplication isMADViewer]) {
-        [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+        [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
         [self.buttonBuyNowViewerOneYear setEnabled:success];
         [self.buttonBuyNowViewerOneYear setHidden:NO];
         [self.buttonBuyNowViewerOneMonth setEnabled:success];
@@ -125,13 +125,13 @@
         
         BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
         if ([UIApplication isMADDesigner]) {
-            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [MADColorEverydayApps newColorBlue] : [MADColorEverydayApps newColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:allowPurchase];
             [self.buttonBuyNowDesignerOneYear setHidden:!allowPurchase];
             [self.buttonBuyNowDesignerOneMonth setEnabled:allowPurchase];
             [self.buttonBuyNowDesignerOneMonth setHidden:!allowPurchase];
         } else if ([UIApplication isMADViewer]) {
-            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [MADColorEverydayApps newColorBlue] : [MADColorEverydayApps newColorBlue];
             [self.buttonBuyNowViewerOneMonth setEnabled:allowPurchase];
             [self.buttonBuyNowViewerOneMonth setHidden:!allowPurchase];
             [self.buttonBuyNowViewerOneYear setEnabled:allowPurchase];
@@ -148,11 +148,11 @@
         }];
         
         if ([UIApplication isMADDesigner]) {
-            [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
             [self.buttonBuyNowDesignerOneYear setEnabled:NO];
             [self.buttonBuyNowDesignerOneMonth setEnabled:NO];
         } else if ([UIApplication isMADViewer]) {
-            [self viewBuyButtonsBackground].backgroundColor = [UIColor tintColorBlue];
+            [self viewBuyButtonsBackground].backgroundColor = [MADColorEverydayApps newColorBlue];
             [self.buttonBuyNowViewerOneYear setEnabled:NO];
             [self.buttonBuyNowViewerOneMonth setEnabled:NO];
         }

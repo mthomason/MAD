@@ -18,8 +18,8 @@
 
 - (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message {
     if (self = [super init]) {
-        NSString *m = message == nil ? @"" : [NSString stringWithString:message];
-        NSString *t = title == nil ? @"" : [NSString stringWithString:title];
+        NSString *m = message == nil ? @"" : [[NSString alloc] initWithString:message];
+        NSString *t = title == nil ? @"" : [[NSString alloc] initWithString:title];
         NSDictionary *userinfo = [[NSDictionary alloc] initWithObjectsAndKeys: t, NSLocalizedDescriptionKey, m, NSLocalizedFailureReasonErrorKey, nil];
         self.userinfo = userinfo;
     }

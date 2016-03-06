@@ -11,7 +11,7 @@
 
 @implementation UIColor (PaperPatterns)
 
-+ (instancetype)paperHomemade {
++ (UIColor *)paperHomemade {
     UIImage *image = [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
     return [UIColor colorWithPatternImage:image];
 }

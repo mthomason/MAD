@@ -19,8 +19,8 @@
 }
 
 + (NSAttributedString *)Twitter {
-    UIColor *color = [UIColor blueTwitter];
     UIFont *fa = [UIFont fontWithName:@"FontAwesome" size:12.0000f];
+    UIColor *color = [MADColorSocial newBlueTwitter];
     NSDictionary *attributesTwitter = @{ NSForegroundColorAttributeName :  color, NSFontAttributeName : fa};
     NSAttributedString *twitter = [[NSAttributedString alloc] initWithString:@"" attributes:attributesTwitter];
     return twitter;

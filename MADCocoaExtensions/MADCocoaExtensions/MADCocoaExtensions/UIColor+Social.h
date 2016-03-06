@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADColor.h>
 
-@interface UIColor (Social)
+@interface MADColorSocial : MADColor
 
-+ (instancetype)blueTwitter;
-+ (instancetype)blueLinkedIn;
-+ (instancetype)blueFacebook;
++ (UIColor *)newBlueTwitter;
++ (UIColor *)newBlueLinkedIn;
++ (UIColor *)newBlueFacebook;
 
 @end

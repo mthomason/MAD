@@ -62,7 +62,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorRed];
+    self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorRed];
     self.navigationController.navigationBar.alpha = 1.0000f;
 }
 

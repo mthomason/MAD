@@ -671,7 +671,7 @@ static const CGFloat BorderWidth = 1.0000f;
             /*
              if (controlStateHorizontalAlignment == MTControlStateAmbiguous) {
              [self.segmentedControlHorizontalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
-             UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
+             UIColor *tentColor = [[MADColorEverydayApps newColor] colorWithAlphaComponent:0.5000f];
              self.segmentedControlHorizontalAlignment.backgroundColor = tentColor;
              } else {
              //[self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -681,7 +681,7 @@ static const CGFloat BorderWidth = 1.0000f;
              //UIImage *imageButtonSelected = [UIImage imageNamed:@"UIButtonSelected"];
              [self.segmentedControlVerticalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
              //[self.segmentedControlVerticalAlignment setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-             UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
+             UIColor *tentColor = [[MADColorEverydayApps newColor] colorWithAlphaComponent:0.5000f];
              self.segmentedControlVerticalAlignment.backgroundColor = tentColor;
              } else {
              //[self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];

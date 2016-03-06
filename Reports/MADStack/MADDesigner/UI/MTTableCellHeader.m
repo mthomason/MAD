@@ -46,9 +46,9 @@
 
 - (void)initalize {
     UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
-    UIColor *bgcolor = [UIColor tintColorBlue];
+    UIColor *bgcolor = [MADColorEverydayApps newColorBlue];
     lbl.backgroundColor = bgcolor;
-    lbl.textColor = [UIColor tintColorWhite];
+    lbl.textColor = [MADColorEverydayApps newColorWhite];
     lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
                            UIViewAutoresizingFlexibleWidth |
                            UIViewAutoresizingFlexibleTopMargin |

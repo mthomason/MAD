@@ -63,11 +63,11 @@
     [super viewDidLoad];
 
     [self initalize];
-    self.collectionView.backgroundColor = [UIColor tintColorBlue];
+    self.collectionView.backgroundColor = [MADColorEverydayApps newColorBlue];
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.alwaysBounceVertical = YES;
     
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor tintColorWhite];
+    self.navigationItem.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
     
     self.toolbarItems = nil;
     self.navigationController.toolbarHidden = YES;

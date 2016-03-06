@@ -214,7 +214,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
-    UIColor *whiteColor = [UIColor tintColorWhite];
+    UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
     self.navigationController.toolbar.tintColor = whiteColor;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
@@ -473,7 +473,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self setPageingEnabled:YES];
     
-    UIColor *red = [UIColor tintColorRed];
+    UIColor *red = [MADColorEverydayApps newColorRed];
     self.toolbarSlider.tintColor = red;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
@@ -566,11 +566,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         sharedController.delegate = self.document;
                         __weak MADViewerController *weakself = self;
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [UIColor tintColorAnalogous4];
-                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorRed];
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColorEverydayApps newColorAnalogous4];
+                            [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorRed];
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = nil;
-                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [UIColor tintColorWhite];
+                                [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorWhite];
                                 weakself.toolbarSlider.enabled = YES;
                                 weakself.activityExporting = false;
                                 [weakself enableTabBarItems];
@@ -595,7 +595,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     __weak MADViewerController *weakSelf = self;
     [self presentViewController:activityViewController animated:YES completion:^{
-        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
     }];
     [self disableTabBarItems];
 }
