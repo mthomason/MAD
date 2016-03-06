@@ -8,7 +8,6 @@
 
 #import "UINavigationController+Designer.h"
 #import "UIStoryboard+Licensing.h"
-#import "UIStoryboard+Designer.h"
 #import "UIStoryboard+InformationTable.h"
 #import "UIStoryboard+NewDocument.h"
 #import "UIStoryboard+Toolbox.h"

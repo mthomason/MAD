@@ -7,7 +7,7 @@
 //
 
 #import "UINavigationController+MADQuery.h"
-#import "UIStoryboard+Designer.h"
+#import "MADStoryboard.h"
 
 static NSString * const QueryNavigationController       = @"MADIdentifierStoryboardQueryNavigationController";
 static NSString * const DesignerNavigationController    = @"MADIdentifierStoryboardDesignerNavigationController";
@@ -16,19 +16,19 @@ static NSString * const ViewerNavigationController      = @"MADIdentifierStorybo
 @implementation UINavigationController (MADQuery)
 
 + (instancetype)QuerySplitViewController {
-    UIStoryboard *storyboard = [UIStoryboard Designer];
+    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
     UINavigationController *queryNavigationController= [storyboard instantiateViewControllerWithIdentifier: QueryNavigationController];
     return queryNavigationController;
 }
 
 + (instancetype)DesignerController {
-    UIStoryboard *storyboard = [UIStoryboard Designer];
+    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
     UINavigationController *queryNavigationController= [storyboard instantiateViewControllerWithIdentifier: DesignerNavigationController];
     return queryNavigationController;
 }
 
 + (instancetype)ViewerController {
-    UIStoryboard *storyboard = [UIStoryboard Designer];
+    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
     UINavigationController *queryNavigationController= [storyboard instantiateViewControllerWithIdentifier: ViewerNavigationController];
     return queryNavigationController;
 }

@@ -7,14 +7,14 @@
 //
 
 #import "UITabBarController+Shared.h"
-#import "UIStoryboard+Designer.h"
+#import "MADStoryboard.h"
 
 static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
 
 @implementation MADTabBarController (Shared)
 
 + (instancetype)mainTabBarController {
-    UIStoryboard *designer = [UIStoryboard Designer];
+    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
     return [designer instantiateViewControllerWithIdentifier:TabBar];
 }
 

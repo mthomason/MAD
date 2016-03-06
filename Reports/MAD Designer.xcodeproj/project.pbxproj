@@ -399,7 +399,6 @@
 		4C4020581BAE92F200BAE5FC /* UINavigationController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */; };
 		4C4020591BAE92F200BAE5FC /* UIPageViewController+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40201B1BAE92F200BAE5FC /* UIPageViewController+Extras.m */; };
 		4C40205A1BAE92F200BAE5FC /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */; };
-		4C40205B1BAE92F200BAE5FC /* UIStoryboard+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40201F1BAE92F200BAE5FC /* UIStoryboard+Designer.m */; };
 		4C40205C1BAE92F200BAE5FC /* UIStoryboard+Viewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020211BAE92F200BAE5FC /* UIStoryboard+Viewer.m */; };
 		4C40205D1BAE92F200BAE5FC /* UITabBarController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020231BAE92F200BAE5FC /* UITabBarController+Shared.m */; };
 		4C40205E1BAE92F200BAE5FC /* UITableViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020251BAE92F200BAE5FC /* UITableViewController+Designer.m */; };
@@ -762,6 +761,7 @@
 		4CB56ECF1AC683CC00756775 /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4CB56EDB1AC683CC00756775 /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4CB94ADC1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB94ADB1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m */; };
+		4CB9AAE41C8C12A300420CFF /* MADStoryboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAE31C8C12A300420CFF /* MADStoryboard.m */; };
 		4CBD28791C7660D500B1B16D /* GoogleConversionTracking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBD28771C7660D500B1B16D /* GoogleConversionTracking.a */; };
 		4CBD287A1C7660D500B1B16D /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CBD28781C7660D500B1B16D /* README.txt */; };
 		4CBD287C1C76611400B1B16D /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBD287B1C76611400B1B16D /* AdSupport.framework */; };
@@ -1643,8 +1643,6 @@
 		4C40201B1BAE92F200BAE5FC /* UIPageViewController+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIPageViewController+Extras.m"; sourceTree = "<group>"; };
 		4C40201C1BAE92F200BAE5FC /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
 		4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
-		4C40201E1BAE92F200BAE5FC /* UIStoryboard+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIStoryboard+Designer.h"; sourceTree = "<group>"; };
-		4C40201F1BAE92F200BAE5FC /* UIStoryboard+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIStoryboard+Designer.m"; sourceTree = "<group>"; };
 		4C4020201BAE92F200BAE5FC /* UIStoryboard+Viewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIStoryboard+Viewer.h"; sourceTree = "<group>"; };
 		4C4020211BAE92F200BAE5FC /* UIStoryboard+Viewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIStoryboard+Viewer.m"; sourceTree = "<group>"; };
 		4C4020221BAE92F200BAE5FC /* UITabBarController+Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Shared.h"; sourceTree = "<group>"; };
@@ -1996,6 +1994,8 @@
 		4CB56EC81AC683CC00756775 /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
 		4CB94ADA1AD0EEBB002130B2 /* MADInterfaceControllerKPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInterfaceControllerKPI.h; sourceTree = "<group>"; };
 		4CB94ADB1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInterfaceControllerKPI.m; sourceTree = "<group>"; };
+		4CB9AAE21C8C12A300420CFF /* MADStoryboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoryboard.h; sourceTree = "<group>"; };
+		4CB9AAE31C8C12A300420CFF /* MADStoryboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoryboard.m; sourceTree = "<group>"; };
 		4CBD28721C7660D500B1B16D /* ACTReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACTReporter.h; sourceTree = "<group>"; };
 		4CBD28741C7660D500B1B16D /* GoogleConversionPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleConversionPing.h; sourceTree = "<group>"; };
 		4CBD28761C7660D500B1B16D /* DCTReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTReporter.h; sourceTree = "<group>"; };
@@ -4423,6 +4423,8 @@
 		4CC886061C7AA874003E18D2 /* UIStoryboard */ = {
 			isa = PBXGroup;
 			children = (
+				4CB9AAE21C8C12A300420CFF /* MADStoryboard.h */,
+				4CB9AAE31C8C12A300420CFF /* MADStoryboard.m */,
 				4CC886071C7AADC0003E18D2 /* UIStoryboard+DocumentInformation.h */,
 				4CC886081C7AADC0003E18D2 /* UIStoryboard+DocumentInformation.m */,
 				4CC886091C7AADC0003E18D2 /* UIStoryboard+InformationTable.h */,
@@ -4441,8 +4443,6 @@
 				4CC886001C7AA861003E18D2 /* UIStoryboard+Licensing.m */,
 				4CC886011C7AA861003E18D2 /* UIStoryboard+QueryVisualization.h */,
 				4CC886021C7AA861003E18D2 /* UIStoryboard+QueryVisualization.m */,
-				4C40201E1BAE92F200BAE5FC /* UIStoryboard+Designer.h */,
-				4C40201F1BAE92F200BAE5FC /* UIStoryboard+Designer.m */,
 				4C4020201BAE92F200BAE5FC /* UIStoryboard+Viewer.h */,
 				4C4020211BAE92F200BAE5FC /* UIStoryboard+Viewer.m */,
 			);
@@ -5706,6 +5706,7 @@
 				4C4020591BAE92F200BAE5FC /* UIPageViewController+Extras.m in Sources */,
 				4C4020411BAE92F200BAE5FC /* NSData+AES256.m in Sources */,
 				4C8DE2641BAFA96300AD1111 /* UILabelStrikethrough.m in Sources */,
+				4CB9AAE41C8C12A300420CFF /* MADStoryboard.m in Sources */,
 				4C4020EF1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4C26B9CC1BAF123A00456DC8 /* MADToolboxPresentationController.m in Sources */,
 				4C8DE26C1BAFA98B00AD1111 /* MTConnectorView.m in Sources */,
@@ -5741,7 +5742,6 @@
 				4C994F391BE082730058627A /* MADLabelStatus.m in Sources */,
 				4C26B9FD1BAF14A500456DC8 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4C4020391BAE92F200BAE5FC /* MADQueryVisualizationSchemaViewController+Designer.m in Sources */,
-				4C40205B1BAE92F200BAE5FC /* UIStoryboard+Designer.m in Sources */,
 				4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */,
 				4C401F2B1BAE703200BAE5FC /* MADTableViewCellQueryTableName.m in Sources */,
 				4CC886151C7AADC0003E18D2 /* UIStoryboard+NewDocument.m in Sources */,

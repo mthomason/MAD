@@ -12,6 +12,9 @@
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADDesignerViewController.h"
 #import "MADViewerController.h"
+#import "MADStoryboard.h"
+
+static NSString * const TabBar = @"MADIdentifierStoryboardMainTabBarController";
 
 const int8_t MADIndexQuery = 0;
 const int8_t MADIndexDesigner = 1;
@@ -125,5 +128,22 @@ const int8_t MADIndexViewer = 2;
     return (MADViewerController *)((UINavigationController *)self.viewControllers[MADIndexViewer]).topViewController;
 }
 
+- (void)disableTabBarItems {
+    for (UITabBarItem *item in self.tabBar.items) {
+        item.enabled = NO;
+    }
+}
+
+- (void)enableTabBarItems {
+    for (UITabBarItem *item in self.tabBar.items) {
+        item.enabled = YES;
+    }
+}
+
++ (instancetype)TabBarControllerMain {
+    UIStoryboard *designer = [MADStoryboard storyboardDesigner];
+    id controller = [designer instantiateViewControllerWithIdentifier:TabBar];
+    return controller;
+}
 
 @end

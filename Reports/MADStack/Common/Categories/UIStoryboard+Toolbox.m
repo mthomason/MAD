@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIStoryboard+Designer.h"
+#import "UIStoryboard+Toolbox.h"
 
 static NSString * const Toolbox                 = @"MADToolbox";
 

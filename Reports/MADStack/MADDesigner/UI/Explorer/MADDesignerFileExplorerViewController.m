@@ -8,6 +8,8 @@
 
 #import "MADDesignerFileExplorerViewController.h"
 
+#import "MADStoryboard.h"
+
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -33,7 +35,6 @@
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #import "UINavigationController+MADQuery.h"
-#import "UIStoryboard+Designer.h"
 #import "UIStoryboard+Query.h"
 
 #import "MADNavigationController.h"
@@ -310,7 +311,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         self.splitViewController = splitViewController;
     }
 
-    UIStoryboard *storyboard = [UIStoryboard Designer];
+    UIStoryboard *storyboard = [MADStoryboard storyboardDesigner];
     
     MADDesignerViewController *designerViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
     designerViewController.delegate = self;
