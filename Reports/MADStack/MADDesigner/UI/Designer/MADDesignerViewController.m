@@ -367,7 +367,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
-    UIGestureRecognizer *tap = [UIGestureRecognizer strayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
+    UIGestureRecognizer *tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget:self action:@selector(handleStrayTouch:) delegate:self];
     [tap requireGestureRecognizerToFail:tapGestureDoubleTap];
     [self.scroller addGestureRecognizer:tap];
     self.strayTouchGesture = tap;
@@ -488,7 +488,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             MADDesignerSectionLabel *sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
             
-            UIGestureRecognizer *tapGestureRecognizer = [UIGestureRecognizer sectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
+            UIGestureRecognizer *tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self action:@selector(handleToggleSectionControlPanel:) delegate:self];
             
             [self.strayTouchGesture requireGestureRecognizerToFail:tapGestureRecognizer];
             [sectionViewLabel addGestureRecognizer: tapGestureRecognizer];
@@ -1531,9 +1531,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             
-            UIGestureRecognizer *panGesture = [UIGestureRecognizer elementPan:self action: @selector(handlePanPiece:) delegate:self];
+            UIGestureRecognizer *panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement:self action: @selector(handlePanPiece:) delegate:self];
             
-            UIGestureRecognizer *pinchGesture = [UIGestureRecognizer elementPinch: self action: @selector(handlePinchPiece:) delegate:self];
+            UIGestureRecognizer *pinchGesture = [MADPinchGestureRecognizer newPinchGestureRecognizerElement: self action: @selector(handlePinchPiece:) delegate:self];
 
             [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
             [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
@@ -2736,7 +2736,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                 elementView = [[MADDesignerElementView alloc] initWithDocumentObject: documentObject];
                 [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
                 
-                UIGestureRecognizer *tapGestureRecognizer = [UITapGestureRecognizer elementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
+                UIGestureRecognizer *tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerElementTouchWithTarget:self action:@selector(handleToggleElementView:) delegate:self];
                 [elementView addGestureRecognizer:tapGestureRecognizer];
                 
             }

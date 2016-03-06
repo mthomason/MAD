@@ -11,27 +11,35 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIGestureRecognizer (Designer)
+@interface MADTapGestureRecognizer : UITapGestureRecognizer
 
-+ (instancetype)sectionToggleWithTarget:(id)target
-                                 action:(SEL)action
-                               delegate:(id<UIGestureRecognizerDelegate>)delegate;
++ (instancetype)newTapGestureRecognizerSectionToggleWithTarget:(id)target
+                                                        action:(SEL)action
+                                                      delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
-+ (instancetype)elementTouchWithTarget:(id)target
-                                action:(SEL)action
-                              delegate:(id<UIGestureRecognizerDelegate>)delegate;
++ (instancetype)newTapGestureRecognizerElementTouchWithTarget:(id)target
+                                                       action:(SEL)action
+                                                     delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
-+ (instancetype)strayTouchWithTarget:(id)target
-                              action:(SEL)action
-                            delegate:(id<UIGestureRecognizerDelegate>)delegate;
++ (instancetype)newTapGestureRecognizerStrayTouchWithTarget:(id)target
+                                                     action:(SEL)action
+                                                   delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
-+ (instancetype)elementPan:(id)target
-                    action:(SEL)action
-                  delegate:(id<UIGestureRecognizerDelegate>)delegate;
+@end
 
-+ (instancetype)elementPinch:(id)target
-                      action:(SEL)action
-                    delegate:(id<UIGestureRecognizerDelegate>)delegate;
+@interface MADPanGestureRecognizer : UIPanGestureRecognizer
+
++ (instancetype)newPanGestureRecognizerElement:(id)target
+                                        action:(SEL)action
+                                      delegate:(id<UIGestureRecognizerDelegate>)delegate;
+
+@end
+
+@interface MADPinchGestureRecognizer : UIPinchGestureRecognizer
+
++ (instancetype)newPinchGestureRecognizerElement:(id)target
+                                          action:(SEL)action
+                                        delegate:(id<UIGestureRecognizerDelegate>)delegate;
 
 @end
 
