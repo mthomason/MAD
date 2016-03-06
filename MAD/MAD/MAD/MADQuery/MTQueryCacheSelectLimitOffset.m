@@ -28,38 +28,35 @@
 @implementation MTQueryCacheSelectLimitOffset
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
 
         NSNumber *limitO = object[@(MTQueryCacheSelectLimitOffsetParamatersLimit)];
-        self.limit = limitO ? [limitO integerValue] : NSNotFound;
-
         NSNumber *offsetO = object[@(MTQueryCacheSelectLimitOffsetParamatersOffset)];
-        self.offset = offsetO ? [offsetO integerValue] : NSNotFound;
+
+        _limit = limitO ? limitO.unsignedIntegerValue : NSNotFound;     // Careful not to fuck this up!
+        _offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
         
-        NSString *tableName = object[@(MTQueryCacheSelectLimitOffsetParamatersTableNames)];
-        [self setTableName:tableName];
+        NSNumber *keyTableNames = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);
+        NSString *tableName = object[keyTableNames];
+        _tableName = [[NSString alloc] initWithString: tableName];
         
         NSArray *columnKeys = object[@(MTQueryCacheSelectLimitOffsetParamatersColumnKeys)];
-        [self setColumnKeys:columnKeys];
+        _columnKeys = [[NSArray alloc] initWithArray:columnKeys];
         
         NSArray *sortDesc = object[@(MTQueryCacheSelectLimitOffsetParamatersSortDesc)];
-        [self setSortDesc:sortDesc];
+        _sortDesc = [[NSArray alloc] initWithArray: sortDesc];
         
         NSArray *whereClause = object[@(MTQueryCacheSelectLimitOffsetParamatersWhere)];
-        [self setWhereClause:whereClause];
+        _whereClause = [[NSArray alloc] initWithArray: whereClause];
         
         NSDictionary *columns = object[@(MTQueryCacheSelectLimitOffsetParamatersColumns)];
-        [self setColumns:columns];
+        NSDictionary *c = [[NSDictionary alloc] initWithDictionary: columns];
+        self.columns = c;
         
         NSNumber *dropRowid = object[@(MTQueryCacheSelectLimitOffsetParamatersDropRowid)];
-        if (dropRowid != nil) {
-            self.droprowid = [dropRowid boolValue];
-        } else {
-            self.droprowid = NO;
-        }
+        self.droprowid = dropRowid != nil ? dropRowid.boolValue : NO;
     }
     return self;
 }
