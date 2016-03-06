@@ -184,7 +184,7 @@ static MTKeyChain *sharedSingleton = nil;
                 self.saveCompletion(NO, nil, nil, nil);
             }];
 
-          [NSThread safeSwitchToMainThread:^{
+          [MADThread safeSwitchToMainThread:^{
                 UIViewController *topViewController = [MADStackViewController topViewController];
                 topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [topViewController  presentViewController: alertController animated: YES completion: nil];
@@ -205,7 +205,7 @@ static MTKeyChain *sharedSingleton = nil;
             [self deleteSavedPassword];
         } cancel:nil];
         
-        [NSThread safeSwitchToMainThread:^{
+        [MADThread safeSwitchToMainThread:^{
             UIViewController *topViewController = viewController == nil ? [MADStackViewController topViewController] : viewController;
             topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
             [topViewController  presentViewController: alertController

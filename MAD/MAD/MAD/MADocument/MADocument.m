@@ -956,7 +956,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                 [weakself.mainDataTable cacheForGroupIdentifier:[delegate groupIdentifier]];
                 weakself.didRefresh = success;
                 
-                [NSThread completeOnMainThread:^(BOOL success, id error) {
+                [MADThread completeOnMainThread:^(BOOL success, id error) {
                     completion(success, error);
                 } withObject:error andSuccess:success];
                 
@@ -982,7 +982,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (successClosingReport) {
             [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
             NSError *error = [MADocument errorConnectionProblem];
-            [NSThread completeOnMainThread:completion withObject:error andSuccess:NO];
+            [MADThread completeOnMainThread:completion withObject:error andSuccess:NO];
         }
     }];
 }
