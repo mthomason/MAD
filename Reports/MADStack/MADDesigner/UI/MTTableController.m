@@ -18,7 +18,9 @@
 
 
 @interface MTTableController ()
-    <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol>
+<UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol> {
+    bool _firstTimeViewDidAppear;
+}
 
 @property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, strong) MTDataTable *datatable;
@@ -46,7 +48,7 @@
     
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
-        
+        _firstTimeViewDidAppear = true;
         [query database].delegate = self;
         MTDataTable *datatable = [MTTableController dataTableWithObjectId:[[query queryObject] objectID]];
         self.datatable = datatable;
@@ -159,7 +161,8 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
-    if (self.firstTimeViewDidAppear == NO) {
+    if (_firstTimeViewDidAppear) {
+        _firstTimeViewDidAppear = false;
         [self.collectionView scrollRectToVisible: CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f)
                                         animated: NO];
     }

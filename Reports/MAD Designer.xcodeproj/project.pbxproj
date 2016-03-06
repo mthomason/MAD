@@ -402,7 +402,6 @@
 		4C40205E1BAE92F200BAE5FC /* UITableViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020251BAE92F200BAE5FC /* UITableViewController+Designer.m */; };
 		4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */; };
 		4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020291BAE92F200BAE5FC /* UIView+Extras.m */; };
-		4C4020611BAE92F200BAE5FC /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202B1BAE92F200BAE5FC /* UIView+NSObjectIdTag.m */; };
 		4C4020621BAE92F200BAE5FC /* UIViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202D1BAE92F200BAE5FC /* UIViewController+Designer.m */; };
 		4C4020631BAE92F200BAE5FC /* UIViewController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202F1BAE92F200BAE5FC /* UIViewController+Shared.m */; };
 		4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */; };
@@ -1005,6 +1004,7 @@
 		4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
+		4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
@@ -1645,8 +1645,6 @@
 		4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITapGestureRecognizer+Designer.m"; sourceTree = "<group>"; };
 		4C4020281BAE92F200BAE5FC /* UIView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extras.h"; sourceTree = "<group>"; };
 		4C4020291BAE92F200BAE5FC /* UIView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extras.m"; sourceTree = "<group>"; };
-		4C40202A1BAE92F200BAE5FC /* UIView+NSObjectIdTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+NSObjectIdTag.h"; sourceTree = "<group>"; };
-		4C40202B1BAE92F200BAE5FC /* UIView+NSObjectIdTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+NSObjectIdTag.m"; sourceTree = "<group>"; };
 		4C40202C1BAE92F200BAE5FC /* UIViewController+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Designer.h"; sourceTree = "<group>"; };
 		4C40202D1BAE92F200BAE5FC /* UIViewController+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Designer.m"; sourceTree = "<group>"; };
 		4C40202E1BAE92F200BAE5FC /* UIViewController+Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Shared.h"; sourceTree = "<group>"; };
@@ -2256,6 +2254,8 @@
 		4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageSlider.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageBolt20.png; path = Reports/UIImageBolt20.png; sourceTree = "<group>"; };
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageBolt20@2x.png"; path = "Reports/UIImageBolt20@2x.png"; sourceTree = "<group>"; };
+		4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADManagedObjectView.h; sourceTree = "<group>"; };
+		4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADManagedObjectView.m; sourceTree = "<group>"; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
 		4CD2FD9A17F40F740015458B /* asn_application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn_application.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/asn_application.h; sourceTree = "<group>"; };
@@ -3128,6 +3128,8 @@
 		4C401EEC1BAE61F700BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4CCDEC041C8C36A300A96E89 /* MADManagedObjectView.h */,
+				4CCDEC051C8C36A300A96E89 /* MADManagedObjectView.m */,
 				4CFEE7F31BB773D800AFAA0A /* QueryBuilder */,
 				4C26BA041BAF14F200456DC8 /* About */,
 				4C26B9931BAF123A00456DC8 /* Designer */,
@@ -3289,8 +3291,6 @@
 				4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */,
 				4C4020281BAE92F200BAE5FC /* UIView+Extras.h */,
 				4C4020291BAE92F200BAE5FC /* UIView+Extras.m */,
-				4C40202A1BAE92F200BAE5FC /* UIView+NSObjectIdTag.h */,
-				4C40202B1BAE92F200BAE5FC /* UIView+NSObjectIdTag.m */,
 				4C40202C1BAE92F200BAE5FC /* UIViewController+Designer.h */,
 				4C40202D1BAE92F200BAE5FC /* UIViewController+Designer.m */,
 				4C40202E1BAE92F200BAE5FC /* UIViewController+Shared.h */,
@@ -5699,7 +5699,6 @@
 				4C4020421BAE92F200BAE5FC /* NSDate+Extras.m in Sources */,
 				4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */,
 				4C26B9CA1BAF123A00456DC8 /* MADToolboxFormatViewController.m in Sources */,
-				4C4020611BAE92F200BAE5FC /* UIView+NSObjectIdTag.m in Sources */,
 				4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */,
 				4C26BA371BAF99BE00456DC8 /* Constants.m in Sources */,
 				4C40203C1BAE92F200BAE5FC /* MTGraph+RptqQuery.m in Sources */,
@@ -5738,6 +5737,7 @@
 				4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */,
 				4C32A4C31BB07FF300DD59A3 /* main.m in Sources */,
 				4CFEE8181BB7A2E600AFAA0A /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
+				4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */,
 				4C26BA5E1BAF99F000456DC8 /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C8DE2521BAFA92C00AD1111 /* MADNavigationBarFixedSize.m in Sources */,
 				4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */,

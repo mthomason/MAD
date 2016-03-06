@@ -12,7 +12,4 @@
 //  !!!:        UITableViewController, UICollectionViewController, etc...
 //
 
-@property (nonatomic, assign, readonly) BOOL firstTimeViewDidAppear;
-@property (nonatomic, assign, readonly) BOOL firstTimeViewWillAppear;
-
 @property (nonatomic, assign, readonly) BOOL firstTimeViewWillLayoutSubviews;

@@ -10,6 +10,7 @@
 #define Reports_MTDocumentSectionView_h
 
 #import <UIKit/UIKit.h>
+#import "MADManagedObjectView.h"
 
 @protocol MTDocumentSectionViewDelegate;
 
@@ -21,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
     MADBorderStateDisabled
 };
 
-@interface MADDesignerSectionView : UICollectionView
+@interface MADDesignerSectionView : MADManagedObjectCollectionView
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) id <MTDocumentSectionViewDelegate> sectionDelegate;

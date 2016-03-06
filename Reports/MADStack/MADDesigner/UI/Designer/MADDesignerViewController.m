@@ -17,6 +17,8 @@
 #import <MAD/NSManagedObjectID+Extras.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
+#import "MADManagedObjectView.h"
+
 #import "MADDesignerViewController.h"
 
 #import "MTRulerView.h"
@@ -60,7 +62,6 @@
 #import "UINavigationController+Designer.h"
 #import "MTViewControllerBarcode+Designer.h"
 #import "MTQueryBuilderChooseFieldViewController+Designer.h"
-#import "UIView+NSObjectIdTag.h"
 #import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
@@ -1083,7 +1084,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                     [change isEqualToString:NSStringFromSelector(@selector(paddingLeft))] ||
                     [change isEqualToString:NSStringFromSelector(@selector(paddingRight))]) {
                     
-                    UICollectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
+                    MADDesignerSectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
                     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[section.objectIdTag];
                     MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
@@ -1099,7 +1100,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                            [change isEqualToString:NSStringFromSelector(@selector(paddingTop))] ||
                            [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
                     
-                    UICollectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
+                    MADDesignerSectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
                     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[section.objectIdTag];
                     MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
@@ -1288,7 +1289,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                                                                   managedObjectContext: self.document.managedObjectContext];
     
     RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
-    UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
+    MADDesignerSectionView *svSection = [self getSectionViewForDocumentSection:section];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: svSection.objectIdTag
                                                                     inManagedObjectContext: self.document.managedObjectContext];
@@ -1487,7 +1488,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark -
 #pragma mark UICollectionViewDataSource
 
-- (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView: (MADDesignerSectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     
@@ -1572,7 +1573,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return cell;
 }
 
-- (NSInteger)collectionView: (UICollectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
+- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
     
     //RptqDocument *document = [self.document activeDocumentModel];
     //RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
@@ -1618,7 +1619,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)collectionView: (UICollectionView *)collectionView willDisplayCell: (UICollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
+- (void)collectionView: (UICollectionView *)collectionView willDisplayCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
@@ -1627,7 +1628,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
 }
 
-- (void)collectionView: (UICollectionView *)collectionView didEndDisplayingCell: (UICollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
+- (void)collectionView: (UICollectionView *)collectionView didEndDisplayingCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
     UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
     NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
@@ -1651,7 +1652,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return result;
 }
 
-- (void)collectionView: (UICollectionView *)collectionView performAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
+- (void)collectionView: (MADDesignerSectionView *)collectionView performAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
     
     NSUInteger row = indexPath.row;
     
@@ -1801,7 +1802,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 #pragma mark - MTReportDesignerSectionViewLayoutLiquidDelegate
 
-- (void)collectionView: (UICollectionView *)collectionView prepareLayout: (UICollectionViewLayout *)collectionViewLayout {
+- (void)collectionView: (MADDesignerSectionView *)collectionView prepareLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     NSManagedObjectContext *objectContext = self.document.managedObjectContext;
     for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
@@ -1814,7 +1815,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     //[objectContext save:nil];
 }
 
-- (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView layout: (UICollectionViewLayout *)collectionViewLayout
+- (MTCollectionViewLayoutLiquidAttributes *)collectionView: (MADDesignerSectionView *)collectionView
+                                                    layout: (UICollectionViewLayout *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
@@ -1829,18 +1831,17 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
 }
 
-- (NSUInteger)numberOfItemsInSection: (NSUInteger)section ofCollectionView: (UICollectionView *)collectionView {
-    
+- (NSUInteger)numberOfItemsInSection: (NSUInteger)section ofCollectionView: (MADDesignerSectionView *)collectionView {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.count;
 }
 
-- (NSArray *)collectionView: (UICollectionView *)collectionView attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
+- (NSArray *)collectionView: (MADDesignerSectionView *)collectionView attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return layoutManager.items.allValues;
 }
 
-- (CGSize)collectionView: (UICollectionView *)collectionView sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
+- (CGSize)collectionView: (MADDesignerSectionView *)collectionView sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     return [layoutManager size];
 }
@@ -2232,7 +2233,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     RptqDocumentSection *section = self.document.activeDocumentModel.hasDetailSection;
     
-    UICollectionView *detailSection = [self getSectionViewForDocumentSection:self.document.activeDocumentModel.hasDetailSection];
+    MADDesignerSectionView *detailSection = [self getSectionViewForDocumentSection:self.document.activeDocumentModel.hasDetailSection];
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[detailSection.objectIdTag];
     
     [detailSection performBatchUpdates:^{
@@ -2362,7 +2363,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [gestureRecognizer setTranslation:CGPointZero inView:self.view];
 }
 
-- (void)beginPanPiece:(UIView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
+- (void)beginPanPiece:(MADDesignerElementView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
     
     [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
     if (self.presentedViewController != nil) {
@@ -2392,7 +2393,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     transition();
     
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
-    MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:piece.objectIdTag];
+    MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: piece.objectIdTag];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
         [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
@@ -2411,7 +2412,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {
 
-    UIView *piece = gesture.view;
+    MADDesignerElementView *piece = gesture.view;
     
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
@@ -2509,7 +2510,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 #pragma mark Display Helpers
 
-- (void)relayoutSectionView:(UICollectionView *)documentSectionView {
+- (void)relayoutSectionView:(MADDesignerSectionView *)documentSectionView {
     
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: self.document.managedObjectContext];

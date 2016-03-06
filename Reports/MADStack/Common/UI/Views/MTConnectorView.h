@@ -10,10 +10,9 @@
 #define Reports_MTConnectorView_h
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import "MADManagedObjectView.h"
 
-@interface MTConnectorView : UIView
+@interface MTConnectorView : MADManagedObjectView
 
 @property (nonatomic, strong) UIView *anchorViewLeft;
 @property (nonatomic, strong) UIView *anchorViewRight;

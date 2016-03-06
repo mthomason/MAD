@@ -7,6 +7,7 @@
 //
 
 #import "MTConnectorView.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface MTConnectorView ()
 

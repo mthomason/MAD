@@ -197,7 +197,7 @@
                         <viewControllerLayoutGuide type="top" id="YJF-Ji-72c"/>
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="X8d-qj-glr">
+                    <view key="view" contentMode="scaleToFill" id="X8d-qj-glr" customClass="MADManagedObjectView">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -290,7 +290,7 @@
                         <outlet property="schemaTableViewController" destination="8TZ-dQ-78r" id="64D-ng-noZ"/>
                         <outlet property="titleView" destination="OIP-Z8-kxy" id="lcb-2u-F5s"/>
                         <outlet property="toolbar" destination="mOi-BF-VzE" id="rpz-Gg-XYj"/>
-                        <outlet property="view" destination="X8d-qj-glr" id="g21-As-O79"/>
+                        <outlet property="view" destination="X8d-qj-glr" id="4pU-b3-alX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FNQ-e4-L3J" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -20,12 +20,12 @@
     - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
-@class MTSchemaFieldCell, NSManagedObjectID, MADocument;
+@class MADocument, MADManagedObjectView, MTSchemaFieldCell, NSManagedObjectID;
 
 extern const CGFloat MADSchemaViewDefaultWidth;
 extern const CGFloat MADSchemaViewDefaultHeight;
 
-@interface MADQueryVisualizationSchemaViewController : MADViewController
+@interface MADQueryVisualizationSchemaViewController : UIViewController
     <MADocumentProtocol>
 
 @property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;

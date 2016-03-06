@@ -37,19 +37,15 @@
 }
 
 - (void)commonInit {
-    _firstTimeViewDidAppear = YES;
-    _firstTimeViewWillAppear = YES;
     self.viewWillLayoutSubviewsCounter = 0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    _firstTimeViewWillAppear = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    _firstTimeViewDidAppear = NO;
 }
 
 - (void)viewWillLayoutSubviews {

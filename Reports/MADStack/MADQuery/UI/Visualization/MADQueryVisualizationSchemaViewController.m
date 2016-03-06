@@ -13,9 +13,9 @@
 #import "MADQueryVisualizationSchemaViewController.h"
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
-#import "UIView+NSObjectIdTag.h"
 #import "MTSchemaFieldCell.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
+#import "MADManagedObjectView.h"
 
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSArray *sortDescriptorsFields;
 @property (nonatomic, strong) UIFont *titleFont;
 @property (nonatomic, strong) UIFont *detailFont;
+@property (nonatomic, strong) IBOutlet MADManagedObjectView *view;
 
 @end
 
@@ -36,6 +37,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 @implementation MADQueryVisualizationSchemaViewController
 
 @synthesize document;
+@dynamic view;
 
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
@@ -141,7 +143,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    [self.view setObjectIdTag:tableObjectId];
+    self.view.objectIdTag = tableObjectId;
     self.cachedTableObjectId = tableObjectId;
     
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
