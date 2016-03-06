@@ -1,5 +1,5 @@
 //
-//  NSThread+Extras.h
+//  MADThread.h
 //  MAD
 //
 //  Created by Michael Thomason on 5/27/14.

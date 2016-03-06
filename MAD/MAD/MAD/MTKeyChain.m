@@ -14,7 +14,7 @@
 #import "MADErrorUserInfo.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/UIAlertController+Constructors.h>
-#import <MADCocoaExtensions/NSThread+Extras.h>
+#import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);

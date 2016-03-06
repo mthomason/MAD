@@ -12,7 +12,7 @@
 
 #import "NSError+Constructors.h"
 #import "UIApplication+Helpers.h"
-#import "NSThread+Extras.h"
+#import "MADThread.h"
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 

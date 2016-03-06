@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSThread+Extras.h"
+#import "MADThread.h"
 
 @implementation MADThread
 
