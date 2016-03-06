@@ -63,7 +63,6 @@
 #import "UIView+NSObjectIdTag.h"
 #import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
-#import "UIScrollView+Extras.h"
 #import "UIView+Extras.h"
 
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;

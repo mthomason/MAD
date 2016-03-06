@@ -397,7 +397,6 @@
 		4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */; };
 		4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C4020581BAE92F200BAE5FC /* UINavigationController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */; };
-		4C40205A1BAE92F200BAE5FC /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */; };
 		4C40205C1BAE92F200BAE5FC /* UIStoryboard+Viewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020211BAE92F200BAE5FC /* UIStoryboard+Viewer.m */; };
 		4C40205D1BAE92F200BAE5FC /* UITabBarController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020231BAE92F200BAE5FC /* UITabBarController+Shared.m */; };
 		4C40205E1BAE92F200BAE5FC /* UITableViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020251BAE92F200BAE5FC /* UITableViewController+Designer.m */; };
@@ -1636,8 +1635,6 @@
 		4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
 		4C4020181BAE92F200BAE5FC /* UINavigationController+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Designer.h"; sourceTree = "<group>"; };
 		4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Designer.m"; sourceTree = "<group>"; };
-		4C40201C1BAE92F200BAE5FC /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
-		4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
 		4C4020201BAE92F200BAE5FC /* UIStoryboard+Viewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIStoryboard+Viewer.h"; sourceTree = "<group>"; };
 		4C4020211BAE92F200BAE5FC /* UIStoryboard+Viewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIStoryboard+Viewer.m"; sourceTree = "<group>"; };
 		4C4020221BAE92F200BAE5FC /* UITabBarController+Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Shared.h"; sourceTree = "<group>"; };
@@ -3284,8 +3281,6 @@
 				4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */,
 				4C4020181BAE92F200BAE5FC /* UINavigationController+Designer.h */,
 				4C4020191BAE92F200BAE5FC /* UINavigationController+Designer.m */,
-				4C40201C1BAE92F200BAE5FC /* UIScrollView+Extras.h */,
-				4C40201D1BAE92F200BAE5FC /* UIScrollView+Extras.m */,
 				4C4020221BAE92F200BAE5FC /* UITabBarController+Shared.h */,
 				4C4020231BAE92F200BAE5FC /* UITabBarController+Shared.m */,
 				4C4020241BAE92F200BAE5FC /* UITableViewController+Designer.h */,
@@ -5762,7 +5757,6 @@
 				4C26B9911BAF11FA00456DC8 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */,
 				4C26B9FA1BAF14A500456DC8 /* MADDesignerSectionLabel.m in Sources */,
-				4C40205A1BAE92F200BAE5FC /* UIScrollView+Extras.m in Sources */,
 				4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C4021011BAE98C300BAE5FC /* MTReportViewerReportPageViewController.m in Sources */,
 				4CC886181C7AADC0003E18D2 /* UIStoryboard+Toolbox.m in Sources */,
