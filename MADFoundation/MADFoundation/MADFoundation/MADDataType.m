@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 #import "NSData+Comparson.h"
 
-@implementation MTDataTypeObject
+@implementation MADDataType
 
 + (SEL)selectorForSorting:(MTDataType)dataType {
     SEL result;

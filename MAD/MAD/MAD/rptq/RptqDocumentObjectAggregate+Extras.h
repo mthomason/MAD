@@ -11,7 +11,7 @@
 
 #import <MAD/RptqDocumentObjectAggregate.h>
 #import <MAD/MTAggregateFunctionInputType.h>
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 
 extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;

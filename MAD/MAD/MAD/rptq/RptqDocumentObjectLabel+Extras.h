@@ -11,7 +11,7 @@
 
 #import "RptqDocumentObjectLabel.h"
 #import <MADDataStructures/MADDataStructures.h>
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare>
 

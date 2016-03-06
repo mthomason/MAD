@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <MADDataStructures/MADDataStructures.h>
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 #import <MAD/MAD.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADDocumentObjectType.h>

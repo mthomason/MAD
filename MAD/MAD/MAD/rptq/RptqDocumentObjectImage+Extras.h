@@ -10,7 +10,7 @@
 #define Reports_RptqDocumentObjectImage_Extras_h
 
 #import "RptqDocumentObjectImage.h"
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentObjectImage (Extras)
 

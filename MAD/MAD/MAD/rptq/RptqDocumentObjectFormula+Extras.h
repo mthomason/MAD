@@ -12,7 +12,7 @@
 #import "RptqDocumentObjectFormula.h"
 #import <MADDataStructures/MADDataStructures.h>
 #import "RptqDocumentObjectFactory.h"
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentObjectFormula (Extras) <RptqDocumentObjectFactory, MTProtocolLog>
 

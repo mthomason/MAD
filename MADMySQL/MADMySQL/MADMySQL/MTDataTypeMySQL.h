@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 
 @interface MTDataTypeMySQL : NSObject
 

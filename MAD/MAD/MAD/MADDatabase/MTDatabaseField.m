@@ -71,7 +71,7 @@
 }
 
 - (SEL)selectorForSorting {
-    return [MTDataTypeObject selectorForSorting:self.fieldType];
+    return [MADDataType selectorForSorting:self.fieldType];
 }
 
 @end

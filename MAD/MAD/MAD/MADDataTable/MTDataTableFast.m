@@ -350,7 +350,7 @@
                 for (columnKey in self.columnKeys) {
                     column = self.columns[columnKey];
                     if ([column.fieldName isEqualToString:sortDescriptor.key]) {
-                        sortAlgo = [MTDataTypeObject selectorForSorting:column.columnType.unsignedIntegerValue];
+                        sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
                         newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
                                                                           ascending:sortDescriptor.ascending
                                                                            selector:sortAlgo];

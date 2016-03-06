@@ -11,7 +11,7 @@
 
 #import "RptqDocumentObjectLabelDataField.h"
 #import <MADDataStructures/MADDataStructures.h>
-#import <MADFoundation/MTDataType.h>
+#import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare>
 
