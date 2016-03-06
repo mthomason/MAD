@@ -8,6 +8,7 @@
 
 #import "MTDataTableVirtual.h"
 #import <MADFoundation/MTDataColumn.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 
 @interface MTDataTableVirtual ()

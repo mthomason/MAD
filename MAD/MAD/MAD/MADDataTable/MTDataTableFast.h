@@ -10,6 +10,7 @@
 #define Reports_MTDataTableFast_h
 
 #import <Foundation/Foundation.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 #import <MADFileManager/MADFileManager.h>
 #import <MADDataStructures/MADDataStructures.h>
 #import <MADSqlite3/MADSqlite3.h>

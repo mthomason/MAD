@@ -9,9 +9,8 @@
 #ifndef Reports_MADDesignerElementPIckerViewController_h
 #define Reports_MADDesignerElementPIckerViewController_h
 
-#import <MADFoundation/MADAggregateGroupByType.h>
-#import <MADFoundation/MTAggregateFunctionType.h>
 #import <MAD/MTAggregateFunctionInputType.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"

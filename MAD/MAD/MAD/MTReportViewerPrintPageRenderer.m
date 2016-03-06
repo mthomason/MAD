@@ -13,6 +13,8 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
+
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 #import <MADFoundation/MTDataTable.h>
 
 #import "MADocument.h"
@@ -67,11 +69,22 @@
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADReportLineRepresentation.h"
 
+@protocol MADDataTableAggregateResultesProtocol <NSObject>
+
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                     function:(MTAggregateFunctionType)function
+                     fieldKey:(NSString *)fieldKey
+                    groupKeys:(NSArray *)groupKeys
+                       rowids:(NSArray *)rowids;
+
+@end
+
+
 @interface MTReportViewerPrintPageRenderer ()
 
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (nonatomic, strong) MTDataTable *dataTable;
+@property (nonatomic, strong) MTDataTable<MADDataTableAggregateResultesProtocol> *dataTable;
 
 @property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
 

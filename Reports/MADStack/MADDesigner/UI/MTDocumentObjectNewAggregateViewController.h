@@ -12,8 +12,6 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <MAD/MAD.h>
-#import <MADFoundation/MADAggregateGroupByType.h>
-#import <MADFoundation/MTAggregateFunctionType.h>
 #import <MAD/MTAggregateFunctionInputType.h>
 #import "MTUnwindProtocol.h"
 #import "MADViewController.h"

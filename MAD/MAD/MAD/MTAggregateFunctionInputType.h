@@ -11,9 +11,5 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
-    MTAggregateFunctionInputTypeField = 0,
-    MTAggregateFunctionInputTypeFormula
-};
 
 #endif

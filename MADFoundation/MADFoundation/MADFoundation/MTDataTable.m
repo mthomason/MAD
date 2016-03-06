@@ -12,21 +12,12 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
-#import "MTAggregateFunctionType.h"
 
 @interface MTDataTable ()
 
 @end
 
 @implementation MTDataTable
-
-- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
-                     function:(MTAggregateFunctionType)function
-                     fieldKey:(NSString *)fieldKey
-                    groupKeys:(NSArray *)groupKeys
-                       rowids:(NSArray *)rowids {
-    return nil;
-}
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);

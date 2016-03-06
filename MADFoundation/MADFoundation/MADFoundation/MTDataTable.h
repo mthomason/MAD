@@ -13,8 +13,6 @@
 #import <MADFoundation/NSFileManager+Common.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
-#import <MADFoundation/MTAggregateFunctionType.h>
-#import <MADFoundation/MADAggregateGroupByType.h>
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -86,12 +84,6 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
-
-- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
-                     function:(MTAggregateFunctionType)function
-                     fieldKey:(NSString *)fieldKey
-                    groupKeys:(NSArray *)groupKeys
-                       rowids:(NSArray *)rowids;
 
 @end
 
