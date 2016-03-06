@@ -15,7 +15,6 @@
 		4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */; };
 		4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B81C8BFA340058E6B4 /* MADColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480BB1C8BFA340058E6B4 /* MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B91C8BFA340058E6B4 /* MADColor.m */; };
-		4C3DCC271BCAF63400ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC261BCAF63400ABE231 /* MADFoundation.framework */; };
 		4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; };
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
@@ -124,7 +123,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C3DCC271BCAF63400ABE231 /* MADFoundation.framework in Frameworks */,
 				4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
