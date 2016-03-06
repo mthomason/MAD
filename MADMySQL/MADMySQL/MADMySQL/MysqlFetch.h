@@ -26,7 +26,6 @@
 
 @property (nonatomic, weak) id <MysqlFetchDelegate> delegate;
 
-//- (NSError *)performQuery:(MTQuery *)q onConnection:(MysqlConnection *)connection;
 - (MTDataTable *)fetchWithCommand:(NSString *)s dataTable:(MTDataTable **)dataTable onConnection:(MysqlConnection *)connection error:(NSError **)error;
 
 @end
