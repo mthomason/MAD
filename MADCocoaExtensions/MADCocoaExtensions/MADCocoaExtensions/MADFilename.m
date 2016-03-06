@@ -7,8 +7,6 @@
 //
 
 #import "MADFilename.h"
-#import "UIDevice+Hack.h"
-#import <MADFoundation/NSFileManager+Common.h>
 
 @implementation MADFilename
 
