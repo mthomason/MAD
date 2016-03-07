@@ -11,19 +11,17 @@
 #endif
 
 #import "MTDataTableFast.h"
+#import <MADFoundation/MTDataColumn.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import "MTQuery.h"
 #import "MTDataTableFastObjectEnumerator.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
-#import "MADConstants.h"
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 @interface MTDataTableFast ()
 
 @property (nonatomic, strong) MTDatabaseCache *databaseForInserts;
-@property (nonatomic, strong) MTDatabaseCache *databaseForSelects;
+@property (nonatomic, strong, readwrite) MTDatabaseCache *databaseForSelects;
 
 @property (nonatomic, strong) NSURL *urlFastCache;
 @property (nonatomic, assign) BOOL bulkInsertLoop;
@@ -38,9 +36,7 @@
 
 @implementation MTDataTableFast
 
-- (void)dealloc {
-    
-}
+- (void)dealloc { }
 
 - (NSDictionary *)plist {
     
@@ -311,7 +307,7 @@
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
     
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
+    [query performQueryWithDatabase:self.databaseForInserts completion:^(BOOL success, NSError *error) {
         NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(semaphoreQuery);
     }];
@@ -834,102 +830,6 @@
     return [self rowCounter];
 }
 
-
-- (NSDictionary *)paramatersAggregateWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
-    NSNumber *keyTableName = @(MTQueryCacheAggregateFunctionParamatersTableName);
-    NSNumber *keyFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
-    NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
-    NSNumber *keyFieldDescriptors = @(MTQueryCacheAggregateFunctionParamatersFieldDescriptors);
-    NSNumber *objFunctionType = @(functionType);
-    return @{
-             keyTableName : [self tableName],
-             keyFieldKey : fieldKey,
-             keyFieldDescriptors : self.columns,
-             keyAggregateFunctionType: objFunctionType
-             };
-}
-
-- (NSDictionary *)paramatersAggregateByPageWithFieldKey:(NSString *)fieldKey andRowIds:(NSArray *)rowids andFunctionType:(MTAggregateFunctionType)functionType {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
-    NSNumber *keyRowids = @(MTQueryCacheAggregateFunctionParamatersRowids);
-    parameters[keyRowids] = rowids;
-    return parameters;
-}
-
-- (NSDictionary *)paramatersAggregateByGroupKeys:(NSArray *)groupKeys andFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
-    NSNumber *keyWhereClause = @(MTQueryCacheAggregateFunctionParamatersPredicates);
-    parameters[keyWhereClause] = [self whereClauseForGroupKeys:groupKeys];
-    return parameters;
-}
-
-- (NSDictionary *)parametersAggregateByReportWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
-    return [self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType];
-}
-
-// FIXME: Return error handler... remove credentals
-- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
-                     function:(MTAggregateFunctionType)function
-                     fieldKey:(NSString *)fieldKey
-                    groupKeys:(NSArray *)groupKeys
-                       rowids:(NSArray *)rowids {
-    id result = nil;
-  
-    NSString *columnKey = [self columnKeyForColumnName:fieldKey];
-    
-    if (columnKey) {
-        NSDictionary *queryParameters;
-        
-        MTQueryType queryType = MTQueryTypeCacheAggregateFunction;
-        switch (groupByType) {
-            case MTAggregateGroupByTypePage: {
-                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function]];
-                NSNumber *groupByTypeNumber = @(groupByType);
-                NSNumber *groupByTypeKey = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
-                ((NSMutableDictionary *)queryParameters)[groupByTypeKey] = groupByTypeNumber;
-
-                break;
-            }
-            case MTAggregateGroupByTypeReport:
-                queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
-                break;
-                
-            case MTAggregateGroupByTypeSection:
-                //[self initalizeGroupKeys];
-                queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
-                break;
-                
-            default:
-                break;
-        }
-        
-        MTQuery *query = [[MTQuery alloc] initWithQueryType:queryType object:queryParameters];
-        sqlite3_stmt *statement = NULL;
-        NSError *error = nil;
-        NSString *sql = [query getSqlWithError:&error];
-        
-        const char *sqlc = [sql UTF8String];
-        char *queryString = sqlite3_mprintf((char *) sqlc);
-        sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
-        
-        BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
-        
-        for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
-            [(MTDatabaseSqlite3 *)self.databaseForSelects bindStatement:&statement withBindings:dataBinding];
-        }
-        
-        if (success && sqlite3_step(statement) == SQLITE_ROW) {
-            result = [self objectOfUnknownType:statement forColumnNumber:0];
-        }
-        NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
-        
-        sqlite3_finalize(statement);
-        sqlite3_free(queryString);
-    }
-    
-    return result;
-}
-
 - (NSString *)columnKeyForColumnName:(NSString *)columnName {
     NSString *key;
     for (NSString *columnKey in self.columnKeys) {
@@ -940,6 +840,32 @@
         }
     }
     return key;
+}
+
+- (id)runSelectQuery:(MTQuery *)query {
+    id result = nil;
+    sqlite3_stmt *statement = NULL;
+    NSError *error = nil;
+    NSString *sql = [query getSqlWithError:&error];
+    
+    const char *sqlc = [sql UTF8String];
+    char *queryString = sqlite3_mprintf((char *) sqlc);
+    sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
+    
+    BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
+    
+    for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
+        [(MTDatabaseSqlite3 *)self.databaseForSelects bindStatement:&statement withBindings:dataBinding];
+    }
+    
+    if (success && sqlite3_step(statement) == SQLITE_ROW) {
+        result = [self objectOfUnknownType:statement forColumnNumber:0];
+    }
+    NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
+    
+    sqlite3_finalize(statement);
+    sqlite3_free(queryString);
+    return result;
 }
 
 MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);

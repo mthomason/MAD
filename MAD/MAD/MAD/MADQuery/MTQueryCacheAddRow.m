@@ -68,6 +68,9 @@
     return self;
 }
 
+static NSString * const SqlDelimitor = @", ";
+static NSString * const SqlDelimitorObject = @", %@";
+
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     
@@ -79,38 +82,33 @@
     char colCtrBuf[19];
     for (id object in self.row) {
         
-        NSString *fieldName = self.columnKeys[columnCounter];
-        MTDataColumn *column = self.columns[fieldName];
-        MTDataType type = column.columnType.unsignedIntegerValue;
-        NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
-        
-        if (columnCounter > 0) {
-            [colmunNames appendString:@", "];
-            [values appendString:@", "];
+        @autoreleasepool {
+            NSString *fieldName = self.columnKeys[columnCounter];
+            MTDataColumn *column = self.columns[fieldName];
+            NSString *safeFieldName = [self.database safeIdentifier:fieldName];
+            
+            if (columnCounter > 0) {
+                [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
+                [values appendString:SqlDelimitor];
+            } else {
+                [colmunNames appendString:safeFieldName];
+            }
+            
+            
+            MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.columnType.unsignedIntegerValue
+                                                                                      fieldIndex: columnCounter
+                                                                                           value: object];
+            [self.binaryBindings addObject:databinding];
+            
+            snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);
+            NSString *columnValue = @(colCtrBuf);
+            [values appendString:columnValue];
         }
-        
-        [colmunNames appendString:safeFieldName];
-        
-        MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: type
-                                                                                  fieldIndex: columnCounter
-                                                                                       value: object];
-        [self.binaryBindings addObject:databinding];
-        
-        snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);
-        NSString *columnValue = @(colCtrBuf);
-        [values appendString:columnValue];
         
         columnCounter++;
     }
-
-    NSMutableString *result = [NSMutableString stringWithString:@"INSERT INTO main."];
-    [result appendString:self.tableName];
-    [result appendString:@" ("];
-    [result appendString:colmunNames];
-    [result appendString:@") VALUES ("];
-    [result appendString:values];
-    [result appendString:@")"];
-    return result;
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", self.tableName, colmunNames, values];
+    return sql;
 }
 
 - (BOOL)returnsResults {

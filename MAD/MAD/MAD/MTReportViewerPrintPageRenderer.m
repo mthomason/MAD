@@ -68,10 +68,11 @@
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADReportLineRepresentation.h"
+#import <MAD/MTDataTableFast.h>
 
 @protocol MADDataTableAggregateResultesProtocol <NSObject>
 
-- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+- (id)zAggregateType:(MTAggregateGroupByType)groupByType
                      function:(MTAggregateFunctionType)function
                      fieldKey:(NSString *)fieldKey
                     groupKeys:(NSArray *)groupKeys
@@ -84,7 +85,7 @@
 
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (nonatomic, strong) MTDataTable<MADDataTableAggregateResultesProtocol> *dataTable;
+@property (nonatomic, strong) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
 
 @property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
 
@@ -106,11 +107,11 @@
 
 @implementation MTReportViewerPrintPageRenderer
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable {
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable {
     return [self initWithReportFormatter:reportFormatter dataTable:dataTable andPrintableAreaSize:[MTPaper sizeLetter]];
 }
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
     if (self = [super init]) {
         [self initCommon];
         self.dataTable = dataTable;
@@ -657,7 +658,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
             id aggregateResult;
             if (calculateInMemory == NO) {
                 
-                aggregateResult = [self.dataTable resultsForAggregateType: item.isAggregate.groupType.unsignedIntegerValue
+                aggregateResult = [self resultsForAggregateType: item.isAggregate.groupType.unsignedIntegerValue
                                                                  function: item.isAggregate.function.unsignedIntegerValue
                                                                  fieldKey: fieldKey
                                                                 groupKeys: groupKeys
@@ -800,6 +801,83 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     }
 
     return drawingObject;
+}
+
+// FIXME: Return error handler... remove credentals
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                     function:(MTAggregateFunctionType)function
+                     fieldKey:(NSString *)fieldKey
+                    groupKeys:(NSArray *)groupKeys
+                       rowids:(NSArray *)rowids {
+    id result = nil;
+    
+    NSString *columnKey = [self.dataTable columnKeyForColumnName:fieldKey];
+    
+    if (columnKey) {
+        NSDictionary *queryParameters;
+        
+        MTQueryType queryType = MTQueryTypeCacheAggregateFunction;
+        switch (groupByType) {
+            case MTAggregateGroupByTypePage: {
+                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function]];
+                NSNumber *groupByTypeNumber = @(groupByType);
+                NSNumber *groupByTypeKey = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
+                ((NSMutableDictionary *)queryParameters)[groupByTypeKey] = groupByTypeNumber;
+                
+                break;
+            }
+            case MTAggregateGroupByTypeReport:
+                queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
+                break;
+                
+            case MTAggregateGroupByTypeSection:
+                //[self initalizeGroupKeys];
+                queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
+                break;
+                
+            default:
+                break;
+        }
+        
+        MTQuery *query = [[MTQuery alloc] initWithQueryType:queryType object:queryParameters];
+        result = [self.dataTable runSelectQuery:query];
+        
+    }
+    
+    return result;
+}
+
+- (NSDictionary *)paramatersAggregateWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+    NSNumber *keyTableName = @(MTQueryCacheAggregateFunctionParamatersTableName);
+    NSNumber *keyFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
+    NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
+    NSNumber *keyFieldDescriptors = @(MTQueryCacheAggregateFunctionParamatersFieldDescriptors);
+    NSNumber *objFunctionType = @(functionType);
+    NSString *tableName = [self.dataTable tableName];
+    return @{
+             keyTableName : tableName,
+             keyFieldKey : fieldKey,
+             keyFieldDescriptors : self.dataTable.columns,
+             keyAggregateFunctionType: objFunctionType
+             };
+}
+
+- (NSDictionary *)paramatersAggregateByPageWithFieldKey:(NSString *)fieldKey andRowIds:(NSArray *)rowids andFunctionType:(MTAggregateFunctionType)functionType {
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
+    NSNumber *keyRowids = @(MTQueryCacheAggregateFunctionParamatersRowids);
+    parameters[keyRowids] = rowids;
+    return parameters;
+}
+
+- (NSDictionary *)paramatersAggregateByGroupKeys:(NSArray *)groupKeys andFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
+    NSNumber *keyWhereClause = @(MTQueryCacheAggregateFunctionParamatersPredicates);
+    parameters[keyWhereClause] = [self.dataTable whereClauseForGroupKeys:groupKeys];
+    return parameters;
+}
+
+- (NSDictionary *)parametersAggregateByReportWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+    return [self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType];
 }
 
 - (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {

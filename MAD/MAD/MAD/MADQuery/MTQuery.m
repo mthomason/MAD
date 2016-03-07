@@ -254,7 +254,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
-    return (index < [[self fieldKeys] count]) ? [self fieldKeys][index] : nil;
+    return (index < self.fieldKeys.count) ? self.fieldKeys[index] : nil;
 }
 
 #pragma mark - Helper functions for the query cache

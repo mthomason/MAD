@@ -202,7 +202,7 @@
 		4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E451BAE4D8C00BAE5FC /* MADocument.m */; };
 		4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */; };
 		4C401E4B1BAE4D8C00BAE5FC /* MADocumentState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */; };
-		4C401E551BAE4E9400BAE5FC /* MTDataTableFast.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E4D1BAE4E9400BAE5FC /* MTDataTableFast.h */; };
+		4C401E551BAE4E9400BAE5FC /* MTDataTableFast.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E4D1BAE4E9400BAE5FC /* MTDataTableFast.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E561BAE4E9400BAE5FC /* MTDataTableFast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E4E1BAE4E9400BAE5FC /* MTDataTableFast.m */; };
 		4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E4F1BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h */; };
 		4C401E581BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E501BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m */; };

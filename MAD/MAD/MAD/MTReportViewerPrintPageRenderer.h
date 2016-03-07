@@ -11,11 +11,11 @@
 
 #import <UIKit/UIPrintPageRenderer.h>
 
-@class MADReportTextRepresentation, MTReportFormatter, MTDataTable, UIImage;
+@class MADReportTextRepresentation, MTReportFormatter, MTDataTableFast, UIImage;
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
-- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable;
 
 @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 

@@ -10,15 +10,20 @@
 #define Reports_MTDataTableFast_h
 
 #import <Foundation/Foundation.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
-#import <MADFileManager/MADFileManager.h>
-#import <MADDataStructures/MADDataStructures.h>
-#import <MADSqlite3/MADSqlite3.h>
 #import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/MTDataColumn.h>
+
+@class MTDatabaseCache, MTQuery;
 
 @interface MTDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>
+
+@property (nonatomic, strong, readonly) MTDatabaseCache *databaseForSelects;
+
+- (NSString *)tableName;
+- (NSString *)columnKeyForColumnName:(NSString *)columnName;
+- (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
+
+- (id)runSelectQuery:(MTQuery *)query;
 
 @end
 
