@@ -7,6 +7,10 @@
 //
 
 #import "MTNotificationDidReadRows.h"
+#import <dispatch/once.h>
+#import <Foundation/NSValue.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSNotification.h>
 
 NSString * const MTNotificationDidReadRowsName = @"MTNotificationDidReadRows";
 NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";

@@ -9,7 +9,7 @@
 #ifndef MAD_DataStructures_MTTree_h
 #define MAD_DataStructures_MTTree_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
 #if __has_attribute(objc_designated_initializer)

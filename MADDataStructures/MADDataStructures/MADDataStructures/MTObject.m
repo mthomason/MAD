@@ -11,6 +11,7 @@
 #endif
 
 #import "MTObject.h"
+#import <Foundation/NSString.h>
 
 @interface MTObject ()
 

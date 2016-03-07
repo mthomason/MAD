@@ -9,7 +9,8 @@
 #ifndef MAD_DataStructures_MTQueue_h
 #define MAD_DataStructures_MTQueue_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSEnumerator.h>
 #import "MTProtocolLog.h"
 
 #ifndef NS_DESIGNATED_INITIALIZER

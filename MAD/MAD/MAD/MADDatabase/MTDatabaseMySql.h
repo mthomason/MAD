@@ -10,7 +10,6 @@
 #define Reports_MTDatabaseMySql_h
 
 #import "MTDatabase.h"
-#import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MADDataType.h>
 
 @class RptqDatabaseSchemaTable;

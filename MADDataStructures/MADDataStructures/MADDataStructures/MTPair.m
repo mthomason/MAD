@@ -12,6 +12,7 @@
 
 #import "MTPair.h"
 #import "MTObject.h"
+#import <Foundation/NSString.h>
 
 @implementation MTPair
 

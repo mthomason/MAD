@@ -10,7 +10,7 @@
 #define Reports_RptqRelationship_Extras_h
 
 #import "RptqRelationship.h"
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 
 @interface RptqRelationship (Extras) <MTProtocolCompare>
 

@@ -9,7 +9,6 @@
 #ifndef MAD_DataStructures_MTEdge_h
 #define MAD_DataStructures_MTEdge_h
 
-#import <Foundation/Foundation.h>
 #import "MTObject.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"

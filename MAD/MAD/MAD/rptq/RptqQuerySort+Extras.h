@@ -10,7 +10,7 @@
 #define Reports_RptqQuerySort_Extras_h
 
 #import "RptqQuerySort.h"
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 
 @interface RptqQuerySort (Extras) <MTProtocolCompare>
 

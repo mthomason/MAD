@@ -40,6 +40,7 @@
 #import "MTQuerySampleDataField.h"
 
 #import <MADFoundation/MTDataTable.h>
+#import <MADDataStructures/MTGraph.h>
 
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"

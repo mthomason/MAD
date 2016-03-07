@@ -9,7 +9,7 @@
 #ifndef Reports_MTNotificationDidReadRows_h
 #define Reports_MTNotificationDidReadRows_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 extern NSString * const MTNotificationDidReadRowsName;
 extern NSString * const MTDatabaseNumberOfRowsReadKey;

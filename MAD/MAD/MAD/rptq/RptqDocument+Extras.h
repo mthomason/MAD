@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MADBarcodes/MADBarcodes.h>
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 #import "RptqDocument.h"
 #import "RptqDocumentSection+Extras.h"
 #import "MTPaper.h"

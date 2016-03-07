@@ -30,7 +30,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 @property (nonatomic, strong, readwrite) NSString *identifier;
 @property (nonatomic, strong) MTDatabaseCache *database;
 
-@property (nonatomic, assign) NSInteger numberOrRows;
+@property (nonatomic, assign) int numberOrRows;
 @property (nonatomic, assign) sqlite3_stmt *statementInsert;
 @property (nonatomic, assign) sqlite3_stmt *statementSelect;
 @property (nonatomic, assign) sqlite3_stmt *statementCount;
@@ -124,12 +124,13 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     if (![self.database tableExist:MTArrayCachedTableName]) {
         MTDataColumn *columnKey = [MADArrayCaching columnKey];
         MTDataColumn *columnValue = [MADArrayCaching columnValue];
-        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnKey identifier] createTable:YES unique:NO];
-        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnValue identifier] createTable:NO unique:NO];
-        [self setNumberOrRows:0];
+        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnKey.identifier createTable:YES unique:NO];
+        [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:columnValue.identifier createTable:NO unique:NO];
+
+        self.numberOrRows = 0;
     }
     [self prepareStatements];
-    [self setNumberOrRows:[self count]];
+    self.numberOrRows = [self count];
 }
 
 - (void)beginBulkInserts {
@@ -343,8 +344,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     id result = nil;
     
     if (self.lastObjectSelected != nil) {
-        NSNumber *lastObjectIndex = self.lastObjectSelected.former;
-        lastIndex = [lastObjectIndex unsignedIntegerValue];
+        lastIndex = ((NSNumber *)self.lastObjectSelected.former).unsignedIntegerValue;
     }
     if (lastIndex == index) {
         result = self.lastObjectSelected.latter;
@@ -353,7 +353,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         
         if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
-                                                 length: sqlite3_column_bytes(_statementSelect, 0)];
+                                                 length: (unsigned int)sqlite3_column_bytes(_statementSelect, 0)];
             result = [self objectForData:queryResult];
             NSNumber *idx = @(index);
             MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
@@ -401,8 +401,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return [MTQuery queryDefinitionSelect:queryDefinationSelect withLimit:1 andOffset:0];
 }
 
-- (NSUInteger)count {
-    NSUInteger lastRowid = 0;
+- (int)count {
+    int lastRowid = 0;
     int stepResult = sqlite3_step(_statementCount);
     if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
         lastRowid = sqlite3_column_int(_statementCount, 0) + 1;
@@ -411,16 +411,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return lastRowid;
 }
 
-- (BOOL)isEmpty {
-    return [self numberOrRows] > 0;
-}
+- (BOOL)isEmpty { return self.numberOrRows > 0; }
 
 - (NSArray *)allObjects {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    if (![self isEmpty]) {
+    if (![self isEmpty]) {  //wat??
         while (sqlite3_step(_statementEnumer) == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                                 length: sqlite3_column_bytes(_statementEnumer, 0)];
+                                                 length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
             id result = [self objectForData:queryResult];
             [results addObject:result];
         }
@@ -436,7 +434,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         stepResult = sqlite3_step(_statementEnumer);
         if (stepResult == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                                 length: sqlite3_column_bytes(_statementEnumer, 0)];
+                                                 length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
             result = [self objectForData:queryResult];
         } else if (stepResult == SQLITE_DONE) {
             sqlite3_reset(_statementEnumer);
@@ -448,9 +446,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return result;
 }
 
-- (void)resetEnumerator {
-    sqlite3_reset(_statementEnumer);
-}
+- (void)resetEnumerator { sqlite3_reset(_statementEnumer); }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
                                   objects:(id __unsafe_unretained *)stackbuf
@@ -474,9 +470,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                 stepResult = sqlite3_step(_statementEnumer);
                 if (stepResult == SQLITE_ROW) {
                     NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                                         length: sqlite3_column_bytes(_statementEnumer, 0)];
+                                                         length: (unsigned int)sqlite3_column_bytes(_statementEnumer, 0)];
                     id obj = [self objectForData:queryResult];
-                    [[self fastEnumerationObjects] addObject:obj];
+                    [self.fastEnumerationObjects addObject:obj];
                     stackbuf[i] = obj;
                 } else if (stepResult == SQLITE_DONE) {
                     sqlite3_reset(_statementEnumer);

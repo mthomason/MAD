@@ -10,7 +10,6 @@
 #define Reports_MTQueryFull_h
 
 #import "MTQuery.h"
-#import <MADDataStructures/MADDataStructures.h>
 
 @interface MTQueryFull : MTQuery
 

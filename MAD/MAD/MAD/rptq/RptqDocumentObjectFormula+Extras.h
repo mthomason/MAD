@@ -10,7 +10,7 @@
 #define Reports_RptqDocumentObjectFormula_Extras_h
 
 #import "RptqDocumentObjectFormula.h"
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolLog.h>
 #import "RptqDocumentObjectFactory.h"
 #import <MADFoundation/MADDataType.h>
 

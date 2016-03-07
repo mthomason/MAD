@@ -12,6 +12,7 @@
 
 #import "MADViewerController.h"
 #import <CoreData/CoreData.h>
+#import <MADDataStructures/MTPair.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTReportFormatter.h>
@@ -21,7 +22,6 @@
 #import <MAD/MTNotificationDidFormatPage.h>
 #import <MAD/MTNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
-#import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTDataTable.h>
 #import <MAD/MTPaper.h>
 

@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MADDocumentSectionType.h>
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 #import "RptqDocumentSection.h"
 
 typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {

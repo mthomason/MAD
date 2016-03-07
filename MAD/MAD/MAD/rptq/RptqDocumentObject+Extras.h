@@ -12,7 +12,8 @@
 #import "RptqDocumentObject.h"
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
+#import <MADDataStructures/MTProtocolLog.h>
 #import <MADFoundation/MADDataType.h>
 #import <MAD/MAD.h>
 #import <MAD/MADFont.h>

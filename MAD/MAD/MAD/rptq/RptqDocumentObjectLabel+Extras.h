@@ -10,7 +10,7 @@
 #define Reports_RptqDocumentObjectLabel_Extras_h
 
 #import "RptqDocumentObjectLabel.h"
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare>

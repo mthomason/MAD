@@ -11,7 +11,6 @@
 
 #import <Foundation/NSObject.h>
 #import <MAD/RptqQuery.h>
-#import <MADDataStructures/MADDataStructures.h>
 
 @class RptqQuery, MTGraph, MTLinkedList;
 

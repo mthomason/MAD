@@ -9,8 +9,7 @@
 #ifndef MAD_DataStructures_MTPair_h
 #define MAD_DataStructures_MTPair_h
 
-#import <Foundation/Foundation.h>
-#import "MTObject.h"
+#import <Foundation/NSObject.h>
 #import "MTProtocolLog.h"
 
 #ifndef NS_DESIGNATED_INITIALIZER

@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueue.h"
+#import <Foundation/NSArray.h>
 
 @interface MTQueue ()
 

@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDataTableFast.h"
+#import <MADDataStructures/MTPair.h>
 #import <MADFoundation/MTDataColumn.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import "MTQuery.h"

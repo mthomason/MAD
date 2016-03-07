@@ -11,6 +11,8 @@
 #endif
 
 #import "MTVertex.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
 #import "MTEdge.h"
 
 @interface MTVertex()
@@ -45,9 +47,7 @@
     return self;
 }
 
-- (NSUInteger)numberOfIncidentEdges {
-    return self.edges.count;
-}
+- (NSUInteger)numberOfIncidentEdges { return self.edges.count; }
 
 - (NSArray *)incidentEdges {
     NSArray *results;

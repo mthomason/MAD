@@ -9,7 +9,7 @@
 #ifndef MAD_DataStructures_MTProtocolEnumerator_h
 #define MAD_DataStructures_MTProtocolEnumerator_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @protocol MTProtocolEnumerator <NSObject>
 

@@ -11,6 +11,10 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTLinkedList.h>
+
 #import "MADManagedObjectView.h"
 
 #import "MADViewControllerSQL.h"

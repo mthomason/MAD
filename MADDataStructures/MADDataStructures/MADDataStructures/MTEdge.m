@@ -11,6 +11,8 @@
 #endif
 
 #import "MTEdge.h"
+#import <Foundation/NSValue.h>
+#import <Foundation/NSString.h>
 #import "MTPair.h"
 #import "MTVertex.h"
 

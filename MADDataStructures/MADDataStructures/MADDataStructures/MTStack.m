@@ -11,6 +11,8 @@
 #endif
 
 #import "MTStack.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
 
 @interface MTStack ()
 

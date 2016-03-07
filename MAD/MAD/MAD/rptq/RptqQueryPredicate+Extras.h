@@ -10,7 +10,7 @@
 #define Reports_RptqQueryPredicate_Extras_h
 
 #import "RptqQueryPredicate.h"
-#import <MADDataStructures/MADDataStructures.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 
 typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 	MNSPredicateOperatorEqual = 0,

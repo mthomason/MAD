@@ -10,15 +10,13 @@
 #define MAD_MTArrayCached_h
 
 #import <Foundation/NSEnumerator.h>
-#import <MADSqlite3/MADSqlite3.h>
-#import <MADDataStructures/MADDataStructures.h>
 #import <MADFoundation/MTCacheProtocol.h>
 
 @interface MADArrayCaching : NSEnumerator
 
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 @property (nonatomic, strong, readonly) NSString *identifier;
-@property (nonatomic, assign, readonly) NSUInteger count;
+@property (nonatomic, assign, readonly) int count;
 
 - (instancetype)initWithIdentifier:(NSString *)identifier;
 - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;

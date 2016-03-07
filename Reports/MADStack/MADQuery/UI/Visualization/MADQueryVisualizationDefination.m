@@ -8,6 +8,9 @@
 
 #import "MADQueryVisualizationDefination.h"
 #import "MTGraph+RptqQuery.h"
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryLinks.h>
 
 @interface MADQueryVisualizationDefination()
 
