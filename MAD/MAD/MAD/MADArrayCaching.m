@@ -7,15 +7,13 @@
 //
 
 #import "MADArrayCaching.h"
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
-#import "MADConstants.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseCache.h"
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADSqlite3/MADSqlite3.h>
+#import <MADDataStructures/MTPair.h>
 #import <MADFoundation/MTDataColumn.h>
 #import "MTQuery.h"
-#import "MTDatabaseField.h"
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import "MTDatabaseConnection.h"
+#import "MTDatabaseCache.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -31,16 +29,14 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 
 @property (nonatomic, strong, readwrite) NSString *identifier;
 @property (nonatomic, strong) MTDatabaseCache *database;
+
 @property (nonatomic, assign) NSInteger numberOrRows;
 @property (nonatomic, assign) sqlite3_stmt *statementInsert;
 @property (nonatomic, assign) sqlite3_stmt *statementSelect;
 @property (nonatomic, assign) sqlite3_stmt *statementCount;
 @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
-@property (nonatomic, assign) NSUInteger nextObjectCounter;
-
 @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
-
 @property (nonatomic, strong) MTPair *lastObjectSelected;
 
 @end
