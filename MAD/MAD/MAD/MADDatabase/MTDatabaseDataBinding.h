@@ -16,13 +16,12 @@
 
 @property (nonatomic, strong, readonly) id value;
 @property (nonatomic, assign, readonly) MTDataType datatype;
-@property (nonatomic, assign, readonly) NSUInteger fieldIndex;
+@property (nonatomic, assign, readonly) int fieldIndex;
+@property (readonly) int columnNumber;
 
 - (instancetype)initWithDataType: (MTDataType)datatype
                       fieldIndex: (NSUInteger)fieldIndex
                            value: (id)value NS_DESIGNATED_INITIALIZER;
-
-- (id)value;
 
 @end
 

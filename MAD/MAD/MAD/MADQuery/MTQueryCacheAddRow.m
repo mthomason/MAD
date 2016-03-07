@@ -49,20 +49,20 @@
         NSArray *columnKeys = object[keyMTQueryCacheAddRowColumnKeys];
         NSString *tableName = object[keyMTQueryCacheAddRowTableName];
         
-        [self setUrl:url];
-        [self setTableName:tableName];
-        [self setRow:row];
-        [self setColumns:columns];
-        [self setColumnKeys:columnKeys];
+        self.url = url;
+        self.tableName = tableName;
+        self.row = row;
+        self.columns = columns;
+        self.columnKeys = columnKeys;
 
         if (url != nil) {
             MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
             MTDatabase *db = [MTDatabase databaseFactory:connection];
             NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
-            [self setDatabase:db];
+            self.database = db;
         }
         
-        [self setQueryObject:object];
+        self.queryObject = object;
         
     }
     return self;
@@ -81,7 +81,7 @@
         
         NSString *fieldName = self.columnKeys[columnCounter];
         MTDataColumn *column = self.columns[fieldName];
-        MTDataType type = [[column columnType] integerValue];
+        MTDataType type = column.columnType.unsignedIntegerValue;
         NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
         
         if (columnCounter > 0) {
@@ -94,7 +94,7 @@
         MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: type
                                                                                   fieldIndex: columnCounter
                                                                                        value: object];
-        [[self binaryBindings] addObject:databinding];
+        [self.binaryBindings addObject:databinding];
         
         snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);
         NSString *columnValue = @(colCtrBuf);

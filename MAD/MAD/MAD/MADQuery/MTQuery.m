@@ -188,9 +188,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return YES;
 }
 
-- (BOOL)partOfTransactionSet {
-    return NO;
-}
+- (BOOL)partOfTransactionSet { return NO; }
 
 - (id)initWithObject:(id)object {
     
@@ -300,8 +298,8 @@ NSString * const MADIdentifierROWID         = @"ROWID";
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             if (sortCounter != 0) [sql appendString:@", "];
             MTDataColumn *dataColumn = nil;
-            if ([self columns]) {
-                dataColumn = [self columns][[sortDescriptor key]];
+            if (self.columns) {
+                dataColumn = self.columns[[sortDescriptor key]];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
             NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.unsignedIntegerValue
@@ -319,7 +317,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     if ([rowids count] > 0) {
         for (NSNumber *rowido in rowids) {
             [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
-            [sql appendFormat:@"rowid = %lu", rowido.unsignedIntegerValue];
+            [sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];
             firstTime = NO;
         }
     } else {
@@ -329,7 +327,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MTDataColumn *)[self columns][columnHandle] columnType] unsignedIntegerValue];
+    return [[(MTDataColumn *)self.columns[columnHandle] columnType] unsignedIntegerValue];
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {

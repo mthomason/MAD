@@ -29,7 +29,7 @@
     [encoder encodeObject: [self identifier]
                    forKey: [MTDataColumn keyIdentifier]];
     
-    [encoder encodeObject: [self column]
+    [encoder encodeObject: self.column
                    forKey: [MTDataColumn keyColumn]];
     
     [encoder encodeObject: [self defaultValue]
@@ -50,50 +50,48 @@
     [encoder encodeObject: [self dataPercision]
                    forKey: [MTDataColumn keyDataPercision]];
     
-    [encoder encodeBool: [self isPrimaryKey]
+    [encoder encodeBool: self.isPrimaryKey ? YES : NO
                    forKey: [MTDataColumn keyIsPrimaryKey]];
 
-    [encoder encodeBool: [self isNotNull]
+    [encoder encodeBool: self.isNotNull ? YES : NO
                  forKey: [MTDataColumn keyIsNotNull]];
 
-    [encoder encodeBool: [self isAutoIncrement]
+    [encoder encodeBool: self.isAutoIncrement ? YES : NO
                  forKey: [MTDataColumn keyIsAutoIncrement]];
 
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-    self = [super init];
-    if(self) {
+    if( self = [super init]) {
 
         NSString *fieldName = [decoder decodeObjectForKey: [MTDataColumn keyFieldName]];
-        [self setIdentifier: fieldName];
+        self.identifier = fieldName;
 
         NSString *identifier = [decoder decodeObjectForKey: [MTDataColumn keyIdentifier]];
-        [self setIdentifier: identifier];
+        self.identifier = identifier;
         
         NSMutableArray *column = [decoder decodeObjectForKey: [MTDataColumn keyColumn]];
-        [self setColumn: column];
+        self.column = column;
         
         id defaultValue = [decoder decodeObjectForKey: [MTDataColumn keyDefaultValue]];
-        [self setDefaultValue: defaultValue];
+        self.defaultValue = defaultValue;
         
         NSString *caption = [decoder decodeObjectForKey: [MTDataColumn keyCaption]];
-        [self setCaption: caption];
+        self.caption = caption;
         
         NSNumber *columnType = [decoder decodeObjectForKey: [MTDataColumn keyColumnType]];
-        [self setColumnType: columnType];
+        self.columnType = columnType;
         
         NSNumber *nativeColumnType = [decoder decodeObjectForKey: [MTDataColumn keyNativeColumnType]];
-        [self setNativeColumnType: nativeColumnType];
+        self.nativeColumnType = nativeColumnType;
         
         NSNumber *dataLength = [decoder decodeObjectForKey: [MTDataColumn keyDataLength]];
-        [self setDataLength: dataLength];
+        self.dataLength = dataLength;
         
         NSNumber *dataPercision = [decoder decodeObjectForKey: [MTDataColumn keyDataPercision]];
-        [self setDataPercision: dataPercision];
+        self.dataPercision = dataPercision;
 
-        BOOL isPrimaryKey = [decoder decodeBoolForKey: [MTDataColumn keyIsPrimaryKey]];
-        [self setPrimaryKey: isPrimaryKey];
+        self.primaryKey = [decoder decodeBoolForKey: [MTDataColumn keyIsPrimaryKey]] ? true : false;
 
     }
     return self;
@@ -103,22 +101,20 @@
     self = [super init];
     if (self) {
 
-        [self setIdentifier:identifier];
-        [self setCaption:identifier];
+        _identifier = [[NSString alloc] initWithString:identifier];
+        _caption = [[NSString alloc] initWithString:identifier];
         
-        NSMutableArray *column = [[NSMutableArray alloc] init];
-        [self setColumn:column];
+        _column = [[NSMutableArray alloc] init];
+
+        _defaultValue = [NSNull null];
         
-        id defaultValue = [NSNull null];
-        [self setDefaultValue:defaultValue];
-        
-        [self setColumnType: @(0)];
-        [self setNativeColumnType: @(0)];
-        [self setDataLength: @(0)];
-        [self setDataPercision: @(0)];
-        [self setPrimaryKey: NO];
-        [self setNotNull: NO];
-        [self setAutoIncrement: NO];
+        _columnType = @(0);
+        _nativeColumnType = @(0);
+        _dataLength = @(0);
+        _dataPercision = @(0);
+        _primaryKey = NO;
+        _notNull = NO;
+        _autoIncrement = NO;
         
     }
     return self;
@@ -164,17 +160,17 @@
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    NSAssert(index < [[self column] count], @"Column doesn't exit!");
-    return [self column][index];
+    NSAssert(index < [self.column count], @"Column doesn't exit!");
+    return self.column[index];
 }
 
 - (void)addObject:(id)object {
-    [[self column] addObject:object];
+    [self.column addObject:object];
 }
 
 - (void)addRows:(NSUInteger)count {
     for (NSUInteger i = 0; i <= count; i++) {
-        [[self column] addObject:[self defaultValue]];
+        [self.column addObject:self.defaultValue];
     }
 }
 
@@ -205,7 +201,7 @@
     
     plist[keyFieldName] = [self fieldName];
     plist[keyIdentifier] = [self identifier];
-    plist[keyColumn] = [self column];
+    plist[keyColumn] = self.column;
     plist[keyDefaultValue] = defaultValue;
     plist[keyCaption] = [self caption];
     plist[keyColumnType] = [self columnType];
@@ -220,7 +216,7 @@
 }
 
 - (void)removeAllObjects {
-    [[self column] removeAllObjects];
+    [self.column removeAllObjects];
 }
 
 + (NSString *)keyDefaultValue {

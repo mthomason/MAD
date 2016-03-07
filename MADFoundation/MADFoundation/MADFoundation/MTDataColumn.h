@@ -23,9 +23,9 @@
 @property (nonatomic, strong) NSNumber *nativeColumnType;
 @property (nonatomic, strong) NSNumber *dataLength;
 @property (nonatomic, strong) NSNumber *dataPercision;
-@property (nonatomic, assign, getter = isPrimaryKey) BOOL primaryKey;
-@property (nonatomic, assign, getter = isNotNull) BOOL notNull;
-@property (nonatomic, assign, getter = isAutoIncrement) BOOL autoIncrement;
+@property (nonatomic, assign, getter = isPrimaryKey) bool primaryKey;
+@property (nonatomic, assign, getter = isNotNull) bool notNull;
+@property (nonatomic, assign, getter = isAutoIncrement) bool autoIncrement;
 
 - (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
 - (instancetype)initWithPlist:(id)plist;

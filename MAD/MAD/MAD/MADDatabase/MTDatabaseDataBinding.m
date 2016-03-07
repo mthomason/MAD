@@ -19,11 +19,15 @@
 
     @property (nonatomic, strong, readwrite) id value;
     @property (nonatomic, assign, readwrite) MTDataType datatype;
-    @property (nonatomic, assign, readwrite) NSUInteger fieldIndex;
+    @property (nonatomic, assign, readwrite) int fieldIndex;
 
 @end
 
 @implementation MTDatabaseDataBinding
+
+- (int)columnNumber {
+    return self.fieldIndex + 1;
+}
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -89,7 +93,7 @@
             }
         }
         self.datatype = datatype;
-        self.fieldIndex = fieldIndex;
+        self.fieldIndex = (int)fieldIndex;
         self.value = value;
     }
     return self;

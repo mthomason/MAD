@@ -17,6 +17,8 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
     @property (nonatomic, strong) NSAttributedString *statusMessage1;
     @property (nonatomic, strong) NSAttributedString *statusMessage2;
     @property (nonatomic, strong) NSAttributedString *statusMessage3;
+    @property (nonatomic, strong) NSDictionary *attributesStatusLabelBold;
+    @property (nonatomic, strong) NSDictionary *attributesStatusLabelLight;
 
 @end
 
@@ -26,6 +28,13 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
     if (self = [super initWithFrame:frame]) {
         self.numberOfLines = 3;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        
+        NSDictionary *attributesStatusLabelBold = [MADLabelStatus attributesStatusLabelBold];
+        self.attributesStatusLabelBold = attributesStatusLabelBold;
+        
+        NSDictionary *attributesStatusLabelLight = [MADLabelStatus attributesStatusLabelLight];
+        self.attributesStatusLabelLight = attributesStatusLabelLight;
+        
         NSAttributedString *statusMessage1 = [NSAttributedString new];
         NSAttributedString *statusMessage2 = [NSAttributedString new];
         NSAttributedString *statusMessage3 = [NSAttributedString new];
@@ -52,8 +61,7 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
             [self updateStatusWithTime:timeMessage];
         });
     } else {
-        NSDictionary *attributes = [MADLabelStatus attributesStatusLabelBold];
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:attributes];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
         self.statusMessage1 = attributedString;
         [self updateStatusLabel: self.statusMessage1
              recordsReadMessage: self.statusMessage2
@@ -82,13 +90,12 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
         });
     } else {
         
-        NSDictionary *attributes = [MADLabelStatus attributesStatusLabelLight];
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message
-                                                                               attributes:attributes];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
         self.statusMessage2 = attributedString;
         [self updateStatusLabel: self.statusMessage1
              recordsReadMessage: self.statusMessage2
         andNumberOfPagesMessage: self.statusMessage3];
+        
     }
 }
 
@@ -98,12 +105,13 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
             [self updateStatusWithPageNumber:message];
         });
     } else {
-        NSDictionary *attributes = [MADLabelStatus attributesStatusLabelLight];
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:attributes];
+        
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
         self.statusMessage3 = attributedString;
         [self updateStatusLabel: self.statusMessage1
              recordsReadMessage: self.statusMessage2
         andNumberOfPagesMessage: self.statusMessage3];
+        
     }
 }
 

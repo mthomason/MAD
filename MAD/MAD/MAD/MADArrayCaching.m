@@ -231,7 +231,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     column.columnType = columnType;
     column.primaryKey = YES;
     column.notNull = YES;
-    column.autoIncrement = NO;
+    column.autoIncrement = false;
     return column;
 }
 
@@ -241,7 +241,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     column.columnType = columnType;
     column.primaryKey = NO;
     column.notNull = YES;
-    column.autoIncrement = NO;
+    column.autoIncrement = false;
     return column;
 }
 
