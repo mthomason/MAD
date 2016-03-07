@@ -78,134 +78,131 @@
     }
     
     if (errorFetch == nil) {
-        @synchronized(connection) {
+        MYSQL_STMT *myStatement = mysql_stmt_init(connection.connection);
+        const char *cCommand = [command UTF8String];
+        int prepareResult = mysql_stmt_prepare(myStatement, cCommand, strlen(cCommand));
+        if (prepareResult) {
+            const char *err = mysql_stmt_error(myStatement);
+            unsigned int code = mysql_stmt_errno(myStatement);
+            NSString *errorString = [[NSString alloc] initWithFormat:@"MySQL says %d! %s.", code, err];
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,
+                                        NSLocalizedFailureReasonErrorKey : @"Error"};
+            errorFetch = [NSError errorWithDomain:@"mad" code:code userInfo:errorInfo];
+            if (error != NULL) *error = errorFetch;
             
-            MYSQL_STMT *myStatement = mysql_stmt_init(connection.connection);
-            const char *cCommand = [command UTF8String];
-            int prepareResult = mysql_stmt_prepare(myStatement, cCommand, strlen(cCommand));
-            if (prepareResult) {
-                const char *err = mysql_stmt_error(myStatement);
-                unsigned int code = mysql_stmt_errno(myStatement);
-                NSString *errorString = [[NSString alloc] initWithFormat:@"MySQL says %d! %s.", code, err];
-                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,
-                                            NSLocalizedFailureReasonErrorKey : @"Error"};
-                errorFetch = [NSError errorWithDomain:@"mad" code:code userInfo:errorInfo];
-                if (error != NULL) *error = errorFetch;
+        } else {
+            
+            // build out and connect the bindings
+            
+            MYSQL_BIND *bindings = calloc(myStatement->field_count,sizeof(MYSQL_BIND));
+            
+            // Notes on how MySQL numeric datatypes are handled in the code following:
+            //
+            // INTEGER datatype handled by MYSQL_TYPE_LONG
+            // INT datatype handled by MYSQL_TYPE_LONG
+            // BIGINT datatype handled by MYSQL_TYPE_LONGLONG
+            // TINYINT datatype handled by MYSQL_TYPE_TINY
+            // REAL datatype handled by MYSQL_TYPE_DOUBLE
+            // DOUBLE datatype handled by MYSQL_TYPE_DOUBLE
+            // FLOAT datatype handled by MYSQL_TYPE_FLOAT
+            // DECIMAL datatype handled by MYSQL_TYPE_NEWDECIMAL
+            // NUMERIC datatype handled by MYSQL_TYPE_NEWDECIMAL (note: NUMERIC is implemented as DECIMAL by MySQL)
+            //
+            // SMALLINT datatype not handled currently - exception will occur if used
+            // MEDIUMINT datatype not handled currently - exception will occur if used
+            // BIT datatype not handled currently - exception will occur if used
+            // Note: CHAR datatype isn't considered numeric and is handled by MYSQL_TYPE_STRING
+            
+            NSMutableArray *fieldNameCollector = [[NSMutableArray alloc] initWithCapacity:myStatement->field_count];
+            NSMutableArray *fieldCollector = [[NSMutableArray alloc] initWithCapacity:myStatement->field_count];
+            NSMutableSet *sourceTables = [[NSMutableSet alloc] initWithCapacity:myStatement->field_count];
+            
+            [*dataTable removeAllObjects];
+            
+            for (NSUInteger x=0; x < myStatement->field_count;x++) {
+                NSString *table=[[NSString alloc]  initWithBytes:myStatement->fields[x].table
+                                                          length:myStatement->fields[x].table_length
+                                                        encoding:NSUTF8StringEncoding];
+                [sourceTables addObject:table];
                 
+                NSString *fieldName;
+                if (useExtendedNames || [sourceTables count]>1){
+                    NSString *fieldKeyName=[[NSString alloc]  initWithBytes:myStatement->fields[x].name
+                                                                     length:myStatement->fields[x].name_length
+                                                                   encoding:NSUTF8StringEncoding];
+                    if ([table length] > 0) {
+                        fieldName=[[NSString alloc] initWithFormat:@"`%@`.`%@`", table, fieldKeyName];
+                    } else {
+                        fieldName=[[NSString alloc] initWithFormat:@"`%@`", fieldKeyName];
+                    }
+                } else {
+                    fieldName= [[NSString alloc]  initWithBytes: myStatement->fields[x].name
+                                                         length: myStatement->fields[x].name_length
+                                                       encoding: NSUTF8StringEncoding];
+                }
+                [fieldNameCollector addObject:fieldName];
+                
+                MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
+                
+                MysqlFetchField *field = [[MysqlFetchField alloc] init];
+                
+                
+                [fieldCollector addObject:field];
+                field.name=fieldName;
+                field.width=myStatement->fields[x].length;
+                field.decimals=myStatement->fields[x].decimals;
+                field.fieldType=myStatement->fields[x].type;
+                if (IS_PRI_KEY(myStatement->fields[x].flags)) field.primaryKey=YES;
+                
+                bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
+                
+                NSInteger ftype = myStatement->fields[x].type;
+                NSNumber *fieldType = @(ftype);
+                NSNumber *fieldLength = @(myStatement->fields[x].length);
+                NSNumber *fieldPercision = @(myStatement->fields[x].decimals);
+                NSNumber *fieldTypeMad = @(0);
+                
+                [dataColumn setFieldName:field.name];
+                [dataColumn setNativeColumnType:fieldType];
+                [dataColumn setDataLength:fieldLength];
+                [dataColumn setDataPercision:fieldPercision];
+                [dataColumn setColumnType:fieldTypeMad];
+                [dataColumn setPrimaryKey:field.primaryKey];
+                
+                NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
+                [dataColumn setColumnType:cType];
+                
+                [*dataTable addColumn:dataColumn];
+                
+            }
+            
+            //[*dataTable beginBulkInsert];
+            
+            [mf setFieldNames:fieldNameCollector];
+            [mf setFields:fieldCollector];
+            
+            if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
+                errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
             } else {
                 
-                // build out and connect the bindings
-                
-                MYSQL_BIND *bindings = calloc(myStatement->field_count,sizeof(MYSQL_BIND));
-                
-                // Notes on how MySQL numeric datatypes are handled in the code following:
-                //
-                // INTEGER datatype handled by MYSQL_TYPE_LONG
-                // INT datatype handled by MYSQL_TYPE_LONG
-                // BIGINT datatype handled by MYSQL_TYPE_LONGLONG
-                // TINYINT datatype handled by MYSQL_TYPE_TINY
-                // REAL datatype handled by MYSQL_TYPE_DOUBLE
-                // DOUBLE datatype handled by MYSQL_TYPE_DOUBLE
-                // FLOAT datatype handled by MYSQL_TYPE_FLOAT
-                // DECIMAL datatype handled by MYSQL_TYPE_NEWDECIMAL
-                // NUMERIC datatype handled by MYSQL_TYPE_NEWDECIMAL (note: NUMERIC is implemented as DECIMAL by MySQL)
-                //
-                // SMALLINT datatype not handled currently - exception will occur if used
-                // MEDIUMINT datatype not handled currently - exception will occur if used
-                // BIT datatype not handled currently - exception will occur if used
-                // Note: CHAR datatype isn't considered numeric and is handled by MYSQL_TYPE_STRING
-                
-                NSMutableArray *fieldNameCollector = [[NSMutableArray alloc] initWithCapacity:myStatement->field_count];
-                NSMutableArray *fieldCollector = [[NSMutableArray alloc] initWithCapacity:myStatement->field_count];
-                NSMutableSet *sourceTables = [[NSMutableSet alloc] initWithCapacity:myStatement->field_count];
-                
-                [*dataTable removeAllObjects];
-                
-                for (NSUInteger x=0; x < myStatement->field_count;x++) {
-                    NSString *table=[[NSString alloc]  initWithBytes:myStatement->fields[x].table
-                                                              length:myStatement->fields[x].table_length
-                                                            encoding:NSUTF8StringEncoding];
-                    [sourceTables addObject:table];
-                    
-                    NSString *fieldName;
-                    if (useExtendedNames || [sourceTables count]>1){
-                        NSString *fieldKeyName=[[NSString alloc]  initWithBytes:myStatement->fields[x].name
-                                                                         length:myStatement->fields[x].name_length
-                                                                       encoding:NSUTF8StringEncoding];
-                        if ([table length] > 0) {
-                            fieldName=[[NSString alloc] initWithFormat:@"`%@`.`%@`", table, fieldKeyName];
-                        } else {
-                            fieldName=[[NSString alloc] initWithFormat:@"`%@`", fieldKeyName];
-                        }
-                    } else {
-                        fieldName= [[NSString alloc]  initWithBytes: myStatement->fields[x].name
-                                                             length: myStatement->fields[x].name_length
-                                                           encoding: NSUTF8StringEncoding];
-                    }
-                    [fieldNameCollector addObject:fieldName];
-                    
-                    MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
-                    
-                    MysqlFetchField *field = [[MysqlFetchField alloc] init];
-                    
-                    
-                    [fieldCollector addObject:field];
-                    field.name=fieldName;
-                    field.width=myStatement->fields[x].length;
-                    field.decimals=myStatement->fields[x].decimals;
-                    field.fieldType=myStatement->fields[x].type;
-                    if (IS_PRI_KEY(myStatement->fields[x].flags)) field.primaryKey=YES;
-                    
-                    bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
-                    
-                    NSInteger ftype = myStatement->fields[x].type;
-                    NSNumber *fieldType = @(ftype);
-                    NSNumber *fieldLength = @(myStatement->fields[x].length);
-                    NSNumber *fieldPercision = @(myStatement->fields[x].decimals);
-                    NSNumber *fieldTypeMad = @(0);
-                    
-                    [dataColumn setFieldName:field.name];
-                    [dataColumn setNativeColumnType:fieldType];
-                    [dataColumn setDataLength:fieldLength];
-                    [dataColumn setDataPercision:fieldPercision];
-                    [dataColumn setColumnType:fieldTypeMad];
-                    [dataColumn setPrimaryKey:field.primaryKey];
-                    
-                    NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
-                    [dataColumn setColumnType:cType];
-                    
-                    [*dataTable addColumn:dataColumn];
-                    
-                }
-                
-                //[*dataTable beginBulkInsert];
-                
-                [mf setFieldNames:fieldNameCollector];
-                [mf setFields:fieldCollector];
-                
-                if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
-                    errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
+                if (mysql_stmt_execute(myStatement)) {
+                    errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
                 } else {
-
-                    if (mysql_stmt_execute(myStatement)) {
-                        errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
-                    } else {
-                        
-                        [self fetchResultsFromConnection:connection
-                                           intoDataTable:dataTable
-                                           withStatement:myStatement
-                                                   fetch:mf
-                                             andBindings:bindings];
-                        
-                        for (NSUInteger x=0; x < myStatement->field_count;x++) {
-                            free(bindings[x].buffer);
-                            free(bindings[x].length);
-                            free(bindings[x].error);
-                            free(bindings[x].is_null);
-                        }
-                        free(bindings);
-                        mysql_stmt_close(myStatement);
+                    
+                    [self fetchResultsFromConnection:connection
+                                       intoDataTable:dataTable
+                                       withStatement:myStatement
+                                               fetch:mf
+                                         andBindings:bindings];
+                    
+                    for (NSUInteger x=0; x < myStatement->field_count;x++) {
+                        free(bindings[x].buffer);
+                        free(bindings[x].length);
+                        free(bindings[x].error);
+                        free(bindings[x].is_null);
                     }
+                    free(bindings);
+                    mysql_stmt_close(myStatement);
                 }
             }
         }
