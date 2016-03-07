@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) MTPair *vertices;
 @property (nonatomic, strong) NSNumber *weight;
-@property (readwrite, assign) BOOL isDirected;
+@property (readwrite, assign, getter=isDirected) bool directed;
 @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 //- (instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -40,7 +40,7 @@
     self = [super initWithObject:object];
     if (self) {
 
-        [self setIsDirected:YES];
+        _directed = true;
         
         MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLatter:vertex2];
         self.vertices = pair;

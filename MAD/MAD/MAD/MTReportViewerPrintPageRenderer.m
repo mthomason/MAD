@@ -196,11 +196,11 @@
 
         //zig
         CGFloat zigDivisor = 4.0000f;
-        int topRandNumber = 4;
+        const unsigned int topRandNumber = 4;
         
         CGFloat numberOfZigs = pathRect.size.height / zigDivisor;
         for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
-            NSInteger zigNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
+            NSUInteger zigNumber = madRandomNumberBetween(0, topRandNumber);
             CGFloat zigReal = zigNumber / scale;
             CGFloat zigDistance = (CGFloat)pow(zigNumber, 1.0001) + zigReal;
             CGFloat zigX = topRightPoint.x - zigDistance;
@@ -225,7 +225,7 @@
         CGFloat numberOfZags = pathRect.size.height / zagDivisor;
         for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
             
-            NSInteger zagNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
+            NSUInteger zagNumber = madRandomNumberBetween(0, topRandNumber);
             CGFloat zagReal = zagNumber / scale;
             CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
             CGFloat zagDistance = (CGFloat)pow(zagNumber, 1.0001) + zagReal;

@@ -90,7 +90,7 @@ static NSString * const Downloading                             = @"Downloading"
     if ([metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded]) {
         result = NSLocalizedString(NotDownloaded, NotDownloaded);;
     } else {
-        NSNumber *systemFileSizeMB =  [MTMath systemFileSizeToMB: metadata.fileSystemFileSize];
+        NSNumber *systemFileSizeMB = @(madSystemFileSizeToMB(metadata.fileSystemFileSize));
         NSString *systemFileSizeString = [self.subtitleNumberFormatter stringFromNumber:systemFileSizeMB];
         result = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
     }

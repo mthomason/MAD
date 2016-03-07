@@ -10,10 +10,6 @@
 
 @implementation MTMath
 
-+ (NSInteger)getRandomNumberBetween:(NSInteger)from to:(NSInteger)to {
-    return (NSInteger)from + arc4random() % (to - from + 1);
-}
-
 + (NSNumber *)systemFileSizeToMB:(unsigned long long)sfs {
     return @((double)sfs / 1000000);
 }

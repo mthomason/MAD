@@ -31,8 +31,7 @@
 }
 
 - (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSNumber *number = [[NSNumber alloc] initWithUnsignedLong:idnumber];
         self.uniqueIdForStructure = number;
@@ -107,12 +106,9 @@
         [result appendString:@"->"];
         MTVertex *destination = [edge destination];
         id destinationObject = [destination object];
-        NSString *desc = @"";
-        if ([destinationObject respondsToSelector:@selector(toStringHumanReadable)]) {
-            desc = [destinationObject toStringHumanReadable];
-        } else {
-            desc = [NSString stringWithFormat:@"%@", destinationObject];
-        }
+        NSString *desc = [destinationObject respondsToSelector:@selector(toStringHumanReadable)] ?
+                            [destinationObject toStringHumanReadable] :
+                            [NSString stringWithFormat:@"%@", destinationObject];
         [result appendString:desc];
     }
     return result;

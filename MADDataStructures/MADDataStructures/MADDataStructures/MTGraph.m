@@ -39,12 +39,11 @@
 #pragma mark - Factory
 
 - (instancetype)initWithVertices:(NSSet *)verticesSet {
-    self = [super init];
-    if (self) {
-        NSMutableArray *vertices = verticesSet.allObjects.mutableCopy;
-        self.vertices = vertices;
-        self.idUniqueEdges = 0;
-        self.idUniqueVertices = 0;
+    if (self = [super init]) {
+        NSArray *vertices = verticesSet.allObjects;
+        _vertices = [[NSMutableArray alloc] initWithArray:vertices];
+        _idUniqueEdges = 0;
+        _idUniqueVertices = 0;
     }
     return self;
 }

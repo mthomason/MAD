@@ -56,7 +56,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"MADTableViewCellDocumentInformation" forIndexPath: indexPath];
-    //cell.vibrantTableViewCellDelegate = self;
     MADMetaData *metadata = self.metadataItems[indexPath.section];
     NSString *systemFileSizeString;
     switch (indexPath.row) {
@@ -65,11 +64,13 @@
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             break;
-        case 1:
-            systemFileSizeString = [self.numberFormatter stringFromNumber: [MTMath systemFileSizeToMB: metadata.fileSystemFileSize]];
+        case 1: {
+            NSNumber *n = @(madSystemFileSizeToMB(metadata.fileSystemFileSize));
+            systemFileSizeString = [self.numberFormatter stringFromNumber: n];
             cell.textLabel.text = [NSString stringWithFormat:@"%@ MB", systemFileSizeString];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             break;
+        }
         case 2: {
             NSString *date = [NSDateFormatter localizedStringFromDate: metadata.fileSystemFileCreationDate
                                                             dateStyle: NSDateFormatterShortStyle

@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, MTEdgeType) {
 
 @interface MTEdge : MTObject <MTProtocolLog, MTProtocolCompare>
 
-@property(atomic, readonly) BOOL isDirected;
+@property (readonly, nonatomic, assign, getter=isDirected) bool directed;
 
 @property(atomic, assign) MTEdgeType dfsEdgeType;
 

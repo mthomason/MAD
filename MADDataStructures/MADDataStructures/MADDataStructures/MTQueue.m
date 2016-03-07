@@ -22,21 +22,17 @@
 @implementation MTQueue
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        NSMutableArray *queue = [[NSMutableArray alloc] init];
-        self.queue = queue;
-        self.counter = 0;
+    if (self = [super init]) {
+        _queue = [[NSMutableArray alloc] init];
+        _counter = 0;
     }
     return self;
 }
 
 - (instancetype)initWithCapacity:(NSUInteger)capacity {
-    self = [super init];
-    if (self) {
-        NSMutableArray *queue = [[NSMutableArray alloc] initWithCapacity:capacity];
-        self.queue = queue;
-        self.counter = 0;
+    if (self = [super init]) {
+        _queue = [[NSMutableArray alloc] initWithCapacity:capacity];
+        _counter = 0;
     }
     return self;
 }

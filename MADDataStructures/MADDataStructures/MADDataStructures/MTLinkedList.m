@@ -22,11 +22,9 @@
 @implementation MTLinkedList
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.location = 0;
-        NSMutableArray *list = [[NSMutableArray alloc] init];
-        self.list = list;
+    if (self = [super init]) {
+        _location = 0;
+        _list = [[NSMutableArray alloc] init];
     }
     return self;
 }
