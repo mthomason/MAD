@@ -353,7 +353,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSData *data = [fileWrapper serializedRepresentation];
         NSError *errorWriting = nil;
         success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
-        if (errorWriting) {
+        if (!success && errorWriting) {
             *outError = errorWriting;
         }
         
@@ -361,7 +361,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         *outError = fileWrapperError;
     }
     
-    return YES;
+    return success;
 }
 
 - (void)wrapFileOverwrite:(BOOL)overwrite {
