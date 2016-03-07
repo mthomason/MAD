@@ -449,6 +449,7 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
                                   signature_blob_ptr->signature, sizeof(signature_blob_ptr->signature)),
                   outLabel);
     
+    if (receipt_signing_key) CFRelease(receipt_signing_key);
     /*
      Optional:  Verify that the receipt certificate has the 1.2.840.113635.100.6.5.1 Null OID
      

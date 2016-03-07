@@ -314,12 +314,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
 
         NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        NSError *error = nil;
         success = [fileWrapper writeToURL: self.urlGuts
                         options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
             originalContentsURL: url
                           error: outError];
-        success = error == nil;
+        if (!success) {
+            success = [fileWrapper writeToURL: self.urlGuts
+                                      options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
+                          originalContentsURL: url
+                                        error: outError];
+        }
+        NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
     }
     if (success) {
         success = [super readFromURL:self.urlGuts error:outError];

@@ -311,8 +311,8 @@
 		4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EBD1BAE5E9000BAE5FC /* MADFeature.m */; };
 		4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EBF1BAE5E9000BAE5FC /* MADFeatures.m */; };
 		4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC11BAE5E9000BAE5FC /* MADSalesReceipt.m */; };
-		4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC31BAE5E9000BAE5FC /* MTStoreKitController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */; };
+		4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC31BAE5E9000BAE5FC /* MTStoreKitController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
+		4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C401EDF1BAE5E9000BAE5FC /* ReceiptModule.ans1 in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EC61BAE5E9000BAE5FC /* ReceiptModule.ans1 */; };
 		4C401EE01BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECA1BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m */; };
 		4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECC1BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m */; };
