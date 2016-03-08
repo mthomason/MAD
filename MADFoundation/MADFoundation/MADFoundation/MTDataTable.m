@@ -110,26 +110,24 @@
     return self;
 }
 
+static NSString * const StringEmpty = @"";
+
 - (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-    NSString *name = @"";
-    [self setName:name];
+
+    NSString *name = StringEmpty;
+    self.name = name;
     
     NSMutableArray *columnKeys = [[NSMutableArray alloc] init];
-    [self setColumnKeys:columnKeys];
+    self.columnKeys = columnKeys;
     
     NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
-    [self setSortDescriptors:sortDescriptors];
+    self.sortDescriptors = sortDescriptors;
     
     NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
-    [self setColumns:columns];
-    
-    [self setRowCounter:0];
-    
-    [self setTag:objectId];
+    self.columns = columns;
+    self.rowCounter = 0;
+    self.tag = objectId;
 
-    //if (fromCache) {
-    //    [self loadFromCache];
-    //}
 }
 
 - (NSString *)filenameMDCache {

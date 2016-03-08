@@ -51,11 +51,16 @@
     NSNumber *identifierObj = @(identifier);
     self.identifier = identifierObj;
     
-    [self setDesignerOriginX:@(CGPointZero.x)];
-    [self setDesignerOriginY:@(CGPointZero.y)];
-    [self setDesignerSizeWidth:@(CGSizeZero.width)];
-    [self setDesignerSizeHeight:@(CGSizeZero.height)];
-    [self setDesignerInitalLayout:@(YES)];
+    NSNumber *x = @(CGPointZero.x);
+    NSNumber *y = @(CGPointZero.y);
+    NSNumber *w = @(CGSizeZero.width);
+    NSNumber *h = @(CGSizeZero.height);
+    NSNumber *yeah = @(YES);
+    self.designerOriginX = x;
+    self.designerOriginY = y;
+    self.designerSizeWidth = w;
+    self.designerSizeHeight = h;
+    self.designerInitalLayout = yeah;
     
 }
 
@@ -96,18 +101,14 @@
 
 - (NSString *)tableAlias {
     return self.dropIndex.unsignedIntegerValue == 0 ?
-                [[self databaseSchemaTable] name] : [self queryAlias];
+                self.databaseSchemaTable.name : [self queryAlias];
 }
 
 - (NSString *)queryAlias {
-    RptqDatabaseSchemaTable *databaseSchemaTable = [self databaseSchemaTable];
-    NSString *tableName = [databaseSchemaTable name];
-    NSNumber *dropIndex = [self dropIndex];
-    NSInteger index = [dropIndex integerValue];
     char buf[12];
-    sprintf(buf, "%ld", (long)index);
+    sprintf(buf, "%ld", (long)self.dropIndex.integerValue);
     NSString *indexString = @(buf);
-    return [tableName stringByAppendingString:indexString];
+    return [self.databaseSchemaTable.name stringByAppendingString:indexString];
 }
 
 - (BOOL)isEqualTo:(id)sender {

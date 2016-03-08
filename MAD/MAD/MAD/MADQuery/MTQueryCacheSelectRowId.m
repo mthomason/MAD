@@ -28,8 +28,7 @@ static NSString * const SqlFormat = @", %@";
 @implementation MTQueryCacheSelectRowId
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
@@ -45,7 +44,7 @@ static NSString * const SqlFormat = @", %@";
         }
         
         if (columnKeys.count > 0) {
-            NSString *firstKey = [[NSString alloc] initWithString:columnKeys.firstObject];
+            NSString *firstKey = columnKeys.firstObject;
             NSMutableString *columnNames = [[NSMutableString alloc] initWithString:firstKey];
             NSArray *columnKeysMinusFirst = [columnKeys subarrayWithRange:NSMakeRange(1, columnKeys.count - 1)];
             for (NSString *key in columnKeysMinusFirst) {

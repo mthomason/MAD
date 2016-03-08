@@ -869,7 +869,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                                             object:extraParameters];
         defaultQuery.dataDelegate = self;
         
-        [self.mainDataTable sortUsingDescriptors:[self sortDescriptors]];
+        NSArray *sortDescriptors = [self readCurrentSortDescriptors];
+        [self.mainDataTable sortUsingDescriptors:sortDescriptors];
         [self setMainQuery:defaultQuery];
     }
 }
@@ -905,7 +906,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)prepareForQuery {
-    [self.mainDataTable sortUsingDescriptors:[self sortDescriptors]];
+    NSArray *sortDescriptors = [self readCurrentSortDescriptors];
+    [self.mainDataTable sortUsingDescriptors:sortDescriptors];
 }
 
 - (NSEnumerator *)enumeratorForReportData {
@@ -1009,7 +1011,11 @@ static NSString * const MADDocumentErrorDomain = @"MADocument";
     }
 }
 
-- (NSArray *)sortDescriptors {
+- (NSArray *)sortDescriptors{
+    return [self readCurrentSortDescriptors];
+}
+
+- (NSArray *)readCurrentSortDescriptors {
     RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
     if (self.mainDatabase == nil) [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
     return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.mainDatabase];

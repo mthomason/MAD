@@ -38,6 +38,19 @@
 
 @implementation MTDataTableFast
 
+- (instancetype)initWithId:(NSUInteger)objectId {
+    return [self initWithId:objectId fromCache:YES];
+}
+
+- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+    if (self = [super initWithId:objectId fromCache:fromCache]) {
+        self.bulkInsertLoop = NO;
+        self.tag = objectId;
+        self.sortDescriptorsSet = NO;
+    }
+    return self;
+}
+
 - (void)dealloc { }
 
 - (NSDictionary *)plist {
@@ -132,8 +145,7 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-    self = [super initWithCoder:decoder];
-    if (self) {
+    if (self = [super initWithCoder:decoder]) {
         
         NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
         NSURL *url = [NSURL URLWithString:absoluteString];
@@ -165,19 +177,6 @@
     return NSStringFromSelector(selColumns);
 }
 
-- (instancetype)initWithId:(NSUInteger)objectId {
-    return [self initWithId:objectId fromCache:YES];
-}
-
-- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-    if (self = [super initWithId:objectId fromCache:fromCache]) {
-        self.bulkInsertLoop = NO;
-        self.tag = objectId;
-        self.sortDescriptorsSet = NO;
-    }
-    return self;
-}
-
 - (NSString *)filenameCacheMadDB {
     NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
     return [tag stringByAppendingString:@"maddb"];
@@ -205,15 +204,15 @@
 }
 
 - (void)reopenDbConnection {
-    //MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
     MTDatabaseConnection *connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:[self urlFastCache]];
+    
     MTDatabaseCache *database = [[MTDatabaseSqlite3 alloc] init];
-    [database setDatabaseConnection:connection];
+    database.databaseConnection = connection;
     [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_NOMUTEX];
-    //MTDatabaseCache *database = [MTDatabaseCache databaseFactory:connection];
-    [self setDatabaseForInserts:database];
+    self.databaseForInserts = database;
+    
     MTDatabaseCache *database2 = [MTDatabaseCache databaseFactory:connection];
-    [self setDatabaseForSelects:database2];
+    self.databaseForSelects = database2;
 }
 
 - (NSString *)tableName {
@@ -235,25 +234,31 @@
 }
 
 - (void)initalizeGroupKeys {
-        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.sortDescriptors.count];
-        for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
+
+    NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.sortDescriptors.count];
+    NSArray *sortDescriptors = self.sortDescriptors;
+    
+    for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+        @autoreleasepool {
             NSUInteger index = [self.columnKeys indexOfObject: sortDescriptor.key];
             if (index != NSNotFound) {
                 NSNumber *columnIndex = @(index);
                 [groupKeys addObject:columnIndex];
             }
         }
-        [self setGroupKeys:groupKeys];
-        groupKeys = nil;
+    }
+
+    self.groupKeys = groupKeys;
+    groupKeys = nil;
 }
 
 - (NSString *)idColumnKeyForGroupLocation:(NSUInteger)groupLevel {
     NSString *result = nil;
-    if ([self.groupKeys count] > groupLevel) {
-        NSUInteger loc = [self.groupKeys[groupLevel] unsignedIntegerValue];
-        result = self.columnKeys[loc];
+    if (self.groupKeys.count > groupLevel) {
+        NSNumber *level = self.groupKeys[groupLevel];
+        result = self.columnKeys[level.unsignedIntegerValue];
     }
-    return result;
+    return [NSString stringWithString:result];
 }
 
 - (MTDataColumn *)idDataColumnForGroupLevel:(NSUInteger)groupLevel {
@@ -285,7 +290,7 @@
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
     
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
+    [query performQueryWithDatabase:self.databaseForInserts completion:^(BOOL success, NSError *error) {
         NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(semaphoreQuery);
     }];
@@ -316,7 +321,9 @@
 
 // FIXME: Maybe wrap in autorelease block.
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
+
     @autoreleasepool {
+        
         NSMutableArray *rowData = [[NSMutableArray alloc] init];
         for (id columnDefKey in self.columnKeys) {
             MTDataColumn *columnDef = self.columns[columnDefKey];
@@ -325,7 +332,9 @@
             [rowData addObject:obj];
         }
         [self addRow:rowData];
+        
     }
+    
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
@@ -557,14 +566,14 @@
                                   keyTableNmae : [self tableName],
                                   keyFieldDef : self.columns
                                   };
+        
         MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
         sqlite3_stmt *statement = NULL;
         NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
         
-        const char *sqlc = [sql UTF8String];
-        char *queryString = sqlite3_mprintf((char *) sqlc);
-        BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+        char *queryString = sqlite3_mprintf((char *) sql.UTF8String);
+        BOOL success = sqlite3_prepare_v2([self.databaseForSelects databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
 
         if (success) {  //Expect success to == NO in normal working conditions.
             success = sqlite3_step(statement) == SQLITE_ROW;
@@ -616,7 +625,7 @@
     
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
-    sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
+    sqlite3 *databaseHandle = [self.databaseForSelects databaseHandle];
     
     BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
     
@@ -653,8 +662,8 @@
         
         const char *sqlc = [sql UTF8String];
         char *queryString = sqlite3_mprintf((char *) sqlc);
-        BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
-        NSAssert(success, @"%s", sqlite3_errmsg([[self databaseForSelects] databaseHandle]));
+        BOOL success = sqlite3_prepare_v2([self.databaseForSelects databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+        NSAssert(success, @"%s", sqlite3_errmsg([self.databaseForSelects databaseHandle]));
         if (success) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 @autoreleasepool {
@@ -855,7 +864,7 @@
     
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
-    sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
+    sqlite3 *databaseHandle = [self.databaseForSelects databaseHandle];
     
     BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
     
@@ -966,7 +975,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
     
-    NSArray *columnKeys = [NSArray arrayWithArray:self.columnKeys];
+    NSArray *columnKeys = self.columnKeys;
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
     NSEnumerator *data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
                                                                                      columns:columns

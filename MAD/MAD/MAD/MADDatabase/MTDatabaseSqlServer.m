@@ -39,6 +39,15 @@ NSString * const MTDatabaseConnectionServer     = @"MTDatabaseConnectionServer";
 NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName";
 NSString * const MADNotificationError           = @"MADNotificationError";
 
+
+static NSString * const MTDatabaseColumnTypeId         = @"MTDatabaseColumnTypeId";
+static NSString * const MTDatabaseColumnNameId         = @"MTDatabaseColumnNameId";
+static NSString * const MTDatabaseColumnNumberId       = @"MTDatabaseColumnNumberId";
+static NSString * const MTDatabaseColumnDataLenId      = @"MTDatabaseColumnDataLenId";
+static NSString * const MTDatabaseColumnLenId          = @"MTDatabaseColumnLenId";
+static NSString * const MTDatabaseColumnIndexOfType    = @"MTDatabaseColumnIndexOfType";
+static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPrecision";
+
 static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 @interface MTDatabaseSqlServer ()
@@ -584,14 +593,6 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 
                 BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperator = NO;
                 BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
-                
-                static NSString *MTDatabaseColumnTypeId         = @"MTDatabaseColumnTypeId";
-                static NSString *MTDatabaseColumnNameId         = @"MTDatabaseColumnNameId";
-                static NSString *MTDatabaseColumnNumberId       = @"MTDatabaseColumnNumberId";
-                static NSString *MTDatabaseColumnDataLenId      = @"MTDatabaseColumnDataLenId";
-                static NSString *MTDatabaseColumnLenId          = @"MTDatabaseColumnLenId";
-                static NSString *MTDatabaseColumnIndexOfType    = @"MTDatabaseColumnIndexOfType";
-                static NSString *MTDatabaseColumnPrecision      = @"MTDatabaseColumnPrecision";
                 
                 NSInteger numberOfColumns = dbnumcols(dbconn);
                 NSMutableArray *colmunHolder = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];

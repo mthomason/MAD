@@ -30,6 +30,11 @@
 
 @implementation MTDataTableFastObjectEnumerator
 
+void sqliteCallback(void *foo, const char* statement);
+void sqliteCallback(void *foo, const char* statement) {
+    MTLogStatic(@"=> %s", statement);
+}
+
 - (void)dealloc {
     sqlite3_finalize(_statement);
     _databaseForQuery = nil;
@@ -40,15 +45,13 @@
     if (self) {
         
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
-        [self setFastEnumerationObjects:fastEnumerationObjects];
+        self.fastEnumerationObjects = fastEnumerationObjects;
 
         MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
-        [self setDatabaseForQuery:database];
+        self.databaseForQuery = database;
 
-        NSUInteger numberOfColumns = [columnKeys count];
-        bool empty = numberOfColumns == 0;
-        self.empty = empty;
-        if (!empty) {
+        self.empty = columnKeys.count == 0;
+        if (!self.empty) {
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
             char *queryString = sqlite3_mprintf(sql.UTF8String);
@@ -58,6 +61,7 @@
         
         NSArray *retainedColumKeys = [NSArray arrayWithArray:columnKeys];
         self.columnKeys = retainedColumKeys;
+        
         NSDictionary *retainedColumns = [NSDictionary dictionaryWithDictionary:columns];
         self.columns = retainedColumns;
         self.addRowId = YES;
@@ -65,11 +69,6 @@
 
     }
     return self;
-}
-
-void sqliteCallback(void *foo, const char* statement);
-void sqliteCallback(void *foo, const char* statement) {
-    MTLogStatic(@"=> %s", statement);
 }
 
 - (NSArray *)allObjects {

@@ -471,8 +471,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             
             if (success) {
                 
-                int colCount = sqlite3_column_count(statement);
-                NSUInteger numberOfColumns = colCount >= 0 ? (NSUInteger) colCount : 0;
+                int numberOfColumns = sqlite3_column_count(statement);
+                numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
                 
                 MTDataTable *dataTable = [self.delegate dataTableForQuery:query];
                 [dataTable removeAllObjects];
@@ -483,10 +483,11 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 while (SQLITE_ROW == sqlite3_step(statement)) {
                     
                     if (rowCounter == 0) {  //If first time around, calculate column information.
-                        for (NSUInteger columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
+                        for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
                             
                             @autoreleasepool {
-                                NSString *fieldName = [query fieldKeys][columnCounter];
+                                NSString *fieldName = query.fieldKeys[(NSUInteger)columnCounter];
+                                
                                 MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
                                 
                                 int affentyType = sqlite3_column_type(statement, (int)columnCounter);
@@ -509,11 +510,11 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                                 [dataColumn setFieldName: fieldName];
                                 [dataColumn setNativeColumnType:nativeColumnType];
                                 NSNumber *columnType = @([MTDatabaseSqlite3 dataTypeForAffentyType:affentyType]);
-                                [dataColumn setColumnType:columnType];
+                                dataColumn.columnType = columnType;
                             
-                                [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? false : *pPrimaryKey];
-                                [dataColumn setAutoIncrement: (pAutoinc == NULL) ? false : *pAutoinc];
-                                [dataColumn setNotNull: (pNotNull == NULL) ? false : *pNotNull];
+                                dataColumn.primaryKey = (pPrimaryKey == NULL) ? false : *pPrimaryKey;
+                                dataColumn.autoIncrement = (pAutoinc == NULL) ? false : *pAutoinc;
+                                dataColumn.notNull = (pNotNull == NULL) ? false : *pNotNull;
                                 [dataTable addColumn:dataColumn];
                                 dataColumn = nil;
                             }
@@ -523,14 +524,14 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                     }
                     [self readRow:rowCounter];
                     
-                    NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+                    NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
                     
                     for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
                         
-                        
+                        NSString *fieldName = query.fieldKeys[(NSUInteger)colCtr];
                         id value = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:colCtr];
-                        NSString *fieldName = [query fieldKeys][colCtr];
                         resultsForRow[fieldName] = value;
+                        
                     }
                     
                     [dataTable addRowWithDataForFieldKeys:resultsForRow];
