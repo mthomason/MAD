@@ -10,7 +10,7 @@
 #define Reports_MTDatabaseSqlite3_h
 
 #import "MTDatabaseCache.h"
-#import <MADSqlite3/MADSqlite3.h>
+#import <MADSqlite3/sqlite3.h>
 
 @class MTDatabaseDataBinding;
 

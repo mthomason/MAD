@@ -9,7 +9,6 @@
 #ifndef Reports_MTDataTableFast_h
 #define Reports_MTDataTableFast_h
 
-#import <Foundation/Foundation.h>
 #import <MADFoundation/MTDataTable.h>
 
 @class MTDatabaseCache, MTQuery;

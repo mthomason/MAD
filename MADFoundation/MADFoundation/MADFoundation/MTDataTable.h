@@ -9,7 +9,7 @@
 #ifndef Reports_MTDataTable_h
 #define Reports_MTDataTable_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADFoundation/NSFileManager+Common.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>

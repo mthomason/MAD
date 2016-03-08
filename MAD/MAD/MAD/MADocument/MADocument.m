@@ -1,4 +1,4 @@
-         //
+//
 //  MADocument.m
 //  Reports
 //
@@ -11,27 +11,20 @@
 #endif
 
 #import "MADocument.h"
+#import <UIKit/UIPrintInteractionController.h>
+#import <MADFoundation/NSURL+Document.h>
+#import <Foundation/NSException.h>
 
-#import "MADErrorUserInfo.h"
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
 
-#import "MTReportViewerPrintPageRenderer.h"
-#import "MTPaper.h"
-
 #import "MADConstants.h"
-
-#import <MADFoundation/MTDataTable.h>
-#import <MADFoundation/NSURL+Document.h>
 
 #import "MTDataTable+Factory.h"
 
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
 #import "MTDatabaseConnection.h"
-#import "MTDatabaseSqlite3.h"
-#import "MTDatabaseTable.h"
-#import "MTDatabaseField.h"
 
 #import "MTNotificationDidFormatPage.h"
 
@@ -137,7 +130,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
 @interface MADocument ()
-    <MTDatabaseProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
+    <UIPrintInteractionControllerDelegate, MTDatabaseProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
 
 @property (nonatomic, strong) UIImage *thumbnail;
 
@@ -711,9 +704,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark - MTCacheProtocol
 
-- (NSURL *)cachedFilesDirectory {
-    return self.urlCachedFilesDirectory;
-}
+- (NSURL *)cachedFilesDirectory { return self.urlCachedFilesDirectory; }
 
 #pragma mark - MTDatabaseProtocol
 

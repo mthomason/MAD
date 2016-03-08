@@ -9,7 +9,7 @@
 #ifndef Reports_MTQuery_h
 #define Reports_MTQuery_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataProtocol.h>
 
 #pragma mark Types of queries
@@ -139,7 +139,7 @@ extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
-@class MTDatabase, MTDataTable, RptqQuery;
+@class MTDatabase, MTDataTable, RptqQuery, NSMutableArray, NSMutableDictionary;
 
 @interface MTQuery : NSObject
 

@@ -23,9 +23,6 @@
 @property (readwrite, assign, getter=isDirected) bool directed;
 @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
-//- (instancetype)init NS_DESIGNATED_INITIALIZER;
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
-
 @end
 
 @implementation MTEdge

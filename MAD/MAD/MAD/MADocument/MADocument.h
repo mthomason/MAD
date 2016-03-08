@@ -11,9 +11,7 @@
 #ifndef Reports_MADocument_h
 #define Reports_MADocument_h
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIManagedDocument.h>
-#import <UIKit/UIPrintInteractionController.h>
 #import <MAD/MTReportFormatterDataSource.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
@@ -34,17 +32,16 @@ extern NSString * const MADMimeType;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
-@class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
+@class MADocumentState, NSManagedObjectID, UIImage, UIPrintPageRenderer, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        NSManagedObjectID, RptqDocumentSection, RptqDocumentObject, MTDatabase, UIPrintPageRenderer, MTPaper;
+        RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper;
 
 @protocol MADActivityProtocol;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
     MTCacheProtocol,
-    MADDataProtocol,
-    UIPrintInteractionControllerDelegate>
+    MADDataProtocol>
 
 @property (nonatomic, assign) BOOL limitResultsDesignMode;
 

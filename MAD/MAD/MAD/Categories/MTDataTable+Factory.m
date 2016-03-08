@@ -7,6 +7,7 @@
 //
 
 #import "MTDataTable+Factory.h"
+#import <Foundation/NSException.h>
 #import "MTDataTableVirtual.h"
 #import "MTDataTableFast.h"
 

@@ -25,6 +25,7 @@
 @property (nonatomic, strong, readwrite) MTDatabaseCache *databaseForSelects;
 
 @property (nonatomic, strong) NSURL *urlFastCache;
+
 @property (nonatomic, assign) BOOL bulkInsertLoop;
 @property (nonatomic, assign) BOOL sortDescriptorsSet;
 
@@ -169,12 +170,10 @@
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-    self = [super initWithId:objectId fromCache:fromCache];
-    if (self) {
-        [self setBulkInsertLoop:NO];
-        [self setTag:objectId];
-        [self setSortDescriptorsSet:NO];
-        //[self reopenDbConnection];
+    if (self = [super initWithId:objectId fromCache:fromCache]) {
+        self.bulkInsertLoop = NO;
+        self.tag = objectId;
+        self.sortDescriptorsSet = NO;
     }
     return self;
 }
@@ -189,7 +188,7 @@
     NSString *filename = [self filenameCacheMadDB];
     NSURL *cacheDirectory = self.cacheDelegate == nil ?
                             [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[delegate groupIdentifier]] :
-                                [[self cacheDelegate] cachedFilesDirectory];
+                                [self.cacheDelegate cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
@@ -315,46 +314,51 @@
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
 }
 
-
+// FIXME: Maybe wrap in autorelease block.
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
-    NSMutableArray *rowData = [[NSMutableArray alloc] init];
-    for (id columnDefKey in self.columnKeys) {
-        MTDataColumn *columnDef = self.columns[columnDefKey];
-        id obj = row[[columnDef fieldName]];
-        if (obj == nil) obj = [NSNull null];
-        [rowData addObject:obj];
+    @autoreleasepool {
+        NSMutableArray *rowData = [[NSMutableArray alloc] init];
+        for (id columnDefKey in self.columnKeys) {
+            MTDataColumn *columnDef = self.columns[columnDefKey];
+            id obj = row[columnDef.fieldName];
+            if (obj == nil) obj = [NSNull null];
+            [rowData addObject:obj];
+        }
+        [self addRow:rowData];
     }
-    [self addRow:rowData];
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
 
     [self.groupKeys removeAllObjects];
-    if ([self.columnKeys count] > 0 && [self.columns count] > 0) {
+    if (self.columnKeys.count > 0 && self.columns.count > 0) {
         
-        if ([sortDescriptors count] > 0 /*&& self.sortDescriptorsSet == NO*/) {
+        if (sortDescriptors.count > 0 /*&& self.sortDescriptorsSet == NO*/) {
             
             NSMutableArray *newSortDescriptors = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count];
-            NSSortDescriptor *sortDescriptor, *newSortDescriptor;
             NSInteger i;
-            SEL sortAlgo;
-            NSString *columnKey;
-            MTDataColumn *column;
-            NSNumber *groupKey;
             
-            for (sortDescriptor in sortDescriptors) {
+            for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
                 i = 0;
-                for (columnKey in self.columnKeys) {
-                    column = self.columns[columnKey];
-                    if ([column.fieldName isEqualToString:sortDescriptor.key]) {
-                        sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
-                        newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
-                                                                          ascending:sortDescriptor.ascending
-                                                                           selector:sortAlgo];
-                        [newSortDescriptors addObject:newSortDescriptor];
-                        groupKey = @(i);
-                        [self.groupKeys addObject:groupKey];
-                        break;
+
+                NSArray *columnKeys = self.columnKeys;
+                for (NSString *columnKey in columnKeys) {
+                    
+                    @autoreleasepool {
+                        __weak MTDataColumn *column = self.columns[columnKey];
+                        if ([column.fieldName isEqualToString:sortDescriptor.key]) {
+                            SEL sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
+                            
+                            NSSortDescriptor *newSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:columnKey
+                                                                                                ascending:sortDescriptor.ascending
+                                                                                                 selector:sortAlgo];
+                            [newSortDescriptors addObject:newSortDescriptor];
+                            
+                            NSNumber *groupKey = @(i);
+                            [self.groupKeys addObject:groupKey];
+                            
+                            break;
+                        }
                     }
                     i++;
                 }

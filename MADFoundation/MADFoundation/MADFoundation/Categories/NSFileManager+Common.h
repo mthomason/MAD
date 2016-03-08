@@ -9,7 +9,7 @@
 #ifndef Reports_NSFileManager_Common_h
 #define Reports_NSFileManager_Common_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSFileManager.h>
 
 @interface NSFileManager (Common)
 

@@ -70,6 +70,9 @@
 #import "MADReportLineRepresentation.h"
 #import <MAD/MTDataTableFast.h>
 
+static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
+static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
+
 @protocol MADDataTableAggregateResultesProtocol <NSObject>
 
 - (id)zAggregateType:(MTAggregateGroupByType)groupByType
@@ -82,7 +85,6 @@
 
 
 @interface MTReportViewerPrintPageRenderer ()
-
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong) MTDataTableFast<MADDataTableAggregateResultesProtocol> *dataTable;
@@ -114,7 +116,7 @@
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTableFast *)dataTable andPrintableAreaSize:(CGSize)printableAreaSize {
     if (self = [super init]) {
         [self initCommon];
-        self.dataTable = dataTable;
+        self.dataTable = (MTDataTableFast<MADDataTableAggregateResultesProtocol> *)dataTable;
         self.printableSize = printableAreaSize;
         self.reportFormatter = reportFormatter;
         
@@ -123,7 +125,9 @@
 }
 
 - (void)initCommon {
-    const char *queueName = [[NSStringFromClass(self.class) stringByAppendingString:@"DispatchConcurrentBackground"] cStringUsingEncoding:NSUTF8StringEncoding];
+    NSString *classname = NSStringFromClass(self.class);
+    NSString *classnameConcurrentBackground = [classname stringByAppendingString:@"DispatchConcurrentBackground"];
+    const char *queueName = [classnameConcurrentBackground cStringUsingEncoding:NSUTF8StringEncoding];
     self.textRepresentationQueue =  dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
     
     self.showWaterMark = false;
@@ -136,11 +140,9 @@
 
     if ([standardUserDefaults valueForKey:@"MTCachedSizeHorizontal"] == nil) {
 
-        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
-                                 forKey: @"MTCachedSizeHorizontal"];
+        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero) forKey: MTCachedSizeHorizontal];
         
-        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
-                                 forKey: @"MTCachedSizeVertical"];
+        [standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero) forKey: MTCachedSizeVertical];
         
         [standardUserDefaults synchronize];
         

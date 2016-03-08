@@ -9,6 +9,8 @@
 #ifndef MAD_MADActivityProtocol_h
 #define MAD_MADActivityProtocol_h
 
+@class UIViewController;
+
 @protocol MADActivityProtocol <NSObject>
 
 - (UIViewController *)activeViewController;

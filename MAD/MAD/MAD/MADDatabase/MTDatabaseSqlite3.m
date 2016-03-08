@@ -11,15 +11,13 @@
 //#endif
 
 #import "MTDatabaseSqlite3.h"
-
-#import "MADErrorUserInfo.h"
 #import "MTDatabaseConnectionSqlite3.h"
+#import "MADErrorUserInfo.h"
+#import "MTQuery.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
-#import "MTQuery.h"
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
-
 #import "MTDatabaseDataBinding.h"
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";

@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryCustomNoResults.h"
+#import <Foundation/NSException.h>
 
 @interface MTQueryCustomNoResults ()
 
