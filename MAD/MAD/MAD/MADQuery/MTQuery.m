@@ -192,16 +192,13 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (id)initWithObject:(id)object {
     
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         NSMutableArray *binaryBindings = [[NSMutableArray alloc] init];
-        [self setBinaryBindings:binaryBindings];
-
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
-        
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
 
+        self.binaryBindings = binaryBindings;
         self.fields = fieldInfo;
         self.fieldKeys = fieldKeys;
 

@@ -14,6 +14,9 @@
 
 @interface MTQueryCacheAddRow : MTQuery
 
+    @property (nonatomic, strong) NSArray *rowData;
+
+    - (instancetype)initWithColumnKeys:(NSArray *)columnKeys columns:(NSDictionary *)columns andTableName:(NSString *)tablename;
 
 @end
 

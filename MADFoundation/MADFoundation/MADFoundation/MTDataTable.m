@@ -13,11 +13,105 @@
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
 
+static NSString * const StringEmpty = @"";
+
 @interface MTDataTable ()
 
 @end
 
 @implementation MTDataTable
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+    if (self = [super init]) {
+        NSString *name =                [decoder decodeObjectForKey: [MTDataTable keyName]];
+        self.name = name;
+        
+        NSMutableArray *columnKeys =    [decoder decodeObjectForKey: [MTDataTable keyColumnKeys]];
+        self.columnKeys = columnKeys;
+        
+        NSMutableDictionary *columns =  [decoder decodeObjectForKey: [MTDataTable keyColumns]];
+        self.columns = columns;
+        
+        NSNumber *rowCounterObject = [decoder decodeObjectForKey: [MTDataTable keyRowCounter]];
+        self.rowCounter = rowCounterObject.unsignedIntegerValue;
+        
+        NSMutableArray *sortDescriptors = [decoder decodeObjectForKey:[MTDataTable keySortDescriptors]];
+        self.sortDescriptors = sortDescriptors;
+        
+        NSNumber *objid = [decoder decodeObjectForKey:@"objid"];
+        self.tag = objid.unsignedIntegerValue;
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
+    if (self = [super init]) {
+        
+        NSString *name = @"";
+        self.name = name;
+        
+        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
+        self.columnKeys = columnKeys;
+        
+        NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
+        self.sortDescriptors = sortDescriptors;
+        
+        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+        self.columns = columns;
+        
+        self.rowCounter = 0;
+    }
+    return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [self initalizeWithObjectId:0 fromCache:NO];
+    }
+    return self;
+}
+
+- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+    if (self = [super init]) {
+        [self initalizeWithObjectId:objectId fromCache:fromCache];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    
+    NSNumber *objid = @(self.tag);
+    [encoder encodeObject:  objid                   forKey: @"objid"];
+    [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
+    [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
+    [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
+    [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
+    [encoder encodeObject: [NSNumber numberWithUnsignedInteger: [self rowCounter]]        forKey: [MTDataTable keyRowCounter]];
+    
+}
+
+- (instancetype)initWithId:(NSUInteger)objectId {
+    return [self initWithId:objectId fromCache:YES];
+}
+
+- (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+    
+    NSString *name = StringEmpty;
+    self.name = name;
+    
+    NSMutableArray *columnKeys = [[NSMutableArray alloc] init];
+    self.columnKeys = columnKeys;
+    
+    NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
+    self.sortDescriptors = sortDescriptors;
+    
+    NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
+    self.columns = columns;
+    self.rowCounter = 0;
+    self.tag = objectId;
+    
+}
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
@@ -50,84 +144,8 @@
     return nil;    
 }
 
-- (void)encodeWithCoder:(NSCoder *)encoder {
-    
-    NSNumber *objid = @(self.tag);
-    [encoder encodeObject:  objid                   forKey: @"objid"];
-    [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
-    [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
-    [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
-    [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
-    [encoder encodeObject: [NSNumber numberWithUnsignedInteger: [self rowCounter]]        forKey: [MTDataTable keyRowCounter]];
-    
-}
-
 + (NSString *)keyUrl {
     return @"url";
-}
-
-- (instancetype)initWithCoder:(NSCoder *)decoder {
-    if (self = [super init]) {
-        NSString *name =                [decoder decodeObjectForKey: [MTDataTable keyName]];
-        self.name = name;
-        
-        NSMutableArray *columnKeys =    [decoder decodeObjectForKey: [MTDataTable keyColumnKeys]];
-        self.columnKeys = columnKeys;
-        
-        NSMutableDictionary *columns =  [decoder decodeObjectForKey: [MTDataTable keyColumns]];
-        self.columns = columns;
-        
-        NSNumber *rowCounterObject = [decoder decodeObjectForKey: [MTDataTable keyRowCounter]];
-        self.rowCounter = rowCounterObject.unsignedIntegerValue;
-        
-        NSMutableArray *sortDescriptors = [decoder decodeObjectForKey:[MTDataTable keySortDescriptors]];
-        self.sortDescriptors = sortDescriptors;
-
-        NSNumber *objid = [decoder decodeObjectForKey:@"objid"];
-        self.tag = objid.unsignedIntegerValue;
-        
-   }
-    return self;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self initalizeWithObjectId:0 fromCache:NO];
-    }
-    return self;
-}
-
-- (instancetype)initWithId:(NSUInteger)objectId {
-    return [self initWithId:objectId fromCache:YES];
-}
-
-- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-    self = [super init];
-    if (self) {
-        [self initalizeWithObjectId:objectId fromCache:fromCache];
-    }
-    return self;
-}
-
-static NSString * const StringEmpty = @"";
-
-- (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-
-    NSString *name = StringEmpty;
-    self.name = name;
-    
-    NSMutableArray *columnKeys = [[NSMutableArray alloc] init];
-    self.columnKeys = columnKeys;
-    
-    NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
-    self.sortDescriptors = sortDescriptors;
-    
-    NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
-    self.columns = columns;
-    self.rowCounter = 0;
-    self.tag = objectId;
-
 }
 
 - (NSString *)filenameMDCache {
@@ -162,27 +180,6 @@ static NSString * const StringEmpty = @"";
     if (plist) {
         [self loadWithPlist:plist];
     }
-}
-
-- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-    self = [super init];
-    if (self) {
-        
-        NSString *name = @"";
-        [self setName:name];
-        
-        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
-        [self setColumnKeys:columnKeys];
-        
-        NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
-        [self setSortDescriptors:sortDescriptors];
-                
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
-        [self setColumns:columns];
-        
-        [self setRowCounter:0];
-    }
-    return self;
 }
 
 - (void)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier {

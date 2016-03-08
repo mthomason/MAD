@@ -18,13 +18,17 @@
 // FIXME: Remove dependency on MTDatabaseSqlite3
 #import "MTDatabaseSqlite3.h"
 
+static NSString * const SqlDelimitor = @", ";
+static NSString * const SqlDelimitorObject = @", %@";
+
 @interface MTQueryCacheAddRow ()
 
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *row;
 @property (nonatomic, strong) NSDictionary *columns;
 @property (nonatomic, strong) NSArray *columnKeys;
+
+@property (nonatomic, strong) NSString *sqlPreProcessColumnNames;
 
 @end
 
@@ -32,9 +36,51 @@
 
 @dynamic columns;
 
+- (void)setDatabase:(MTDatabase *)database {
+    [super setDatabase:database];
+    NSString *c = [self columnNames];
+    NSString *sqlColumnNames = [NSString stringWithString:c];
+    self.sqlPreProcessColumnNames = sqlColumnNames;
+}
+
+- (NSString *)columnNames {
+    NSMutableString *colmunNames = [[NSMutableString alloc] init];
+    
+    NSUInteger columnCount = self.columnKeys.count;
+    for (NSUInteger columnCounter=0; columnCounter<columnCount; columnCounter++) {
+        
+        @autoreleasepool {
+            
+            NSString * __weak fieldName = self.columnKeys[columnCounter];
+            NSString *safeFieldName = [self.database safeIdentifier:fieldName];
+            if (columnCounter > 0) {
+                [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
+            } else {
+                [colmunNames appendString:safeFieldName];
+            }
+        }
+    }
+    return colmunNames;
+}
+
+- (instancetype)initWithColumnKeys:(NSArray *)columnKeys columns:(NSDictionary *)columns andTableName:(NSString *)tableName {
+    if (self = [super initWithObject:nil]) {
+
+        NSString *name = [[NSString alloc] initWithString:tableName];
+        self.tableName = name;
+        
+        NSDictionary *cols = [[NSDictionary alloc] initWithDictionary:columns];
+        self.columns = cols;
+        
+        NSArray *keys = [[NSArray alloc] initWithArray:columnKeys];
+        self.columnKeys = keys;
+        
+    }
+    return self;
+}
+
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddRow expects NSDictionary.");
         NSNumber *keyMTQueryCacheAddRowUrl = @(MTQueryCacheAddRowUrl);
@@ -51,7 +97,7 @@
         
         self.url = url;
         self.tableName = tableName;
-        self.row = row;
+        self.rowData = row;
         self.columns = columns;
         self.columnKeys = columnKeys;
 
@@ -68,37 +114,32 @@
     return self;
 }
 
-static NSString * const SqlDelimitor = @", ";
-static NSString * const SqlDelimitorObject = @", %@";
-
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     
-    NSMutableString *colmunNames = [[NSMutableString alloc] init];
     NSMutableString *values = [[NSMutableString alloc] init];
     
     NSUInteger columnCounter = 0;
 
     char colCtrBuf[19];
-    for (id object in self.row) {
+    NSArray *row = self.rowData;
+    NSMutableArray *binaryBindings = [[NSMutableArray alloc] initWithCapacity:row.count];
+    for (id object in row) {
         
         @autoreleasepool {
-            NSString *fieldName = self.columnKeys[columnCounter];
-            MTDataColumn *column = self.columns[fieldName];
-            NSString *safeFieldName = [self.database safeIdentifier:fieldName];
+            
+            NSString * __weak fieldName = self.columnKeys[columnCounter];
+            MTDataColumn *  __weak column = self.columns[fieldName];
             
             if (columnCounter > 0) {
-                [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
                 [values appendString:SqlDelimitor];
-            } else {
-                [colmunNames appendString:safeFieldName];
             }
             
             
-            MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.columnType.unsignedIntegerValue
-                                                                                      fieldIndex: columnCounter
-                                                                                           value: object];
-            [self.binaryBindings addObject:databinding];
+            MTDatabaseDataBinding * databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.columnType.unsignedIntegerValue
+                                                                                                       fieldIndex: columnCounter
+                                                                                                            value: object];
+            [binaryBindings addObject:databinding];
             
             snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);
             NSString *columnValue = @(colCtrBuf);
@@ -107,7 +148,8 @@ static NSString * const SqlDelimitorObject = @", %@";
         
         columnCounter++;
     }
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", self.tableName, colmunNames, values];
+    self.binaryBindings = binaryBindings;
+    NSString * __autoreleasing sql = [NSString stringWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", self.tableName, self.sqlPreProcessColumnNames, values];
     return sql;
 }
 
