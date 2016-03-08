@@ -367,8 +367,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return [MTDatabaseSqlite3 nativeTypeForDataType:dataType];
 }
 
-- (sqlite3_stmt *)statementForQuery:(MTQuery *)query andStatement:(sqlite3_stmt *)statement {
-    return [query partOfTransactionSet] ? _bulkStatement : statement;
+- (sqlite3_stmt *)statementForQueryInTransactionSet:(bool)partOfTransactionSet andStatement:(sqlite3_stmt *)statement {
+    return partOfTransactionSet ? _bulkStatement : statement;
 }
 
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding {
@@ -437,6 +437,46 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     
 }
 
+- (void)executeQueryWithSql:(NSString *)queryString
+                  dataTable:(MTDataTable *)dataTable
+        queryBinaryBindings:(NSArray *)queryBinaryBindings
+             queryFieldKeys:(NSArray *)queryFieldKeys
+  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet {
+    
+    BOOL success = YES;
+
+    if (queryString.length > 0) {
+        
+        sqlite3_stmt *statement = _bulkStatement;
+        
+        char *sql = sqlite3_mprintf(queryString.UTF8String);
+        
+        
+        if (statement == NULL) {
+            success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
+            if (queryBinaryBindings.count > 0) {
+                for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
+                    [self bindStatement:&statement withBindings:databinding];
+                }
+            }
+        } else if (queryPartOfTransactionSet) {
+            if (queryBinaryBindings.count > 0) {
+                for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
+                    [self bindStatement:&statement withBindings:databinding];
+                }
+            }
+        }
+        
+        sqlite3_step(statement);
+        sqlite3_reset(statement);
+        
+        NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
+
+        sqlite3_free(sql);
+        
+    }
+}
+
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     
     NSError *error = nil;
@@ -446,7 +486,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     if (queryString.length > 0) {
 
         sqlite3_stmt *statement = NULL;
-        statement = [self statementForQuery:query andStatement:statement];
+        statement = [self statementForQueryInTransactionSet:query.partOfTransactionSet andStatement:statement];
         
         char *errorMessage = NULL;
         char *sql = sqlite3_mprintf(queryString.UTF8String);

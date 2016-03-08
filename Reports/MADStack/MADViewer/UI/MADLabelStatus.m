@@ -120,7 +120,6 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
   andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
-    
     if (recordsReadMessage.string.length > 0) {
         [status appendAttributedString:recordsReadMessage];
     }

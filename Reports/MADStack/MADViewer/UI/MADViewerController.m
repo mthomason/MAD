@@ -106,6 +106,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @property (nonatomic, assign) bool pageIsAnimating;
 @property (nonatomic, assign) bool updatingOfTimerIsPaused;
 
+@property (nonatomic, strong) NSNumberFormatter *numberFormatterSpelledOut;
+
 @end
 
 @implementation MADViewerController
@@ -115,6 +117,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Dealloc
 
 - (void)dealloc {
+    _numberFormatterSpelledOut = nil;
     [self timerDealloc];
 }
 
@@ -210,6 +213,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSNumberFormatter *numberFormatterSpelledOut = [NSNumberFormatter new];
+    numberFormatterSpelledOut.numberStyle = NSNumberFormatterSpellOutStyle;
+    self.numberFormatterSpelledOut = numberFormatterSpelledOut;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
@@ -965,6 +972,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.labelStatus updateStatusWithTime:noCache];
         return;
     } else {
+        
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
         [self.labelStatus updateStatusWithTime:dateStringAndInterval.former];
         resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;

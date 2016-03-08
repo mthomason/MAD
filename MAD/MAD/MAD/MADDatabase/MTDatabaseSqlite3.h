@@ -47,6 +47,12 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
 + (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber;
 + (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type;
 
+- (void)executeQueryWithSql:(NSString *)queryString
+                  dataTable:(MTDataTable *)dataTable
+        queryBinaryBindings:(NSArray *)queryBinaryBindings
+             queryFieldKeys:(NSArray *)queryFieldKeys
+  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet;
+
 @end
 
 #endif

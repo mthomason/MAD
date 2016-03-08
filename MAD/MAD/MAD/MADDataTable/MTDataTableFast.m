@@ -37,6 +37,9 @@
 
 @property (nonatomic, strong) MTQueryCacheAddRow *bulkInsertQuery;
 
+@property (nonatomic, strong) dispatch_queue_t queueBulkAdd;
+
+
 @end
 
 @implementation MTDataTableFast
@@ -74,11 +77,19 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         self.bulkInsertLoop = false;
         self.tag = objectId;
         self.sortDescriptorsSet = false;
+        _queueBulkAdd = nil;
     }
     return self;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+
+    if (_queueBulkAdd != nil) {
+        dispatch_suspend(_queueBulkAdd);
+        _queueBulkAdd = nil;
+    }
+    
+}
 
 - (NSDictionary *)plist {
     
@@ -104,13 +115,14 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         plist[keyGroupKeys] = self.groupKeys;
     }
     plist[keySortDescriptorsSet] = @(self.sortDescriptorsSet ? YES : NO);
-    
+    _queueBulkAdd = nil;
     return plist;
 }
 
 - (void)loadWithPlist:(NSDictionary *)plist {
     [super loadWithPlist:plist];
     
+    _queueBulkAdd = nil;
     NSString *absoluteString = plist[[MTDataTableFast keyUrlFastCache]];
     NSURL *url = [NSURL URLWithString:absoluteString];
     [self setUrlFastCache: url];
@@ -169,12 +181,14 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [encoder encodeObject: objid                                forKey: [MTDataTableFast keyTag]];
     [encoder encodeBool: _bulkInsertLoop ? YES : NO             forKey: [MTDataTableFast keyBulkInsertLoop]];
     [encoder encodeBool: _sortDescriptorsSet ? YES : NO         forKey: [MTDataTableFast keySortDescriptorsSet]];
+    _queueBulkAdd = nil;
 
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super initWithCoder:decoder]) {
         
+        _queueBulkAdd = nil;
         NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
         NSURL *url = [NSURL URLWithString:absoluteString];
         self.urlFastCache = url;
@@ -233,7 +247,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     MTDatabaseCache *database = [[MTDatabaseSqlite3 alloc] init];
     database.databaseConnection = connection;
-    [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_NOMUTEX];
+    [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX];
     self.databaseForInserts = database;
     
     MTDatabaseCache *database2 = [MTDatabaseCache databaseFactory:connection];
@@ -323,10 +337,63 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     
     if (self.bulkInsertLoop) {
-        self.bulkInsertQuery.rowData = row;
-        [self.databaseForInserts executeQuery:self.bulkInsertQuery completion:^(BOOL success, NSError *error) {
-            NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
-        }];
+        
+        NSArray *rowData = [NSArray arrayWithArray: row];
+        self.bulkInsertQuery.rowData = rowData;
+        __block typeof(self) myself = self;
+        
+        //MTDataTable *dataTable = [self.databaseForInserts.delegate dataTableForQuery:self.bulkInsertQuery];
+        __block NSString *sql = [self.bulkInsertQuery getSqlWithError:nil];
+        __block NSArray *binaryBindings = self.bulkInsertQuery.binaryBindings;
+        __block NSArray *fieldKeys = self.bulkInsertQuery.fieldKeys;
+        __block bool partOfTransactionSet = self.bulkInsertQuery.partOfTransactionSet;
+        dispatch_async(self.queueBulkAdd, ^{
+            __block typeof(self) __weak weakself = myself;
+            
+            [((MTDatabaseSqlite3 *)weakself.databaseForInserts) executeQueryWithSql:sql
+                                                                         dataTable:weakself
+                                                               queryBinaryBindings:binaryBindings
+                                                                    queryFieldKeys:fieldKeys
+                                                         queryPartOfTransactionSet:partOfTransactionSet];
+            
+            
+            //[myself2.databaseForInserts executeQuery:myself2.bulkInsertQuery completion:^(BOOL success, NSError *error) {
+            //    NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
+            //}];
+            
+            //dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            //dispatch_async(q, ^{
+                
+                
+                /*[myself2.databaseForInserts executeQuery:myself2.bulkInsertQuery completion:^(BOOL success, NSError *error) {
+                    NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
+                }];*/
+                
+                
+                
+                /*
+                NSNumber *keyKeys = @(MTQueryCacheAddRowColumnKeys);
+                NSNumber *keyColumns = @(MTQueryCacheAddRowColumns);
+                NSNumber *keyData = @(MTQueryCacheAddRowData);
+                NSNumber *keyTableName = @(MTQueryCacheAddRowTableName);
+                NSString *tableName = [myself2 tableName];
+                NSDictionary *columns = myself2.columns;
+                NSArray *columKeys = myself2.columnKeys;
+                NSDictionary *queryDefination = @{
+                                                  keyKeys : columKeys,
+                                                  keyColumns : columns,
+                                                  keyData : row,
+                                                  keyTableName : tableName
+                                                  };
+                
+                MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
+                
+                //dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
+                [query performQueryWithDatabase:self.databaseForInserts completion:^(BOOL success, NSError *error) {
+                    NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
+                }];*/
+        });
+        
         
 
     } else {
@@ -364,7 +431,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 // FIXME: Maybe wrap in autorelease block.
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
 
-    @autoreleasepool {
+    //@autoreleasepool {
         
         NSMutableArray *rowData = [[NSMutableArray alloc] init];
         for (id columnDefKey in self.columnKeys) {
@@ -375,7 +442,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         }
         [self addRow:rowData];
         
-    }
+    //}
     
 }
 
@@ -964,31 +1031,29 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     [self.databaseForInserts beginBulkInsert];
 
-    NSNumber *keyKeys = @(MTQueryCacheAddRowColumnKeys);
-    NSNumber *keyColumns = @(MTQueryCacheAddRowColumns);
-    NSNumber *keyData = @(MTQueryCacheAddRowData);
-    NSNumber *keyTableName = @(MTQueryCacheAddRowTableName);
     NSString *tableName = [self tableName];
     NSDictionary *columns = self.columns;
     NSArray *columnKeys = self.columnKeys;
     
-    NSDictionary *queryDefination = @{
-                                      keyKeys : columnKeys,
-                                      keyColumns : columns,
-                                      keyTableName : tableName
-                                      };
-    
     MTQueryCacheAddRow *bulkInsertQuery = [[MTQueryCacheAddRow alloc] initWithColumnKeys:columnKeys columns:columns andTableName:tableName];
     bulkInsertQuery.database = self.databaseForInserts;
     self.bulkInsertQuery = bulkInsertQuery;
+    
+    if (self.queueBulkAdd == nil) {
+        dispatch_queue_t queue = dispatch_queue_create("mad.cache", DISPATCH_QUEUE_SERIAL);
+        self.queueBulkAdd = queue;
+    }
     
 }
 
 /*! Call right after bulk insert of data. */
 
 - (void)endBulkInsert {
-    self.bulkInsertLoop = false;
-    [(MTDatabaseSqlite3 *)self.databaseForInserts endBulkInsert];
+    __block typeof(self) myself = self;
+    dispatch_async(self.queueBulkAdd, ^{
+        myself.bulkInsertLoop = false;
+        [(MTDatabaseSqlite3 *)myself.databaseForInserts endBulkInsert];
+    });
 }
 
 #pragma mark - Unused
