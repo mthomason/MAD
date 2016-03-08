@@ -25,6 +25,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 @interface MADReportPageView ()
 
+    @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
     @property (nonatomic, weak) UILabel *timeSinceRefrehLabel;
     @property (nonatomic, strong) UIView *timeSinceRefreshView;
     @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
@@ -64,6 +65,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)layoutSubviews {
     if (self.firstTime) {
+        MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
+        self.dateTimeFormatter = dateTimeFormatter;
         self.firstTime = false;
         if (self.displaysCacheTimer) {
             [self addTimerView];
@@ -190,11 +193,12 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         self.timeSinceRefrehLabel.text = noCache;
         
     } else {
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:lastCacheDate];
+
+        MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:lastCacheDate];
         self.timeSinceRefrehLabel.text = dateStringAndInterval.former;
         MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
         
-        NSTimeInterval updateLabelInSeconds = [NSDate timeIntervalForResolution:resolution];
+        NSTimeInterval updateLabelInSeconds = [MADDateFromTimeFormatter timeIntervalForResolution:resolution];
         
         if (self.timerLabelTimeSinceRefreh != nil) {
             if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {

@@ -24,10 +24,9 @@ typedef NS_ENUM(NSUInteger, MTDateResolution) {
 
 @class MTPair;
 
-@interface NSDate (Extras)
+@interface MADDateFromTimeFormatter : NSObject
 
-+ (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate;
-
+- (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate;
 + (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution;
 
 @end

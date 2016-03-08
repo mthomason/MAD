@@ -66,6 +66,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTActivityItemProviderDelegate>
 
 
+@property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
+
 #pragma mark - Attributes
 #pragma mark Display Varables
 
@@ -194,6 +196,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageSlider.sliderDelegate = self;
     self.toolbarSlider = pageSlider;
     
+    MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
+    self.dateTimeFormatter = dateTimeFormatter;
+
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
 
 //    self.transitionStyle = UIPageViewControllerTransitionStyleScroll;
@@ -259,7 +264,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     [self layoutSubviewSliderPagination];
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
@@ -957,26 +962,28 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)uiUpdateTimeSinceLastRefresh:(id)sender {
 
-    if (self.lastCacheDate == nil) {    // Find last cache date
+    MTDateResolution resolution;
+    if (self.lastCacheDate == nil) {    // No Cache exist, so return quickly.
+
         NSURL *cachedDataUrl = [self.document cachedDataUrl];
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataUrl.path error:&error];
         if (error == nil) {
             self.lastCacheDate = attributes.fileModificationDate;
         }
+
+        if (self.lastCacheDate == nil) {    // Find last cache date
+            NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
+            [self.labelStatus updateStatusWithTime:noCache];
+            return;
+        }
+        
     }
 
-    MTDateResolution resolution;
-    if (self.lastCacheDate == nil) {    // No Cache exist, so return quickly.
-        NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
-        [self.labelStatus updateStatusWithTime:noCache];
-        return;
-    } else {
-        
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:self.lastCacheDate];
-        [self.labelStatus updateStatusWithTime:dateStringAndInterval.former];
-        resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
-    }
+    MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:self.lastCacheDate];
+    [self.labelStatus updateStatusWithTime:dateStringAndInterval.former];
+    resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
+
     if (self.timerLabelTimeSinceRefreh != nil) {
         if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if ([self.timerLabelTimeSinceRefreh isValid]) {
@@ -986,7 +993,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.timerLabelTimeSinceRefreh = nil;
     }
     
-    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [NSDate timeIntervalForResolution:resolution]
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
                                                   target: self selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil
                                                  repeats: NO];
     self.timerLabelTimeSinceRefreh = t;
