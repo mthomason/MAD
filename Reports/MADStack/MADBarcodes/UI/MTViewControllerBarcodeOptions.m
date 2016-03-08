@@ -43,6 +43,22 @@
 
 @implementation MTViewControllerBarcodeOptions
 
+static inline NSInteger tvsDefination();
+static inline NSInteger tvsDefination() { return 0; }
+
+static inline NSInteger tvsRendering(bool has2dComponent);
+static inline NSInteger tvsRendering(bool has2dComponent) {
+    return has2dComponent ? 2 : 1;
+}
+static inline NSInteger tvsBorder(bool has2dComponent);
+static inline NSInteger tvsBorder(bool has2dComponent) {
+    return has2dComponent ? 3 : 2;
+}
+static inline NSInteger tvs2dComponent(bool has2dComponent);
+static inline NSInteger tvs2dComponent(bool has2dComponent) {
+    return has2dComponent ? 1 : -1;
+}
+
 #pragma mark - Exit
 
 - (IBAction)unwindToBarcodeOptions:(UIStoryboardSegue *)action { }
@@ -84,18 +100,28 @@
     [super viewWillAppear:animated];
 }
 
+static NSString * const SetDatasource = @"Set Datasource";
+static NSString * const StringEmpty = @"";
+
 - (void)customInit {
     self.borderWidth = 5;
     [self setSampleBarcodeIndex: 0];
-    NSArray *sampleBarcodeData = @[@{@"Set Datasource" : @"Set Datasource"}];
-    NSArray *sampleBarcodeDataMaxicode = @[@{@"" : @""}];
-    NSArray *sampleBarcodeData2dComponent = @[@{@"" : @""}];
-    [self setSampleBarcodeData:sampleBarcodeData];
-    [self setSampleBarcodeDataMaxicode:sampleBarcodeDataMaxicode];
-    [self setSampleBarcodeData2dComponent:sampleBarcodeData2dComponent];
-    [self setSelectingField1:NO];
-    [self setSelectingField2:NO];
-    [self setSelecting2dComponentType:NO];
+    
+    NSDictionary *d = @{SetDatasource : SetDatasource};
+    NSArray *sampleBarcodeData = @[d];
+    self.sampleBarcodeData = sampleBarcodeData;
+    
+    NSDictionary *d2 = @{StringEmpty : StringEmpty};
+    NSArray *sampleBarcodeDataMaxicode = @[d2];
+    self.sampleBarcodeDataMaxicode = sampleBarcodeDataMaxicode;
+    
+    NSDictionary *d3 = @{StringEmpty : StringEmpty};
+    NSArray *sampleBarcodeData2dComponent = @[d3];
+    self.sampleBarcodeData2dComponent = sampleBarcodeData2dComponent;
+
+    self.selectingField1 = NO;
+    self.selectingField2 = NO;
+    self.selecting2dComponentType = NO;
 
 }
 
@@ -121,9 +147,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    [self setSelectingField1:NO];
-    [self setSelectingField2:NO];
-    [self setSelecting2dComponentType:NO];
+    self.selectingField1 = NO;
+    self.selectingField2 = NO;
+    self.selecting2dComponentType = NO;
 
     if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
 
@@ -217,22 +243,6 @@
     return numberOfSections;
 }
 
-static inline NSInteger tvsDefination();
-static inline NSInteger tvsDefination() { return 0; }
-
-static inline NSInteger tvsRendering(bool has2dComponent);
-static inline NSInteger tvsRendering(bool has2dComponent) {
-    return has2dComponent ? 2 : 1;
-}
-static inline NSInteger tvsBorder(bool has2dComponent);
-static inline NSInteger tvsBorder(bool has2dComponent) {
-    return has2dComponent ? 3 : 2;
-}
-static inline NSInteger tvs2dComponent(bool has2dComponent);
-static inline NSInteger tvs2dComponent(bool has2dComponent) {
-    return has2dComponent ? 1 : -1;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
@@ -289,7 +299,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
             case 0: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeData forIndexPath:indexPath];
                 
-                NSInteger sampleBarcodeDataCount = [[self sampleBarcodeData] count];
+                NSUInteger sampleBarcodeDataCount = self.sampleBarcodeData.count;
                 
                 NSAssert(sampleBarcodeDataCount >= 1, @"Sample data is missing");
                 
