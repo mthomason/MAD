@@ -16,7 +16,7 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTActivityIndicator.h"
 #import "MTPaper.h"
-#import <MADFoundation/MTDataTable.h>
+#import "MTDataTableFast.h"
 #import "MTNotificationDidFormatPage.h"
 
 @interface  MTActivityItemProviderPdf ()

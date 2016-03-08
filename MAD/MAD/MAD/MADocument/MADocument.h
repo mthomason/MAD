@@ -33,15 +33,13 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class MADocumentState, NSManagedObjectID, UIImage, UIPrintPageRenderer, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
-        MTDataTable, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
+        MTDataTableFast, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
         RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper;
 
 @protocol MADActivityProtocol;
 
 @interface MADocument : UIManagedDocument
-<MTReportFormatterDataSource,
-    MTCacheProtocol,
-    MADDataProtocol>
+<MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
 
 @property (nonatomic, assign) BOOL limitResultsDesignMode;
 
@@ -50,7 +48,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
 
-@property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
+@property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
 @property (nonatomic, strong, readonly) MTQuery *mainQuery;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
@@ -71,8 +69,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
-- (void)addConnection:(MTDatabaseConnection *)connection
-               status:(void (^)(NSString *status, float progress))status
+- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 
 - (void)regenThumbnail;

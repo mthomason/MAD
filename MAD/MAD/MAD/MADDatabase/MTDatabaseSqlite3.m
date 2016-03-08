@@ -459,6 +459,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                     [self bindStatement:&statement withBindings:databinding];
                 }
             }
+            _bulkStatement = statement;
         } else if (queryPartOfTransactionSet) {
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {

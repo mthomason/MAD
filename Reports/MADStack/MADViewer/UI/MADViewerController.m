@@ -14,9 +14,11 @@
 #import <CoreData/CoreData.h>
 #import <MADDataStructures/MTPair.h>
 #import <MAD/MADConstants.h>
+#import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTReportFormatter.h>
 #import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTDataTableFast.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTActivityItemProviderPdf.h>
 #import <MAD/MTNotificationDidFormatPage.h>

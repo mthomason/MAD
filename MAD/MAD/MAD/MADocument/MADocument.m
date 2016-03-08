@@ -71,6 +71,8 @@
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 //#import <MADCocoaExtensions/MADFilename.h>
 
+#import "MTDataTableFast.h"
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 /*
@@ -139,7 +141,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MTQuery *mainQuery;
-@property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
+@property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
 
 @property (nonatomic, assign) BOOL didRefresh;
 
