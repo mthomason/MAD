@@ -26,7 +26,6 @@ NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 
 @interface MTDatabaseSqlite3 ()
 
-@property (nonatomic, readwrite, assign) sqlite3 *database;
 @property (atomic, assign) sqlite3_stmt *bulkStatement;
 
 @property (nonatomic, assign, getter=isOpen) bool open;
@@ -43,10 +42,10 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
-static inline bool Sqlite3ResultOK(int result);
+/*static inline bool Sqlite3ResultOK(int result);
 static inline bool Sqlite3ResultOK(int result) {
     return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE ? true : false;
-}
+}*/
 
 #ifdef MAD_MTDatabaseSqlite3_DEBUG
 void sqliteLog(void *foo, const char* statement);
@@ -56,12 +55,11 @@ void sqliteLog(void *foo, const char* statement) {
 #endif
 
 - (void *)databaseHandle {
-    return _database;
+    return self.database;
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         _database = NULL;
         _bulkStatement = NULL;
         _open = false;
@@ -80,7 +78,7 @@ void sqliteLog(void *foo, const char* statement) {
     //Open conneciton... closed in dealloc.
     if (!self.isOpen) {
        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
-        BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
+        bool isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);
             sqlite3_create_collation(_database, "LSASC",
@@ -103,12 +101,15 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (void)dealloc {
+    
     if (_bulkStatement != NULL && sqlite3_finalize(_bulkStatement)) {
         NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
-    if (_database != NULL && sqlite3_close(_database) != SQLITE_OK) {   // close short circuts (skips) on null database
-        //NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+    
+    if (_database != NULL && sqlite3_close_v2(_database) != SQLITE_OK) {
+        NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
+
 }
 
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
@@ -119,9 +120,10 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL exist = NO;
 	NSString *query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
     sqlite3_stmt *statement = NULL;
-    const char *queryc = [query UTF8String];
+    const char *queryc = query.UTF8String;
 	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
-        sqlite3_bind_text(statement, 1, [tablename UTF8String], (int)strlen([tablename UTF8String]), SQLITE_STATIC);
+        const char *t = tablename.UTF8String;
+        sqlite3_bind_text(statement, 1, t, (int)strlen(t), SQLITE_STATIC);
 		if (sqlite3_step(statement) == SQLITE_ROW) {
             exist = sqlite3_column_int(statement, 0) == 1;
         }
@@ -442,24 +444,22 @@ void sqliteLog(void *foo, const char* statement) {
                          file:(NSString *)fileName
                    lineNumber:(NSInteger)line
                   description:(NSString *)format {
-    NSLog(@"Assert: (%@:%d)", fileName, line);
+    NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
 }
 
-- (void)executeQueryWithSql:(NSString *)queryString
-                  dataTable:(MTDataTable *)dataTable
++ (void)executeQueryWithSql:(NSString *)queryString
+                   database:(sqlite3 *)_database
         queryBinaryBindings:(NSArray *)queryBinaryBindings
              queryFieldKeys:(NSArray *)queryFieldKeys
-  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet
-                 completion:(void (^)(BOOL, NSError *))completion {
-    
+  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet {
+
     BOOL success = YES;
 
     if (queryString.length > 0) {
         
-        sqlite3_stmt *statement = NULL;//_bulkStatement;
+        sqlite3_stmt *statement = NULL;
         
         char *sql = sqlite3_mprintf(queryString.UTF8String);
-        
         
         if (statement == NULL) {
             success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
@@ -468,7 +468,6 @@ void sqliteLog(void *foo, const char* statement) {
                     [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
                 }
             }
-            //_bulkStatement = statement;
         } else if (queryPartOfTransactionSet) {
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
@@ -487,7 +486,6 @@ void sqliteLog(void *foo, const char* statement) {
         sqlite3_free(sql);
         sql = NULL;
     }
-    completion(success, nil);
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
@@ -743,15 +741,6 @@ void sqliteLog(void *foo, const char* statement) {
     return columnValue;
 }
 
-- (BOOL)cleanupBulkInsert {
-    BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);
-    NSAssert(success, @"Bulk insert sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(_database));
-    _bulkStatement = NULL;
-    sqlite3_close(_database);
-    _database = NULL;
-    return success;
-}
-
 - (void)executeQuery:(MTQuery *)query withStatement:(sqlite3_stmt *)statement completion:(void (^)(BOOL, NSError *))completion {
 
 }
@@ -852,8 +841,11 @@ void sqliteLog(void *foo, const char* statement) {
     dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
     
     */
+    sqlite3_finalize(_bulkStatement);
+    _bulkStatement = NULL;
+    sqlite3_close_v2(_database);
+    _database = NULL;
     
-    [self cleanupBulkInsert];
 }
 
 @end

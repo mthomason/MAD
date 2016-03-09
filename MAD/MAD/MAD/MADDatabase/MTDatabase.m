@@ -196,8 +196,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
                                                     safeTable];
 }
 
-- (BOOL)cleanupBulkInsert { return  YES; }
-
 - (NSString *)nativeTypeForDataType:(MTDataType)dataType {
     return @"";
 }

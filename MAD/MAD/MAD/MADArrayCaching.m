@@ -54,7 +54,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
         _statementInsert = NULL;
         _statementSelect = NULL;
     }
-    sqlite3_close_v2(_database.databaseHandle);
+    //sqlite3_close_v2(_database.databaseHandle);
 }
 
 - (void)finalizeDatabase {
@@ -66,7 +66,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     _statementEnumer = NULL;
     _statementInsert = NULL;
     _statementSelect = NULL;
-    sqlite3_close_v2(_database.databaseHandle);
+    //sqlite3_close_v2(_database.databaseHandle);
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
