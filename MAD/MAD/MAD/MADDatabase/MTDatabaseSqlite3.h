@@ -51,7 +51,8 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                   dataTable:(MTDataTable *)dataTable
         queryBinaryBindings:(NSArray *)queryBinaryBindings
              queryFieldKeys:(NSArray *)queryFieldKeys
-  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet;
+  queryPartOfTransactionSet:(bool)queryPartOfTransactionSet
+                 completion:(void (^)(BOOL, NSError *))completion;
 
 @end
 

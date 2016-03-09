@@ -7,6 +7,7 @@
 //
 
 #import "MTNotificationDidReadRows.h"
+#import <math.h>
 #import <dispatch/once.h>
 #import <Foundation/NSValue.h>
 #import <Foundation/NSDictionary.h>
@@ -15,12 +16,12 @@
 NSString * const MTNotificationDidReadRowsName = @"MTNotificationDidReadRows";
 NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";
 
-static const NSInteger RowIntervalInital = 7;
-static const NSInteger RowIntervalInitalMax = 77;
+static const short RowIntervalInital = 7;
+static const short RowIntervalInitalMax = 511;
 
 @interface MTNotificationDidReadRows ()
 
-@property (nonatomic, assign) NSUInteger rowInterval;
+@property (nonatomic, assign) unsigned int rowInterval;
 
 @end
 
@@ -49,7 +50,7 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
 }
 
 - (void)initalizeRowInterval {
-    [self setRowInterval:RowIntervalInital];
+    self.rowInterval = RowIntervalInital;
 }
 
 - (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
@@ -67,10 +68,8 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
                                                                      object: database
                                                                    userInfo: parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
-        if ([self rowInterval] < RowIntervalInitalMax) {
-            if (row > self.rowInterval) {
-                self.rowInterval = (NSUInteger)ceill((long double)self.rowInterval * 1.1);
-            }
+        if (self.rowInterval < RowIntervalInitalMax && row > self.rowInterval) {
+            self.rowInterval = (NSUInteger)ceill((long double)self.rowInterval * 1.19);
         }
     }
 }
