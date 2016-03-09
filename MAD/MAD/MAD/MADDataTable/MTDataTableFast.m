@@ -171,6 +171,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     return NSStringFromSelector(@selector(groupTableNames));
 }
 
++ (NSString *)keyColumns {
+    SEL selColumns = @selector(columns);
+    return NSStringFromSelector(selColumns);
+}
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [super encodeWithCoder:encoder];
@@ -209,11 +213,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         [self reopenDbConnection];
     }
     return self;
-}
-
-+ (NSString *)keyColumns {
-    SEL selColumns = @selector(columns);
-    return NSStringFromSelector(selColumns);
 }
 
 - (NSString *)filenameCacheMadDB {
@@ -348,19 +347,22 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         __block bool partOfTransactionSet = self.bulkInsertQuery.partOfTransactionSet;
         
         __block typeof(self) __weak weakself = self;
-        dispatch_sync(self.queueBulkAdd, ^{
+        dispatch_async(self.queueBulkAdd, ^{
             __block typeof(self) __strong strongself = weakself;
-            
-                dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
+            @autoreleasepool {
+                
+                //dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
                 [((MTDatabaseSqlite3 *)strongself.databaseForInserts) executeQueryWithSql:sql
-                                                                              dataTable:strongself
-                                                                    queryBinaryBindings:binaryBindings
-                                                                         queryFieldKeys:fieldKeys
-                                                              queryPartOfTransactionSet:partOfTransactionSet
-                 completion:^(BOOL success, NSError *error) {
-                     dispatch_semaphore_signal(semaphoreQuery);
-                 }];
-                dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+                                                                                dataTable:strongself
+                                                                      queryBinaryBindings:binaryBindings
+                                                                           queryFieldKeys:fieldKeys
+                                                                queryPartOfTransactionSet:partOfTransactionSet
+                                                                               completion:^(BOOL success, NSError *error) {
+                                                                                   //    dispatch_semaphore_signal(semaphoreQuery);
+                                                                               }];
+
+            }
+                //dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
             /*
              
              NSNumber *keyKeys = @(MTQueryCacheAddRowColumnKeys);
@@ -429,7 +431,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 // FIXME: Maybe wrap in autorelease block.
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
 
-    //@autoreleasepool {
+    @autoreleasepool {
         
         NSMutableArray *rowData = [[NSMutableArray alloc] init];
         for (id columnDefKey in self.columnKeys) {
@@ -440,7 +442,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         }
         [self addRow:rowData];
         
-    //}
+    }
     
 }
 
@@ -1038,7 +1040,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     self.bulkInsertQuery = bulkInsertQuery;
     
     if (self.queueBulkAdd == nil) {
-        dispatch_queue_t queue = dispatch_queue_create("mad.cache", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_t queue = dispatch_queue_create("mad.cache", DISPATCH_QUEUE_SERIAL);
         self.queueBulkAdd = queue;
     }
     

@@ -36,6 +36,25 @@ NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 
 @implementation MTDatabaseSqlite3
 
+int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2);
+int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
+    NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding];
+    NSString *string2 = [[NSString alloc] initWithBytes:arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding];
+    return [string1 localizedCaseInsensitiveCompare:string2];
+}
+
+static inline bool Sqlite3ResultOK(int result);
+static inline bool Sqlite3ResultOK(int result) {
+    return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE ? true : false;
+}
+
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+void sqliteLog(void *foo, const char* statement);
+void sqliteLog(void *foo, const char* statement) {
+    MTLogStatic(@"=> %s", statement);
+}
+#endif
+
 - (void *)databaseHandle {
     return _database;
 }
@@ -81,19 +100,6 @@ NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
         }
         self.open = true;
     }
-}
-
-#ifdef MAD_MTDatabaseSqlite3_DEBUG
-void sqliteLog(void *foo, const char* statement);
-void sqliteLog(void *foo, const char* statement) {
-    MTLogStatic(@"=> %s", statement);
-}
-#endif
-
-int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
-    NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding];
-    NSString *string2 = [[NSString alloc] initWithBytes:arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding];
-    return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
 - (void)dealloc {
@@ -435,10 +441,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     }
 }
 
-static inline bool Sqlite3ResultOK(int result) {
-    return result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE ? true : false;
-}
-
 - (void)handleFailureInMethod:(SEL)selector
                        object:(id)object
                          file:(NSString *)fileName
@@ -480,7 +482,7 @@ static inline bool Sqlite3ResultOK(int result) {
         }
         
         sqlite3_step(statement);
-        sqlite3_reset(statement);
+//        sqlite3_reset(statement);
         
         NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
 
