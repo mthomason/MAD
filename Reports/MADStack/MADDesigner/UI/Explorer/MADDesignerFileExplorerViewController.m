@@ -145,7 +145,9 @@ NSString * const MADUtiType                                     = @"com.everyday
 
     self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
     self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
-    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
+    
+    BOOL canMakePayments = [SKPaymentQueue canMakePayments];
+    self.barButtonItemLicensing.enabled = canMakePayments;
 
 }
 
