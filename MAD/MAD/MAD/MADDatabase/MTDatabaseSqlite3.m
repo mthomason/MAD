@@ -377,11 +377,11 @@ void sqliteLog(void *foo, const char* statement) {
     return partOfTransactionSet ? _bulkStatement : statement;
 }
 
-- (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding {
++ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding {
 
     int success = 0;
     if ([databinding.value isEqual:[NSNull null]]) {
-        success = SQLITE_OK == sqlite3_bind_null(*statement, databinding.columnNumber);
+        success = sqlite3_bind_null(*statement, databinding.columnNumber);
     } else {
         switch (databinding.datatype) {
                 
@@ -393,13 +393,11 @@ void sqliteLog(void *foo, const char* statement) {
                     success = sqlite3_bind_blob(*statement, databinding.columnNumber, ((NSData *)databinding.value).bytes, (int)((NSData *)databinding.value).length, SQLITE_TRANSIENT);
                 }
                 
-                NSAssert(Sqlite3ResultOK(success), @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
             }
                 
             case MTDataTypeInteger: {
                 success = sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)[databinding value]).longLongValue);
-                NSAssert(Sqlite3ResultOK(success), @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
             }
                 
@@ -411,26 +409,24 @@ void sqliteLog(void *foo, const char* statement) {
                     
                 } else if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
                     
-                    NSDate *date = [[self currentCalandar] dateFromComponents:[databinding value]];
+                    NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:[databinding value]];
                     success = sqlite3_bind_double(*statement, databinding.columnNumber, [date timeIntervalSince1970]);
                     
                 } else {
-                    NSAssert(false, @"What else is there? %s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
+                    NSAssert(false, @"What else is there? %s", __PRETTY_FUNCTION__);
                 }
-                NSAssert(Sqlite3ResultOK(success), @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
                 
             }
             case MTDataTypeFloat:
-            case MTDataTypeDouble:
-                
-                success = sqlite3_bind_double(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue);
-                NSAssert(Sqlite3ResultOK(success), @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
+            case MTDataTypeDouble: {
+                NSNumber * __weak n = (NSNumber *)databinding.value;
+                success = sqlite3_bind_double(*statement, databinding.columnNumber, n.doubleValue);
                 break;
+            }
                 
             case MTDataTypeNull:
                 success = sqlite3_bind_null(*statement, databinding.columnNumber);
-                NSAssert(Sqlite3ResultOK(success), @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
                 
             default:
@@ -469,14 +465,14 @@ void sqliteLog(void *foo, const char* statement) {
             success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
-                    [self bindStatement:&statement withBindings:databinding];
+                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
                 }
             }
             //_bulkStatement = statement;
         } else if (queryPartOfTransactionSet) {
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
-                    [self bindStatement:&statement withBindings:databinding];
+                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
                 }
             }
         }
@@ -513,13 +509,13 @@ void sqliteLog(void *foo, const char* statement) {
             success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
             if (query.binaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in query.binaryBindings) {
-                    [self bindStatement:&statement withBindings:databinding];
+                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
                 }
             }
         } else if ([query partOfTransactionSet]) {
             if (query.binaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in query.binaryBindings) {
-                    [self bindStatement:&statement withBindings:databinding];
+                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
                 }
             }
         }

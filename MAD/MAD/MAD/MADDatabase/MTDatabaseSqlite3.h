@@ -33,7 +33,7 @@ typedef struct sqlite3_stmt sqlite3_stmt;
 - (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
-- (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
++ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
 
 - (void)openDatabase;
 - (void)openDatabaseWithFlags:(int)flags;

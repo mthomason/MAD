@@ -341,28 +341,29 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         self.bulkInsertQuery.rowData = rowData;
         
         //MTDataTable *dataTable = [self.databaseForInserts.delegate dataTableForQuery:self.bulkInsertQuery];
-        __block NSString *sql = [self.bulkInsertQuery getSqlWithError:nil];
-        __block NSArray *binaryBindings = self.bulkInsertQuery.binaryBindings;
-        __block NSArray *fieldKeys = self.bulkInsertQuery.fieldKeys;
-        __block bool partOfTransactionSet = self.bulkInsertQuery.partOfTransactionSet;
+        NSString * __strong sql = [[NSString alloc] initWithString:[self.bulkInsertQuery getSqlWithError:nil]];
+        NSArray * __strong binaryBindings = [[NSArray alloc] initWithArray:self.bulkInsertQuery.binaryBindings];
+        NSArray * __strong fieldKeys = [[NSArray alloc] initWithArray:self.bulkInsertQuery.fieldKeys];
         
-        __block typeof(self) __weak weakself = self;
+        bool partOfTransactionSet = self.bulkInsertQuery.partOfTransactionSet;
+        
+        typeof(self) __weak weakself = self;
         dispatch_async(self.queueBulkAdd, ^{
-            __block typeof(self) __strong strongself = weakself;
-            @autoreleasepool {
-                
-                //dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
+            //@autoreleasepool {
+                typeof(self) __strong strongself = weakself;
+            //NSString * __strong sql = [[NSString alloc] initWithString:[strongself.bulkInsertQuery getSqlWithError:nil]];
+            
+  //              dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
                 [((MTDatabaseSqlite3 *)strongself.databaseForInserts) executeQueryWithSql:sql
                                                                                 dataTable:strongself
                                                                       queryBinaryBindings:binaryBindings
                                                                            queryFieldKeys:fieldKeys
                                                                 queryPartOfTransactionSet:partOfTransactionSet
                                                                                completion:^(BOOL success, NSError *error) {
-                                                                                   //    dispatch_semaphore_signal(semaphoreQuery);
+                                                                                       //dispatch_semaphore_signal(semaphoreQuery);
                                                                                }];
-
-            }
-                //dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+//                dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+            //}
             /*
              
              NSNumber *keyKeys = @(MTQueryCacheAddRowColumnKeys);
@@ -747,7 +748,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     NSArray *queryBinaryBindings = query.binaryBindings;
     for (MTDatabaseDataBinding *dataBinding in queryBinaryBindings) {
-        [(MTDatabaseSqlite3 *)self.databaseForSelects bindStatement:&statement withBindings:dataBinding];
+        [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding];
     }
 
     if (success) {
@@ -979,7 +980,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
     
     for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
-        [(MTDatabaseSqlite3 *)self.databaseForSelects bindStatement:&statement withBindings:dataBinding];
+        [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding];
     }
     
     if (success && sqlite3_step(statement) == SQLITE_ROW) {
