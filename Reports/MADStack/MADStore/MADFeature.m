@@ -50,7 +50,7 @@ static NSString * const Available       = @"available";
 }
 
 - (MADFeatureType)type {
-    return ((NSNumber *)self.feature[Type]).integerValue;
+    return ((NSNumber *)self.feature[Type]).shortValue;
 }
 
 - (BOOL)available {

@@ -277,13 +277,13 @@ CG_INLINE CGFloat CGDelta(CGFloat f1, CGFloat f2) {
     return f2 - f1;
 }
 
-CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2);
-CG_INLINE CGFloat CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
-    return atan2(p2.y - p1.y, p2.x - p1.x) * (180.0000f / M_PI);
+CG_INLINE double CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2);
+CG_INLINE double CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
+    return atan2(p2.y - p1.y, p2.x - p1.x) * (180.0000 / M_PI);
 }
 
-CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity);
-CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity) {
+CG_INLINE double CGDirectionInDegreesFromVelocity(CGPoint velocity);
+CG_INLINE double CGDirectionInDegreesFromVelocity(CGPoint velocity) {
     return atan2(velocity.y, velocity.x);
 }
 

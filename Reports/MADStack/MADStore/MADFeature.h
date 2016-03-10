@@ -8,7 +8,7 @@
 
 #import <Foundation/NSObject.h>
 
-typedef NS_ENUM(NSUInteger, MADFeatureType) {
+typedef NS_ENUM(short, MADFeatureType) {
     MADFeatureTypeNonConsumable                     = 1,
     MADFeatureTypeSubscription                      = 2
 };
