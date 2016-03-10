@@ -124,6 +124,8 @@ NSString * const MNSInterfaceTitleProblem                           = @"Problem"
 NSString * const MADManagedObjectModelName = @"MAD";
 NSString * const MADManagedObjectModelExtention = @"momd";
 
+NSString * const MADDocumentErrorDomain = @"MADocument";
+
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
 NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
 #elif MAD_VIEWER == 1
@@ -916,8 +918,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    NSURL *url = [self.mainDataTable urlForGroupIdentifier:[delegate groupIdentifier]];
+    NSURL *url = [self.mainDataTable urlForGroupIdentifier:MADIdentifierGroup];
     return [[NSFileManager defaultManager] fileExistsAtPath:url.path];
 }
 
@@ -939,9 +940,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
     @autoreleasepool {
 
-        MADAppDelegate delegate = [UIApplication AppDelegate];
-        NSString *groupIdentifier = [delegate groupIdentifier];
-
         [self initalizeMainDataTable];
         RptqDocument *document = [self activeDocumentModel];
         [self initalizeMainQuery:document];
@@ -957,7 +955,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                 
                 [weakself.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
                     
-                    [weakself.mainDataTable cacheForGroupIdentifier:groupIdentifier];
+                    [weakself.mainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
                     weakself.didRefresh = success;
                     
                     [MADThread completeOnMainThread:^(BOOL success, id error) {
@@ -973,8 +971,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSURL *)cachedDataUrl {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    return [self.mainDataTable urlForGroupIdentifier:[delegate groupIdentifier]];
+    return [self.mainDataTable urlForGroupIdentifier:MADIdentifierGroup];
 }
 
 - (NSString *)fileHandle {
@@ -991,8 +988,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         }
     }];
 }
-
-static NSString * const MADDocumentErrorDomain = @"MADocument";
 
 + (NSError *)errorConnectionProblem {
     NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");

@@ -8,8 +8,6 @@
 
 #import "MADInterfaceControllerDocumentsLocal.h"
 #import "MADRowTypeDocumentsLocal.h"
-#import "UIColor+EverydayApps.h"
-#import "NSFileManager+Common.h"
 
 @interface MADInterfaceControllerDocumentsLocal()
 
@@ -28,9 +26,8 @@
 @implementation MADInterfaceControllerDocumentsLocal
 
 - (id)init {
-    self = [super init];
     
-    if (self) {
+    if (self = [super init]) {
 
         Class rowControllerClassDocumentsLocal = [MADRowTypeDocumentsLocal class];
         NSString *identifierRowTypeDocumentLocal = NSStringFromClass(rowControllerClassDocumentsLocal);
@@ -72,8 +69,6 @@
 - (void)willActivate {
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
-    
-
 }
 
 - (void)didDeactivate {

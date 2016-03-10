@@ -239,7 +239,7 @@
 		4CC281F81BADE80500775B72 /* MADActivityProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC281F91BADE80500775B72 /* MADArrayCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F01BADE80500775B72 /* MADArrayCaching.h */; };
 		4CC281FA1BADE80500775B72 /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F11BADE80500775B72 /* MADArrayCaching.m */; };
-		4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F21BADE80500775B72 /* MADConstants.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F21BADE80500775B72 /* MADConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC281FC1BADE80500775B72 /* MADConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC281F31BADE80500775B72 /* MADConstants.m */; };
 		4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282401BADE81A00775B72 /* MADSectionLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };

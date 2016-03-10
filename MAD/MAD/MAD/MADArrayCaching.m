@@ -7,7 +7,7 @@
 //
 
 #import "MADArrayCaching.h"
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MAD/MADConstants.h>
 #import <MADSqlite3/MADSqlite3.h>
 #import <MADDataStructures/MTPair.h>
 #import <MADFoundation/MTDataColumn.h>
@@ -70,25 +70,25 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
-    self = [super init];
-    if (self) {
-        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
-        [self setFastEnumerationObjects:fastEnumerationObjects];
+    if (self = [super init]) {
         
         _statementCount = NULL;
         _statementEnumer = NULL;
         _statementInsert = NULL;
         _statementSelect = NULL;
-        
+
+        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
+        self.fastEnumerationObjects = fastEnumerationObjects;
+
         NSString *i = [NSString stringWithString:identifier];
-        [self setIdentifier:i];
+        self.identifier = i;
+        
     }
     return self;
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         [self setFastEnumerationObjects:fastEnumerationObjects];
         
@@ -134,11 +134,11 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 }
 
 - (void)beginBulkInserts {
-    [[self database] beginBulkInsert];
+    [self.database beginBulkInsert];
 }
 
 - (void)endBulkInserts {
-    [[self database] endBulkInsert];
+    [self.database endBulkInsert];
     [self reopenDatabaseAtUrl:[self url]];
     [self prepareStatements];
 }
@@ -213,9 +213,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSURL *)url {
     NSURL *result = nil;
-    MADAppDelegate delegate = [UIApplication AppDelegate];
     NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
-                                        [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[delegate groupIdentifier]] :
+                                        [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
                                         [self.cachedDelegate cachedFilesDirectory];
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];

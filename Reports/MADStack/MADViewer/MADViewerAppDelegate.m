@@ -36,11 +36,11 @@ const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 NSString *s = @"";
 #endif
 
-#if MAD_DESIGNER || MADWATCHKIT
+/*#if MAD_DESIGNER || MADWATCHKIT
 NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
 #elif MAD_VIEWER
 NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
-#endif
+#endif*/
 
 NSString * const MADIdentifierGroup                                     = @"group.everydayapps.mad";
 
@@ -70,9 +70,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     return MADUbiquityIdentifier;
 }
 
-- (NSString *)groupIdentifier {
-    return MADIdentifierGroup;
-}
+- (NSString *)groupIdentifier { return MADIdentifierGroup; }
 
 - (NSString *)name {
     NSString *trademark = [self trademark];

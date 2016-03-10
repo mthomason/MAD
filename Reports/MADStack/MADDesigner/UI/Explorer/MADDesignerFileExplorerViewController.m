@@ -9,7 +9,7 @@
 #import "MADDesignerFileExplorerViewController.h"
 
 #import "MADStoryboard.h"
-
+#import "Constants.h"
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -76,13 +76,11 @@ NSString * const MADUtiType                                     = @"com.everyday
 #pragma mark - MADFileLocationManagerDelegate
 
 - (NSString *)groupIdentifier {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    return [delegate groupIdentifier];
+    return MADIdentifierGroup;
 }
 
 - (NSString *)ubiquityIdentifier {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    return [delegate ubiquityIdentifier];
+    return MADUbiquityIdentifier;
 }
 
 - (NSString *)fileExtention {       return MADFileExtentionMobleApplicationDocument; }

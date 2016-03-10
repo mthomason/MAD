@@ -11,6 +11,7 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
+#import <MAD/MADConstants.h>
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTLinkedList.h>
@@ -36,8 +37,6 @@
 #import "MADOperationArchiveData.h"
 
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "UIGestureRecognizer+AnchorPoint.h"
@@ -67,9 +66,9 @@ typedef void(^MTBlockResultVoid)(void);
         MADQueryVisualizationSchemaDelegate,
         MTViewControllerProtocol>
 
-    @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
-
     @property (nonatomic, weak) IBOutlet UIView *backgroundContainer;
+
+    @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
 
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
@@ -457,8 +456,8 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (NSURL *)localCacheFileUrl {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    NSString *groupIdentifier = [delegate groupIdentifier];
+    NSString *groupIdentifier = MADIdentifierGroup;
+    
     NSURL *cachedFilesDirectories = [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:groupIdentifier];
     NSString *cacheFileName = [self cacheFileName];
     return [cachedFilesDirectories URLByAppendingPathComponent:cacheFileName isDirectory:NO];

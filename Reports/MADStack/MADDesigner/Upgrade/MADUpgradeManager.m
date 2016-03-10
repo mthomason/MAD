@@ -76,18 +76,4 @@ const NSInteger currentMajorVersion = 8;
 
 }
 
-/*
- *  Upgrading 7 -> 8
- *      Move documents to group folder.
- */
-- (void)migrateDocumentToGroupFolder {
-    NSOperationQueue *opqueue = [[NSOperationQueue alloc] init];
-    opqueue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
-    [opqueue addOperation:sampleDatabase];
-    
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    [MADFileUtilities copyInitialFiles:MADFileExtentionMobleApplicationDocument groupId:[delegate groupIdentifier]];
-}
-
 @end

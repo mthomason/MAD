@@ -7,7 +7,10 @@
 //
 
 #import "MADOperationInstallSampleDatabase.h"
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MAD/MADConstants.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSUserDefaults.h>
 #import <MADFoundation/NSFileManager+Common.h>
 
 NSString * const MADUpgradeInstalledSamples                         = @"MADUpgradeInstalledSamples";
@@ -15,8 +18,8 @@ NSString * const MADUpgradeInstalledSamplesLondon                   = @"MADUpgra
 NSString * const MADUpgradeInstalledSamplesMusic                    = @"MADUpgradeInstalledSamplesMusic";
 NSString * const MADUpgradeInstalledChinook                         = @"MADUpgradeInstalledChinook";
 
-NSString * const MTSampleDatabaseChinook            = @"chinook";
-NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
+NSString * const MTSampleDatabaseChinook                            = @"chinook";
+NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3";
 
 @implementation MADOperationInstallSampleDatabase
 
@@ -30,7 +33,7 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
         if (chinookAppSupportUrl != nil) {
             NSError *error = nil;
             [[NSFileManager defaultManager] copyItemAtURL:fileUrl toURL:chinookAppSupportUrl error:&error];
-            installed = [[NSFileManager defaultManager] fileExistsAtPath:[chinookAppSupportUrl path]];
+            installed = [[NSFileManager defaultManager] fileExistsAtPath:chinookAppSupportUrl.path];
             if (installed) {
                 NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
                 [standardUserDefaults setBool:YES forKey:MADUpgradeInstalledChinook];
@@ -48,8 +51,7 @@ NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:[delegate groupIdentifier]];
+    NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }

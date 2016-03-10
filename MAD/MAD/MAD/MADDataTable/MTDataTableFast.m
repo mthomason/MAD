@@ -11,9 +11,11 @@
 #endif
 
 #import "MTDataTableFast.h"
+
 #import <MADDataStructures/MTPair.h>
 #import <MADFoundation/MTDataColumn.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import "MADConstants.h"
+
 #import "MTDataTableFastObjectEnumerator.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
@@ -221,10 +223,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSURL *)urlFastCache {
-    MADAppDelegate delegate = [UIApplication AppDelegate];
     NSString *filename = [self filenameCacheMadDB];
     NSURL *cacheDirectory = self.cacheDelegate == nil ?
-                            [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:[delegate groupIdentifier]] :
+                            [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:MADIdentifierGroup] :
                                 [self.cacheDelegate cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -236,8 +237,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (void)setCacheDelegate:(id<MTCacheProtocol>)cacheDelegate {
     super.cacheDelegate = cacheDelegate;
-    MADAppDelegate delegate = [UIApplication AppDelegate];
-    [super loadFromCacheWithGroupIdentifier:[delegate groupIdentifier]];
+    [super loadFromCacheWithGroupIdentifier:MADIdentifierGroup];
     [self reopenDbConnection];
 }
 

@@ -14,6 +14,7 @@
 #import "MADConstants.h"
 #import "RptqUserCredentals.h"
 #import "MTDatabase.h"
+#import "MADConstants.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
@@ -134,10 +135,8 @@ NSString * const MADStringEmpty = @"";
             // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
             //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
             //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
-            MADAppDelegate delegate = [UIApplication AppDelegate];
             
-            NSString *groupIdentifier = [delegate groupIdentifier];
-            NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:groupIdentifier];
+            NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
             NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent:databaseFilename isDirectory:NO];
             
             NSURL *databaseUrl = [NSURL fileURLWithPath:dbUrl.path];
