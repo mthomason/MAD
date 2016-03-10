@@ -609,8 +609,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.startedRefresh = true;
         self.refreshing = true;
         [self setDisplayInactive];
-        
-        MTDatabase *database = self.document.mainDatabase;
+        MADocument *document = self.document;
+        MTDatabase *database = document.mainDatabase;
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         
@@ -619,37 +619,55 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
-        NSString *connectionString = self.document.mainDatabase.databaseConnection.connectionString;
+        NSString *connectionString = document.mainDatabase.databaseConnection.connectionString;
+        
         __block MADViewerController * __weak weakself = self;
-        [self.document refresh:^(BOOL success, NSError *error) {
+        [document refresh:^(BOOL success, NSError *error) {
+            
             __strong MADViewerController *strongself = weakself;
             
             if (success) {
                 strongself.lastCacheDate = [NSDate date];
             } else {
+                /*
+                NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+                queue.maxConcurrentOperationCount = 1;
+                [queue addOperationWithBlock:^{
+
+                    [NSError presentError: error
+                         onViewController: strongself
+                               completion:^(BOOL presentErrorSuccess) {
+
+                                   
+                               }];
+                }];
+                
+                [queue addOperationWithBlock:^{
+                    [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: strongself];
+                }];
+                */
+                
+// FIXME: Use concurrency queues to fix this.
+                //Want one to run right after the other, but without being in blocks.
                 
                 __weak MADViewerController *weakself2 = strongself;
-                
                 [NSError presentError: error
                      onViewController: strongself
-                           completion:^(BOOL success) {
-                               
-                               __strong MADViewerController *strongself2 = weakself2;
-                               [[MTKeyChain sharedObject] deleteKey: connectionString
-                                                usingViewController: strongself2];
-                               
+                           completion:^(BOOL presentErrorSuccess) {
+                               if (presentErrorSuccess) {
+                                   __strong MADViewerController *strongself2 = weakself2;
+                                   [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: strongself2];
+                               }
                            }];
-                
-                
             }
             
-            [notificationCenter removeObserver: weakself
+            [notificationCenter removeObserver: strongself
                                           name: MTNotificationDidReadRowsName
                                         object: database];
-            [weakself setDisplayActive];
-            [weakself reload];
-            [weakself timerDealloc];
-            [weakself uiUpdateTimeSinceLastRefresh:weakself];
+            [strongself setDisplayActive];
+            [strongself reload];
+            [strongself timerDealloc];
+            [strongself uiUpdateTimeSinceLastRefresh: NULL];
         }];
     }
 }

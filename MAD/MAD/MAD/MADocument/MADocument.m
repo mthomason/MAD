@@ -958,10 +958,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                     [weakself.mainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
                     weakself.didRefresh = success;
                     
-                    [MADThread completeOnMainThread:^(BOOL success, id error) {
+                    if ([NSThread isMainThread]) {
                         completion(success, error);
-                    } withObject:error andSuccess:success];
-                    
+                    } else {
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            completion(success, error);
+                        });
+                    }
                 }];
             }
         });
