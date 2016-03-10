@@ -114,12 +114,19 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @implementation MADViewerController
 
-//@dynamic document;
-
 #pragma mark - Dealloc
 
 - (void)dealloc {
-    [self timerDealloc];
+    _document = nil;
+    _lastCacheDate = nil;
+    if (_timerLabelTimeSinceRefreh != nil) {
+        if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
+            if ([_timerLabelTimeSinceRefreh isValid]) {
+                [_timerLabelTimeSinceRefreh invalidate];
+            }
+        }
+        _timerLabelTimeSinceRefreh = nil;
+    }
 }
 
 - (void)timerDealloc {

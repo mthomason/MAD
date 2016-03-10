@@ -39,7 +39,7 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 @dynamic view;
 
 - (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    _document = nil;
 }
 
 - (void)setCenter:(CGPoint)center {

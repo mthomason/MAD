@@ -41,7 +41,8 @@
 @implementation MADQueryBuilderSplitViewController
 
 - (void)dealloc {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    _viewControllerDelegate = nil;
+    _document = nil;
 }
 
 - (NSString *)title {

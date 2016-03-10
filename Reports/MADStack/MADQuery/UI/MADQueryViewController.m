@@ -139,8 +139,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - NSObject
 
 - (void)dealloc {
+    _document = nil;
     [MADQueryViewController deleteCoreDataCache];
-    
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIContentSizeCategoryDidChangeNotification
                                                   object: nil];

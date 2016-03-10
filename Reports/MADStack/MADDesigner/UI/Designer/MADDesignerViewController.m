@@ -185,6 +185,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @implementation MADDesignerViewController
 
 - (void)dealloc {
+    _document = nil;
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 

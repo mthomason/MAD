@@ -83,6 +83,11 @@ typedef void(^MTBlockResultVoid)(void);
 
 @implementation MADQueryVisualizationViewController
 
+- (void)dealloc {
+    _operationQueueCache.underlyingQueue = nil;
+    _document = nil;
+}
+
 #pragma mark - UIContainerViewControllerCallbacks
 
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods {
@@ -136,10 +141,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 #pragma mark - NSObject
-
-- (void)dealloc {
-    _operationQueueCache.underlyingQueue = nil;
-}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {

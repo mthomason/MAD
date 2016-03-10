@@ -12,7 +12,9 @@
 
 @implementation MADNavigationController
 
-- (void)dealloc { }
+- (void)dealloc {
+    _document = nil;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
