@@ -9,8 +9,6 @@
 #ifndef Reports_MTReportViewerReportPageViewController_h
 #define Reports_MTReportViewerReportPageViewController_h
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTPaper.h>
 #import "MTPrintingProtocol.h"

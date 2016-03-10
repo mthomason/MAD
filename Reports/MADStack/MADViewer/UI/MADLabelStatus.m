@@ -7,10 +7,11 @@
 //
 
 #import "MADLabelStatus.h"
+#import <UIKit/NSAttributedString.h>
 
-static NSString * const MADTextReadRecords = @"\nRead %@ records.";
-static NSString * const MADTextFormattingPage = @"Formatting page %@.";
-static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
+NSString * const MADTextReadRecords = @"\nRead %@ records.";
+NSString * const MADTextFormattingPage = @"Formatting page %@.";
+NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
 
 @interface MADLabelStatus ()
 
@@ -55,18 +56,10 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
     [self updateStatusWithPageNumber:localizedPageOfPages];
 }
 
-- (void)updateStatusWithTime:(NSString *)timeMessage {
-    if ([NSThread isMainThread] == NO) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateStatusWithTime:timeMessage];
-        });
-    } else {
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
-        self.statusMessage1 = attributedString;
-        [self updateStatusLabel: self.statusMessage1
-             recordsReadMessage: self.statusMessage2
-        andNumberOfPagesMessage: self.statusMessage3];
-    }
+- (void)updateDisplay {
+    [self updateStatusLabel: self.statusMessage1
+         recordsReadMessage: self.statusMessage2
+    andNumberOfPagesMessage: self.statusMessage3];
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
@@ -84,34 +77,38 @@ static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
 }
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
-    if ([NSThread isMainThread] == NO) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateStatusWithRecordsRead:message];
-        });
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
+    self.statusMessage2 = attributedString;
+    if ([NSThread isMainThread]) {
+        [self updateDisplay];
     } else {
-        
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
-        self.statusMessage2 = attributedString;
-        [self updateStatusLabel: self.statusMessage1
-             recordsReadMessage: self.statusMessage2
-        andNumberOfPagesMessage: self.statusMessage3];
-        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateDisplay];
+        });
     }
 }
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
-    if ([NSThread isMainThread] == NO) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateStatusWithPageNumber:message];
-        });
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
+    self.statusMessage3 = attributedString;
+    if ([NSThread isMainThread]) {
+        [self updateDisplay];
     } else {
-        
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
-        self.statusMessage3 = attributedString;
-        [self updateStatusLabel: self.statusMessage1
-             recordsReadMessage: self.statusMessage2
-        andNumberOfPagesMessage: self.statusMessage3];
-        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateDisplay];
+        });
+    }
+}
+
+- (void)updateStatusWithTime:(NSString *)timeMessage {
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
+    self.statusMessage1 = attributedString;
+    if ([NSThread isMainThread]) {
+        [self updateDisplay];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateDisplay];
+        });
     }
 }
 

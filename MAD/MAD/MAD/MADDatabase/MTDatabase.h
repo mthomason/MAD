@@ -11,7 +11,8 @@
 #ifndef Reports_MTDatabase_h
 #define Reports_MTDatabase_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
 
 extern NSString * const MTSqlFrom;
 

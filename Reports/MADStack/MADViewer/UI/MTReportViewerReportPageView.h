@@ -9,9 +9,7 @@
 #ifndef Reports_MTReportViewerReportPageView_h
 #define Reports_MTReportViewerReportPageView_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MTReportViewerPrintPageRenderer.h>
-#import "MTPrintingProtocol.h"
+#import <UIKit/UIView.h>
 
 @class MTReportViewerPrintPageRenderer;
 

@@ -15,7 +15,6 @@
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseConnection.h"
-#import "MTDatabaseTable.h"
 #import "MTKeyChain.h"
 #import "MTNotificationDidReadRows.h"
 

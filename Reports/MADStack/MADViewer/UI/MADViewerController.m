@@ -11,11 +11,12 @@
 #endif
 
 #import "MADViewerController.h"
+#import "MUIViewControllerDelegate.h"
+
 #import <CoreData/CoreData.h>
 
-#import <MADDataStructures/MTPair.h>
-
 #import <MAD/MADConstants.h>
+#import <MAD/MTReportViewerPrintPageRenderer.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTReportFormatter.h>
@@ -28,12 +29,9 @@
 #import <MAD/MTKeyChain.h>
 
 #import <MADFoundation/MTDataTable.h>
-
-#import <MAD/MTPaper.h>
+#import <MADDataStructures/MTPair.h>
 
 #import "MTActivityReportPrintPreview.h"
-
-#import "MUIViewControllerDelegate.h"
 
 #import "MTReportViewerReportPageView.h"
 #import "MTReportViewerReportPageViewController.h"
