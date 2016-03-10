@@ -940,7 +940,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
     
     MADocument *weakself = self;
-    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(bgQueue, ^{
         [weakself initalizeMainDataTable];
         RptqDocument *document = [self activeDocumentModel];
