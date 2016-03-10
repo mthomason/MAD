@@ -87,9 +87,8 @@ NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
 
 - (instancetype)initWithFileCoordinator:(id<MADFileCoordinator>)fileCoordinator
                           delegateQueue:(NSOperationQueue *)delegateQueue sortComparator:(NSComparisonResult (^)(MADMetaData *, MADMetaData *))sortComparator {
-    self = [super init];
-    
-    if (self) {
+
+    if (self = [super init]) {
         
         _fileCoordinator = fileCoordinator;
         

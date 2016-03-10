@@ -105,8 +105,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 @implementation MADQueryViewController
 
-@synthesize document;
-
 #pragma mark - Exit
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }

@@ -32,6 +32,7 @@ extern const CGFloat MADSchemaViewDefaultHeight;
 @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
+@property (nonatomic, weak) MADocument *document;
 
 - (void)setCenter:(CGPoint)center;
 - (void)setBounds:(CGRect)bounds;

@@ -36,7 +36,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 @implementation MTDatabaseDriverSelectorViewController
 
 - (NSURL *)documentDirectory {
-    NSURL *url = [self.saveFileDelegate documentDirectory].copy;
+    NSURL *url = [self.saveFileDelegate documentDirectory];
     return  url;
 }
 

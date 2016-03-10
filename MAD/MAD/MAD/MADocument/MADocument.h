@@ -12,6 +12,7 @@
 #define Reports_MADocument_h
 
 #import <UIKit/UIManagedDocument.h>
+#import <UIKit/UIPrintInteractionController.h>
 #import <MAD/MTReportFormatterDataSource.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
@@ -34,17 +35,16 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class MADocumentState, NSManagedObjectID, UIImage, UIPrintPageRenderer, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
         MTDataTableFast, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper;
+        RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper, MTReportViewerPrintPageRenderer;
 
 @protocol MADActivityProtocol;
 
 @interface MADocument : UIManagedDocument
-<MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
+    <UIPrintInteractionControllerDelegate, MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
 
 @property (nonatomic, assign) BOOL limitResultsDesignMode;
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (readonly) UIPrintPageRenderer *printerPrintPageRender;
 
 @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
 
@@ -60,6 +60,9 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 @property (nonatomic, strong, readonly) MTPaper *paper;
+
+
+- (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (BOOL)isRetnaDisplay;

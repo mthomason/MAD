@@ -40,8 +40,6 @@
 
 @implementation MADQueryBuilderSplitViewController
 
-@synthesize document = _document;
-
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }

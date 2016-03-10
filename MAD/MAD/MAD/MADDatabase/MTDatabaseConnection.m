@@ -179,7 +179,8 @@ NSString * const MADStringEmpty = @"";
 }
 
 - (NSString *)connectionString {
-    return [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
+    NSString *connectionString = [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
+    return connectionString;
 }
 
 - (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion {

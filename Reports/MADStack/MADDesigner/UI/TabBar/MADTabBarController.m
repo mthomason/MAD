@@ -29,8 +29,6 @@ const int8_t MADIndexViewer = 2;
 
 @implementation MADTabBarController
 
-@synthesize document;
-
 - (void)dealloc {
     NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }

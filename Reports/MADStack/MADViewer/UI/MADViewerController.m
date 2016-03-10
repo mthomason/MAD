@@ -12,7 +12,9 @@
 
 #import "MADViewerController.h"
 #import <CoreData/CoreData.h>
+
 #import <MADDataStructures/MTPair.h>
+
 #import <MAD/MADConstants.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
@@ -24,7 +26,9 @@
 #import <MAD/MTNotificationDidFormatPage.h>
 #import <MAD/MTNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
+
 #import <MADFoundation/MTDataTable.h>
+
 #import <MAD/MTPaper.h>
 
 #import "MTActivityReportPrintPreview.h"
@@ -35,7 +39,6 @@
 #import "MTReportViewerReportPageViewController.h"
 
 #import "MADSliderPageVertical.h"
-#import "MADProgressView.h"
 #import "MADLabelStatus.h"
 #import "MADNavigationBarTitleView.h"
 
@@ -67,7 +70,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTTabBarImageProtocol,
         MTActivityItemProviderDelegate>
 
-
 @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
 
 #pragma mark - Attributes
@@ -84,14 +86,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark User Interface
 
-@property (nonatomic, strong) MADPageSlider *toolbarSlider;
-@property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
-@property (nonatomic, strong) MADLabelStatus *labelStatus;
-@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, weak) MADPageSlider *toolbarSlider;
+@property (nonatomic, weak) MADLabelStatus *labelStatus;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
-@property (nonatomic, strong) UIProgressView *progressView; // FIXME: Not implmented.
 
+@property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
+@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 #pragma mark Controllers
 
@@ -110,18 +110,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @property (nonatomic, assign) bool pageIsAnimating;
 @property (nonatomic, assign) bool updatingOfTimerIsPaused;
 
-@property (nonatomic, strong) NSNumberFormatter *numberFormatterSpelledOut;
-
 @end
 
 @implementation MADViewerController
 
-@synthesize document;
+@dynamic document;
 
 #pragma mark - Dealloc
 
 - (void)dealloc {
-    _numberFormatterSpelledOut = nil;
     [self timerDealloc];
 }
 
@@ -180,30 +177,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)initalize {
     
-    UIProgressView *progressView = [[MADProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-    progressView.progress = 0.0000f;
-    self.progressView = progressView;
-
-    UIBarButtonItem *barButtonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
-    self.barButtonItemRefresh = barButtonRefresh;
-
-    MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
-    self.labelStatus = labelStatus;
-    
     self.activityExporting = false;
     self.didRefreshBeforeReaload = false;
     
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
-    pageSlider.sliderDelegate = self;
-    self.toolbarSlider = pageSlider;
     
     MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
     self.dateTimeFormatter = dateTimeFormatter;
 
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
 
-//    self.transitionStyle = UIPageViewControllerTransitionStyleScroll;
 }
 
 #pragma mark - MADPageSliderDelegate
@@ -220,10 +202,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSNumberFormatter *numberFormatterSpelledOut = [NSNumberFormatter new];
-    numberFormatterSpelledOut.numberStyle = NSNumberFormatterSpellOutStyle;
-    self.numberFormatterSpelledOut = numberFormatterSpelledOut;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
@@ -253,14 +231,20 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSArray *blankPageArray = @[blankPage];
     [self setViewControllers: blankPageArray direction: UIPageViewControllerNavigationDirectionForward
                     animated: NO completion: ^(BOOL finished) { }];
-    
-    [self.view addSubview:self.toolbarSlider];
-    [self.view bringSubviewToFront:self.toolbarSlider];
+
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    MADPageSlider *pageSlider = [[MADPageSlider alloc] initWithEffect:effect];
+    pageSlider.sliderDelegate = self;
+    [self.view addSubview:pageSlider];
+    [self.view bringSubviewToFront:pageSlider];
+    self.toolbarSlider = pageSlider;
     
     NSMutableArray *toolbarItems = self.toolbarItems.mutableCopy;
-    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:self.labelStatus];
+    MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
+    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
     [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
+    self.labelStatus = labelStatus;
     
 }
 
@@ -350,25 +334,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }];
 }
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
-              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    
-    [super willTransitionToTraitCollection: newCollection
-                 withTransitionCoordinator: coordinator];
-    
-    
-}
-
-#pragma mark - add controls
-
-- (void)addProgressViewToView {
-    self.progressView.progress = 0.0000f;
-    [self.view addSubview:self.progressView];
-    [self.view bringSubviewToFront:self.progressView];
-}
-
-- (void)removeProgressViewFromView {
-    [self.progressView removeFromSuperview];
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
 }
 
 #pragma mark - properties
@@ -495,13 +462,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     self.toolbarSlider.enabled = YES;
-    self.barButtonItemRefresh.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
     self.refreshing = false;
     self.updatingOfTimerIsPaused = false;
     
-    [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
-    
+    UIBarButtonItem *barButtonItemRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
+    barButtonItemRefresh.enabled = YES;
+    [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItemRefresh animated:YES];
 }
 
 - (void)setDisplayInactive {
@@ -517,7 +484,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     self.toolbarSlider.enabled = NO;
-    self.barButtonItemRefresh.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     self.refreshing = true;
     self.updatingOfTimerIsPaused = false;
@@ -526,8 +492,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;
     activityIndicator.hidesWhenStopped = NO;
-    
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    
     [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem animated: YES];
     
 }
@@ -574,10 +540,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
                     if (sharedController) {
                         sharedController.delegate = weakself;
-                        UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
+                        
+                        MTReportViewerPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
+                        
                         __weak MADViewerController *weakself = self;
+                        
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
                             [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColorEverydayApps newColorAnalogous4];
                             [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorRed];
@@ -589,6 +558,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                 [weakself enableTabBarItems];
                             }];
                         }
+                        
+                        
                     }
                 }
                 weakself.toolbarSlider.enabled = YES;
@@ -643,8 +614,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
-        
-        __weak __block MADViewerController *weakself = self;
+        NSString *connectionString = self.document.mainDatabase.databaseConnection.connectionString;
+        __block MADViewerController * __weak weakself = self;
         [self.document refresh:^(BOOL success, NSError *error) {
             __strong MADViewerController *strongself = weakself;
             
@@ -653,12 +624,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             } else {
                 
                 __weak MADViewerController *weakself2 = strongself;
+                
                 [NSError presentError: error
                      onViewController: strongself
                            completion:^(BOOL success) {
+                               
                                __strong MADViewerController *strongself2 = weakself2;
-                               [[MTKeyChain sharedObject] deleteKey: self.document.mainDatabase.databaseConnection.connectionString
+                               [[MTKeyChain sharedObject] deleteKey: connectionString
                                                 usingViewController: strongself2];
+                               
                            }];
                 
                 
@@ -787,7 +761,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageAttributes.numberOfPages = self.numberOfPages;
     
     // FIXME: Don't reset the display size to the paper size.
-    pageAttributes.contentSizeInital = document.paper.paperSize;
+    pageAttributes.contentSizeInital = self.document.paper.paperSize;
     pageAttributes.zoomScaleInital = 1.0000f;
     pageAttributes.contentScaleFactor = 0.0;
     
@@ -879,7 +853,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             pageAttributes.contentSizeInital = pageViewControllerLast.documentScroller.contentSize;
             pageAttributes.contentScaleFactor = pageViewControllerLast.documentView.contentScaleFactor;
 
-            result = [[MADReportPageViewController alloc] initWithDocument:document andPageAttributtes:pageAttributes];
+            result = [[MADReportPageViewController alloc] initWithDocument:self.document andPageAttributtes:pageAttributes];
             result.delegate = self;
             result.view.backgroundColor = self.view.backgroundColor;
             result.view.frame = self.view.bounds;
@@ -911,7 +885,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             pageAttributes.contentSizeInital = pageViewControllerPrevious.documentScroller.contentSize;
             pageAttributes.contentScaleFactor = pageViewControllerPrevious.documentView.contentScaleFactor;
 
-            result = [[MADReportPageViewController alloc] initWithDocument:document andPageAttributtes:pageAttributes];
+            result = [[MADReportPageViewController alloc] initWithDocument:self.document andPageAttributtes:pageAttributes];
             result.view.backgroundColor = self.view.backgroundColor;
 
             result.delegate =  self;

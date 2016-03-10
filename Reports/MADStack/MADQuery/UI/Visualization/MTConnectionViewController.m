@@ -161,10 +161,10 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-    NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-    NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL:desiredUrl];
+    NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
+    NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
     
-    MADocument *doc = [[MADocument alloc] initWithFileURL:uniqueURL];
+    MADocument *doc = [[MADocument alloc] initWithFileURL: uniqueURL];
     self.docToSave = doc;
     [self.docToSave removeGuts];
     
@@ -176,7 +176,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     
     
     __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
     
     [self.databaseConnection testConnection:^(BOOL success, NSArray *errors) { //Not always removing credentsals when connection fails.
         

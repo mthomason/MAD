@@ -11,7 +11,6 @@
 #endif
 
 #import "MADocument.h"
-#import <UIKit/UIPrintInteractionController.h>
 #import <MADFoundation/NSURL+Document.h>
 #import <Foundation/NSException.h>
 
@@ -132,7 +131,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
 @interface MADocument ()
-    <UIPrintInteractionControllerDelegate, MTDatabaseProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
+    <MTDatabaseProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
 
 @property (nonatomic, strong) UIImage *thumbnail;
 
@@ -938,32 +937,38 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
-    
-    MADocument *weakself = self;
-    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(bgQueue, ^{
-        [weakself initalizeMainDataTable];
-        RptqDocument *document = [self activeDocumentModel];
-        [weakself initalizeMainQuery:document];
-        [weakself initalizeReportFormatter];
-        weakself.mainQuery.database.delegate = weakself;
+    @autoreleasepool {
 
-        @autoreleasepool {
+        MADAppDelegate delegate = [UIApplication AppDelegate];
+        NSString *groupIdentifier = [delegate groupIdentifier];
+
+        [self initalizeMainDataTable];
+        RptqDocument *document = [self activeDocumentModel];
+        [self initalizeMainQuery:document];
+        [self initalizeReportFormatter];
+        self.mainQuery.database.delegate = self;
+
+        MADocument *weakself = self;
+        dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_async(bgQueue, ^{
             
-            [self.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
-                
-                MADAppDelegate delegate = [UIApplication AppDelegate];
-                [weakself.mainDataTable cacheForGroupIdentifier:[delegate groupIdentifier]];
-                weakself.didRefresh = success;
-                
-                [MADThread completeOnMainThread:^(BOOL success, id error) {
-                    completion(success, error);
-                } withObject:error andSuccess:success];
-                
-            }];
             
-        }
-    });
+            @autoreleasepool {
+                
+                [weakself.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
+                    
+                    [weakself.mainDataTable cacheForGroupIdentifier:groupIdentifier];
+                    weakself.didRefresh = success;
+                    
+                    [MADThread completeOnMainThread:^(BOOL success, id error) {
+                        completion(success, error);
+                    } withObject:error andSuccess:success];
+                    
+                }];
+            }
+        });
+
+    }
     
 }
 
@@ -1023,7 +1028,7 @@ static NSString * const MADDocumentErrorDomain = @"MADocument";
     return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.mainDatabase];
 }
 
-- (UIPrintPageRenderer *)printerPrintPageRender {
+- (MTReportViewerPrintPageRenderer *)printerPrintPageRender {
     MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
                                                                               layout: self
                                                                              options: MTReportFormatterOptionsMargin];

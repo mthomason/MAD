@@ -83,8 +83,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 @implementation MADQueryVisualizationViewController
 
-@synthesize document;
-
 #pragma mark - UIContainerViewControllerCallbacks
 
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods {

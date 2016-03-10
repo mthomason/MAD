@@ -36,7 +36,6 @@ const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
 @implementation MADQueryVisualizationSchemaViewController
 
-@synthesize document;
 @dynamic view;
 
 - (void)dealloc {

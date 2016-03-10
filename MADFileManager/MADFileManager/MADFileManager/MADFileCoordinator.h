@@ -18,7 +18,7 @@
 @protocol MADFileCoordinator <NSObject>
 
 @property (nonatomic, weak) id<MADFileCoordinatorDelegate> delegate;
-@property (nonatomic, strong, readonly) NSURL *documentsDirectory;
+@property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
 
 - (void)startQuery;
 - (void)stopQuery;
