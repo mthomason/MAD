@@ -51,8 +51,7 @@ static inline NSString *LocalizedFormatMonths(NSInteger i) {
     return i == 1 ? NSLocalizedString(FormatMonth, FormatMonth) : NSLocalizedString(FormatMonths, FormatMonths);
 }
 
-static inline NSString *LocalizedFormatFormatMinutes(NSInteger i);
-static inline NSString *LocalizedFormatFormatMinutes(NSInteger i) {
++ (NSString *)LocalizedFormatFormatMinutes:(NSInteger)i {
     return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) : NSLocalizedString(FormatMinutes, FormatMinutes);
 }
 
@@ -152,14 +151,15 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     
     if ((forceInclude && aDateComponents.hour != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
-            
-            NSNumber *hour = @(ABS(aDateComponents.hour));
-            NSString *spelledOut = [self.formatter stringFromNumber: hour];
-            format = aDateComponents.hour == 1 ? NSLocalizedString(FormatHour, FormatHour) : NSLocalizedString(FormatHours, FormatHours);
-            [text appendFormat:format, spelledOut];
-            printedOne = true;
-            forceInclude = true;
-            resultResolution = MTDateResolutionHour;
+            @autoreleasepool {
+                NSNumber *hour = @(ABS(aDateComponents.hour));
+                NSString *spelledOut = [self.formatter stringFromNumber: hour];
+                format = aDateComponents.hour == 1 ? NSLocalizedString(FormatHour, FormatHour) : NSLocalizedString(FormatHours, FormatHours);
+                [text appendFormat:format, spelledOut];
+                printedOne = true;
+                forceInclude = true;
+                resultResolution = MTDateResolutionHour;
+            }
         } else {
             forceInclude = false;
         }
@@ -168,14 +168,15 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     
     if ((forceInclude && aDateComponents.minute != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
-            
-            NSNumber *minute = @(ABS(aDateComponents.minute));
-            NSString *spelledOut = [self.formatter stringFromNumber: minute];
-            NSString *format = LocalizedFormatFormatMinutes(aDateComponents.minute);
-            [text appendFormat:format, spelledOut];
-            printedOne = true;
-            forceInclude = true;
-            resultResolution = MTDateResolutionMinute;
+            @autoreleasepool {
+                NSNumber *minute = @(ABS(aDateComponents.minute));
+                NSString *spelledOut = [self.formatter stringFromNumber: minute];
+                NSString *format = [MADDateFromTimeFormatter LocalizedFormatFormatMinutes:aDateComponents.minute];
+                [text appendFormat:format, spelledOut];
+                printedOne = true;
+                forceInclude = true;
+                resultResolution = MTDateResolutionMinute;
+            }
         } else {
             forceInclude = false;
         }
@@ -184,14 +185,15 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     
     if ((forceInclude && aDateComponents.second != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
-            
-            NSNumber *second = @(ABS(aDateComponents.second));
-            NSString *spelledOut = [self.formatter stringFromNumber: second];
-            NSString *format = LocalizedFormatSeconds(aDateComponents.second);
-            [text appendFormat:format, spelledOut];
-            printedOne = true;
-            forceInclude = true;
-            resultResolution = MTDateResolutionSecond;
+            @autoreleasepool {
+                NSNumber *second = @(ABS(aDateComponents.second));
+                NSString *spelledOut = [self.formatter stringFromNumber: second];
+                NSString *format = LocalizedFormatSeconds(aDateComponents.second);
+                [text appendFormat:format, spelledOut];
+                printedOne = true;
+                forceInclude = true;
+                resultResolution = MTDateResolutionSecond;
+            }
         } else {
             forceInclude = false;
         }

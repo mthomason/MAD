@@ -21,7 +21,10 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [[UIButton appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
+        UIColor *white = [UIColor whiteColor];
+        Class searchBar = [UISearchBar class];
+        [[UIButton appearanceWhenContainedIn: searchBar, nil] setTintColor:white];
+        
     });
 }
 

@@ -340,6 +340,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
             NSArray *rowData = [NSArray arrayWithArray: row];
             self.bulkInsertQuery.rowData = rowData;
+            
             NSString * __strong sql = [[NSString alloc] initWithString:[self.bulkInsertQuery getSqlWithError:nil]];
             NSArray * __strong binaryBindings = [[NSArray alloc] initWithArray:self.bulkInsertQuery.binaryBindings];
             NSArray * __strong fieldKeys = [[NSArray alloc] initWithArray:self.bulkInsertQuery.fieldKeys];
@@ -347,41 +348,43 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
             MTDatabaseSqlite3 * dbForInserts = ((MTDatabaseSqlite3 *)self.databaseForInserts);
             struct sqlite3 *db = dbForInserts.database;
             
-            NSArray *__weak wbinaryBindings = [NSArray arrayWithArray:binaryBindings];
-            NSArray *__weak wfieldKeys = [NSArray arrayWithArray:fieldKeys];
-            NSString *__weak wsql = [NSString stringWithString:sql];
+//            NSArray *__weak wbinaryBindings = [NSArray arrayWithArray:binaryBindings];
+//            NSArray *__weak wfieldKeys = [NSArray arrayWithArray:fieldKeys];
+//            NSString *__weak wsql = [NSString stringWithString:sql];
             //MTDataTableFast *__weak wself = self;
+            
             dispatch_queue_t q = self.queueBulkAdd;
-            dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            dispatch_async(q, ^{
                 //MTDataTableFast *__strong sself = wself;
                 
-                NSArray * sbinaryBindings = [[NSArray alloc] initWithArray:wbinaryBindings];
-                NSArray * sfieldKeys = [[NSArray alloc] initWithArray:wfieldKeys];
-                NSString * ssql = [[NSString alloc] initWithString:wsql];
+//                NSArray * sbinaryBindings = [[NSArray alloc] initWithArray:wbinaryBindings];
+//                NSArray * sfieldKeys = [[NSArray alloc] initWithArray:wfieldKeys];
+//                NSString * ssql = [[NSString alloc] initWithString:wsql];
                 
-                NSArray *__weak wwbinaryBindings = [NSArray arrayWithArray:sbinaryBindings];
-                NSArray *__weak wwfieldKeys = [NSArray arrayWithArray:sfieldKeys];
-                NSString *__weak wwssql = [NSString stringWithString:ssql];
+//                NSArray *__weak wwbinaryBindings = [NSArray arrayWithArray:sbinaryBindings];
+//                NSArray *__weak wwfieldKeys = [NSArray arrayWithArray:sfieldKeys];
+//                NSString *__weak wwssql = [NSString stringWithString:ssql];
 
-                dispatch_async(q, ^{
-                        NSArray *__strong s1binaryBindings = [NSArray arrayWithArray:wwbinaryBindings];
-                        NSArray *__strong s1fieldKeys = [NSArray arrayWithArray:wwfieldKeys];
-                        NSString *__strong s1sql = [NSString stringWithString:wwssql];
-                        [MTDatabaseSqlite3 executeQueryWithSql:s1sql
+                //dispatch_async(q, ^{
+//                        NSArray *__strong s1binaryBindings = [NSArray arrayWithArray:wwbinaryBindings];
+//                        NSArray *__strong s1fieldKeys = [NSArray arrayWithArray:wwfieldKeys];
+//                        NSString *__strong s1sql = [NSString stringWithString:wwssql];
+                        [MTDatabaseSqlite3 executeQueryWithSql:sql
                                                       database:db
-                                           queryBinaryBindings:s1binaryBindings
-                                                queryFieldKeys:s1fieldKeys
+                                           queryBinaryBindings:binaryBindings
+                                                queryFieldKeys:fieldKeys
                                      queryPartOfTransactionSet:YES];
-                        s1sql = nil;
-                        s1fieldKeys = nil;
-                        s1binaryBindings = nil;
+                        //s1sql = nil;
+                        //s1fieldKeys = nil;
+                        //s1binaryBindings = nil;
                     
-                });
+                //});
             });
 
-            wsql = nil;
-            wfieldKeys = nil;
-            wbinaryBindings = nil;
+            //wsql = nil;
+            //wfieldKeys = nil;
+            //wbinaryBindings = nil;
+            rowData = nil; // release?
             sql = nil;
             fieldKeys = nil;
             binaryBindings = nil;
