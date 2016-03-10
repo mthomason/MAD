@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITextInput.h>
 
 @interface MADTextPosition : UITextPosition
 

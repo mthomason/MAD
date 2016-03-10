@@ -257,7 +257,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
                                                                                     error: &error];
         if (error == nil) {
             NSDate *lastD = [attributes fileModificationDate];
-            self.pageViewAttributes.reportLastCacheDate = lastD;
+            self.pageViewAttributes.reportLastCacheDate = lastD.copy;
         }
     }
     return self.pageViewAttributes.reportLastCacheDate;

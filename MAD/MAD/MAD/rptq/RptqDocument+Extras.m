@@ -53,8 +53,6 @@
 #import "MTErrorContainer.h"
 #import "MTDatabaseTable.h"
 
-#import "MTAggregateFunctionInputType.h"
-
 @implementation RptqDocument (Extras)
 
 #pragma mark - Overrides

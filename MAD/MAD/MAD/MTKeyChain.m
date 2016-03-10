@@ -352,6 +352,7 @@ static MTKeyChain *sharedSingleton = nil;
     
     self.credentialsUsername = username;
     
+    
     UIAlertController *prompt = [UIAlertController promptForPasswordGivenUsername:username password:^(UITextField *textField) {
         textField.delegate = self;
     } submit:^(NSString *password) {

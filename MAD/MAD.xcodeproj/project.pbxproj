@@ -251,7 +251,6 @@
 		4CC282461BADE81A00775B72 /* MTActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282091BADE81A00775B72 /* MTActivityIndicator.m */; };
 		4CC282471BADE81A00775B72 /* MTActivityItemProviderPdf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282481BADE81B00775B72 /* MTActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */; };
-		4CC282491BADE81B00775B72 /* MTAggregateFunctionInputType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820C1BADE81A00775B72 /* MTAggregateFunctionInputType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820D1BADE81A00775B72 /* MTAlignment.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282651BADE81E00775B72 /* MTDataFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282281BADE81A00775B72 /* MTDataFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282661BADE81E00775B72 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282291BADE81A00775B72 /* MTDataFormatter.m */; };
@@ -638,7 +637,6 @@
 		4CC282091BADE81A00775B72 /* MTActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTActivityIndicator.m; path = MAD/MTActivityIndicator.m; sourceTree = "<group>"; };
 		4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTActivityItemProviderPdf.h; path = MAD/MTActivityItemProviderPdf.h; sourceTree = "<group>"; };
 		4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTActivityItemProviderPdf.m; path = MAD/MTActivityItemProviderPdf.m; sourceTree = "<group>"; };
-		4CC2820C1BADE81A00775B72 /* MTAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAggregateFunctionInputType.h; path = MAD/MTAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4CC2820D1BADE81A00775B72 /* MTAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAlignment.h; path = MAD/MTAlignment.h; sourceTree = "<group>"; };
 		4CC282281BADE81A00775B72 /* MTDataFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataFormatter.h; path = MAD/MTDataFormatter.h; sourceTree = "<group>"; };
 		4CC282291BADE81A00775B72 /* MTDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDataFormatter.m; path = MAD/MTDataFormatter.m; sourceTree = "<group>"; };
@@ -1073,7 +1071,6 @@
 				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
 				4CC2820D1BADE81A00775B72 /* MTAlignment.h */,
 				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
-				4CC2820C1BADE81A00775B72 /* MTAggregateFunctionInputType.h */,
 				4CC281F21BADE80500775B72 /* MADConstants.h */,
 				4CC281F31BADE80500775B72 /* MADConstants.m */,
 				4CC282361BADE81A00775B72 /* MADFont.h */,
@@ -1470,7 +1467,6 @@
 				4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */,
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */,
-				4CC282491BADE81B00775B72 /* MTAggregateFunctionInputType.h in Headers */,
 				4C401E291BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h in Headers */,
 				4C401DC11BAE3BD600BAE5FC /* MTQueryCacheDeleteAllFromTable.h in Headers */,
 				4C401D381BAE3AF800BAE5FC /* MTPaperA9.h in Headers */,

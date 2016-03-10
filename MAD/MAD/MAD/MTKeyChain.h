@@ -9,10 +9,11 @@
 #ifndef MAD_MTKeyChain_h
 #define MAD_MTKeyChain_h
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
 
 extern NSInteger const MTKeyErrorUserCanceled;
+
+@class UIViewController;
 
 @interface MTKeyChain : NSObject
 
