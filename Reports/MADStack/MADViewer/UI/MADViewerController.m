@@ -114,7 +114,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @implementation MADViewerController
 
-@dynamic document;
+//@dynamic document;
 
 #pragma mark - Dealloc
 

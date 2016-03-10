@@ -12,8 +12,6 @@
 
 @implementation MADNavigationController
 
-@dynamic document;
-
 - (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -103,8 +101,8 @@
 }
 
 - (void)setDocument:(MADocument *)document {
-    if (self.document != document) {
-        self.document = document;
+    if (_document != document) {
+        _document = document;
         for (UIViewController *viewController in self.viewControllers) {
             if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
                 ((id <MADocumentProtocol>) viewController).document = document;
