@@ -734,122 +734,122 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     
                     //SYBREAL, SYBFLTN, and SYBFLT8
                     
-                    NSInteger resultCountForType = [self numberOfItemsOfType:SYBREAL withCounters:counters];
+                    NSInteger resultCountForType = numberOfItemsOfType(SYBREAL, counters);
                     double sybRealBind[resultCountForType];
                     DBINT sybRealBindNull[resultCountForType];
                     
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBFLTN withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBFLTN, counters);
                     double sybFltNBind[resultCountForType];
                     DBINT sybFltNBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBFLT8 withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBFLT8, counters);
                     double sybFlt8Bind[resultCountForType];
                     DBINT sybFlt8BindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBINT1 withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBINT1, counters);
                     int sybInt1Bind[resultCountForType];
                     DBINT sybInt1BindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBINT2 withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBINT2, counters);
                     int sybInt2Bind[resultCountForType];
                     DBINT sybInt2BindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBINTN withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBINTN, counters);
                     long long sybIntnBind[resultCountForType];
                     DBINT sybIntnBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBINT4 withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBINT4, counters);
                     int sybInt4Bind[resultCountForType];
                     DBINT sybInt4BindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBINT8 withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBINT8, counters);
                     long long sybInt8Bind[resultCountForType];
                     DBINT sybInt8BindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBMONEY withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBMONEY, counters);
                     double sybMoneyBind[resultCountForType];
                     DBINT sybMoneyBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBMONEYN withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBMONEYN, counters);
                     double sybMoneyNBind[resultCountForType];
                     DBINT sybMoneyNBindNull[resultCountForType];
                     
-                    NSInteger resultCountForTypeSybNumericBindChar = [self numberOfItemsOfType:SYBNUMERIC withCounters:counters];
+                    NSInteger resultCountForTypeSybNumericBindChar = numberOfItemsOfType(SYBNUMERIC, counters);
                     char *sybNumericBindChar[resultCountForTypeSybNumericBindChar];
                     DBINT sybNumericBindNull[resultCountForTypeSybNumericBindChar];
                     for (NSInteger i=0; i<resultCountForTypeSybNumericBindChar; i++) {
                         sybNumericBindChar[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybCharBind = [self numberOfItemsOfType:SYBCHAR withCounters:counters];
+                    NSInteger resultCountForTypeSybCharBind = numberOfItemsOfType(SYBCHAR, counters);
                     char *sybCharBind[resultCountForTypeSybCharBind];
                     DBINT sybCharBindNull[resultCountForTypeSybCharBind];
                     for (NSInteger i=0; i<resultCountForTypeSybCharBind; i++) {
                         sybCharBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybVarCharBind = [self numberOfItemsOfType:SYBVARCHAR withCounters:counters];
+                    NSInteger resultCountForTypeSybVarCharBind = numberOfItemsOfType(SYBVARCHAR, counters);
                     char *sybVarCharBind[resultCountForTypeSybVarCharBind];
                     DBINT sybVarCharBindNull[resultCountForTypeSybVarCharBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
                         sybVarCharBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybnVarCharBind = [self numberOfItemsOfType:SYBNVARCHAR withCounters:counters];
+                    NSInteger resultCountForTypeSybnVarCharBind = numberOfItemsOfType(SYBNVARCHAR, counters);
                     char *sybnVarCharBind[resultCountForTypeSybnVarCharBind];
                     DBINT sybnVarCharBindNull[resultCountForTypeSybnVarCharBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
                         sybnVarCharBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybTextBind = [self numberOfItemsOfType:SYBTEXT withCounters:counters];
+                    NSInteger resultCountForTypeSybTextBind = numberOfItemsOfType(SYBTEXT, counters);
                     char *sybTextBind[resultCountForTypeSybTextBind];
                     DBINT sybTextBindNull[resultCountForTypeSybTextBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
                         sybTextBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybnTextBind = [self numberOfItemsOfType:SYBNTEXT withCounters:counters];
+                    NSInteger resultCountForTypeSybnTextBind = numberOfItemsOfType(SYBNTEXT, counters);
                     char *sybnTextBind[resultCountForTypeSybnTextBind];
                     DBINT sybnTextBindNull[resultCountForTypeSybnTextBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
                         sybnTextBind[i] = '\0';
                     }
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBDATETIME withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBDATETIME, counters);
                     DBDATETIME *sybDateTimeBind[resultCountForType];
                     DBINT sybDateTimeBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBDATETIME4 withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBDATETIME4, counters);
                     DBDATETIME4 *sybDateTime4Bind[resultCountForType];
                     DBINT sybDateTime4BindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBDATETIMN withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBDATETIMN, counters);
                     DBDATETIME *sybDateTimnBind[resultCountForType];
                     DBINT sybDateTimnBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBIMAGE withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBIMAGE, counters);
                     BYTE *sybImageBind[resultCountForType];
                     DBINT sybImageBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBBINARY withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBBINARY, counters);
                     DBINT sybBinaryBind[resultCountForType];
                     DBINT sybBinaryBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBVARBINARY withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBVARBINARY, counters);
                     //void *sybVarBinaryBind[resultCountForType];
                     DBINT sybVarBinaryBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBVOID withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBVOID, counters);
                     //void *sybVoidBind[resultCountForType];
                     DBINT sybVoidBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBBIT withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBBIT, counters);
                     BOOL sybBitBind[resultCountForType];
                     DBINT sybBitBindNull[resultCountForType];
                     
-                    resultCountForType = [self numberOfItemsOfType:SYBBITN withCounters:counters];
+                    resultCountForType = numberOfItemsOfType(SYBBITN, counters);
                     BOOL sybBitNBind[resultCountForType];
                     DBINT sybBitNBindNull[resultCountForType];
                     
@@ -1450,15 +1450,17 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 }
 
+static inline NSInteger numberOfItemsOfType(int type, NSMutableDictionary *counters);
+static inline NSInteger numberOfItemsOfType(int type, NSMutableDictionary *counters) {
+    NSNumber *key = @(type);
+    NSNumber * __autoreleasing counter = counters[key];
+    return counter ? counter.integerValue : 0;
+}
+
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
-    NSNumber *counter = counters[@(type)];
-    NSInteger resultCountForType;
-    if (counter) {
-        resultCountForType = [counter integerValue];
-    } else {
-        resultCountForType = 0;
-    }
-    return resultCountForType;
+    NSNumber *key = @(type);
+    NSNumber *counter = counters[key];
+    return counter ? counter.integerValue : 0;
 }
 
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr);
@@ -1493,7 +1495,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     
     LOGINREC *login;
     char hostname[30];
-    int max_len = 30;
+    size_t max_len = 30;
     
     
     /* Init the DB library */
@@ -1519,8 +1521,10 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             /* Initialize the login params in the structure */
             const char *u = [username cStringUsingEncoding:NSUTF8StringEncoding];
             const char *p = [password cStringUsingEncoding:NSUTF8StringEncoding];
-            const char *a = [[self.databaseConnection appname] cStringUsingEncoding:NSUTF8StringEncoding];
-            const char *n = [[self.databaseConnection database] cStringUsingEncoding:NSUTF8StringEncoding];
+            NSString *appName = [self.databaseConnection appname];
+            const char *a = [appName cStringUsingEncoding:NSUTF8StringEncoding];
+            NSString *connection = [self.databaseConnection database];
+            const char *n = [connection cStringUsingEncoding:NSUTF8StringEncoding];
             DBSETLUSER(login, u);
             DBSETLPWD(login, p);
             DBSETLAPP(login, a);
