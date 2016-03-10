@@ -80,8 +80,9 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)drawRect:(CGRect)rect {
     if (!self.drawBlankPage) {
-        MTReportViewerPrintPageRenderer *printPageRender = [self.delegatePage printPageRender];
-        [printPageRender drawPageAtIndex:self.delegatePage.pageNumber - 1 inRect:rect];
+        id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
+        MTReportViewerPrintPageRenderer *printPageRender = [delegatePage printPageRender];
+        [printPageRender drawPageAtIndex:delegatePage.pageNumber - 1 inRect:rect];
     }
 }
 
@@ -98,7 +99,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)displayPageCounterIndicator {
 
-    if ([self.delegatePage respondsToSelector:@selector(numberOfPages)]) {
+    id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
+    if ([delegatePage respondsToSelector:@selector(numberOfPages)]) {
         UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
                                                                       CGPointZero.y + PageCounterBuffer,
                                                                       PageCounterWidth,
@@ -112,8 +114,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
                                                                        PageCounterWidth, PageCounterHeight)];
         labelView.text = [NSString stringWithFormat: @"%lu of %lu",
-                          (unsigned long)[self.delegatePage pageNumber],
-                          (unsigned long)[self.delegatePage numberOfPages]];
+                          (unsigned long)[delegatePage pageNumber],
+                          (unsigned long)[delegatePage numberOfPages]];
         labelView.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f];
         labelView.textColor = [UIColor whiteColor];
         labelView.textAlignment = NSTextAlignmentCenter;
@@ -134,8 +136,10 @@ static const CGFloat PageCounterBuffer = 10.0000f;
                                     [UIView animateWithDuration:0.30000f delay:1.0000f
                                                         options:UIViewAnimationOptionCurveEaseOut animations:^{
                                                             numberView.alpha = 0.0000f;
-                                                        } completion:^(BOOL finished) {
-                                                            [numberView removeFromSuperview];
+                                                        } completion:^(BOOL animateFinished) {
+                                                            if (animateFinished) {
+                                                                [numberView removeFromSuperview];
+                                                            }
                                                         }];
                                 }
                             }];
@@ -186,16 +190,18 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)uiUpdateTimeSinceLastRefresh:(id)sender {
 
+    UILabel *timeSinceRefrehLabel = self.timeSinceRefrehLabel;
+    
     NSDate * _Nullable lastCacheDate = [self.delegatePage lastCacheDate];
     if (lastCacheDate == nil) {
         
         NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
-        self.timeSinceRefrehLabel.text = noCache;
+        timeSinceRefrehLabel.text = noCache;
         
     } else {
 
         MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:lastCacheDate];
-        self.timeSinceRefrehLabel.text = dateStringAndInterval.former;
+        timeSinceRefrehLabel.text = dateStringAndInterval.former;
         MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
         
         NSTimeInterval updateLabelInSeconds = [MADDateFromTimeFormatter timeIntervalForResolution:resolution];

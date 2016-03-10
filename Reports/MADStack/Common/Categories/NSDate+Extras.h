@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSUInteger, MTDateResolution) {
+typedef NS_ENUM(short, MTDateResolution) {
 	MTDateResolutionYear = 1,
 	MTDateResolutionMonth,
     MTDateResolutionWeek,

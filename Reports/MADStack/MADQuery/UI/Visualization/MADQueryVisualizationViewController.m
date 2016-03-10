@@ -211,17 +211,18 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self reloadDocument:self.document animated:YES];
+    MADocument *doc = self.document;
+    [self reloadDocument:doc animated:YES];
 
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextWillSave:)
                                                  name: NSManagedObjectContextWillSaveNotification
-                                               object: self.document.activeDocumentModel.managedObjectContext];
+                                               object: doc.activeDocumentModel.managedObjectContext];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextDidSave:)
                                                  name: NSManagedObjectContextDidSaveNotification
-                                               object: self.document.activeDocumentModel.managedObjectContext];
+                                               object: doc.activeDocumentModel.managedObjectContext];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -234,13 +235,15 @@ typedef void(^MTBlockResultVoid)(void);
     [self archiveCache];
     [self clearScreen];
     
+    MADocument *doc = self.document;
+
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextWillSaveNotification
-                                                  object: self.document.activeDocumentModel.managedObjectContext];
+                                                  object: doc.activeDocumentModel.managedObjectContext];
     
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextDidSaveNotification
-                                                  object: self.document.activeDocumentModel.managedObjectContext];
+                                                  object: doc.activeDocumentModel.managedObjectContext];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -398,11 +401,12 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark - Cache Operations
 
 - (void)updateCache {
-    if (self.document != nil) {
+    MADocument *doc = self.document;
+    if (doc != nil) {
         MADQueryVisualizationCacheData *cacheData = [[MADQueryVisualizationCacheData alloc] init];
         cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
         cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
-        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:self.document.activeDocumentModel.defaultDatabase.defaultQuery];
+        MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:doc.activeDocumentModel.defaultDatabase.defaultQuery];
         for (MTPair *pair in queryDef.topologicallySortedTables) {
             MTVertex *tableIdVertext = pair.former;
             if (tableIdVertext.object != nil) {
@@ -472,7 +476,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
-    UIWindow __weak *window = [[UIApplication sharedApplication] windows][0];
+    UIWindow *window = [[UIApplication sharedApplication] windows][0];
     gestureRecognizer.view.center = [window convertPoint: [gestureRecognizer locationInView:window]
                                                   toView: self.scrollView.contentView];
     [self didMoveFieldRect:self.controllersByObjectID[((MADManagedObjectView *)gestureRecognizer.view).objectIdTag]
@@ -596,7 +600,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)deleteQueryLink:(RptqQueryLinks *)deletedQueryLinks {
     NSMutableSet *orphanedQueryTables = [[NSMutableSet alloc] init];
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    MADocument *doc = self.document;
+    RptqDatabase *database = doc.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     for (RptqQueryTable *table in query.hasQueryTables) {
         BOOL orphaned = YES;
@@ -613,7 +618,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     [orphanedQueryTables minusSet:self.rootTables];  // Should only be one newly orphaned table.
     
-    RptqQueryLinks *deletedLink = (RptqQueryLinks *)[self.document.managedObjectContext objectWithID:deletedQueryLinks.objectID];
+    RptqQueryLinks *deletedLink = (RptqQueryLinks *)[doc.managedObjectContext objectWithID:deletedQueryLinks.objectID];
     
     for (RptqQueryTable *table in orphanedQueryTables) {
         MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:table.objectID];

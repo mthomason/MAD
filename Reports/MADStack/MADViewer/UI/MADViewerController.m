@@ -507,10 +507,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;
-    
-    [self.document.managedObjectContext save:&error];
+    MADocument *document = self.document;
+    [document.managedObjectContext save:&error];
     if (error != nil) {
-        [self.document.managedObjectContext save:&error];
+        [document.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish: self];
 }
@@ -943,6 +943,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)uiUpdateTimeSinceLastRefresh:(id)sender {
 
+    MADLabelStatus *labelStatus = self.labelStatus;
     MTDateResolution resolution;
     if (self.lastCacheDate == nil) {    // No Cache exist, so return quickly.
 
@@ -955,15 +956,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         if (self.lastCacheDate == nil) {    // Find last cache date
             NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
-            [self.labelStatus updateStatusWithTime:noCache];
+            [labelStatus updateStatusWithTime:noCache];
             return;
         }
         
     }
 
     MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:self.lastCacheDate];
-    [self.labelStatus updateStatusWithTime:dateStringAndInterval.former];
-    resolution = ((NSNumber *)dateStringAndInterval.latter).integerValue;
+    [labelStatus updateStatusWithTime:dateStringAndInterval.former];
+    resolution = ((NSNumber *)dateStringAndInterval.latter).shortValue;
 
     if (self.timerLabelTimeSinceRefreh != nil) {
         if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
@@ -985,9 +986,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         NSNumber *numberOfResults = @([self.document.mainDataTable numberOfRows]);
         [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
     } else {
-        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakSelf uiUpdateRecordsRead];
+            [self uiUpdateRecordsRead];
         });
     }
 }
@@ -1000,14 +1000,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)uiUpdateNumberOfPages:(NSUInteger)numberOfPages {
     if ([NSThread isMainThread]) {
-        if (round(self.toolbarSlider.maximumValue) != round(numberOfPages)) {
-            self.toolbarSlider.maximumValue = numberOfPages;
-        }
+        [self updateNumberOfPages:(NSUInteger)numberOfPages];
     } else {
-        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakSelf uiUpdateNumberOfPages:numberOfPages];
+            [self updateNumberOfPages:(NSUInteger)numberOfPages];
         });
+    }
+}
+
+- (void)updateNumberOfPages:(NSUInteger)numberOfPages {
+    MADPageSlider *slider = self.toolbarSlider;
+    if (round(slider.maximumValue) != round(numberOfPages)) {
+        slider.maximumValue = numberOfPages;
     }
     [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
 }

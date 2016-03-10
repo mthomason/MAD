@@ -1075,6 +1075,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             RptqDocumentObject *documentObject = updatedObject;
             NSDictionary *changes = [documentObject changedValues];
             
+            MADocument *doc = self.document;
             for (id change in changes) {
                 
                 if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))] ||
@@ -1084,7 +1085,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                     [change isEqualToString:NSStringFromSelector(@selector(paddingRight))]) {
                     
                     MADDesignerSectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
-                    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[section.objectIdTag];
+                    MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[section.objectIdTag];
                     MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
                         attributes.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);
@@ -1100,7 +1101,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                            [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     MADDesignerSectionView *section = [self getSectionViewForDocumentSection: documentObject.inSectionRow.inSection];
-                    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[section.objectIdTag];
+                    MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[section.objectIdTag];
                     MADSectionLayoutAttributes *attributes = layoutManager.items[documentObject.objectID];
                     if (attributes != nil) {
                         attributes.frame = CGRectMake(documentObject.originx.floatValue, documentObject.originy.floatValue, documentObject.size.width, documentObject.size.height);

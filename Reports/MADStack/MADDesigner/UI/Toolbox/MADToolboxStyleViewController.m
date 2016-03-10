@@ -348,19 +348,21 @@ static const CGFloat BorderWidth = 1.0000f;
     }
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+
     __weak UIControl *weakControl = control;
-    
     dispatch_async(queuePriorityBackground, ^{
-        
+        __strong UIControl *strongControl = weakControl;
+        __weak UIControl *weakControl2 = strongControl;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            __strong UIControl *strongControl2 = weakControl2;
             
-            weakControl.selected = select;
-            weakControl.highlighted = highlight;
+            strongControl2.selected = select;
+            strongControl2.highlighted = highlight;
             
-            if ([weakControl isKindOfClass:[UIButton class]]) {
-                weakControl.backgroundColor = backgroundColor;
+            if ([strongControl2 isKindOfClass:[UIButton class]]) {
+                strongControl2.backgroundColor = backgroundColor;
                 
-                weakControl.tintColor = titleColor;
+                strongControl2.tintColor = titleColor;
                 
                 [[(UIButton *)weakControl titleLabel] setTextColor:titleColor];
             }
@@ -706,7 +708,7 @@ static const CGFloat BorderWidth = 1.0000f;
     }
 }
 
-- (NSAttributedString *)fontSizeStringForSizeInPoints:(CGFloat)points {
+- (NSAttributedString *)fontSizeStringForSizeInPoints:(double)points {
     
     CGFloat pointSize = self.labelFontSize.font.pointSize;
     UIFont *boldFont = [UIFont boldSystemFontOfSize:pointSize];
@@ -731,12 +733,12 @@ static const CGFloat BorderWidth = 1.0000f;
     self.labelFontName.font = font;
     self.labelFontName.text = familyName;
 
+    MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
-        [documentObject setFontname:familyName];
+        RptqDocumentObject *documentObject = [doc.managedObjectContext objectRegisteredForID:objectId];
+        documentObject.fontname = familyName;
     }
-    [self.document saveContext];
+    [doc saveContext];
 
 }
 
@@ -758,12 +760,13 @@ static const CGFloat BorderWidth = 1.0000f;
     }
     [self setStateInControl:self.buttonBold forState:self.controlStateBold];
     
+    MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
         NSNumber *boldWrapper = @(ControlStateIsOn(self.controlStateBold));
         documentObject.bold = boldWrapper;
     }
-    [self.document saveContext];
+    [doc saveContext];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -782,13 +785,14 @@ static const CGFloat BorderWidth = 1.0000f;
             break;
     }
     [self setStateInControl:self.buttonItalic forState:self.controlStateItalic];
-    
+
+    MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
         NSNumber *italic = @(ControlStateIsOn(self.controlStateItalic));
         documentObject.italic = italic;
     }
-    [self.document saveContext];
+    [doc saveContext];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -808,12 +812,13 @@ static const CGFloat BorderWidth = 1.0000f;
     }
     [self setStateInControl:self.buttonStrike forState:self.controlStateStrike];
     
+    MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
         NSNumber *strike = @(ControlStateIsOn(self.controlStateStrike));
         documentObject.strike = strike;
     }
-    [self.document saveContext];
+    [doc saveContext];
 }
 
 
@@ -834,12 +839,13 @@ static const CGFloat BorderWidth = 1.0000f;
     }
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
     
+    MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
         NSNumber *underline = @(ControlStateIsOn(self.controlStateUnderline));
         documentObject.underline = underline;
     }
-    [self.document saveContext];
+    [doc saveContext];
 }
 
 - (void)emptySelector:(id)whofuckingCares {
