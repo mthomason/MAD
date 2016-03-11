@@ -30,12 +30,10 @@ NSInteger const MTKeyErrorUserCanceled = 393920;
 
 @property (atomic, copy) MTKeyChainCredentialsCompletion credentialsCompletion;
 @property (nonatomic, strong) NSString *credentialsUsername;
-@property (nonatomic, strong) NSString *credentialsKey;
 
 @property (atomic, copy) MTKeyChainSaveCompletion saveCompletion;
 @property (nonatomic, strong) NSString *saveUsername;
 @property (nonatomic, strong) NSString *savePassword;
-@property (nonatomic, strong) NSString *saveKey;
 
 @property (nonatomic, strong) UITextField *textFieldOne;
 @property (nonatomic, strong) UITextField *textFieldTwo;
@@ -51,8 +49,6 @@ static MTKeyChain *sharedSingleton = nil;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[super allocWithZone:NULL] init];
         sharedSingleton.credentialsUsername = @"";
-        sharedSingleton.credentialsKey = @"";
-        sharedSingleton.saveKey = @"";
         sharedSingleton.savePassword = @"";
         sharedSingleton.saveUsername = @"";
     });
@@ -159,39 +155,9 @@ static MTKeyChain *sharedSingleton = nil;
     return self;
 }
 
-/*- (void)saveUsername:(NSString *)username
-         andPassword:(NSString *)password
-              forKey:(NSString *)key {
++ (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
     
-        self.saveUsername = username;
-        self.savePassword = password;
-        self.saveKey = key;
-        
-        NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
-        NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
-        if (keyUsername == nil || keyPassword == nil || ![username isEqualToString:keyUsername] || ![password isEqualToString:keyPassword]) {
-            
-            UIAlertController *alertController = [UIAlertController saveCredentials:^(UIAlertAction *action) {
-                
-                [self saveUsername: self.saveUsername andPassword: self.savePassword forKey: self.saveKey];
-                self.saveCompletion(YES, nil, self.saveUsername, self.savePassword);
-                
-            } cancel:^(UIAlertAction *action) {
-                self.saveCompletion(NO, nil, nil, nil);
-            }];
-            
-            [MADThread safeSwitchToMainThread:^{
-                UIViewController *topViewController = [MADStackViewController topViewController];
-                topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-                [topViewController  presentViewController: alertController animated: YES completion: nil];
-            }];
-        }    
-}*/
-
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
-    self.credentialsKey = key;
-    
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:self.credentialsKey];
+    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
     CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
     
     OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
@@ -241,7 +207,6 @@ static MTKeyChain *sharedSingleton = nil;
         
         self.saveUsername = username;
         self.savePassword = password;
-        self.saveKey = key;
         
         NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
         NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
@@ -251,9 +216,9 @@ static MTKeyChain *sharedSingleton = nil;
             
             UIAlertController *alertController = [UIAlertController saveCredentials:^(UIAlertAction *action) {
                 
-                [self saveUsername: self.saveUsername
-                       andPassword: self.savePassword
-                            forKey: self.saveKey];
+                [MTKeyChain saveUsername: self.saveUsername
+                             andPassword: self.savePassword
+                                  forKey: key];
                 
                 completion(YES, nil, self.saveUsername, self.savePassword);
                 
@@ -277,10 +242,9 @@ static MTKeyChain *sharedSingleton = nil;
 
 - (void)deleteKey:(NSString *)key usingViewController:(UIViewController *)viewController {
     if ([MTKeyChain credentialsExist:key]) {
-        self.credentialsKey = key;
         
         UIAlertController *alertController = [UIAlertController removeCredentials:^(UIAlertAction *action) {
-            [self deleteSavedPassword];
+            [MTKeyChain deleteSavedPasswordForKey:key];
         } cancel:nil];
         
         [MADThread safeSwitchToMainThread:^{
@@ -291,7 +255,7 @@ static MTKeyChain *sharedSingleton = nil;
                                            completion: nil];
         }];
     } else {
-        [self deleteSavedPassword];
+        [MTKeyChain deleteSavedPasswordForKey:key];
     }
 }
 
@@ -299,10 +263,11 @@ static MTKeyChain *sharedSingleton = nil;
     [self deleteKey:key usingViewController:nil];
 }
 
-- (void)deleteSavedPassword {
++ (void)deleteSavedPasswordForKey:(NSString *)key {
     
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:self.credentialsKey];
-    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:self.credentialsKey];
+    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
+    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
+    
     CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
     
     OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);

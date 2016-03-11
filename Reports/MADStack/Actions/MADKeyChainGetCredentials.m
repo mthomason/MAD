@@ -21,16 +21,6 @@ NSString * const MADMessagePassword             = @"Please enter your password."
 NSString * const MADButtonContinue              = @"Continue";
 NSString * const MADButtonCancel                = @"Cancel";
 
-typedef NS_ENUM(char, MADOperationState) {
-    nonready,
-    ready,
-    executing,
-    finished,
-    error,
-    cancelled,
-    usercancelled
-};
-
 @interface MADKeyChainGetCredentials()
     <UITextFieldDelegate>
 
@@ -68,13 +58,7 @@ typedef NS_ENUM(char, MADOperationState) {
     return self;
 }
 
-- (BOOL)isReady { return self.state == ready; }
-
 - (BOOL)isAsynchronous { return YES; }
-
-- (BOOL)isExecuting {return self.state == executing; }
-
-- (BOOL)isFinished { return self.state == finished || self.state == error || self.state == cancelled; }
 
 - (void)main {
 
@@ -116,40 +100,6 @@ typedef NS_ENUM(char, MADOperationState) {
     });
 }
 */
-- (void)setStateCanceled {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = cancelled;
-    [self didChangeValueForKey:isFinished];
-}
-
-- (void)setStateError {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = error;
-    [self didChangeValueForKey:isFinished];
-}
-
-- (void)setStateFinished {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = finished;
-    [self didChangeValueForKey:isFinished];
-}
-
-- (void)setStateExecuting {
-    NSString *isExecuting = NSStringFromSelector(@selector(isExecuting));
-    [self willChangeValueForKey:isExecuting];
-    self.state = executing;
-    [self didChangeValueForKey:isExecuting];
-}
-
-- (void)setStateUserCancelled {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = usercancelled;
-    [self didChangeValueForKey:isFinished];
-}
 
 - (void)start {
     
@@ -199,7 +149,7 @@ typedef NS_ENUM(char, MADOperationState) {
         case stateGetNothing: {
 
             NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
-                                                       encoding: NSUTF8StringEncoding];;
+                                                       encoding: NSUTF8StringEncoding];
             NSString *password = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryPasswordData
                                                        encoding: NSUTF8StringEncoding];
             MADCredential *c = [[MADCredential alloc] initWithUsername:username andPassword:password];

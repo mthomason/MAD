@@ -6,8 +6,13 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADKeyChainGetCredentials_h
+#define MAD_Designer_MADKeyChainGetCredentials_h
 
-@interface MADKeyChainGetCredentials : NSOperation
+#import "MADOperation.h"
+
+@interface MADKeyChainGetCredentials : MADOperation
 
 @end
+
+#endif
