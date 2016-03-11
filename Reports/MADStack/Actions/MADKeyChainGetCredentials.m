@@ -42,8 +42,7 @@ typedef NS_ENUM(char, MADOperationState) {
 
 @end
 
-@implementation MADKeyChainGetCredentials
- {
+@implementation MADKeyChainGetCredentials {
      dispatch_queue_t _stateGuardQueue;
  }
 

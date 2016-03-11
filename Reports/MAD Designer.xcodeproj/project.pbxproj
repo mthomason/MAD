@@ -431,6 +431,7 @@
 		4C42DD681BCB0ADB0082D8E3 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD491BCB0A1C0082D8E3 /* MADSqlite3.framework */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
+		4C4AA56F1C92C055008558E4 /* MADKeyChainSaveCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C60C5A01BB0A100004D9758 /* MADDesignerFileExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */; };
@@ -1776,6 +1777,8 @@
 		4C434B2318B5F3E800750B6B /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = /Users/mthomason/Desktop/Reports/Reports/../Compressor/library/openssl/libcrypto.a; sourceTree = "<absolute>"; };
 		4C434B2418B5F3E800750B6B /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
+		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
 		4C60C59E1BB0A100004D9758 /* MADDesignerFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerFileExplorerViewController.h; sourceTree = "<group>"; };
 		4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerFileExplorerViewController.m; sourceTree = "<group>"; };
@@ -2559,6 +2562,8 @@
 			children = (
 				4C39D0261C92BBF900C70B10 /* MADKeyChainGetCredentials.h */,
 				4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */,
+				4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */,
+				4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */,
 				4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */,
 				4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */,
 				4C26B9621BAF11C800456DC8 /* MADOperationInstallSampleDatabase.h */,
@@ -5682,6 +5687,7 @@
 				4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */,
 				4CFEE8201BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */,
+				4C4AA56F1C92C055008558E4 /* MADKeyChainSaveCredentials.m in Sources */,
 				4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */,
 				4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */,
 				4C26B9CB1BAF123A00456DC8 /* MADToolboxNavigationController.m in Sources */,
