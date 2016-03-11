@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MADKeyChainSaveCredentials : NSOperation
+@interface MADKeyChainGetCredentials : NSOperation
 
 @end

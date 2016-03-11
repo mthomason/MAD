@@ -159,14 +159,10 @@ static MTKeyChain *sharedSingleton = nil;
     return self;
 }
 
-- (void)saveUsername:(NSString *)username
+/*- (void)saveUsername:(NSString *)username
          andPassword:(NSString *)password
-              forKey:(NSString *)key
-        shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+              forKey:(NSString *)key {
     
-    if (shortCircuit == NO) {
-        
-        self.saveCompletion = completion;
         self.saveUsername = username;
         self.savePassword = password;
         self.saveKey = key;
@@ -183,12 +179,94 @@ static MTKeyChain *sharedSingleton = nil;
             } cancel:^(UIAlertAction *action) {
                 self.saveCompletion(NO, nil, nil, nil);
             }];
+            
+            [MADThread safeSwitchToMainThread:^{
+                UIViewController *topViewController = [MADStackViewController topViewController];
+                topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                [topViewController  presentViewController: alertController animated: YES completion: nil];
+            }];
+        }    
+}*/
+
+- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
+    self.credentialsKey = key;
+    
+    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:self.credentialsKey];
+    CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
+    
+    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+    if (queryUsernameStatus == errSecItemNotFound) {
+        NSDictionary *queryAddUsername = [MTKeyChain queryUsernameAdd:username key:key];
+        OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
+        if (queryAddStatus != errSecSuccess) {
+            SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
+        }
+    } else {
+        NSDictionary *updateQueryUsername = [MTKeyChain queryUsernameUpdate:key];
+        NSDictionary *changesUsername = [MTKeyChain queryUsernameUpdateData:username];
+        OSStatus statusUsernameUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
+        if (statusUsernameUpdate != errSecSuccess) {
+            SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
+        }
+    }
+    
+    
+    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
+    OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
+    if (queryPasswordStatus == errSecItemNotFound) {
+        NSDictionary *queryAddPassword = [MTKeyChain queryPasswordAdd:password key:key];
+        OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
+        if (queryAddStatus != errSecSuccess) {
+            
+            
+            SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
+        }
+    } else {
+        NSDictionary *updateQueryPassword = [MTKeyChain queryPasswordUpdate:key];
+        NSDictionary *changesPassword = [MTKeyChain queryPasswordUpdateData:password];
+        OSStatus statusPasswordUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryPassword, (__bridge CFDictionaryRef)changesPassword);
+        if (statusPasswordUpdate != errSecSuccess) {
+            SecItemUpdate((__bridge CFDictionaryRef)updateQueryPassword, (__bridge CFDictionaryRef)changesPassword);
+        }
+    }
+}
+
+- (void)saveUsername:(NSString *)username
+         andPassword:(NSString *)password
+              forKey:(NSString *)key
+        shortCircuit:(BOOL)shortCircuit
+          completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+    
+    if (shortCircuit == NO) {
+        
+        self.saveUsername = username;
+        self.savePassword = password;
+        self.saveKey = key;
+        
+        NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
+        NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+        if (keyUsername == nil || keyPassword == nil ||
+            ![username isEqualToString:keyUsername] ||
+            ![password isEqualToString:keyPassword]) {
+            
+            UIAlertController *alertController = [UIAlertController saveCredentials:^(UIAlertAction *action) {
+                
+                [self saveUsername: self.saveUsername
+                       andPassword: self.savePassword
+                            forKey: self.saveKey];
+                
+                completion(YES, nil, self.saveUsername, self.savePassword);
+                
+            } cancel:^(UIAlertAction *action) {
+                completion(NO, nil, nil, nil);
+            }];
 
           [MADThread safeSwitchToMainThread:^{
                 UIViewController *topViewController = [MADStackViewController topViewController];
                 topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [topViewController  presentViewController: alertController animated: YES completion: nil];
             }];
+            
         }
         
     } else {
@@ -239,49 +317,6 @@ static MTKeyChain *sharedSingleton = nil;
 
 }
 
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
-    self.credentialsKey = key;
-
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:self.credentialsKey];
-    CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
-    
-    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
-    if (queryUsernameStatus == errSecItemNotFound) {
-        NSDictionary *queryAddUsername = [MTKeyChain queryUsernameAdd:username key:key];
-        OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
-        if (queryAddStatus != errSecSuccess) {
-            SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
-        }
-    } else {
-        NSDictionary *updateQueryUsername = [MTKeyChain queryUsernameUpdate:key];
-        NSDictionary *changesUsername = [MTKeyChain queryUsernameUpdateData:username];
-        OSStatus statusUsernameUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
-        if (statusUsernameUpdate != errSecSuccess) {
-            SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
-        }
-    }
-    
-    
-    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
-    OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
-    if (queryPasswordStatus == errSecItemNotFound) {
-        NSDictionary *queryAddPassword = [MTKeyChain queryPasswordAdd:password key:key];
-        OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
-        if (queryAddStatus != errSecSuccess) {
-            
-
-            SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
-        }
-    } else {
-        NSDictionary *updateQueryPassword = [MTKeyChain queryPasswordUpdate:key];
-        NSDictionary *changesPassword = [MTKeyChain queryPasswordUpdateData:password];
-        OSStatus statusPasswordUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryPassword, (__bridge CFDictionaryRef)changesPassword);
-        if (statusPasswordUpdate != errSecSuccess) {
-            SecItemUpdate((__bridge CFDictionaryRef)updateQueryPassword, (__bridge CFDictionaryRef)changesPassword);
-        }
-    }
-}
-
 - (void)getUsernameAndPasswordForKey:(NSString *)key
                           completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion {
     
@@ -319,7 +354,7 @@ static MTKeyChain *sharedSingleton = nil;
             status = stateGetUsernameAndPassword;
         }
     }
-
+    
     
     switch (status) {
         case stateGetNothing: {
@@ -332,7 +367,7 @@ static MTKeyChain *sharedSingleton = nil;
         case stateGetPassword: {
             //Username found.  What about password?
             NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
-                                                        encoding:NSUTF8StringEncoding];
+                                                       encoding:NSUTF8StringEncoding];
             SEL promptForPasswordGivenUsername = @selector(promptForPasswordGivenUsername:);
             [self performSelectorOnMainThread: promptForPasswordGivenUsername withObject: username waitUntilDone: NO];
             break;

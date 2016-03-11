@@ -17,6 +17,7 @@
 #import "MTDatabaseConnection.h"
 #import "MTKeyChain.h"
 #import "MTNotificationDidReadRows.h"
+#import "MADCredential.h"
 
 NSString * const MTSqlFrom = @"\nFROM\n";
 
@@ -41,6 +42,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     NSString *identifier = [connection databaseTypeIdentifier];
     
     id result = nil;
+    
     if ([MADIdentifierDatabaseMySQL isEqualToString:identifier]) {
         
         result = [[MTDatabaseMySql alloc] init];
@@ -66,6 +68,35 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 - (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
     
     NSString *key = [connection connectionString];
+    
+    
+    //NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    
+    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
+        
+        if (success) {
+            
+            [[MTKeyChain sharedObject] saveUsername: username
+                                        andPassword: password
+                                             forKey: key
+                                       shortCircuit: fromKeyChain
+                                         completion: ^(BOOL success, NSError *error, NSString *username, NSString *password) {
+                                             completion(success, error, username, password);
+                                         }];
+            
+        } else {
+            completion(NO, connectionError, username, password);
+        }
+        
+    }];
+}
+
+- (MADCredential *)getCredentalsWithConnection:(MTDatabaseConnection *)connection {
+    
+    //completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+    
+    NSString *key = [connection connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
         if (success) {
@@ -75,15 +106,16 @@ NSString * const MTSqlFrom = @"\nFROM\n";
                                              forKey:key
                                        shortCircuit:fromKeyChain
                                          completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                completion(success, error, username, password);
+                //completion(success, error, username, password);
             }];
             
         } else {
-            completion(NO, connectionError, username, password);
+            //completion(NO, connectionError, username, password);
         }
         
     }];
-    
+// FIXME: ... sould return something
+    return nil;
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {

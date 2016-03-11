@@ -19,7 +19,14 @@ extern NSInteger const MTKeyErrorUserCanceled;
 
 + (MTKeyChain *)sharedObject;
 
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion;
++ (NSString *)keyForUsernameWithMainKey:(NSString *)key;
++ (NSString *)keyForPasswordWithMainKey:(NSString *)key;
++ (NSDictionary *)queryUsernameDefination:(NSString *)key;
++ (NSDictionary *)queryPasswordDefination:(NSString *)key;
+
+- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key
+        shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion;
+
 - (void)getUsernameAndPasswordForKey:(NSString *)key completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion;
 
 // FIXME: Remove UIKit dependency.

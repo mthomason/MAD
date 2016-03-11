@@ -288,6 +288,7 @@
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
+		4C39D0211C92844000C70B10 /* MADKeyChainSaveCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39D0201C92844000C70B10 /* MADKeyChainSaveCredentials.m */; };
 		4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */; };
 		4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */; };
 		4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */; };
@@ -1412,6 +1413,8 @@
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4C39D01F1C92844000C70B10 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
+		4C39D0201C92844000C70B10 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
 		4C3C16031BC6D7AE0056A77C /* MADViewDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewDebugging.h; sourceTree = "<group>"; };
 		4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewDebugging.m; sourceTree = "<group>"; };
 		4C3DCBAE1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationPresentationController.h; sourceTree = "<group>"; };
@@ -2562,6 +2565,8 @@
 				4C26B9651BAF11C800456DC8 /* MADOperationInstallSampleDocument.m */,
 				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
 				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
+				4C39D01F1C92844000C70B10 /* MADKeyChainSaveCredentials.h */,
+				4C39D0201C92844000C70B10 /* MADKeyChainSaveCredentials.m */,
 			);
 			name = Actions;
 			path = MADStack/Actions;
@@ -5744,6 +5749,7 @@
 				4C40203F1BAE92F200BAE5FC /* NSAttributedString+Common.m in Sources */,
 				4CC886141C7AADC0003E18D2 /* UIStoryboard+InformationTable.m in Sources */,
 				4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */,
+				4C39D0211C92844000C70B10 /* MADKeyChainSaveCredentials.m in Sources */,
 				4C26B9C81BAF123A00456DC8 /* MADTabBar.m in Sources */,
 				4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */,
 				4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */,

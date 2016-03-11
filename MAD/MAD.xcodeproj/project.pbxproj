@@ -13,6 +13,8 @@
 		4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C24809B1C8B20E00058E6B4 /* MADFonts.m */; };
 		4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480B71C8B7C860058E6B4 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */; };
+		4C39D0241C9284F800C70B10 /* MADCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C39D0221C9284F800C70B10 /* MADCredential.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C39D0251C9284F800C70B10 /* MADCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39D0231C9284F800C70B10 /* MADCredential.m */; };
 		4C3DCC331BCAF70200ABE231 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */; };
 		4C3DCC351BCAF72100ABE231 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */; };
 		4C3DCC391BCAF74200ABE231 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */; };
@@ -398,6 +400,8 @@
 		4C24809B1C8B20E00058E6B4 /* MADFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFonts.m; path = MAD/MADFonts.m; sourceTree = "<group>"; };
 		4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADErrorUserInfo.h; path = MAD/MADErrorUserInfo.h; sourceTree = "<group>"; };
 		4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADErrorUserInfo.m; path = MAD/MADErrorUserInfo.m; sourceTree = "<group>"; };
+		4C39D0221C9284F800C70B10 /* MADCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCredential.h; path = MAD/MADCredential.h; sourceTree = "<group>"; };
+		4C39D0231C9284F800C70B10 /* MADCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCredential.m; path = MAD/MADCredential.m; sourceTree = "<group>"; };
 		4C3DCC321BCAF70200ABE231 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADCocoaExtensions.framework"; sourceTree = "<group>"; };
 		4C3DCC341BCAF72100ABE231 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C3DCC361BCAF74200ABE231 /* MADMySQL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADMySQL.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos/MADMySQL.framework"; sourceTree = "<group>"; };
@@ -1105,6 +1109,8 @@
 				4C994F501BE485F80058627A /* MADDocumentObjectType.m */,
 				4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */,
 				4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */,
+				4C39D0221C9284F800C70B10 /* MADCredential.h */,
+				4C39D0231C9284F800C70B10 /* MADCredential.m */,
 			);
 			name = MAD;
 			sourceTree = "<group>";
@@ -1360,6 +1366,7 @@
 				4CC282441BADE81A00775B72 /* MADSortOrder.h in Headers */,
 				4CC281F81BADE80500775B72 /* MADActivityProtocol.h in Headers */,
 				4CC284091BADE93200775B72 /* RptqDocumentObjectAggregate.h in Headers */,
+				4C39D0241C9284F800C70B10 /* MADCredential.h in Headers */,
 				4CC2847D1BADE9B000775B72 /* RptqDocumentObjectFormula+Extras.h in Headers */,
 				4CC2842F1BADE96A00775B72 /* RptqRelationship.h in Headers */,
 				4CC2849D1BADE9F000775B72 /* RptqQueryTable+Extras.h in Headers */,
@@ -1638,6 +1645,7 @@
 				4C401DB81BAE3BD600BAE5FC /* MTQueryCache.m in Sources */,
 				4C401D451BAE3AF800BAE5FC /* MTPaperB4.m in Sources */,
 				4C401D5B1BAE3AF800BAE5FC /* MTPaperC4.m in Sources */,
+				4C39D0251C9284F800C70B10 /* MADCredential.m in Sources */,
 				4C401DC01BAE3BD600BAE5FC /* MTQueryCacheBeginTransaction.m in Sources */,
 				4C401D2D1BAE3AF800BAE5FC /* MTPaperA3.m in Sources */,
 				4C401DEA1BAE3BD800BAE5FC /* MTQueryDefinitionSort.m in Sources */,
