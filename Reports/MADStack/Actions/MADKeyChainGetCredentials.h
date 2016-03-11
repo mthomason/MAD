@@ -1,5 +1,5 @@
 //
-//  MADKeyChainSaveCredentials.h
+//  MADKeyChainGetCredentials.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/10/16.
