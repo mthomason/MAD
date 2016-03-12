@@ -26,8 +26,8 @@
 @property (atomic, strong) id object;
 
 - (instancetype)init;
-- (instancetype)initWithObject:(id)object;
-+ (instancetype)objectWithObject:(id)object;
+- (instancetype)initWithObject:(id <NSCopying>)object;
++ (instancetype)objectWithObject:(id <NSCopying>)object;
 
 @end
 

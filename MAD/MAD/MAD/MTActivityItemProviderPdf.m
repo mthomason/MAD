@@ -77,7 +77,7 @@
                               waitUntilDone: YES];
     [self.document setStatusLabel:activityView];
     
-    __weak MADocument *weakdoc = self.document;
+    MADocument * __weak weakdoc = self.document;
     
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     

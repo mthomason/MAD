@@ -292,7 +292,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
     [self regenThumbnail];
-    __weak MADocument *weakself = self;
+    MADocument * __weak weakself = self;
     [super closeWithCompletionHandler:^(BOOL success) {
         if (success) {
             [weakself removeGuts];

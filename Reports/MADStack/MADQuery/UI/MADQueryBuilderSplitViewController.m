@@ -94,7 +94,7 @@
     NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
-    __weak id<UISplitViewControllerDelegate> delegate = self;
+    id <UISplitViewControllerDelegate> __weak delegate = self;
     self.delegate = delegate;
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
@@ -204,7 +204,7 @@
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    __weak MADQueryBuilderSplitViewController *weakSelf = self;
+    MADQueryBuilderSplitViewController * __weak weakSelf = self;
     BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
     [self dismissViewControllerAnimated:YES completion:^{
         if (procDelegateFunction) {

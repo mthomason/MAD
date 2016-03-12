@@ -131,11 +131,8 @@
     
     if (presentedViewController.transitionCoordinator) {
         
-        __weak MADToolboxPresentationController *weakself = self;
         [presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-
-            weakself.dimmingView.alpha = 1.0000f;
-
+            self.dimmingView.alpha = 1.0000f;
         } completion:nil];
 
     } else {
@@ -147,11 +144,8 @@
 
     if (self.presentedViewController.transitionCoordinator) {
 
-        __weak MADToolboxPresentationController *weakself = self;
         [self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-    
-            weakself.dimmingView.alpha = 0.0;
-        
+            self.dimmingView.alpha = 0.0;
         } completion:nil];
         
     } else {
@@ -216,11 +210,10 @@
 }
 
 - (void)dismiss {
-    __weak MADToolboxPresentationController *weakself = self;
     [((UIViewController <MADViewControllerProtocol> *)self.designerViewController) setHidesStatusBar: NO];
     [self.presentingViewController dismissViewControllerAnimated: YES
                                                       completion: ^{
-                                                          [weakself.popoverPresentationControllerDelegate popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)weakself];
+                                                          [self.popoverPresentationControllerDelegate popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)self];
                                                       }];
 }
 

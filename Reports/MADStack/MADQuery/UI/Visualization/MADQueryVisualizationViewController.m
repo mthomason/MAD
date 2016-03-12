@@ -626,7 +626,7 @@ typedef void(^MTBlockResultVoid)(void);
         [self.rootTables addObject: table.objectID];
     }
     
-    MTConnectorView __weak *connectorView = self.controllersByObjectID[deletedLink.objectID];
+    MTConnectorView * __weak connectorView = self.controllersByObjectID[deletedLink.objectID];
     [connectorView removeFromSuperview];
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];

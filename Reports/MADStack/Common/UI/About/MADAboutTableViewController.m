@@ -106,7 +106,7 @@
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError*)error {
 
-    __weak MADAboutTableViewController *weakself = self;
+    MADAboutTableViewController * __weak weakself = self;
     [NSError presentError: error
          onViewController: self
                completion:^(BOOL success) {

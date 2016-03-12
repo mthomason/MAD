@@ -41,7 +41,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         
         NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:JoinPredicateWhere];
         int i = 0;
-        __weak NSArray *selectPredicates = object[keySelectPredicates];
+        NSArray * __weak selectPredicates = object[keySelectPredicates];
         for (NSDictionary *predicate in selectPredicates) {
             
             NSString *left = predicate[MTQueryKeyPredicateColumn];
@@ -64,8 +64,8 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         self.accending = sortValue.boolValue;
         
         NSNumber *keyColumns = @(MTQuerySelectColumns);
-        __weak NSDictionary *columns = object[keyColumns];
-        __weak MTDataColumn *dataColumn = columns[columnName];
+        NSDictionary * __weak columns = object[keyColumns];
+        MTDataColumn * __weak dataColumn = columns[columnName];
 
         NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
 

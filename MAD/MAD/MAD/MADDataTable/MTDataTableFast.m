@@ -433,7 +433,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                 for (NSString *columnKey in columnKeys) {
                     
                     @autoreleasepool {
-                        __weak MTDataColumn *column = self.columns[columnKey];
+                        MTDataColumn * __weak column = self.columns[columnKey];
                         if ([column.fieldName isEqualToString:sortDescriptor.key]) {
                             SEL sortAlgo = [MADDataType selectorForSorting:column.columnType.unsignedIntegerValue];
                             

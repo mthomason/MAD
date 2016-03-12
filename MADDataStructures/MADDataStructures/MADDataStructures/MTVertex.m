@@ -17,7 +17,7 @@
 
 @interface MTVertex()
 
-@property (nonatomic, strong) NSMutableArray *edges;     // MARK: The edges this node has
+@property (nonatomic, strong) NSMutableArray <MTEdge *> *edges;     // MARK: The edges this node has
 @property (nonatomic, strong, readwrite) NSNumber *uniqueIdForStructure;
 
 @end
@@ -32,7 +32,7 @@
     return [self initWithID:idnumber andObject:nil];
 }
 
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object {
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object {
     if (self = [super initWithObject:object]) {
         
         NSNumber *number = [[NSNumber alloc] initWithUnsignedLong:idnumber];

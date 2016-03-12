@@ -307,9 +307,9 @@
          completion:(void (^)(BOOL success, MTErrorContainer *error))completion {
     
     __block MTErrorContainer *errorContainer = [MTErrorContainer new];
-    __weak RptqDocument *rptqDocument = self;
-    __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
-    NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
+    RptqDocument * __weak rptqDocument = self;
+    NSManagedObjectContext * __weak managedObjectContext = rptqDocument.managedObjectContext;
+    NSNumber *connectionId = @(self.hasDatabaseSchemas.count + 1);
     RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: self.managedObjectContext
                                                                            driverType: database.identifier
                                                                          connectionId: connectionId];
@@ -359,7 +359,7 @@
                                                         inManagedObjectContext: managedObjectContext];
     [rptqDatabase addHasQueriesObject:newQuery];
     
-    NSSet *databaseSchemas = [rptqDocument.hasDatabaseSchemas setByAddingObject: rptqDatabase];
+    NSSet *databaseSchemas = [self.hasDatabaseSchemas setByAddingObject: rptqDatabase];
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
@@ -391,9 +391,9 @@
                 NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
                 
                 if (success) {
+                    
                     [tables setArray:resultTables];
                     NSUInteger counter = 0, numberOfTables = tables.count;
-                    
                     for (MTDatabaseTable *databaseTable in tables) {
                         @autoreleasepool {
                             
@@ -427,15 +427,16 @@
                         
                         for (MTDatabaseTable *table in tables) {
                             
-                            NSString *tableName = [table name];
-                            NSArray *fields = tablesAndFields[tableName];
+                            NSString *tableName = table.name;
+                            NSArray *fields = tablesAndFields[table.name];
                             
-                            if ([fields count]) {
+                            if (fields.count) {
+                                
                                 RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext
                                                                                                                                        andTable: table];
-                                [[rptqDocument defaultDatabase] addHasTablesObject: rptqTable];
+                                [rptqDocument.defaultDatabase addHasTablesObject: rptqTable];
                                 
-                                NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:[fields count]];
+                                NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
                                 for (MTDatabaseField *field in fields) {
                                     RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
                                                                                                                                              andField: field];
@@ -443,10 +444,10 @@
                                 }
                                 
                                 NSOrderedSet *hasFields = [[NSOrderedSet alloc] initWithArray:schemaFields];
-                                [rptqTable setHasFields:hasFields];
+                                rptqTable.hasFields = hasFields;
                                 
                                 NSError *saveError = nil;
-                                [[rptqTable managedObjectContext] save:&saveError];
+                                [rptqTable.managedObjectContext save:&saveError];
                             } else {
                                 NSString *failure = [NSString stringWithFormat:@"Table %@ not Added", tableName];
                                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : @"Fields not found.",
@@ -516,12 +517,10 @@
         case MTDocumentObjectTypeLabelDynamic: {
             
             NSString *entityName = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
-                                                                 inManagedObjectContext: mangedObjectContext];
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName inManagedObjectContext: mangedObjectContext];
             
             NSManagedObjectID *fieldObjectId = defination[MTDocumentObjectDefinationObject];
-            RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
-                                                     managedObjectContext: mangedObjectContext];
+            RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId managedObjectContext: mangedObjectContext];
             
             
             RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype

@@ -27,15 +27,14 @@
     return self;
 }
 
-- (instancetype)initWithObject:(id)object {
-    self = [super init];
-    if (self) {
-        self.object = object;
+- (instancetype)initWithObject:(id <NSCopying>)object {
+    if (self = [super init]) {
+        _object = [object copyWithZone:nil];
     }
     return self;
 }
 
-+ (instancetype)objectWithObject:(id)object {
++ (instancetype)objectWithObject:(id <NSCopying>)object {
     return [[self alloc] initWithObject:object];
 }
 

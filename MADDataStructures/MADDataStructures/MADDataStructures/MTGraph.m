@@ -51,7 +51,7 @@
 #pragma mark - Members
 
 // MARK: Add new vertex to adjacency list.
-- (MTVertex *)addVertexWithObject:(id)object {
+- (MTVertex *)addVertexWithObject:(id <NSCopying>)object {
     MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject:object];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
     [self.vertices addObject:vertex];
@@ -59,14 +59,14 @@
 }
 
 // MARK: Add new edge to the graph.
-- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id)object andWeight:(NSNumber *)weight {
+- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
     
     BOOL result = NO;
     
     // MARK: Create new edge.
-    NSNumber *uniqueId = @([self idUniqueEdges]);
+    NSNumber *uniqueId = @(self.idUniqueEdges);
     MTEdge *edge = [[MTEdge alloc] initWithUniqueID:uniqueId origin:origin destination:destination object:object andWeight:weight];
-    [self setIdUniqueEdges: ([self idUniqueEdges] + 1)];
+    self.idUniqueEdges = self.idUniqueEdges + 1;
 
     // MARK: Make sure edge does not exist.
     BOOL edgeExist = NO;

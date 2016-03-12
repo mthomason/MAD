@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 
 - (instancetype)init;
 - (instancetype)initWithID:(NSUInteger)idnumber;
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
 
 - (void)addEdge:(MTEdge *)edge;
 
