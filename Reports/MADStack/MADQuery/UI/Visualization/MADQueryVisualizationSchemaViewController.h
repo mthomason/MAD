@@ -26,7 +26,7 @@ extern const CGFloat MADSchemaViewDefaultWidth;
 extern const CGFloat MADSchemaViewDefaultHeight;
 
 @interface MADQueryVisualizationSchemaViewController : UIViewController
-    <MADocumentProtocol>
+    <MADViewControllerDocumentProtocol>
 
 @property (nonatomic, weak) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;

@@ -7,34 +7,30 @@
 //
 
 #import "MADKeyChainGetCredentials.h"
-#import <UIKit/UIAlertController.h>
-#import <UIKit/UILabel.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MTKeyChain.h>
+#import <UIKit/UIAlertController.h>
+#import <UIKit/UILabel.h>
 
-NSString * const MADTitleCredentials            = @"Credentials";
-NSString * const MADMessageCredentials          = @"Please enter your credentials.";
+static NSString * const MADTitleCredentials            = @"Credentials";
+static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
 
-NSString * const MADTitlePassword               = @"Password";
-NSString * const MADMessagePassword             = @"Please enter your password.";
+static NSString * const MADTitlePassword               = @"Password";
+static NSString * const MADMessagePassword             = @"Please enter your password.";
 
-NSString * const MADButtonContinue              = @"Continue";
-NSString * const MADButtonCancel                = @"Cancel";
+static NSString * const MADButtonContinue              = @"Continue";
+static NSString * const MADButtonCancel                = @"Cancel";
 
 @interface MADKeyChainGetCredentials()
     <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
-    @property (nonatomic, copy) MADCredential *credential;
     @property (nonatomic, copy) NSString *key;
-
-    @property (nonatomic, assign) MADOperationState state;
+    @property (nonatomic, copy, readwrite) MADCredential *credential;
 
 @end
 
-@implementation MADKeyChainGetCredentials {
-     dispatch_queue_t _stateGuardQueue;
- }
+@implementation MADKeyChainGetCredentials
 
 #pragma mark - UITextFieldDelegate
 
@@ -52,54 +48,13 @@ NSString * const MADButtonCancel                = @"Cancel";
     if (self = [super init]) {
         self.viewController = viewController;
         self.key = key.copy;
-        _state = ready;
-        _stateGuardQueue = dispatch_queue_create(NULL, DISPATCH_QUEUE_CONCURRENT);
+        self.source = none;
+        [self setStateReady];
     }
     return self;
 }
 
 - (BOOL)isAsynchronous { return YES; }
-
-- (void)main {
-
-    
-}
-/*
-- (void)setOperationState:(MADOperationState)state {
-        if (self->_state != state) {
-            NSString *selector = nil;
-            switch (state) {
-                case cancelled:
-                    selector = NSStringFromSelector(@selector(isFinished));
-                    break;
-                case executing:
-                    selector = NSStringFromSelector(@selector(isExecuting));
-                    break;
-                case finished:
-                    selector = NSStringFromSelector(@selector(isFinished));
-                    break;
-                case error:
-                    selector = NSStringFromSelector(@selector(isFinished));
-                    break;
-                case usercancelled:
-                    selector = NSStringFromSelector(@selector(isFinished));
-                    break;
-                case nonready:
-                case ready:
-                default:
-                    break;
-            }
-            if (selector) {
-                [self willChangeValueForKey:selector];
-                self->_state = state;
-                [self didChangeValueForKey:selector];
-            }
-            
-        }
-
-    });
-}
-*/
 
 - (void)start {
     
@@ -107,46 +62,37 @@ NSString * const MADButtonCancel                = @"Cancel";
         [self setStateCanceled];
         return;
     }
+    
     [self setStateExecuting];
     
-    const char stateGetPassword = 1;
-    const char stateGetUsernameAndPassword = 2;
-    const char stateGetNothing = 3;
+    const char PromptForUsernameAndPassword = 1;
+    const char PromptForPassword = 2;
+    const char PromptForNothing = 3;
     
-    NSInteger status;
     CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
+
+    //Read username and password.
     NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:self.key];
+    OSStatus queryStatusUsername = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+    
     NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:self.key];
+    OSStatus queryStatusPassword = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
     
-    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
-    OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
-    
-    //Check items doesn't exist
-    if (queryUsernameStatus == errSecItemNotFound) {
-        status = stateGetUsernameAndPassword;
-    } else {
-        if (queryPasswordStatus == errSecItemNotFound) {
-            status = stateGetPassword;
-        } else {
-            status = stateGetNothing;
-        }
+    char status = PromptForUsernameAndPassword;
+    if (queryStatusUsername == errSecSuccess) {
+        status = queryStatusPassword == errSecSuccess ? PromptForNothing : PromptForPassword;
     }
     
-    //Check errors
-    if (status == stateGetNothing) {
-        if (queryUsernameStatus == errSecSuccess && queryUsernameData != NULL) {
-            if ((queryPasswordStatus == errSecSuccess && queryPasswordData != NULL) == NO){
-                status = stateGetPassword;
-            }
-        } else {
-            status = stateGetUsernameAndPassword;
-        }
+    //Sanity check the data
+    if (status == PromptForNothing) {
+        if (queryUsernameData == NULL || queryPasswordData == NULL)  status = PromptForUsernameAndPassword;
+    } else if (status == PromptForPassword && queryPasswordData == NULL) {
+        status = PromptForUsernameAndPassword;
     }
-    
     
     switch (status) {
             
-        case stateGetNothing: {
+        case PromptForNothing: {
 
             NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
                                                        encoding: NSUTF8StringEncoding];
@@ -154,18 +100,19 @@ NSString * const MADButtonCancel                = @"Cancel";
                                                        encoding: NSUTF8StringEncoding];
             MADCredential *c = [[MADCredential alloc] initWithUsername:username andPassword:password];
             self.credential = c;
+            self.source = keychain;
             [self setStateFinished];
             break;
         }
             
-        case stateGetPassword: {
+        case PromptForPassword: {
             
             NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
                                                        encoding:NSUTF8StringEncoding];
             [self promptForPasswordGivenUsername: username];
             break;
         }
-        case stateGetUsernameAndPassword: {
+        case PromptForUsernameAndPassword: {
             
             [self promptForUsernameAndPassword];
             break;
@@ -192,10 +139,12 @@ NSString * const MADButtonCancel                = @"Cancel";
         MADCredential *c = [[MADCredential alloc] initWithUsername: ((UITextField *)alertController.textFields.firstObject).text
                                                        andPassword:((UITextField *)[alertController.textFields objectAtIndex:1]).text];
         self.credential = c;
+        self.source = credential_prompt;
         [self setStateFinished];
     };
     
     void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
+        self.source = none;
         [self setStateUserCancelled];
     };
     
@@ -246,14 +195,15 @@ NSString * const MADButtonCancel                = @"Cancel";
         MADCredential *c = [[MADCredential alloc] initWithUsername: username
                                                        andPassword: ((UITextField *)alertController.textFields.firstObject).text];
         self.credential = c;
+        self.source = password_prompt;
         [self setStateFinished];
     };
     
     void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
-        self.state = usercancelled;
+        self.credential = nil;
+        self.source = none;
         [self setStateUserCancelled];
     };
-    
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {
         textField.delegate = self;

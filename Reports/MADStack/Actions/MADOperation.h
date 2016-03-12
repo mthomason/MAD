@@ -12,10 +12,10 @@
 #import <Foundation/NSOperation.h>
 
 typedef NS_ENUM(char, MADOperationState) {
+    finished,
     nonready,
     ready,
     executing,
-    finished,
     error,
     cancelled,
     usercancelled
@@ -23,6 +23,8 @@ typedef NS_ENUM(char, MADOperationState) {
 
 @interface MADOperation : NSOperation
 
+    @property (readonly) bool success;
+    - (void)setStateReady;
     - (void)setStateCanceled;
     - (void)setStateError;
     - (void)setStateFinished;

@@ -18,6 +18,7 @@
 #import "MTKeyChain.h"
 #import "MTNotificationDidReadRows.h"
 #import "MADCredential.h"
+//#import "MADKeyChainGetCredentials.h"
 
 NSString * const MTSqlFrom = @"\nFROM\n";
 
@@ -68,10 +69,16 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 - (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
     
     NSString *key = [connection connectionString];
+    if (![self.delegate respondsToSelector:@selector(getCredentialsForDatabase:andKey:)]) {
+        completion(NO, nil, nil, nil);
+    }
     
-    
-    //NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    
+    MADCredential *c = [self.delegate getCredentialsForDatabase:self andKey:key];
+    if (c) {
+        completion(YES, nil, c.username, c.password);
+    } else {
+        completion(NO, nil, nil, nil);
+    }
     
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
@@ -95,6 +102,11 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 - (MADCredential *)getCredentalsWithConnection:(MTDatabaseConnection *)connection {
     
     //completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+    
+    //get credientials
+        //credientals are empty prompt for credientials
+        //save credientials
+    
     
     NSString *key = [connection connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {

@@ -14,7 +14,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 @interface MADOpenDocumentManager ()
 
 @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
-@property (nonatomic, strong, readwrite) NSURL *openUrl;
+@property (nonatomic, copy, readwrite) NSURL *openUrl;
 
 @end
 
@@ -25,8 +25,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         NSMutableDictionary *openFiles = [[NSMutableDictionary alloc] init];
         self.openFiles = openFiles;
         self.openUrl = nil;
@@ -36,7 +35,7 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
 
 - (void)setOpenDocument:(UIManagedDocument *)document {
     if (document) {
-        self.openUrl = document.fileURL;
+        self.openUrl = document.fileURL.copy;
         self.openFiles[self.openUrl.absoluteString] = document;
     }
 }

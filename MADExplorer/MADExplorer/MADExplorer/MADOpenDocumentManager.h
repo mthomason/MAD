@@ -13,7 +13,7 @@
 
 @interface MADOpenDocumentManager : NSObject
 
-@property (nonatomic, strong, readonly) NSURL *openUrl;
+@property (nonatomic, copy, readonly) NSURL *openUrl;
 @property (readonly) UIManagedDocument *openDocument;
 
 - (void)setOpenDocument:(UIManagedDocument *)document;

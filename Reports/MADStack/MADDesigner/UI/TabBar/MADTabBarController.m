@@ -44,8 +44,8 @@ const int8_t MADIndexViewer = 2;
     self.lastSelectedIndex = -1;
     self.delegate = self;
     for (UIViewController *viewController in self.viewControllers) {
-        if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
-            ((id <MADocumentProtocol>)viewController).document = self.document;
+        if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+            ((id <MADViewControllerDocumentProtocol>)viewController).document = self.document;
         }
     }
     self.view.backgroundColor = [UIColor purpleColor];

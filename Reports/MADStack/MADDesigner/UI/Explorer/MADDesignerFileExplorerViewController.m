@@ -10,6 +10,7 @@
 
 #import "MADStoryboard.h"
 #import "Constants.h"
+#import "MADKeyChainGetCredentials.h"
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -49,6 +50,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 @interface MADDesignerFileExplorerViewController ()
     <UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
+        MADocumentDelegate,
         MTViewControllerProtocol,
         MADFileLocationManagerDelegate>
 
@@ -261,9 +263,10 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (void)viewControllerDidFinish:(id)sender {
     self.shouldShowAddDocumentPopover = YES;
     
-    __weak MADOpenFileViewController *weakself = self;
+    MADOpenFileViewController * __weak weakself = self;
     [self closeDocument:self.traitCollection completion:^(BOOL success) {
-        [weakself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:weakself waitUntilDone:NO];
+        MADOpenFileViewController * __strong strongself = weakself;
+        [strongself performSelectorOnMainThread:@selector(finishCloseDocument:) withObject:strongself waitUntilDone:NO];
     }];
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -299,8 +302,8 @@ NSString * const MADUtiType                                     = @"com.everyday
     tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     tabBarController.viewControllerDelegate = self;
     
-    NSAssert([tabBarController conformsToProtocol:@protocol(MADocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
-    ((id <MADocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
+    NSAssert([tabBarController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)], @"Controller to conform to MADocumentProtocol.");
+    ((id <MADViewControllerDocumentProtocol>)tabBarController).document = (MADocument *)self.openDocument;
 
     // FIXME: UISplitViewController has retain cycle, and can't be dealloc without issues.  This is
     //          a work around.  We are keeping one split view controller alive.
@@ -342,14 +345,16 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 - (void)openDocumentAtURL:(NSURL *)url completionHandler:(void(^)(BOOL success, UIManagedDocument *document))handler {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    document.documentDelegate = self;
+    
     self.fileManager.openDocument = document;
     
-    __weak MADOpenFileViewController *weakself = self;
-    [weakself.fileManager.openDocument openWithCompletionHandler:^(BOOL success) {
-        
-        if (success) [((MADocument *)weakself.fileManager.openDocument) activeDocumentModel];
-        handler(success, weakself.fileManager.openDocument);
-        [weakself reenable];
+    [self.fileManager.openDocument openWithCompletionHandler:^(BOOL success) {
+
+        if (success) [((MADocument *)self.fileManager.openDocument) activeDocumentModel];
+        UIManagedDocument *openDocument = self.fileManager.openDocument;
+        handler(success, openDocument);
+        [self reenable];
     }];
 }
 
@@ -363,7 +368,22 @@ NSString * const MADUtiType                                     = @"com.everyday
 }
 
 - (NSArray *)supportedUTIs {
-    return @[MADUtiType];
+    NSArray *UTIs = @[MADUtiType];
+    return UTIs;
+}
+
+#pragma mark - MADDocumentDelegate
+
+- (MADCredential *)getCredentialsForDocument:(MADocument *)document database:(MTDatabase *)database andKey:(NSString *)key {
+    NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
+    credentialQueue.maxConcurrentOperationCount = 1;
+    MADKeyChainGetCredentials *c = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
+    [credentialQueue addOperation:c];
+    [credentialQueue waitUntilAllOperationsAreFinished];
+    if (c.success && c != nil) {
+        
+    }
+    
 }
 
 #pragma mark - Actions

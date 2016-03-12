@@ -181,6 +181,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
+#pragma mark - Property Overrides
+
+- (void)setMainDatabase:(MTDatabase *)mainDatabase {
+    _mainDatabase = mainDatabase;
+    _mainDatabase.delegate = self;
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc {
@@ -691,25 +698,31 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     */
 }
 
-#pragma mark - MTDatabaseProtocol
-
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    switch (query.type) {
-        case MTQueryTypeFull:
-            self.mainDataTable.dataDelegate = self;
-            return self.mainDataTable;
-            break;
-        default:
-            return nil;
-            break;
-    }
-}
-
 #pragma mark - MTCacheProtocol
 
 - (NSURL *)cachedFilesDirectory { return self.urlCachedFilesDirectory; }
 
 #pragma mark - MTDatabaseProtocol
+
+- (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {
+    return [self.documentDelegate getCredentialsForDocument:self database:database andKey:key];
+}
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+
+    switch (query.type) {
+        
+        case MTQueryTypeFull:
+            self.mainDataTable.dataDelegate = self;
+            return self.mainDataTable;
+            break;
+    
+        default:
+            return nil;
+            break;
+    }
+    
+}
 
 - (MTDatabase *)database {
     return [self mainDatabase];
@@ -884,7 +897,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSNumber *objectIdKey = @(MTDataTableObjectId);
     NSNumber *objectIdV =  @(self.fileName.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    MTDataTable *datatable = [MTDataTable dataTableFactory:parameters];
+    MTDataTableFast *datatable = (MTDataTableFast *)[MTDataTable dataTableFactory:parameters];
     datatable.cacheDelegate = self;
     self.mainDataTable = datatable;
 }

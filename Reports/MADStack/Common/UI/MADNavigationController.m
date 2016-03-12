@@ -25,9 +25,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if ([self.topViewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
+    if ([self.topViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
         NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-        ((id <MADocumentProtocol>)self.topViewController).document = self.document;
+        ((id <MADViewControllerDocumentProtocol>)self.topViewController).document = self.document;
     }
     [self setNeedsStatusBarAppearanceUpdate];
 }
@@ -106,8 +106,8 @@
     if (_document != document) {
         _document = document;
         for (UIViewController *viewController in self.viewControllers) {
-            if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
-                ((id <MADocumentProtocol>) viewController).document = document;
+            if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+                ((id <MADViewControllerDocumentProtocol>) viewController).document = document;
             }
         }
     }

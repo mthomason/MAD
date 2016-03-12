@@ -66,11 +66,15 @@
             
             MysqlServer *serv = [[MysqlServer alloc] init];
             
-            [serv setHost:      [connection server]];
-            [serv setSchema:    [connection database]];
-            [serv setPort:      (unsigned int)[connection port]];
-            [serv setUser:      username];
-            [serv setPassword:  password];
+            NSString *server = [connection server];
+            serv.host = server.copy;
+            
+            NSString *database = [connection database];
+            serv.schema = database.copy;
+            
+            serv.port = (unsigned int)connection.port;
+            serv.user = username.copy;
+            serv.password = password.copy;
             
             MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
             
@@ -214,15 +218,18 @@
         MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
         MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
         if (errorColumnMetaData == nil) {
-            for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
+            NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
+            for (MTDataColumn *dataColumn in columnsEnumerator) {
                 MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
-                NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
-                [databaseField setFieldTypeNative:nativeColumnType];
+                
+                NSInteger nativeColumnType = dataColumn.nativeColumnType.integerValue;
+                databaseField.fieldTypeNative = nativeColumnType;
+
                 MTDataType fieldType = [MTDataTypeMySQL dataTypeForNativeType: nativeColumnType];
-                [databaseField setFieldType:fieldType];
-                [databaseField setWidth:[[dataColumn dataLength] integerValue]];
-                [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
-                [databaseField setPrimaryKey:[dataColumn isPrimaryKey]];
+                databaseField.fieldType = fieldType;
+                databaseField.width = dataColumn.dataLength.unsignedIntegerValue;
+                databaseField.decimals = dataColumn.dataPercision.unsignedIntegerValue;
+                databaseField.primaryKey = dataColumn.isPrimaryKey ? YES : NO;
             }
         }
     }

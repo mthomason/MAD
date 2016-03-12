@@ -25,6 +25,12 @@
 
 #pragma mark - Convenience
 
+- (bool)success { return self.state == finished; }
+
+- (void)setStateReady {
+    self.state = ready;
+}
+
 - (void)setStateCanceled {
     NSString *isFinished = NSStringFromSelector(@selector(isFinished));
     [self willChangeValueForKey:isFinished];

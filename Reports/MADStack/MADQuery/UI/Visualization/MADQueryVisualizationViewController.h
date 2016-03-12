@@ -13,7 +13,7 @@
 #import "MADocumentProtocol.h"
 
 @interface MADQueryVisualizationViewController : UIViewController
-    <MADocumentProtocol>
+    <MADViewControllerDocumentProtocol>
 
     @property (nonatomic, weak) MADocument *document;
 

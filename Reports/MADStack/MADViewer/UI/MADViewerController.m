@@ -260,15 +260,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
     
+    MADocument *document = self.document;
     // MARK: Reporting feature (number of results in main query)
-    self.document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-    [self.document initalizeMainQuery:[self.document activeDocumentModel]];
-    [self loadFromCache: self.document.paper.paperSize];
+    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    RptqDocument *activeDocumentModel = [document activeDocumentModel];
+    [document initalizeMainQuery:activeDocumentModel];
+
+    [self loadFromCache: document.paper.paperSize];
     
-    if ([self printPageRendererReport] == nil) {
-        [self.document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
-                                                                                                                           dataTable: self.document.mainDataTable];
+    if (self.printPageRendererReport == nil) {
+        [document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                                                                                           dataTable: document.mainDataTable];
         self.printPageRendererReport = prtingPageRendererReport;
     }
 }

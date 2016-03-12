@@ -34,15 +34,23 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class MADocumentState, NSManagedObjectID, UIImage, UIPrintPageRenderer, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
-        MTDataTableFast, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable,
-        RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper, MTReportViewerPrintPageRenderer;
+        MTDataTableFast, MTQuery, MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable, MADocument,
+        RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper, MTReportViewerPrintPageRenderer, MADCredential;
 
 @protocol MADActivityProtocol;
+
+@protocol MADocumentDelegate
+@required
+@optional
+    - (MADCredential *)getCredentialsForDocument:(MADocument *)document database:(MTDatabase *)database andKey:(NSString *)key;
+@end
 
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate, MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
 
 @property (nonatomic, assign) BOOL limitResultsDesignMode;
+
+@property (nonatomic, weak) id <MADocumentDelegate> documentDelegate;
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 
@@ -55,6 +63,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
+
 @property (readonly) RptqDocument *activeDocumentModel;
 @property (readonly) NSURL *cachedDataUrl;
 

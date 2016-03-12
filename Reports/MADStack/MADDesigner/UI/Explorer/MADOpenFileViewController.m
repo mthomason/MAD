@@ -114,8 +114,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 }
 
 + (NSOperationQueue *)queue {
+
     static NSOperationQueue *queue;
-    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         queue = [[NSOperationQueue alloc] init];
@@ -416,7 +416,7 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
 
 - (void)userSelectedItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:indexPath.item];
+    MADMetaData *metadata = [self.filesCoordnator.filesController objectAtIndexedSubscript:(NSUInteger)indexPath.item];
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
@@ -656,7 +656,6 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         self.searchBar.alpha = 0.0000f;
         self.titleView.alpha = 1.0000f;
         self.navigationItem.leftBarButtonItem.enabled = NO;
-        __weak MADOpenFileViewController *weakself = self;
         
         self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
         [self.searchBar sizeToFit];
@@ -676,12 +675,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
             [UIView transitionWithView:(UIView * _Nonnull)self.navigationItem.titleView
                               duration:0.2000f
                                options:UIViewAnimationOptionCurveEaseOut animations:^{
-                                   weakself.searchBar.alpha = 1.0000f;
-                                   weakself.titleView.alpha = 0.0000f;
-                                   weakself.navigationItem.titleView = searchViewHolder;
+                                   self.searchBar.alpha = 1.0000f;
+                                   self.titleView.alpha = 0.0000f;
+                                   self.navigationItem.titleView = searchViewHolder;
                                } completion:^(BOOL finished) {
-                                   if (weakself.searchBar.isFirstResponder == NO) {
-                                       [weakself.searchBar becomeFirstResponder];
+                                   if (self.searchBar.isFirstResponder == NO) {
+                                       [self.searchBar becomeFirstResponder];
                                    }
                                }];
         }
@@ -694,13 +693,12 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         self.searchBar.alpha = 0.1000f;
         self.titleView.alpha = 0.0000f;
         self.navigationItem.leftBarButtonItem.enabled = YES;
-        __weak MADOpenFileViewController *weakself = self;
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
-                               weakself.searchBar.alpha = 0.0000f;
-                               weakself.titleView.alpha = 1.0000f;
-                               weakself.navigationItem.titleView = weakself.titleView;
+                               self.searchBar.alpha = 0.0000f;
+                               self.titleView.alpha = 1.0000f;
+                               self.navigationItem.titleView = self.titleView;
                            } completion:nil];
         
     }
@@ -793,8 +791,8 @@ CGFloat const MADSectionHeaderHeight                            = 32.0000f;
         NSURL *fileUrl = [self documentForIndexPath:selectedCellLocation];
         [wrappedUrls addObject:fileUrl];
     }
-    NSUInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-    for (NSUInteger i=0; i<numberOfItemsInSection; i++) {
+    NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+    for (NSInteger i=0; i<numberOfItemsInSection; i++) {
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         if (documentCell != nil) {

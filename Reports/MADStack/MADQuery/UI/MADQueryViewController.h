@@ -24,7 +24,7 @@ extern NSString * const MADSegueShowSql;
 @class MADocument;
 
 @interface MADQueryViewController : MADTableViewController
-    <MADocumentProtocol>
+    <MADViewControllerDocumentProtocol>
 
     @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
     @property (nonatomic, weak) MADocument *document;

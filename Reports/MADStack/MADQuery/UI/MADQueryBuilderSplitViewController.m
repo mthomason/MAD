@@ -311,8 +311,8 @@
     if (document != _document) {
         _document = document;
         for (UIViewController *viewController in self.viewControllers) {
-            if ([viewController conformsToProtocol:@protocol(MADocumentProtocol)]) {
-                ((id <MADocumentProtocol>) viewController).document = document;
+            if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
+                ((id <MADViewControllerDocumentProtocol>) viewController).document = document;
             }
         }
     }

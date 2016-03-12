@@ -9,9 +9,9 @@
 #ifndef MAD_Designer_MADKeyChainSaveCredentials_h
 #define MAD_Designer_MADKeyChainSaveCredentials_h
 
-#import <Foundation/NSOperation.h>
+#import "MADOperation.h"
 
-@interface MADKeyChainSaveCredentials : NSOperation
+@interface MADKeyChainSaveCredentials : MADOperation
 
 @end
 

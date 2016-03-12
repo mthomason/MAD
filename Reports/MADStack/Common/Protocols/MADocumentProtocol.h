@@ -11,7 +11,7 @@
 
 @class MADocument;
 
-@protocol MADocumentProtocol <NSObject>
+@protocol MADViewControllerDocumentProtocol <NSObject>
 
 @property (nonatomic, weak) MADocument *document;
 

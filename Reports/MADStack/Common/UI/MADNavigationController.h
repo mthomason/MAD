@@ -14,7 +14,7 @@
 #import "MADocumentProtocol.h"
 
 @interface MADNavigationController : UINavigationController
-    <MADocumentProtocol, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
+    <MADViewControllerDocumentProtocol, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, weak) MADocument *document;
 

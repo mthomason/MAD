@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 };
 
 @interface MADDesignerViewController : MADViewController
-    <MADocumentProtocol, MADViewControllerProtocol>
+    <MADViewControllerDocumentProtocol, MADViewControllerProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;

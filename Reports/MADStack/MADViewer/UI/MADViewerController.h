@@ -16,7 +16,7 @@
 @protocol MTViewControllerProtocol;
 
 @interface MADViewerController : UIPageViewController
-    <MADocumentProtocol,
+    <MADViewControllerDocumentProtocol,
         MADActivityProtocol,
         UIPageViewControllerDelegate,
         UIPageViewControllerDataSource,

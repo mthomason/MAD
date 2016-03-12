@@ -24,7 +24,7 @@ extern const int8_t MADIndexViewer;
 @class MADTabBarController;
 
 @interface MADTabBarController : UITabBarController
-    <MADocumentProtocol, MTViewControllerProtocol>
+    <MADViewControllerDocumentProtocol, MTViewControllerProtocol>
 
     @property (nullable, readonly) MADQueryBuilderSplitViewController * querySplitViewController;
     @property (nullable, readonly) MADDesignerViewController * designerViewController;

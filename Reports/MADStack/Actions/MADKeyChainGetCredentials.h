@@ -11,7 +11,23 @@
 
 #import "MADOperation.h"
 
+@class MADCredential, UIViewController;
+
+typedef NS_ENUM(char, MADCredentialSource) {
+    unknown,
+    none,
+    keychain,
+    credential_prompt,
+    password_prompt,
+};
+
 @interface MADKeyChainGetCredentials : MADOperation
+
+    - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
+
+    @property (nonatomic, copy, readonly) MADCredential *credential;
+    @property (nonatomic, assign, readonly) MADOperationState state;
+    @property (nonatomic, assign) MADCredentialSource source;
 
 @end
 
