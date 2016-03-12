@@ -94,7 +94,7 @@ void sqliteLog(void *foo, const char* statement) {
             NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
             NSString *domain = @"MTSqlite3";
             MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-            error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
+            //error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
         }
         self.open = true;
     }
@@ -208,28 +208,24 @@ void sqliteLog(void *foo, const char* statement) {
 
 + (MTDataType)dataTypeForNativeType:(NSString *)nativeType {
     
-    NSString *lowerCaseString = [nativeType lowercaseString];
+    NSString *lowerCaseString = nativeType.lowercaseString;
     
-    BOOL isInteger = [lowerCaseString rangeOfString:@"int"].location != NSNotFound;
-    BOOL isText = NO;
-    BOOL isNone = NO;
+    bool isInteger = [lowerCaseString rangeOfString:@"int"].location != NSNotFound;
+    bool isText = false;
+    bool isNone = false;
     BOOL isReal = NO;
-    BOOL isNumeric = NO;
-    if (isInteger == NO) {
+    if (!isInteger) {
         isText = [lowerCaseString rangeOfString:@"char"].location != NSNotFound ||
                     [lowerCaseString rangeOfString:@"clob"].location != NSNotFound ||
                     [lowerCaseString rangeOfString:@"text"].location != NSNotFound;
-        if (isText == NO) {
+        if (!isText) {
             isNone = [lowerCaseString length] == 0 ||
                         [lowerCaseString rangeOfString:@"blob"].location != NSNotFound;
             
-            if (isNone == NO) {
+            if (!isNone) {
                 isReal = [lowerCaseString rangeOfString:@"real"].location != NSNotFound ||
                     [lowerCaseString rangeOfString:@"floa"].location != NSNotFound ||
                     [lowerCaseString rangeOfString:@"doub"].location != NSNotFound;
-                if (isReal == NO) {
-                    isNumeric = YES;        //Not read
-                }
             }
 
         }
