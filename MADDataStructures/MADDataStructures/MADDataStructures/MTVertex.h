@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 - (NSUInteger)numberOfIncidentEdges;
 - (NSArray *)incidentEdges;
 - (void)removeEdge:(MTEdge *)edge;
-- (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
+- (bool)isAdjacentToVertex:(MTVertex *)vertex;
 
 @property (nonatomic, strong, readonly) NSNumber *uniqueIdForStructure;
 

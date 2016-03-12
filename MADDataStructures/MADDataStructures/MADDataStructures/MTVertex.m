@@ -66,11 +66,12 @@
     }
 }
 
-- (BOOL)isAdjacentToVertex:(MTVertex *)vertex {
-    BOOL result = NO;
-    for (MTEdge *edge in self.edges) {
+- (bool)isAdjacentToVertex:(MTVertex *)vertex {
+    bool result = false;
+    NSArray *edges = self.edges;
+    for (MTEdge *edge in edges) {
         if ([[edge destination] isEqual:vertex]) {
-            result = YES;
+            result = true;
         }
     }
     return result;
