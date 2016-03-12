@@ -11,6 +11,8 @@
 #endif
 
 #import "MTLinkedList.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
 
 @interface MTLinkedList()
 

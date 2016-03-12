@@ -11,6 +11,9 @@
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryLinks.h>
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTLinkedList.h>
+#import <MADDataStructures/MTVertex.h>
 
 @interface MADQueryVisualizationDefination()
 

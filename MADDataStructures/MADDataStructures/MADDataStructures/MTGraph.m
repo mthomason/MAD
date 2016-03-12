@@ -11,6 +11,17 @@
 #endif
 
 #import "MTGraph.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSSet.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSBundle.h>
+#import "MTVertex.h"
+#import "MTEdge.h"
+#import "MTQueue.h"
+#import "MTLinkedList.h"
+#import "MTPair.h"
 
 @interface MTGraph ()
 

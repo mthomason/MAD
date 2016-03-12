@@ -41,6 +41,10 @@
 
 #import <MADFoundation/MTDataTable.h>
 #import <MADDataStructures/MTGraph.h>
+#import <MADDataStructures/MTLinkedList.h>
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTEdge.h>
 
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"

@@ -9,7 +9,8 @@
 #ifndef MAD_DataStructures_MTLinkedList_h
 #define MAD_DataStructures_MTLinkedList_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSEnumerator.h>
 #import "MTProtocolLog.h"
 
 #ifndef NS_DESIGNATED_INITIALIZER
@@ -19,24 +20,23 @@
 #define NS_DESIGNATED_INITIALIZER
 #endif
 #endif
-// MARK: Just a wrapper around NSArray.
 
 @interface MTLinkedList : NSObject <NSFastEnumeration, MTProtocolLog>
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (NSUInteger)count;
-- (void)insert:(id)object;
-- (void)add:(id)object;
-- (id)head;
-- (id)getNext;
-- (id)getPrevious;
-- (id)getTop;
-- (id)getBottom;
-- (bool)isNext;
-- (bool)isPrevious;
-- (id)objectAtIndex:(NSUInteger)index;
-- (void)reverse;
-- (NSArray *)toArray;
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
+    - (NSUInteger)count;
+    - (void)insert:(id)object;
+    - (void)add:(id)object;
+    - (id)head;
+    - (id)getNext;
+    - (id)getPrevious;
+    - (id)getTop;
+    - (id)getBottom;
+    - (bool)isNext;
+    - (bool)isPrevious;
+    - (id)objectAtIndex:(NSUInteger)index;
+    - (void)reverse;
+    - (NSArray *)toArray;
 
 @end
 
