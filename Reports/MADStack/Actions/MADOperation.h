@@ -24,7 +24,7 @@ typedef NS_ENUM(char, MADOperationState) {
 @interface MADOperation : NSOperation
 
     @property (readonly) bool success;
-    - (void)setStateReady;
+
     - (void)setStateCanceled;
     - (void)setStateError;
     - (void)setStateFinished;

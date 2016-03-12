@@ -13,6 +13,7 @@
 #import "MADocument.h"
 #import <MADFoundation/NSURL+Document.h>
 #import <Foundation/NSException.h>
+#import "MADCredential.h"
 
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
@@ -68,7 +69,6 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
-//#import <MADCocoaExtensions/MADFilename.h>
 
 #import "MTDataTableFast.h"
 
@@ -705,7 +705,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark - MTDatabaseProtocol
 
 - (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {
-    return [self.documentDelegate getCredentialsForDocument:self database:database andKey:key];
+    MADCredential *credentials = [self.documentDelegate getCredentialsForDocument:self database:database andKey:key];
+    return credentials;
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
@@ -721,7 +722,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             return nil;
             break;
     }
-    
 }
 
 - (MTDatabase *)database {
@@ -1035,7 +1035,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSArray *)readCurrentSortDescriptors {
     RptqDocument *document = (RptqDocument *)[self.managedObjectContext objectWithID:self.documentObjectID];
-    if (self.mainDatabase == nil) [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
+    if (self.mainDatabase == nil) {
+        [self initalizeMainDatabase:document];        // FIXME: I doubt this ever runs.
+    }
     return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.mainDatabase];
 }
 

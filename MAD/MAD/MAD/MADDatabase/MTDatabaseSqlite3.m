@@ -112,8 +112,9 @@ void sqliteLog(void *foo, const char* statement) {
 
 }
 
-- (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
+- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
     [self openDatabase];
+    return (__bridge id)(_database);
 }
 
 - (BOOL)tableExist:(NSString *)tablename {

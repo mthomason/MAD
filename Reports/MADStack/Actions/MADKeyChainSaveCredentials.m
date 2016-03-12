@@ -24,18 +24,15 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, weak) UIViewController *viewController;
     @property (nonatomic, copy) NSString *key;
     @property (nonatomic, strong, readwrite) MADCredential *credential;
-    //@property (nonatomic, strong) MTKeyChain *keychain;
 
 @end
 
 @implementation MADKeyChainSaveCredentials
 
-- (instancetype)initWithCredentials:(MADCredential *)credentials key:(NSString *)key viewController:(UIViewController *)viewController {
+- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.credential = credentials.copy;
         self.viewController = viewController;
         self.key = key.copy;
-        [self setStateReady];
     }
     return self;
 }
@@ -51,10 +48,12 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     [self setStateExecuting];
     
+    MADCredential *credentials = nil;
     MADCredentialSource source = none;
     NSArray *dependencies = self.dependencies;
     for (MADKeyChainGetCredentials *dependency in dependencies) {
         if ([dependency isKindOfClass:[MADKeyChainGetCredentials class]]) {
+            credentials = ((MADKeyChainGetCredentials *)dependency).credential.copy;
             source = ((MADKeyChainGetCredentials *)dependency).source;
             break;
         }

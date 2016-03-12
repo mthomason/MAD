@@ -49,7 +49,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.viewController = viewController;
         self.key = key.copy;
         self.source = none;
-        [self setStateReady];
     }
     return self;
 }
@@ -94,10 +93,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
             
         case PromptForNothing: {
 
-            NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
-                                                       encoding: NSUTF8StringEncoding];
-            NSString *password = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryPasswordData
-                                                       encoding: NSUTF8StringEncoding];
+            NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData encoding: NSUTF8StringEncoding];
+            NSString *password = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryPasswordData encoding: NSUTF8StringEncoding];
             MADCredential *c = [[MADCredential alloc] initWithUsername:username andPassword:password];
             self.credential = c;
             self.source = keychain;

@@ -11,7 +11,11 @@
 
 #import "MADOperation.h"
 
+@class MADCredential, UIViewController;
+
 @interface MADKeyChainSaveCredentials : MADOperation
+
+- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
 
 @end
 

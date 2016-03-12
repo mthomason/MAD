@@ -719,14 +719,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)loadFromCache:(CGSize)viewBounds {
     
-    [self.document activeDocumentModel];
-    [self.document prepareForQuery];
+    MADocument *document = self.document;
+    [document activeDocumentModel];
+    [document prepareForQuery];
     
-    self.document.reportFormatter.didRefresh = NO;
-    [self.document.reportFormatter loadFromCacheWithSize: viewBounds];
+    document.reportFormatter.didRefresh = NO;
+    [document.reportFormatter loadFromCacheWithSize: viewBounds];
     
-    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
-                                                                                                               dataTable: self.document.mainDataTable];
+    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                                                                               dataTable: document.mainDataTable];
     self.printPageRendererReport = printPageRender;
     
     [self uiUpdateNumberOfPages];
@@ -735,11 +736,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageAttributes.pageNumber = self.currentPageNumber;
     pageAttributes.numberOfPages = self.numberOfPages;
     pageAttributes.zoomScaleInital = 1.0000f;
-    pageAttributes.contentSizeInital = self.document.paper.paperSize;
+    pageAttributes.contentSizeInital = document.paper.paperSize;
     pageAttributes.contentOffsetInital = CGPointZero;
     pageAttributes.contentScaleFactor = 0.0;
 
-    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: self.document
+    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
                                                                                         pageAttributes: pageAttributes
                                                                                                  frame: self.view.bounds
                                                                                            andDelegate: self];
@@ -753,7 +754,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.refreshing = false;
     self.startedRefresh = false;
     [self uiUpdateRecordsRead];
-    self.document.reportFormatter.didRefresh = NO;
+    document.reportFormatter.didRefresh = NO;
     
 }
 
@@ -767,31 +768,34 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)reloadStepTwo:(CGSize)size {
-    [self watchFormatter: self.document.reportFormatter];
+
+    MADocument *document = self.document;
+    [self watchFormatter: document.reportFormatter];
     
-    self.document.reportFormatter.didRefresh = self.startedRefresh;
-    [self.document.reportFormatter formatForSize:size contentChanged:self.startedRefresh];
+    document.reportFormatter.didRefresh = self.startedRefresh;
+    [document.reportFormatter formatForSize:size contentChanged:self.startedRefresh];
     
-    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.document.reportFormatter
-                                                                                                               dataTable: self.document.mainDataTable];
+    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                                                                               dataTable: document.mainDataTable];
     self.printPageRendererReport = printPageRender;
-    [self ignoreFormatter: self.document.reportFormatter];
+    [self ignoreFormatter: document.reportFormatter];
     
 }
 
 - (void)reloadStepThree {
     [self uiUpdateNumberOfPages];
     
+    MADocument *document = self.document;
     MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
     pageAttributes.pageNumber = self.currentPageNumber;
     pageAttributes.numberOfPages = self.numberOfPages;
     
     // FIXME: Don't reset the display size to the paper size.
-    pageAttributes.contentSizeInital = self.document.paper.paperSize;
+    pageAttributes.contentSizeInital = document.paper.paperSize;
     pageAttributes.zoomScaleInital = 1.0000f;
     pageAttributes.contentScaleFactor = 0.0;
     
-    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: self.document
+    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
                                                                                         pageAttributes: pageAttributes
                                                                                                  frame: self.view.bounds
                                                                                            andDelegate: self];
@@ -805,7 +809,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.refreshing = false;
     self.startedRefresh = false;
     [self uiUpdateRecordsRead];
-    self.document.reportFormatter.didRefresh = NO;
+    document.reportFormatter.didRefresh = NO;
     if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
         
         UILocalNotification *notification = [[UILocalNotification alloc] init];
@@ -825,17 +829,20 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)reloadWithSize:(CGSize)viewBounds {
     
     [self reloadStepOne];
-    __weak MADViewerController *blockViewer = self;
+
+    MADViewerController * __weak blockViewer = self;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
-
-        [blockViewer reloadStepTwo:viewBounds];
-        __weak MADViewerController *blockViewer2 = blockViewer;
-
+        
+        MADViewerController * __strong strongViewer = blockViewer;
+        [strongViewer reloadStepTwo:viewBounds];
+        __weak MADViewerController *blockViewer2 = strongViewer;
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [blockViewer2 reloadStepThree];
+            MADViewerController * __strong strongViewer2 = blockViewer2;
+            [strongViewer2 reloadStepThree];
             
         });
     });
@@ -1038,6 +1045,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 #pragma mark - MTActivityItemProviderDelegate
+
+// ???: Why is it like this?
 
 - (void)showPrintDialog {
     __weak MADViewerController *weakself = self;

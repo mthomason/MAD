@@ -17,8 +17,6 @@
 
 @implementation MADOperation
 
-- (BOOL)isReady { return self.state == ready; }
-
 - (BOOL)isExecuting {return self.state == executing; }
 
 - (BOOL)isFinished { return self.state == finished || self.state == error || self.state == cancelled; }
@@ -26,10 +24,6 @@
 #pragma mark - Convenience
 
 - (bool)success { return self.state == finished; }
-
-- (void)setStateReady {
-    self.state = ready;
-}
 
 - (void)setStateCanceled {
     NSString *isFinished = NSStringFromSelector(@selector(isFinished));

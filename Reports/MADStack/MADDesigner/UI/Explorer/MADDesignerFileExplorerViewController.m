@@ -7,10 +7,14 @@
 //
 
 #import "MADDesignerFileExplorerViewController.h"
+#import <MAD/MADCredential.h>
 
 #import "MADStoryboard.h"
 #import "Constants.h"
+
 #import "MADKeyChainGetCredentials.h"
+#import "MADKeyChainSaveCredentials.h"
+
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -377,12 +381,17 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (MADCredential *)getCredentialsForDocument:(MADocument *)document database:(MTDatabase *)database andKey:(NSString *)key {
     NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
     credentialQueue.maxConcurrentOperationCount = 1;
-    MADKeyChainGetCredentials *c = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
-    [credentialQueue addOperation:c];
+    
+    MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
+    MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
+
+    [cs addDependency:cg];
+    [credentialQueue addOperation:cg];
+    [credentialQueue addOperation:cs];
     [credentialQueue waitUntilAllOperationsAreFinished];
-    if (c.success && c != nil) {
-        
-    }
+    
+    MADCredential *credentials = cg.credential.copy;
+    return credentials;
     
 }
 

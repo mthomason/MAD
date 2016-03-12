@@ -66,76 +66,26 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return result;
 }
 
-- (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
-    
-    NSString *key = [connection connectionString];
-    if (![self.delegate respondsToSelector:@selector(getCredentialsForDatabase:andKey:)]) {
-        completion(NO, nil, nil, nil);
-    }
-    
-    MADCredential *c = [self.delegate getCredentialsForDatabase:self andKey:key];
-    if (c) {
-        completion(YES, nil, c.username, c.password);
-    } else {
-        completion(NO, nil, nil, nil);
-    }
-    
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        if (success) {
-            
-            [[MTKeyChain sharedObject] saveUsername: username
-                                        andPassword: password
-                                             forKey: key
-                                       shortCircuit: fromKeyChain
-                                         completion: ^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                                             completion(success, error, username, password);
-                                         }];
-            
-        } else {
-            completion(NO, connectionError, username, password);
-        }
-        
-    }];
-}
-
 - (MADCredential *)getCredentalsWithConnection:(MTDatabaseConnection *)connection {
-    
-    //completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
-    
-    //get credientials
-        //credientals are empty prompt for credientials
-        //save credientials
-    
-    
     NSString *key = [connection connectionString];
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        if (success) {
-            
-            [[MTKeyChain sharedObject] saveUsername:username
-                                        andPassword:password
-                                             forKey:key
-                                       shortCircuit:fromKeyChain
-                                         completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                //completion(success, error, username, password);
-            }];
-            
-        } else {
-            //completion(NO, connectionError, username, password);
+    bool responds = [self.delegate respondsToSelector:@selector(getCredentialsForDatabase:andKey:)];
+    MADCredential *results = nil;
+    if (responds) {
+        MADCredential *c = [self.delegate getCredentialsForDatabase:self andKey:key];
+        if (c) {
+            results = c.copy;
         }
         
-    }];
-// FIXME: ... sould return something
-    return nil;
+    }
+    return results;
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     completion(NO, nil);
 }
 
-- (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion {
-    completion(nil, YES, nil);
+- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
+    return nil;
 }
 
 + (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
