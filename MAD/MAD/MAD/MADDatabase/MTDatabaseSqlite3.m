@@ -74,7 +74,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (void)openDatabaseWithFlags:(int)flags {
-    NSError *error = nil;
+    //NSError *error = nil;
     //Open conneciton... closed in dealloc.
     if (!self.isOpen) {
        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
@@ -89,11 +89,11 @@ void sqliteLog(void *foo, const char* statement) {
 #endif
 
         } else {
-            const char *errorMessage = sqlite3_errmsg(_database);
-            NSString *message = @(errorMessage);
-            NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
-            NSString *domain = @"MTSqlite3";
-            MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+            //const char *errorMessage = sqlite3_errmsg(_database);
+            //NSString *message = @(errorMessage);
+            //NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
+            //NSString *domain = @"MTSqlite3";
+            //MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
             //error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
         }
         self.open = true;

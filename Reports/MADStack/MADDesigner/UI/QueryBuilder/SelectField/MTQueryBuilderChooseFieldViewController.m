@@ -56,12 +56,11 @@
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
                                               withSender:(id)sender {
-    
-    return self.unwindViewController ?
-    self.unwindViewController :
-    [super viewControllerForUnwindSegueAction: action
-                           fromViewController: fromViewController
-                                   withSender: sender];
+    UIViewController *viewController = self.unwindViewController;
+    return viewController ? viewController :
+                        [super viewControllerForUnwindSegueAction: action
+                                               fromViewController: fromViewController
+                                                       withSender: sender];
 }
 
 #pragma mark Initialization and configuration
@@ -192,30 +191,30 @@
 }
 
 
-- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[indexPath.section];
-    return [[sectionInfo objectInRowHeightsAtIndex:indexPath.row] floatValue];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
+    return [[sectionInfo objectInRowHeightsAtIndex:(NSUInteger)indexPath.row] floatValue];
 }
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
     if (queryField != nil) {
-        if (self.delegate != nil) {
-            [self.delegate tableViewControllerChooseFieldDidFinish: self
-                                                         withField: queryField];
+        id <MTQueryBuilderChooseFieldDelegate> d = self.delegate;
+        if (d != nil) {
+            [d tableViewControllerChooseFieldDidFinish: self withField: queryField];
         }
     }
 }
 
 - (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryField *queryField = nil;
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[indexPath.section];
-    NSUInteger row = indexPath.row;
-    if (sectionInfo.table.hasQueryFields.count > row) {
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
+    NSInteger row = indexPath.row;
+    if (sectionInfo.table.hasQueryFields.count > (NSUInteger)row) {
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
         NSArray *fieldsArray = [sectionInfo.table.hasQueryFields sortedArrayUsingDescriptors:@[namesAccending]];
-        queryField = fieldsArray[indexPath.row];
+        queryField = fieldsArray[(NSUInteger)indexPath.row];
         [self setQueryField:queryField];
     }
     return queryField;
@@ -225,17 +224,17 @@
 
 - (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
 	
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[sectionOpened];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)sectionOpened];
     sectionInfo.open = YES;
     
     /*
      Create an array containing the index paths of the rows to insert: These correspond to the rows for each quotation in the current section.
      */
-    NSInteger countOfRowsToInsert = sectionInfo.fields.count;
+    NSUInteger countOfRowsToInsert = sectionInfo.fields.count;
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
-    for (NSInteger i = 0; i < countOfRowsToInsert; i++) {
+    for (NSUInteger i = 0; i < countOfRowsToInsert; i++) {
         @autoreleasepool {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:sectionOpened];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(NSInteger)i inSection:sectionOpened];
             [indexPathsToInsert addObject:indexPath];
         }
     }
@@ -248,13 +247,13 @@
     NSInteger previousOpenSectionIndex = self.openSectionIndex;
     if (previousOpenSectionIndex != NSNotFound) {
 		
-		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = self.sectionInfoArray[previousOpenSectionIndex];
+		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = self.sectionInfoArray[(NSUInteger)previousOpenSectionIndex];
         previousOpenSection.open = NO;
         [previousOpenSection.headerView toggleOpenWithUserAction:NO];
         NSUInteger countOfRowsToDelete = previousOpenSection.fields.count;
         for (NSUInteger i = 0; i < countOfRowsToDelete; i++) {
             @autoreleasepool {
-                NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:previousOpenSectionIndex];
+                NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)i inSection:previousOpenSectionIndex];
                 [indexPathsToDelete addObject:path];
             }
         }
@@ -286,7 +285,7 @@
     /*
      Create an array of the index paths of the rows in the section that was closed, then delete those rows from the table view.
      */
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[sectionClosed];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)sectionClosed];
     sectionInfo.open = NO;
 
     NSInteger countOfRowsToDelete = [self.tableView numberOfRowsInSection:sectionClosed];

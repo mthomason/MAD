@@ -201,7 +201,6 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
     viewControllerToShow.view.frame = self.view.bounds;
     
-    __weak MADToolboxViewController *weakself = self;
     [self addChildViewController:viewControllerToShow];
     [viewControllerToHide willMoveToParentViewController:nil];
     [viewControllerToShow beginAppearanceTransition:YES animated:YES];
@@ -211,14 +210,11 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
                       toViewController: viewControllerToShow
                               duration: 0.23232323f
                                options: options
-                            animations:^{
-                                
-                            }
-                            completion:^(BOOL finished) {
+                            animations:^{ } completion:^(BOOL finished) {
                                 if (finished) {
                                     [viewControllerToHide removeFromParentViewController];
-                                    [viewControllerToShow didMoveToParentViewController:weakself];
-                                    [((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:weakself];
+                                    [viewControllerToShow didMoveToParentViewController:self];
+                                    [((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:self];
 
                                 }
                                 
@@ -252,6 +248,8 @@ CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
             break;
             
         default:
+            viewControllerToShow = self.layout;
+            viewControllerToUpdate = self.layout;
             break;
     }
 

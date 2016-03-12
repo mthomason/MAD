@@ -48,16 +48,16 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     [self setStateExecuting];
     
-    MADCredential *credentials = nil;
     MADCredentialSource source = none;
     NSArray *dependencies = self.dependencies;
     for (MADKeyChainGetCredentials *dependency in dependencies) {
         if ([dependency isKindOfClass:[MADKeyChainGetCredentials class]]) {
-            credentials = ((MADKeyChainGetCredentials *)dependency).credential.copy;
+            self.credential = ((MADKeyChainGetCredentials *)dependency).credential.copy;
             source = ((MADKeyChainGetCredentials *)dependency).source;
             break;
         }
     }
+    
     
     switch (source) {
         case credential_prompt: {

@@ -367,9 +367,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return success;
 }
 
-- (void)wrapFileOverwrite:(BOOL)overwrite {
+- (bool)wrapFileOverwrite:(BOOL)overwrite {
     NSError *fileWrapperError = nil;
-    BOOL success = NO;
+    bool success = false;
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
                                                             options: NSFileWrapperReadingImmediate
                                                               error: &fileWrapperError];
@@ -379,13 +379,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         if (overwrite) {
             NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
-            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
+            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting] ? true : false;
         } else {
             resultUrl = [self.fileURL uniqueUrl];
             NSData *data = [fileWrapper serializedRepresentation];
-            success = [data writeToURL:resultUrl atomically:YES];
+            success = [data writeToURL:resultUrl atomically:YES] ? true : false;
         }
     }
+    return success;
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {

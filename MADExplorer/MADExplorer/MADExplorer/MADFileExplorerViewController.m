@@ -132,8 +132,8 @@ static NSString * const Downloading                             = @"Downloading"
     bool notDownloaded = [metadata.ubiquitousItemDownloadingStatus isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
     bool downloading = metadata.ubiquitousItemIsDownloading;
     bool uploading = metadata.ubiquitousItemIsUploading;
-    bool uploaded = metadata.ubiquitousItemIsUploaded;
-    CGFloat p = metadata.ubiquitousItemPercentUploaded;
+    //bool uploaded = metadata.ubiquitousItemIsUploaded;
+    //CGFloat p = metadata.ubiquitousItemPercentUploaded;
     
     if (downloading) {
         cell.labelTitleSub.text = NSLocalizedString(Downloading, Downloading);

@@ -116,7 +116,7 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
     if ([[MTVerificationController sharedInstance] modernReceiptIsValid]) {
 
         NSArray *inAppPurchasesReadOnly = [MTVerificationController sharedInstance].receipt.inAppPurchases;
-        NSMutableArray *inAppPurchases = [[NSMutableArray alloc] initWithArray: inAppPurchasesReadOnly];
+        NSMutableArray *inAppPurchases = [NSMutableArray arrayWithArray: inAppPurchasesReadOnly];
         
         NSPredicate *canceledReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             NSDictionary *transactionData = evaluatedObject;

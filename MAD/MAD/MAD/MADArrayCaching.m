@@ -313,7 +313,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         
         if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
             result = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
-                                    length: sqlite3_column_bytes(_statementSelect, 0)];
+                                    length: (NSUInteger)sqlite3_column_bytes(_statementSelect, 0)];
             sqlite3_reset(_statementSelect);
         }
     }

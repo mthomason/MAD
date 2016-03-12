@@ -245,14 +245,15 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
 
+    MADocument *document = self.document;
     self.navigationController.hidesBarsWhenVerticallyCompact = NO;
 
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-    if (self.document) {
+    if (document) {
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(documentStateChanged)
                                                      name: UIDocumentStateChangedNotification
-                                                   object: self.document];
+                                                   object: document];
     }
     [self enableTabBarItems];
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];

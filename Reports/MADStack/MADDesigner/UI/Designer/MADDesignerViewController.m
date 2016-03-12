@@ -624,10 +624,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [super viewDidDisappear:animated];
     
     [self removeObservers];
-    
+
+// ???: Unused?
     NSArray *viewsToRemove = [self.sectionViewsArray arrayByAddingObjectsFromArray:self.sectionControlViewsArray];
     viewsToRemove = [self.sectionViewsArray arrayByAddingObject:self.ruler];
-    for (id view in self.scroller.container.subviews) {
+    
+    NSArray *subviews = self.scroller.container.subviews;
+    for (id view in subviews) {
         if ([view isKindOfClass:[MADDesignerSectionView class]]) {
             [((MADDesignerSectionView *)view).sectionLabel removeFromSuperview];
         }
