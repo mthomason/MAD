@@ -1781,21 +1781,25 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)deleteQueryLinksFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     MADTableViewCellQueryLink *cell = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
-    NSManagedObject *obj = [self.document.managedObjectContext objectRegisteredForID:cell.tableID];
-    [self.document.managedObjectContext deleteObject: obj];
-    [self.document.managedObjectContext save:nil];
+    MADocument *document = self.document;
+    NSManagedObject *obj = [document.managedObjectContext objectRegisteredForID:cell.tableID];
+    [document.managedObjectContext deleteObject: obj];
+    [document.managedObjectContext save:nil];
 }
 
 - (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    RptqQueryGroup *groupToRemove = [self.document.activeDocumentModel.defaultDatabase.defaultQuery queryGroupForIndex:indexPath.row];
-    [self.document removeGroup:groupToRemove];
+    MADocument *document = self.document;
+    RptqQueryGroup *groupToRemove = [document.activeDocumentModel.defaultDatabase.defaultQuery queryGroupForIndex:(NSUInteger)indexPath.row];
+    [document removeGroup:groupToRemove];
 }
 
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    NSManagedObjectID *objid = [(MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath] tableID];
-    NSManagedObject *predicate = [self.document.activeDocumentModel.managedObjectContext objectRegisteredForID:objid];
-    [self.document.activeDocumentModel.managedObjectContext deleteObject:predicate];
-    [self.document.activeDocumentModel.managedObjectContext save:nil];
+    MADocument *document = self.document;
+    MADTableViewCellQueryPredicate *cell = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
+    NSManagedObjectID *objid = cell.tableID;
+    NSManagedObject *predicate = [document.managedObjectContext objectRegisteredForID:objid];
+    [document.managedObjectContext deleteObject:predicate];
+    [document.managedObjectContext save:nil];
 }
 
 - (void)deleteItemFromQuerySection:(MTQuerySections)querySection fromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
