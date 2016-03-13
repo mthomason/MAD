@@ -19,6 +19,12 @@
 
 @implementation MTObject
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    id object = [self.object copyWithZone:zone];
+    id copy = [[[self class] alloc] initWithObject:object];
+    return copy;
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -53,11 +59,11 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [self.object toStringHumanReadable];
+    return [(id <MTProtocolLog>)self.object toStringHumanReadable];
 }
 
 - (NSString *)toString {
-    return [self.object toString];
+    return [(id <MTProtocolLog>)self.object toString];
 }
 
 - (NSString *)toStringDebug {
