@@ -101,8 +101,7 @@
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
             @autoreleasepool {
-                NSManagedObjectID *objectID = table.objectID;
-                [graph addVertexWithObject:objectID];
+                [graph addVertexWithObject:[table objectID]];
             }
         }
         
