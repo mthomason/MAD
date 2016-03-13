@@ -28,12 +28,12 @@
 
 @interface MTGraph ()
 
-// MARK: The graph is defined as an adjacency list.
-@property (nonatomic, strong) NSMutableArray *vertices;
+    // MARK: The graph is defined as an adjacency list.
+    @property (nonatomic, strong) NSMutableArray *vertices;
 
-// MARK: Counters to give edges and verties unique ids.
-@property (atomic, assign) NSUInteger idUniqueVertices;
-@property (atomic, assign) NSUInteger idUniqueEdges;
+    // MARK: Counters to give edges and verties unique ids.
+    @property (atomic, assign) NSUInteger idUniqueVertices;
+    @property (atomic, assign) NSUInteger idUniqueEdges;
 
 @end
 
