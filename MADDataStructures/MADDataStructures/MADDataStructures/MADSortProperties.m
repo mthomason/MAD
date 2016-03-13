@@ -10,4 +10,10 @@
 
 @implementation MADSortProperties
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    MADSortProperties *copy = [[[self class] allocWithZone:zone] init];
+    copy.vertexColor = self.vertexColor;
+    return copy;
+}
+
 @end

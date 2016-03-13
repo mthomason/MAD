@@ -7,7 +7,15 @@
 //
 
 #import "MADBfsProperties.h"
-
+#import <Foundation/NSValue.h>
 @implementation MADBfsProperties
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+    MADBfsProperties *copy = [[[self class] allocWithZone:zone] init];
+    copy.bfsDistance = [self.bfsDistance copyWithZone:zone];
+    copy.bfsPredecessor = self.bfsPredecessor;
+    copy.vertexColor = self.vertexColor;
+    return copy;
+}
 
 @end
