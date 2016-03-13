@@ -25,7 +25,7 @@
 
 @implementation MTVertex
 
-- (id)copyWithZone:(nullable NSZone *)zone {
+/*- (id)copyWithZone:(nullable NSZone *)zone {
     MTVertex *copy = [[[self class] alloc] initWithID:self.uniqueIdForStructure andObject:self.object];
     NSArray *edges = self.edges;
     for (MTEdge *edge in edges) {
@@ -35,7 +35,7 @@
     id properties = [self.properties copyWithZone:zone];
     copy.properties = properties;
     return copy;
-}
+}*/
 
 - (instancetype)init {
     return [self initWithID:0];

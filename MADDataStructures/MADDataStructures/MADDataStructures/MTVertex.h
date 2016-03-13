@@ -22,8 +22,7 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
     MADAlgorithmPropertyClassesSort
 };
 
-@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
-@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
+@interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
 @property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
 @property (nonatomic, strong) MADAlgorithmElementProperties *properties;
