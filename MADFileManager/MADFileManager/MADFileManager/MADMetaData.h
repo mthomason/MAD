@@ -17,10 +17,9 @@
 
 @interface MADMetaData : NSObject
 
+@property (nonatomic, strong, readonly) NSURL     *URL;
 @property (nonatomic, strong, readonly) NSString  *fileSystemName;
 @property (nonatomic, strong, readonly) NSString  *name;
-@property (nonatomic, strong, readonly) NSString  *subtitle;
-@property (nonatomic, strong, readonly) NSURL     *URL;
 
 @property (nonatomic, assign, readonly) unsigned long long fileSystemFileSize;
 
@@ -30,16 +29,18 @@
 @property (nonatomic, strong, readonly) NSString  *contentType;
 
 @property (nonatomic, assign, getter=isUbiquitous, readonly) BOOL ubiquitous;
-@property (nonatomic, strong, readonly) NSString *ubiquitousItemDownloadingStatus;                // Download status of this item. The values are the three strings defined below:
 
-@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly)
-                                    BOOL ubiquitousItemDownloadingStatusNotDownloaded;        // this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.
+// Download status of this item. The values are the three strings defined below.
+@property (nonatomic, strong, readonly) NSString *ubiquitousItemDownloadingStatus;
 
-@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusDownloaded, readonly)
-                                    BOOL ubiquitousItemDownloadingStatusDownloaded;           // there is a local version of this item available. The most current version will get downloaded as soon as possible.
+// this item has not been downloaded yet. Use startDownloadingUbiquitousItemAtURL:error: to download it.
+@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusNotDownloaded, readonly) BOOL ubiquitousItemDownloadingStatusNotDownloaded;
 
-@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusCurrent, readonly)
-                                    BOOL ubiquitousItemDownloadingStatusCurrent;              // there is a local version of this item and it is the most up-to-date version known to this device.
+// there is a local version of this item available. The most current version will get downloaded as soon as possible.
+@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusDownloaded, readonly) BOOL ubiquitousItemDownloadingStatusDownloaded;
+
+// there is a local version of this item and it is the most up-to-date version known to this device.
+@property (nonatomic, assign, getter=isUbiquitousItemDownloadingStatusCurrent, readonly) BOOL ubiquitousItemDownloadingStatusCurrent;
 
 @property (nonatomic, assign, readonly) BOOL ubiquitousItemIsDownloading;
 @property (nonatomic, assign, readonly) BOOL ubiquitousItemIsUploaded;

@@ -13,6 +13,7 @@
 @property (nonatomic, strong, readwrite) NSURL *URL;
 @property (nonatomic, strong, readwrite) NSString  *fileSystemName;
 @property (nonatomic, strong, readwrite) NSString  *name;
+
 @property (nonatomic, strong) NSMetadataItem *metadataItem;
 @property (nonatomic, strong) NSDictionary *attributes;
 
@@ -129,11 +130,11 @@
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsUploadedKey]).boolValue) : NO;
 }
 
-- (CGFloat)ubiquitousItemPercentUploaded {
+- (double)ubiquitousItemPercentUploaded {
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey]).doubleValue) : 100.0;
 }
 
-- (CGFloat)ubiquitousItemPercentDownloaded {
+- (double)ubiquitousItemPercentDownloaded {
     return self.metadataItem ? (((NSNumber *)[self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey]).doubleValue) : 100.0;
 }
 
@@ -170,7 +171,7 @@
             self.ubiquitousItemPercentUploaded == unknown.ubiquitousItemPercentUploaded;
 }
 
-- (CGFloat)samePercentageHash {
+- (double)samePercentageHash {
     return self.ubiquitousItemPercentDownloaded * 5 + self.ubiquitousItemPercentUploaded * 7;
 }
 
