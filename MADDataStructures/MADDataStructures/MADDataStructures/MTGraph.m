@@ -84,7 +84,8 @@
 
     // MARK: Make sure edge does not exist.
     BOOL edgeExist = NO;
-    for (MTEdge *existingEdge in [self allEdges]) {
+    NSSet *allEdges = [self allEdges];
+    for (MTEdge *existingEdge in allEdges) {
         if ([edge isEqualTo:existingEdge]) {
             edgeExist = YES;
             break;
@@ -93,7 +94,8 @@
     
     // MARK: Insert edge.
     if (!edgeExist) {
-        for (MTVertex *vertex in self.vertices) {
+        NSArray *vertices = self.vertices;
+        for (MTVertex *vertex in vertices) {
             MTVertex *edgeOrigin = edge.origin;
             if ([vertex isEqualTo: edgeOrigin]) {
                 [vertex addEdge:edge];
@@ -121,8 +123,13 @@
 
 - (NSUInteger)numberOfEdges {
     NSMutableSet *allEdges = [[NSMutableSet alloc] init];
-    for (MTVertex *vertex in [self allVertices]) {
-        [allEdges addObjectsFromArray:[vertex incidentEdges]];
+    NSArray *allVertices = [self allVertices];
+    for (MTVertex *vertex in allVertices) {
+        @autoreleasepool {
+            NSArray *ie = [vertex incidentEdges];
+            NSArray *incidentEdges = [NSArray arrayWithArray:ie];
+            [allEdges addObjectsFromArray:incidentEdges];
+        }
     }
     return allEdges.count;
 }
@@ -137,15 +144,21 @@
 
 - (NSSet *)allEdges {
     NSMutableSet *allEdges = [[NSMutableSet alloc] init];
-    for (MTVertex *vertex in [self allVertices]) {
-        [allEdges addObjectsFromArray:[vertex incidentEdges]];
+    NSArray *allVertices = [self allVertices];
+    for (MTVertex *vertex in allVertices) {
+        @autoreleasepool {
+            NSArray *ie = [vertex incidentEdges];
+            NSArray *incidentEdges = [NSArray arrayWithArray:ie];
+            [allEdges addObjectsFromArray:incidentEdges];
+        }
     }
     return allEdges;
 }
 
 - (MTVertex *)vertexForObject:(id)object {
     MTVertex *result = nil;
-    for (MTVertex *vertex in self.vertices) {
+    NSArray *vertices = self.vertices;
+    for (MTVertex *vertex in vertices) {
         if ([vertex.object isEqual: object]) {
             result = vertex;
             break;
@@ -158,7 +171,9 @@
 - (NSArray *)breadthFirstSearch:(MTVertex *)root {
     
     NSMutableArray *resultList = [[NSMutableArray alloc] init];
+    
     MTQueue *greyVertices = [[MTQueue alloc] init];
+    
     for (MTVertex *vertex in self.vertices) {
         @autoreleasepool {
             MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
@@ -184,7 +199,8 @@
                 if (vertex.properties.vertexColor == MTColorWhite) {
                     vertex.properties.vertexColor = MTColorGray;
                     vertex.bfsProperties.bfsPredecessor = u;
-                    vertex.bfsProperties.bfsDistance = @(u.bfsProperties.bfsDistance.integerValue + 1);
+                    NSNumber *distance = @(u.bfsProperties.bfsDistance.integerValue + 1);
+                    vertex.bfsProperties.bfsDistance = distance;
                     [greyVertices enqueue: vertex];
                 }
             } while (vertex.properties.vertexColor == MTColorWhite);
@@ -222,7 +238,8 @@
     
     NSNumber *counter = @(0);
     
-    for (MTVertex *vertex in self.vertices) {
+    NSArray *vertices = self.vertices;
+    for (MTVertex *vertex in vertices) {
         @autoreleasepool {
             MADDfsProperties *properties = [[MADDfsProperties alloc] init];
             properties.vertexColor = MTColorWhite;
@@ -243,9 +260,9 @@
     
     *isDirectedAcyclicGraph = YES;
     //BOOL isDirectedAcyclicGraph = YES;
+
     for (MTPair *pair in resultEdges) {
-        MTEdgeType edgeType = [pair.latter unsignedIntegerValue];
-        if (edgeType == MTEdgeTypeBackEdge) {
+        if ((MTEdgeType)((NSNumber *)pair.latter).unsignedIntegerValue == MTEdgeTypeBackEdge) {
             *isDirectedAcyclicGraph = NO;
 
             if (anError != NULL) {
@@ -316,7 +333,8 @@
 
 - (NSString *)toStringHumanReadable {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
-    for (MTVertex *vertex in [self allVertices]) {
+    NSArray *allVertices = [self allVertices];
+    for (MTVertex *vertex in allVertices) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
     [result appendString:@"--------------------\n"];
@@ -325,7 +343,8 @@
 
 - (NSString *)toString {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
-    for (MTVertex *vertex in [self allVertices]) {
+    NSArray *allVertices = [self allVertices];
+    for (MTVertex *vertex in allVertices) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
     return result;
@@ -333,7 +352,8 @@
 
 - (NSString *)toStringDebug {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
-    for (MTVertex *vertex in [self allVertices]) {
+    NSArray *allVertices = [self allVertices];
+    for (MTVertex *vertex in allVertices) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
     return result;
