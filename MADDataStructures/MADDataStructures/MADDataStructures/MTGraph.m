@@ -206,8 +206,6 @@
     return resultEdges;
 }
 
-
-
 - (MTLinkedList *)topologicalSortWithError:(NSError **)anError isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph {
     
     NSNumber *counter = @(0);

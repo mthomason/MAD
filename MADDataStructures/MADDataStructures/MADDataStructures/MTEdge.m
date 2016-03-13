@@ -36,15 +36,12 @@
 }
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id <NSCopying>)object andWeight:(NSNumber *)weight {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
 
         _directed = true;
         
         MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLatter:vertex2];
         self.vertices = pair;
-
-        self.object = object;
         self.weight = weight;
         self.uniqueIdForStructure = uniqueID;
     }

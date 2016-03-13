@@ -41,8 +41,6 @@
         NSMutableArray *array = [[NSMutableArray alloc] init];
         self.edges = array;
 
-        self.object = object;
-
     }
     return self;
 }
