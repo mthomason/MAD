@@ -8,6 +8,24 @@
 
 #import "MADIndex.h"
 
+@interface MADIndex ()
+
+    @property (nonatomic, strong, readwrite) id object;
+    @property (nonatomic, assign, readwrite) NSUInteger index;
+
+@end
+
 @implementation MADIndex
+
+- (instancetype)initWithIndex:(NSUInteger)index andObject:(id)object {
+    if (self = [super init]) {
+        
+        _index = index;
+
+        id __strong obj = object;
+        _object = obj;
+    }
+    return self;
+}
 
 @end

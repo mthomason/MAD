@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FA9F21C94F462005E8B33 /* MADIndex.m */; };
+		4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FA9F31C94F462005E8B33 /* MADIndex.h */; };
 		4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B4C1BA929EF00C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */; };
 		4C2C7B511BA929EF00C9CC5E /* MADDataStructuresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */; };
@@ -44,6 +46,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C0FA9F21C94F462005E8B33 /* MADIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADIndex.m; path = MADDataStructures/MADIndex.m; sourceTree = "<group>"; };
+		4C0FA9F31C94F462005E8B33 /* MADIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADIndex.h; path = MADDataStructures/MADIndex.h; sourceTree = "<group>"; };
 		4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDataStructures.h; sourceTree = "<group>"; };
 		4C2C7B461BA929EF00C9CC5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 		4C2C7B5B1BA92A0900C9CC5E /* MADDataStructures */ = {
 			isa = PBXGroup;
 			children = (
+				4C0FA9F31C94F462005E8B33 /* MADIndex.h */,
+				4C0FA9F21C94F462005E8B33 /* MADIndex.m */,
 				4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */,
 				4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */,
 				4C2C7B601BA92A8700C9CC5E /* MTGraph.h */,
@@ -176,6 +182,7 @@
 				4C2C7B791BA92A8700C9CC5E /* MTGraph.h in Headers */,
 				4C2C7B7F1BA92A8700C9CC5E /* MTPair.h in Headers */,
 				4C2C7B861BA92A8700C9CC5E /* MTStack.h in Headers */,
+				4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */,
 				4C2C7B841BA92A8700C9CC5E /* MTQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C2C7B8B1BA92A8700C9CC5E /* MTTree.m in Sources */,
+				4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */,
 				4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */,
 				4C2C7B7C1BA92A8700C9CC5E /* MTLinkedList.m in Sources */,
 				4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */,
