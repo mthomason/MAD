@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char MADDataStructuresVersionString[];
 #import <MADDataStructures/MTLinkedList.h>
 #import <MADDataStructures/MTObject.h>
 #import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MADIndex.h>
 #import <MADDataStructures/MTQueue.h>
 #import <MADDataStructures/MTStack.h>
 #import <MADDataStructures/MTVertex.h>

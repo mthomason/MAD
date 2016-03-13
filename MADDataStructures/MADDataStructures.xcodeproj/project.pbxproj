@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FA9F21C94F462005E8B33 /* MADIndex.m */; };
-		4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FA9F31C94F462005E8B33 /* MADIndex.h */; };
+		4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FA9F31C94F462005E8B33 /* MADIndex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B4C1BA929EF00C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */; };
 		4C2C7B511BA929EF00C9CC5E /* MADDataStructuresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */; };
