@@ -27,12 +27,23 @@
 
 @implementation MTEdge
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    NSNumber *uniqueId = self.uniqueIdForStructure.copy;
+    NSNumber *weight = self.weight.copy;
+    MTVertex *origin = self.origin.copy;
+    MTVertex *destination = self.destination.copy;
+    id<NSCopying> obj = [self.object copyWithZone:zone];
+    id copy = [[[self class] alloc] initWithUniqueID:uniqueId origin:origin destination:destination object:obj andWeight:weight];
+    return copy;
+}
+
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
     return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 andObject:nil];
 }
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id <NSCopying>)object {
-    return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 object:nil andWeight:@(1)];
+    NSNumber *one = @(1);
+    return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 object:nil andWeight:one];
 }
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id <NSCopying>)object andWeight:(NSNumber *)weight {

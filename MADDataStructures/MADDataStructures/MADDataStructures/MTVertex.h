@@ -24,6 +24,9 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
 
 @interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
+@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
+@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
+
 - (instancetype)init;
 - (instancetype)initWithID:(NSUInteger)idnumber;
 - (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
@@ -35,9 +38,6 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
 - (void)removeEdge:(MTEdge *)edge;
 - (bool)isAdjacentToVertex:(MTVertex *)vertex;
 
-@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
-
-@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
 @property (readonly) MADBfsProperties *bfsProperties;
 @property (readonly) MADDfsProperties *dfsProperties;
 @property (readonly) MADSortProperties *sortProperties;
