@@ -16,6 +16,7 @@
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/NSURL+Document.h>
 #import <MAD/MADocument.h>
 
@@ -76,9 +77,9 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 @property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
 
-@property (nonatomic, strong) NSMutableArray *batchInserts;
-@property (nonatomic, strong) NSMutableArray *batchRemoves;
-@property (nonatomic, strong) NSMutableArray *batchUpdates;
+@property (nonatomic, strong) NSMutableArray <MADIndex *> *batchInserts;
+@property (nonatomic, strong) NSMutableArray <MADIndex *> *batchRemoves;
+@property (nonatomic, strong) NSMutableArray <MADIndex *> *batchUpdates;
 
 @property (nonatomic, strong) dispatch_queue_t queueSerialOperations;
 
@@ -87,6 +88,13 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 @end
 
 @implementation MADOpenFileViewController
+
+- (void)dealloc {
+    [_batchInserts removeAllObjects];
+    [_batchUpdates removeAllObjects];
+    [_batchRemoves removeAllObjects];
+    [self removeObservers];
+}
 
 #pragma mark - UITextFieldDelegate
 
@@ -131,10 +139,6 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 #pragma mark - NSObject
-
-- (void)dealloc {
-    [self removeObservers];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -553,43 +557,40 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 }
 
 - (void)filesController:(MADFilesController *)filesController didInsertListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
-    NSNumber *i = @(index);
-    MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
-    [self.batchInserts addObject:pair];
+    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:listInfo];
+    [self.batchInserts addObject:i];
 }
 
 - (void)filesController:(MADFilesController *)filesController didRemoveListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
-    NSNumber *i = @(index);
-    MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
-    [self.batchRemoves addObject:pair];
+    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:listInfo];
+    [self.batchRemoves addObject:i];
 }
 
 - (void)filesController:(MADFilesController *)filesController didUpdateListInfo:(MADFileInfo *)listInfo atIndex:(NSUInteger)index {
-    NSNumber *i = @(index);
-    MTPair *pair = [[MTPair alloc] initWithLeft:listInfo andRight:i];
-    [self.batchUpdates addObject:pair];
+    MADIndex *i = [[MADIndex alloc] initWithIndex:index andObject:listInfo];
+    [self.batchUpdates addObject:i];
 }
 
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController completion:(void (^)(BOOL, NSError *))completion {
     NSIndexPath *path;
-    MTPair *pair;
     NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity:self.batchInserts.count];
-    for (pair in self.batchInserts) {
-        path = [NSIndexPath indexPathForItem:((NSNumber *)pair.right).integerValue
-                                   inSection:0];
+    NSArray *batchInserts = self.batchInserts;
+    for (MADIndex *index in batchInserts) {
+        path = [NSIndexPath indexPathForItem:(NSInteger)index.index inSection:0];
         [inserts addObject:path];
     }
 
     NSMutableArray *removes = [[NSMutableArray alloc] initWithCapacity:self.batchRemoves.count];
-    for (pair in self.batchRemoves) {
-        path = [NSIndexPath indexPathForItem:((NSNumber *)pair.right).integerValue
-                                   inSection:0];
+    NSArray *batchRemoves = self.batchRemoves;
+    for (MADIndex *index in batchRemoves) {
+        path = [NSIndexPath indexPathForItem:(NSInteger)index.index inSection:0];
         [removes addObject:path];
     }
 
     NSMutableArray *updates = [[NSMutableArray alloc] initWithCapacity:self.batchUpdates.count];
-    for (pair in self.batchUpdates) {
-        path = [NSIndexPath indexPathForItem:((NSNumber *)pair.right).integerValue inSection:0];
+    NSArray *batchUpdates = self.batchUpdates;
+    for (MADIndex *index in batchUpdates) {
+        path = [NSIndexPath indexPathForItem:(NSInteger)index.index inSection:0];
         [updates addObject:path];
     }
 
