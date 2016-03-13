@@ -455,7 +455,6 @@ void sqliteLog(void *foo, const char* statement) {
     if (queryString.length > 0) {
         
         sqlite3_stmt *statement = NULL;
-        
         char *sql = sqlite3_mprintf(queryString.UTF8String);
         
         if (statement == NULL) {

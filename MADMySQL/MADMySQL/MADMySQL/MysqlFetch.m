@@ -359,20 +359,20 @@ char *mySQLTypeForType(int type) {
                                             // FIXME: This is a hack.
                                             if (rowCounter == 0) {
                                                 MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
-                                                NSNumber *columnTypeString = @(MTDataTypeString);
+                                                NSNumber * __autoreleasing columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
                                                 [column setColumnType:columnTypeString];
                                             }
-                                            if ([theDataString length] != 0) {
+                                            if (theDataString.length != 0) {
                                                 dict[key] = theDataString;
                                             } else {
-                                                NSData *theData = [NSData dataWithBytes:bindings[x].buffer length:*(bindings[x].length)];
+                                                NSData * __autoreleasing theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
                                                 dict[key] = theData;
                                                 
                                             }
                                         } else if ([theDataString isKindOfClass:[NSNumber class]]) {
                                             if (rowCounter == 0) {
                                                 MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
-                                                NSNumber *columnTypeString = @(MTDataTypeInteger);
+                                                NSNumber * __autoreleasing columnTypeString = [NSNumber numberWithUnsignedInteger: MTDataTypeInteger];
                                                 [column setColumnType:columnTypeString];
                                             }
                                             dict[key] = theDataString;
@@ -381,7 +381,7 @@ char *mySQLTypeForType(int type) {
                                         }
                                     }
                                     if (![dict[key] respondsToSelector:@selector(compare:)]) {
-                                        NSString *utf8String = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
+                                        NSString * __autoreleasing utf8String = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
                                         dict[key] = utf8String;
                                     }
                                 } else {
@@ -401,9 +401,9 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_BIT:
                         {
                             // TODO - the encoding type should really be read from mysql
-                            NSString *theString = [[NSString alloc] initWithBytes:bindings[x].buffer
-                                                                           length:*(bindings[x].length)
-                                                                         encoding:NSUTF8StringEncoding];
+                            NSString * __autoreleasing theString = [[NSString alloc] initWithBytes: bindings[x].buffer
+                                                                                            length: *(bindings[x].length)
+                                                                                          encoding: NSUTF8StringEncoding];
                             dict[key] = theString;
                         } break;
                             
@@ -432,7 +432,7 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_TIMESTAMP2:
                         case MYSQL_TYPE_TIMESTAMP: {
                             NSString *f=[[NSString alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length) encoding:NSUTF8StringEncoding];
-                            NSDateFormatter *sqlFmt = [[NSDateFormatter alloc] init];
+                            NSDateFormatter * __autoreleasing sqlFmt = [[NSDateFormatter alloc] init];
                             [sqlFmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                             NSDate *date = [sqlFmt dateFromString:f];
                             dict[key] = date;
@@ -451,14 +451,16 @@ char *mySQLTypeForType(int type) {
                             
                         case MYSQL_TYPE_INT24: {
                             int *aValue = (int *)bindings[x].buffer;
-                            dict[key] = @(*aValue);
+                            NSNumber * __autoreleasing v = [[NSNumber alloc] initWithInt:*aValue];
+                            dict[key] = v;
                         }
                             
                         case MYSQL_TYPE_DECIMAL:
                         case MYSQL_TYPE_DOUBLE:
                         {
                             double *aValue = (double *)bindings[x].buffer;
-                            dict[key] = @(*aValue);
+                            NSNumber * __autoreleasing v = [[NSNumber alloc] initWithDouble: *aValue];
+                            dict[key] = v;
                         } break;
                             
                         case MYSQL_TYPE_DATETIME2:
@@ -466,7 +468,7 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_NEWDATE:
                         {
                             MYSQL_TIME *aValue = (MYSQL_TIME *)bindings[x].buffer;
-                            NSDateComponents *comps=[[NSDateComponents alloc] init];
+                            NSDateComponents * __autoreleasing comps = [[NSDateComponents alloc] init];
                             [comps setYear:aValue->year];
                             [comps setMonth:aValue->month];
                             [comps setDay:aValue->day];

@@ -11,11 +11,6 @@
 #endif
 
 #import "MTReportViewerPrintPageRenderer.h"
-#import <CoreText/CoreText.h>
-#import <QuartzCore/QuartzCore.h>
-
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
-#import <MADFoundation/MTDataTable.h>
 
 #import "MADocument.h"
 #import "MTDatabaseConnection.h"
@@ -395,7 +390,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
                                   offsetElement:(NSUInteger *)offsetElement offsetCharacter:(NSUInteger *)offsetCharacter {
     
     NSOrderedSet *rows = documentSection.hasRows;
-    MADReportSectionRepresentation *sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
+    MADReportSectionRepresentation * _Nonnull __autoreleasing sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
     sectionRepresentation.type = pageSection.sectionType;
     sectionRepresentation.elementOffset = *(offsetElement);
     
@@ -407,7 +402,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
         NSArray *groupLevelKeys = [self groupLevelKeysForDetailRow:pageSection.detailRowId];
         for (RptqDocumentSectionRows *row in rows) {
             NSOrderedSet *items = row.hasObjects;
-            MADReportSectionRowsRepresentation *rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
+            MADReportSectionRowsRepresentation * _Nonnull __autoreleasing rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
                         
             for (RptqDocumentObject *item in items) {
                 @autoreleasepool {
@@ -419,20 +414,20 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
                                                           item.sizeheight.floatValue + item.spacingBottom);
                     
                     if ([drawingObject isKindOfClass:[NSString class]]) {
-                        
-                        NSDictionary *attributes = [item attributesForDrawingText];
-                        [drawingObject drawWithRect: elementCanvasRect
-                                            options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
-                                         attributes: attributes
-                                            context: nil];
-                        attributes = nil;
+                        @autoreleasepool {
+                            NSDictionary *attributes = [item attributesForDrawingText];
+                            [drawingObject drawWithRect: elementCanvasRect
+                                                options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                             attributes: attributes
+                                                context: nil];
+                        }
                     } else {
                         [drawingObject drawInRect:elementCanvasRect];
                     }
                     
-                    MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
-                                                                                                                 type:item.getType
-                                                                                                                frame:elementCanvasRect];
+                    MADReportLineRepresentation * _Nonnull __autoreleasing line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
+                                                                                                                                 type:item.getType
+                                                                                                                                frame:elementCanvasRect];
                     [rowRepresentation addLine:line];
                     line.elementOffset = *(offsetElement);
                     (*(offsetElement))++;

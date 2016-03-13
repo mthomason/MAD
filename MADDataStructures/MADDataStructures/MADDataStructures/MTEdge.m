@@ -18,7 +18,9 @@
 
 @interface MTEdge ()
 
-@property (nonatomic, strong) MTPair *vertices;
+@property (nonatomic, weak, readwrite) MTVertex *origin;
+@property (nonatomic, weak, readwrite) MTVertex *destination;
+
 @property (nonatomic, strong) NSNumber *weight;
 @property (readwrite, assign, getter=isDirected) bool directed;
 @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
@@ -27,7 +29,7 @@
 
 @implementation MTEdge
 
-- (id)copyWithZone:(nullable NSZone *)zone {
+/*- (id)copyWithZone:(nullable NSZone *)zone {
     NSNumber *uniqueId = self.uniqueIdForStructure.copy;
     NSNumber *weight = self.weight.copy;
     MTVertex *origin = self.origin.copy;
@@ -35,7 +37,7 @@
     id<NSCopying> obj = [self.object copyWithZone:zone];
     id copy = [[[self class] alloc] initWithUniqueID:uniqueId origin:origin destination:destination object:obj andWeight:weight];
     return copy;
-}
+}*/
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
     return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 andObject:nil];
@@ -51,20 +53,13 @@
 
         _directed = true;
         
-        MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLatter:vertex2];
-        self.vertices = pair;
-        self.weight = weight;
-        self.uniqueIdForStructure = uniqueID;
+        self.origin = vertex1;
+        self.destination = vertex2;
+
+        self.weight = weight.copy;
+        self.uniqueIdForStructure = uniqueID.copy;
     }
     return self;
-}
-
-- (MTVertex *)origin {
-    return self.vertices.former;
-}
-
-- (MTVertex *)destination {
-    return self.vertices.latter;
 }
 
 #pragma mark - MTProtocolCompare

@@ -32,15 +32,15 @@ typedef NS_ENUM(NSUInteger, MTEdgeType) {
 
 @interface MTEdge : MTObject <MTProtocolLog, MTProtocolCompare>
 
+@property (nonatomic, weak, readonly) MTVertex *origin;
+@property (nonatomic, weak, readonly) MTVertex *destination;
+
 @property (readonly, nonatomic, assign, getter=isDirected) bool directed;
 @property(atomic, assign) MTEdgeType dfsEdgeType;
 
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2;
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id <NSCopying>)object;
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id <NSCopying>)object andWeight:(NSNumber *)weight NS_DESIGNATED_INITIALIZER;
-
-- (MTVertex *)origin;
-- (MTVertex *)destination;
 
 @end
 

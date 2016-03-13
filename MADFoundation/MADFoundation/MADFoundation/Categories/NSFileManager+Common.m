@@ -60,15 +60,12 @@ NSString * const MADPathComponentData       = @"Data";
     NSError *error;
     NSURL *groupUrl = [self containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
     NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil for %@.  Maybe the fucking entitlment file is missing?!?!", groupIdentifier);
-    NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent
-                                                isDirectory: YES];
+    NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent isDirectory: YES];
     BOOL isDirectory;
-    BOOL success = [self fileExistsAtPath: cacheURL.path
-                              isDirectory: &isDirectory];
+    BOOL success = [self fileExistsAtPath: cacheURL.path isDirectory: &isDirectory];
     if (!success) {
         isDirectory = [self createDirectoryAtURL: cacheURL
-                     withIntermediateDirectories: YES
-                                      attributes: nil
+                     withIntermediateDirectories: YES attributes: nil
                                            error: &error];
     }
 
