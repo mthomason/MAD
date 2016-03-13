@@ -14,6 +14,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import "MTEdge.h"
+#import "MADAlgorithmElementProperties.h"
 
 @interface MTVertex()
 
@@ -24,13 +25,17 @@
 
 @implementation MTVertex
 
-/*- (id)copyWithZone:(nullable NSZone *)zone {
-    id username = [self.username copyWithZone:zone];
-    id password = [self.password copyWithZone:zone];
-    id copy = [[[self class] alloc] initWithUsername:username
-                                         andPassword:password];
+- (id)copyWithZone:(nullable NSZone *)zone {
+    MTVertex *copy = [[[self class] alloc] initWithID:self.uniqueIdForStructure andObject:self.object];
+    NSArray *edges = self.edges;
+    for (MTEdge *edge in edges) {
+        MTEdge *edgeCopy = [edge copyWithZone:zone];
+        [copy.edges addObject:edgeCopy];
+    }
+    id properties = [self.properties copyWithZone:zone];
+    copy.properties = properties;
     return copy;
-}*/
+}
 
 - (instancetype)init {
     return [self initWithID:0];
