@@ -55,14 +55,14 @@ NSString * const MNSStringInterfaceButtonTitleAbortDesc             = @"Abort Bu
 
 // MARK: Storyboard Identifiers
 
-CGFloat const MNSAnimationDurationShowFromBottom = 0.7000f;
-CGFloat const MNSAnimationDurationShowFromSide = 0.4870f;
-CGFloat const MNSAnimationDurationSlow = 0.12000f;
-CGFloat const MNSAnimationDurationNormal = 0.7000f;
-CGFloat const MNSAnimationDurationFast = 0.3000f;
-CGFloat const MNSAnimationDurationNone = 0.0000f;
+const CGFloat MNSAnimationDurationShowFromBottom = 0.7000f;
+const CGFloat MNSAnimationDurationShowFromSide = 0.4870f;
+const CGFloat MNSAnimationDurationSlow = 0.12000f;
+const CGFloat MNSAnimationDurationNormal = 0.7000f;
+const CGFloat MNSAnimationDurationFast = 0.3000f;
+const CGFloat MNSAnimationDurationNone = 0.0000f;
 
-CGFloat const MNSDocumentHeight = 73.0000f;
+const CGFloat MNSDocumentHeight = 73.0000f;
 
 NSString * const MNSInterfaceButtonDismiss                          = @"Dismiss";
 NSString * const MNSInterfaceTitleError                             = @"error";
@@ -77,10 +77,10 @@ NSString * const TEMPLATES                                          = @"Template
 NSString * const NSDATABASE_SF_OAUTH_KEY                            = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
 NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL                  = @"eda://reports.everydayapps.com/";
 
-CGFloat const MNSTableViewCellQueryInputHeightDefault = 100.0000f;
-CGFloat const MNSTableViewCellInstructionHeightDefault = 100.0000f;
-CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
-CGFloat const MNSTableViewCellQueryLinkHeightDefault = 50.0000f;
+const CGFloat MNSTableViewCellQueryInputHeightDefault = 100.0000f;
+const CGFloat MNSTableViewCellInstructionHeightDefault = 100.0000f;
+const CGFloat MNSTableViewCellOverrideHeightDefault = 44.0000f;
+const CGFloat MNSTableViewCellQueryLinkHeightDefault = 50.0000f;
 
 // MARK: Segue Identifiers
 

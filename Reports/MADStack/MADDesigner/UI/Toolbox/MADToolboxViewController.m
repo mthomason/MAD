@@ -15,8 +15,8 @@ NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardL
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
 NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardStyle";
 
-CGFloat const MADNavigationBarSizeHeightNormal = 44.0000f;
-CGFloat const MADNavigationBarSizeHeightConstrained = 32.0000f;
+const CGFloat MADNavigationBarSizeHeightNormal = 44.0000f;
+const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 
 
 @interface MADToolboxViewController ()

@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
 
-extern CGFloat const MNSTableViewCellHeightDefault;
+extern const CGFloat MNSTableViewCellHeightDefault;
 
 @interface MADTableViewCellQueryInstructions : MTAutoLayoutTableViewCell
 

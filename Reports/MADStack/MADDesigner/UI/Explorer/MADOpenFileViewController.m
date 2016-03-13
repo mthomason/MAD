@@ -32,7 +32,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 //NSString * const MADUtiPublicData                               = @"public.data";
 
 
-CGFloat const MADSectionHeaderHeight                            = 32.0000f;
+const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,

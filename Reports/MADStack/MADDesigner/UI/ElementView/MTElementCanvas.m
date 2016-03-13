@@ -10,9 +10,9 @@
 
 @implementation MTElementCanvas
 
-static CGFloat const kDashedBorderWidth     = (0.5f);
-static CGFloat const kDashedPhase           = (0.0f);
-static CGFloat const kDashedLinesLength[]   = {4.0f, 2.0f};
+static const CGFloat kDashedBorderWidth     = (0.5f);
+static const CGFloat kDashedPhase           = (0.0f);
+static const CGFloat kDashedLinesLength[]   = {4.0f, 2.0f};
 static size_t const kDashedCount            = (2.0f);
 
 - (void)drawRect:(CGRect)rect {

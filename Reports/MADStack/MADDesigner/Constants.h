@@ -118,19 +118,19 @@ extern NSString * const MNSStringInterfaceButtonTitleAbortDesc;
 
 // MARK: Storyboard Identifiers
 
-extern CGFloat const MNSAnimationDurationShowFromBottom;
-extern CGFloat const MNSAnimationDurationShowFromSide;
-extern CGFloat const MNSAnimationDurationSlow;
-extern CGFloat const MNSAnimationDurationFast;
-extern CGFloat const MNSAnimationDurationNormal;
-extern CGFloat const MNSAnimationDurationNone;
+extern const CGFloat MNSAnimationDurationShowFromBottom;
+extern const CGFloat MNSAnimationDurationShowFromSide;
+extern const CGFloat MNSAnimationDurationSlow;
+extern const CGFloat MNSAnimationDurationFast;
+extern const CGFloat MNSAnimationDurationNormal;
+extern const CGFloat MNSAnimationDurationNone;
 
-extern CGFloat const MNSTableViewCellQueryInputHeightDefault;
-extern CGFloat const MNSTableViewCellInstructionHeightDefault;
-extern CGFloat const MNSTableViewCellOverrideHeightDefault;
-extern CGFloat const MNSTableViewCellQueryLinkHeightDefault;
+extern const CGFloat MNSTableViewCellQueryInputHeightDefault;
+extern const CGFloat MNSTableViewCellInstructionHeightDefault;
+extern const CGFloat MNSTableViewCellOverrideHeightDefault;
+extern const CGFloat MNSTableViewCellQueryLinkHeightDefault;
 
-extern CGFloat const MNSDocumentHeight;
+extern const CGFloat MNSDocumentHeight;
 
 extern NSString * const MNSInterfaceButtonDismiss;
 extern NSString * const MNSInterfaceTitleError;

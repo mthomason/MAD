@@ -8,7 +8,7 @@
 
 #import "MADTableViewCellQueryInstructions.h"
 
-CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
+const CGFloat MNSTableViewCellHeightDefault = 44.0000f;
 
 @implementation MADTableViewCellQueryInstructions
 
