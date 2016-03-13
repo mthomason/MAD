@@ -294,7 +294,8 @@
     vertex.dfsProperties.dfsDistance = *counter;
     vertex.dfsProperties.dfsTimestampDiscovered = *counter;
     
-    for (MTEdge *incidentEdge in [vertex incidentEdges]) {
+    NSArray *incidentEdges = [vertex incidentEdges];
+    for (MTEdge *incidentEdge in incidentEdges) {
         
         MTVertex *neighborVertex = incidentEdge.destination;
 
