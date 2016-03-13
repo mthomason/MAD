@@ -8,31 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B4C1BA929EF00C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B4C1BA929EF00C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */; };
 		4C2C7B511BA929EF00C9CC5E /* MADDataStructuresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */; };
-		4C2C7B751BA92A8700C9CC5E /* NSNumber+MTProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B5C1BA92A8700C9CC5E /* NSNumber+MTProtocol.h */; settings = {ASSET_TAGS = (); }; };
-		4C2C7B761BA92A8700C9CC5E /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B5D1BA92A8700C9CC5E /* NSNumber+MTProtocol.m */; settings = {ASSET_TAGS = (); }; };
 		4C2C7B771BA92A8700C9CC5E /* MTEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B781BA92A8700C9CC5E /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B781BA92A8700C9CC5E /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */; };
 		4C2C7B791BA92A8700C9CC5E /* MTGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B601BA92A8700C9CC5E /* MTGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B7A1BA92A8700C9CC5E /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B611BA92A8700C9CC5E /* MTGraph.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B7A1BA92A8700C9CC5E /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B611BA92A8700C9CC5E /* MTGraph.m */; };
 		4C2C7B7B1BA92A8700C9CC5E /* MTLinkedList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B621BA92A8700C9CC5E /* MTLinkedList.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B7C1BA92A8700C9CC5E /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B631BA92A8700C9CC5E /* MTLinkedList.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B7C1BA92A8700C9CC5E /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B631BA92A8700C9CC5E /* MTLinkedList.m */; };
 		4C2C7B7D1BA92A8700C9CC5E /* MTObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B641BA92A8700C9CC5E /* MTObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B7E1BA92A8700C9CC5E /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B651BA92A8700C9CC5E /* MTObject.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B7E1BA92A8700C9CC5E /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B651BA92A8700C9CC5E /* MTObject.m */; };
 		4C2C7B7F1BA92A8700C9CC5E /* MTPair.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B661BA92A8700C9CC5E /* MTPair.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B801BA92A8700C9CC5E /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B671BA92A8700C9CC5E /* MTPair.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B801BA92A8700C9CC5E /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B671BA92A8700C9CC5E /* MTPair.m */; };
 		4C2C7B811BA92A8700C9CC5E /* MTProtocolCompare.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B681BA92A8700C9CC5E /* MTProtocolCompare.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B821BA92A8700C9CC5E /* MTProtocolEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B691BA92A8700C9CC5E /* MTProtocolEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B831BA92A8700C9CC5E /* MTProtocolLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B6A1BA92A8700C9CC5E /* MTProtocolLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B841BA92A8700C9CC5E /* MTQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B6B1BA92A8700C9CC5E /* MTQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B6C1BA92A8700C9CC5E /* MTQueue.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B6C1BA92A8700C9CC5E /* MTQueue.m */; };
 		4C2C7B861BA92A8700C9CC5E /* MTStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B6D1BA92A8700C9CC5E /* MTStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B6E1BA92A8700C9CC5E /* MTStack.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B6E1BA92A8700C9CC5E /* MTStack.m */; };
 		4C2C7B8A1BA92A8700C9CC5E /* MTTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B711BA92A8700C9CC5E /* MTTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B8B1BA92A8700C9CC5E /* MTTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B721BA92A8700C9CC5E /* MTTree.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B8B1BA92A8700C9CC5E /* MTTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B721BA92A8700C9CC5E /* MTTree.m */; };
 		4C2C7B8C1BA92A8700C9CC5E /* MTVertex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B731BA92A8700C9CC5E /* MTVertex.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B741BA92A8700C9CC5E /* MTVertex.m */; settings = {ASSET_TAGS = (); }; };
+		4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B741BA92A8700C9CC5E /* MTVertex.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,8 +50,6 @@
 		4C2C7B4B1BA929EF00C9CC5E /* MADDataStructuresTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDataStructuresTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataStructuresTests.m; sourceTree = "<group>"; };
 		4C2C7B521BA929EF00C9CC5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C2C7B5C1BA92A8700C9CC5E /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+MTProtocol.h"; path = "MADDataStructures/NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
-		4C2C7B5D1BA92A8700C9CC5E /* NSNumber+MTProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber+MTProtocol.m"; path = "MADDataStructures/NSNumber+MTProtocol.m"; sourceTree = "<group>"; };
 		4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = MADDataStructures/MTEdge.h; sourceTree = "<group>"; };
 		4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTEdge.m; path = MADDataStructures/MTEdge.m; sourceTree = "<group>"; };
 		4C2C7B601BA92A8700C9CC5E /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = MADDataStructures/MTGraph.h; sourceTree = "<group>"; };
@@ -136,8 +132,6 @@
 		4C2C7B5B1BA92A0900C9CC5E /* MADDataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				4C2C7B5C1BA92A8700C9CC5E /* NSNumber+MTProtocol.h */,
-				4C2C7B5D1BA92A8700C9CC5E /* NSNumber+MTProtocol.m */,
 				4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */,
 				4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */,
 				4C2C7B601BA92A8700C9CC5E /* MTGraph.h */,
@@ -183,7 +177,6 @@
 				4C2C7B7F1BA92A8700C9CC5E /* MTPair.h in Headers */,
 				4C2C7B861BA92A8700C9CC5E /* MTStack.h in Headers */,
 				4C2C7B841BA92A8700C9CC5E /* MTQueue.h in Headers */,
-				4C2C7B751BA92A8700C9CC5E /* NSNumber+MTProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +278,6 @@
 			files = (
 				4C2C7B8B1BA92A8700C9CC5E /* MTTree.m in Sources */,
 				4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */,
-				4C2C7B761BA92A8700C9CC5E /* NSNumber+MTProtocol.m in Sources */,
 				4C2C7B7C1BA92A8700C9CC5E /* MTLinkedList.m in Sources */,
 				4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */,
 				4C2C7B801BA92A8700C9CC5E /* MTPair.m in Sources */,
