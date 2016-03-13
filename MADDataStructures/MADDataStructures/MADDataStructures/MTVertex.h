@@ -35,7 +35,7 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
 - (void)removeEdge:(MTEdge *)edge;
 - (bool)isAdjacentToVertex:(MTVertex *)vertex;
 
-@property (nonatomic, strong, readonly) NSNumber *uniqueIdForStructure;
+@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
 
 @property (nonatomic, strong) MADAlgorithmElementProperties *properties;
 @property (readonly) MADBfsProperties *bfsProperties;

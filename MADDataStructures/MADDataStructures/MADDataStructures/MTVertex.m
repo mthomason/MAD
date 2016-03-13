@@ -18,7 +18,7 @@
 @interface MTVertex()
 
 @property (nonatomic, strong) NSMutableArray <MTEdge *> *edges;     // MARK: The edges this node has
-@property (nonatomic, strong, readwrite) NSNumber *uniqueIdForStructure;
+@property (nonatomic, assign, readwrite) NSUInteger uniqueIdForStructure;
 
 @end
 
@@ -35,8 +35,7 @@
 - (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object {
     if (self = [super initWithObject:object]) {
         
-        NSNumber *number = [[NSNumber alloc] initWithUnsignedLong:idnumber];
-        self.uniqueIdForStructure = number;
+        self.uniqueIdForStructure = idnumber;
 
         NSMutableArray *array = [[NSMutableArray alloc] init];
         self.edges = array;
@@ -82,13 +81,12 @@
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {
-    BOOL result;
     if (self == sender) {
-        result = YES;
+        return YES;
     } else {
-        result = [self.uniqueIdForStructure isEqualToNumber:((MTVertex *)sender).uniqueIdForStructure];
+        return [sender isKindOfClass:[MTVertex class]] ?
+                    self.uniqueIdForStructure == ((MTVertex *)sender).uniqueIdForStructure : NO;
     }
-    return result;
 }
 
 #pragma mark - MTProtocolLog

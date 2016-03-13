@@ -26,6 +26,8 @@
 #import "MADDfsProperties.h"
 #import "MADSortProperties.h"
 
+NSString * const TextCycleEncountered = @"Cycle encountered.";
+
 @interface MTGraph ()
 
     // MARK: The graph is defined as an adjacency list.
@@ -266,7 +268,7 @@
             *isDirectedAcyclicGraph = NO;
 
             if (anError != NULL) {
-                NSString *t = NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.");
+                NSString *t = NSLocalizedString(TextCycleEncountered, TextCycleEncountered);
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : t};
                 *anError = [NSError errorWithDomain: @"MTDataStructures"
                                                code: 1
