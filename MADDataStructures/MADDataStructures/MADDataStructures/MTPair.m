@@ -35,17 +35,26 @@
 }
 
 - (instancetype)initWithLeft:(id)left andRight:(id)right {
-    MTPair *pair = [self initWithFormer:left andLatter:right];
-    return pair;
+    
+    if (self = [super init]) {
+        
+        id f = left;
+        self.former = f;
+        
+        id l = right;
+        self.latter = l;
+    }
+    return self;
 }
 
-+ (instancetype)pairWithFormer:(id)former andLatter:(id)latter {
++ (instancetype)newPairWithFormer:(id)former andLatter:(id)latter {
     id result = [[self alloc] initWithFormer:former andLatter:latter];
     return result;
 }
 
-+ (instancetype)pairWithLeft:(id)left andRight:(id)right   {
-    return [MTPair pairWithFormer:left andLatter:right];
++ (instancetype)newPairWithLeft:(id)left andRight:(id)right   {
+    id result = [[self alloc] initWithLeft:left andRight:right];
+    return result;
 }
 
 - (NSString *)toStringHumanReadable {

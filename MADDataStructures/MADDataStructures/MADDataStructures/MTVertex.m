@@ -14,11 +14,12 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import "MTEdge.h"
+#import "MADAlgorithmElementProperties.h"
 
 @interface MTVertex()
 
 @property (nonatomic, strong) NSMutableArray <MTEdge *> *edges;     // MARK: The edges this node has
-@property (nonatomic, strong, readwrite) NSNumber *uniqueIdForStructure;
+@property (nonatomic, assign, readwrite) NSUInteger uniqueIdForStructure;
 
 @end
 
@@ -32,16 +33,13 @@
     return [self initWithID:idnumber andObject:nil];
 }
 
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object {
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object {
     if (self = [super initWithObject:object]) {
         
-        NSNumber *number = [[NSNumber alloc] initWithUnsignedLong:idnumber];
-        self.uniqueIdForStructure = number;
+        self.uniqueIdForStructure = idnumber;
 
         NSMutableArray *array = [[NSMutableArray alloc] init];
         self.edges = array;
-
-        self.object = object;
 
     }
     return self;
@@ -84,13 +82,12 @@
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {
-    BOOL result;
     if (self == sender) {
-        result = YES;
+        return YES;
     } else {
-        result = [self.uniqueIdForStructure isEqualToNumber:((MTVertex *)sender).uniqueIdForStructure];
+        return [sender isKindOfClass:[MTVertex class]] ?
+            self.uniqueIdForStructure == ((MTVertex *)sender).uniqueIdForStructure : NO;
     }
-    return result;
 }
 
 #pragma mark - MTProtocolLog
@@ -126,6 +123,18 @@
 
 - (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", self];
+}
+
+- (MADBfsProperties *)bfsProperties {
+    return (MADBfsProperties *)self.properties;
+}
+
+- (MADDfsProperties *)dfsProperties {
+    return (MADDfsProperties *)self.properties;
+}
+
+- (MADSortProperties *)sortProperties {
+    return (MADSortProperties *)self.properties;
 }
 
 @end

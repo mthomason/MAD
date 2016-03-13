@@ -85,7 +85,6 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
                                                        toDate: lastDate
                                                       options: 0];
     
-    NSString *format;
     bool forceInclude = true;
     bool printedOne = false;
     int_fast8_t includedComponetsCounter = 0;
@@ -138,7 +137,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
             
             NSNumber *day = @(ABS(aDateComponents.day));
             NSString *spelledOut = [self.formatter stringFromNumber: day];
-            format = aDateComponents.day == 1 ? NSLocalizedString(FormatDay, FormatDay) : NSLocalizedString(FormatDays, FormatDays);
+            NSString *format = aDateComponents.day == 1 ? NSLocalizedString(FormatDay, FormatDay) : NSLocalizedString(FormatDays, FormatDays);
             [text appendFormat:format, spelledOut];
             printedOne = true;
             forceInclude = true;
@@ -154,7 +153,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
             @autoreleasepool {
                 NSNumber *hour = @(ABS(aDateComponents.hour));
                 NSString *spelledOut = [self.formatter stringFromNumber: hour];
-                format = aDateComponents.hour == 1 ? NSLocalizedString(FormatHour, FormatHour) : NSLocalizedString(FormatHours, FormatHours);
+                NSString *format = aDateComponents.hour == 1 ? NSLocalizedString(FormatHour, FormatHour) : NSLocalizedString(FormatHours, FormatHours);
                 [text appendFormat:format, spelledOut];
                 printedOne = true;
                 forceInclude = true;
@@ -206,7 +205,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
             NSTimeInterval ti = [lastDate timeIntervalSinceDate:now];
             NSNumber *milliseconds = @((NSInteger)fabs(((ti - (NSInteger)ti) * 1000)));
             NSString *spelledOut = [self.formatter stringFromNumber: milliseconds];
-            format = LocalizedFormatMilliseconds(milliseconds.integerValue);
+            NSString *format = LocalizedFormatMilliseconds(milliseconds.integerValue);
             [text appendFormat:format, spelledOut];
             resultResolution = MTDateResolutionMillisecond;
         }
@@ -216,7 +215,7 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     [text appendString: NSLocalizedString(TextAgo, TextAgo)];
     
     NSNumber *resultType = @(resultResolution);
-    return [MTPair pairWithFormer:text andLatter:resultType];
+    return [MTPair newPairWithFormer:text andLatter:resultType];
 }
 
 + (NSTimeInterval)timeIntervalForResolution:(MTDateResolution)resolution {

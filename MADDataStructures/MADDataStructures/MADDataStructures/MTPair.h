@@ -26,11 +26,11 @@
 @property (nonatomic, strong) id latter;
 
 - (instancetype)init;
-- (instancetype)initWithFormer:(id)former andLatter:(id)latter NS_DESIGNATED_INITIALIZER;
-+ (instancetype)pairWithFormer:(id)former andLatter:(id)latter;
-
+- (instancetype)initWithFormer:(id)former andLatter:(id)latter;
 - (instancetype)initWithLeft:(id)left andRight:(id)right;
-+ (instancetype)pairWithLeft:(id)left andRight:(id)right;
+
++ (instancetype)newPairWithFormer:(id)former andLatter:(id)latter;
++ (instancetype)newPairWithLeft:(id)left andRight:(id)right;
 
 - (id)left;
 - (id)right;

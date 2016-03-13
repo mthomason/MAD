@@ -13,19 +13,23 @@
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
-typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
-	MTColorBlack,
-	MTColorWhite,
-	MTColorGray
-};
-
 @class MTEdge;
+@class MADAlgorithmElementProperties, MADBfsProperties, MADDfsProperties, MADSortProperties;
+
+typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
+    MADAlgorithmPropertyClassesDfs,
+    MADAlgorithmPropertyClassesBfs,
+    MADAlgorithmPropertyClassesSort
+};
 
 @interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
+@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
+@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
+
 - (instancetype)init;
 - (instancetype)initWithID:(NSUInteger)idnumber;
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 - (void)addEdge:(MTEdge *)edge;
 
@@ -34,20 +38,9 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 - (void)removeEdge:(MTEdge *)edge;
 - (bool)isAdjacentToVertex:(MTVertex *)vertex;
 
-@property (nonatomic, strong, readonly) NSNumber *uniqueIdForStructure;
-
-@property (atomic, assign) MTAlgorithmColor sortVertexColor;
-@property (atomic, assign) MTAlgorithmColor bfsVertexColor;
-@property (atomic, assign) MTAlgorithmColor dfsVertexColor;
-
-@property (nonatomic, weak)   MTVertex         *bfsPredecessor;
-@property (nonatomic, strong) NSNumber         *bfsDistance;
-
-@property (nonatomic, strong) NSNumber         *dfsDistance;
-@property (nonatomic, weak)   MTVertex         *dfsPredecessor;
-@property (nonatomic, strong) NSNumber         *dfsFoundCounter;
-@property (nonatomic, strong) NSNumber         *dfsTimestampDiscovered;
-@property (nonatomic, strong) NSNumber         *dfsTimestampFinished;
+@property (readonly) MADBfsProperties *bfsProperties;
+@property (readonly) MADDfsProperties *dfsProperties;
+@property (readonly) MADSortProperties *sortProperties;
 
 @end
 
