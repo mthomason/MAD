@@ -16,6 +16,13 @@
 
 @implementation MTPair
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    id former = [self.former copyWithZone:zone];
+    id latter = [self.latter copyWithZone:zone];
+    id copy = [[[self class] alloc] initWithFormer:former andLatter:latter];
+    return copy;
+}
+
 - (instancetype)init {
     return [self initWithFormer:nil andLatter:nil];
 }
