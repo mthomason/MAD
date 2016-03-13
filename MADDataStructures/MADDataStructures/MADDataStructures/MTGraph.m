@@ -68,7 +68,8 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 
 // MARK: Add new vertex to adjacency list.
 - (MTVertex *)addVertexWithObject:(id <NSCopying>)object {
-    MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject:object];
+    id obj = [object copyWithZone:NULL];
+    MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices andObject:obj];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
     [self.vertices addObject:vertex];
     return vertex;
@@ -254,7 +255,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
 
-    for (MTVertex *vertex in self.vertices) {
+    for (MTVertex *vertex in vertices) {
         if (vertex.properties.vertexColor == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
         }

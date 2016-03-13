@@ -101,7 +101,8 @@
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
             @autoreleasepool {
-                [graph addVertexWithObject:[table objectID]];
+                NSManagedObjectID *objectID = table.objectID;
+                [graph addVertexWithObject:objectID];
             }
         }
         
@@ -120,6 +121,7 @@
         // MARK: Sort the vectors topologically.
         if (error != NULL) *error = nil;
         BOOL  isDirectedAcyclicGraph;
+        NSAssert(graph != nil, @"Where's the graph?");
         MTLinkedList *topologicalSort = [graph topologicalSortWithError:error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
         
         // MARK: Error on circuts or other bad query.
@@ -166,7 +168,7 @@
         }
         
     }
-    
+    NSLog(@"Result %@", result);
     return result;
 }
 

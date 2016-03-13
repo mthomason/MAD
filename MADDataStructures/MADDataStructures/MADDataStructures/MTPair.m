@@ -17,9 +17,9 @@
 @implementation MTPair
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    id former = [self.former copyWithZone:zone];
-    id latter = [self.latter copyWithZone:zone];
-    id copy = [[[self class] alloc] initWithFormer:former andLatter:latter];
+    id <NSCopying> former = [self.former copyWithZone:zone];
+    id <NSCopying> latter = [self.latter copyWithZone:zone];
+    id copy = [[[self class] allocWithZone:zone] initWithFormer:former andLatter:latter];
     return copy;
 }
 
@@ -27,14 +27,14 @@
     return [self initWithFormer:nil andLatter:nil];
 }
 
-- (instancetype)initWithFormer:(id)former andLatter:(id)latter {
+- (instancetype)initWithFormer:(id <NSCopying>)former andLatter:(id <NSCopying>)latter {
 
     if (self = [super init]) {
 
-        id f = former;
+        id f = [former copyWithZone:NULL];
         self.former = f;
         
-        id l = latter;
+        id l = [latter copyWithZone:NULL];
         self.latter = l;
         
     }
@@ -42,25 +42,16 @@
     return self;
 }
 
-- (instancetype)initWithLeft:(id)left andRight:(id)right {
-
-    if (self = [super init]) {
-        
-        id f = left;
-        self.former = f;
-        
-        id l = right;
-        self.latter = l;
-    }
-    return self;
+- (instancetype)initWithLeft:(id <NSCopying>)left andRight:(id <NSCopying>)right {
+    return [self initWithFormer:left andLatter:right];
 }
 
-+ (instancetype)newPairWithFormer:(id)former andLatter:(id)latter {
++ (instancetype)newPairWithFormer:(id <NSCopying>)former andLatter:(id <NSCopying>)latter {
     id result = [[self alloc] initWithFormer:former andLatter:latter];
     return result;
 }
 
-+ (instancetype)newPairWithLeft:(id)left andRight:(id)right   {
++ (instancetype)newPairWithLeft:(id <NSCopying>)left andRight:(id <NSCopying>)right   {
     id result = [[self alloc] initWithLeft:left andRight:right];
     return result;
 }

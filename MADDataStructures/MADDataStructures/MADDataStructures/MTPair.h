@@ -14,15 +14,15 @@
 
 @interface MTPair : NSObject <NSCopying, MTProtocolLog>
 
-@property (nonatomic, strong) id former;
-@property (nonatomic, strong) id latter;
+@property (nonatomic, copy) id former;
+@property (nonatomic, copy) id latter;
 
 - (instancetype)init;
-- (instancetype)initWithFormer:(id)former andLatter:(id)latter;
-- (instancetype)initWithLeft:(id)left andRight:(id)right;
+- (instancetype)initWithFormer:(id <NSCopying>)former andLatter:(id <NSCopying>)latter;
+- (instancetype)initWithLeft:(id <NSCopying>)left andRight:(id <NSCopying>)right;
 
-+ (instancetype)newPairWithFormer:(id)former andLatter:(id)latter;
-+ (instancetype)newPairWithLeft:(id)left andRight:(id)right;
++ (instancetype)newPairWithFormer:(id <NSCopying>)former andLatter:(id <NSCopying>)latter;
++ (instancetype)newPairWithLeft:(id <NSCopying>)left andRight:(id <NSCopying>)right;
 
 - (id)left;
 - (id)right;
