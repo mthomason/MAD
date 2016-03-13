@@ -450,14 +450,15 @@
                     NSString *safeTableName = [[self.dataDelegate database] safeIdentifier:tableName];
                     [result appendString:safeTableName];
                 }
+                
                 vertexTable.properties.vertexColor = MTColorBlack;
                 
                 for (MTEdge *edge in incidentEdges) {
                     MTVertex *vertexTableDestination = [edge destination];
                     if (vertexTableDestination) {
-                        if (vertexTable.properties.vertexColor == MTColorWhite) {
+                        if (vertexTableDestination.properties.vertexColor == MTColorWhite) {
                             
-                            vertexTable.properties.vertexColor = MTColorGray;
+                            vertexTableDestination.properties.vertexColor = MTColorGray;
                             
                             NSManagedObjectID *queryLinkID = [edge object];
                             RptqQueryLinks *queryLink = (RptqQueryLinks *)[managedObjectContext objectRegisteredForID:queryLinkID];

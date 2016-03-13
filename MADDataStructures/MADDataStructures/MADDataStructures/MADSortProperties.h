@@ -8,6 +8,6 @@
 
 #import "MADAlgorithmElementProperties.h"
 
-@interface MADSortProperties : MADAlgorithmElementProperties <NSCopying>
+@interface MADSortProperties : MADAlgorithmElementProperties
 
 @end

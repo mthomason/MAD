@@ -10,10 +10,4 @@
 
 @implementation MADAlgorithmElementProperties
 
-- (id)copyWithZone:(nullable NSZone *)zone {
-    MADAlgorithmElementProperties *copy = [[[self class] allocWithZone:zone] init];
-    copy.vertexColor = self.vertexColor;
-    return copy;
-}
-
 @end

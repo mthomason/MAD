@@ -7,9 +7,9 @@
 //
 
 #import "MADArrayCaching.h"
+#import <MADDataStructures/MADIndex.h>
 #import <MAD/MADConstants.h>
 #import <MADSqlite3/MADSqlite3.h>
-#import <MADDataStructures/MTPair.h>
 #import <MADFoundation/MTDataColumn.h>
 #import "MTQuery.h"
 #import "MTDatabaseConnection.h"
@@ -37,7 +37,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
 @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
-@property (nonatomic, strong) MTPair *lastObjectSelected;
+@property (nonatomic, strong) MADIndex *lastObjectSelected;
 
 @end
 
@@ -299,52 +299,47 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSData *)readDataAtIndex:(NSUInteger)index {
-    NSUInteger lastIndex = NSNotFound;
+
     NSData *result = nil;
     
     if (self.lastObjectSelected != nil) {
-        NSNumber *lastObjectIndex = self.lastObjectSelected.former;
-        lastIndex = [lastObjectIndex unsignedIntegerValue];
-    }
-    if (lastIndex == index) {
-        result = self.lastObjectSelected.latter;
-    } else {
-        sqlite3_bind_int(_statementSelect, 1, (int)index);
-        
-        if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
-            result = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
-                                    length: (NSUInteger)sqlite3_column_bytes(_statementSelect, 0)];
-            sqlite3_reset(_statementSelect);
+        if (self.lastObjectSelected.index == index) {
+            return self.lastObjectSelected.object;
         }
+    }
+    
+    sqlite3_bind_int(_statementSelect, 1, (int)index);
+    
+    if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
+        result = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
+                                length: (NSUInteger)sqlite3_column_bytes(_statementSelect, 0)];
+        sqlite3_reset(_statementSelect);
     }
     return result;
 }
 
-- (id)objectAtIndexedSubscript:(NSUInteger)index {
-    return [self objectAtIndex:index];
-}
+- (id)objectAtIndexedSubscript:(NSUInteger)index { return [self objectAtIndex:index]; }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    NSUInteger lastIndex = NSNotFound;
     id result = nil;
     
+    //If they are asking for the last one, short circut
     if (self.lastObjectSelected != nil) {
-        lastIndex = ((NSNumber *)self.lastObjectSelected.former).unsignedIntegerValue;
-    }
-    if (lastIndex == index) {
-        result = self.lastObjectSelected.latter;
-    } else {
-        sqlite3_bind_int(_statementSelect, 1, (int)index);
-        
-        if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
-            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
-                                                 length: (unsigned int)sqlite3_column_bytes(_statementSelect, 0)];
-            result = [self objectForData:queryResult];
-            NSNumber *idx = @(index);
-            MTPair *pair = [MTPair newPairWithFormer:idx andLatter:result];
-            self.lastObjectSelected = pair;
-            sqlite3_reset(_statementSelect);
+        if (self.lastObjectSelected.index == index) {
+            return self.lastObjectSelected.object;
         }
+    }
+    
+    sqlite3_bind_int(_statementSelect, 1, (int)index);
+    
+    if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
+        NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0) length: (unsigned int)sqlite3_column_bytes(_statementSelect, 0)];
+        result = [self objectForData:queryResult];
+        
+        MADIndex *idx = [[MADIndex alloc] initWithIndex:index andObject:result];
+        self.lastObjectSelected = idx;
+        sqlite3_reset(_statementSelect);
+        
     }
     return result;
 }

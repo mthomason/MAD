@@ -9,14 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FA9F21C94F462005E8B33 /* MADIndex.m */; };
 		4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FA9F31C94F462005E8B33 /* MADIndex.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C0FAA0E1C95160D005E8B33 /* MADAlgorithmElementProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FAA061C95160D005E8B33 /* MADAlgorithmElementProperties.m */; };
-		4C0FAA0F1C95160E005E8B33 /* MADAlgorithmElementProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FAA071C95160D005E8B33 /* MADAlgorithmElementProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C0FAA101C95160E005E8B33 /* MADSortProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FAA081C95160D005E8B33 /* MADSortProperties.m */; };
-		4C0FAA111C95160E005E8B33 /* MADSortProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FAA091C95160D005E8B33 /* MADSortProperties.h */; };
-		4C0FAA121C95160E005E8B33 /* MADDfsProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FAA0A1C95160D005E8B33 /* MADDfsProperties.h */; };
-		4C0FAA131C95160E005E8B33 /* MADDfsProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FAA0B1C95160D005E8B33 /* MADDfsProperties.m */; };
-		4C0FAA141C95160E005E8B33 /* MADBfsProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FAA0C1C95160D005E8B33 /* MADBfsProperties.m */; };
-		4C0FAA151C95160E005E8B33 /* MADBfsProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FAA0D1C95160D005E8B33 /* MADBfsProperties.h */; };
 		4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B4C1BA929EF00C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */; };
 		4C2C7B511BA929EF00C9CC5E /* MADDataStructuresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */; };
@@ -41,6 +33,14 @@
 		4C2C7B8B1BA92A8700C9CC5E /* MTTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B721BA92A8700C9CC5E /* MTTree.m */; };
 		4C2C7B8C1BA92A8700C9CC5E /* MTVertex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B731BA92A8700C9CC5E /* MTVertex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B741BA92A8700C9CC5E /* MTVertex.m */; };
+		4CBC23E01C9559C40006C0A6 /* MADSortProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */; };
+		4CBC23E11C9559C40006C0A6 /* MADSortProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */; };
+		4CBC23E21C9559C40006C0A6 /* MADDfsProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */; };
+		4CBC23E31C9559C40006C0A6 /* MADDfsProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */; };
+		4CBC23E41C9559C40006C0A6 /* MADBfsProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */; };
+		4CBC23E51C9559C40006C0A6 /* MADBfsProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */; };
+		4CBC23E61C9559C40006C0A6 /* MADAlgorithmElementProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */; };
+		4CBC23E71C9559C40006C0A6 /* MADAlgorithmElementProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +91,14 @@
 		4C2C7B721BA92A8700C9CC5E /* MTTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTree.m; path = MADDataStructures/MTTree.m; sourceTree = "<group>"; };
 		4C2C7B731BA92A8700C9CC5E /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = MADDataStructures/MTVertex.h; sourceTree = "<group>"; };
 		4C2C7B741BA92A8700C9CC5E /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVertex.m; path = MADDataStructures/MTVertex.m; sourceTree = "<group>"; };
+		4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSortProperties.m; path = MADDataStructures/MADSortProperties.m; sourceTree = "<group>"; };
+		4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSortProperties.h; path = MADDataStructures/MADSortProperties.h; sourceTree = "<group>"; };
+		4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDfsProperties.h; path = MADDataStructures/MADDfsProperties.h; sourceTree = "<group>"; };
+		4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDfsProperties.m; path = MADDataStructures/MADDfsProperties.m; sourceTree = "<group>"; };
+		4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBfsProperties.m; path = MADDataStructures/MADBfsProperties.m; sourceTree = "<group>"; };
+		4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBfsProperties.h; path = MADDataStructures/MADBfsProperties.h; sourceTree = "<group>"; };
+		4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAlgorithmElementProperties.m; path = MADDataStructures/MADAlgorithmElementProperties.m; sourceTree = "<group>"; };
+		4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlgorithmElementProperties.h; path = MADDataStructures/MADAlgorithmElementProperties.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,7 +175,7 @@
 		4C2C7B5B1BA92A0900C9CC5E /* MADDataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				4C0FAA161C951636005E8B33 /* ElementProperties */,
+				4CBC23E81C9559E60006C0A6 /* AlgorithmProperties */,
 				4C0FA9F31C94F462005E8B33 /* MADIndex.h */,
 				4C0FA9F21C94F462005E8B33 /* MADIndex.m */,
 				4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */,
@@ -195,6 +203,21 @@
 			name = MADDataStructures;
 			sourceTree = "<group>";
 		};
+		4CBC23E81C9559E60006C0A6 /* AlgorithmProperties */ = {
+			isa = PBXGroup;
+			children = (
+				4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */,
+				4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */,
+				4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */,
+				4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */,
+				4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */,
+				4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */,
+				4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */,
+				4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */,
+			);
+			name = AlgorithmProperties;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -204,10 +227,12 @@
 			files = (
 				4C0FAA111C95160E005E8B33 /* MADSortProperties.h in Headers */,
 				4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */,
+				4CBC23E11C9559C40006C0A6 /* MADSortProperties.h in Headers */,
 				4C2C7B831BA92A8700C9CC5E /* MTProtocolLog.h in Headers */,
 				4C2C7B7D1BA92A8700C9CC5E /* MTObject.h in Headers */,
-				4C0FAA151C95160E005E8B33 /* MADBfsProperties.h in Headers */,
+				4CBC23E21C9559C40006C0A6 /* MADDfsProperties.h in Headers */,
 				4C2C7B771BA92A8700C9CC5E /* MTEdge.h in Headers */,
+				4CBC23E51C9559C40006C0A6 /* MADBfsProperties.h in Headers */,
 				4C2C7B821BA92A8700C9CC5E /* MTProtocolEnumerator.h in Headers */,
 				4C2C7B8A1BA92A8700C9CC5E /* MTTree.h in Headers */,
 				4C2C7B7B1BA92A8700C9CC5E /* MTLinkedList.h in Headers */,
@@ -220,6 +245,7 @@
 				4C2C7B861BA92A8700C9CC5E /* MTStack.h in Headers */,
 				4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */,
 				4C2C7B841BA92A8700C9CC5E /* MTQueue.h in Headers */,
+				4CBC23E71C9559C40006C0A6 /* MADAlgorithmElementProperties.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,12 +353,16 @@
 				4C2C7B851BA92A8700C9CC5E /* MTQueue.m in Sources */,
 				4C2C7B7C1BA92A8700C9CC5E /* MTLinkedList.m in Sources */,
 				4C2C7B871BA92A8700C9CC5E /* MTStack.m in Sources */,
+				4CBC23E31C9559C40006C0A6 /* MADDfsProperties.m in Sources */,
 				4C2C7B801BA92A8700C9CC5E /* MTPair.m in Sources */,
 				4C0FAA131C95160E005E8B33 /* MADDfsProperties.m in Sources */,
 				4C2C7B7A1BA92A8700C9CC5E /* MTGraph.m in Sources */,
 				4C2C7B781BA92A8700C9CC5E /* MTEdge.m in Sources */,
+				4CBC23E41C9559C40006C0A6 /* MADBfsProperties.m in Sources */,
+				4CBC23E61C9559C40006C0A6 /* MADAlgorithmElementProperties.m in Sources */,
 				4C2C7B7E1BA92A8700C9CC5E /* MTObject.m in Sources */,
 				4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */,
+				4CBC23E01C9559C40006C0A6 /* MADSortProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

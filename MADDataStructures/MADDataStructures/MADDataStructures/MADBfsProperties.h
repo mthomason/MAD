@@ -10,9 +10,9 @@
 
 @class MTVertex;
 
-@interface MADBfsProperties : MADAlgorithmElementProperties <NSCopying>
+@interface MADBfsProperties : MADAlgorithmElementProperties
 
-    @property (nonatomic, weak)   MTVertex         *bfsPredecessor;
-    @property (nonatomic, strong) NSNumber         *bfsDistance;
+@property (nonatomic, weak)   MTVertex         *bfsPredecessor;
+@property (nonatomic, strong) NSNumber         *bfsDistance;
 
 @end

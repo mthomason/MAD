@@ -22,14 +22,15 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
     MADAlgorithmPropertyClassesSort
 };
 
-@interface MTVertex : MTObject <NSCopying, MTProtocolCompare, MTProtocolLog>
+@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
+@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
 
 @property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
 @property (nonatomic, strong) MADAlgorithmElementProperties *properties;
 
 - (instancetype)init;
 - (instancetype)initWithID:(NSUInteger)idnumber;
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 - (void)addEdge:(MTEdge *)edge;
 

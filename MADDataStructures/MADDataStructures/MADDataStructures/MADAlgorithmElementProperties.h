@@ -14,7 +14,7 @@ typedef NS_ENUM(short, MTAlgorithmColor) {
     MTColorGray
 };
 
-@interface MADAlgorithmElementProperties : NSObject <NSCopying>
+@interface MADAlgorithmElementProperties : NSObject
 
     @property (atomic, assign) MTAlgorithmColor vertexColor;
 

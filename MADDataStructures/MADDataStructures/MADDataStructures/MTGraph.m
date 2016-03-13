@@ -192,7 +192,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     root.properties = bfsp;
     
     [greyVertices enqueue:root];
-
+    
     do {
         MTVertex *u = [greyVertices dequeue];
         NSArray *incidentEdges = [u incidentEdges];
@@ -216,9 +216,9 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 }
 
 - (MTLinkedList *)depthFirstSearch:(MTVertex *)root {
-
+    
     NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
-
+    
     for (MTVertex *vertex in self.vertices) {
         MADDfsProperties *bfsp = [[MADDfsProperties alloc] init];
         bfsp.vertexColor = MTColorWhite;
@@ -254,7 +254,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
     
     [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
-
+    
     for (MTVertex *vertex in self.vertices) {
         if (vertex.properties.vertexColor == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
@@ -263,11 +263,11 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     
     *isDirectedAcyclicGraph = YES;
     //BOOL isDirectedAcyclicGraph = YES;
-
+    
     for (MTPair *pair in resultEdges) {
         if ((MTEdgeType)((NSNumber *)pair.latter).unsignedIntegerValue == MTEdgeTypeBackEdge) {
             *isDirectedAcyclicGraph = NO;
-
+            
             if (anError != NULL) {
                 NSString *t = NSLocalizedString(TextCycleEncountered, TextCycleEncountered);
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : t};
@@ -278,10 +278,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
             break;
         }
     }
-
+    
     [resultVertices reverse];
     return resultVertices;
-
+    
 }
 
 - (void)depthFirstSearchVisitWithCurrentVertex:(MTVertex *)vertex
@@ -290,7 +290,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
                                 listOfVertices:(MTLinkedList **)listOfVertices {
     
     vertex.properties.vertexColor = MTColorGray;
-
+    
     NSNumber *count = @((*counter).integerValue + 1);
     *counter = count;
     
@@ -301,7 +301,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     for (MTEdge *incidentEdge in incidentEdges) {
         
         MTVertex *neighborVertex = incidentEdge.destination;
-
+        
         MTEdgeType edgeType = MTEdgeTypeCrossEdge;
         if (neighborVertex.properties.vertexColor == MTColorWhite) {
             edgeType = MTEdgeTypeTreeEdge;
@@ -312,7 +312,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
                 edgeType = MTEdgeTypeForwardEdge;
             }
         }
-
+        
         NSNumber *et = @(edgeType);
         MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
         [*listOfEdges add:pairEdge];

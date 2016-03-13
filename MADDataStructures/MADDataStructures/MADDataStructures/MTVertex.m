@@ -45,7 +45,7 @@
     return [self initWithID:idnumber andObject:nil];
 }
 
-- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object {
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object {
     if (self = [super initWithObject:object]) {
         
         self.uniqueIdForStructure = idnumber;
@@ -98,7 +98,7 @@
         return YES;
     } else {
         return [sender isKindOfClass:[MTVertex class]] ?
-                    self.uniqueIdForStructure == ((MTVertex *)sender).uniqueIdForStructure : NO;
+            self.uniqueIdForStructure == ((MTVertex *)sender).uniqueIdForStructure : NO;
     }
 }
 

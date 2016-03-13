@@ -12,7 +12,7 @@
 
 #import "MTDataTableFast.h"
 
-#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/MTDataColumn.h>
 #import "MADConstants.h"
 
@@ -35,7 +35,7 @@
 @property (nonatomic, strong) NSMutableArray *groupKeys;
 @property (nonatomic, strong) NSArray *groupTableNames;
 
-@property (nonatomic, strong) MTPair *lastDataForCacheId;
+@property (nonatomic, strong) MADIndex *lastDataForCacheId;
 
 @property (nonatomic, strong) MTQueryCacheAddRow *bulkInsertQuery;
 
@@ -630,8 +630,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     NSDictionary *result = nil;
     
     if (self.lastDataForCacheId != nil) {
-        if ([cacheId isEqualToNumber:self.lastDataForCacheId.former]) {
-            result = [NSDictionary dictionaryWithDictionary:self.lastDataForCacheId.latter];
+        if (cacheId.unsignedIntegerValue == self.lastDataForCacheId.index) {
+            result = [NSDictionary dictionaryWithDictionary:self.lastDataForCacheId.object];
         }
     }
     
@@ -661,8 +661,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
             success = sqlite3_step(statement) == SQLITE_ROW;
             if (success) {
                 result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
-                NSNumber *cid = [NSNumber numberWithInteger:cacheId.integerValue];
-                MTPair *lastDataForCacheId = [MTPair newPairWithFormer:cid andLatter:result];
+                MADIndex *lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
                 self.lastDataForCacheId = lastDataForCacheId;
             } else {
                 result = @{};
