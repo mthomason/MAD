@@ -16,6 +16,6 @@ typedef NS_ENUM(short, MTAlgorithmColor) {
 
 @interface MADAlgorithmElementProperties : NSObject
 
-    @property (atomic, assign) MTAlgorithmColor sortVertexColor;
+    @property (atomic, assign) MTAlgorithmColor vertexColor;
 
 @end

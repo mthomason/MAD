@@ -31,17 +31,11 @@
     return self;
 }
 
-- (NSUInteger)count {
-    return self.list.count;
-}
+- (NSUInteger)count { return self.list.count; }
 
-- (bool)isNext {
-    return (self.location + 1 < self.count);
-}
+- (bool)isNext { return (self.location + 1 < self.count); }
 
-- (bool)isPrevious {
-    return (self.location - 1 < self.count && self.location > 0);
-}
+- (bool)isPrevious { return (self.location - 1 < self.count && self.location > 0); }
 
 - (void)insert:(id)object {
     if (object != nil) {

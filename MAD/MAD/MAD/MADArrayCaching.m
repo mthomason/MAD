@@ -323,20 +323,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (id)objectAtIndexedSubscript:(NSUInteger)index {
     return [self objectAtIndex:index];
 }
-/*
-- (id)objectAtIndex:(NSUInteger)index {
-    [self readDataAtIndex:index];
-    id result = nil;
-    NSData *queryResult = [self readDataAtIndex:index];
-    if (queryResult != nil) {
-        result = [self objectForData:queryResult];
-    }
-    NSNumber *idx = @(index);
-    MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
-    self.lastObjectSelected = pair;
-    return result;
-}
-*/
 
 - (id)objectAtIndex:(NSUInteger)index {
     NSUInteger lastIndex = NSNotFound;
@@ -355,7 +341,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                  length: (unsigned int)sqlite3_column_bytes(_statementSelect, 0)];
             result = [self objectForData:queryResult];
             NSNumber *idx = @(index);
-            MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
+            MTPair *pair = [MTPair newPairWithFormer:idx andLatter:result];
             self.lastObjectSelected = pair;
             sqlite3_reset(_statementSelect);
         }

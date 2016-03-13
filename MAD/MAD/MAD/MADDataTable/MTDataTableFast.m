@@ -662,7 +662,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
             if (success) {
                 result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
                 NSNumber *cid = [NSNumber numberWithInteger:cacheId.integerValue];
-                MTPair *lastDataForCacheId = [MTPair pairWithFormer:cid andLatter:result];
+                MTPair *lastDataForCacheId = [MTPair newPairWithFormer:cid andLatter:result];
                 self.lastDataForCacheId = lastDataForCacheId;
             } else {
                 result = @{};

@@ -126,4 +126,16 @@
     return [NSString stringWithFormat:@"%@", self];
 }
 
+- (MADBfsProperties *)bfsProperties {
+    return (MADBfsProperties *)self.properties;
+}
+
+- (MADDfsProperties *)dfsProperties {
+    return (MADDfsProperties *)self.properties;
+}
+
+- (MADSortProperties *)sortProperties {
+    return (MADSortProperties *)self.properties;
+}
+
 @end

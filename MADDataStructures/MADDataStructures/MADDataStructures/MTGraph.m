@@ -22,6 +22,9 @@
 #import "MTQueue.h"
 #import "MTLinkedList.h"
 #import "MTPair.h"
+#import "MADBfsProperties.h"
+#import "MADDfsProperties.h"
+#import "MADSortProperties.h"
 
 @interface MTGraph ()
 
@@ -153,15 +156,22 @@
 
 // MARK: Breadth first search returns a breadth first tree
 - (NSArray *)breadthFirstSearch:(MTVertex *)root {
-    NSMutableArray *resultList = [[NSMutableArray alloc] init];
     
+    NSMutableArray *resultList = [[NSMutableArray alloc] init];
     MTQueue *greyVertices = [[MTQueue alloc] init];
     for (MTVertex *vertex in self.vertices) {
-        [vertex setBfsVertexColor:MTColorWhite];
+        @autoreleasepool {
+            MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
+            bfsp.vertexColor = MTColorWhite;
+            vertex.properties = bfsp;
+        }
     }
-    [root setBfsDistance:@(0)];
-    [root setBfsVertexColor:MTColorGray];
-    [root setBfsPredecessor:nil];
+    
+    MADBfsProperties *bfsp = [[MADBfsProperties alloc] init];
+    bfsp.bfsDistance = @(0);
+    bfsp.vertexColor = MTColorGray;
+    bfsp.bfsPredecessor = nil;
+    root.properties = bfsp;
     
     [greyVertices enqueue:root];
 
@@ -171,17 +181,17 @@
         for (MTEdge *edge in incidentEdges) {
             MTVertex *vertex = [edge destination];
             do {
-                if ([vertex bfsVertexColor] == MTColorWhite) {
-                    [vertex setBfsVertexColor: MTColorGray];
-                    [vertex setBfsPredecessor: u];
-                    [vertex setBfsDistance:@([[u bfsDistance] integerValue] + 1)];
+                if (vertex.properties.vertexColor == MTColorWhite) {
+                    vertex.properties.vertexColor = MTColorGray;
+                    vertex.bfsProperties.bfsPredecessor = u;
+                    vertex.bfsProperties.bfsDistance = @(u.bfsProperties.bfsDistance.integerValue + 1);
                     [greyVertices enqueue: vertex];
                 }
-            } while ([vertex bfsVertexColor] == MTColorWhite);
+            } while (vertex.properties.vertexColor == MTColorWhite);
         }
-        [u setBfsVertexColor:MTColorBlack];
+        u.properties.vertexColor = MTColorBlack;
         [resultList addObject:u];
-    } while ([greyVertices count] > 0);
+    } while (greyVertices.count > 0);
     
     return resultList;
 }
@@ -191,7 +201,9 @@
     NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
 
     for (MTVertex *vertex in self.vertices) {
-        [vertex setDfsVertexColor:MTColorWhite];
+        MADDfsProperties *bfsp = [[MADDfsProperties alloc] init];
+        bfsp.vertexColor = MTColorWhite;
+        vertex.properties = bfsp;
     }
     
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
@@ -199,7 +211,7 @@
     
     [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
     for (MTVertex *vertex in self.vertices) {
-        if ([vertex dfsVertexColor] == MTColorWhite) {
+        if (vertex.properties.vertexColor == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
         }
     }
@@ -211,7 +223,11 @@
     NSNumber *counter = @(0);
     
     for (MTVertex *vertex in self.vertices) {
-        [vertex setDfsVertexColor:MTColorWhite];
+        @autoreleasepool {
+            MADDfsProperties *properties = [[MADDfsProperties alloc] init];
+            properties.vertexColor = MTColorWhite;
+            vertex.properties = properties;
+        }
     }
     
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
@@ -220,7 +236,7 @@
     [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
 
     for (MTVertex *vertex in self.vertices) {
-        if (vertex.dfsVertexColor == MTColorWhite) {
+        if (vertex.properties.vertexColor == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
         }
     }
@@ -253,46 +269,46 @@
                                    listOfEdges:(MTLinkedList **)listOfEdges
                                 listOfVertices:(MTLinkedList **)listOfVertices {
     
-    vertex.dfsVertexColor = MTColorGray;
+    vertex.properties.vertexColor = MTColorGray;
 
     NSNumber *count = @((*counter).integerValue + 1);
     *counter = count;
     
-    vertex.dfsDistance = *counter;
-    vertex.dfsTimestampDiscovered = *counter;
+    vertex.dfsProperties.dfsDistance = *counter;
+    vertex.dfsProperties.dfsTimestampDiscovered = *counter;
     
     for (MTEdge *incidentEdge in [vertex incidentEdges]) {
         
         MTVertex *neighborVertex = incidentEdge.destination;
 
         MTEdgeType edgeType = MTEdgeTypeCrossEdge;
-        if (neighborVertex.dfsVertexColor == MTColorWhite) {
+        if (neighborVertex.properties.vertexColor == MTColorWhite) {
             edgeType = MTEdgeTypeTreeEdge;
-        } else if (neighborVertex.dfsVertexColor == MTColorGray) {
+        } else if (neighborVertex.properties.vertexColor == MTColorGray) {
             edgeType = MTEdgeTypeBackEdge;
         } else {
-            if (vertex.dfsDistance < neighborVertex.dfsDistance) {
+            if (vertex.dfsProperties.dfsDistance < neighborVertex.dfsProperties.dfsDistance) {
                 edgeType = MTEdgeTypeForwardEdge;
             }
         }
 
         NSNumber *et = @(edgeType);
-        MTPair *pairEdge = [MTPair pairWithFormer:incidentEdge andLatter:et];
+        MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
         [*listOfEdges add:pairEdge];
         
-        if ([neighborVertex dfsVertexColor] == MTColorWhite) {
-            [neighborVertex setDfsPredecessor: vertex];
+        if (neighborVertex.properties.vertexColor == MTColorWhite) {
+            neighborVertex.dfsProperties.dfsPredecessor = vertex;
             [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter listOfEdges:listOfEdges listOfVertices:listOfVertices];
         }
     }
     
-    vertex.dfsVertexColor = MTColorBlack;
+    vertex.properties.vertexColor = MTColorBlack;
     NSNumber *c2 = @((*counter).integerValue + 1);
     *counter = c2;
-    vertex.dfsTimestampFinished = *counter;
-    vertex.dfsFoundCounter = *counter;
+    vertex.dfsProperties.dfsTimestampFinished = *counter;
+    vertex.dfsProperties.dfsFoundCounter = *counter;
     
-    MTPair *pairVertices = [MTPair pairWithFormer:vertex andLatter:*counter];
+    MTPair *pairVertices = [MTPair newPairWithFormer:vertex andLatter:*counter];
     [*listOfVertices add:pairVertices];
 }
 

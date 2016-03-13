@@ -45,6 +45,7 @@
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTEdge.h>
+#import <MADDataStructures/MADAlgorithmElementProperties.h>
 
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
@@ -143,7 +144,7 @@
                 for (MTPair *pair in topologicalSortArray) {
                     MTVertex *vertexTable = [pair former];
                     if (vertexTable) {
-                        [vertexTable setSortVertexColor: MTColorWhite];
+                        vertexTable.properties.vertexColor = MTColorWhite;
                         [vertexArray addObject:vertexTable];
                     }
                 }
@@ -425,7 +426,7 @@
             NSManagedObjectID *objectID = [vertexTable object];
             RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID managedObjectContext:managedObjectContext];
             
-            if ([vertexTable sortVertexColor] == MTColorWhite || [vertexTable sortVertexColor] == MTColorGray) {
+            if (vertexTable.properties.vertexColor == MTColorWhite || vertexTable.properties.vertexColor == MTColorGray) {
                 
                 NSArray *incidentEdges = [vertexTable incidentEdges];
                 
@@ -436,7 +437,7 @@
                     [result appendString:@"\n\t"];
                 }
                 
-                if ([vertexTable sortVertexColor] == MTColorWhite) {
+                if (vertexTable.properties.vertexColor == MTColorWhite) {
                     if ([result length] <= 0) {
                         [result appendString:@"\t"];
                     }
@@ -448,15 +449,14 @@
                     NSString *safeTableName = [[self.dataDelegate database] safeIdentifier:tableName];
                     [result appendString:safeTableName];
                 }
-                
-                [vertexTable setSortVertexColor: MTColorBlack];
+                vertexTable.properties.vertexColor = MTColorBlack;
                 
                 for (MTEdge *edge in incidentEdges) {
                     MTVertex *vertexTableDestination = [edge destination];
                     if (vertexTableDestination) {
-                        if ([vertexTableDestination sortVertexColor] == MTColorWhite) {
+                        if (vertexTable.properties.vertexColor == MTColorWhite) {
                             
-                            [vertexTableDestination setSortVertexColor:MTColorGray];
+                            vertexTable.properties.vertexColor = MTColorGray;
                             
                             NSManagedObjectID *queryLinkID = [edge object];
                             RptqQueryLinks *queryLink = (RptqQueryLinks *)[managedObjectContext objectRegisteredForID:queryLinkID];

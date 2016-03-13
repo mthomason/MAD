@@ -13,13 +13,14 @@
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
-typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
-	MTColorBlack,
-	MTColorWhite,
-	MTColorGray
-};
-
 @class MTEdge;
+@class MADAlgorithmElementProperties, MADBfsProperties, MADDfsProperties, MADSortProperties;
+
+typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
+    MADAlgorithmPropertyClassesDfs,
+    MADAlgorithmPropertyClassesBfs,
+    MADAlgorithmPropertyClassesSort
+};
 
 @interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
@@ -36,18 +37,10 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 
 @property (nonatomic, strong, readonly) NSNumber *uniqueIdForStructure;
 
-@property (atomic, assign) MTAlgorithmColor sortVertexColor;
-@property (atomic, assign) MTAlgorithmColor bfsVertexColor;
-@property (atomic, assign) MTAlgorithmColor dfsVertexColor;
-
-@property (nonatomic, weak)   MTVertex         *bfsPredecessor;
-@property (nonatomic, strong) NSNumber         *bfsDistance;
-
-@property (nonatomic, strong) NSNumber         *dfsDistance;
-@property (nonatomic, weak)   MTVertex         *dfsPredecessor;
-@property (nonatomic, strong) NSNumber         *dfsFoundCounter;
-@property (nonatomic, strong) NSNumber         *dfsTimestampDiscovered;
-@property (nonatomic, strong) NSNumber         *dfsTimestampFinished;
+@property (nonatomic, strong) MADAlgorithmElementProperties *properties;
+@property (readonly) MADBfsProperties *bfsProperties;
+@property (readonly) MADDfsProperties *dfsProperties;
+@property (readonly) MADSortProperties *sortProperties;
 
 @end
 
