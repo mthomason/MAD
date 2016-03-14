@@ -526,8 +526,12 @@ void sqliteLog(void *foo, const char* statement) {
                 
                 int numberOfColumns = sqlite3_column_count(statement);
                 numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
-                
-                MTDataTable * __autoreleasing dataTable = [self.delegate dataTableForQuery:query];
+                MTDataTable * dataTable;
+                if (query.dataTable) {
+                    dataTable = query.dataTable;
+                } else {
+                    dataTable = [self.delegate dataTableForQuery:query];
+                }
                 [dataTable removeAllObjects];
                 
                 NSUInteger rowCounter = 0;

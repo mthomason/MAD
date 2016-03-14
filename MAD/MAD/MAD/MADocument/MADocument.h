@@ -17,6 +17,7 @@
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
+#import <MAD/MTQueryFull.h>
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
@@ -60,7 +61,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
 @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 @property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
-@property (nonatomic, strong, readonly) MTQuery *mainQuery;
+@property (nonatomic, strong, readonly) MTQueryFull *mainQuery;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
@@ -82,7 +83,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
-- (void)refresh:(void (^)(BOOL success, NSError *error))completion;
+- (bool)refreshWithError:(NSError * __autoreleasing *)error;
 
 - (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;

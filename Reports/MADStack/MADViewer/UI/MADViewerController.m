@@ -625,7 +625,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         NSString *connectionString = document.mainDatabase.databaseConnection.connectionString;
         
         __block MADViewerController * __weak weakself = self;
-        [document refresh:^(BOOL success, NSError *error) {
+        NSError *error = nil;
+        bool success = [document refreshWithError:&error];
+        
+        //[document refresh:^(BOOL success, NSError *error) {
             
             __strong MADViewerController *strongself = weakself;
             
@@ -671,7 +674,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             [strongself reload];
             [strongself timerDealloc];
             [strongself uiUpdateTimeSinceLastRefresh: NULL];
-        }];
+        //}];
     }
 }
 

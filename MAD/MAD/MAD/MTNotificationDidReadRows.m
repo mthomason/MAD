@@ -12,6 +12,7 @@
 #import <Foundation/NSValue.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNotification.h>
+#import <Foundation/NSOperation.h>
 
 NSString * const MTNotificationDidReadRowsName = @"MTNotificationDidReadRows";
 NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";
@@ -55,22 +56,27 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
 
 - (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
     NSNumber *rowCounterWrapper = @(row);
-    return @{
-             MTDatabaseNumberOfRowsReadKey : rowCounterWrapper,
-             };
+    NSDictionary * __autoreleasing parameters = @{
+                                                  MTDatabaseNumberOfRowsReadKey : rowCounterWrapper,
+                                                  };
+    return parameters;
 }
 
 - (void)database:(id)database readRow:(NSUInteger)row {
     if (row % self.rowInterval == 0) {
         if (row == 0) [self initalizeRowInterval];
-        NSDictionary *parameters = [self parametersWithNumberOfRows:row];
-        NSNotification *notification = [NSNotification notificationWithName: MTNotificationDidReadRowsName
-                                                                     object: database
-                                                                   userInfo: parameters];
-        [[NSNotificationCenter defaultCenter] postNotification:notification];
+ 
         if (self.rowInterval < RowIntervalInitalMax && row > self.rowInterval) {
             self.rowInterval = (NSUInteger)ceill((long double)self.rowInterval * 1.19);
         }
+        
+        NSDictionary *parameters = [self parametersWithNumberOfRows:row];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            NSNotification *notification = [NSNotification notificationWithName: MTNotificationDidReadRowsName
+                                                                         object: database
+                                                                       userInfo: parameters];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
+        }];
     }
 }
 

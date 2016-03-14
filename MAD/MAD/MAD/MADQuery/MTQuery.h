@@ -144,6 +144,7 @@ extern NSString * const MADIdentifierROWID;
 @interface MTQuery : NSObject
 
 @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+@property (nonatomic, weak) MTDataTable *dataTable;
 @property (nonatomic, strong, readwrite) MTDatabase *database;
 
 @property (nonatomic, strong) id queryObject;

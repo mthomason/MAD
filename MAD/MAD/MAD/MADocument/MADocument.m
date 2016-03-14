@@ -143,7 +143,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @property (nonatomic, strong, readwrite) NSManagedObjectID *documentObjectID;
 
 @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
-@property (nonatomic, strong, readwrite) MTQuery *mainQuery;
+@property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
 
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
@@ -954,25 +954,28 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     self.mainQuery.database.delegate = self;
     
     MTDatabase * __weak wMainDatabase = self.mainDatabase;
+    self.mainQuery.dataTable = self.mainDataTable;
     MTQuery * __weak wMainQuery = self.mainQuery;
     MTDataTableFast * __weak wMainDataTable = self.mainDataTable;
     __block bool didRefresh = false;
 
     NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
+        MTQuery *squery = wMainQuery;
+        MTDatabase *sdatabase = wMainDatabase;
         
         NSError * __autoreleasing eerror = NULL;
-        bool success = [wMainDatabase executeQuery:wMainQuery withError:&eerror];
+        bool success = [sdatabase executeQuery:squery withError:&eerror];
         
         [wMainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
         didRefresh = success ? true : false;
-        
+        return;
         
     }];
 
     NSOperationQueue *queue = [NSOperationQueue new];
     queue.maxConcurrentOperationCount = 1;
     [queue addOperation:operationRefresh];
-    
+    [queue waitUntilAllOperationsAreFinished];
     self.didRefresh = didRefresh ? YES : NO;
 
     return success;

@@ -155,7 +155,7 @@
 		4C401DEA1BAE3BD800BAE5FC /* MTQueryDefinitionSort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DA61BAE3BD500BAE5FC /* MTQueryDefinitionSort.m */; };
 		4C401DEB1BAE3BD800BAE5FC /* MTQueryDefinitionTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DA71BAE3BD500BAE5FC /* MTQueryDefinitionTable.h */; };
 		4C401DEC1BAE3BD800BAE5FC /* MTQueryDefinitionTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DA81BAE3BD500BAE5FC /* MTQueryDefinitionTable.m */; };
-		4C401DED1BAE3BD800BAE5FC /* MTQueryFull.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DA91BAE3BD500BAE5FC /* MTQueryFull.h */; };
+		4C401DED1BAE3BD800BAE5FC /* MTQueryFull.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DA91BAE3BD500BAE5FC /* MTQueryFull.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401DEE1BAE3BD900BAE5FC /* MTQueryFull.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DAA1BAE3BD500BAE5FC /* MTQueryFull.m */; };
 		4C401DEF1BAE3BD900BAE5FC /* MTQueryMaxFieldLength.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DAB1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.h */; };
 		4C401DF01BAE3BD900BAE5FC /* MTQueryMaxFieldLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401DAC1BAE3BD500BAE5FC /* MTQueryMaxFieldLength.m */; };

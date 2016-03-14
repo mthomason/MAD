@@ -517,13 +517,18 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 - (bool)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process withError:(NSError * __autoreleasing *)error {
     bool success = false;
-    MTDataTable * __autoreleasing datatable = [self.delegate dataTableForQuery:query];
+    MTDataTable *dataTable;
+    if (query.dataTable) {
+        dataTable = query.dataTable;
+    } else {
+        dataTable = [self.delegate dataTableForQuery:query];
+    }
+
     NSError *sqlError = nil;
     NSString *sql = [query getSqlWithError:&sqlError];
     if (sqlError == nil) {
-        success = [self runSQL:sql onDataTable:datatable fieldKeys:query.fieldKeys process:process];
+        success = [self runSQL:sql onDataTable:dataTable fieldKeys:query.fieldKeys process:process];
     }
-    datatable = nil;
     return success;
 }
 
