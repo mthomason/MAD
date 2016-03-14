@@ -9,14 +9,12 @@
 #ifndef Reports_RptqDocument_Extras_h
 #define Reports_RptqDocument_Extras_h
 
-#import <Foundation/Foundation.h>
-#import <MADBarcodes/MADBarcodes.h>
-#import <MADDataStructures/MTProtocolCompare.h>
 #import "RptqDocument.h"
-#import "RptqDocumentSection+Extras.h"
-#import "MTPaper.h"
+#import <MADDataStructures/MTProtocolCompare.h>
+#import <MAD/MADDocumentSectionType.h>
+#import <MAD/MTPaper.h>
 
-@class NSManagedObjectContext, MTDatabase, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;
+@class NSManagedObjectContext, MTDatabase, RptqDocumentSection, RptqDocumentObject, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
