@@ -71,6 +71,7 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import "MTDataTableFast.h"
 
@@ -962,7 +963,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [self initalizeReportFormatter];
         self.mainQuery.database.delegate = self;
 
-        MADocument *weakself = self;
+        MADocument * __weak weakself = self;
         dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_async(bgQueue, ^{
             

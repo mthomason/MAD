@@ -85,6 +85,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
+
 - (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 
