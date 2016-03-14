@@ -144,16 +144,16 @@ extern NSString * const MADIdentifierROWID;
 @interface MTQuery : NSObject
 
 @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
-
 @property (nonatomic, strong, readwrite) MTDatabase *database;
 
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;
+@property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind NSData to insert statements
+@property (nonatomic, strong) NSDictionary *columns;            //MTDataColumns by key
 
 @property (nonatomic, assign, readonly) MTQueryType type;
 
-@property (nonatomic, strong) NSMutableArray *binaryBindings; // Used by database to bind NSData to insert statements
 
 - (id)initWithQueryType:(MTQueryType)type object:(id)object;
 
@@ -161,24 +161,24 @@ extern NSString * const MADIdentifierROWID;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
-- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion;
 
-@property (nonatomic, strong) NSDictionary *columns;    //MTDataColumns by key
+- (void)performQueryWithDatabase:(MTDatabase *)database
+                      completion:(void (^)(BOOL success, NSError *error))completion;
 
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
+
+- (instancetype)initWithObject:(id)object;
 
 - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
 - (NSUInteger)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
-- (instancetype)initWithObject:(id)object;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 - (BOOL)returnsResults;
-
 - (BOOL)partOfTransactionSet;
 
 + (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;

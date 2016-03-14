@@ -14,7 +14,7 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
 
-extern NSString * const MTSqlFrom;
+extern NSString * const MADSqlTextFromPart;
 
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeNone = 0,
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName;
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion;
+- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error;
 
 - (MADCredential *)getCredentalsWithConnection:(MTDatabaseConnection *)connection;
 - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals;

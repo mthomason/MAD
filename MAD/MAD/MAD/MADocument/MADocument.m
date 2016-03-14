@@ -966,19 +966,23 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_async(bgQueue, ^{
             
-            [weakself.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
+            NSError * __autoreleasing eerror = NULL;
+            bool success = [weakself.database executeQuery:weakself.mainQuery withError:&eerror];
+            //[weakself.database executeQuery:weakself.mainQuery completion:^(BOOL success, NSError *error) {
                 
                 [weakself.mainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
-                weakself.didRefresh = success;
-                
+                weakself.didRefresh = success ? YES : NO;
+            
                 if ([NSThread isMainThread]) {
+                    NSError *error = eerror;
                     completion(success, error);
                 } else {
+                    NSError *error = eerror;
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         completion(success, error);
                     });
                 }
-            }];
+            //}];
         });
 
     }

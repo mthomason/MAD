@@ -78,30 +78,28 @@
                                                                object: fields];
     queryMaxFieldLenght.database.delegate = self;
 
-    __block NSError *blockError;
-    [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
-        if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
+    NSError * __autoreleasing blockError;
+    bool success = [queryMaxFieldLenght.database executeQuery:queryMaxFieldLenght withError:&blockError];
+    if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
+        
+        [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
             
-            [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
-                
-                NSString *safeTableName = [queryMaxFieldLenght.database tableAliasForTable:field.inTable.toString];
-                NSString *okey = [queryMaxFieldLenght.database fieldAliasForField: field.name
-                                                                withSafeTableName: safeTableName];
-                NSString *ckey = [queryMaxFieldLenght.database fieldAliasForField: field.name
-                                                                     andTableName: field.inTable.name];
-                NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
-                NSNumber *widthByField = widthsByField[ckey];
-                NSUInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.unsignedIntegerValue;
-                MTDatabaseField *f = self.fields[okey];
-                f.calculatedWidth = maxSize;
-            }];
-        } else {
-            blockError = errorFl;
-        }
-    }];
+            NSString *safeTableName = [queryMaxFieldLenght.database tableAliasForTable:field.inTable.toString];
+            NSString *okey = [queryMaxFieldLenght.database fieldAliasForField: field.name
+                                                            withSafeTableName: safeTableName];
+            NSString *ckey = [queryMaxFieldLenght.database fieldAliasForField: field.name
+                                                                 andTableName: field.inTable.name];
+            NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
+            NSNumber *widthByField = widthsByField[ckey];
+            NSUInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.unsignedIntegerValue;
+            MTDatabaseField *f = self.fields[okey];
+            f.calculatedWidth = maxSize;
+        }];
+    }
+    
     *error = blockError;
     
-    [sql appendString:MTSqlFrom];
+    [sql appendString:MADSqlTextFromPart];
     [sql appendString:safeTableName];
     NSString *sqlLimit = [self.database sqlLimitClause:255];
     [sql appendString:sqlLimit];

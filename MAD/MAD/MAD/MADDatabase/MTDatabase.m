@@ -18,13 +18,15 @@
 #import "MTKeyChain.h"
 #import "MTNotificationDidReadRows.h"
 #import "MADCredential.h"
-//#import "MADKeyChainGetCredentials.h"
+#import "MADErrorUserInfo.h"
 
-NSString * const MTSqlFrom = @"\nFROM\n";
+
+NSString * const MADSqlTextFromPart = @"\nFROM\n";
+NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";
+NSString * const MADSqlSqlite3Identifier = @"NONE";
+NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
 @interface MTDatabase ()
-
-@property (nonatomic, assign, readwrite) BOOL isLicensedUser;
 
 @end
 
@@ -84,6 +86,17 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     completion(NO, nil);
 }
 
+- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+    if (error != NULL) {
+        NSString * const title = @"Abstract function.";
+        NSString * const message = @"Don't go there.";
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithDictionary: errorUserInfo.userinfo];
+        *error = [NSError errorWithDomain:@"MTDatabase" code:3190 userInfo:userInfo]; // assign indirectly via the reference to a variable
+    }
+    return NO;
+}
+
 - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
     return nil;
 }
@@ -135,23 +148,23 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 }
 
 - (NSString *)tableAliasConnector {
-    return @" AS ";
+    return MADSqlSqlite3TableAliasConnector;
 }
 
 - (NSString *)identifier {
-    return [MTDatabase identifier];
+    return MADSqlSqlite3Identifier;
 }
 
 + (NSString *)identifier {
-    return @"NONE";
+    return MADSqlSqlite3Identifier;
 }
 
 - (NSString *)selectPart {
-    return @"SELECT\n";
+    return MADSqlSqlite3SelectPart;
 }
 
 - (NSString *)selectPartWithLimitedResults:(NSInteger)limit {   //Generally limited resuls are in a LIMIT part, but
-    return [self selectPart];                                   //  SQL Server uses the TOP part (not default here).
+    return MADSqlSqlite3SelectPart;                                   //  SQL Server uses the TOP part (not default here).
 }
 
 - (NSString *)sqlLimitClause {
@@ -185,7 +198,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
                                                     safeField,
                                                     [self tableAliasConnector],
                                                     safeFieldAlias,
-                                                    MTSqlFrom,
+                                                    MADSqlTextFromPart,
                                                     safeTable];
 }
 

@@ -103,7 +103,7 @@
         
         NSString *selectPart = [self.database selectPart];
         
-        sql = [NSString stringWithFormat:@"%@ %@ %@ %@;", selectPart, fieldsPart, MTSqlFrom, tableNamePart];
+        sql = [NSString stringWithFormat:@"%@ %@ %@ %@;", selectPart, fieldsPart, MADSqlTextFromPart, tableNamePart];
 
     }
 

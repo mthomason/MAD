@@ -208,12 +208,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     @autoreleasepool {
-        [self.database executeQuery:self completion:^(BOOL success, NSError *error) {
-            NSError *resultError = error ? [NSError errorWithDomain:error.domain
-                                                               code:error.code
-                                                           userInfo:error.userInfo] : nil;
-            completion(success, resultError);
-        }];
+        NSError * __autoreleasing qerror = NULL;
+        bool success = [self.database executeQuery:self withError:&qerror];
+        completion(success, qerror);
     }
 }
 
@@ -221,12 +218,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
                       completion:(void (^)(BOOL success, NSError *error))completion {
     [self setDatabase:database];
     @autoreleasepool {
-        [self.database executeQuery:self completion:^(BOOL success, NSError *error) {
-            NSError *resultError = error ? [NSError errorWithDomain:error.domain
-                                                               code:error.code
-                                                           userInfo:error.userInfo] : nil;
-            completion(success, resultError);
-        }];
+        NSError * __autoreleasing qerror = NULL;
+        bool success = [self.database executeQuery:self withError:&qerror];
+        completion(success, qerror);
     }
 }
 

@@ -58,6 +58,7 @@
     [self readRow:row];
 }
 
+// FIXME: Return error.
 - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
 
     if (credentals == nil) {
@@ -113,7 +114,35 @@
     } else {
         completion(NO, nil);
     }
-    
+}
+
+- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+    bool result = false;
+    MTDatabaseConnection *connectionSettings = [self databaseConnection];
+    MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
+    if (dbconn) {
+        MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+        myFetch.delegate = self;
+        
+        NSError *sqlError = nil;
+        NSString *queryString = [query getSqlWithError:&sqlError];
+        if (queryString.length > 0 && sqlError == nil) {
+            MTDataTable *dataTable = [self dataTableForQuery:query];
+            [myFetch fetchWithCommand: queryString
+                            dataTable: &dataTable
+                         onConnection: dbconn
+                                error: &sqlError];
+        }
+        if (sqlError) {
+            MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription andMessage:sqlError.localizedFailureReason];
+            if (error != NULL) {
+                *error = [NSError errorWithDomain:sqlError.domain code:sqlError.code userInfo:errorUserInfo.userinfo];
+            }
+        } else {
+            result = true;
+        }
+    }
+    return result ? YES : NO;
 }
 
 + (NSError *)errorCouldNotGetCredientals {

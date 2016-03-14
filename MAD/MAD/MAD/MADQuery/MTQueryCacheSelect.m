@@ -123,7 +123,7 @@
             if ([sqlSelectExpression length] > 0) {
                 [result appendString:sqlSelectExpression];
                 
-                [result appendString:MTSqlFrom];
+                [result appendString:MADSqlTextFromPart];
                 
                 NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
                 NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];

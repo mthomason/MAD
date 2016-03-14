@@ -55,11 +55,13 @@
 //- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, assign) NSInteger limitResults;
+@property (nonatomic, strong) RptqQuery *queryObject;
 
 @end
 
 @implementation MTQueryFull
 
+@dynamic queryObject;
 
 - (instancetype)initWithObject:(NSDictionary *)object {
     self = [super initWithObject:object];
@@ -90,9 +92,15 @@
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
-    if ([[self.queryObject hasQueryTables] count] > 0) {
+    if (self.queryObject.hasQueryTables.count > 0) {
         
-        [result appendString:[[self.dataDelegate database] selectPartWithLimitedResults:self.limitResults]];
+        MTDatabase *database = [self.dataDelegate database];
+        
+        NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
+        NSString *predicatePart = [self sqlWhereClauseWithQuery:self.queryObject];
+        NSString *limitPart = [[self.dataDelegate database] sqlLimitClause:self.limitResults];
+        
+        [result appendString:selectPart];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
@@ -137,7 +145,7 @@
             if ([sqlSelectExpression length] > 0) {
                 [result appendString:sqlSelectExpression];
                 
-                [result appendString:MTSqlFrom];
+                [result appendString:MADSqlTextFromPart];
                 
                 NSNumber *linkDepth = @0;
                 NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
@@ -162,8 +170,8 @@
         }
         
         if ([result length] > 0) {
-            [result appendString:[self sqlWhereClauseWithQuery:self.queryObject]];
-            [result appendString:[[self.dataDelegate database] sqlLimitClause:self.limitResults]];
+            [result appendString:predicatePart];
+            [result appendString:limitPart];
         }
         
     }
@@ -377,8 +385,8 @@
             NSString *fieldName = [[self.dataDelegate database] safeIdentifier: [field name]];
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
-            [self fields][fieldAlias] = field;
-            [[self fieldKeys] addObject:fieldAlias];
+            self.fields[fieldAlias] = field;
+            [self.fieldKeys addObject:fieldAlias];
             fieldCounter++;
         }
         if (fieldCounter == 0) {

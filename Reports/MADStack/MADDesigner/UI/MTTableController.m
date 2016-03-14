@@ -15,7 +15,7 @@
 #import "MTTableLayout.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
-
+#import <MAD/RptqQuery.h>
 
 @interface MTTableController ()
 <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol> {
@@ -50,7 +50,7 @@
     if (self) {
         _firstTimeViewDidAppear = true;
         [query database].delegate = self;
-        MTDataTable *datatable = [MTTableController dataTableWithObjectId:[[query queryObject] objectID]];
+        MTDataTable *datatable = [MTTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         tableLayout.delegate = self;
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
