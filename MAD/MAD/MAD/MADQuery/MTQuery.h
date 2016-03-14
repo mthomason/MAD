@@ -162,8 +162,7 @@ extern NSString * const MADIdentifierROWID;
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
 
-- (void)performQueryWithDatabase:(MTDatabase *)database
-                      completion:(void (^)(BOOL success, NSError *error))completion;
+- (bool)performQueryWithDatabase:(MTDatabase *)database withError:(NSError * __autoreleasing *)error;
 
 @end
 

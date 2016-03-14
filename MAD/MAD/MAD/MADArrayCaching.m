@@ -254,12 +254,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
     
-    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self database] completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"Error %@", error);
-        dispatch_semaphore_signal(semaphoreQuery);
-    }];
-    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+    NSError * __autoreleasing error = NULL;
+    [query performQueryWithDatabase:self.database withError:&error];
+    
 }
 
 - (NSData *)dataForObject:(id)object {
@@ -350,11 +347,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:MTArrayCachedTableName];
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
-    dispatch_semaphore_t semaphoreDeleteAll = dispatch_semaphore_create(0);
-    [queryDeleteAllFromTable performQueryWithDatabase:[self database] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(semaphoreDeleteAll);
-    }];
-    dispatch_semaphore_wait(semaphoreDeleteAll, DISPATCH_TIME_FOREVER);
+    
+    NSError * __autoreleasing error = NULL;
+    [queryDeleteAllFromTable performQueryWithDatabase:self.database withError:&error];
 }
 
 - (NSDictionary *)queryDefinatinSelect {

@@ -11,49 +11,32 @@
 #endif
 
 #import "MTQueryCacheDeleteAllFromTable.h"
-#import "MTDatabaseConnection.h"
+#import <Foundation/NSString.h>
 #import "MTDatabase.h"
 
 @interface MTQueryCacheDeleteAllFromTable ()
 
-@property (nonatomic, strong) MTDatabaseConnection *connection;
-@property (nonatomic, strong) NSString *tableName;
+@property (nonatomic, copy) NSString *tableName;
 
 @end
 
 @implementation MTQueryCacheDeleteAllFromTable
 
-// FIXME: This is currently SQLite specific.
-
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super init]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddColumn expects NSDictionary.");
-        
-        NSNumber *keyMTQueryCacheDeleteAllFromTableConnection = @(MTQueryCacheDeleteAllFromTableConnection);
-        NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MTQueryCacheDeleteAllFromTableTableName);
-        
-        NSString *tableName = object[keyMTQueryCacheDeleteAllFromTableTableName];
-        [self setTableName:tableName];
-        
-        MTDatabaseConnection *connection = object[keyMTQueryCacheDeleteAllFromTableConnection];
-        [self setConnection:connection];
-        
-        MTDatabase *db = [MTDatabase databaseFactory:connection];
-        [self setDatabase:db];
-        [self setQueryObject:object];
+        NSString *tableName = object;
+        self.tableName = tableName;
         
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    return [NSString stringWithFormat:@"DELETE FROM %@", [self tableName]];
+    NSString * __autoreleasing sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
+    return sql;
 }
 
-- (BOOL)returnsResults {
-    return NO;
-}
+- (BOOL)returnsResults { return NO; }
 
 @end

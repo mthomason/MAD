@@ -21,6 +21,10 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTQuery.h"
 #import "MTQueryCacheAddRow.h"
+#import "MTQueryCacheIndexDrop.h"
+#import "MTQueryCacheVacuum.h"
+#import "MTQueryCacheDropTable.h"
+#import "MTQueryCacheDeleteAllFromTable.h"
 
 @interface MTDataTableFast ()
 
@@ -317,14 +321,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                       @(MTQueryCacheAddColumnCreateTable) : createTable,
                                       @(MTQueryCacheAddColumnUnique) : @(unique),
                                       };
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
     
-    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:self.databaseForInserts completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(semaphoreQuery);
-    }];
-    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+    NSError * __autoreleasing errorQuery = NULL;
+    MTQuery * __autoreleasing query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    [query performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
 }
 
 - (void)addRow:(NSArray *)row {
@@ -384,14 +384,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                           };
 
         MTQuery *query = self.bulkInsertLoop ? self.bulkInsertQuery :
-        [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
+                                [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
         
-        dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-        [query performQueryWithDatabase:self.databaseForInserts completion:^(BOOL success, NSError *error) {
-            NSAssert(success, @"NSAssert at %s: %@", __PRETTY_FUNCTION__, error);
-            dispatch_semaphore_signal(semaphoreQuery);
-        }];
-        dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+        NSError * __autoreleasing errorQuery = NULL;
+        [query performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
 
     }
     
@@ -498,12 +494,14 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSDictionary *)createIndexParametersForIndexName:(NSString *)indexName tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors {
-    return @{
-             @(MTQueryCacheIndexCreateIndexName)         : indexName,
-             @(MTQueryCacheIndexCreateTableName)         : tableName,
-             @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors,
-             @(MTQueryCacheIndexCreateColumns)           : self.columns
-             };
+    NSDictionary *columns = [NSDictionary dictionaryWithDictionary: self.columns];
+    NSDictionary * __autoreleasing parameters = @{
+                                                  @(MTQueryCacheIndexCreateIndexName)         : indexName,
+                                                  @(MTQueryCacheIndexCreateTableName)         : tableName,
+                                                  @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors,
+                                                  @(MTQueryCacheIndexCreateColumns)           : columns
+                                                  };
+    return parameters;
 }
 
 - (void)createIndex {
@@ -519,18 +517,15 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     for (NSArray *sortDescriptors in sortDescriptorGroups) {
 
         NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
+        NSString *tableName = [self tableName];
         NSDictionary *parametersCreateIndex = [self createIndexParametersForIndexName:groupName
-                                                                            tableName:[self tableName]
+                                                                            tableName:tableName
                                                                    andSortDescriptors:sortDescriptors];
   
-        MTQuery *queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
-                                                                object: parametersCreateIndex];
-        dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-        [queryCreateIndex performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-            NSAssert(success, @"Error %@", error);
-            dispatch_semaphore_signal(semaphoreQuery);
-        }];
-        dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+        MTQuery * __autoreleasing queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
+                                                                                 object: parametersCreateIndex];
+        NSError * __autoreleasing errorQuery = NULL;
+        [queryCreateIndex performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
         groupCounter++;
     }
 
@@ -545,29 +540,16 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         NSDictionary *parameters = @{
                                      @(MTQueryCacheIndexDropIndexName) : groupName,
                                      };
-        MTQuery *query = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexDropParameters
-                                                     object: parameters];
-        
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        [query performQueryWithDatabase:[self databaseForInserts]
-                             completion:^(BOOL success, NSError *error) {
-                                 NSAssert(success, @"Error %@", error);
-                                 dispatch_semaphore_signal(semaphore);
-                             }];
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        MTQuery *query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
+        NSError * __autoreleasing errorQuery = NULL;
+        [query performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
     }
 }
 
 - (void)vacuumCacheDb {
-    NSDictionary *queryVacuumDefination = @{ };
-    MTQuery *queryVacuum = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheVacuum object:queryVacuumDefination];
-
-    dispatch_semaphore_t semaphoreVacuum = dispatch_semaphore_create(0);
-    [queryVacuum performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(semaphoreVacuum);
-    }];
-    dispatch_semaphore_wait(semaphoreVacuum, DISPATCH_TIME_FOREVER);
-
+    MTQuery *queryVacuum = [[MTQueryCacheVacuum alloc] init];
+    NSError * __autoreleasing errorQuery = NULL;
+    [queryVacuum performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
 }
 
 - (void)dropTable {
@@ -575,31 +557,17 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (void)dropTableName:(NSString *)tableName {
-    NSNumber *tableNameKey = @(MTQueryCacheDropTableTableName);
-    NSDictionary *queryDefination = @{
-                                      tableNameKey : tableName
-                                      };
-    
-    MTQuery *queryDropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDropTable object:queryDefination];
-    
-    dispatch_semaphore_t semaphoreDropTable = dispatch_semaphore_create(0);
-    [queryDropTable performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(semaphoreDropTable);
-    }];
-    dispatch_semaphore_wait(semaphoreDropTable, DISPATCH_TIME_FOREVER);
+    MTQuery *queryDropTable = [[MTQueryCacheDropTable alloc] initWithObject:tableName];
+    NSError * __autoreleasing errorQuery = NULL;
+    [queryDropTable performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
 }
 
 - (void)deleteAll {
-    NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:[self tableName]];
-    MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
-                                                                   object: queryDefination];
+    NSString *tableName = [self tableName];
+    MTQuery *queryDeleteAllFromTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
     
-    dispatch_semaphore_t semaphoreDeleteAll = dispatch_semaphore_create(0);
-    [queryDeleteAllFromTable performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(semaphoreDeleteAll);
-    }];
-    dispatch_semaphore_wait(semaphoreDeleteAll, DISPATCH_TIME_FOREVER);
-
+    NSError * __autoreleasing errorQuery = NULL;
+    [queryDeleteAllFromTable performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {

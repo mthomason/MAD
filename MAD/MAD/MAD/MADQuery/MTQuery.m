@@ -214,14 +214,15 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     }
 }
 
-- (void)performQueryWithDatabase:(MTDatabase *)database
-                      completion:(void (^)(BOOL success, NSError *error))completion {
+- (bool)performQueryWithDatabase:(MTDatabase *)database withError:(NSError * __autoreleasing *)error {
+    bool success = false;
     [self setDatabase:database];
     @autoreleasepool {
         NSError * __autoreleasing qerror = NULL;
-        bool success = [self.database executeQuery:self withError:&qerror];
-        completion(success, qerror);
+        success = [database executeQuery:self withError:&qerror];
+        *error = qerror;
     }
+    return success;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {

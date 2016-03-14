@@ -82,10 +82,6 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
     return results;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
-    completion(NO, nil);
-}
-
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
     if (error != NULL) {
         NSString * const title = @"Abstract function.";
@@ -127,7 +123,8 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
                withSafeTableName:(NSString *)safeTableName {
     NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
     NSString *fieldName = [self safeIdentifier: field];
-    return [tableAlias stringByAppendingString:fieldName];
+    NSString * __autoreleasing alias = [tableAlias stringByAppendingString:fieldName];
+    return alias;
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {

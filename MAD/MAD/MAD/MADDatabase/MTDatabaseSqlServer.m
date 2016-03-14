@@ -506,17 +506,6 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return result;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
-    MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];
-    if (dbconn) {
-        NSError *error = NULL;
-        bool success = [self runQuery:query onProcess:dbconn withError:&error];
-        completion(success ? YES : NO, error);
-    } else {
-        completion(NO, nil);
-    }
-}
-
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
     bool success = false;
     MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];

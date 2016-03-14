@@ -16,10 +16,7 @@
 
 @interface MTQueryCacheDropTable ()
 
-@property (nonatomic, strong) MTDatabaseConnection *connection;
-@property (nonatomic, strong) NSString *tableName;
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, copy) NSString *tableName;
 
 @end
 
@@ -28,30 +25,19 @@
 // FIXME: This is currently SQLite specific.
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super init]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddColumn expects NSDictionary.");
-        
-        NSNumber *keyConnection = @(MTQueryCacheDropTableConnection);
-        NSNumber *keyTableName = @(MTQueryCacheDropTableTableName);
-        
-        NSString *tableName = object[keyTableName];
+        NSString *tableName = [[NSString alloc] initWithString: object];
         [self setTableName:tableName];
-        
-        MTDatabaseConnection *connection = object[keyConnection];
-        [self setConnection:connection];
-        
-        MTDatabase *db = [MTDatabase databaseFactory:connection];
-        [self setDatabase:db];
-        [self setQueryObject:object];
         
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    return [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", [self tableName]];
+    NSString *tablename = self.tableName;
+    NSString * __autoreleasing Sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", tablename];
+    return Sql;
 }
 
 - (BOOL)returnsResults {

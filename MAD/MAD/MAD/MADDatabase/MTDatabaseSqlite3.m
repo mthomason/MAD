@@ -19,6 +19,11 @@
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
 #import "MTDatabaseDataBinding.h"
+#import "MTQueryCacheSyncOff.h"
+#import "MTQueryCacheJournalModeOverride.h"
+#import "MTQueryCacheBeginTransaction.h"
+#import "MTQueryCacheEndTransaction.h"
+#import "MTQueryCacheSyncDefault.h"
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
@@ -626,147 +631,6 @@ void sqliteLog(void *foo, const char* statement) {
     return success;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
-    
-    NSError *error = nil;
-    BOOL success = YES;
-    
-    NSString *queryString = [NSString stringWithString: [query getSqlWithError:&error]];
-    NSLog(@"Query String: %@", queryString);
-    
-    if (queryString.length > 0) {
-
-        sqlite3_stmt *statement = NULL;
-        statement = [self statementForQueryInTransactionSet:query.partOfTransactionSet andStatement:statement];
-        
-        char *errorMessage = NULL;
-        char *sql = sqlite3_mprintf(queryString.UTF8String);
-        
-        
-        if (statement == NULL) {
-            success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
-            if (query.binaryBindings.count > 0) {
-                for (MTDatabaseDataBinding *databinding in query.binaryBindings) {
-                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
-                }
-            }
-        } else if ([query partOfTransactionSet]) {
-            if (query.binaryBindings.count > 0) {
-                for (MTDatabaseDataBinding *databinding in query.binaryBindings) {
-                    [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
-                }
-            }
-        }
-        
-        if ([query returnsResults]) {
-            
-            if (success) {
-                
-                int numberOfColumns = sqlite3_column_count(statement);
-                numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
-                
-                MTDataTable *dataTable = [self.delegate dataTableForQuery:query];
-                [dataTable removeAllObjects];
-                
-                NSUInteger rowCounter = 0;
-                
-                //NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-                while (SQLITE_ROW == sqlite3_step(statement)) {
-                    
-                    if (rowCounter == 0) {  //If first time around, calculate column information.
-                        for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
-                            
-                            @autoreleasepool {
-                                NSString *fieldName = query.fieldKeys[(NSUInteger)columnCounter];
-                                
-                                MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
-                                
-                                int affentyType = sqlite3_column_type(statement, (int)columnCounter);
-                                NSNumber *nativeColumnType = @(affentyType);
-                                
-                                const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
-                                const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
-                                const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
-                                
-                                char const **pzDataType = NULL;
-                                char const **pzCollSeq = NULL;
-                                int *pNotNull = 0;
-                                int *pPrimaryKey = 0;
-                                int *pAutoinc = 0;
-                            
-                                if (tableName != NULL) {
-                                    sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
-                                }
-                            
-                                [dataColumn setFieldName: fieldName];
-                                [dataColumn setNativeColumnType:nativeColumnType];
-                                NSNumber *columnType = @([MTDatabaseSqlite3 dataTypeForAffentyType:affentyType]);
-                                dataColumn.columnType = columnType;
-                            
-                                dataColumn.primaryKey = (pPrimaryKey == NULL) ? false : *pPrimaryKey;
-                                dataColumn.autoIncrement = (pAutoinc == NULL) ? false : *pAutoinc;
-                                dataColumn.notNull = (pNotNull == NULL) ? false : *pNotNull;
-                                [dataTable addColumn:dataColumn];
-                                dataColumn = nil;
-                            }
-                        }
-                        
-                        [dataTable beginBulkInsert];
-                    }
-                    [self readRow:rowCounter];
-                    
-                    NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
-                    
-                    for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
-                        
-                        NSString *fieldName = query.fieldKeys[(NSUInteger)colCtr];
-                        id value = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:colCtr];
-                        resultsForRow[fieldName] = value;
-                        
-                    }
-                    
-                    [dataTable addRowWithDataForFieldKeys:resultsForRow];
-                    resultsForRow = nil;
-                    rowCounter++;
-                }
-                [dataTable endBulkInsert];
-                
-            }
-        } else {
-            // FIXME: Handle failures.
-            sqlite3_step(statement);
-        }
-        if ([query partOfTransactionSet] == NO) {
-            success = SQLITE_OK == sqlite3_finalize(statement);
-        } else {
-            sqlite3_reset(statement);
-            _bulkStatement = statement;
-        }
-        
-        if (success == NO) {
-            errorMessage = (char *)sqlite3_errmsg(_database);
-        }
-        
-        NSString *message = nil;
-        if (errorMessage != NO) {
-            success = NO;
-            message = [[NSString alloc] initWithUTF8String:errorMessage];
-        } else if (success == NO) {
-            message = NSLocalizedString(@"Unknown database failure.", @"Unknown database failure.");
-        }
-        if (success == NO) {
-            NSString *title = NSLocalizedString(@"Error", @"Error");
-            NSString *domain = @"MTSqlite3";
-            MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-            error = [NSError errorWithDomain:domain code:4784 userInfo:errorUserInfo.userinfo];
-        }
-        sqlite3_free(sql);
-        
-    }
-    
-    completion(success, error);
-}
-
 + (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber {
     id value = nil;
     int affentyType = sqlite3_column_type(statement, columnNumber);   //http://www.sqlite.org/c3ref/c_blob.html
@@ -881,11 +745,6 @@ void sqliteLog(void *foo, const char* statement) {
     return columnValue;
 }
 
-- (void)executeQuery:(MTQuery *)query withStatement:(sqlite3_stmt *)statement completion:(void (^)(BOOL, NSError *))completion {
-
-}
-
-
 - (NSString *)identifier {
     return MADIdentifierDatabaseSqlite3;
 }
@@ -920,67 +779,45 @@ void sqliteLog(void *foo, const char* statement) {
         for (MTDatabaseTable *table in tables) {
             NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
-            [dropTable performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-                NSAssert(success && error == nil, @"Error %@ at %s.", error, __PRETTY_FUNCTION__);
-            }];
+            
+            NSError * __autoreleasing error = NULL;
+            [dropTable performQueryWithDatabase:self withError:&error];
+
         }
         dispatch_semaphore_signal(s0);
     }];
     dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
     
-    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(s1);
-    }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    
-    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeOverride object:@{}];
-    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
-    [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(s2);
-    }];
-    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+    NSError * __autoreleasing errorQuerySyncMode = NULL;
+    MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncOff alloc] init];
+    [querySyncMode performQueryWithDatabase:self withError:&errorQuerySyncMode];
 
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
-    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(s3);
-    }];
-    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+    NSError * __autoreleasing errorQueryJournalMode = NULL;
+    MTQuery * __autoreleasing queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
+    [queryJournalMode performQueryWithDatabase:self withError:&errorQueryJournalMode];
+
+    NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
+    MTQuery * __autoreleasing query = [[MTQueryCacheBeginTransaction alloc] init];
+    [query performQueryWithDatabase:self withError:&errorQueryCacheBeginTransaction];
+    
 }
 
 - (void)endBulkInsert {
+
+    NSError * __autoreleasing errorCacheEndTransaction = NULL;
+    MTQuery * __autoreleasing query = [[MTQueryCacheEndTransaction alloc] init];
+    [query performQueryWithDatabase:self withError:&errorCacheEndTransaction];
     
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(s1);
-    }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    
-    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
-    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
-    [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(s2);
-    }];
-    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
-    
+    NSError * __autoreleasing errorQuerySyncMode = NULL;
+    MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
+    [querySyncMode performQueryWithDatabase:self withError:&errorQuerySyncMode];
+
     /*
-    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
-    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
-    [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
-        dispatch_semaphore_signal(s3);
-    }];
-    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
-    
+     NSError * __autoreleasing errorJournalMode = NULL;
+     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
+     [queryJournalMode performQueryWithDatabase:self withError:&errorJournalMode];
     */
+    
     sqlite3_finalize(_bulkStatement);
     _bulkStatement = NULL;
     sqlite3_close_v2(_database);

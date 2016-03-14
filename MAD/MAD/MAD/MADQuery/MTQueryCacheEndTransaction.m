@@ -21,8 +21,7 @@
 @implementation MTQueryCacheEndTransaction
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) { }
+    if (self = [super init]) { }
     return self;
 }
 
