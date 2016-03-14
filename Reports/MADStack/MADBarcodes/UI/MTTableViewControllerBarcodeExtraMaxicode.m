@@ -48,23 +48,24 @@
     [self setDataTableSampleData:dataTable];
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
                                                                 object: schemaField];
-    [querySampleDataField performQuery:^(BOOL success, NSError *error) {
-        if (success) {
-            MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
-            [self setDataTableSampleData:dt];
-            NSArray *allObjects = [self.dataTableSampleData allObjects];
-            [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
-            [self.tableView reloadData];
-        } else {
-            [NSError presentError: error
-                 onViewController: self
-                       completion:^(BOOL success) {
-                           NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                           [[MTKeyChain sharedObject] deleteKey:key];
-                       }];
-
-        }
-    }];
+    NSError * __autoreleasing error = NULL;
+    bool success = [querySampleDataField performQueryWithError:&error];
+    if (success) {
+        MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
+        [self setDataTableSampleData:dt];
+        NSArray *allObjects = [self.dataTableSampleData allObjects];
+        [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
+        [self.tableView reloadData];
+    } else {
+        MTTableViewControllerBarcodeExtraMaxicode * __weak wself = self;
+        [NSError presentError: error
+             onViewController: wself
+                   completion:^(BOOL presentErrorSuccess) {
+                       NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                       [[MTKeyChain sharedObject] deleteKey:key];
+                   }];
+        
+    }
 }
 
 + (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {

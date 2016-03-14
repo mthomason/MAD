@@ -121,59 +121,55 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     if (self.editmode) {
         self.barButtonItemSave.enabled = YES;
         
-        __weak MTViewControllerBarcodeOptions *optionsViewController = self.optionsViewController;
-        if ([self queryField1] != nil) {
-            RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
-            
+        if (self.queryField1 != nil) {
+
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
-                                                                        object: schemaField];
-            __weak MTViewControllerBarcode *weakself = self;
+                                                                        object: self.queryField1.databaseSchemaField];
             [querySampleDataField database].delegate = self;
             self.query = querySampleDataField;
-            [self.query performQuery:^(BOOL success, NSError *error) {
-                __strong MTViewControllerBarcode *strongself = weakself;
-                if (success) {
-                    NSArray *allObjects = [[strongself dataTableSampleData] allObjects];
-                    [optionsViewController setSampleBarcodeData:allObjects];
-                    [[optionsViewController tableView] reloadData];
-                } else {
-                    __weak MTViewControllerBarcode *weakself2 = strongself;
-                    [NSError presentError: error
-                         onViewController: strongself
-                               completion:^(BOOL success) {
-                                   NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                                   [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself2];
-                               }];
-                    
-                }
-            }];
+            NSError * __autoreleasing error = NULL;
+            bool success = [self.query performQueryWithError:&error];
+            if (success) {
+                NSArray *allObjects = [self.dataTableSampleData allObjects];
+                [self.optionsViewController setSampleBarcodeData:allObjects];
+                [self.optionsViewController.tableView reloadData];
+            } else {
+                __weak MTViewControllerBarcode *weakself2 = self;
+                [NSError presentError: error
+                     onViewController: weakself2
+                           completion:^(BOOL presentErrorSuccess) {
+                               NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                               [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself2];
+                           }];
+                
+            }
         }
         
-        if ([self queryField2] != nil) {
-            RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
+        if (self.queryField2 != nil) {
+            
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
-                                                                        object: schemaField];
-            __weak MTViewControllerBarcode *weakself = self;
+                                                                        object: self.queryField2.databaseSchemaField];
             [querySampleDataField database].delegate = self;
             self.query2 = querySampleDataField;
-            [self.query2 performQuery:^(BOOL success, NSError *error) {
-                __strong MTViewControllerBarcode *strongself = weakself;
-                if (success) {
-                    NSArray *allObjects = [strongself.dataTableSampleData2 allObjects];
-                    [optionsViewController setSampleBarcodeData2dComponent:allObjects];
-                    [[optionsViewController tableView] reloadData];
-                } else {
-                    __weak MTViewControllerBarcode *weakself2 = strongself;
-                    [NSError presentError: error
-                         onViewController: strongself
-                               completion:^(BOOL success) {
-                                   __strong MTViewControllerBarcode *strongself2 = weakself2;
-                                   NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                                   [[MTKeyChain sharedObject] deleteKey:key usingViewController:strongself2];
-                               }];
-                    
-                }
-            }];
+            NSError * __autoreleasing error = NULL;
+            bool success = [self.query2 performQueryWithError:&error];
+
+            if (success) {
+                NSArray *allObjects = [self.dataTableSampleData2 allObjects];
+                [self.optionsViewController setSampleBarcodeData2dComponent:allObjects];
+                [self.optionsViewController.tableView reloadData];
+            } else {
+                __weak MTViewControllerBarcode *weakself = self;
+                [NSError presentError: error
+                     onViewController: weakself
+                           completion:^(BOOL presentErrorSuccess) {
+                               __strong MTViewControllerBarcode *strongself2 = weakself;
+                               __weak MTViewControllerBarcode *weak = strongself2;
+                               NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                               [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak];
+                           }];
+                
+            }
         }
 
     }

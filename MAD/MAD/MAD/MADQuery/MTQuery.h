@@ -160,8 +160,7 @@ extern NSString * const MADIdentifierROWID;
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
 
-- (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
-
+- (bool)performQueryWithError:(NSError * __autoreleasing *)error;
 - (bool)performQueryWithDatabase:(MTDatabase *)database withError:(NSError * __autoreleasing *)error;
 
 @end

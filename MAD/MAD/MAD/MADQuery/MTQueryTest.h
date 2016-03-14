@@ -14,6 +14,8 @@
 
 @interface MTQueryTest : MTQuery
 
+@property (nonatomic, strong, readwrite) MTDatabase *database;
+
 @end
 
 #endif

@@ -25,6 +25,8 @@
 
 @implementation MTQueryTest
 
+@dynamic database;
+
 - (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {

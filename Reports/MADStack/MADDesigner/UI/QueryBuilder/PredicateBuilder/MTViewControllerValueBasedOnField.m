@@ -139,47 +139,48 @@
     
     __weak MTViewControllerValueBasedOnField *weakself2 = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [querySampleDataField performQuery:^(BOOL success, NSError *error) {
-            if (success) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
-                    [weakself2 setDataTable: dt];
-                    NSArray *allObjects = [[weakself2 dataTable] allObjects];
-                    [weakself2 setPickerData:allObjects];
-                    [weakself2.pickerView reloadAllComponents];
-                    
-                    [weakself2.pickerView setNeedsDisplay];
-                    
-                    [weakself2.pickerView selectRow: 0
-                                        inComponent: 0
-                                           animated: NO];
-                    [weakself2 pickerView: weakself2.pickerView
-                             didSelectRow: 0
-                              inComponent: 0];
-                });
+        __strong MTViewControllerValueBasedOnField *strongself2 = weakself2;
+        
+        NSError * __autoreleasing error = NULL;
+        bool success = [querySampleDataField performQueryWithError:&error];
+        if (success) {
+            __weak MTViewControllerValueBasedOnField *weakself3 = strongself2;
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                __strong MTViewControllerValueBasedOnField *strongself5 = weakself3;
+                MTDataTable *dt = [[querySampleDataField.database delegate] dataTableForQuery:querySampleDataField];
+                [strongself5 setDataTable: dt];
+                NSArray *allObjects = [[strongself5 dataTable] allObjects];
+                [strongself5 setPickerData:allObjects];
+                [strongself5.pickerView reloadAllComponents];
                 
+                [strongself5.pickerView setNeedsDisplay];
                 
+                [strongself5.pickerView selectRow: 0 inComponent: 0 animated: NO];
+                [strongself5 pickerView: strongself5.pickerView didSelectRow: 0 inComponent: 0];
+            });
+            
+            
+        } else {
+            
+            NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+            
+            if ([NSThread isMainThread]) {
+                __weak UIViewController *weak1 = strongself2;
+                [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
+                    [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
+                }];
             } else {
-                
-                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                
-                if ([NSThread isMainThread]) {
-                    [NSError presentError:error onViewController:weakself2 completion:^(BOOL success) {
-                        __strong UIViewController *viewController = weakself2;
-                        [[MTKeyChain sharedObject] deleteKey:key usingViewController:viewController];
-                    }];
-                } else {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [NSError presentError: error
-                             onViewController: weakself2
-                                   completion:^(BOOL success) {
-                                       __strong UIViewController *viewController = weakself2;
-                                       [[MTKeyChain sharedObject] deleteKey:key usingViewController:viewController];
-                                   }];
-                    });
-                }
+                NSError *serror = error;
+                __weak UIViewController *weak1 = strongself2;
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [NSError presentError: serror
+                         onViewController: weak1
+                               completion:^(BOOL presentErrorSuccess) {
+                                   [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
+                               }];
+                });
             }
-        }];
+        }
     });
 }
 

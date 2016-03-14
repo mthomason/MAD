@@ -787,45 +787,46 @@ static NSString * const StringEmpty = @"";
                                       withField:(RptqQueryField *)field {
 
     [[self navigationController] popViewControllerAnimated:YES];
+    
+    id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
     if  ([self selectingField1]) {
-        [self.delegate didSetField1:field];
+        [delegate didSetField1:field];
     } else if ([self selectingField2]) {
-        [self.delegate didSetField2:field];
+        [delegate didSetField2:field];
     }
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
                                                                 object: field.databaseSchemaField];
-    __weak MTViewControllerBarcodeOptions *weakself = self;
-    [querySampleDataField performQuery:^(BOOL success, NSError *error) {
-        
-        __strong MTViewControllerBarcodeOptions *strongself = weakself;
-        
-        if (success) {
-            MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
-            [strongself setSampleDataTable:dt];
-            NSAssert((strongself.selectingField1 == NO && strongself.selectingField2 == NO) == NO, @"Must be setting one or the other.");
-            NSAssert((strongself.selectingField1 && strongself.selectingField2) == NO, @"Can't be setting both at the same time, now can we?");
-            if (strongself.selectingField1) {
-                NSArray *allObjects = [strongself.sampleDataTable allObjects];
-                [strongself setSampleBarcodeData:allObjects];
-            } else if (strongself.selectingField2) {
-                NSArray *allObjects = [strongself.sampleDataTable allObjects];
-                [strongself setSampleBarcodeData2dComponent:allObjects];
-            }
-            [strongself.tableView reloadData];
+    NSError * __autoreleasing error = NULL;
+    bool success = [querySampleDataField performQueryWithError:&error];
 
-        } else {
-            __weak MTViewControllerBarcodeOptions *weakself2 = strongself;
-            [NSError presentError: error
-                 onViewController: self
-                       completion:^(BOOL success) {
-                           __strong MTViewControllerBarcodeOptions *strongself2 = weakself2;
-                           NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                           [[MTKeyChain sharedObject] deleteKey:key usingViewController:strongself2];
-                       }];
-            
+    
+    
+    if (success) {
+        MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
+        [self setSampleDataTable:dt];
+        NSAssert((self.selectingField1 == NO && self.selectingField2 == NO) == NO, @"Must be setting one or the other.");
+        NSAssert((self.selectingField1 && self.selectingField2) == NO, @"Can't be setting both at the same time, now can we?");
+        if (self.selectingField1) {
+            NSArray *allObjects = [self.sampleDataTable allObjects];
+            [self setSampleBarcodeData:allObjects];
+        } else if (self.selectingField2) {
+            NSArray *allObjects = [self.sampleDataTable allObjects];
+            [self setSampleBarcodeData2dComponent:allObjects];
         }
-    }];
+        [self.tableView reloadData];
+        
+    } else {
+        MTViewControllerBarcodeOptions * __strong strongself = self;
+        [NSError presentError: error
+             onViewController: self
+                   completion:^(BOOL presentErrorSuccess) {
+                       __weak MTViewControllerBarcodeOptions *weakself = strongself;
+                       NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+                       [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself];
+                   }];
+        
+    }
 }
 
 #pragma mark - MTDatabaseProtocol

@@ -22,6 +22,7 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
+#import "MTQueryTest.h"
 
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
 NSString * const MADIdentifierDatabaseTDS       = @"TDS";
@@ -183,13 +184,13 @@ NSString * const MADStringEmpty = @"";
 }
 
 - (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion {
-    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
-                                                     object: self];
-    [queryTest performQuery:^(BOOL success, NSError *error) {
-        NSArray *displayErrors = error ? [queryTest.database.errors arrayByAddingObject:error] :
-                                         [NSArray arrayWithArray:queryTest.database.errors];
-        completion(success, displayErrors);
-    }];
+    
+    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: self];
+    NSError * __autoreleasing error = NULL;
+    bool success = [queryTest.database executeQuery:queryTest withError:&error];
+    NSArray *displayErrors = error ? [queryTest.database.errors arrayByAddingObject:error] : [NSArray arrayWithArray:queryTest.database.errors];
+    completion(success, displayErrors);
+
 }
 
 @end

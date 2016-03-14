@@ -206,12 +206,13 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return self;
 }
 
-- (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
-    @autoreleasepool {
-        NSError * __autoreleasing qerror = NULL;
-        bool success = [self.database executeQuery:self withError:&qerror];
-        completion(success, qerror);
+- (bool)performQueryWithError:(NSError * __autoreleasing *)error {
+    NSError * __autoreleasing qerror = NULL;
+    bool success = [self.database executeQuery:self withError:&qerror];
+    if (!success && error == NULL) {
+        *error = qerror;
     }
+    return success;
 }
 
 - (bool)performQueryWithDatabase:(MTDatabase *)database withError:(NSError * __autoreleasing *)error {

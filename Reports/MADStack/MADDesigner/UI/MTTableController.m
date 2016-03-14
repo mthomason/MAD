@@ -107,53 +107,54 @@
         
         __strong MTTableController *strongself = weakSelf;
         __weak MTTableController *weakSelf2 = strongself;
-        [strongself.tableFormatter.query performQuery:^(BOOL success, NSError *error) {
+        NSError * __autoreleasing error = NULL;
+        bool success = [strongself.tableFormatter.query performQueryWithError:&error];
+        
+        __strong MTTableController *strongself2 = weakSelf2;
+        
+        
+        [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
+                                                     withObject: strongself2.navigationItem.rightBarButtonItem
+                                                  waitUntilDone: NO];
+        
+        [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
+        
+        if (!success && error) {
             
-            __strong MTTableController *strongself2 = weakSelf2;
-            __weak MTTableController *weakSelf3 = strongself2;
-
-            
-            [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
-                                                       withObject: strongself2.navigationItem.rightBarButtonItem
-                                                    waitUntilDone: NO];
-            
-            [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
-
-            if (error) {
-            
-                if ([NSThread isMainThread]) {
-                    __strong MTTableController *strongself3 = weakSelf3;
-                    __strong MTTableController *weakself4 = strongself3;
+            if ([NSThread isMainThread]) {
+                //__strong MTTableController *strongself3 = weakSelf3;
+                __strong MTTableController *weakself4 = strongself2;
+                
+                [NSError presentError: error
+                     onViewController: strongself2
+                           completion:^(BOOL displayErrorSuccess) {
+                               NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                               [[MTKeyChain sharedObject] deleteKey:key];
+                           }];
+                
+            } else {
+                
+                NSError *serror = error;
+                __weak MTTableController *weakself4 = strongself2;
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     
-                    [NSError presentError: error
+                    __strong MTTableController *strongself3 = weakself4;
+                    __weak MTTableController *weakself5 = strongself3;
+                    
+                    [NSError presentError: serror
                          onViewController: strongself3
-                               completion:^(BOOL success) {
-                                   NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
+                               completion:^(BOOL displayErrorSuccess) {
+                                   NSString *key = [NSString stringWithString:weakself5.query.database.databaseConnection.connectionString];
                                    [[MTKeyChain sharedObject] deleteKey:key];
                                }];
                     
-                } else {
-                    
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        __strong MTTableController *strongself3 = weakSelf3;
-                        __strong MTTableController *weakself4 = strongself3;
-                        
-                        [NSError presentError: error
-                             onViewController: strongself3
-                                   completion:^(BOOL success) {
-                                       NSString *key = [NSString stringWithString:weakself4.query.database.databaseConnection.connectionString];
-                                       [[MTKeyChain sharedObject] deleteKey:key];
-                                   }];
-                        
-                    });
-                    
-                }
+                });
                 
             }
-            [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
             
-        }];
+        }
+        [strongself2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:strongself2 waitUntilDone:NO];
+        
         
     });
 }
