@@ -36,7 +36,6 @@
 #import "MADNavigationBarTitleView.h"
 #import "MADWatermarkView.h"
 
-//#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #import "UINavigationController+MADQuery.h"

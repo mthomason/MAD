@@ -84,8 +84,8 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
     if (error != NULL) {
-        NSString * const title = @"Abstract function.";
-        NSString * const message = @"Don't go there.";
+        NSString * title = @"Abstract function.";
+        NSString * message = @"Don't go there.";
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
         NSDictionary *userInfo = [NSDictionary dictionaryWithDictionary: errorUserInfo.userinfo];
         *error = [NSError errorWithDomain:@"MTDatabase" code:3190 userInfo:userInfo]; // assign indirectly via the reference to a variable
