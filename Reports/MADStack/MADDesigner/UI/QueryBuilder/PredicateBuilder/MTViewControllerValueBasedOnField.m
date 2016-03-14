@@ -147,7 +147,7 @@
             __weak MTViewControllerValueBasedOnField *weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 __strong MTViewControllerValueBasedOnField *strongself5 = weakself3;
-                MTDataTable *dt = [[querySampleDataField.database delegate] dataTableForQuery:querySampleDataField];
+                MTDataTable * __autoreleasing dt = [[querySampleDataField.database delegate] dataTableForQuery:querySampleDataField];
                 [strongself5 setDataTable: dt];
                 NSArray *allObjects = [[strongself5 dataTable] allObjects];
                 [strongself5 setPickerData:allObjects];

@@ -101,7 +101,7 @@
         NSError *sqlError = nil;
         NSString *queryString = [query getSqlWithError:&sqlError];
         if (queryString.length > 0 && sqlError == nil) {
-            MTDataTable *dataTable = [self dataTableForQuery:query];
+            MTDataTable * __autoreleasing dataTable = [self dataTableForQuery:query];
             [myFetch fetchWithCommand: queryString
                             dataTable: &dataTable
                          onConnection: dbconn

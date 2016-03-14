@@ -51,7 +51,7 @@
     NSError * __autoreleasing error = NULL;
     bool success = [querySampleDataField performQueryWithError:&error];
     if (success) {
-        MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
+        MTDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
         [self setDataTableSampleData:dt];
         NSArray *allObjects = [self.dataTableSampleData allObjects];
         [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];

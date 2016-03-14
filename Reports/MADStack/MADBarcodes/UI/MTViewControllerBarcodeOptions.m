@@ -803,7 +803,7 @@ static NSString * const StringEmpty = @"";
     
     
     if (success) {
-        MTDataTable *dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
+        MTDataTable * __weak dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
         [self setSampleDataTable:dt];
         NSAssert((self.selectingField1 == NO && self.selectingField2 == NO) == NO, @"Must be setting one or the other.");
         NSAssert((self.selectingField1 && self.selectingField2) == NO, @"Can't be setting both at the same time, now can we?");
