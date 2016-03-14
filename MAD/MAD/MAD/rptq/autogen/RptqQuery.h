@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqQuery_h
+#define MAD_AutoGen_RptqQuery_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabase, RptqDatabaseSchemaField, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
@@ -55,3 +57,5 @@
 - (void)removeHasQueryTables:(NSSet *)values;
 
 @end
+
+#endif

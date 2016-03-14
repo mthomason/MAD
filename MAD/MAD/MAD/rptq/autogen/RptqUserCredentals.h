@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqUserCredentals_h
+#define MAD_AutoGen_RptqUserCredentals_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabase;
 
@@ -36,3 +38,5 @@
 @property (nonatomic, strong) RptqDatabase *inDatabase;
 
 @end
+
+#endif

@@ -57,21 +57,19 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @property (nonatomic, weak) id <MADocumentDelegate> documentDelegate;
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-
 @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
-
+@property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 @property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
 @property (nonatomic, strong, readonly) MTQuery *mainQuery;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
-
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
+
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
 @property (readonly) RptqDocument *activeDocumentModel;
 @property (readonly) NSURL *cachedDataUrl;
 
-@property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 @property (nonatomic, strong, readonly) MTPaper *paper;
 
 

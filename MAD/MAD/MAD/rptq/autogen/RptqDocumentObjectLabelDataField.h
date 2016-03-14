@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqDocumentObjectLabelDataField_h
+#define MAD_AutoGen_RptqDocumentObjectLabelDataField_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDocumentObject, RptqQueryField;
 
@@ -21,3 +23,5 @@
 @property (nonatomic, strong) RptqQueryField *referencesQueryField;
 
 @end
+
+#endif

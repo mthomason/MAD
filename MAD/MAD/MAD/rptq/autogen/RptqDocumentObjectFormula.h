@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqDocumentObjectFormula_h
+#define MAD_AutoGen_RptqDocumentObjectFormula_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDocumentObject, RptqDocumentObjectAggregate;
 
@@ -24,3 +26,5 @@
 @property (nonatomic, strong) RptqDocumentObject *parentObjectFormula;
 
 @end
+
+#endif

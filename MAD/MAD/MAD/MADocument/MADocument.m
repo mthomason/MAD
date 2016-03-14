@@ -15,8 +15,8 @@
 #import <Foundation/NSException.h>
 #import <MADFoundation/NSURL+Document.h>
 
-#import "MADCredential.h"
 #import "MADConstants.h"
+#import "MADCredential.h"
 
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
@@ -146,19 +146,15 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @property (nonatomic, strong, readwrite) MTQuery *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
 
-@property (nonatomic, assign) BOOL didRefresh;
-
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
-
 @property (nonatomic, strong, readwrite) NSURL *urlGuts;
 @property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
 @property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
-
 @property (nonatomic, strong, readwrite) NSString *fileName;
-
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
-
 @property (nonatomic, strong, readwrite) MTPaper *paper;
+
+@property (nonatomic, assign) BOOL didRefresh;
 
 @end
 
@@ -241,10 +237,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         self.persistentStoreOptions = options;
         
-        //NSPersistentStoreCoordinator *psc = [self.managedObjectContext persistentStoreCoordinator];
-        //[psc metadataForPersistentStore:psc];
-        //NSURL *oldURL = [psc URLForPersistentStore:[[psc persistentStores]objectAtIndex:0]];
-
         NSURL *urlGuts = [MADocument archiveUrlForMadUrl:url];
         NSURL *urlMetaPlaylist = [urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
         self.urlMetaPlaylist = urlMetaPlaylist;

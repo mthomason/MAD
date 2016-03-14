@@ -11,6 +11,7 @@
 #endif
 
 #import "MTReportFormatter.h"
+#import <CoreData/NSManagedObjectID.h>
 #import "MTReportFormatterState.h"
 #import "MADocument.h"
 #import "MTQueryFull.h"

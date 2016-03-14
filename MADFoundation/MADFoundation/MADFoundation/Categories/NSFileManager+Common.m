@@ -8,6 +8,9 @@
 
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSFileCoordinator.h>
+#import <Foundation/NSException.h>
 
 NSString * const MADPathComponentDocuments  = @"Documents";
 NSString * const MADPathComponentCache      = @"Cache";

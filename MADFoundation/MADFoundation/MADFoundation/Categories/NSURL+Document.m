@@ -7,6 +7,8 @@
 //
 
 #import "NSURL+Document.h"
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSFileManager.h>
 
 @implementation NSURL (Document)
 

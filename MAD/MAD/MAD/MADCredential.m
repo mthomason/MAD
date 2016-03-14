@@ -7,6 +7,7 @@
 //
 
 #import "MADCredential.h"
+#import <Foundation/NSString.h>
 
 @implementation MADCredential
 

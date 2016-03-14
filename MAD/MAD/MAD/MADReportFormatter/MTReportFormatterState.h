@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MTReportFormatterState_h
+#define MAD_MTReportFormatterState_h
+
+#import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
 
 @class RptqDocument;
@@ -26,3 +29,5 @@
     @property (nonatomic, strong) NSNumber *detailRowIdLast;
 
 @end
+
+#endif

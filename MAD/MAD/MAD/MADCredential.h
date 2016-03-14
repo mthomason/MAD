@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADCredential_h
+#define MAD_MADCredential_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADCredential : NSObject <NSCopying>
 
@@ -17,3 +20,4 @@
 
 @end
 
+#endif

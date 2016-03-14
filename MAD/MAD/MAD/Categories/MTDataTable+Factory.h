@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTDataTable_Factory_h
+#define MAD_MTDataTable_Factory_h
+
 #import <MADFoundation/MTDataTable.h>
 
 @interface MTDataTable (Factory)
@@ -14,3 +17,5 @@
 + (instancetype)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED;
 
 @end
+
+#endif

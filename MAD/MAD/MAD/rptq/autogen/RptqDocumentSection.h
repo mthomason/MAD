@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqDocumentSection_h
+#define MAD_AutoGen_RptqDocumentSection_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDocument, RptqDocumentSectionRows, RptqQueryGroup;
 
@@ -51,3 +53,5 @@
 - (void)addHasRows:(NSOrderedSet *)values;
 - (void)removeHasRows:(NSOrderedSet *)values;
 @end
+
+#endif

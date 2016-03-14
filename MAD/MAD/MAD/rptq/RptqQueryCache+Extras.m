@@ -11,6 +11,9 @@
 #endif
 
 #import "RptqQueryCache+Extras.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 #import "NSObject+DebugDescription.h"
 
 @implementation RptqQueryCache (Extras)

@@ -14,6 +14,8 @@
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTLinkedList.h>
 #import <MADDataStructures/MTVertex.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MADQueryVisualizationDefination()
 

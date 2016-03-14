@@ -9,7 +9,7 @@
 #ifndef Reports_NSURL_Document_h
 #define Reports_NSURL_Document_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSURL.h>
 
 @interface NSURL (Document)
 

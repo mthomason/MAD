@@ -12,6 +12,8 @@
 
 #import "RptqRelationship+Extras.h"
 #import "NSObject+DebugDescription.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 @implementation RptqRelationship (Extras)
 

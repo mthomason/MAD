@@ -6,7 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_NSDictionary_MADReportObjectRepresentation_h
+#define MAD_NSDictionary_MADReportObjectRepresentation_h
+
+#import <Foundation/NSDictionary.h>
 #import "MADDocumentSectionType.h"
 
 extern NSString * const MTReportSectionType;
@@ -27,3 +30,5 @@ extern NSString * const MTReportGroupLevel;
 - (NSNumber *)detailRowId;
 
 @end
+
+#endif

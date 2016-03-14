@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqQueryField_h
+#define MAD_AutoGen_RptqQueryField_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabaseSchemaField, RptqDocumentObjectAggregate, RptqDocumentObjectLabelDataField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
@@ -71,3 +73,5 @@
 - (void)removeInQuerySort:(NSSet *)values;
 
 @end
+
+#endif

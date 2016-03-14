@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqDocumentObjectLabel_h
+#define MAD_AutoGen_RptqDocumentObjectLabel_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDocumentObject;
 
@@ -18,3 +20,5 @@
 @property (nonatomic, strong) RptqDocumentObject *parentObjectLabel;
 
 @end
+
+#endif

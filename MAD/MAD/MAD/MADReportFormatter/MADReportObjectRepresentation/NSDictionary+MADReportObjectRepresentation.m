@@ -7,6 +7,8 @@
 //
 
 #import "NSDictionary+MADReportObjectRepresentation.h"
+#import <Foundation/NSValue.h>
+#import <Foundation/NSString.h>
 
 //Keys stored in the cache.  Short and unique.
 NSString * const MTReportSectionType                    = @"a";

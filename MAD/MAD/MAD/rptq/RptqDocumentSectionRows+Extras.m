@@ -10,8 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows+Extras.h"
+#import "RptqDocumentSection.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
 
 @implementation RptqDocumentSectionRows (Extras)
 

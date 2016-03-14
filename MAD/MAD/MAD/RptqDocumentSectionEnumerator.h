@@ -9,7 +9,7 @@
 #ifndef Reports_SectionEnumerator_h
 #define Reports_SectionEnumerator_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSEnumerator.h>
 
 @class RptqDocument;
 

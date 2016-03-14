@@ -9,8 +9,7 @@
 #ifndef MAD_MTReportFormatter_h
 #define MAD_MTReportFormatter_h
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <CoreGraphics/CGGeometry.h>
 #import <MAD/MTTableFormatter.h>
 #import <MAD/MTReportFormatterDataSource.h>
 #import <MADFoundation/MTCacheProtocol.h>
