@@ -9,7 +9,7 @@
 #ifndef Reports_MTNotificationDidFormatPage_h
 #define Reports_MTNotificationDidFormatPage_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 extern NSString * const MTNotificationDidFormatPagesName;
 extern NSString * const MTDatabaseNumberOfPagesFormattedKey;

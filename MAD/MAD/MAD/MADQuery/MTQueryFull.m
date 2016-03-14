@@ -50,6 +50,10 @@
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
 
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
 @interface MTQueryFull ()
 
 //- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;

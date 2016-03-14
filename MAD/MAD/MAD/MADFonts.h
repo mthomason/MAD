@@ -6,11 +6,15 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIFont.h>
+#ifndef MAD_MADFonts_h
+#define MAD_MADFonts_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADFonts : NSObject
 
 @property (nonatomic, strong, readonly) NSArray <NSString *> *familyNames;
 
 @end
+
+#endif

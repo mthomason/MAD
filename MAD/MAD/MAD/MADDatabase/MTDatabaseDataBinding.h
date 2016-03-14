@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDatabaseProcessSqlServer_h
-#define Reports_MTDatabaseProcessSqlServer_h
+#ifndef MAD_MTDatabaseDataBinding_h
+#define MAD_MTDatabaseDataBinding_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface MTDatabaseDataBinding : NSObject

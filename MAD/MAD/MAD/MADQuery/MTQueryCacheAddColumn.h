@@ -9,7 +9,6 @@
 #ifndef Reports_MTQueryCacheAddColumn_h
 #define Reports_MTQueryCacheAddColumn_h
 
-#import <Foundation/Foundation.h>
 #import "MTQueryCache.h"
 
 @interface MTQueryCacheAddColumn : MTQueryCache

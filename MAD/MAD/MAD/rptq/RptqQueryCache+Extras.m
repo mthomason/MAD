@@ -11,10 +11,11 @@
 #endif
 
 #import "RptqQueryCache+Extras.h"
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
-#import "NSObject+DebugDescription.h"
 
 @implementation RptqQueryCache (Extras)
 

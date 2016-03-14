@@ -9,7 +9,6 @@
 #ifndef Reports_MTQueryCacheAddRow_h
 #define Reports_MTQueryCacheAddRow_h
 
-#import <Foundation/Foundation.h>
 #import "MTQuery.h"
 
 @interface MTQueryCacheAddRow : MTQuery

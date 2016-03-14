@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqDatabaseSchemaTable_h
+#define MAD_AutoGen_RptqDatabaseSchemaTable_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabase, RptqDatabaseSchemaField, RptqQueryTable;
 
@@ -46,3 +48,5 @@
 - (void)addInQueryTable:(NSOrderedSet *)values;
 - (void)removeInQueryTable:(NSOrderedSet *)values;
 @end
+
+#endif

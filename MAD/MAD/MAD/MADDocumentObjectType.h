@@ -9,6 +9,8 @@
 #ifndef MAD_MADDocumentObjectType_h
 #define MAD_MADDocumentObjectType_h
 
+#import <Foundation/NSString.h>
+
 typedef NS_ENUM(short, MTDocumentObjectType) {
     MTDocumentObjectTypeLabelDynamic = 0,
     MTDocumentObjectTypeLabelStatic = 1,

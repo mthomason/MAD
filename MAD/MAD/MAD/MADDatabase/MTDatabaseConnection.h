@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseConnection_h
 #define Reports_MTDatabaseConnection_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADFileManager/MADFileManager.h>
 

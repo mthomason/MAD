@@ -7,6 +7,7 @@
 //
 
 #import "MADFonts.h"
+#import <UIKit/UIFont.h>
 
 @interface MADFonts ()
 

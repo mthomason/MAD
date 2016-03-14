@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryDefinitionPredicate_h
 #define Reports_MTQueryDefinitionPredicate_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTQueryDefinitionPredicate : NSObject
 

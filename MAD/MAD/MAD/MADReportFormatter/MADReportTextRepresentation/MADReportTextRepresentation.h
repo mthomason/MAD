@@ -6,7 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADReportTextRepresentation_h
+#define MAD_MADReportTextRepresentation_h
+
+#import <Foundation/NSObject.h>
 #import "MADTextRepresentationProtocol.h"
 
 @class MADReportPageRepresentation;
@@ -22,3 +25,5 @@
     - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex;
 
 @end
+
+#endif

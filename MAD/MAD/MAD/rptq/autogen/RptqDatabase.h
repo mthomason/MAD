@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#ifndef MAD_AutoGen_RptqDatabase_h
+#define MAD_AutoGen_RptqDatabase_h
+
+#import <CoreData/NSManagedObject.h>
 
 @class RptqDatabaseSchemaTable, RptqDocument, RptqQuery, RptqUserCredentals;
 
@@ -35,3 +37,5 @@
 - (void)removeHasTables:(NSSet *)values;
 
 @end
+
+#endif

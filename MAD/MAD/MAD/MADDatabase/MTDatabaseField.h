@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseField_h
 #define Reports_MTDatabaseField_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface MTDatabaseField : NSObject

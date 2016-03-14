@@ -9,8 +9,7 @@
 #ifndef Reports_MTPaper_h
 #define Reports_MTPaper_h
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 typedef NS_ENUM(unsigned short, MTPaperType) {

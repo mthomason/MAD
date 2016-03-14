@@ -14,7 +14,10 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "NSObject+DebugDescription.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSBundle.h>
 
 @implementation RptqDatabaseSchemaField (Extras)
 

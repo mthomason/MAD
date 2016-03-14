@@ -12,6 +12,8 @@
 
 #import "MTDatabaseDataBinding.h"
 #import "MTDatabaseField.h"
+#import <Foundation/NSNull.h>
+#import <Foundation/NSString.h>
 
 @interface MTDatabaseDataBinding ()
 

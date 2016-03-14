@@ -6,7 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADReportPageRepresentation_h
+#define MAD_MADReportPageRepresentation_h
+
+#import <Foundation/NSObject.h>
 #import "MADTextRepresentationProtocol.h"
 
 @class MADReportSectionRepresentation;
@@ -20,3 +23,5 @@
     - (void)addSection:(nonnull MADReportSectionRepresentation *)section;
 
 @end
+
+#endif

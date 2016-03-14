@@ -9,7 +9,7 @@
 #ifndef Reports_MTDataTableLocation_h
 #define Reports_MTDataTableLocation_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTDataTableLocation : NSObject
     <NSCoding>

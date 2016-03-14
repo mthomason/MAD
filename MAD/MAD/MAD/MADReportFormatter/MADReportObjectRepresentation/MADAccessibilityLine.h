@@ -6,7 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADAccessibilityLine_h
+#define MAD_MADAccessibilityLine_h
+
+#import <Foundation/NSObject.h>
 #import <UIKit/UIGeometry.h>
 #import "MADDocumentObjectType.h"
 
@@ -19,3 +22,5 @@
     @property (nonatomic, assign, readonly) MTDocumentObjectType type;
 
 @end
+
+#endif

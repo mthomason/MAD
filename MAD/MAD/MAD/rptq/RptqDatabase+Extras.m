@@ -15,6 +15,9 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 
 @implementation RptqDatabase (Extras)
 

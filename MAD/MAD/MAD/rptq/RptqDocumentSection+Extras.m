@@ -35,8 +35,6 @@
 
 #import "NSManagedObjectID+Extras.h"
 
-#import "NSObject+DebugDescription.h"
-
 @interface RptqDocumentSection ()
 
 @end

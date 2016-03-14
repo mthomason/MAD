@@ -16,6 +16,9 @@
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 
 @implementation RptqQueryPredicate (Extras)
 

@@ -6,7 +6,10 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADReportLineRepresentation_h
+#define MAD_MADReportLineRepresentation_h
+
+#import <Foundation/NSObject.h>
 #import <UIKit/UIGeometry.h>
 #import <MAD/MADDocumentObjectType.h>
 #import "MADTextRepresentationProtocol.h"
@@ -19,3 +22,5 @@
     @property (nonatomic, assign, readonly) CGRect frame;
 
 @end
+
+#endif

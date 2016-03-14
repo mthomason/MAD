@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcode_h
 #define Barcodes_MTBarcode_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <UIKit/UIKit.h>
 #import "MTBarcodeProtocol.h"
 #import "MADBarcodeType.h"

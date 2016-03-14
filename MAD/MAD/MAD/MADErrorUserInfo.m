@@ -7,6 +7,9 @@
 //
 
 #import "MADErrorUserInfo.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSError.h>
 
 @interface MADErrorUserInfo ()
 

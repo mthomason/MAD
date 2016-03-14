@@ -12,7 +12,6 @@
 
 #import "RptqDocumentObject+Extras.h"
 #import "MTAlignment.h"
-#import "NSObject+DebugDescription.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";

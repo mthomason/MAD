@@ -12,7 +12,6 @@
 
 #import "RptqDocumentObjectLabel+Extras.h"
 #import "RptqDocumentObject+Extras.h"
-#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectLabel (Extras)
 

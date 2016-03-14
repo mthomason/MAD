@@ -6,8 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MADDocumentObjectType.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
 
 NSString * const MADDocumentObjectTypeTitleDynamic     = @"Data Label";
 NSString * const MADDocumentObjectTypeTitleStatic      = @"Static Label";

@@ -9,11 +9,13 @@
 #ifndef MAD_MTActivityIndicator_h
 #define MAD_MTActivityIndicator_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
+
+@class UILabel;
 
 @interface MTActivityIndicator : UIView
 
-@property (nonatomic, strong) UILabel *status;
+    @property (nonatomic, strong) UILabel *status;
 
 @end
 

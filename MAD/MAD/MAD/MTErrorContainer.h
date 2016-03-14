@@ -9,7 +9,7 @@
 #ifndef MAD_MTErrorContainer_h
 #define MAD_MTErrorContainer_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTErrorContainer : NSObject
 

@@ -11,7 +11,8 @@
 #endif
 
 #import "RptqRelationship+Extras.h"
-#import "NSObject+DebugDescription.h"
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 

@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryDefinitionTable_h
 #define Reports_MTQueryDefinitionTable_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTQueryDefinitionTable : NSObject
 

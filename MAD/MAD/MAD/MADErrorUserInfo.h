@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADErrorUserInfo_h
+#define MAD_MADErrorUserInfo_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADErrorUserInfo : NSObject
 
@@ -16,3 +19,5 @@
     @property (nonatomic, strong, readonly) NSDictionary *userinfo;
 
 @end
+
+#endif

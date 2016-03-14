@@ -7,7 +7,6 @@
 //
 
 #import "MADReportLineRepresentation.h"
-#import "MADDocumentObjectType.h"
 
 @interface MADReportLineRepresentation ()
 

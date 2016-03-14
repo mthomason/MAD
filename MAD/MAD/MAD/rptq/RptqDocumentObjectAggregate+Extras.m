@@ -17,7 +17,6 @@
 
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-#import "NSObject+DebugDescription.h"
 
 NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
 NSString * const MTAggregateTypeKeyFunctionType = @"MTAggregateTypeKeyFunctionType";

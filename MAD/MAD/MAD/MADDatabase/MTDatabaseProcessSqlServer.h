@@ -9,9 +9,9 @@
 #ifndef Reports_MTDatabaseProcessSqlServer_h
 #define Reports_MTDatabaseProcessSqlServer_h
 
-#import <Foundation/Foundation.h>
-//#import "sybdb.h"
+#import <Foundation/NSObject.h>
 #import <MADTdsClient/MADTdsClient.h>
+//#import "sybdb.h"
 
 @interface MTDatabaseProcessSqlServer : NSObject
 

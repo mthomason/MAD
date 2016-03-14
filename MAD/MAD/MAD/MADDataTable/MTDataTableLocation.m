@@ -11,6 +11,8 @@
 #endif
 
 #import "MTDataTableLocation.h"
+#import <Foundation/NSValue.h>
+#import <Foundation/NSCoder.h>
 
 @interface MTDataTableLocation ()
 

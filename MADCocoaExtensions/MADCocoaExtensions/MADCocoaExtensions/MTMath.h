@@ -9,7 +9,9 @@
 #ifndef Reports_MTMath_h
 #define Reports_MTMath_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSRange.h>
+#import <stdlib.h>
 
 static inline NSUInteger madRandomNumberBetween(NSUInteger from, NSUInteger to);
 static inline NSUInteger madRandomNumberBetween(NSUInteger from, NSUInteger to) {

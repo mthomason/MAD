@@ -17,6 +17,12 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseConnection.h"
 
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
+
 @implementation RptqUserCredentals (Extras)
 
 #pragma mark - Overrides

@@ -9,7 +9,6 @@
 #ifndef Reports_MTQueryCacheSelect_h
 #define Reports_MTQueryCacheSelect_h
 
-#import <Foundation/Foundation.h>
 #import "MTQuery.h"
 
 @interface MTQueryCacheSelect : MTQuery

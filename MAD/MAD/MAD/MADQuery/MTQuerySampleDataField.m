@@ -18,6 +18,7 @@
 #import "MTDataTable+Factory.h"
 #import "RptqDatabase.h"
 #import "MTDatabaseConnection.h"
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MTQuerySampleDataField ()
     <MTDatabaseProtocol>

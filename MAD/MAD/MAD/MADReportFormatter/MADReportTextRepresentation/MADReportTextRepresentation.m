@@ -9,6 +9,7 @@
 #import "MADReportTextRepresentation.h"
 #import "MADReportPageRepresentation.h"
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 
 @interface MADReportTextRepresentation ()
 

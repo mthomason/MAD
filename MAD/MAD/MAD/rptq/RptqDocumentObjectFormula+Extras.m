@@ -16,7 +16,6 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
-#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectFormula (Extras)
 

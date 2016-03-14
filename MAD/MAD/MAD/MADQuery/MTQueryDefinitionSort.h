@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryDefinitionSort_h
 #define Reports_MTQueryDefinitionSort_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTQueryDefinitionSort : NSObject
 

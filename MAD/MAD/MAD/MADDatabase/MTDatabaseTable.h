@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseTable_h
 #define Reports_MTDatabaseTable_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTDatabaseTable : NSObject
 

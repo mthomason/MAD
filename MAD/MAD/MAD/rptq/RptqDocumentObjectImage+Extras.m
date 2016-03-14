@@ -13,7 +13,6 @@
 #import "RptqDocumentObjectImage+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
-#import "NSObject+DebugDescription.h"
 
 @implementation RptqDocumentObjectImage (Extras)
 

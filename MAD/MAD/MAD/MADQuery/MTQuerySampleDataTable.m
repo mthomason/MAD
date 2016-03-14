@@ -22,6 +22,7 @@
 #import <MADFoundation/MTDataTable.h>
 #import "MTDataTable+Factory.h"
 #import "MTDatabaseConnection.h"
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MTQuerySampleDataTable ()
     <MTDatabaseProtocol>

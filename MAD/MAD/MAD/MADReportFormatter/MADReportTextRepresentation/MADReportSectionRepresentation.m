@@ -8,6 +8,7 @@
 
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
+#import <Foundation/NSArray.h>
 
 @interface MADReportSectionRepresentation ()
 

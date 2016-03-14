@@ -18,6 +18,7 @@
 #import "RptqQueryGroup.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
+#import <CoreData/NSManagedObjectContext.h>
 
 @interface RptqDocumentSectionEnumerator ()
 

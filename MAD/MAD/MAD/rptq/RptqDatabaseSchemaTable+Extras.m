@@ -22,7 +22,9 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "MTDatabaseTable.h"
-#import "NSObject+DebugDescription.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 
 @implementation RptqDatabaseSchemaTable (Extras)
 
