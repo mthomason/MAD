@@ -760,9 +760,6 @@
 		4CB56EDB1AC683CC00756775 /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4CB94ADC1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB94ADB1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m */; };
 		4CB9AAE41C8C12A300420CFF /* MADStoryboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAE31C8C12A300420CFF /* MADStoryboard.m */; };
-		4CBD28791C7660D500B1B16D /* GoogleConversionTracking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBD28771C7660D500B1B16D /* GoogleConversionTracking.a */; };
-		4CBD287A1C7660D500B1B16D /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CBD28781C7660D500B1B16D /* README.txt */; };
-		4CBD287C1C76611400B1B16D /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBD287B1C76611400B1B16D /* AdSupport.framework */; };
 		4CC3D7291BCB6D9500BDA5D3 /* MADIcon22x29.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6391BCB6D9400BDA5D3 /* MADIcon22x29.png */; };
 		4CC3D72A1BCB6D9500BDA5D3 /* MADIcon320.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63A1BCB6D9400BDA5D3 /* MADIcon320.png */; };
 		4CC3D72B1BCB6D9500BDA5D3 /* MADIcon320x320.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63B1BCB6D9400BDA5D3 /* MADIcon320x320.png */; };
@@ -1995,12 +1992,6 @@
 		4CB94ADB1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInterfaceControllerKPI.m; sourceTree = "<group>"; };
 		4CB9AAE21C8C12A300420CFF /* MADStoryboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoryboard.h; sourceTree = "<group>"; };
 		4CB9AAE31C8C12A300420CFF /* MADStoryboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoryboard.m; sourceTree = "<group>"; };
-		4CBD28721C7660D500B1B16D /* ACTReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACTReporter.h; sourceTree = "<group>"; };
-		4CBD28741C7660D500B1B16D /* GoogleConversionPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleConversionPing.h; sourceTree = "<group>"; };
-		4CBD28761C7660D500B1B16D /* DCTReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTReporter.h; sourceTree = "<group>"; };
-		4CBD28771C7660D500B1B16D /* GoogleConversionTracking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = GoogleConversionTracking.a; sourceTree = "<group>"; };
-		4CBD28781C7660D500B1B16D /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		4CBD287B1C76611400B1B16D /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4CBE1CC718C5A6E6009675CE /* buildcounter.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildcounter.sh; sourceTree = "<group>"; };
 		4CC3D6331BCB62BC00BDA5D3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CC3D6391BCB6D9400BDA5D3 /* MADIcon22x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADIcon22x29.png; sourceTree = "<group>"; };
@@ -2378,7 +2369,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CBD287C1C76611400B1B16D /* AdSupport.framework in Frameworks */,
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
 				4C2480991C8B0FD60058E6B4 /* MAD.framework in Frameworks */,
 				4C42DD681BCB0ADB0082D8E3 /* MADSqlite3.framework in Frameworks */,
@@ -2388,7 +2378,6 @@
 				4C42DD4C1BCB0A1C0082D8E3 /* MADCocoaExtensions.framework in Frameworks */,
 				4C42DD4D1BCB0A1C0082D8E3 /* MADDataStructures.framework in Frameworks */,
 				4C42DD501BCB0A1C0082D8E3 /* MADFoundation.framework in Frameworks */,
-				4CBD28791C7660D500B1B16D /* GoogleConversionTracking.a in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
 				4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */,
@@ -2930,7 +2919,6 @@
 			isa = PBXGroup;
 			children = (
 				4C2480981C8B0FD60058E6B4 /* MAD.framework */,
-				4CBD287B1C76611400B1B16D /* AdSupport.framework */,
 				4C401F871BAE85C200BAE5FC /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* MADStack */,
@@ -4084,35 +4072,6 @@
 			path = libMysqlClientObjC/MysqlClientObjC/../../../Compressor/library/libmysqlclient/include;
 			sourceTree = "<group>";
 		};
-		4CBD28711C7660D500B1B16D /* libGoogleConversionTrackingSDK */ = {
-			isa = PBXGroup;
-			children = (
-				4CBD28721C7660D500B1B16D /* ACTReporter.h */,
-				4CBD28731C7660D500B1B16D /* Deprecated */,
-				4CBD28751C7660D500B1B16D /* DoubleClick */,
-				4CBD28771C7660D500B1B16D /* GoogleConversionTracking.a */,
-				4CBD28781C7660D500B1B16D /* README.txt */,
-			);
-			name = libGoogleConversionTrackingSDK;
-			path = "../3rdPartyProjects/GoogleConversionTrackingSDK-iOS-3.4.0";
-			sourceTree = "<group>";
-		};
-		4CBD28731C7660D500B1B16D /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				4CBD28741C7660D500B1B16D /* GoogleConversionPing.h */,
-			);
-			path = Deprecated;
-			sourceTree = "<group>";
-		};
-		4CBD28751C7660D500B1B16D /* DoubleClick */ = {
-			isa = PBXGroup;
-			children = (
-				4CBD28761C7660D500B1B16D /* DCTReporter.h */,
-			);
-			path = DoubleClick;
-			sourceTree = "<group>";
-		};
 		4CC3D6351BCB6D9400BDA5D3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -4470,7 +4429,6 @@
 				4CA54D3218938266006B301A /* libc++.dylib */,
 				4CDA76AF18257E4A00E462F6 /* libz.dylib */,
 				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
-				4CBD28711C7660D500B1B16D /* libGoogleConversionTrackingSDK */,
 				4C3A969B189F7D10007AF476 /* libMySqlClient */,
 				4C434AD518B5F3E800750B6B /* libSsl */,
 			);
@@ -5267,7 +5225,6 @@
 				4CC3D7501BCB6D9500BDA5D3 /* Icon-72-Designer-Lagacy@2x.png in Resources */,
 				4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
 				4CC3D7E91BCB6D9500BDA5D3 /* UIImagePatternWhiteStationary.png in Resources */,
-				4CBD287A1C7660D500B1B16D /* README.txt in Resources */,
 				4CC3D7DE1BCB6D9500BDA5D3 /* UIImagePatternRedVellum@2x.png in Resources */,
 				4CC3D7DC1BCB6D9500BDA5D3 /* UIImagePatternRedTextured@2x.png in Resources */,
 				4CC3D7A41BCB6D9500BDA5D3 /* UIImagePatternFibers2@2x.png in Resources */,
