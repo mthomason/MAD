@@ -624,57 +624,33 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         NSString *connectionString = document.mainDatabase.databaseConnection.connectionString;
         
-        __block MADViewerController * __weak weakself = self;
         NSError *error = nil;
         bool success = [document refreshWithError:&error];
         
-        //[document refresh:^(BOOL success, NSError *error) {
+        
+        if (success) {
+            self.lastCacheDate = [NSDate date];
+        } else {
             
-            __strong MADViewerController *strongself = weakself;
-            
-            if (success) {
-                strongself.lastCacheDate = [NSDate date];
-            } else {
-                /*
-                NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-                queue.maxConcurrentOperationCount = 1;
-                [queue addOperationWithBlock:^{
-
-                    [NSError presentError: error
-                         onViewController: strongself
-                               completion:^(BOOL presentErrorSuccess) {
-
-                                   
-                               }];
-                }];
-                
-                [queue addOperationWithBlock:^{
-                    [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: strongself];
-                }];
-                */
-                
-// FIXME: Use concurrency queues to fix this.
-                //Want one to run right after the other, but without being in blocks.
-                
-                __weak MADViewerController *weakself2 = strongself;
-                [NSError presentError: error
-                     onViewController: strongself
-                           completion:^(BOOL presentErrorSuccess) {
-                               if (presentErrorSuccess) {
-                                   __strong MADViewerController *strongself2 = weakself2;
-                                   [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: strongself2];
-                               }
-                           }];
-            }
-            
-            [notificationCenter removeObserver: strongself
-                                          name: MTNotificationDidReadRowsName
-                                        object: database];
-            [strongself setDisplayActive];
-            [strongself reload];
-            [strongself timerDealloc];
-            [strongself uiUpdateTimeSinceLastRefresh: NULL];
-        //}];
+            __weak MADViewerController *weakself2 = self;
+            [NSError presentError: error
+                 onViewController: weakself2
+                       completion:^(BOOL presentErrorSuccess) {
+                           if (presentErrorSuccess) {
+                               __strong MADViewerController *strongself2 = weakself2;
+                               MADViewerController * __weak weakself3 = strongself2;
+                               [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: weakself3];
+                           }
+                       }];
+        }
+        
+        [notificationCenter removeObserver: self
+                                      name: MTNotificationDidReadRowsName
+                                    object: database];
+        [self setDisplayActive];
+        [self reload];
+        [self timerDealloc];
+        [self uiUpdateTimeSinceLastRefresh: NULL];
     }
 }
 
