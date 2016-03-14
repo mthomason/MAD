@@ -9,9 +9,11 @@
 #ifndef Reports_RptqDatabaseSchemaFieldSelectorManager_h
 #define Reports_RptqDatabaseSchemaFieldSelectorManager_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
-@class RptqQueryTable, UIViewTableSectionHeaderDatabaseTable;
+@class RptqQueryTable;
+@class NSMutableArray, NSIndexSet;
+@class UIViewTableSectionHeaderDatabaseTable;
 
 @interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
 

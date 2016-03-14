@@ -14,6 +14,7 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqDatabaseSchemaTable.h"
+#import <Foundation/NSSortDescriptor.h>
 
 @interface RptqDatabaseSchemaFieldSelectorManager ()
 
