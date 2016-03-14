@@ -30,8 +30,6 @@
 
 #import "MADDesignerFileExplorerViewController.h"
 
-#import "ACTReporter.h"
-
 @class MADTransparentPresentationController;
 
 NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
