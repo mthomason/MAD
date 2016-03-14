@@ -89,7 +89,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_queueBulkAdd != nil) {
         dispatch_suspend(_queueBulkAdd);
         _queueBulkAdd = nil;
