@@ -11,16 +11,15 @@
 #endif
 
 #import "MADocument.h"
-#import <MADFoundation/NSURL+Document.h>
 
 #import <Foundation/NSException.h>
+#import <MADFoundation/NSURL+Document.h>
 
 #import "MADCredential.h"
+#import "MADConstants.h"
 
 #import "MTActivityIndicator.h"
 #import "MADocumentState.h"
-
-#import "MADConstants.h"
 
 #import "MTDataTable+Factory.h"
 
