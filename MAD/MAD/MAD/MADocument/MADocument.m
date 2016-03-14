@@ -953,8 +953,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [self initalizeReportFormatter];
     self.mainQuery.database.delegate = self;
     
-    //MADocument * __weak weakself = self;
-    
     MTDatabase * __weak wMainDatabase = self.mainDatabase;
     MTQuery * __weak wMainQuery = self.mainQuery;
     MTDataTableFast * __weak wMainDataTable = self.mainDataTable;
@@ -970,32 +968,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         
     }];
- //   operationRefresh.priority = NSOperationQueuePriorityVeryHigh;
+
     NSOperationQueue *queue = [NSOperationQueue new];
     queue.maxConcurrentOperationCount = 1;
     [queue addOperation:operationRefresh];
     
     self.didRefresh = didRefresh ? YES : NO;
-    /*
-    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(bgQueue, ^{
-        
-        NSError * __autoreleasing eerror = NULL;
-        bool success = [weakself.database executeQuery:weakself.mainQuery withError:&eerror];
-        
-        [weakself.mainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
-        weakself.didRefresh = success ? YES : NO;
-        
-        if ([NSThread isMainThread]) {
-            NSError *error = eerror;
-            completion(success, error);
-        } else {
-            NSError *error = eerror;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                completion(success, error);
-            });
-        }
-    });*/
+
     return success;
 }
 
