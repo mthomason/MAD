@@ -179,7 +179,6 @@
         }
         
     }
-    NSLog(@"Result %@", result);
     return result;
 }
 

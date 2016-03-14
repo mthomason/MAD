@@ -100,24 +100,20 @@ static NSString * const Downloading                             = @"Downloading"
 - (BOOL)isFileViewEditing { return self.editing; }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"\t%s\tItem:\t%ld", __PRETTY_FUNCTION__, (long)indexPath.item);
     return [self.filesCoordnator.filesController objectAtIndexedSubscript: (NSUInteger)indexPath.item];
 }
 
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
     return self.filesCoordnator.filesController ? (NSInteger)self.filesCoordnator.filesController.count : 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"\t%s\tItem:\t%ld", __PRETTY_FUNCTION__, (long)indexPath.item);
     
     static NSString * MTCollectionViewCellDocumentIdentifier  = @"MTCollectionViewCellDocumentIdentifier";
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier forIndexPath: indexPath];
@@ -174,14 +170,9 @@ static NSString * const Downloading                             = @"Downloading"
     [cell.labelTitle layoutIfNeeded];
     [cell.labelTitleSub layoutIfNeeded];
 
-    //dispatch_async(self.queueCell, ^{
-        NSURL *thumbnailUrl = [self.fileExplorerDelegate thumbnailUrlForUrl:metadata.URL];
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
-    //    dispatch_sync(dispatch_get_main_queue(), ^(void) {
-            cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];
-    //    });
-    //});
-
+    NSURL *thumbnailUrl = [self.fileExplorerDelegate thumbnailUrlForUrl:metadata.URL];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:thumbnailUrl.path];
+    cell.imagePreview.image = image ?: [MTCollectionViewCellDocument defaultThumbnail];
     
     [cell normalizeTint];
     

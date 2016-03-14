@@ -494,7 +494,7 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = YES;
     
     NSString *queryString = [NSString stringWithString: [query getSqlWithError:&error]];
-    NSLog(@"Query String: %@", queryString);
+    //NSLog(@"Query String: %@", queryString);
     
     if (queryString.length > 0) {
         

@@ -23,7 +23,7 @@
         }
     }
     [self popViewControllerAnimated:NO];*/
-    NSLog(@"\t%s", __PRETTY_FUNCTION__);
+    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
