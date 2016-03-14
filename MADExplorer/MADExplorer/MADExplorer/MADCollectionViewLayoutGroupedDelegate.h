@@ -9,8 +9,9 @@
 #ifndef Reports_MADCollectionViewLayoutGroupedDelegate_h
 #define Reports_MADCollectionViewLayoutGroupedDelegate_h
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
+#import <UIKit/UICollectionView.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
 
 extern NSString * const MADImageToolbarCloudDownload;
 

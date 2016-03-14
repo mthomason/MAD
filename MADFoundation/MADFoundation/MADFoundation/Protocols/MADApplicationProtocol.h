@@ -9,6 +9,10 @@
 #ifndef MADApplicationProtocol_h
 #define MADApplicationProtocol_h
 
+#import <Foundation/NSObject.h>
+
+@class NSUserDefaults;
+
 @protocol MADApplicationProtocol <NSObject>
 
 - (NSString *)applicationIdentifier;

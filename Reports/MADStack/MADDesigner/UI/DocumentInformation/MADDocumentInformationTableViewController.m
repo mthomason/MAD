@@ -7,6 +7,7 @@
 //
 
 #import "MADDocumentInformationTableViewController.h"
+#import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/NSNumberFormatter+Constructors.h>
 #import <MADFileManager/MADMetaData.h>
 #import "MADVibrantTableView.h"

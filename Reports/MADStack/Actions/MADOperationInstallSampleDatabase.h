@@ -6,6 +6,9 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADOperationInstallSampleDatabase_h
+#define Reports_MADOperationInstallSampleDatabase_h
+
 #import <Foundation/NSOperation.h>
 
 extern NSString * const MADUpgradeInstalledSamples;
@@ -19,3 +22,5 @@ extern NSString * const MADUpgradeInstalledSamplesMusic;
 + (NSURL *)applicationSupportSampleDatabaseChinook;
 
 @end
+
+#endif

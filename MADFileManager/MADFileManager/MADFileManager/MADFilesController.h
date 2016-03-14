@@ -9,10 +9,11 @@
 #ifndef MADDesigner_MADFilesController_h
 #define MADDesigner_MADFilesController_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADFoundation/NSFileManager+Common.h>
 
 @class MADFilesController, MADMetaData, MADFile;
+@class NSOperationQueue;
 
 @protocol MADFileCoordinator;
 

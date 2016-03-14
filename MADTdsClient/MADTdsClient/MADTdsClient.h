@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObjCRuntime.h>
 
 //! Project version number for MADTdsClient.
 FOUNDATION_EXPORT double MADTdsClientVersionNumber;

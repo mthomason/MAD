@@ -11,6 +11,9 @@
 #endif
 
 #import "MTActivityReportPrintPreview.h"
+#import <UIKit/UIDocumentInteractionController.h>
+#import <UIKit/UIScreen.h>
+#import <UIKit/UIImage.h>
 
 @interface MTActivityReportPrintPreview()
     <UIDocumentInteractionControllerDelegate>

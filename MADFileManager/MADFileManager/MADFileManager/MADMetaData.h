@@ -9,11 +9,9 @@
 #ifndef MAD_MADMetaData_h
 #define MAD_MADMetaData_h
 
-#import <Foundation/Foundation.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import <MobileCoreServices/MobileCoreServices.h>
-#import <UIKit/UIKit.h>
-#import <sys/stat.h>
+#import <Foundation/NSObject.h>
+
+@class NSMetadataItem;
 
 @interface MADMetaData : NSObject
 

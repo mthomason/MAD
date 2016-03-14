@@ -10,8 +10,6 @@
 #define MAD_Designer_MADOperationInstallSampleDocument_h
 
 #import <Foundation/NSOperation.h>
-#import <MADFileManager/MADFileManager.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
 
 @interface MADOperationInstallSampleDocument : NSOperation
 

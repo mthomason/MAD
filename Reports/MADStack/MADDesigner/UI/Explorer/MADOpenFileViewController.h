@@ -9,7 +9,6 @@
 #ifndef Reports_MADOpenFileViewController_h
 #define Reports_MADOpenFileViewController_h
 
-#import <UIKit/UIKit.h>
 #import <MADExplorer/MADFileExplorerViewController.h>
 
 @protocol MADOpenFileViewControllerDelegate <NSObject>

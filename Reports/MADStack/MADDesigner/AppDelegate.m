@@ -15,6 +15,8 @@
 #import <QuickLook/QLPreviewController.h>
 #import <Foundation/NSString.h>
 #import <MAD/MADConstants.h>
+#import "MADDesignerFileExplorerViewController.h"
+
 #import "Constants.h"
 
 #import "MADNavigationController.h"
@@ -27,8 +29,6 @@
 
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"
-
-#import "MADDesignerFileExplorerViewController.h"
 
 @class MADTransparentPresentationController;
 
@@ -56,7 +56,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
 
-@property (readonly) MADNavigationController *navigationController;
+//@property (readonly) MADNavigationController *navigationController;
 @property (readonly) MADDesignerFileExplorerViewController *openFileViewController;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueSerial;
 @property (nonatomic, strong) dispatch_queue_t appDelegateQueueBackground;
@@ -276,14 +276,6 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
         UIInterfaceOrientationMaskAll;
 }
 
-- (void)displayActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES animated:YES];
-}
-
-- (void)hideActivityIndictor:(id)sender {
-    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
-}
-
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
     return NO;
 }
@@ -335,7 +327,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    UINavigationController * __weak navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+    [navController popToRootViewControllerAnimated:YES];
     
     
     UIAlertController *signedOutController = [UIAlertController promotCloudSignOut:^(UIAlertAction *action) {
@@ -354,12 +348,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 #pragma mark - Convenience
 
-- (MADNavigationController *)navigationController {
-    return (MADNavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
-}
+- (UIViewController *)openFileViewController {
+    UIViewController * viewController = ((UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController).topViewController;
 
-- (MADDesignerFileExplorerViewController *)openFileViewController {
-    return (MADDesignerFileExplorerViewController *)self.navigationController.topViewController;
+    return viewController;
 }
 
 - (BOOL)isSampleInstalled {

@@ -7,6 +7,12 @@
 //
 
 #import "MADMetaData.h"
+#import <Foundation/NSURL.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSMetadataAttributes.h>
+#import <Foundation/NSMetadata.h>
+#import <MobileCoreServices/UTType.h>
+#import <sys/stat.h>
 
 @interface MADMetaData ()
 

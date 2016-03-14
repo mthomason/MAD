@@ -7,13 +7,19 @@
 //
 
 #import "MADOperationInstallSampleDocument.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSUserDefaults.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSURL.h>
+#import <MADFileManager/MADFileManager.h>
 
 @interface MADOperationInstallSampleDocument ()
 
-@property (nonatomic, strong) NSString *filename;
-@property (nonatomic, strong) NSString *fileExtension;
-@property (nonatomic, strong) NSString *groupIdentifier;
-@property (nonatomic, strong) NSString *installFlag;
+@property (nonatomic, copy) NSString *filename;
+@property (nonatomic, copy) NSString *fileExtension;
+@property (nonatomic, copy) NSString *groupIdentifier;
+@property (nonatomic, copy) NSString *installFlag;
 
 @end
 
@@ -22,16 +28,16 @@
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
     if (self = [super init]) {
         
-        NSString *fn = [NSString stringWithString:filename];
+        NSString * __autoreleasing fn = [[NSString alloc] initWithString:filename];
         self.filename = fn;
         
-        NSString *fe = [NSString stringWithString:fileExtension];
+        NSString * __autoreleasing fe = [[NSString alloc] initWithString:fileExtension];
         self.fileExtension = fe;
         
-        NSString *gi = [NSString stringWithString:groupIdentifier];
+        NSString * __autoreleasing gi = [[NSString alloc] initWithString:groupIdentifier];
         self.groupIdentifier = gi;
         
-        NSString *ii = [NSString stringWithString:installFlag];
+        NSString * __autoreleasing ii = [[NSString alloc] initWithString:installFlag];
         self.installFlag = ii;
         
     }

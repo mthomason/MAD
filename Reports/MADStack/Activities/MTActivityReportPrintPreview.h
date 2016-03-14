@@ -9,7 +9,9 @@
 #ifndef Reports_MTActivityReportPrintPreview_h
 #define Reports_MTActivityReportPrintPreview_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIActivity.h>
+
+@class UIDocumentInteractionController;
 
 @protocol MTActivityReportPrintPreviewDelegate <NSObject>
 @required

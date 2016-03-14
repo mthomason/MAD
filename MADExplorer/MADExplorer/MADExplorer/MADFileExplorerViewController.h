@@ -6,14 +6,18 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
-#import <MADFileManager/MADFileManager.h>
-#import <MADExplorer/MADDocumentState.h>
-#import "MADCollectionViewLayoutGroupedDelegate.h"
-#import "MADSaveFileProtocol.h"
+#ifndef MADExplorer_MADFileExplorerViewController_h
+#define MADExplorer_MADFileExplorerViewController_h
 
+#import <UIKit/UICollectionViewController.h>
+#import <MADFileManager/MADFilesController.h>
+#import <MADExplorer/MADDocumentState.h>
+#import <MADExplorer/MADCollectionViewLayoutGroupedDelegate.h>
+#import <MADExplorer/MADSaveFileProtocol.h>
+
+@class MADMetaData;
 @class MADFileLocationManager, MADOpenDocumentManager;
+@class UIManagedDocument;
 
 @protocol MADFileExplorerDelegate <NSObject>
 
@@ -41,3 +45,5 @@
     @property (readonly) UIManagedDocument *openDocument;
 
 @end
+
+#endif

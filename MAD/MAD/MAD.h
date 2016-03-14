@@ -6,6 +6,8 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#import <Foundation/NSObjCRuntime.h>
+
 FOUNDATION_EXPORT double MADVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADVersionString[];
 

@@ -6,11 +6,14 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MADExplorer/MADExplorer.h>
-#import <StoreKit/StoreKit.h>
+#ifndef MAD_Designer_MADDesignerFileExplorerViewController_h
+#define MAD_Designer_MADDesignerFileExplorerViewController_h
+
 #import "MADOpenFileViewController.h"
 
 @interface MADDesignerFileExplorerViewController : MADOpenFileViewController
     <MADOpenFileViewControllerDelegate>
 
 @end
+
+#endif

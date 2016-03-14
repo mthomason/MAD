@@ -8,7 +8,7 @@
 
 #import "MADCollectionViewLayoutGroupedDelegate.h"
 #import "MTCollectionViewCellDocument.h"
-#import <MADCocoaExtensions/UILabel+Constructors.h>
+#import <MADCocoaExtensions/MADLabel.h>
 
 NSString * const MADImageToolbarCloudDownload = @"MADImageToolbarCloudDownload";
 
@@ -33,7 +33,7 @@ static inline CGRect rectCellLabel() {
 
 - (UILabel *)testLabel {
     if (!_testLabel) {
-        UILabel *label = [UILabel documentCaption:rectCellLabel() width:fLabelWidth];
+        UILabel *label = [MADLabel newDocumentCaption:rectCellLabel() width:fLabelWidth];
         _testLabel = label;
     }
     return _testLabel;
@@ -41,7 +41,7 @@ static inline CGRect rectCellLabel() {
 
 - (UILabel *)testLabelSub {
     if (!_testLabelSub) {
-        UILabel *label = [UILabel documentCaption:rectCellLabel() width:fLabelWidth];
+        UILabel *label = [MADLabel newDocumentCaption:rectCellLabel() width:fLabelWidth];
         _testLabelSub = label;
     }
     return _testLabelSub;

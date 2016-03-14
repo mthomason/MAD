@@ -9,7 +9,7 @@
 #ifndef MADExtensions_MADLabel_h
 #define MADExtensions_MADLabel_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UILabel.h>
 
 @interface MADLabel : UILabel
 

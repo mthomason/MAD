@@ -9,6 +9,13 @@
 #import "MADFilesController.h"
 #import "MADFileCoordinator.h"
 #import "MADMetaData.h"
+#import <Foundation/NSTimer.h>
+#import <Foundation/NSOperation.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSLocale.h>
+#import <Foundation/NSCompoundPredicate.h>
+#import <Foundation/NSKeyValueCoding.h>
+#import <dispatch/dispatch.h>
 
 NSInteger finderSortWithLocale(id string1, id string2, void *locale);
 NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
