@@ -7,7 +7,6 @@
 //
 
 #import "MADDesignerSectionView.h"
-#import <QuartzCore/QuartzCore.h>
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"

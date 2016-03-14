@@ -10,7 +10,6 @@
 #define Reports_MTLicensingViewController_h
 
 #import "MUIViewControllerDelegate.h"
-#import <QuartzCore/QuartzCore.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIDevice+Hack.h>
 

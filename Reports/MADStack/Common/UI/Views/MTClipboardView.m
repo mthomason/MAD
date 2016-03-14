@@ -7,7 +7,6 @@
 //
 
 #import "MTClipboardView.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation MTClipboardView
 
@@ -39,8 +38,8 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGFloat actualBrightness = _brightness;
     CGColorRef blackColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0].CGColor;
-	CGColorRef outerTop = [UIColor colorWithHue:_hue saturation:_saturation brightness:1.0*actualBrightness alpha:1.0].CGColor;
-    CGColorRef outerBottom = [UIColor colorWithHue:_hue saturation:_saturation brightness:0.80*actualBrightness alpha:1.0].CGColor;
+	CGColorRef outerTop = [UIColor colorWithHue:_hue saturation:_saturation brightness:1.0000f * actualBrightness alpha:1.0].CGColor;
+    CGColorRef outerBottom = [UIColor colorWithHue:_hue saturation:_saturation brightness:0.80000f * actualBrightness alpha:1.0].CGColor;
     CGRect outerRect = CGRectInset(self.bounds, 7.5f, 7.5f);
     CGMutablePathRef outerPath = createRoundedRectForRect(outerRect, 6.0);
 	CGContextSaveGState(context);

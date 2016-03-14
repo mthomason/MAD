@@ -92,7 +92,6 @@
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
 		4C1848081B8E1CF100FA7872 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */; };
 		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
-		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4C2480991C8B0FD60058E6B4 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2480981C8B0FD60058E6B4 /* MAD.framework */; };
 		4C26B9531BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */; };
@@ -1659,8 +1658,6 @@
 		4C4020351BAE92F200BAE5FC /* UIViewController+Viewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Viewer.m"; sourceTree = "<group>"; };
 		4C4020671BAE938500BAE5FC /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		4C4020681BAE938500BAE5FC /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		4C4020691BAE938500BAE5FC /* NSNumber+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+Extras.h"; sourceTree = "<group>"; };
-		4C40206A1BAE938500BAE5FC /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
 		4C40206C1BAE940E00BAE5FC /* UIApplication+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Extras.h"; sourceTree = "<group>"; };
 		4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Extras.m"; sourceTree = "<group>"; };
 		4C4020741BAE957D00BAE5FC /* MADUpgradeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUpgradeManager.h; sourceTree = "<group>"; };
@@ -2387,7 +2384,6 @@
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
 				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
-				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4CD697001AD92458008A9ED3 /* QuickLook.framework in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
 				4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */,
@@ -3212,8 +3208,6 @@
 				4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */,
 				4C4020671BAE938500BAE5FC /* NSData+Base64.h */,
 				4C4020681BAE938500BAE5FC /* NSData+Base64.m */,
-				4C4020691BAE938500BAE5FC /* NSNumber+Extras.h */,
-				4C40206A1BAE938500BAE5FC /* NSNumber+MTProtocol.h */,
 				4C401FD41BAE92F200BAE5FC /* ACAccountStore+Social.h */,
 				4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */,
 				4C401FD61BAE92F200BAE5FC /* CGAffineTransform+Common.h */,

@@ -7,7 +7,6 @@
 //
 
 #import "MTBlurView.h"
-#import <QuartzCore/QuartzCore.h>
 
 @interface MTBlurView ()
 

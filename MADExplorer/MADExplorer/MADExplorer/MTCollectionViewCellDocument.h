@@ -9,11 +9,12 @@
 #ifndef Reports_MTCollectionViewCellDocument_h
 #define Reports_MTCollectionViewCellDocument_h
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import <UIKit/UICollectionViewCell.h>
+#import <UIKit/UIGestureRecognizer.h>
 #import "MTDocumentCellProtocol.h"
 
 @class MTCollectionViewCellDocument;
+@class UILabel, UIActivityIndicatorView, UIProgressView;
 
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 

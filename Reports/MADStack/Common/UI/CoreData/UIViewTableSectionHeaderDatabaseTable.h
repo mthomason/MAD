@@ -10,7 +10,6 @@
 #define Reports_UIViewTableSectionHeaderDatabaseTable_h
 
 #import <UIKit/UIView.h>
-#import <QuartzCore/QuartzCore.h>
 #import "MADSectionHeaderViewDelegate.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
