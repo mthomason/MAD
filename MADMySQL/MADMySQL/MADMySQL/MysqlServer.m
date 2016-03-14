@@ -12,6 +12,7 @@
 
 #import "MysqlServer.h"
 #import "mysql.h"
+#import <Foundation/NSString.h>
 
 @implementation MysqlServer
 

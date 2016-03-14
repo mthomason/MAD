@@ -9,7 +9,7 @@
 #ifndef Reports_MTReportDesignerSectionLayoutSettingsViewController_h
 #define Reports_MTReportDesignerSectionLayoutSettingsViewController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewController.h>
 
 extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier;
 

@@ -10,7 +10,6 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import <Foundation/Foundation.h>
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "UIViewController+Designer.h"

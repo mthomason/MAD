@@ -11,8 +11,9 @@
 #endif
 
 #import "RptqQueryGroup+Extras.h"
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+
 #import "RptqDatabaseSchemaField.h"
 
 #import "RptqDocument.h"

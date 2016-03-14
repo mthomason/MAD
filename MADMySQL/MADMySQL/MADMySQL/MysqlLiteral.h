@@ -9,7 +9,7 @@
 #ifndef MAD_MysqlLiteral_h
 #define MAD_MysqlLiteral_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MysqlLiteral : NSObject {
     NSString *string;
@@ -17,7 +17,7 @@
 
 @property(readonly) NSString *string;
 
-+(MysqlLiteral *)literalWithString:(NSString *)s;
++ (MysqlLiteral *)literalWithString:(NSString *)s;
 
 @end
 

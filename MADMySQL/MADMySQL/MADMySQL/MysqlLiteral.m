@@ -11,6 +11,7 @@
 #endif
 
 #import "MysqlLiteral.h"
+#import <Foundation/NSString.h>
 
 @implementation MysqlLiteral
 

@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-//#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADPreference_h
+#define MAD_Designer_MADPreference_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADPreference : NSObject
 
@@ -14,3 +17,5 @@
 - (instancetype)initWithKey:(NSString *)key allowCloud:(BOOL)allowCloud encrypt:(BOOL)encrypt;
 
 @end
+
+#endif

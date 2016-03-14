@@ -9,7 +9,7 @@
 #ifndef MAD_MysqlTruncate_h
 #define MAD_MysqlTruncate_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MysqlConnection;
 

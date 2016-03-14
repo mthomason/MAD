@@ -9,7 +9,7 @@
 #ifndef MAD_MysqlUpdate_h
 #define MAD_MysqlUpdate_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MysqlConnection;
 

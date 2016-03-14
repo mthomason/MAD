@@ -9,10 +9,11 @@
 #ifndef Reports_RptqDocumentSection_Extras_h
 #define Reports_RptqDocumentSection_Extras_h
 
-#import <UIKit/UIKit.h>
+#import "RptqDocumentSection.h"
+#import <CoreGraphics/CGBase.h>
+#import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADDocumentSectionType.h>
 #import <MADDataStructures/MTProtocolCompare.h>
-#import "RptqDocumentSection.h"
 
 typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,
@@ -20,6 +21,7 @@ typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
 };
 
 @class RptqQuery, RptqDocumentObject, RptqDocumentSectionRows;
+@class NSIndexPath;
 
 @interface RptqDocumentSection (Extras) <MTProtocolCompare>
 

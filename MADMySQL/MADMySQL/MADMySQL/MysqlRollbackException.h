@@ -9,12 +9,9 @@
 #ifndef MAD_MysqlRollbackException_h
 #define MAD_MysqlRollbackException_h
 
-#import <Foundation/Foundation.h>
 #import "MysqlException.h"
 
-@interface MysqlRollbackException : MysqlException {
-
-}
+@interface MysqlRollbackException : MysqlException { }
 
 @end
 

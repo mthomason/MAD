@@ -9,7 +9,7 @@
 #ifndef MADDesigner_MADFileUtilities_h
 #define MADDesigner_MADFileUtilities_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 #import <MADFoundation/NSFileManager+Common.h>
 
 @class MADFile;

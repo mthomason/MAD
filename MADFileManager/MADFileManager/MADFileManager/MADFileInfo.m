@@ -8,6 +8,8 @@
 
 #import "MADFileInfo.h"
 #import "MADFileUtilities.h"
+#import <Foundation/NSURL.h>
+#import <dispatch/dispatch.h>
 
 #define AAPLListColorUndefined ((AAPLListColor)-1)
 

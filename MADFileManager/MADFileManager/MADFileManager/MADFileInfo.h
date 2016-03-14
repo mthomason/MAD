@@ -9,7 +9,7 @@
 #ifndef MADDesigner_MADFileInfo_h
 #define MADDesigner_MADFileInfo_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MADFileInfo : NSObject
 

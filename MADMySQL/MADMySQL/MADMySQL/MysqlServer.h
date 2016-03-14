@@ -9,7 +9,7 @@
 #ifndef MAD_MysqlServer_h
 #define MAD_MysqlServer_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MysqlServer : NSObject {
     NSString *host;
