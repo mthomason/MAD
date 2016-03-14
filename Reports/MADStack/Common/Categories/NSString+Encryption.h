@@ -14,13 +14,18 @@
  0x8c, 0x0a, 0x18, 0x2b, 0xfb, 0x3f, 0x34, 0x06
  };*/
 
+#ifndef MADDESIGNER_MADStringEncryption_h
+#define MADDESIGNER_MADStringEncryption_h
+
 #import <Foundation/NSString.h>
 
 @class NSData;
 
-@interface NSString (Encryption)
+@interface MADStringEncryption : NSObject
 
 + (NSData *)encryptString:(NSString *)string withKey:(unsigned char *)key keySize:(int)keySize;
 + (NSString *)decryptString:(NSData *)data withKey:(unsigned char *)key keySize:(int)keySize;
 
 @end
+
+#endif

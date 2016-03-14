@@ -13,7 +13,7 @@
 //#import "ssl.h"
 #include "aes.h"
 
-@implementation NSString (Encryption)
+@implementation MADStringEncryption
 
 + (NSData *)encryptString:(NSString *)string withKey:(unsigned char *)key keySize:(int)keySize {
     const unsigned char *orig = (const unsigned char *)[string cStringUsingEncoding:NSUTF8StringEncoding];

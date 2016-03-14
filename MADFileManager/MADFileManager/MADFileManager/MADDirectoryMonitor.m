@@ -7,6 +7,10 @@
 //
 
 #import "MADDirectoryMonitor.h"
+#import <Foundation/NSURL.h>
+#include <dispatch/dispatch.h>
+#import <sys/unistd.h>
+#import <sys/fcntl.h>
 
 @interface MADDirectoryMonitor ()
 

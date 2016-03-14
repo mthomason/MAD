@@ -9,7 +9,7 @@
 #ifndef MADDesigner_MADDirectoryMonitor_h
 #define MADDesigner_MADDirectoryMonitor_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MADDirectoryMonitor;
 
