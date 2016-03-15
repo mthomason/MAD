@@ -42,7 +42,7 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
 + (NSString *)identifier;
 
 - (NSString *)connectionString;
-- (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion;
+- (bool)testConnectionWithErrors:(NSArray * __autoreleasing *)errors;
 
 @end
 

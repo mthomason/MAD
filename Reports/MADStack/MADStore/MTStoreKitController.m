@@ -8,7 +8,6 @@
 
 #import "MTStoreKitController.h"
 #import "MTVerificationController.h"
-//#import "UIApplication+Extras.h"
 
 NSString * const MTStoreKitTransactionReceipt                           = @"MTStoreKitTransactionReceipt";
 NSString * const MTStoreKitTransactionDate                              = @"MTStoreKitTransactionDate";

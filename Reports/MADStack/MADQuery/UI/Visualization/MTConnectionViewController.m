@@ -176,54 +176,61 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     
     
     __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
     
-    [self.databaseConnection testConnection:^(BOOL success, NSArray *errors) { //Not always removing credentsals when connection fails.
+    NSArray *errors = NULL;
+    bool success = [self.databaseConnection testConnectionWithErrors:&errors];
+
+    
+    if (success) {
         
-        if (success) {
+        MTConnectionViewController * __weak weakself = self;
+        MADocument *document = self.docToSave;
+        [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
             
-            MTConnectionViewController * __weak weakself = self;
-            MADocument *document = self.docToSave;
-            [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
-                 MTConnectionViewController *strongself = weakself;
-                strongself.navigationItem.prompt = readStatus;
-                strongself.progressView.progress = progress;
-                
-            } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
-                
-                __strong MTConnectionViewController *strongself = weakself;
-                NSNumber *backgroundTask = @(bgTask);
-                
-                if (addConnectionSuccess) {
-                    
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            
-                            [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileURL.lastPathComponent
-                                                      andBackgroundTask: backgroundTask];
-                            
-                        });
-                    });
-                    
-                    
-                } else {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [strongself closeAndDeleteWithErrors:errorContainer
-                                                connectionString:strongself.databaseConnection.connectionString
-                                               andBackgroundTask:backgroundTask];
-                        });
-                    });
-                }
-                
-            }];
+            MTConnectionViewController *strongself = weakself;
+            strongself.navigationItem.prompt = readStatus;
+            strongself.progressView.progress = progress;
             
-        } else {
-            [self resetAfterConnectionString: self.databaseConnection.connectionString
-                                  failedTest: errors];
-        }
+        } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
+            
+            __strong MTConnectionViewController *strongself = weakself;
+            NSNumber *backgroundTask = @(bgTask);
+            
+            if (addConnectionSuccess) {
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileURL.lastPathComponent
+                                                  andBackgroundTask: backgroundTask];
+                        
+                    });
+                });
+                
+                
+            } else {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        [strongself closeAndDeleteWithErrors:errorContainer
+                                            connectionString:strongself.databaseConnection.connectionString
+                                           andBackgroundTask:backgroundTask];
+                        
+                    });
+                });
+            }
+            
+        }];
         
-    }];
+    } else {
+        [self resetAfterConnectionString: self.databaseConnection.connectionString
+                              failedTest: errors];
+    }
+    
+    errors = NULL;
+    
 }
 
 - (void)resetAfterConnectionString:(NSString *)connectionString

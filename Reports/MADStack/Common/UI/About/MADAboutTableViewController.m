@@ -13,7 +13,6 @@
 #import "MADAboutTableViewController.h"
 #import "MADTableViewCellBase.h"
 
-#import "UIApplication+Extras.h"
 #import "UIButton+FollowTwitter.h"
 #import "ACAccountStore+Social.h"
 

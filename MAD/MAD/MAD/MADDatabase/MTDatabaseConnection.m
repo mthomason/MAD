@@ -179,8 +179,18 @@ NSString * const MADStringEmpty = @"";
 }
 
 - (NSString *)connectionString {
-    NSString *connectionString = [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
+    NSString * __autoreleasing connectionString = [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
     return connectionString;
+}
+
+- (bool)testConnectionWithErrors:(NSArray * __autoreleasing *)errors {
+    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: self];
+    NSError * __autoreleasing error = NULL;
+    bool success = [queryTest.database executeQuery:queryTest withError:&error];
+    if (!success && errors == NULL) {
+        *errors = error ? [queryTest.database.errors arrayByAddingObject:error] : [NSArray arrayWithArray:queryTest.database.errors];
+    }
+    return success;
 }
 
 - (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion {
