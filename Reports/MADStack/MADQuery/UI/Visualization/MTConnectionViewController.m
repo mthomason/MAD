@@ -182,18 +182,19 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
         
         if (success) {
             
-            __weak MTConnectionViewController *weakself = self;
-            [self.docToSave addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
+            MTConnectionViewController * __weak weakself = self;
+            MADocument *document = self.docToSave;
+            [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
+                 MTConnectionViewController *strongself = weakself;
+                strongself.navigationItem.prompt = readStatus;
+                strongself.progressView.progress = progress;
                 
-                weakself.navigationItem.prompt = readStatus;
-                weakself.progressView.progress = progress;
-                
-            } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+            } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
                 
                 __strong MTConnectionViewController *strongself = weakself;
                 NSNumber *backgroundTask = @(bgTask);
                 
-                if (success) {
+                if (addConnectionSuccess) {
                     
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                         dispatch_sync(dispatch_get_main_queue(), ^{
