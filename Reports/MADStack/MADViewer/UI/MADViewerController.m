@@ -622,6 +622,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
+        
+        
         NSString *connectionString = document.mainDatabase.databaseConnection.connectionString;
         
         NSError *error = nil;
