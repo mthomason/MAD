@@ -321,9 +321,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                       @(MTQueryCacheAddColumnUnique) : @(unique),
                                       };
     
+    bool success = false;
     NSError * __autoreleasing errorQuery = NULL;
-    MTQuery * __autoreleasing query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
-    [query performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    success = [self.databaseForInserts executeQuery:query withError:&errorQuery];
 }
 
 - (void)addRow:(NSArray *)row {
@@ -385,8 +386,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         MTQuery *query = self.bulkInsertLoop ? self.bulkInsertQuery :
                                 [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
         
+        bool success;
         NSError * __autoreleasing errorQuery = NULL;
-        [query performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+        success = [self.databaseForInserts executeQuery:query withError:&errorQuery];
 
     }
     
@@ -521,10 +523,12 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                                                             tableName:tableName
                                                                    andSortDescriptors:sortDescriptors];
   
-        MTQuery * __autoreleasing queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
-                                                                                 object: parametersCreateIndex];
+        MTQuery *queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
+                                                                object: parametersCreateIndex];
+        bool success;
         NSError * __autoreleasing errorQuery = NULL;
-        [queryCreateIndex performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+        success = [self.databaseForInserts executeQuery:queryCreateIndex withError:&errorQuery];
+
         groupCounter++;
     }
 
@@ -534,21 +538,24 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (void)dropIndex {
     NSUInteger sortDescCtr = self.sortDescriptors.count;
     NSUInteger groupCounter = 0;
+    bool success;
     for (NSUInteger i = 0; i<sortDescCtr; i++) {
         NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
         NSDictionary *parameters = @{
                                      @(MTQueryCacheIndexDropIndexName) : groupName,
                                      };
-        MTQuery *query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
         NSError * __autoreleasing errorQuery = NULL;
-        [query performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+        MTQuery *query = [[MTQueryCacheIndexDrop alloc] initWithObject:parameters];
+        success = [self.databaseForInserts executeQuery:query withError:&errorQuery];
+        errorQuery = NULL;
     }
 }
 
 - (void)vacuumCacheDb {
-    MTQuery *queryVacuum = [[MTQueryCacheVacuum alloc] init];
+    bool success;
     NSError * __autoreleasing errorQuery = NULL;
-    [queryVacuum performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+    MTQuery *queryVacuum = [[MTQueryCacheVacuum alloc] init];
+    success = [self.databaseForInserts executeQuery:queryVacuum withError:&errorQuery];
 }
 
 - (void)dropTable {
@@ -556,17 +563,18 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (void)dropTableName:(NSString *)tableName {
-    MTQuery *queryDropTable = [[MTQueryCacheDropTable alloc] initWithObject:tableName];
+    bool success;
     NSError * __autoreleasing errorQuery = NULL;
-    [queryDropTable performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+    MTQuery *queryDropTable = [[MTQueryCacheDropTable alloc] initWithObject:tableName];
+    success = [self.databaseForInserts executeQuery:queryDropTable withError:&errorQuery];
 }
 
 - (void)deleteAll {
+    bool success;
+    NSError * __autoreleasing errorQuery = NULL;
     NSString *tableName = [self tableName];
     MTQuery *queryDeleteAllFromTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
-    
-    NSError * __autoreleasing errorQuery = NULL;
-    [queryDeleteAllFromTable performQueryWithDatabase:self.databaseForInserts withError:&errorQuery];
+    success = [self.databaseForInserts executeQuery:queryDeleteAllFromTable withError:&errorQuery];
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {

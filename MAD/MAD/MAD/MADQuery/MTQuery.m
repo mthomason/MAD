@@ -215,17 +215,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return success;
 }
 
-- (bool)performQueryWithDatabase:(MTDatabase *)database withError:(NSError * __autoreleasing *)error {
-    bool success = false;
-    [self setDatabase:database];
-    @autoreleasepool {
-        NSError * __autoreleasing qerror = NULL;
-        success = [database executeQuery:self withError:&qerror];
-        *error = qerror;
-    }
-    return success;
-}
-
 - (NSString *)getSqlWithError:(NSError **)error {
     [self.fields removeAllObjects];
     [self.fieldKeys removeAllObjects];
@@ -273,7 +262,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
                                                                    fieldIndex: counterBinings
                                                                         value: columnValue];
             }
-            [[self binaryBindings] addObject:databinding];
+            [self.binaryBindings addObject:databinding];
             [sql appendFormat:@"%@ = ?", columnHandle];
             counterBinings++;
             counter++;

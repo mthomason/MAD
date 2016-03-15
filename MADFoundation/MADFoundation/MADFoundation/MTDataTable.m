@@ -182,24 +182,26 @@ static NSString * const StringEmpty = @"";
     }
 }
 
-- (void)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier {
+- (bool)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier {
     NSError *error = nil;
     NSData *cache = [NSPropertyListSerialization dataWithPropertyList: data
                                                                format: NSPropertyListBinaryFormat_v1_0
                                                               options: 0
                                                                 error: &error];
     NSURL *url = [self urlForGroupIdentifier:groupIdentifier];
+    bool success = false;
     if (url) {
-        [cache writeToURL:url
-                  options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
-                    error:&error];
+        success = [cache writeToURL:url
+                            options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
+                              error:&error] ? true : false;
         NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
+    return success;
 }
 
-- (void)cacheForGroupIdentifier:(NSString *)groupIdentifier {
+- (bool)cacheForGroupIdentifier:(NSString *)groupIdentifier {
     NSDictionary *plist = [self plist];
-    [self cachePlist:plist forGroupIdentifier:groupIdentifier];
+    return [self cachePlist:plist forGroupIdentifier:groupIdentifier];
 }
 
 - (NSDictionary *)plist {

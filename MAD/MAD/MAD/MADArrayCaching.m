@@ -252,11 +252,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                       @(MTQueryCacheAddColumnCreateTable) : createTable,
                                       @(MTQueryCacheAddColumnUnique) : @(unique),
                                       };
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
-    
     NSError * __autoreleasing error = NULL;
-    [query performQueryWithDatabase:self.database withError:&error];
-    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    bool success = false;
+    success = [self.database executeQuery:query withError:&error];
 }
 
 - (NSData *)dataForObject:(id)object {
@@ -349,7 +348,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                                    object: queryDefination];
     
     NSError * __autoreleasing error = NULL;
-    [queryDeleteAllFromTable performQueryWithDatabase:self.database withError:&error];
+    bool success = false;
+    success = [self.database executeQuery:queryDeleteAllFromTable withError:&error];
+
 }
 
 - (NSDictionary *)queryDefinatinSelect {

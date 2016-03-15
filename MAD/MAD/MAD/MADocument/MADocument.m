@@ -957,11 +957,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     MTDatabase * __weak wMainDatabase = self.mainDatabase;
     self.mainQuery.dataTable = self.mainDataTable;
+    
     MTQuery * __weak wMainQuery = self.mainQuery;
     MTDataTableFast * __weak wMainDataTable = self.mainDataTable;
     __block bool didRefresh = false;
 
     NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
+        
         MTQuery *squery = wMainQuery;
         MTDatabase *sdatabase = wMainDatabase;
         
@@ -978,43 +980,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     queue.maxConcurrentOperationCount = 1;
     [queue addOperation:operationRefresh];
     [queue waitUntilAllOperationsAreFinished];
+    
     self.didRefresh = didRefresh ? YES : NO;
 
     return success;
-}
-
-- (void)refresh:(void (^)(BOOL success, NSError *error))completion {
-    @autoreleasepool {
-
-        [self initalizeMainDataTable];
-        RptqDocument *document = [self activeDocumentModel];
-        [self initalizeMainQuery:document];
-        [self initalizeReportFormatter];
-        self.mainQuery.database.delegate = self;
-
-        MADocument * __weak weakself = self;
-        dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_async(bgQueue, ^{
-            
-            NSError * __autoreleasing eerror = NULL;
-            bool success = [weakself.database executeQuery:weakself.mainQuery withError:&eerror];
-
-            [weakself.mainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
-            weakself.didRefresh = success ? YES : NO;
-            
-            if ([NSThread isMainThread]) {
-                NSError *error = eerror;
-                completion(success, error);
-            } else {
-                NSError *error = eerror;
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    completion(success, error);
-                });
-            }
-        });
-
-    }
-    
 }
 
 - (NSURL *)cachedDataUrl {

@@ -780,41 +780,47 @@ void sqliteLog(void *foo, const char* statement) {
     NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
     dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        
         for (MTDatabaseTable *table in tables) {
             NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
-            
             NSError * __autoreleasing error = NULL;
-            [dropTable performQueryWithDatabase:self withError:&error];
-
+            bool success = false;
+            success = [self executeQuery:dropTable withError:&error];
         }
+        
         dispatch_semaphore_signal(s0);
     }];
     dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
-    
+
+    bool success = false;
     NSError * __autoreleasing errorQuerySyncMode = NULL;
     MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncOff alloc] init];
-    [querySyncMode performQueryWithDatabase:self withError:&errorQuerySyncMode];
+    success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
+
 
     NSError * __autoreleasing errorQueryJournalMode = NULL;
     MTQuery * __autoreleasing queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
-    [queryJournalMode performQueryWithDatabase:self withError:&errorQueryJournalMode];
+    success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
+
 
     NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
     MTQuery * __autoreleasing query = [[MTQueryCacheBeginTransaction alloc] init];
-    [query performQueryWithDatabase:self withError:&errorQueryCacheBeginTransaction];
-    
+    success = [self executeQuery:query withError:&errorQueryCacheBeginTransaction];
+
 }
 
 - (void)endBulkInsert {
 
+    bool success = false;
+
     NSError * __autoreleasing errorCacheEndTransaction = NULL;
     MTQuery * __autoreleasing query = [[MTQueryCacheEndTransaction alloc] init];
-    [query performQueryWithDatabase:self withError:&errorCacheEndTransaction];
+    success = [self executeQuery:query withError:&errorCacheEndTransaction];
     
     NSError * __autoreleasing errorQuerySyncMode = NULL;
     MTQuery * __autoreleasing querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
-    [querySyncMode performQueryWithDatabase:self withError:&errorQuerySyncMode];
+    success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
 
     /*
      NSError * __autoreleasing errorJournalMode = NULL;

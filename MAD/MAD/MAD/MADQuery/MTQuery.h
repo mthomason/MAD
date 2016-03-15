@@ -144,6 +144,7 @@ extern NSString * const MADIdentifierROWID;
 @interface MTQuery : NSObject
 
 @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+
 @property (nonatomic, weak) MTDataTable *dataTable;
 @property (nonatomic, strong, readwrite) MTDatabase *database;
 
@@ -162,8 +163,6 @@ extern NSString * const MADIdentifierROWID;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
 
 - (bool)performQueryWithError:(NSError * __autoreleasing *)error;
-- (bool)performQueryWithDatabase:(MTDatabase *)database withError:(NSError * __autoreleasing *)error;
-
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only

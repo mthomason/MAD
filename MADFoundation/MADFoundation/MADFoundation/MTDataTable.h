@@ -46,8 +46,8 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 
 - (NSURL *)urlForGroupIdentifier:(NSString *)groupIdentifier;
 
-- (void)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier;
-- (void)cacheForGroupIdentifier:(NSString *)groupIdentifier;
+- (bool)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier;
+- (bool)cacheForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSDictionary *)plist;
 
 - (void)loadWithPlist:(id)plist;

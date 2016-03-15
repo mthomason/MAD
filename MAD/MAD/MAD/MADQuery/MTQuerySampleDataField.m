@@ -36,14 +36,16 @@
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]], @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
         
-        RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
+        RptqUserCredentals * __weak userCredentals = ((RptqDatabaseSchemaField *)object).inTable.inDatabase.ownedByUser;
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         db.delegate = self;
-        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[[[object objectID] URIRepresentation] absoluteString]];
+        
+        NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;
+        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:identifier];
         self.datatable = dataTable;
-        [self setDatabase:db];
-        [self setQueryObject:object];
+        self.database = db;
+        self.queryObject = object;
         
     }
     return self;

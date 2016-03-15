@@ -612,15 +612,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.startedRefresh = true;
         self.refreshing = true;
         [self setDisplayInactive];
+
         MADocument *document = self.document;
         MTDatabase *database = document.mainDatabase;
-        
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        
-        [notificationCenter addObserver: self
-                               selector: @selector(reportDocumentDidReadRows:)
-                                   name: MTNotificationDidReadRowsName
-                                 object: database];
+        [self addObserverDidReadRowsToDatabase:database];
         
         
         
@@ -645,16 +640,27 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                            }
                        }];
         }
-        
-        [notificationCenter removeObserver: self
-                                      name: MTNotificationDidReadRowsName
-                                    object: database];
+        [self removeObserverDidReadRowsFromDatabase:database];
         [self setDisplayActive];
         [self reload];
         [self timerDealloc];
         [self uiUpdateTimeSinceLastRefresh: NULL];
     }
 }
+
+- (void)addObserverDidReadRowsToDatabase:(MTDatabase *)database {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(reportDocumentDidReadRows:)
+                                                 name: MTNotificationDidReadRowsName
+                                               object: database];
+}
+
+- (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MTNotificationDidReadRowsName
+                                                  object: database];
+}
+
 
 - (IBAction)zoomToActualSize:(id)sender {
     
