@@ -1467,10 +1467,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSRange rangeFirstPart = NSMakeRange(0, firstPart.length);
     NSRange rangeSecondPart = NSMakeRange(firstPart.length, titleString.length - firstPart.length);
     
-    UIFont *fontb = [UIFont fontWithName: @"HelveticaNeue-Light"
-                                    size: 20.0000f];
-    UIFont *fonti = [UIFont fontWithName: @"HelveticaNeue-LightItalic"
-                                    size: 18.0000f];
+    UIFont *fontb = [UIFont fontWithName: @"HelveticaNeue-Light" size: 20.0000f];
+    UIFont *fonti = [UIFont fontWithName: @"HelveticaNeue-LightItalic" size: 18.0000f];
     
     UIColor *foregroundColor = [UIColor whiteColor];
     NSDictionary *attributes = @{NSParagraphStyleAttributeName: paragraphStyle,

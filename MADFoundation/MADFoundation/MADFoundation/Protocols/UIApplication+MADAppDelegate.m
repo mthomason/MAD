@@ -15,16 +15,20 @@ NSString * const MADApplicationIdMadViewer                           = @"6660037
 @implementation UIApplication (MADAppDelegate)
 
 + (MADAppDelegate)AppDelegate {
-    MADAppDelegate appDelegate = (MADAppDelegate)[UIApplication sharedApplication].delegate;
+    MADAppDelegate __autoreleasing appDelegate = (MADAppDelegate)[UIApplication sharedApplication].delegate;
     return appDelegate;
 }
 
 + (BOOL)isMADDesigner {
-    return [[[self AppDelegate] applicationIdentifier] isEqualToString: MADApplicationIdMadDesigner];
+    MADAppDelegate __weak appDelegate = [self AppDelegate];
+    NSString *appIdentifier = [appDelegate applicationIdentifier];
+    return [appIdentifier isEqualToString: MADApplicationIdMadDesigner];
 }
 
 + (BOOL)isMADViewer {
-    return [[[self AppDelegate] applicationIdentifier] isEqualToString: MADApplicationIdMadViewer];
+    MADAppDelegate __weak appDelegate = [self AppDelegate];
+    NSString *appIdentifier = [appDelegate applicationIdentifier];
+    return [appIdentifier isEqualToString: MADApplicationIdMadViewer];
 }
 
 @end
