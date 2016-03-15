@@ -39,7 +39,6 @@
 
 #import "MTQuerySampleDataField.h"
 
-#import <MADFoundation/MTDataTable.h>
 #import <MADDataStructures/MTGraph.h>
 #import <MADDataStructures/MTLinkedList.h>
 #import <MADDataStructures/MTPair.h>
@@ -56,8 +55,6 @@
 
 @interface MTQueryFull ()
 
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
-
 @property (nonatomic, assign) NSInteger limitResults;
 @property (nonatomic, strong) RptqQuery *queryObject;
 
@@ -68,15 +65,16 @@
 @dynamic queryObject;
 
 - (instancetype)initWithObject:(NSDictionary *)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryFull expects NSDictionary with parameters.");
 
         NSDictionary *parameters = (NSDictionary *)object;
         NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
+        
         NSNumber *numberOfResults = parameters[@"MADQueryLimit"];
         self.limitResults = numberOfResults.integerValue;
+        
         RptqQuery *queryObject = parameters[parameterScheam];
         [self setQueryObject:queryObject];
 

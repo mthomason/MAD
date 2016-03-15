@@ -324,7 +324,9 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     bool success = false;
     NSError * __autoreleasing errorQuery = NULL;
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
-    success = [self.databaseForInserts executeQuery:query withError:&errorQuery];
+    success = [_databaseForInserts executeQuery:query withError:&errorQuery];
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts.databaseHandle), __PRETTY_FUNCTION__);
+
 }
 
 - (void)addRow:(NSArray *)row {
