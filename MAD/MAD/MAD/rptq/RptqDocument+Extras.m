@@ -39,6 +39,7 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
 #import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 #import "RptqDocumentObjectChart.h"
@@ -52,6 +53,11 @@
 
 #import "MTErrorContainer.h"
 #import "MTDatabaseTable.h"
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
 
 @implementation RptqDocument (Extras)
 

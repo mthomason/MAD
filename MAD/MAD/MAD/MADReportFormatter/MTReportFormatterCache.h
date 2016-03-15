@@ -9,7 +9,8 @@
 #ifndef MAD_MTReportFormatterCache_h
 #define MAD_MTReportFormatterCache_h
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
 
 @interface MTReportFormatterCache : NSObject
 

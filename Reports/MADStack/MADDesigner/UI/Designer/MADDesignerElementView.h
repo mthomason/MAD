@@ -9,8 +9,6 @@
 #ifndef Reports_MTElementView_h
 #define Reports_MTElementView_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 #import "MADManagedObjectView.h"
 
 @class RptqDocumentObject, MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;

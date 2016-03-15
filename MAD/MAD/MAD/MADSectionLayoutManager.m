@@ -13,6 +13,10 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSectionRows.h"
+#import <Foundation/NSIndexPath.h>
+#import <UIKit/UICollectionView.h>
+#import <UIKit/UITableView.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MADSectionLayoutManager ()
 

@@ -9,7 +9,9 @@
 #ifndef MAD_MTReportFormatterPageDefinition_h
 #define MAD_MTReportFormatterPageDefinition_h
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
+#import <UIKit/UIGeometry.h>
 
 @interface MTReportFormatterPageDefinition : NSObject
 

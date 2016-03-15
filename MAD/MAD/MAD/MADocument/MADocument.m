@@ -14,6 +14,7 @@
 
 #import <Foundation/NSException.h>
 #import <MADFoundation/NSURL+Document.h>
+#import <MAD/MADErrorUserInfo.h>
 
 #import "MADConstants.h"
 #import "MADCredential.h"
@@ -34,6 +35,8 @@
 
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+
+#import "RptqDocumentSection.h"
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
@@ -67,13 +70,11 @@
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
-//#import <MADFoundation/MADApplicationProtocol.h>
-//#import <MADFoundation/MADAppDelegate.h>
-//#import <MADFoundation/UIApplication+MADAppDelegate.h>
-
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import "MTDataTableFast.h"
+#import "MTDatabase.h"
+#import "MTReportViewerPrintPageRenderer.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 

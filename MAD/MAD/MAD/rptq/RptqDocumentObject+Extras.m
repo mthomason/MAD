@@ -12,6 +12,26 @@
 
 #import "RptqDocumentObject+Extras.h"
 #import "MTAlignment.h"
+#import "MADFont.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
+#import "RptqDocumentObjectFormula.h"
+#import "RptqDocumentObjectGroupKey.h"
+#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqDocumentSectionRows.h"
+#import <MADBarcodes/MTBarcode.h>
+#import <Foundation/NSNumberFormatter.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSBundle.h>
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";

@@ -7,6 +7,8 @@
 //
 
 #import "MTReportFormatterCache.h"
+#import <Foundation/NSDictionary.h>
+#import <UIKit/UIGeometry.h>
 
 @interface MTReportFormatterCache ()
 

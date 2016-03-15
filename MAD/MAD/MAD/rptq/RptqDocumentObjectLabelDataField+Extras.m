@@ -15,6 +15,10 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 

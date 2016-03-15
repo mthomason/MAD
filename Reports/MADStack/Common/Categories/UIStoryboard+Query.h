@@ -9,7 +9,7 @@
 #ifndef Reports_UIStoryboard_Query_h
 #define Reports_UIStoryboard_Query_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIStoryboard.h>
 
 @interface UIStoryboard (Query)
 

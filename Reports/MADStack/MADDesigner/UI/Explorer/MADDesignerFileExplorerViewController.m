@@ -8,6 +8,8 @@
 
 #import "MADDesignerFileExplorerViewController.h"
 #import <MAD/MADCredential.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #import "MADStoryboard.h"
 #import "Constants.h"
@@ -17,7 +19,6 @@
 
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
-#import <MADFoundation/MADApplicationProtocol.h>
 #import "MUIViewControllerDelegate.h"
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADViewerController.h"
@@ -29,20 +30,18 @@
 #import "MADDocumentInformationTableViewController.h"
 #import "MADDocumentInformationTableViewController+Designer.h"
 
-#import "UINavigationController+Designer.h"
-#import "UITabBarController+Shared.h"
-#import "UITableViewController+Designer.h"
-
 #import "MADNavigationBarTitleView.h"
 #import "MADWatermarkView.h"
 
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
-
-#import "UINavigationController+MADQuery.h"
-#import "UIStoryboard+Query.h"
-
 #import "MADNavigationController.h"
 #import "MADTabBarController.h"
+
+#import "UIStoryboard+Query.h"
+
+#import "UINavigationController+MADQuery.h"
+#import "UINavigationController+Designer.h"
+#import "UITabBarController+Shared.h"
+#import "UITableViewController+Designer.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";

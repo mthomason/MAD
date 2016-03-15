@@ -12,6 +12,13 @@
 #import "MTResizeHandleView.h"
 #import <MAD/RptqDocumentObject.h>
 #import <MAD/RptqDocumentObject+Extras.h>
+#import <MAD/RptqDocumentObjectImage.h>
+#import <MAD/RptqDocumentObjectBarcode.h>
+#import <MAD/RptqDocumentObjectBarcode+Extras.h>
+
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
+
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0

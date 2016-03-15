@@ -10,14 +10,14 @@
 #define Reports_RptqDocumentObject_Extras_h
 
 #import "RptqDocumentObject.h"
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MADDataStructures/MTProtocolCompare.h>
-#import <MADDataStructures/MTProtocolLog.h>
-#import <MADFoundation/MADDataType.h>
-#import <MAD/MAD.h>
-#import <MAD/MADFont.h>
+#import "RptqDocumentObjectFactory.h"
 #import <MAD/MADDocumentObjectType.h>
+#import <MADFoundation/MADDataType.h>
+#import <MADDataStructures/MTProtocolLog.h>
+#import <MADDataStructures/MTProtocolCompare.h>
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
+
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;

@@ -13,6 +13,10 @@
 #import "RptqDocumentObjectLabelLink+Extras.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <Foundation/NSSortDescriptor.h>
 
 @implementation RptqDocumentObjectLabelLink (Extras)
 

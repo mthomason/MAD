@@ -35,6 +35,7 @@
 #import "RptqDocumentSectionRows.h"
 
 #import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
 
 #import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
@@ -43,6 +44,7 @@
 
 #import "RptqDocumentObjectLabel.h"
 #import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "RptqDocumentObjectImage.h"
 
 #import "MTPaper.h"
