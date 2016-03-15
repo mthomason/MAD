@@ -39,18 +39,21 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (void)viewDidLoad {
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
-    self.lastSelectedIndex = -1;
+    MADocument *document = self.document;
+    NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    self.lastSelectedIndex = NSNotFound;
     self.delegate = self;
     for (UIViewController *viewController in self.viewControllers) {
         if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
-            ((id <MADViewControllerDocumentProtocol>)viewController).document = self.document;
+            ((id <MADViewControllerDocumentProtocol>)viewController).document = document;
         }
     }
     self.view.backgroundColor = [UIColor purpleColor];
-    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                             target:self action:@selector(viewControllerDidFinish:)];
+
+    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                             target: self
+                                                                             action: @selector(viewControllerDidFinish:)];
     [self.navigationItem setLeftBarButtonItem:dismiss animated:NO];
 
 }
@@ -115,25 +118,32 @@ const int8_t MADIndexViewer = 2;
 }
 
 - (MADQueryBuilderSplitViewController *)querySplitViewController {
-    return (MADQueryBuilderSplitViewController *)self.viewControllers[MADIndexQuery];
+    MADQueryBuilderSplitViewController * __autoreleasing topViewController = ((MADQueryBuilderSplitViewController *)self.viewControllers[MADIndexQuery]);
+    return topViewController;
 }
 
 - (MADDesignerViewController *)designerViewController {
-    return (MADDesignerViewController *)((UINavigationController *)self.viewControllers[MADIndexDesigner]).topViewController;
+    UINavigationController *navigationController = ((UINavigationController *)self.viewControllers[MADIndexDesigner]);
+    MADDesignerViewController * __autoreleasing topViewController = (MADDesignerViewController *)navigationController.topViewController;
+    return topViewController;
 }
 
 - (MADViewerController *)viewerViewController {
-    return (MADViewerController *)((UINavigationController *)self.viewControllers[MADIndexViewer]).topViewController;
+    UINavigationController *navigationController = ((UINavigationController *)self.viewControllers[MADIndexViewer]);
+    MADViewerController * __autoreleasing topViewController = (MADViewerController *)navigationController.topViewController;
+    return topViewController;
 }
 
 - (void)disableTabBarItems {
-    for (UITabBarItem *item in self.tabBar.items) {
+    NSArray *tabBarItems = self.tabBar.items;
+    for (UITabBarItem *item in tabBarItems) {
         item.enabled = NO;
     }
 }
 
 - (void)enableTabBarItems {
-    for (UITabBarItem *item in self.tabBar.items) {
+    NSArray *tabBarItems = self.tabBar.items;
+    for (UITabBarItem *item in tabBarItems) {
         item.enabled = YES;
     }
 }

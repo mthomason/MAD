@@ -30,6 +30,7 @@
 
 #import <MADFoundation/MTDataTable.h>
 #import <MADDataStructures/MTPair.h>
+#import "MADTabBarController.h"
 
 #import "MTActivityReportPrintPreview.h"
 
@@ -41,7 +42,6 @@
 #import "MADNavigationBarTitleView.h"
 
 #import "UIApplication+Extras.h"
-#import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "NSDate+Extras.h"
 #import "MTStoreKitController+Features.h"
@@ -541,7 +541,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (completed || (!completed && activityType == nil)) {
             weakself.toolbarSlider.enabled = YES;
             weakself.activityExporting = false;
-            [weakself enableTabBarItems];
+            [weakself.tabBarController enableTabBarItems];
         } else {
             if (activityType.length > 0) {  // Long running activity
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
@@ -563,7 +563,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                 [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].tintColor              = [MADColorEverydayApps newColorWhite];
                                 weakself.toolbarSlider.enabled = YES;
                                 weakself.activityExporting = false;
-                                [weakself enableTabBarItems];
+                                [weakself.tabBarController enableTabBarItems];
                             }];
                         }
                         
@@ -575,7 +575,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             } else {    // Cancel button
                 weakself.toolbarSlider.enabled = YES;
                 weakself.activityExporting = false;
-                [weakself enableTabBarItems];
+                [weakself.tabBarController enableTabBarItems];
             }
         }
     };
@@ -589,7 +589,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self presentViewController:activityViewController animated:YES completion:^{
         weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
     }];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (IBAction)reload {
@@ -1048,7 +1048,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                         ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                             weakself2.toolbarSlider.enabled = YES;
-                            [weakself2 enableTabBarItems];
+                            [weakself2.tabBarController enableTabBarItems];
                         };
                         [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
                                                  completionHandler:completionHandler];
@@ -1066,7 +1066,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
 }
 
 - (UIViewController *)activeViewController {

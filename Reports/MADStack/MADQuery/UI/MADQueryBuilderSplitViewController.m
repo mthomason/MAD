@@ -11,6 +11,7 @@
 #endif
 
 #import "MADQueryBuilderSplitViewController.h"
+#import "MADTabBarController.h"
 #import <MAD/MADocument.h>
 
 #import "MADNavigationBarTitleView.h"
@@ -19,7 +20,6 @@
 #import "MADViewControllerSQL.h"
 
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "UIViewController+UI.h"
 
 #import "MADQueryVisualizationViewController.h"
 #import "MADQueryVisualizationViewController+Designer.h"
@@ -171,7 +171,7 @@
         if ([segue isKindOfClass:popoverSegueClass]) {
             [[(UIStoryboardPopoverSegue *)segue popoverController] setDelegate:self];
             [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
-            [self disableTabBarItems];
+            [self.tabBarController disableTabBarItems];
         }
     }
 }
@@ -302,7 +302,7 @@
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
 }
 
 #pragma mark - Override

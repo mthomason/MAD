@@ -13,9 +13,9 @@
 #import "MADQueryViewController.h"
 
 #import "MADNavigationBarTitleView.h"
+#import "MADTabBarController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
-
 #import <MAD/MTQuery.h>
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
@@ -42,8 +42,6 @@
 #import "UIViewController+tabBarItem.h"
 
 #import "NSParagraphStyle+CommonStyles.h"
-
-#import "UIViewController+UI.h"
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
@@ -255,7 +253,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                      name: UIDocumentStateChangedNotification
                                                    object: document];
     }
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:NO];
 }
 
@@ -302,7 +300,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             viewController = segue.destinationViewController;
         }
         viewController.query = self.document.mainQuery;
-        [self disableTabBarItems];
+        [self.tabBarController disableTabBarItems];
         
     } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
         
@@ -388,7 +386,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
     [super dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -404,9 +402,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - MTQueryBuilderPredicateFormatDelegate
 
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
-    UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        [weakself enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
     
     [self.document.activeDocumentModel addPredicate:predicate];
@@ -441,13 +438,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 }
 
@@ -456,7 +453,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
 
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 
     [self.document.activeDocumentModel addQueryLink:link];
@@ -477,7 +474,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                        andSortOrder:(MNSSortOrder)sortOrder {
     
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 
     [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];
@@ -490,7 +487,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable {
 
     [self dismissViewControllerAnimated:YES completion:^{
-        [self enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
@@ -1112,31 +1109,31 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)addConnection:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addTable:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addLink:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addPredicate:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addGroup:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController
                               sender: sender];
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 #pragma mark - Helper functions
@@ -1838,28 +1835,33 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
     NSArray *sectionTypes = dataModel[MTTableSectionSectionsKey];
     if ([sectionTypes count] >= section) {
-        result = [sectionTypes[section] integerValue];
+        NSNumber *sectionType = sectionTypes[section];
+        result = sectionType.unsignedIntegerValue;
     }
     return result;
 }
 
-- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
-    MTQuerySections result = sec;
+- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section {
+    MTQuerySections result = section;
     NSDictionary *datamodel = [self datamodel];
     NSArray *sectionTypes = datamodel[MTTableSectionSectionsKey];
-    if ([sectionTypes count] >= sec) {
-        result = [sectionTypes[sec] integerValue];
+    if (sectionTypes.count >= section) {
+        NSNumber *sectionType = sectionTypes[section];
+        result = sectionType.unsignedIntegerValue;
     }
     return result;
 }
 
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
-    NSInteger result = 0;
-    NSArray *sectionTypes = [self datamodelForNumberOfTables:[self.tableView numberOfRowsInSection: 1]][MTTableSectionSectionsKey];
+    MTQuerySections result = 0;
+    NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
+    NSDictionary *datamodel = [self datamodelForNumberOfTables:numberOfRows];
+    NSArray *sectionTypes = datamodel[MTTableSectionSectionsKey];
     NSInteger secPos = 0;
+    
     for (NSNumber *num in sectionTypes) {
-        if ([num integerValue] == sec) {
-            result = secPos;
+        if (num.unsignedIntegerValue == sec) {
+            result = (MTQuerySections)secPos;
             break;
         }
         secPos++;

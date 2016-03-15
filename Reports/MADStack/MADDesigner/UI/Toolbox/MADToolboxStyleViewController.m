@@ -12,7 +12,6 @@
 
 #import "MADToolboxStyleViewController.h"
 #import "MADControlState.h"
-#import "UIViewController+UI.h"
 
 static NSString * const MADIdentifierStoryboardSeguePushFontPicker = @"MADIdentifierStoryboardSeguePushFontPicker";
 

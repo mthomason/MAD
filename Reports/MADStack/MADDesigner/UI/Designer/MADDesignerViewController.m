@@ -17,6 +17,8 @@
 #import <MAD/NSManagedObjectID+Extras.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 
+#import "MADTabBarController.h"
+
 #import "MADManagedObjectView.h"
 
 #import "MADDesignerViewController.h"
@@ -62,7 +64,6 @@
 #import "UINavigationController+Designer.h"
 #import "MTViewControllerBarcode+Designer.h"
 #import "MTQueryBuilderChooseFieldViewController+Designer.h"
-#import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
 
@@ -305,9 +306,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)viewDidLoad {
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
     
+    MADocument *document = self.document;
+    NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     self.scroller.scrollsToTop = YES;
     self.scroller.scrollEnabled = YES;
     self.scroller.userInteractionEnabled = YES;
@@ -332,14 +334,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
     viewControllerToolbox.clearsBackground = [self padLike];
-    viewControllerToolbox.document = self.document;
+    viewControllerToolbox.document = document;
     viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
     self.viewControllerToolbox = viewControllerToolbox;
     
     self.navigationControllerToolbox = navigationControllerToolbox;
     self.toolboxTransitioningDelegate = transitioningDelegate;
     
-    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:self.document.fileURL.lastPathComponent];
+    MADPromptManager *promptManager = [[MADPromptManager alloc] initWithDefaultPrompt:document.fileURL.lastPathComponent];
     self.promptManager = promptManager;
     
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
@@ -574,7 +576,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.viewDidAppearDesignerScrollViewConstraints = viewDidAppearDesignerScrollViewConstraints;
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
     
     [self.scroller addConstraints: constraintsScroller];
     [self.scroller.container addConstraints: constraintsContainer];
@@ -2528,13 +2530,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.toolboxVisible = false;
     self.barButtonAddReportObject.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    [self enableTabBarItems];
+    [self.tabBarController enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
     self.barButtonAddReportObject.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
-    [self disableTabBarItems];
+    [self.tabBarController disableTabBarItems];
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {

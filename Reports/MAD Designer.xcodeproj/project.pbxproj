@@ -405,7 +405,6 @@
 		4C4020621BAE92F200BAE5FC /* UIViewController+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202D1BAE92F200BAE5FC /* UIViewController+Designer.m */; };
 		4C4020631BAE92F200BAE5FC /* UIViewController+Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40202F1BAE92F200BAE5FC /* UIViewController+Shared.m */; };
 		4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */; };
-		4C4020651BAE92F200BAE5FC /* UIViewController+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020331BAE92F200BAE5FC /* UIViewController+UI.m */; };
 		4C4020661BAE92F200BAE5FC /* UIViewController+Viewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020351BAE92F200BAE5FC /* UIViewController+Viewer.m */; };
 		4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020681BAE938500BAE5FC /* NSData+Base64.m */; };
 		4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */; };
@@ -1652,8 +1651,6 @@
 		4C40202F1BAE92F200BAE5FC /* UIViewController+Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Shared.m"; sourceTree = "<group>"; };
 		4C4020301BAE92F200BAE5FC /* UIViewController+tabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+tabBarItem.h"; sourceTree = "<group>"; };
 		4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+tabBarItem.m"; sourceTree = "<group>"; };
-		4C4020321BAE92F200BAE5FC /* UIViewController+UI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+UI.h"; sourceTree = "<group>"; };
-		4C4020331BAE92F200BAE5FC /* UIViewController+UI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+UI.m"; sourceTree = "<group>"; };
 		4C4020341BAE92F200BAE5FC /* UIViewController+Viewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Viewer.h"; sourceTree = "<group>"; };
 		4C4020351BAE92F200BAE5FC /* UIViewController+Viewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Viewer.m"; sourceTree = "<group>"; };
 		4C4020671BAE938500BAE5FC /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -3294,8 +3291,6 @@
 				4C40202F1BAE92F200BAE5FC /* UIViewController+Shared.m */,
 				4C4020301BAE92F200BAE5FC /* UIViewController+tabBarItem.h */,
 				4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */,
-				4C4020321BAE92F200BAE5FC /* UIViewController+UI.h */,
-				4C4020331BAE92F200BAE5FC /* UIViewController+UI.m */,
 				4C4020341BAE92F200BAE5FC /* UIViewController+Viewer.h */,
 				4C4020351BAE92F200BAE5FC /* UIViewController+Viewer.m */,
 				4C60C5B71BB11E94004D9758 /* UIManagedDocument+URLs.h */,
@@ -5813,7 +5808,6 @@
 				4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */,
-				4C4020651BAE92F200BAE5FC /* UIViewController+UI.m in Sources */,
 				4C4020511BAE92F200BAE5FC /* UIGestureRecognizer+AnchorPoint.m in Sources */,
 				4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */,
 				4CFEE8241BB7AE0800AFAA0A /* UINavigationController+MADQuery.m in Sources */,

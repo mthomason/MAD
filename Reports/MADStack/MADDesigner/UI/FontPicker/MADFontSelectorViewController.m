@@ -11,7 +11,6 @@
 #endif
 
 #import "MADFontSelectorViewController.h"
-#import "UIViewController+UI.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADFonts.h>

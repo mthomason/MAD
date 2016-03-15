@@ -9,10 +9,9 @@
 #ifndef Reports_MTQueryBuilderContainerController_h
 #define Reports_MTQueryBuilderContainerController_h
 
-#import <UIKit/UIKit.h>
+#import "MADViewController.h"
 #import "MADocumentProtocol.h"
 #import "MUIViewControllerDelegate.h"
-#import "MADViewController.h"
 
 @class MADQueryViewController,
         MADQueryVisualizationViewController,

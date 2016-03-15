@@ -118,3 +118,31 @@
 }
 
 @end
+
+@interface MADPageViewController()
+
+#include "MADViewControllerBaseInterfacePrivate.h"
+
+@end
+
+@implementation MADPageViewController
+
+#include "MADViewControllerBase.m"
+
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    
+    if (self.isViewLoaded) {
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [self.navigationItem.titleView sizeToFit];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [self.navigationItem.titleView sizeToFit];
+        }];
+    }
+    
+}
+
+@end

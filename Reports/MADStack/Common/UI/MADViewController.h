@@ -11,6 +11,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class MADTabBarController;
+
 @interface MADViewController : UIViewController
 
 #include "MADViewControllerBase.h"
@@ -30,6 +32,12 @@
 @end
 
 @interface MADSplitViewController : UISplitViewController
+
+#include "MADViewControllerBase.h"
+
+@end
+
+@interface MADPageViewController : UIPageViewController
 
 #include "MADViewControllerBase.h"
 
