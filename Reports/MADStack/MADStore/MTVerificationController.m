@@ -69,8 +69,8 @@ static MTVerificationController *sharedSingleton;
 
 - (void)reloadReceipt {
     MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:[[NSBundle mainBundle] appStoreReceiptURL].path];
-    NSString *bundleID = [[UIApplication AppDelegate] applicationBundleIdentifier];
-    NSString *globalBundleVersion = [[UIApplication AppDelegate] versionNumber];
+    NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
+    NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
     self.modernReceiptIsValid = [receipt verifyReceiptWithBundleID: bundleID
                                                      bundleVersion: globalBundleVersion
                                                        andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
@@ -83,8 +83,8 @@ static MTVerificationController *sharedSingleton;
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
     if ([[NSFileManager defaultManager] fileExistsAtPath:receiptUrl.path]) {
         MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
-        NSString *bundleID = [[UIApplication AppDelegate] applicationBundleIdentifier];
-        NSString *globalBundleVersion = [[UIApplication AppDelegate] versionNumber];
+        NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
+        NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
         BOOL isValidReceipt = [receipt verifyReceiptWithBundleID: bundleID
                                                    bundleVersion: globalBundleVersion
                                                      andDeviceID: [[UIDevice currentDevice] identifierForVendor]];
@@ -93,10 +93,9 @@ static MTVerificationController *sharedSingleton;
         } else {
             //Invalid receipt!!! Gerr, blast it, and download from APPL
             NSError *error = nil;
-            NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
             [[NSFileManager defaultManager] removeItemAtURL:receiptUrl error:&error];
-            [self refreshReceipt:^(BOOL success, NSError *error) {
-                if (success) [self reloadReceipt];
+            [self refreshReceipt:^(BOOL refreshReceiptSuccess, NSError *refreshReceiptError) {
+                if (refreshReceiptSuccess) [self reloadReceipt];
             }];
         }
     } else {

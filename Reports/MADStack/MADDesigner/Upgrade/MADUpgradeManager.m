@@ -8,8 +8,8 @@
 
 #import "MADUpgradeManager.h"
 #import "MADOperationInstallSampleDatabase.h"
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
+//#import <MADFoundation/MADApplicationProtocol.h>
+//#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
@@ -42,7 +42,7 @@ const NSInteger currentMajorVersion = 8;
         installChinook = NO;
     }
     
-    if ([UIApplication isMADDesigner]) {
+    if ([MADApplication isMADDesigner]) {
         NSNumber *samplesInstalled = [standardUserDefault objectForKey:MADUpgradeInstalledSamples];
         if (samplesInstalled == nil) {
             installSamples = YES;

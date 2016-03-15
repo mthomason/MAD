@@ -13,7 +13,6 @@
 #import <UIKit/NSStringDrawing.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
-//#import <MAD/MADConstants.h>
 
 NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-CondensedBlack";
 
@@ -21,20 +20,20 @@ NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue-Conden
 
 + (NSAttributedString *)waterMarkStringMad {
     UIColor *foregroundColor = [UIColor lightTextColor];
-    UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack size:[UIApplication isMADDesigner] ? 100.0000f : 78.0000f];
+    UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack size:[MADApplication isMADDesigner] ? 100.0000f : 78.0000f];
     NSDictionary *attributes = @{
                                  NSForegroundColorAttributeName : foregroundColor,
                                  NSFontAttributeName : customFont
                                  };
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: [[UIApplication AppDelegate] trademark]
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: [[MADApplication AppDelegate] trademark]
                                                                            attributes: attributes];
     return attributedString;
 }
 
 + (NSAttributedString *)waterMarkStringDesigner {
-    NSString *displayStringText = [[[UIApplication AppDelegate] applicationNameSufixPart] uppercaseString];
+    NSString *displayStringText = [[[MADApplication AppDelegate] applicationNameSufixPart] uppercaseString];
     UIColor *foregroundColor = [UIColor lightTextColor];
-    CGFloat fontSize =  [UIApplication isMADDesigner] ? 44.5000f : 46.0000f;
+    CGFloat fontSize =  [MADApplication isMADDesigner] ? 44.5000f : 46.0000f;
     UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack size:fontSize];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];

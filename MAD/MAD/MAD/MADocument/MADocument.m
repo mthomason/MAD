@@ -67,9 +67,10 @@
 #import "NSManagedObject+Extras.h"
 #import "NSManagedObjectID+Extras.h"
 
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
-#import <MADFoundation/UIApplication+MADAppDelegate.h>
+//#import <MADFoundation/MADApplicationProtocol.h>
+//#import <MADFoundation/MADAppDelegate.h>
+//#import <MADFoundation/UIApplication+MADAppDelegate.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import "MTDataTableFast.h"

@@ -9,8 +9,7 @@
 #ifndef MAD_MADUpgradeManager_h
 #define MAD_MADUpgradeManager_h
 
-#import <MADFileManager/MADFileManager.h>
-#import <MAD/MADConstants.h>
+#import <Foundation/NSObject.h>
 
 @interface MADUpgradeManager : NSObject
 

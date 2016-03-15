@@ -132,7 +132,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     [super viewDidLoad];
     
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
-    MADAppDelegate delegate = [UIApplication AppDelegate];
+    MADAppDelegate delegate = [MADApplication AppDelegate];
     titleView.text = [delegate name];
     titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;

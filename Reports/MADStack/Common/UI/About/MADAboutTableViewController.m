@@ -62,14 +62,14 @@
 
 - (NSString *)versionText {
     NSString *versionTextKey = NSLocalizedString(@"v%@", @"v%@");
-    NSString *globalBundleVersion = [[UIApplication AppDelegate] versionNumber];
+    NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
     NSString *versionText = [NSString stringWithFormat:versionTextKey, globalBundleVersion];
     return versionText;
 }
 
 - (NSString *)buildText {
     NSString *buildTextKey = NSLocalizedString(@"r%@", @"r%@");
-    NSString *revision = [[UIApplication AppDelegate] revisionNumber];
+    NSString *revision = [[MADApplication AppDelegate] revisionNumber];
     NSString *buildText = [NSString stringWithFormat:buildTextKey, revision];
     return buildText;
 }
