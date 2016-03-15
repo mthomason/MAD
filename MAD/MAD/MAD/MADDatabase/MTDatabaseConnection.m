@@ -52,8 +52,7 @@ NSString * const MADStringEmpty = @"";
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         [self nullValues];
     }
     return self;
@@ -67,11 +66,10 @@ NSString * const MADStringEmpty = @"";
     id result = [self databaseConnectionFactoryEmpty:typeIdentifier];
     
     NSString *h   = [NSString stringWithString: host];
-    ((MTDatabaseConnection *) result).server = h;
-    
     NSString *d = [NSString stringWithString: database];
-    ((MTDatabaseConnection *) result).database = d;
     
+    ((MTDatabaseConnection *) result).server = h;
+    ((MTDatabaseConnection *) result).database = d;
     ((MTDatabaseConnection *) result).port = port;
     
     return result;
