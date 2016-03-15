@@ -19,9 +19,6 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
 #import "MTQuery.h"
-//#import <MADFoundation/MADApplicationProtocol.h>
-//#import <MADFoundation/MADAppDelegate.h>
-//#import <MADFoundation/UIApplication+MADAppDelegate.h>
 #import "MTQueryTest.h"
 
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
