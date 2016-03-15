@@ -21,7 +21,7 @@
 @implementation MTQueryCacheBeginTransaction
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
+    self = [super init];
     if (self) { }
     return self;
 }

@@ -12,17 +12,10 @@
 
 #import "MTQueryCacheJournalModeOverride.h"
 
-@interface MTQueryCacheJournalModeOverride ()
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
-
-@end
-
 @implementation MTQueryCacheJournalModeOverride
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) { }
+    self = [super init];
     return self;
 }
 

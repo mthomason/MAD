@@ -19,8 +19,7 @@
 @implementation MTQueryCacheSyncOff
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) { }
+    self = [super init];
     return self;
 }
 

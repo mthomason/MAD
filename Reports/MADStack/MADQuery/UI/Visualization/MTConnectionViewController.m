@@ -11,14 +11,19 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import <MAD/MTDatabase.h>
+#import <MAD/MADCredential.h>
 #import "UIApplication+Extras.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
+#import "MADKeyChainGetCredentials.h"
+#import "MADKeyChainSaveCredentials.h"
 
-NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
-NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
+static NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
+static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MTConnectionViewController()
+    <MADocumentDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
 @property (nonatomic, strong) MADocument *docToSave;
@@ -143,6 +148,22 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     return progressView;
 }
 
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+    NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
+    credentialQueue.maxConcurrentOperationCount = 1;
+    
+    MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
+    MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
+    
+    [cs addDependency:cg];
+    [credentialQueue addOperation:cg];
+    [credentialQueue addOperation:cs];
+    [credentialQueue waitUntilAllOperationsAreFinished];
+    
+    MADCredential *credentials = cg.credential.copy;
+    return credentials;
+}
+
 - (IBAction)save:(id)sender {
     
     [self removeKeyboard];
@@ -165,6 +186,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
     
     MADocument *doc = [[MADocument alloc] initWithFileURL: uniqueURL];
+    doc.documentDelegate = self;
+    
     self.docToSave = doc;
     [self.docToSave removeGuts];
     

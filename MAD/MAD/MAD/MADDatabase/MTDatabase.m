@@ -70,10 +70,10 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
 - (MADCredential *)getCredentalsWithConnection:(MTDatabaseConnection *)connection {
     NSString *key = [connection connectionString];
-    bool responds = [self.delegate respondsToSelector:@selector(getCredentialsForDatabase:andKey:)];
+    bool responds = [self.delegate respondsToSelector:@selector(getCredentialsForKey:)];
     MADCredential *results = nil;
     if (responds) {
-        MADCredential *c = [self.delegate getCredentialsForDatabase:self andKey:key];
+        MADCredential *c = [self.delegate getCredentialsForKey:key];
         if (c) {
             results = c.copy;
         }

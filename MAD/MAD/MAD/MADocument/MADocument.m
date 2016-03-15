@@ -701,8 +701,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark - MTDatabaseProtocol
 
-- (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {
-    MADCredential *credentials = [self.documentDelegate getCredentialsForDocument:self database:database andKey:key];
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+    MADCredential *credentials = [self.documentDelegate getCredentialsForKey:key];
     return credentials;
 }
 

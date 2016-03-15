@@ -45,9 +45,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @protocol MADocumentDelegate
 @required
 @optional
-    - (MADCredential *)getCredentialsForDocument:(MADocument *)document
-                                        database:(MTDatabase *)database
-                                          andKey:(NSString *)key;
+    - (MADCredential *)getCredentialsForKey:(NSString *)key;
 @end
 
 @interface MADocument : UIManagedDocument

@@ -376,7 +376,8 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 #pragma mark - MADDocumentDelegate
 
-- (MADCredential *)getCredentialsForDocument:(MADocument *)document database:(MTDatabase *)database andKey:(NSString *)key {
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+    
     NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
     credentialQueue.maxConcurrentOperationCount = 1;
     
