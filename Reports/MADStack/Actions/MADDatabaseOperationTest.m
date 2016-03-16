@@ -33,6 +33,9 @@
 @implementation MADDatabaseOperationTest
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
+    if (!self.credentials) {
+        [self setStateError];
+    }
     MADCredential *credentialsCopy = self.credentials.copy;
     return credentialsCopy;
 }
@@ -68,7 +71,12 @@
     
     if (self.credentials == nil) {
         for (NSOperation *operation in self.dependencies) {
-            
+            if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+                if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
+                    self.credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials;
+                    break;
+                }
+            }
         }
     }
     
@@ -87,6 +95,13 @@
     db.delegate = self;
     queryTest.database = db;
     self.database = db;
+    
+    // One more chance to short
+    
+    if ([self isCancelled]) {
+        [self setStateCanceled];
+        return;
+    }
     
     NSError * __autoreleasing error = NULL;
     if ((self.success = [queryTest.database executeQuery:queryTest withError:&error])) {

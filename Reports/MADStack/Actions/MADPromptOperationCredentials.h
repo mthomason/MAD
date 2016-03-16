@@ -10,9 +10,8 @@
 #import <UIKit/UIViewController.h>
 #import <MAD/MADCredential.h>
 
-
-
 @interface MADPromptOperationCredentials : MADOperation
+    <MADOperationHoldsCredentialsProtocol>
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
 

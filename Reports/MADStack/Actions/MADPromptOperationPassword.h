@@ -11,6 +11,7 @@
 #import <MAD/MADCredential.h>
 
 @interface MADPromptOperationPassword : MADOperation
+    <MADOperationHoldsCredentialsProtocol>
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
 
