@@ -10,4 +10,7 @@
 
 @interface MADDatabaseOperationTest : MADOperation
 
+@property (nonatomic, readonly, strong) NSError *error;
+@property (nonatomic, readonly, assign) bool success;
+
 @end
