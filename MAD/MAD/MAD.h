@@ -36,7 +36,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+Extras.h>
 
-#import <MAD/MADDocumentSectionType.h>
+#import <MAD/MADReportSectionRepresentation.h>
 
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>

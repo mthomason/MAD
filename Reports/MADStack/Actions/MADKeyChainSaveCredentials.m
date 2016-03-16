@@ -74,6 +74,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
             break;
         }
         case password_prompt: {
+            
+            
             [self promptToSave:^(UIAlertAction *action) {
                 OSStatus status = [MTKeyChain savePassword: self.credential.password
                                                     forKey: self.key];
@@ -84,6 +86,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                 }
 
             }];
+            
             break;
         }
         case keychain:

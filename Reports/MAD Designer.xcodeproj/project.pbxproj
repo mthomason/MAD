@@ -436,6 +436,9 @@
 		4C5B55DD1C97C5FA005C19D9 /* MADRefreshOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */; };
 		4C5B55E51C98CCBF005C19D9 /* MADDesignerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55E41C98CCBF005C19D9 /* MADDesignerUITests.m */; };
 		4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */; };
+		4C5B55FB1C98CE6D005C19D9 /* MADDesignerTestConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55FA1C98CE6D005C19D9 /* MADDesignerTestConnection.m */; };
+		4C5B55FE1C98DD4D005C19D9 /* MADPromptOperationPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */; };
+		4C5B56011C98DD76005C19D9 /* MADPromptOperationCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */; };
 		4C60C5A01BB0A100004D9758 /* MADDesignerFileExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */; };
 		4C60C5B61BB0A1CC004D9758 /* MADDesignerExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */; };
 		4C60C5B91BB11E94004D9758 /* UIManagedDocument+URLs.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60C5B81BB11E94004D9758 /* UIManagedDocument+URLs.m */; };
@@ -1798,6 +1801,11 @@
 		4C5B55F01C98CCD6005C19D9 /* MADDesignerUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDesignerUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDesignerUnitTests.m; sourceTree = "<group>"; };
 		4C5B55F41C98CCD6005C19D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C5B55FA1C98CE6D005C19D9 /* MADDesignerTestConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerTestConnection.m; sourceTree = "<group>"; };
+		4C5B55FC1C98DD4D005C19D9 /* MADPromptOperationPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPromptOperationPassword.h; sourceTree = "<group>"; };
+		4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPromptOperationPassword.m; sourceTree = "<group>"; };
+		4C5B55FF1C98DD76005C19D9 /* MADPromptOperationCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPromptOperationCredentials.h; sourceTree = "<group>"; };
+		4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPromptOperationCredentials.m; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
 		4C60C59E1BB0A100004D9758 /* MADDesignerFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerFileExplorerViewController.h; sourceTree = "<group>"; };
 		4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerFileExplorerViewController.m; sourceTree = "<group>"; };
@@ -2600,6 +2608,10 @@
 				4C26B9651BAF11C800456DC8 /* MADOperationInstallSampleDocument.m */,
 				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
 				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
+				4C5B55FC1C98DD4D005C19D9 /* MADPromptOperationPassword.h */,
+				4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */,
+				4C5B55FF1C98DD76005C19D9 /* MADPromptOperationCredentials.h */,
+				4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */,
 			);
 			name = Actions;
 			path = MADStack/Actions;
@@ -3800,6 +3812,7 @@
 		4C5B55F11C98CCD6005C19D9 /* MADDesignerUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				4C5B55FA1C98CE6D005C19D9 /* MADDesignerTestConnection.m */,
 				4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */,
 				4C5B55F41C98CCD6005C19D9 /* Info.plist */,
 			);
@@ -5897,6 +5910,7 @@
 				4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */,
 				4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
 				4C8DE2771BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m in Sources */,
+				4C5B56011C98DD76005C19D9 /* MADPromptOperationCredentials.m in Sources */,
 				4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */,
 				4C26B9C21BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m in Sources */,
 				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
@@ -5915,6 +5929,7 @@
 				4C4020661BAE92F200BAE5FC /* UIViewController+Viewer.m in Sources */,
 				4C26BA381BAF99BE00456DC8 /* MADPromptManager.m in Sources */,
 				4CC886161C7AADC0003E18D2 /* UIStoryboard+ObjectSelector.m in Sources */,
+				4C5B55FE1C98DD4D005C19D9 /* MADPromptOperationPassword.m in Sources */,
 				4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */,
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */,
@@ -5982,6 +5997,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */,
+				4C5B55FB1C98CE6D005C19D9 /* MADDesignerTestConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

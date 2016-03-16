@@ -11,7 +11,7 @@
 
 #import "RptqDocument.h"
 #import <MADDataStructures/MTProtocolCompare.h>
-#import <MAD/MADDocumentSectionType.h>
+#import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
 @class NSManagedObjectContext, MTDatabase, RptqDocumentSection, RptqDocumentObject, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;

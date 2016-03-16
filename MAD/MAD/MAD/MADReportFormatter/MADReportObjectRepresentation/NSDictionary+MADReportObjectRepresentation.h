@@ -10,7 +10,7 @@
 #define MAD_NSDictionary_MADReportObjectRepresentation_h
 
 #import <Foundation/NSDictionary.h>
-#import "MADDocumentSectionType.h"
+#import <MAD/MADReportSectionRepresentation.h>
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;

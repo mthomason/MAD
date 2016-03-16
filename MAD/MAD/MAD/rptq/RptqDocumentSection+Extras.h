@@ -12,7 +12,7 @@
 #import "RptqDocumentSection.h"
 #import <CoreGraphics/CGBase.h>
 #import <CoreGraphics/CGGeometry.h>
-#import <MAD/MADDocumentSectionType.h>
+#import <MAD/MADReportSectionRepresentation.h>
 #import <MADDataStructures/MTProtocolCompare.h>
 
 typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {

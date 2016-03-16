@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <UIKit/UIGeometry.h>
 #import <MAD/MADDocumentObjectType.h>
-#import "MADTextRepresentationProtocol.h"
+#import <MAD/MADReportTextRepresentation.h>
 
 @interface MADReportLineRepresentation : NSObject
     <MADTextRepresentationProtocol>

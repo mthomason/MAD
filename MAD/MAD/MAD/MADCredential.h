@@ -11,6 +11,14 @@
 
 #import <Foundation/NSObject.h>
 
+typedef NS_ENUM(short, MADCredentialSource) {
+    unknown,
+    none,
+    keychain,
+    credential_prompt,
+    password_prompt,
+};
+
 @interface MADCredential : NSObject <NSCopying>
 
     - (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password;

@@ -27,9 +27,8 @@
 
 @dynamic database;
 
-- (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+- (instancetype)initWithObject:(MTDatabaseConnection *)object {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[MTDatabaseConnection class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
         

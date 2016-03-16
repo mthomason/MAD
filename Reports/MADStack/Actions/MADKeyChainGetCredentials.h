@@ -10,16 +10,9 @@
 #define MAD_Designer_MADKeyChainGetCredentials_h
 
 #import "MADOperation.h"
+#import <MAD/MADCredential.h>
 
 @class MADCredential, UIViewController;
-
-typedef NS_ENUM(char, MADCredentialSource) {
-    unknown,
-    none,
-    keychain,
-    credential_prompt,
-    password_prompt,
-};
 
 @interface MADKeyChainGetCredentials : MADOperation
 

@@ -7,6 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTQueryTest.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
 
 @interface MADDesignerUnitTests : XCTestCase
 
@@ -25,8 +29,17 @@
 }
 
 - (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactoryWithType:MADIdentifierDatabaseMySQL
+                                                                                                  host:@"edadb.cqyrz0epxrje.us-east-1.rds.amazonaws.com"
+                                                                                              database:@"employees"
+                                                                                                  port:3306];
+    
+    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
+    NSError * __autoreleasing error = NULL;
+    bool success = [queryTest.database executeQuery:queryTest withError:&error];
+    XCTAssertNil(error, @"Got an error (%s): %@", __PRETTY_FUNCTION__, error);
+    XCTAssertTrue(success, @"No success here!");
 }
 
 - (void)testPerformanceExample {
