@@ -33,6 +33,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, readwrite, assign) bool bypass;
     @property (nonatomic, readwrite, assign) bool userContinue;
 
+    @property (nonatomic, readwrite, copy) MADCredential *credentials;
+    @property (nonatomic, readwrite, assign) bool gotCredentials;
+
+    @property (nonatomic, strong, readwrite) NSString *username;
+
 @end
 
 @implementation MADPromptOperationPassword
@@ -61,20 +66,43 @@ static NSString * const MADButtonCancel                = @"Cancel";
     bool showPrompt = false;
     bool gotUsername = false;
     bool gotPassword = false;
+    NSString *usernameC = nil;
+    NSString *passwordC = nil;
     for (NSOperation *dependency in self.dependencies) {
         if ([dependency isKindOfClass:[MADPromptOperationCredentials class]]) {
 
+            if (((MADPromptOperationCredentials *)dependency).gotCredentials) {
+                self.credentials = ((MADPromptOperationCredentials *)dependency).credentials;
+                self.gotCredentials = true;
+                self.bypass = true;
+                self.source = credential_prompt;
+                self.password = self.credentials.password;
+                [self setStateFinished];
+                return;
+            }
+            
             if (((MADPromptOperationCredentials *)dependency).displayingPrompt) {
                 promptOperationCredentialsDisplaying = true;
             }
-            
+
         } else if ([dependency isKindOfClass:[MADKeyChainOperationGet class]]) {
             if (((MADKeyChainOperationGet *)dependency).readOperationType == username) {
                 gotUsername = true;
+                usernameC = ((MADKeyChainOperationGet *)dependency).result.copy;
             } else if (((MADKeyChainOperationGet *)dependency).readOperationType == password) {
                 gotPassword = true;
+                passwordC = ((MADKeyChainOperationGet *)dependency).result.copy;
             }
         }
+    }
+    
+    if (gotUsername && gotPassword) {
+        MADCredential *credentials = [[MADCredential alloc] initWithUsername:usernameC andPassword:passwordC];
+        self.credentials = credentials;
+        self.source = keychain;
+        self.bypass = true;
+        self.gotCredentials = true;
+        [self setStateFinished];
     }
     
     if (promptOperationCredentialsDisplaying) {
@@ -85,6 +113,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         }
         if (gotUsername && !gotPassword) {
             showPrompt = true;
+            self.username = usernameC;
         }
     }
 
@@ -144,8 +173,12 @@ static NSString * const MADButtonCancel                = @"Cancel";
 }
 
 - (void)finish:(bool)success password:(NSString *)password {
+    MADCredential *credentials = [[MADCredential alloc] initWithUsername:self.username andPassword:password];
+    self.credentials = credentials;
+    self.source = password_prompt;
     self.userContinue = success;
     self.password = password;
+    self.gotCredentials = true;
     [self setStateFinished];
 }
 

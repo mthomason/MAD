@@ -13,6 +13,10 @@
 @interface MADPromptOperationPassword : MADOperation
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
+
+    @property (nonatomic, readonly, copy) MADCredential *credentials;
+    @property (nonatomic, readonly, assign) bool gotCredentials;
+
     @property (nonatomic, readonly, copy) NSString *password;
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 

@@ -37,6 +37,15 @@
     return credentialsCopy;
 }
 
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection {
+    if (self = [super init]) {
+        self.databaseConnection = connection;
+        self.success = false;
+        self.credentials = nil;
+    }
+    return self;
+}
+
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection credentials:(MADCredential *)credentials {
     if (self = [super init]) {
         self.databaseConnection = connection;
@@ -54,8 +63,14 @@
         [self setStateCanceled];
         return;
     }
-    
+
     [self setStateExecuting];
+    
+    if (self.credentials == nil) {
+        for (NSOperation *operation in self.dependencies) {
+            
+        }
+    }
     
     MTDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];

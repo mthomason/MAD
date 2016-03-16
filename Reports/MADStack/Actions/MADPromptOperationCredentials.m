@@ -33,6 +33,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, readwrite, assign) bool userContinue;
     @property (nonatomic, readwrite, assign) bool displayingPrompt;
 
+    @property (nonatomic, readwrite, assign) bool gotCredentials;
+
 @end
 
 @implementation MADPromptOperationCredentials
@@ -44,6 +46,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         
         self.displayingPrompt = false;
         self.bypass = false;
+        self.gotCredentials = false;
+        
     }
     return self;
 }
@@ -61,14 +65,23 @@ static NSString * const MADButtonCancel                = @"Cancel";
     bool showPrompt = false;
     bool gotUsername = false;
     bool gotPassword = false;
+    NSString *usernameC = nil;
+    NSString *passwordC = nil;
     for (NSOperation *dependency in self.dependencies) {
         if ([dependency isKindOfClass:[MADKeyChainOperationGet class]]) {
             if (((MADKeyChainOperationGet *)dependency).success && ((MADKeyChainOperationGet *)dependency).readOperationType == username) {
                 gotUsername = true;
+                usernameC = ((MADKeyChainOperationGet *)dependency).result.copy;
             } else if (((MADKeyChainOperationGet *)dependency).success && ((MADKeyChainOperationGet *)dependency).readOperationType == password) {
                 gotPassword = true;
+                passwordC = ((MADKeyChainOperationGet *)dependency).result.copy;
             }
         }
+    }
+    if (gotUsername && gotPassword) {
+        MADCredential *credentials = [[MADCredential alloc] initWithUsername:usernameC andPassword:passwordC];
+        self.credentials = credentials;
+        self.gotCredentials = true;
     }
     showPrompt = !gotUsername;
 
@@ -119,7 +132,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                               MADCredential *credentials = nil;
                                                               if (username != nil && password != nil) {
                                                                   credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-                                                                  
+                                                                  strongself.gotCredentials = true;
                                                               }
                                                               [strongself finish:true credentials:credentials];
                                        

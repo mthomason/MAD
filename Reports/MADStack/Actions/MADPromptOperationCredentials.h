@@ -10,11 +10,15 @@
 #import <UIKit/UIViewController.h>
 #import <MAD/MADCredential.h>
 
+
+
 @interface MADPromptOperationCredentials : MADOperation
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
 
     @property (nonatomic, readonly, copy) MADCredential *credentials;
+    @property (nonatomic, readonly, assign) bool gotCredentials;
+
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 
     @property (nonatomic, readonly, assign) bool bypass;
