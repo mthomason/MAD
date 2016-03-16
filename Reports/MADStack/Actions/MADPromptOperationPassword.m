@@ -135,18 +135,12 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.alertController = alertController;
     UIAlertController * __weak weakAlertController = self.alertController;
     UIViewController * __weak wViewController = self.viewController;
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: weakAlertController animated: YES completion:^{ }];
     }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
 
-    self.userContinue = success;
-    self.password = password;
-    [self setStateFinished];
-    
 }
 
 - (void)finish:(bool)success password:(NSString *)password {
