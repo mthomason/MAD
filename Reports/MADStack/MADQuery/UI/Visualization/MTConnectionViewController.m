@@ -185,27 +185,30 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
     NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
     NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
     
+
+    //Create MADocument File and Remove Cache
     MADocument *doc = [[MADocument alloc] initWithFileURL: uniqueURL];
     doc.documentDelegate = self;
-    
+    [doc removeGuts];
     self.docToSave = doc;
-    [self.docToSave removeGuts];
     
+    
+    //Create a database connection
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactoryWithType:self.databaseType
                                                                                                   host:self.textFieldHost.text
                                                                                               database:self.textFieldDatabase.text
                                                                                                   port:self.textFieldPort.text.integerValue];
     self.databaseConnection = databaseConnection;
     
-    
+
+    //Mark the start of a background task
     __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
-    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
-    
+
+    //Test the connection
     NSArray *errors = NULL;
     bool success = [self.databaseConnection testConnectionWithErrors:&errors];
 
-    
     if (success) {
         
         MTConnectionViewController * __weak weakself = self;
