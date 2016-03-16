@@ -6,14 +6,14 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDatabaseOperationTest.h"
+#import "MADDatabaseOperationTestConnection.h"
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MTDataTable+Factory.h>
 
-@interface MADDatabaseOperationTest ()
+@interface MADDatabaseOperationTestConnection ()
     <MTDatabaseProtocol>
 
 //Parameters
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation MADDatabaseOperationTest
+@implementation MADDatabaseOperationTestConnection
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     if (!self.credentials) {
