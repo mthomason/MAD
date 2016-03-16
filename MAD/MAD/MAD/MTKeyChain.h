@@ -21,6 +21,7 @@ extern NSInteger const MTKeyErrorUserCanceled;
 
 + (NSString *)keyForUsernameWithMainKey:(NSString *)key;
 + (NSString *)keyForPasswordWithMainKey:(NSString *)key;
++ (NSDictionary *)queryDefination:(NSString *)key;
 + (NSDictionary *)queryUsernameDefination:(NSString *)key;
 + (NSDictionary *)queryPasswordDefination:(NSString *)key;
 + (OSStatus)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key;

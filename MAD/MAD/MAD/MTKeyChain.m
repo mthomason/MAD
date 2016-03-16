@@ -90,6 +90,15 @@ static MTKeyChain *sharedSingleton = nil;
     return query;
 }
 
++ (NSDictionary *)queryDefination:(NSString *)key {
+    const NSNumber *yes = @YES;
+    NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
+                            (__bridge id)(kSecAttrService) : key,
+                            (__bridge id)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
+                            (__bridge id)(kSecReturnData) : yes};
+    return query;
+}
+
 + (NSDictionary *)queryUsernameAdd:(NSString *)username key:(NSString *)key {
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
     NSData *data = [username dataUsingEncoding:NSUTF8StringEncoding];

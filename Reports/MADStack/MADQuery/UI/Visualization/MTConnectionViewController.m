@@ -12,23 +12,32 @@
 
 #import "MTConnectionViewController.h"
 #import <MAD/MTDatabase.h>
+#import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTQueryTest.h>
 #import <MAD/MADCredential.h>
 #import "UIApplication+Extras.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADKeyChainGetCredentials.h"
 #import "MADKeyChainSaveCredentials.h"
+#import "MADKeyChainOperationGet.h"
+#import "MADPromptOperationCredentials.h"
+#import "MADPromptOperationPassword.h"
 
 static NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MTConnectionViewController()
-    <MADocumentDelegate>
+    <MADocumentDelegate, MTDatabaseProtocol>
 
-@property (nonatomic, strong) UIBarButtonItem *holderButton;
-@property (nonatomic, strong) MADocument *docToSave;
-@property (nonatomic, strong) UIProgressView *progressView;
-@property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, strong) UIBarButtonItem *holderButton;
+    @property (nonatomic, strong) MADocument *docToSave;
+    @property (nonatomic, strong) UIProgressView *progressView;
+    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+
+    @property (nonatomic, strong) MTDatabase *databaseTest;
+    @property (nonatomic, strong) MTDataTable *datatableTest;   // Holds datatable since used
+                                                                //  in static function
 
 @end
 
@@ -150,18 +159,45 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
-    credentialQueue.maxConcurrentOperationCount = 1;
+    credentialQueue.maxConcurrentOperationCount = 2;
     
-    MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
-    MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
+    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
+    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+    MADKeyChainOperationGet *getUsername = [[MADKeyChainOperationGet alloc] initWithKey:keyUsername];
+    getUsername.readOperationType = username;
+    MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword];
+    getPassword.readOperationType = password;
     
-    [cs addDependency:cg];
-    [credentialQueue addOperation:cg];
-    [credentialQueue addOperation:cs];
-    [credentialQueue waitUntilAllOperationsAreFinished];
+    MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithViewController:self];
+    [promptCredntials addDependency:getUsername];
+    [promptCredntials addDependency:getPassword];
     
-    MADCredential *credentials = cg.credential.copy;
-    return credentials;
+    MADPromptOperationPassword *promptPassword = [[MADPromptOperationPassword alloc] initWithViewController:self];
+    [promptPassword addDependency:getUsername];
+    [promptPassword addDependency:getPassword];
+    [promptPassword addDependency:promptCredntials];
+
+    
+    [credentialQueue addOperation:getUsername];
+    [credentialQueue addOperation:getPassword];
+    [credentialQueue addOperation:promptCredntials];
+    [credentialQueue addOperation:promptPassword];
+    
+    
+    
+    //MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
+    //MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
+    
+    //[cs addDependency:cg];
+    //[credentialQueue addOperation:cg];
+    //[credentialQueue addOperation:cs];
+
+    
+    //[credentialQueue waitUntilAllOperationsAreFinished];
+    
+    //MADCredential *credentials = [[MADCredential alloc] initWithUsername:getUsername.result andPassword:getPassword.result];
+    //return credentials;
+    return nil;
 }
 
 - (IBAction)save:(id)sender {
@@ -200,14 +236,23 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
                                                                                                   port:self.textFieldPort.text.integerValue];
     self.databaseConnection = databaseConnection;
     
+    
+    [self getCredentialsForKey: databaseConnection.connectionString];
 
+    
+    
+    
+    /*
+    
+    
+    
     //Mark the start of a background task
     __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
 
     //Test the connection
     NSArray *errors = NULL;
-    bool success = [self.databaseConnection testConnectionWithErrors:&errors];
+    bool success = [self testConnection:databaseConnection withErrors:&errors];
 
     if (success) {
         
@@ -256,7 +301,58 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
     }
     
     errors = NULL;
+ 
     
+    
+    
+    */
+}
+
+- (bool)testConnection:(MTDatabaseConnection *)connection withErrors:(NSArray * __autoreleasing *)errors {
+    
+    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: connection];
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(connection.hash);
+    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
+    MTDataTable *datatable = [MTDataTable dataTableFactory:parameters];
+    
+    self.datatableTest = datatable;
+    
+    MTDatabase *db = [MTDatabase databaseFactory:connection];
+    db.delegate = self;
+    queryTest.database = db;
+    self.databaseTest = db;
+    
+    NSError * __autoreleasing error = NULL;
+    bool success = [queryTest.database executeQuery:queryTest withError:&error];
+    if (!success && errors == NULL) {
+        *errors = error ? [queryTest.database.errors arrayByAddingObject:error] : [NSArray arrayWithArray:queryTest.database.errors];
+    }
+    return success;
+}
+
+#pragma mark - MTDatabaseProtocol
+
+- (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {
+    NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
+    credentialQueue.maxConcurrentOperationCount = 1;
+    
+    MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
+    MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
+    
+    [cs addDependency:cg];
+    [credentialQueue addOperation:cg];
+    [credentialQueue addOperation:cs];
+    [credentialQueue waitUntilAllOperationsAreFinished];
+    
+    MADCredential *credentials = cg.credential.copy;
+    return credentials;
+}
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [self datatableTest];
 }
 
 - (void)resetAfterConnectionString:(NSString *)connectionString

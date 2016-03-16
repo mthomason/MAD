@@ -25,6 +25,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
     <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
+    @property (nonatomic, strong) UIAlertController *alertController;
+
     @property (nonatomic, copy) NSString *key;
     @property (nonatomic, copy, readwrite) MADCredential *credential;
 
@@ -49,6 +51,15 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.viewController = viewController;
         self.key = key.copy;
         self.source = none;
+        
+        NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
+        NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                                 message: message
+                                                                          preferredStyle: UIAlertControllerStyleAlert];
+        self.alertController = alertController;
+        
     }
     return self;
 }
@@ -122,19 +133,14 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (void)promptForUsernameAndPassword {
 
-    NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
-    NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
+    NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);    
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
-    
-    
+    UIAlertController *alertController = self.alertController;
+
     void (^ __nullable actionContinue)(UIAlertAction *action) = ^(UIAlertAction *action) {
         MADCredential *c = [[MADCredential alloc] initWithUsername: ((UITextField *)alertController.textFields.firstObject).text
-                                                       andPassword:((UITextField *)[alertController.textFields objectAtIndex:1]).text];
+                                                       andPassword: ((UITextField *)[alertController.textFields objectAtIndex:1]).text];
         self.credential = c;
         self.source = credential_prompt;
         [self setStateFinished];

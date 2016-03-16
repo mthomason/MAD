@@ -13,5 +13,6 @@
 @interface MADTextField : NSObject
 
 + (void)configureTextFieldForPassword:(UITextField * __autoreleasing *)textField;
++ (void)configureTextFieldForUsername:(UITextField * __autoreleasing *)textField;
 
 @end

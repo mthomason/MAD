@@ -16,7 +16,7 @@
 
 @interface MTQueryTest : MTQuery
 
-@property (nonatomic, strong, readwrite) MTDatabase *database;
+@property (nonatomic, weak) MTDatabase *database;
 
 - (instancetype)initWithObject:(MTDatabaseConnection *)object;
 

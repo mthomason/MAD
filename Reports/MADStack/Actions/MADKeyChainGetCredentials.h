@@ -19,7 +19,6 @@
     - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
 
     @property (nonatomic, copy, readonly) MADCredential *credential;
-    @property (nonatomic, assign, readonly) MADOperationState state;
     @property (nonatomic, assign) MADCredentialSource source;
 
 @end

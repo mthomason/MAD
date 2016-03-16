@@ -63,9 +63,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     bool gotPassword = false;
     for (NSOperation *dependency in self.dependencies) {
         if ([dependency isKindOfClass:[MADKeyChainOperationGet class]]) {
-            if (((MADKeyChainOperationGet *)dependency).readOperationType == username) {
+            if (((MADKeyChainOperationGet *)dependency).success && ((MADKeyChainOperationGet *)dependency).readOperationType == username) {
                 gotUsername = true;
-            } else if (((MADKeyChainOperationGet *)dependency).readOperationType == password) {
+            } else if (((MADKeyChainOperationGet *)dependency).success && ((MADKeyChainOperationGet *)dependency).readOperationType == password) {
                 gotPassword = true;
             }
         }
@@ -92,11 +92,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     __block bool success = false;
     
     
-  
-    
-
-    
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
 
     
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
@@ -112,14 +107,23 @@ static NSString * const MADButtonCancel                = @"Cancel";
         textField.delegate = self;
     };
     
-    UIAlertController * __weak wAlertController = self.alertController;
+    MADPromptOperationCredentials *weakself = self;
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
-                                                              UIAlertController * __strong sAlertController = wAlertController;
-                                                              username = ((UITextField *)[sAlertController.textFields objectAtIndex:1]).text;
-                                                              password = ((UITextField *)sAlertController.textFields.firstObject).text;
-                                                              success = true;
+                                                              MADPromptOperationCredentials * __strong strongself = weakself;
+                                                              username = ((UITextField *)strongself.alertController.textFields.firstObject).text;
+                                                              password = ((UITextField *)[strongself.alertController.textFields objectAtIndex:1]).text;
+                                                              
+
+                                                              MADCredential *credentials = nil;
+                                                              if (username != nil && password != nil) {
+                                                                  credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
+                                                                  
+                                                              }
+                                                              [strongself finish:true credentials:credentials];
+                                       
+                                                              
                                                           }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
@@ -127,6 +131,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                               handler: ^(UIAlertAction *action) {
                                                                   password = nil; username = nil;
                                                                   success = false;
+                                                                  [weakself userCancel];
                                                               }];
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
@@ -139,19 +144,20 @@ static NSString * const MADButtonCancel                = @"Cancel";
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: weakAlertController animated: YES completion:^{
-            dispatch_semaphore_signal(s1);
-        }];
+        [topViewController  presentViewController: weakAlertController animated: YES completion:^{ }];
     }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+}
+
+- (void)finish:(bool)success credentials:(MADCredential *)credentials {
     self.userContinue = success;
-    if (success && username != nil && password != nil) {
-        MADCredential *credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-        self.credentials = credentials;
-        
-    }
+    self.credentials = credentials;
     [self setStateFinished];
-    
+}
+
+- (void)userCancel {
+    self.userContinue = false;
+    self.credentials = nil;
+    [self setStateUserCancelled];
 }
 
 #pragma mark - UITextFieldDelegate

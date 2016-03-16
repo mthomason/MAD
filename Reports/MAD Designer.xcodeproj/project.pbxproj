@@ -440,6 +440,7 @@
 		4C5B55FE1C98DD4D005C19D9 /* MADPromptOperationPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */; };
 		4C5B56011C98DD76005C19D9 /* MADPromptOperationCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */; };
 		4C5B56041C98F838005C19D9 /* MADTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B56031C98F838005C19D9 /* MADTextField.m */; };
+		4C5B56071C9931BA005C19D9 /* MADKeyChainOperationGet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B56061C9931BA005C19D9 /* MADKeyChainOperationGet.m */; };
 		4C60C5A01BB0A100004D9758 /* MADDesignerFileExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */; };
 		4C60C5B61BB0A1CC004D9758 /* MADDesignerExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */; };
 		4C60C5B91BB11E94004D9758 /* UIManagedDocument+URLs.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60C5B81BB11E94004D9758 /* UIManagedDocument+URLs.m */; };
@@ -1809,6 +1810,8 @@
 		4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPromptOperationCredentials.m; sourceTree = "<group>"; };
 		4C5B56021C98F838005C19D9 /* MADTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextField.h; sourceTree = "<group>"; };
 		4C5B56031C98F838005C19D9 /* MADTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTextField.m; sourceTree = "<group>"; };
+		4C5B56051C9931BA005C19D9 /* MADKeyChainOperationGet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainOperationGet.h; sourceTree = "<group>"; };
+		4C5B56061C9931BA005C19D9 /* MADKeyChainOperationGet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainOperationGet.m; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
 		4C60C59E1BB0A100004D9758 /* MADDesignerFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerFileExplorerViewController.h; sourceTree = "<group>"; };
 		4C60C59F1BB0A100004D9758 /* MADDesignerFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerFileExplorerViewController.m; sourceTree = "<group>"; };
@@ -2617,6 +2620,8 @@
 				4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */,
 				4C5B56021C98F838005C19D9 /* MADTextField.h */,
 				4C5B56031C98F838005C19D9 /* MADTextField.m */,
+				4C5B56051C9931BA005C19D9 /* MADKeyChainOperationGet.h */,
+				4C5B56061C9931BA005C19D9 /* MADKeyChainOperationGet.m */,
 			);
 			name = Actions;
 			path = MADStack/Actions;
@@ -5941,6 +5946,7 @@
 				4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */,
 				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
+				4C5B56071C9931BA005C19D9 /* MADKeyChainOperationGet.m in Sources */,
 				4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */,
 				4C4020EA1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C26B9541BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
@@ -7157,6 +7163,7 @@
 				4C5B55EA1C98CCBF005C19D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C5B55F71C98CCD6005C19D9 /* Build configuration list for PBXNativeTarget "MADDesignerUnitTests" */ = {
 			isa = XCConfigurationList;
@@ -7165,6 +7172,7 @@
 				4C5B55F91C98CCD6005C19D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C6700B81BA133AB001C9D5A /* Build configuration list for PBXNativeTarget "MAD Barcodes" */ = {
 			isa = XCConfigurationList;

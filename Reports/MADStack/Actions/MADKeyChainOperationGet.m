@@ -1,5 +1,5 @@
 //
-//  NSKeyChainOperationGet.m
+//  MADKeyChainOperationGet.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/16/16.
@@ -7,7 +7,65 @@
 //
 
 #import "MADKeyChainOperationGet.h"
+#import <MAD/MTKeyChain.h>
+#import <Security/SecItem.h>
+#import <CoreFoundation/CFData.h>
+#import <Foundation/NSString.h>
+
+@interface MADKeyChainOperationGet ()
+
+@property (nonatomic, copy) NSString *key;
+@property (atomic, readwrite, copy) NSString *result;
+@property (atomic, readwrite, assign) bool success;
+
+@end
 
 @implementation MADKeyChainOperationGet
+
+- (instancetype)initWithKey:(NSString *)key {
+    if (self = [super init]) {
+        self.key = key.copy;
+        self.success = false;
+    }
+    return self;
+}
+
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)start {
+    
+    if ([self isCancelled]) {
+        [self setStateCanceled];
+        return;
+    }
+    
+    [self setStateExecuting];
+ 
+    CFDataRef queryData = NULL;
+    NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key];
+    OSStatus queryStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryDefination, (CFTypeRef *)&queryData);
+
+    if (queryData == NULL) {
+        [self setStateFinished];
+        return;
+    }
+    
+    NSString *result;
+    
+    switch (queryStatus) {
+        case errSecSuccess:
+            
+            result = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryData encoding: NSUTF8StringEncoding];
+            self.result = result;
+            self.success = true;
+            [self setStateFinished];
+            break;
+            
+        default:
+            self.result = nil;
+            [self setStateFinished];
+            break;
+    }
+}
 
 @end

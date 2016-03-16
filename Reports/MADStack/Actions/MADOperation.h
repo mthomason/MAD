@@ -23,7 +23,7 @@ typedef NS_ENUM(char, MADOperationState) {
 
 @interface MADOperation : NSOperation
 
-    @property (readonly) bool success;
+    @property (nonatomic, assign, readonly) MADOperationState state;
 
     - (void)setStateCanceled;
     - (void)setStateError;

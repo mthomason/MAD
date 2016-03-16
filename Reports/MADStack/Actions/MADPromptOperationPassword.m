@@ -111,12 +111,14 @@ static NSString * const MADButtonCancel                = @"Cancel";
         textField.delegate = self;
     };
     
-    UIAlertController * __weak wAlertController = alertController;
+    MADPromptOperationPassword * __weak weakself = self;
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
-                                                              password = ((UITextField *)wAlertController.textFields.firstObject).text;
+                                                              MADPromptOperationPassword * sself = weakself;
+                                                              password = ((UITextField *)sself.alertController.textFields.firstObject).text;
                                                               success = true;
+                                                              [sself finish:success password:password];
                                                           }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
@@ -124,6 +126,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                               handler: ^(UIAlertAction *action) {
                                                                   password = nil;
                                                                   success = false;
+                                                                  [weakself userCancel];
                                                               }];
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
@@ -136,9 +139,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: weakAlertController animated: YES completion:^{
-            dispatch_semaphore_signal(s1);
-        }];
+        [topViewController  presentViewController: weakAlertController animated: YES completion:^{ }];
     }];
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
 
@@ -146,6 +147,18 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = password;
     [self setStateFinished];
     
+}
+
+- (void)finish:(bool)success password:(NSString *)password {
+    self.userContinue = success;
+    self.password = password;
+    [self setStateFinished];
+}
+
+- (void)userCancel {
+    self.userContinue = false;
+    self.password = nil;
+    [self setStateUserCancelled];
 }
 
 #pragma mark - UITextFieldDelegate

@@ -17,38 +17,15 @@
 #import "MTDatabaseConnection.h"
 
 @interface MTQueryTest ()
-    <MTDatabaseProtocol>
 
-@property (nonatomic, strong) MTDataTable *datatable;   // Holds datatable since used
-                                                        //  in static function
 @end
 
 @implementation MTQueryTest
 
 @dynamic database;
 
-- (instancetype)initWithObject:(MTDatabaseConnection *)object {
-    if (self = [super initWithObject:object]) {
-        
-        NSAssert([object isKindOfClass:[MTDatabaseConnection class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
-        
-        NSUInteger hash = [object hash];
-        
-        NSNumber *typeKey = @(MTDataTableTypeOfTable);
-        NSNumber *type = @(MTDataTableTypeVirtual);
-        NSNumber *objectIdKey = @(MTDataTableObjectId);
-        NSNumber *objectIdV =  @(hash);
-        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
-                                                                 typeKey : type,
-                                                                 objectIdKey : objectIdV}];
-        
-        self.datatable = datatable;
-    
-        MTDatabase *db = [MTDatabase databaseFactory:object];
-        [self setDatabase:db];
-        [self setQueryObject:object];
-        
-    }
+- (instancetype)initWithObject:(id)object {
+    if (self = [super init]) { }
     return self;
 }
 
@@ -56,13 +33,9 @@
     [super getSqlWithError:error];
     
     NSString *key = [self.database safeIdentifier:@"f1"];
-    [[self fieldKeys] addObject:key];
     NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [self.database selectPart], key];
     return sql;
 }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self datatable];
-}
 
 @end

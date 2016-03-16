@@ -19,7 +19,7 @@
 
 - (BOOL)isExecuting {return self.state == executing; }
 
-- (BOOL)isFinished { return self.state == finished || self.state == error || self.state == cancelled; }
+- (BOOL)isFinished { return self.state == finished || self.state == usercancelled || self.state == error || self.state == cancelled; }
 
 #pragma mark - Convenience
 
