@@ -8,10 +8,12 @@
 
 #import "MADOperation.h"
 #import <UIKit/UIViewController.h>
+#import <MAD/MADCredential.h>
 
 @interface MADPromptOperationPassword : MADOperation
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
-    @property (nonatomic, copy, readonly) NSString *password;
+    @property (nonatomic, readonly, copy) NSString *password;
+    @property (nonatomic, readonly, assign) MADCredentialSource source;
 
 @end

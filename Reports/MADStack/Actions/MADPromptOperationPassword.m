@@ -9,6 +9,7 @@
 #import "MADPromptOperationPassword.h"
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
+#import <UIKit/UILabel.h>
 #import <MAD/MADCredential.h>
 #import "MADTextField.h"
 
@@ -24,7 +25,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, weak) UIViewController *viewController;
     @property (nonatomic, strong) UIAlertController *alertController;
 
-    @property (nonatomic, assign) MADCredentialSource source;
+    @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) NSString *password;
 
 @end
@@ -36,15 +37,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.viewController = viewController;
         self.source = none;
 
-        NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
-        NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                                 message: message
-                                                                          preferredStyle: UIAlertControllerStyleAlert];
-        self.alertController = alertController;
     }
     return self;
 }
+
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)start {
@@ -109,7 +105,16 @@ static NSString * const MADButtonCancel                = @"Cancel";
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [topViewController  presentViewController: wAlertController animated: YES completion:completion];
     }];
-    
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    ((UILabel *)textField.leftView).textColor = [UIColor darkGrayColor];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    ((UILabel *)textField.leftView).textColor = [UIColor lightGrayColor];
 }
 
 @end

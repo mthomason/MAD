@@ -7,7 +7,14 @@
 //
 
 #import "MADOperation.h"
+#import <UIKit/UIViewController.h>
+#import <MAD/MADCredential.h>
 
 @interface MADPromptOperationCredentials : MADOperation
+
+    - (instancetype)initWithViewController:(UIViewController *)viewController;
+
+    @property (nonatomic, readonly, copy) MADCredential *credentials;
+    @property (nonatomic, readonly, assign) MADCredentialSource source;
 
 @end
