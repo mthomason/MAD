@@ -168,6 +168,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
     MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword];
     getPassword.readOperationType = password;
     
+    
     MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithViewController:self];
     [promptCredntials addDependency:getUsername];
     [promptCredntials addDependency:getPassword];
@@ -177,6 +178,8 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
     [promptPassword addDependency:getPassword];
     [promptPassword addDependency:promptCredntials];
 
+    
+    
     
     [credentialQueue addOperation:getUsername];
     [credentialQueue addOperation:getPassword];
