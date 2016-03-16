@@ -12,6 +12,7 @@
 #import <UIKit/UILabel.h>
 #import <MAD/MADCredential.h>
 #import "MADTextField.h"
+#import "MADKeyChainOperationGet.h"
 
 static NSString * const MADTitleCredentials            = @"Credentials";
 static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
@@ -28,6 +29,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) MADCredential *credentials;
 
+    @property (nonatomic, readwrite, assign) bool bypass;
+    @property (nonatomic, readwrite, assign) bool userContinue;
+    @property (nonatomic, readwrite, assign) bool displayingPrompt;
+
 @end
 
 @implementation MADPromptOperationCredentials
@@ -37,12 +42,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.viewController = viewController;
         self.source = none;
         
-        NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
-        NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                                 message: message
-                                                                          preferredStyle: UIAlertControllerStyleAlert];
-        self.alertController = alertController;
+        self.displayingPrompt = false;
+        self.bypass = false;
     }
     return self;
 }
@@ -57,41 +58,47 @@ static NSString * const MADButtonCancel                = @"Cancel";
     }
     [self setStateExecuting];
     
-    UIAlertController * __weak wAlertController = self.alertController;
+    bool showPrompt = false;
+    bool gotUsername = false;
+    bool gotPassword = false;
+    for (NSOperation *dependency in self.dependencies) {
+        if ([dependency isKindOfClass:[MADKeyChainOperationGet class]]) {
+            if (((MADKeyChainOperationGet *)dependency).readOperationType == username) {
+                gotUsername = true;
+            } else if (((MADKeyChainOperationGet *)dependency).readOperationType == password) {
+                gotPassword = true;
+            }
+        }
+    }
+    showPrompt = !gotUsername;
+
+    if (!showPrompt) {
+        self.bypass = true;
+        [self setStateFinished];
+        return;
+    }
+
+    self.displayingPrompt = true;
+
+    NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
+    NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+
+    
     __block NSString *password;
     __block NSString *username;
     __block bool success = false;
     
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    [self promptForCredentials:^(UIAlertAction *action) {
-        UIAlertController * __strong sAlertController = wAlertController;
-        username = ((UITextField *)[sAlertController.textFields objectAtIndex:1]).text;
-        password = ((UITextField *)sAlertController.textFields.firstObject).text;
-        success = true;
-    } cancelHandler:^(UIAlertAction *action) {
-        password = nil; username = nil;
-        success = false;
-    } completion:^{
-        dispatch_semaphore_signal(s1);
-    }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
     
-    if (success && username != nil && password != nil) {
-        
-        MADCredential *credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-        self.credentials = credentials;
-        
-        [self setStateFinished];
-        
-    } else {
-        [self setStateCanceled];
-    }
+  
     
-}
 
-- (void)promptForCredentials:(void (^ __nullable)(UIAlertAction *action))actionContinue
-               cancelHandler:(void (^ __nullable)(UIAlertAction *action))actionCancel
-                  completion:(void (^ __nullable)(void))completion {
+    
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+
+    
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
@@ -105,25 +112,46 @@ static NSString * const MADButtonCancel                = @"Cancel";
         textField.delegate = self;
     };
     
+    UIAlertController * __weak wAlertController = self.alertController;
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
                                                             style: UIAlertActionStyleDefault
-                                                          handler: actionContinue];
+                                                          handler: ^(UIAlertAction *action) {
+                                                              UIAlertController * __strong sAlertController = wAlertController;
+                                                              username = ((UITextField *)[sAlertController.textFields objectAtIndex:1]).text;
+                                                              password = ((UITextField *)sAlertController.textFields.firstObject).text;
+                                                              success = true;
+                                                          }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
                                                                 style: UIAlertActionStyleCancel
-                                                              handler: actionCancel];
-    [self.alertController addAction:actionAlertOK];
-    [self.alertController addAction:actionAlertCancel];
-    [self.alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationUsername];
-    [self.alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationPassword];
+                                                              handler: ^(UIAlertAction *action) {
+                                                                  password = nil; username = nil;
+                                                                  success = false;
+                                                              }];
+    [alertController addAction:actionAlertOK];
+    [alertController addAction:actionAlertCancel];
+    [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationUsername];
+    [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationPassword];
     
-    UIAlertController * __weak wAlertController = self.alertController;
+    self.alertController = alertController;
+    UIAlertController * __weak weakAlertController = self.alertController;
     UIViewController * __weak wViewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: wAlertController animated: YES completion:completion];
+        [topViewController  presentViewController: weakAlertController animated: YES completion:^{
+            dispatch_semaphore_signal(s1);
+        }];
     }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    self.userContinue = success;
+    if (success && username != nil && password != nil) {
+        MADCredential *credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
+        self.credentials = credentials;
+        
+    }
+    [self setStateFinished];
+    
 }
 
 #pragma mark - UITextFieldDelegate

@@ -12,6 +12,8 @@
 #import <UIKit/UILabel.h>
 #import <MAD/MADCredential.h>
 #import "MADTextField.h"
+#import "MADKeyChainOperationGet.h"
+#import "MADPromptOperationCredentials.h"
 
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
@@ -20,13 +22,16 @@ static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 
 @interface MADPromptOperationPassword ()
-<UITextFieldDelegate>
+    <UITextFieldDelegate>
 
-@property (nonatomic, weak) UIViewController *viewController;
-@property (nonatomic, strong) UIAlertController *alertController;
+    @property (nonatomic, weak) UIViewController *viewController;
+    @property (nonatomic, strong) UIAlertController *alertController;
 
-@property (nonatomic, assign, readwrite) MADCredentialSource source;
-@property (nonatomic, copy, readwrite) NSString *password;
+    @property (nonatomic, assign, readwrite) MADCredentialSource source;
+    @property (nonatomic, copy, readwrite) NSString *password;
+
+    @property (nonatomic, readwrite, assign) bool bypass;
+    @property (nonatomic, readwrite, assign) bool userContinue;
 
 @end
 
@@ -37,6 +42,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.viewController = viewController;
         self.source = none;
         
+        self.bypass = false;
+        self.userContinue = false;
     }
     return self;
 }
@@ -44,12 +51,48 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)start {
-    
     if ([self isCancelled]) {
         [self setStateCanceled];
         return;
     }
     [self setStateExecuting];
+
+    bool promptOperationCredentialsDisplaying = false;
+    bool showPrompt = false;
+    bool gotUsername = false;
+    bool gotPassword = false;
+    for (NSOperation *dependency in self.dependencies) {
+        if ([dependency isKindOfClass:[MADPromptOperationCredentials class]]) {
+
+            if (((MADPromptOperationCredentials *)dependency).displayingPrompt) {
+                promptOperationCredentialsDisplaying = true;
+            }
+            
+        } else if ([dependency isKindOfClass:[MADKeyChainOperationGet class]]) {
+            if (((MADKeyChainOperationGet *)dependency).readOperationType == username) {
+                gotUsername = true;
+            } else if (((MADKeyChainOperationGet *)dependency).readOperationType == password) {
+                gotPassword = true;
+            }
+        }
+    }
+    
+    if (promptOperationCredentialsDisplaying) {
+        showPrompt = false;
+    } else {
+        if (gotUsername && gotPassword) {
+            showPrompt = false;
+        }
+        if (gotUsername && !gotPassword) {
+            showPrompt = true;
+        }
+    }
+
+    if (!showPrompt) {
+        self.bypass = true;
+        [self setStateFinished];
+        return;
+    }
     
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
@@ -98,7 +141,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         }];
     }];
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    
+
+    self.userContinue = success;
     self.password = password;
     [self setStateFinished];
     

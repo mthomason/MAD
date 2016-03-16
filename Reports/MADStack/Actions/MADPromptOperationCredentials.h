@@ -17,4 +17,8 @@
     @property (nonatomic, readonly, copy) MADCredential *credentials;
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 
+    @property (nonatomic, readonly, assign) bool bypass;
+    @property (nonatomic, readonly, assign) bool userContinue;
+    @property (nonatomic, readonly, assign) bool displayingPrompt;
+
 @end
