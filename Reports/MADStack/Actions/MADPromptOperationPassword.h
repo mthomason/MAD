@@ -11,6 +11,7 @@
 
 @interface MADPromptOperationPassword : MADOperation
 
-- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
+    - (instancetype)initWithViewController:(UIViewController *)viewController;
+    @property (nonatomic, copy, readonly) NSString *password;
 
 @end

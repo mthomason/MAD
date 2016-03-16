@@ -10,6 +10,7 @@
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
 #import <MAD/MADCredential.h>
+#import "MADTextField.h"
 
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
@@ -24,13 +25,13 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, strong) UIAlertController *alertController;
 
     @property (nonatomic, assign) MADCredentialSource source;
-    @property (nonatomic, copy) NSString *password;
+    @property (nonatomic, copy, readwrite) NSString *password;
 
 @end
 
 @implementation MADPromptOperationPassword
 
-- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
+- (instancetype)initWithViewController:(UIViewController *)viewController {
     if (self = [super init]) {
         self.viewController = viewController;
         self.source = none;
@@ -57,15 +58,20 @@ static NSString * const MADButtonCancel                = @"Cancel";
     UIAlertController * __weak wAlertController = self.alertController;
     __block NSString *password;
     __block bool success = false;
+    
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     [self promptForPassword:^(UIAlertAction *action) {
         password = ((UITextField *)wAlertController.textFields.firstObject).text;
         success = true;
     } cancelHandler:^(UIAlertAction *action) {
         password = nil;
         success = false;
+    } completion:^{
+        dispatch_semaphore_signal(s1);
     }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+
     self.password = password;
-    
     if (success) {
         [self setStateFinished];
     } else {
@@ -74,13 +80,14 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
 }
 
-
 - (void)promptForPassword:(void (^ __nullable)(UIAlertAction *action))actionContinue
-            cancelHandler:(void (^ __nullable)(UIAlertAction *action))actionCancel {
+            cancelHandler:(void (^ __nullable)(UIAlertAction *action))actionCancel
+               completion:(void (^ __nullable)(void))completion {
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {
+        [MADTextField configureTextFieldForPassword:&textField];
         textField.delegate = self;
     };
     
@@ -100,7 +107,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: wAlertController animated: YES completion: nil];
+        [topViewController  presentViewController: wAlertController animated: YES completion:completion];
     }];
     
 }

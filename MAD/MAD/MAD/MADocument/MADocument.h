@@ -13,7 +13,7 @@
 
 #import <UIKit/UIManagedDocument.h>
 #import <UIKit/UIPrintInteractionController.h>
-#import <MAD/MTReportFormatterDataSource.h>
+#import <MAD/MTReportFormatter.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
