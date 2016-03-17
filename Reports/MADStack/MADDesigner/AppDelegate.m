@@ -27,8 +27,8 @@
 
 #import "MADQueryViewController.h"
 
-#import "MADOperationInstallSampleDatabase.h"
-#import "MADOperationInstallSampleDocument.h"
+#import "MADInstallOperationSampleDatabase.h"
+#import "MADInstallOperationSampleDocument.h"
 
 @class MADTransparentPresentationController;
 
@@ -200,12 +200,12 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     
     NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget:self.openFileViewController selector:@selector(getUserCloudPrefs) object:NULL];
     
-    MADOperationInstallSampleDatabase *sampleDatabase = [[MADOperationInstallSampleDatabase alloc] init];
-    MADOperationInstallSampleDocument *sampleDocumentMusic = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileLondon
+    MADInstallOperationSampleDatabase *sampleDatabase = [[MADInstallOperationSampleDatabase alloc] init];
+    MADInstallOperationSampleDocument *sampleDocumentMusic = [[MADInstallOperationSampleDocument alloc] initWithFilename:MADIdentifierFileLondon
                                                                                                            fileExtension:MADFileExtentionMobleApplicationDocument
                                                                                                          groupIdentifier:MADIdentifierGroup
                                                                                                              installFlag:MADUpgradeInstalledSamplesLondon];
-    MADOperationInstallSampleDocument *sampleDatabaseLondon = [[MADOperationInstallSampleDocument alloc] initWithFilename:MADIdentifierFileMusic
+    MADInstallOperationSampleDocument *sampleDatabaseLondon = [[MADInstallOperationSampleDocument alloc] initWithFilename:MADIdentifierFileMusic
                                                                                                             fileExtension:MADFileExtentionMobleApplicationDocument
                                                                                                           groupIdentifier:MADIdentifierGroup
                                                                                                               installFlag:MADUpgradeInstalledSamplesMusic];

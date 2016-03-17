@@ -97,8 +97,8 @@
 		4C26B9531BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */; };
 		4C26B9541BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9521BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m */; };
 		4C26B9681BAF11C800456DC8 /* MADOperationArchiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */; };
-		4C26B9691BAF11C800456DC8 /* MADOperationInstallSampleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9631BAF11C800456DC8 /* MADOperationInstallSampleDatabase.m */; };
-		4C26B96A1BAF11C800456DC8 /* MADOperationInstallSampleDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9651BAF11C800456DC8 /* MADOperationInstallSampleDocument.m */; };
+		4C26B9691BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9631BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m */; };
+		4C26B96A1BAF11C800456DC8 /* MADInstallOperationSampleDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9651BAF11C800456DC8 /* MADInstallOperationSampleDocument.m */; };
 		4C26B96B1BAF11C800456DC8 /* MADOperationRegisterDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */; };
 		4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9821BAF11FA00456DC8 /* MADTransparentPresentationController.m */; };
 		4C26B98E1BAF11FA00456DC8 /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9841BAF11FA00456DC8 /* MADVibrantCollectionView.m */; };
@@ -1226,10 +1226,10 @@
 		4C26B9521BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderDatabaseTable.m; sourceTree = "<group>"; };
 		4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationArchiveData.h; sourceTree = "<group>"; };
 		4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationArchiveData.m; sourceTree = "<group>"; };
-		4C26B9621BAF11C800456DC8 /* MADOperationInstallSampleDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationInstallSampleDatabase.h; sourceTree = "<group>"; };
-		4C26B9631BAF11C800456DC8 /* MADOperationInstallSampleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationInstallSampleDatabase.m; sourceTree = "<group>"; };
-		4C26B9641BAF11C800456DC8 /* MADOperationInstallSampleDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationInstallSampleDocument.h; sourceTree = "<group>"; };
-		4C26B9651BAF11C800456DC8 /* MADOperationInstallSampleDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationInstallSampleDocument.m; sourceTree = "<group>"; };
+		4C26B9621BAF11C800456DC8 /* MADInstallOperationSampleDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInstallOperationSampleDatabase.h; sourceTree = "<group>"; };
+		4C26B9631BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInstallOperationSampleDatabase.m; sourceTree = "<group>"; };
+		4C26B9641BAF11C800456DC8 /* MADInstallOperationSampleDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInstallOperationSampleDocument.h; sourceTree = "<group>"; };
+		4C26B9651BAF11C800456DC8 /* MADInstallOperationSampleDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInstallOperationSampleDocument.m; sourceTree = "<group>"; };
 		4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRegisterDefaults.h; sourceTree = "<group>"; };
 		4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRegisterDefaults.m; sourceTree = "<group>"; };
 		4C26B9811BAF11FA00456DC8 /* MADTransparentPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTransparentPresentationController.h; sourceTree = "<group>"; };
@@ -2603,30 +2603,17 @@
 			children = (
 				4C4AA5701C92C3D2008558E4 /* MADOperation.h */,
 				4C4AA5711C92C3D2008558E4 /* MADOperation.m */,
-				4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */,
-				4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */,
-				4C39D0261C92BBF900C70B10 /* MADKeyChainGetCredentials.h */,
-				4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */,
-				4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */,
-				4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */,
+				4C5B560F1C9A2DF7005C19D9 /* Report */,
+				4C5B560E1C9A2D6C005C19D9 /* Install */,
+				4C5B560D1C9A2D4C005C19D9 /* Database */,
+				4C5B560C1C9A2D07005C19D9 /* Alerts */,
+				4C5B560B1C9A2CD1005C19D9 /* KeyChain */,
 				4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */,
 				4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */,
-				4C26B9621BAF11C800456DC8 /* MADOperationInstallSampleDatabase.h */,
-				4C26B9631BAF11C800456DC8 /* MADOperationInstallSampleDatabase.m */,
-				4C26B9641BAF11C800456DC8 /* MADOperationInstallSampleDocument.h */,
-				4C26B9651BAF11C800456DC8 /* MADOperationInstallSampleDocument.m */,
 				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
 				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
-				4C5B55FC1C98DD4D005C19D9 /* MADPromptOperationPassword.h */,
-				4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */,
-				4C5B55FF1C98DD76005C19D9 /* MADPromptOperationCredentials.h */,
-				4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */,
 				4C5B56021C98F838005C19D9 /* MADTextField.h */,
 				4C5B56031C98F838005C19D9 /* MADTextField.m */,
-				4C5B56051C9931BA005C19D9 /* MADKeyChainOperationGet.h */,
-				4C5B56061C9931BA005C19D9 /* MADKeyChainOperationGet.m */,
-				4C5B56081C998B1D005C19D9 /* MADDatabaseOperationTestConnection.h */,
-				4C5B56091C998B1D005C19D9 /* MADDatabaseOperationTestConnection.m */,
 			);
 			name = Actions;
 			path = MADStack/Actions;
@@ -3832,6 +3819,59 @@
 				4C5B55F41C98CCD6005C19D9 /* Info.plist */,
 			);
 			path = MADDesignerUnitTests;
+			sourceTree = "<group>";
+		};
+		4C5B560B1C9A2CD1005C19D9 /* KeyChain */ = {
+			isa = PBXGroup;
+			children = (
+				4C5B56051C9931BA005C19D9 /* MADKeyChainOperationGet.h */,
+				4C5B56061C9931BA005C19D9 /* MADKeyChainOperationGet.m */,
+				4C39D0261C92BBF900C70B10 /* MADKeyChainGetCredentials.h */,
+				4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */,
+				4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */,
+				4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */,
+			);
+			name = KeyChain;
+			sourceTree = "<group>";
+		};
+		4C5B560C1C9A2D07005C19D9 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				4C5B55FC1C98DD4D005C19D9 /* MADPromptOperationPassword.h */,
+				4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */,
+				4C5B55FF1C98DD76005C19D9 /* MADPromptOperationCredentials.h */,
+				4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */,
+			);
+			name = Alerts;
+			sourceTree = "<group>";
+		};
+		4C5B560D1C9A2D4C005C19D9 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4C5B56081C998B1D005C19D9 /* MADDatabaseOperationTestConnection.h */,
+				4C5B56091C998B1D005C19D9 /* MADDatabaseOperationTestConnection.m */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		4C5B560E1C9A2D6C005C19D9 /* Install */ = {
+			isa = PBXGroup;
+			children = (
+				4C26B9621BAF11C800456DC8 /* MADInstallOperationSampleDatabase.h */,
+				4C26B9631BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m */,
+				4C26B9641BAF11C800456DC8 /* MADInstallOperationSampleDocument.h */,
+				4C26B9651BAF11C800456DC8 /* MADInstallOperationSampleDocument.m */,
+			);
+			name = Install;
+			sourceTree = "<group>";
+		};
+		4C5B560F1C9A2DF7005C19D9 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */,
+				4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */,
+			);
+			name = Report;
 			sourceTree = "<group>";
 		};
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
@@ -5800,7 +5840,7 @@
 				4C5B560A1C998B1D005C19D9 /* MADDatabaseOperationTestConnection.m in Sources */,
 				4C26B9CE1BAF123A00456DC8 /* MADToolboxStyleStyleViewController.m in Sources */,
 				4C4021001BAE98C300BAE5FC /* MTReportViewerReportPageView.m in Sources */,
-				4C26B9691BAF11C800456DC8 /* MADOperationInstallSampleDatabase.m in Sources */,
+				4C26B9691BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m in Sources */,
 				4C401F261BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m in Sources */,
 				4C26BA5B1BAF99F000456DC8 /* MADPopoverBackgroundView.m in Sources */,
 				4C401EE01BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m in Sources */,
@@ -5866,7 +5906,7 @@
 				4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */,
 				4CFEE8211BB7A3A300AFAA0A /* MTCellEnterText.m in Sources */,
 				4C39D0281C92BBF900C70B10 /* MADKeyChainGetCredentials.m in Sources */,
-				4C26B96A1BAF11C800456DC8 /* MADOperationInstallSampleDocument.m in Sources */,
+				4C26B96A1BAF11C800456DC8 /* MADInstallOperationSampleDocument.m in Sources */,
 				4C401FC71BAE8AD500BAE5FC /* MTViewControllerBarcode.m in Sources */,
 				4C40204A1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C401EE71BAE5E9000BAE5FC /* MTLicensingViewController.m in Sources */,

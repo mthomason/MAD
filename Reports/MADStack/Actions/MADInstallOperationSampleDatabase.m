@@ -1,5 +1,5 @@
 //
-//  MADOperationInstallSampleDatabase.m
+//  MADInstallOperationSampleDatabase.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 9/11/15.
@@ -21,14 +21,14 @@ NSString * const MADUpgradeInstalledChinook                         = @"MADUpgra
 NSString * const MTSampleDatabaseChinook                            = @"chinook";
 NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3";
 
-@implementation MADOperationInstallSampleDatabase
+@implementation MADInstallOperationSampleDatabase
 
 - (void)main {
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
     if (installed == NO) {
         
-        NSURL *fileUrl = [MADOperationInstallSampleDatabase applicationBundleSampleDatabaseChinook];
-        NSURL *chinookAppSupportUrl = [MADOperationInstallSampleDatabase applicationSupportSampleDatabaseChinook];
+        NSURL *fileUrl = [MADInstallOperationSampleDatabase applicationBundleSampleDatabaseChinook];
+        NSURL *chinookAppSupportUrl = [MADInstallOperationSampleDatabase applicationSupportSampleDatabaseChinook];
         
         if (chinookAppSupportUrl != nil) {
             NSError *error = nil;

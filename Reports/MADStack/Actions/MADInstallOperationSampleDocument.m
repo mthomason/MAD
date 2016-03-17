@@ -1,5 +1,5 @@
 //
-//  MADOperationInstallSampleDocument.m
+//  MADInstallOperationSampleDocument.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 9/11/15.
@@ -14,7 +14,7 @@
 #import <Foundation/NSURL.h>
 #import <MADFileManager/MADFileManager.h>
 
-@interface MADOperationInstallSampleDocument ()
+@interface MADInstallOperationSampleDocument ()
 
 @property (nonatomic, copy) NSString *filename;
 @property (nonatomic, copy) NSString *fileExtension;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation MADOperationInstallSampleDocument
+@implementation MADInstallOperationSampleDocument
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
     if (self = [super init]) {
