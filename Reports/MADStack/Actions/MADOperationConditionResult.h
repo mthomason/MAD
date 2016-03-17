@@ -15,13 +15,13 @@
 
 extern NSString * MADOperationConditionKey;
 
-@interface MADOperationConditionSupport : NSObject
+@interface MADOperationConditionResult : NSObject
 
     @property (nonatomic, readonly) BOOL isSucceed;
     @property (nonatomic, readonly) NSError * error;
 
-    + (MADOperationConditionSupport *)satisfied;
-    + (MADOperationConditionSupport *)failed:(NSError *)error;
+    + (MADOperationConditionResult *)satisfied;
+    + (MADOperationConditionResult *)failed:(NSError *)error;
     + (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation completion:(void(^)(NSArray * errors))completion;
 
 @end

@@ -6,32 +6,32 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOperationConditionSupport.h"
+#import "MADOperationConditionResult.h"
 #import "MADOperationCondition.h"
 #import "MADOperation.h"
 #import "NSError+MADOperationErrors.h"
 
 NSString * MADOperationConditionKey = @"OperationCondition";
 
-@interface MADOperationConditionSupport ()
+@interface MADOperationConditionResult ()
 
     @property (nonatomic, assign) BOOL isSucceed;
     @property (nonatomic, strong) NSError * error;
 
 @end
 
-@implementation MADOperationConditionSupport
+@implementation MADOperationConditionResult
 
-+ (MADOperationConditionSupport *)satisfied {
++ (MADOperationConditionResult *)satisfied {
     return [self isSucceed:YES error:nil];
 }
 
-+ (MADOperationConditionSupport *)failed:(NSError *)error {
++ (MADOperationConditionResult *)failed:(NSError *)error {
     return [self isSucceed:NO error:error];
 }
 
-+ (MADOperationConditionSupport *)isSucceed:(BOOL)isSucceed error:(NSError *)error {
-    MADOperationConditionSupport * newResult = [MADOperationConditionSupport new];
++ (MADOperationConditionResult *)isSucceed:(BOOL)isSucceed error:(NSError *)error {
+    MADOperationConditionResult * newResult = [MADOperationConditionResult new];
     newResult.isSucceed = isSucceed;
     newResult.error = error;
     return newResult;
@@ -56,7 +56,7 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     [conditions enumerateObjectsUsingBlock:^(NSObject <MADOperationCondition> * condition, NSUInteger idx, BOOL *stop) {
         
         dispatch_group_enter(conditionGroup);
-        [condition evaluateForOperation:operation completion:^(MADOperationConditionSupport * result) {
+        [condition evaluateForOperation:operation completion:^(MADOperationConditionResult * result) {
             
             results[idx] = result;
             dispatch_group_leave(conditionGroup);
