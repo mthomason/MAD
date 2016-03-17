@@ -291,12 +291,12 @@ NSString * const MTNullIdentifier = @"(null)";
 
     MADArrayCaching *ixarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportIndexes]
                                                             cachedDelegate: self.cachedDelegate];
-    [ixarray initalizeDatabase];
+    [ixarray initializeDatabase];
     [self setReportIndexes:ixarray];
     
     MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: [self nameCurrentReportLayout]
                                                             cachedDelegate: self.cachedDelegate];
-    [lyarray initalizeDatabase];
+    [lyarray initializeDatabase];
     [self setReportLayout:lyarray];
     
     [self cleanupTemporaryReportIndexes];

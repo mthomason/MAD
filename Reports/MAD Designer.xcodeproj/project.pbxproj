@@ -433,8 +433,14 @@
 		4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA5711C92C3D2008558E4 /* MADOperation.m */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
-		4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD991C9A4EAB0031BC6C /* MADOperationConditionSupport.m */; };
+		4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */; };
 		4C59BD9D1C9A4FD90031BC6C /* NSError+MADOperationErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */; };
+		4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasCredientals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasCredientals.m */; };
+		4C59BDA71C9A87A20031BC6C /* MADOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA61C9A87A20031BC6C /* MADOperationQueue.m */; };
+		4C59BDAA1C9A87B70031BC6C /* MADExclusivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA91C9A87B70031BC6C /* MADExclusivityController.m */; };
+		4C59BDAD1C9A88900031BC6C /* MADBackgroundObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDAC1C9A88900031BC6C /* MADBackgroundObserver.m */; };
+		4C59BDB01C9A88A40031BC6C /* MADBlockObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDAF1C9A88A40031BC6C /* MADBlockObserver.m */; };
+		4C59BDB31C9A8D1A0031BC6C /* NSOperation+Advanced.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDB21C9A8D1A0031BC6C /* NSOperation+Advanced.m */; };
 		4C5B55DD1C97C5FA005C19D9 /* MADRefreshOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */; };
 		4C5B55E51C98CCBF005C19D9 /* MADDesignerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55E41C98CCBF005C19D9 /* MADDesignerUITests.m */; };
 		4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */; };
@@ -1799,10 +1805,23 @@
 		4C4AA5701C92C3D2008558E4 /* MADOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperation.h; sourceTree = "<group>"; };
 		4C4AA5711C92C3D2008558E4 /* MADOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperation.m; sourceTree = "<group>"; };
 		4C59BD971C9A4E330031BC6C /* MADOperationCondition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationCondition.h; sourceTree = "<group>"; };
-		4C59BD981C9A4EAB0031BC6C /* MADOperationConditionSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionSupport.h; sourceTree = "<group>"; };
-		4C59BD991C9A4EAB0031BC6C /* MADOperationConditionSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionSupport.m; sourceTree = "<group>"; };
+		4C59BD981C9A4EAB0031BC6C /* MADOperationConditionResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionResult.h; sourceTree = "<group>"; };
+		4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionResult.m; sourceTree = "<group>"; };
 		4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MADOperationErrors.h"; sourceTree = "<group>"; };
 		4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MADOperationErrors.m"; sourceTree = "<group>"; };
+		4C59BD9F1C9A68B70031BC6C /* MADOperationConditionHasCredientals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionHasCredientals.h; sourceTree = "<group>"; };
+		4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasCredientals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionHasCredientals.m; sourceTree = "<group>"; };
+		4C59BDA31C9A70700031BC6C /* MADOperationObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationObserver.h; sourceTree = "<group>"; };
+		4C59BDA51C9A87A20031BC6C /* MADOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationQueue.h; sourceTree = "<group>"; };
+		4C59BDA61C9A87A20031BC6C /* MADOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationQueue.m; sourceTree = "<group>"; };
+		4C59BDA81C9A87B70031BC6C /* MADExclusivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExclusivityController.h; sourceTree = "<group>"; };
+		4C59BDA91C9A87B70031BC6C /* MADExclusivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExclusivityController.m; sourceTree = "<group>"; };
+		4C59BDAB1C9A88900031BC6C /* MADBackgroundObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundObserver.h; sourceTree = "<group>"; };
+		4C59BDAC1C9A88900031BC6C /* MADBackgroundObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundObserver.m; sourceTree = "<group>"; };
+		4C59BDAE1C9A88A40031BC6C /* MADBlockObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBlockObserver.h; sourceTree = "<group>"; };
+		4C59BDAF1C9A88A40031BC6C /* MADBlockObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBlockObserver.m; sourceTree = "<group>"; };
+		4C59BDB11C9A8D1A0031BC6C /* NSOperation+Advanced.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOperation+Advanced.h"; sourceTree = "<group>"; };
+		4C59BDB21C9A8D1A0031BC6C /* NSOperation+Advanced.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOperation+Advanced.m"; sourceTree = "<group>"; };
 		4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperation.h; sourceTree = "<group>"; };
 		4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperation.m; sourceTree = "<group>"; };
 		4C5B55E21C98CCBE005C19D9 /* MADDesignerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDesignerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2608,24 +2627,26 @@
 		4C26B95F1BAF11C800456DC8 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
-				4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */,
-				4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */,
-				4C59BD971C9A4E330031BC6C /* MADOperationCondition.h */,
-				4C4AA5701C92C3D2008558E4 /* MADOperation.h */,
-				4C4AA5711C92C3D2008558E4 /* MADOperation.m */,
+				4C59BDB11C9A8D1A0031BC6C /* NSOperation+Advanced.h */,
+				4C59BDB21C9A8D1A0031BC6C /* NSOperation+Advanced.m */,
+				4C59BDA41C9A87890031BC6C /* Queue */,
+				4C59BDA21C9A70050031BC6C /* Observers */,
+				4C59BD9E1C9A688C0031BC6C /* Conditions */,
 				4C5B560F1C9A2DF7005C19D9 /* Report */,
 				4C5B560E1C9A2D6C005C19D9 /* Install */,
 				4C5B560D1C9A2D4C005C19D9 /* Database */,
 				4C5B560C1C9A2D07005C19D9 /* Alerts */,
 				4C5B560B1C9A2CD1005C19D9 /* KeyChain */,
+				4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */,
+				4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */,
+				4C4AA5701C92C3D2008558E4 /* MADOperation.h */,
+				4C4AA5711C92C3D2008558E4 /* MADOperation.m */,
 				4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */,
 				4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */,
 				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
 				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
 				4C5B56021C98F838005C19D9 /* MADTextField.h */,
 				4C5B56031C98F838005C19D9 /* MADTextField.m */,
-				4C59BD981C9A4EAB0031BC6C /* MADOperationConditionSupport.h */,
-				4C59BD991C9A4EAB0031BC6C /* MADOperationConditionSupport.m */,
 			);
 			name = Actions;
 			path = MADStack/Actions;
@@ -3812,6 +3833,41 @@
 				4C1848061B8E1CF100FA7872 /* fontawesome-webfont.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		4C59BD9E1C9A688C0031BC6C /* Conditions */ = {
+			isa = PBXGroup;
+			children = (
+				4C59BD971C9A4E330031BC6C /* MADOperationCondition.h */,
+				4C59BD981C9A4EAB0031BC6C /* MADOperationConditionResult.h */,
+				4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */,
+				4C59BD9F1C9A68B70031BC6C /* MADOperationConditionHasCredientals.h */,
+				4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasCredientals.m */,
+			);
+			name = Conditions;
+			sourceTree = "<group>";
+		};
+		4C59BDA21C9A70050031BC6C /* Observers */ = {
+			isa = PBXGroup;
+			children = (
+				4C59BDA31C9A70700031BC6C /* MADOperationObserver.h */,
+				4C59BDAE1C9A88A40031BC6C /* MADBlockObserver.h */,
+				4C59BDAF1C9A88A40031BC6C /* MADBlockObserver.m */,
+				4C59BDAB1C9A88900031BC6C /* MADBackgroundObserver.h */,
+				4C59BDAC1C9A88900031BC6C /* MADBackgroundObserver.m */,
+			);
+			name = Observers;
+			sourceTree = "<group>";
+		};
+		4C59BDA41C9A87890031BC6C /* Queue */ = {
+			isa = PBXGroup;
+			children = (
+				4C59BDA51C9A87A20031BC6C /* MADOperationQueue.h */,
+				4C59BDA61C9A87A20031BC6C /* MADOperationQueue.m */,
+				4C59BDA81C9A87B70031BC6C /* MADExclusivityController.h */,
+				4C59BDA91C9A87B70031BC6C /* MADExclusivityController.m */,
+			);
+			name = Queue;
 			sourceTree = "<group>";
 		};
 		4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */ = {
@@ -5810,6 +5866,8 @@
 				4CFEE7FB1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C26B9F91BAF14A500456DC8 /* MADDesignerElementView.m in Sources */,
 				4CC886041C7AA861003E18D2 /* UIStoryboard+Licensing.m in Sources */,
+				4C59BDA71C9A87A20031BC6C /* MADOperationQueue.m in Sources */,
+				4C59BDB31C9A8D1A0031BC6C /* NSOperation+Advanced.m in Sources */,
 				4C26B98E1BAF11FA00456DC8 /* MADVibrantCollectionView.m in Sources */,
 				4C4020621BAE92F200BAE5FC /* UIViewController+Designer.m in Sources */,
 				4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */,
@@ -5836,12 +5894,13 @@
 				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
-				4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionSupport.m in Sources */,
+				4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionResult.m in Sources */,
 				4C40203E1BAE92F200BAE5FC /* MTViewControllerBarcode+Designer.m in Sources */,
 				4C4020481BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
 				4C401F021BAE64AF00BAE5FC /* UIFont+Helpers.m in Sources */,
 				4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */,
 				4CFEE8201BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m in Sources */,
+				4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasCredientals.m in Sources */,
 				4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */,
 				4C4AA56F1C92C055008558E4 /* MADKeyChainSaveCredentials.m in Sources */,
 				4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */,
@@ -5960,6 +6019,7 @@
 				4C26B96B1BAF11C800456DC8 /* MADOperationRegisterDefaults.m in Sources */,
 				4C4020461BAE92F200BAE5FC /* NSLayoutConstraint+QueryVisualization.m in Sources */,
 				4C4020631BAE92F200BAE5FC /* UIViewController+Shared.m in Sources */,
+				4C59BDAA1C9A87B70031BC6C /* MADExclusivityController.m in Sources */,
 				4C26BA231BAF150F00456DC8 /* MADQueryVisualizationTableDefination.m in Sources */,
 				4C40205D1BAE92F200BAE5FC /* UITabBarController+Shared.m in Sources */,
 				4C40204F1BAE92F200BAE5FC /* UIColor+Gradients.m in Sources */,
@@ -5977,6 +6037,7 @@
 				4CFEE81F1BB7A3A300AFAA0A /* MTQueryBuilderAddPredicateViewController.m in Sources */,
 				4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */,
 				4C401EED1BAE61F700BAE5FC /* AppDelegate.m in Sources */,
+				4C59BDB01C9A88A40031BC6C /* MADBlockObserver.m in Sources */,
 				4C401F0F1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m in Sources */,
 				4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */,
 				4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
@@ -6005,6 +6066,7 @@
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
 				4C26B9FE1BAF14A500456DC8 /* MTReportDesignerSectionDecorationView.m in Sources */,
 				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
+				4C59BDAD1C9A88900031BC6C /* MADBackgroundObserver.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
 				4C5B56071C9931BA005C19D9 /* MADKeyChainOperationGet.m in Sources */,
 				4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */,

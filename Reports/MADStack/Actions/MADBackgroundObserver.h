@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MADOperationObserver.h"
 
-@interface MADBackgroundObserver : NSObject
+@interface MADBackgroundObserver : NSObject <MADOperationObserver>
 
 @end

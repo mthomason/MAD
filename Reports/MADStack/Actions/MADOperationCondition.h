@@ -9,10 +9,10 @@
 #ifndef MAD_Designer_MADOperationCondition_h
 #define MAD_Designer_MADOperationCondition_h
 
-#import <Foundation/Foundation.h>
-#import "MADOperationConditionSupport.h"
+#import <Foundation/NSOperation.h>
+#import "MADOperationConditionResult.h"
 
-@class MADOperation, MADOperationConditionSupport;
+@class MADOperation, MADOperationConditionResult;
 
 /**
  A protocol for defining conditions that must be satisfied in order for an
@@ -24,13 +24,13 @@
  The name of the condition. This is used in userInfo dictionaries of `.ConditionFailed`
  errors as the value of the `OperationConditionKey` key.
  */
--(NSString *)name;
+- (NSString *)name;
 
 /**
  Specifies whether multiple instances of the conditionalized operation may
  be executing simultaneously.
  */
--(BOOL)isMutuallyExclusive;
+- (BOOL)isMutuallyExclusive;
 
 /**
  Some conditions may have the ability to satisfy the condition if another
@@ -44,10 +44,10 @@
  expressing that as multiple conditions. Alternatively, you could return
  a single `GroupOperation` that executes multiple operations internally.
  */
--(NSOperation *)dependencyForOperation:(MADOperation *)operation;
+- (NSOperation *)dependencyForOperation:(MADOperation *)operation;
 
 /// Evaluate the condition, to see if it has been satisfied or not.
--(void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionSupport *))completion;
+- (void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion;
 
 @end
 

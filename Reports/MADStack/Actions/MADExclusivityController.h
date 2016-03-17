@@ -6,8 +6,25 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADExclusivityController_h
+#define MAD_Designer_MADExclusivityController_h
+
+#import <Foundation/NSObject.h>
+
+@class MADOperation;
+
+/**
+ `ExclusivityController` is a singleton to keep track of all the in-flight
+ `Operation` instances that have declared themselves as requiring mutual exclusivity.
+ We use a singleton because mutual exclusivity must be enforced across the entire
+ app, regardless of the `OperationQueue` on which an `Operation` was executed.
+ */
 
 @interface MADExclusivityController : NSObject
+    +(instancetype)sharedExclusivityController;
 
+    -(void)addOperation:(MADOperation *)operation categories:(NSArray */*[String]*/)categories;
+    -(void)removeOperation:(MADOperation *)operation categories:(NSArray */*[String]*/)categories;
 @end
+
+#endif

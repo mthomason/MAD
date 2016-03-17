@@ -6,8 +6,20 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADBlockObserver_h
+#define MAD_Designer_MADBlockObserver_h
 
-@interface MADBlockObserver : NSObject
+#import <Foundation/NSObject.h>
+#import "MADOperationObserver.h"
+
+@class NSOperation;
+
+@interface MADBlockObserver : NSObject <MADOperationObserver>
+
+- (instancetype)initWithStartHandler:(void(^)(MADOperation *))startHandler
+                      produceHandler:(void(^)(MADOperation *, NSOperation *))produceHandler
+                       finishHandler:(void(^)(MADOperation *, NSArray *))finishHandler;
 
 @end
+
+#endif

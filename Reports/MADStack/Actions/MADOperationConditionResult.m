@@ -10,6 +10,9 @@
 #import "MADOperationCondition.h"
 #import "MADOperation.h"
 #import "NSError+MADOperationErrors.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSKeyValueCoding.h>
 
 NSString * MADOperationConditionKey = @"OperationCondition";
 

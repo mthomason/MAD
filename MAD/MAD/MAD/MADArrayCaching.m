@@ -113,7 +113,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
     [self setDatabase:database];
 }
 
-- (void)initalizeDatabase {
+- (void)initializeDatabase {
     
     NSURL *url = [self url];
     BOOL createDatabase = ![[NSFileManager defaultManager] fileExistsAtPath:url.path];

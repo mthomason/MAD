@@ -10,23 +10,46 @@
 #define MAD_Designer_MADOperation_h
 
 #import <Foundation/NSOperation.h>
+#import "MADOperationObserver.h"
+#import "MADOperationCondition.h"
+
+@class NSMutableArray<ObjectType>;
+//@class MADOperationCondition, MADOperationObserver;
 
 typedef NS_ENUM(char, MADOperationState) {
-    finished,
-    nonready,
+    initialized,
+    pending,
+    evaluatingConditions,
     ready,
     executing,
+    finishing,
+    finished,
+    
+    nonready,
     error,
     cancelled,
-    usercancelled
+    usercancelled,
 };
 
 @interface MADOperation : NSOperation
 
     @property (nonatomic, assign, readonly) MADOperationState state;
 
-    -(void)addCompletionBlock:(void(^)(void))block;
-    -(void)addDependencies:(NSArray /*NSOperation*/ *)dependencies;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSObject <MADOperationCondition> *> *conditions;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSObject <MADOperationObserver> *> *observers;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSError *> *internalErrors;;
+
+    - (void)addObserver:(NSObject <MADOperationObserver> *)observer;
+    - (void)addCondition:(NSObject <MADOperationCondition> *)condition;
+    - (void)willEnqueue;
+
+    - (void)finish;
+    - (void)finish:(NSArray *)errors;
+    - (void)finishWithError:(NSError *)error;
+    - (void)finished:(NSArray *)errors;
+    - (void)execute;
+    - (void)produceOperation:(NSOperation *)operation;
+
 
     - (void)setStateCanceled;
     - (void)setStateError;
