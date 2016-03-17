@@ -16,7 +16,7 @@ extern NSString * const MADUpgradeInstalledChinook;
 extern NSString * const MADUpgradeInstalledSamplesLondon;
 extern NSString * const MADUpgradeInstalledSamplesMusic;
 
-@interface MADOperationInstallSampleDatabase : NSOperation
+@interface MADInstallOperationSampleDatabase : NSOperation
 
 + (NSURL *)applicationBundleSampleDatabaseChinook;
 + (NSURL *)applicationSupportSampleDatabaseChinook;
