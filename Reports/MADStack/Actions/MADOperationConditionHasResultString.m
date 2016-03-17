@@ -6,10 +6,12 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOperationConditionHasCredientals.h"
+#import "MADOperationConditionHasResultString.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSDictionary.h>
+#import "MADOperationConditionHasResultStringResult.h"
 #import "MADOperation.h"
 #import "NSError+MADOperationErrors.h"
-#import <Foundation/NSDictionary.h>
 #import "MADKeyChainOperationGet.h"
 
 @implementation MADOperationConditionHasResultString
@@ -36,23 +38,22 @@
 
 - (void)evaluateForOperation:(MADOperation *)operation
                   completion:(void (^)(MADOperationConditionResult *))completion {
+    
     if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
-        MADOperation
-        completion();
-    } else {
         
-    }
-     // Since evaluation requires executing an operation, use a private operation queue.
-        if (YES){
-            completion([MADOperationConditionResult satisfied]);
+        if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) operation).key]) {
+        
+            MADOperationConditionHasResultStringResult *result = [MADOperationConditionHasResultStringResult satisfied];
+            result.result = ((NSObject <MADOperationResultStringProtocol> *) operation).result;
+            completion(result);
+        
         } else {
-            completion([MADOperationConditionResult failed:[NSError errorWithCode: 333
-                                                                         userInfo: @{
-                                                                                     MADOperationConditionKey: self.name,
-                                                                                     NSUnderlyingErrorKey: @""
-                                                                                     }]]
-                       );
+            completion([MADOperationConditionResult failed:nil]);
         }
+        
+    } else {
+        completion([MADOperationConditionResult failed:nil]);
+    }
 }
 
 @end

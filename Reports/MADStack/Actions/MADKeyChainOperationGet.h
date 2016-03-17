@@ -16,7 +16,16 @@ typedef NS_ENUM(short, MADKeyChainReadOperationTypes) {
     password
 };
 
+@protocol MADOperationResultStringProtocol <NSObject>
+
+    - (NSString *)key;
+    - (NSString *)result;
+    - (bool)success;
+
+@end
+
 @interface MADKeyChainOperationGet : MADOperation
+    <MADOperationResultStringProtocol>
 
     - (instancetype)initWithKey:(NSString *)key;
     @property (atomic, readonly, copy) NSString *result;

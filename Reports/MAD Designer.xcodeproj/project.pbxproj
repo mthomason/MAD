@@ -435,12 +435,14 @@
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */; };
 		4C59BD9D1C9A4FD90031BC6C /* NSError+MADOperationErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */; };
-		4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasCredientals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasCredientals.m */; };
+		4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasResultString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasResultString.m */; };
 		4C59BDA71C9A87A20031BC6C /* MADOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA61C9A87A20031BC6C /* MADOperationQueue.m */; };
 		4C59BDAA1C9A87B70031BC6C /* MADExclusivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDA91C9A87B70031BC6C /* MADExclusivityController.m */; };
 		4C59BDAD1C9A88900031BC6C /* MADBackgroundObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDAC1C9A88900031BC6C /* MADBackgroundObserver.m */; };
 		4C59BDB01C9A88A40031BC6C /* MADBlockObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDAF1C9A88A40031BC6C /* MADBlockObserver.m */; };
 		4C59BDB31C9A8D1A0031BC6C /* NSOperation+Advanced.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDB21C9A8D1A0031BC6C /* NSOperation+Advanced.m */; };
+		4C59BDB71C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDB61C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m */; };
+		4C59BDBA1C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BDB91C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m */; };
 		4C5B55DD1C97C5FA005C19D9 /* MADRefreshOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */; };
 		4C5B55E51C98CCBF005C19D9 /* MADDesignerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55E41C98CCBF005C19D9 /* MADDesignerUITests.m */; };
 		4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */; };
@@ -1809,8 +1811,8 @@
 		4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionResult.m; sourceTree = "<group>"; };
 		4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MADOperationErrors.h"; sourceTree = "<group>"; };
 		4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MADOperationErrors.m"; sourceTree = "<group>"; };
-		4C59BD9F1C9A68B70031BC6C /* MADOperationConditionHasCredientals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionHasCredientals.h; sourceTree = "<group>"; };
-		4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasCredientals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionHasCredientals.m; sourceTree = "<group>"; };
+		4C59BD9F1C9A68B70031BC6C /* MADOperationConditionHasResultString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionHasResultString.h; sourceTree = "<group>"; };
+		4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasResultString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionHasResultString.m; sourceTree = "<group>"; };
 		4C59BDA31C9A70700031BC6C /* MADOperationObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationObserver.h; sourceTree = "<group>"; };
 		4C59BDA51C9A87A20031BC6C /* MADOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationQueue.h; sourceTree = "<group>"; };
 		4C59BDA61C9A87A20031BC6C /* MADOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationQueue.m; sourceTree = "<group>"; };
@@ -1822,6 +1824,10 @@
 		4C59BDAF1C9A88A40031BC6C /* MADBlockObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBlockObserver.m; sourceTree = "<group>"; };
 		4C59BDB11C9A8D1A0031BC6C /* NSOperation+Advanced.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOperation+Advanced.h"; sourceTree = "<group>"; };
 		4C59BDB21C9A8D1A0031BC6C /* NSOperation+Advanced.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOperation+Advanced.m"; sourceTree = "<group>"; };
+		4C59BDB51C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionHasCredientialsResult.h; sourceTree = "<group>"; };
+		4C59BDB61C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionHasCredientialsResult.m; sourceTree = "<group>"; };
+		4C59BDB81C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionHasResultStringResult.h; sourceTree = "<group>"; };
+		4C59BDB91C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionHasResultStringResult.m; sourceTree = "<group>"; };
 		4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperation.h; sourceTree = "<group>"; };
 		4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperation.m; sourceTree = "<group>"; };
 		4C5B55E21C98CCBE005C19D9 /* MADDesignerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDesignerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3838,11 +3844,10 @@
 		4C59BD9E1C9A688C0031BC6C /* Conditions */ = {
 			isa = PBXGroup;
 			children = (
+				4C59BDB41C9A9C860031BC6C /* Results */,
 				4C59BD971C9A4E330031BC6C /* MADOperationCondition.h */,
-				4C59BD981C9A4EAB0031BC6C /* MADOperationConditionResult.h */,
-				4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */,
-				4C59BD9F1C9A68B70031BC6C /* MADOperationConditionHasCredientals.h */,
-				4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasCredientals.m */,
+				4C59BD9F1C9A68B70031BC6C /* MADOperationConditionHasResultString.h */,
+				4C59BDA01C9A68B70031BC6C /* MADOperationConditionHasResultString.m */,
 			);
 			name = Conditions;
 			sourceTree = "<group>";
@@ -3868,6 +3873,19 @@
 				4C59BDA91C9A87B70031BC6C /* MADExclusivityController.m */,
 			);
 			name = Queue;
+			sourceTree = "<group>";
+		};
+		4C59BDB41C9A9C860031BC6C /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				4C59BD981C9A4EAB0031BC6C /* MADOperationConditionResult.h */,
+				4C59BD991C9A4EAB0031BC6C /* MADOperationConditionResult.m */,
+				4C59BDB51C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.h */,
+				4C59BDB61C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m */,
+				4C59BDB81C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.h */,
+				4C59BDB91C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m */,
+			);
+			name = Results;
 			sourceTree = "<group>";
 		};
 		4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */ = {
@@ -5871,10 +5889,12 @@
 				4C26B98E1BAF11FA00456DC8 /* MADVibrantCollectionView.m in Sources */,
 				4C4020621BAE92F200BAE5FC /* UIViewController+Designer.m in Sources */,
 				4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */,
+				4C59BDBA1C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */,
 				4C60C5B91BB11E94004D9758 /* UIManagedDocument+URLs.m in Sources */,
 				4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
+				4C59BDB71C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m in Sources */,
 				4C26BA0B1BAF14F200456DC8 /* MADInformationTableViewController.m in Sources */,
 				4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */,
 				4C26B9CF1BAF123A00456DC8 /* MADToolboxStyleViewController.m in Sources */,
@@ -5900,7 +5920,7 @@
 				4C401F021BAE64AF00BAE5FC /* UIFont+Helpers.m in Sources */,
 				4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */,
 				4CFEE8201BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m in Sources */,
-				4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasCredientals.m in Sources */,
+				4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasResultString.m in Sources */,
 				4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */,
 				4C4AA56F1C92C055008558E4 /* MADKeyChainSaveCredentials.m in Sources */,
 				4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */,

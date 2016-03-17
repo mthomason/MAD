@@ -25,16 +25,16 @@ NSString * MADOperationConditionKey = @"OperationCondition";
 
 @implementation MADOperationConditionResult
 
-+ (MADOperationConditionResult *)satisfied {
++ (instancetype)satisfied {
     return [self isSucceed:YES error:nil];
 }
 
-+ (MADOperationConditionResult *)failed:(NSError *)error {
++ (instancetype)failed:(NSError *)error {
     return [self isSucceed:NO error:error];
 }
 
-+ (MADOperationConditionResult *)isSucceed:(BOOL)isSucceed error:(NSError *)error {
-    MADOperationConditionResult * newResult = [MADOperationConditionResult new];
++ (instancetype)isSucceed:(BOOL)isSucceed error:(NSError *)error {
+    MADOperationConditionResult *newResult = [self new];
     newResult.isSucceed = isSucceed;
     newResult.error = error;
     return newResult;
@@ -68,6 +68,7 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     
     // After all the conditions have evaluated, this block will execute.
     dispatch_group_notify(conditionGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+        
         // Aggregate the errors that occurred, in order.
         NSArray * failures = [[results filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"error != nil"]] valueForKeyPath:@"error"];
         
@@ -78,6 +79,7 @@ NSString * MADOperationConditionKey = @"OperationCondition";
         if (operation.isCancelled) {
             failures = [failures arrayByAddingObject: [NSError errorWithCode:MADConditionFailed]];
         }
+        
         if (completion){
             completion(failures);
         }

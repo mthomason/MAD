@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADOperationConditionHasCredientals_h
-#define MAD_Designer_MADOperationConditionHasCredientals_h
+#ifndef MAD_Designer_MADOperationConditionHasResultString_h
+#define MAD_Designer_MADOperationConditionHasResultString_h
 
 #import <Foundation/NSObject.h>
 #import "MADOperationCondition.h"
@@ -15,12 +15,13 @@
 @interface MADOperationConditionHasResultString : NSObject
     <MADOperationCondition>
 
-@property (nonatomic, copy) NSString *key;
+    @property (nonatomic, copy) NSString *key;
 
-- (NSString *)name;
-- (BOOL)isMutuallyExclusive;
-- (NSOperation *)dependencyForOperation:(MADOperation *)operation;
-- (void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion;
+    - (NSString *)name;
+    - (BOOL)isMutuallyExclusive;
+    - (NSOperation *)dependencyForOperation:(MADOperation *)operation;
+    - (void)evaluateForOperation:(MADOperation *)operation
+                      completion:(void(^)(MADOperationConditionResult *))completion;
 
 @end
 
