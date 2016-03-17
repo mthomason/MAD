@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOperationInstallSampleDocument.h"
+#import "MADInstallOperationSampleDocument.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSUserDefaults.h>
