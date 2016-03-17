@@ -78,6 +78,7 @@ static id _sharedInstance = nil;
     [operationsWithThisCategory addObject:operation];
     
     _operations[category] = operationsWithThisCategory;
+
 }
 
 - (void)noqueue_removeOperation:(MADOperation*)operation category:(NSString *)category {
