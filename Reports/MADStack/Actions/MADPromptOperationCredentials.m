@@ -82,6 +82,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         MADCredential *credentials = [[MADCredential alloc] initWithUsername:usernameC andPassword:passwordC];
         self.credentials = credentials;
         self.gotCredentials = true;
+        self.source = keychain;
     }
     showPrompt = !gotUsername;
 
@@ -133,6 +134,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                               if (username != nil && password != nil) {
                                                                   credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
                                                                   strongself.gotCredentials = true;
+                                                                  strongself.source = credential_prompt;
                                                               }
                                                               [strongself finish:true credentials:credentials];
                                        
