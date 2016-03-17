@@ -12,10 +12,15 @@
 #import <Foundation/NSObject.h>
 #import "MADOperationCondition.h"
 
-@interface MADOperationConditionHasCredientals : NSObject
+@interface MADOperationConditionHasResultString : NSObject
     <MADOperationCondition>
 
+@property (nonatomic, copy) NSString *key;
 
+- (NSString *)name;
+- (BOOL)isMutuallyExclusive;
+- (NSOperation *)dependencyForOperation:(MADOperation *)operation;
+- (void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion;
 
 @end
 
