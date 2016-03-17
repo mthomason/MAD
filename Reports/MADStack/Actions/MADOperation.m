@@ -21,6 +21,33 @@
 
 - (BOOL)isFinished { return self.state == finished || self.state == usercancelled || self.state == error || self.state == cancelled; }
 
+/**
+ Add a completion block to be executed after the `NSOperation` enters the
+ "finished" state.
+ */
+-(void)addCompletionBlock:(void(^)(void))block {
+    void(^existing)(void) = self.completionBlock;
+    if (existing){
+        /*
+         If we already have a completion block, we construct a new one by
+         chaining them together.
+         */
+        self.completionBlock = ^{
+            existing();
+            block();
+        };
+    } else {
+        self.completionBlock = block;
+    }
+}
+
+/// Add multiple depdendencies to the operation.
+-(void)addDependencies:(NSArray /*NSOperation*/ *)dependencies {
+    for (NSOperation * dependency in dependencies) {
+        [self addDependency:dependency];
+    }
+}
+
 #pragma mark - Convenience
 
 - (bool)success { return self.state == finished; }

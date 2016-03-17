@@ -433,6 +433,8 @@
 		4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA5711C92C3D2008558E4 /* MADOperation.m */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
+		4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD991C9A4EAB0031BC6C /* MADOperationConditionSupport.m */; };
+		4C59BD9D1C9A4FD90031BC6C /* NSError+MADOperationErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */; };
 		4C5B55DD1C97C5FA005C19D9 /* MADRefreshOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */; };
 		4C5B55E51C98CCBF005C19D9 /* MADDesignerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55E41C98CCBF005C19D9 /* MADDesignerUITests.m */; };
 		4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */; };
@@ -1796,6 +1798,11 @@
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
 		4C4AA5701C92C3D2008558E4 /* MADOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperation.h; sourceTree = "<group>"; };
 		4C4AA5711C92C3D2008558E4 /* MADOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperation.m; sourceTree = "<group>"; };
+		4C59BD971C9A4E330031BC6C /* MADOperationCondition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationCondition.h; sourceTree = "<group>"; };
+		4C59BD981C9A4EAB0031BC6C /* MADOperationConditionSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionSupport.h; sourceTree = "<group>"; };
+		4C59BD991C9A4EAB0031BC6C /* MADOperationConditionSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionSupport.m; sourceTree = "<group>"; };
+		4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MADOperationErrors.h"; sourceTree = "<group>"; };
+		4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MADOperationErrors.m"; sourceTree = "<group>"; };
 		4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperation.h; sourceTree = "<group>"; };
 		4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperation.m; sourceTree = "<group>"; };
 		4C5B55E21C98CCBE005C19D9 /* MADDesignerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDesignerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2601,6 +2608,9 @@
 		4C26B95F1BAF11C800456DC8 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				4C59BD9B1C9A4FD90031BC6C /* NSError+MADOperationErrors.h */,
+				4C59BD9C1C9A4FD90031BC6C /* NSError+MADOperationErrors.m */,
+				4C59BD971C9A4E330031BC6C /* MADOperationCondition.h */,
 				4C4AA5701C92C3D2008558E4 /* MADOperation.h */,
 				4C4AA5711C92C3D2008558E4 /* MADOperation.m */,
 				4C5B560F1C9A2DF7005C19D9 /* Report */,
@@ -2614,6 +2624,8 @@
 				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
 				4C5B56021C98F838005C19D9 /* MADTextField.h */,
 				4C5B56031C98F838005C19D9 /* MADTextField.m */,
+				4C59BD981C9A4EAB0031BC6C /* MADOperationConditionSupport.h */,
+				4C59BD991C9A4EAB0031BC6C /* MADOperationConditionSupport.m */,
 			);
 			name = Actions;
 			path = MADStack/Actions;
@@ -5824,6 +5836,7 @@
 				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
+				4C59BD9A1C9A4EAB0031BC6C /* MADOperationConditionSupport.m in Sources */,
 				4C40203E1BAE92F200BAE5FC /* MTViewControllerBarcode+Designer.m in Sources */,
 				4C4020481BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */,
 				4C401F021BAE64AF00BAE5FC /* UIFont+Helpers.m in Sources */,
@@ -5891,6 +5904,7 @@
 				4C8DE26D1BAFA98B00AD1111 /* MTResizeHandleView.m in Sources */,
 				4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */,
 				4C32A4C31BB07FF300DD59A3 /* main.m in Sources */,
+				4C59BD9D1C9A4FD90031BC6C /* NSError+MADOperationErrors.m in Sources */,
 				4CFEE8181BB7A2E600AFAA0A /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4CCDEC061C8C36A300A96E89 /* MADManagedObjectView.m in Sources */,
 				4C26BA5E1BAF99F000456DC8 /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,

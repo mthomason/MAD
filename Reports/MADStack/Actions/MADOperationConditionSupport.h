@@ -6,8 +6,24 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADOperationErrorCode_h
+#define MAD_Designer_MADOperationErrorCode_h
+
+#import <Foundation/NSObject.h>
+
+@class MADOperation;
+
+extern NSString * MADOperationConditionKey;
 
 @interface MADOperationConditionSupport : NSObject
 
+    @property (nonatomic, readonly) BOOL isSucceed;
+    @property (nonatomic, readonly) NSError * error;
+
+    + (MADOperationConditionSupport *)satisfied;
+    + (MADOperationConditionSupport *)failed:(NSError *)error;
+    + (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation completion:(void(^)(NSArray * errors))completion;
+
 @end
+
+#endif

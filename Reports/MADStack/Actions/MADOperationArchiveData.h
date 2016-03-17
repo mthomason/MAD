@@ -13,7 +13,7 @@
 
 @interface MADOperationArchiveData : NSOperation
 
-- (instancetype)initWithURL:(NSURL *)url andObject:(id <NSCoding>)object;
+    - (instancetype)initWithURL:(NSURL *)url andObject:(id <NSCoding>)object;
 
 @end
 

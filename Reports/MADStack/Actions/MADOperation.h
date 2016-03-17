@@ -25,6 +25,9 @@ typedef NS_ENUM(char, MADOperationState) {
 
     @property (nonatomic, assign, readonly) MADOperationState state;
 
+    -(void)addCompletionBlock:(void(^)(void))block;
+    -(void)addDependencies:(NSArray /*NSOperation*/ *)dependencies;
+
     - (void)setStateCanceled;
     - (void)setStateError;
     - (void)setStateFinished;

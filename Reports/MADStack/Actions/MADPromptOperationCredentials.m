@@ -100,13 +100,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
 
-    
     __block NSString *password;
     __block NSString *username;
     __block bool success = false;
-    
-    
-
     
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
