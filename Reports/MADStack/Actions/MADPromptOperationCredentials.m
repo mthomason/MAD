@@ -88,7 +88,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     if (!showPrompt) {
         self.bypass = true;
-        [self setStateFinished];
+        [self finish];
         return;
     }
 
@@ -162,7 +162,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (void)finish:(bool)success credentials:(MADCredential *)credentials {
     self.userContinue = success;
     self.credentials = credentials;
-    [self setStateFinished];
+    [self finish];
 }
 
 - (void)userCancel {

@@ -46,7 +46,7 @@
     OSStatus queryStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryDefination, (CFTypeRef *)&queryData);
 
     if (queryData == NULL) {
-        [self setStateFinished];
+        [self finish];
         return;
     }
     
@@ -58,12 +58,12 @@
             result = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryData encoding: NSUTF8StringEncoding];
             self.result = result;
             self.success = true;
-            [self setStateFinished];
+            [self finish];
             break;
             
         default:
             self.result = nil;
-            [self setStateFinished];
+            [self finish];
             break;
     }
 }

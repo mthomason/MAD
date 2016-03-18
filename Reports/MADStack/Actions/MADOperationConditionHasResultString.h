@@ -15,7 +15,8 @@
 @interface MADOperationConditionHasResultString : NSObject
     <MADOperationCondition>
 
-    @property (nonatomic, copy) NSString *key;
+    - (instancetype)initWithKey:(NSString *)key;
+    @property (nonatomic, readonly, copy) NSString *key;
 
     - (NSString *)name;
     - (BOOL)isMutuallyExclusive;

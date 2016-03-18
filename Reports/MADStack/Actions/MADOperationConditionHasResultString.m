@@ -14,6 +14,12 @@
 #import "NSError+MADOperationErrors.h"
 #import "MADKeyChainOperationGet.h"
 
+@interface MADOperationConditionHasResultString ()
+
+    @property (nonatomic, readwrite, copy) NSString *key;
+
+@end
+
 @implementation MADOperationConditionHasResultString
 
 - (instancetype)initWithKey:(NSString *)key {
@@ -41,8 +47,9 @@
     
     if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
         
-        if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) operation).key]) {
-        
+        if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) operation).key] &&
+                ((NSObject <MADOperationResultStringProtocol> *) operation).success) {
+            
             MADOperationConditionHasResultStringResult *result = [MADOperationConditionHasResultStringResult satisfied];
             result.result = ((NSObject <MADOperationResultStringProtocol> *) operation).result;
             completion(result);

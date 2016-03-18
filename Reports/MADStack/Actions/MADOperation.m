@@ -13,11 +13,16 @@
 #import "MADOperationConditionResult.h"
 #import "MADOperationObserver.h"
 
+static NSString * const MADOperatorSelectorIsReady      = @"isReady";
+static NSString * const MADOperatorSelectorIsExecuting  = @"isExecuting";
+static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
+static NSString * const MADOperatorSelectorState        = @"state";
+
 @interface MADOperation() {
     MADOperationState _state;
 }
 
-    @property (nonatomic, strong) NSMutableArray * kad_internalErrors;
+    @property (nonatomic, strong) NSMutableArray * mad_internalErrors;
     @property (nonatomic, assign) bool hasFinishedAlready;
 
 @end
@@ -27,10 +32,10 @@
 #pragma mark - Lazy Load
 
 - (NSMutableArray *)kad_internalErrors {
-    if (!_kad_internalErrors) {
-        _kad_internalErrors = [NSMutableArray array];
+    if (!_mad_internalErrors) {
+        _mad_internalErrors = [NSMutableArray array];
     }
-    return _kad_internalErrors;
+    return _mad_internalErrors;
 }
 
 #pragma mark - KVO
@@ -53,6 +58,7 @@
 
 - (void)setState:(MADOperationState)newState {
     // Manually fire the KVO notifications for state change, since this is "private".
+
     [self willChangeValueForKey:@"state"];
     
     @synchronized(self) {
@@ -93,7 +99,7 @@
 
 - (BOOL)isExecuting {return self.state == executing; }
 
-- (BOOL)isFinished { return self.state == finished || self.state == usercancelled || self.state == error || self.state == cancelled; }
+- (BOOL)isFinished { return self.state == finished || self.state == usercancelled; }
 
 
 - (BOOL)userInitiated { return self.qualityOfService == NSQualityOfServiceUserInitiated; }
@@ -286,26 +292,12 @@
 
 #pragma mark - Convenience
 
-- (void)setStateCanceled {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = cancelled;
-    [self didChangeValueForKey:isFinished];
-}
-
-- (void)setStateError {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = error;
-    [self didChangeValueForKey:isFinished];
-}
-
-- (void)setStateFinished {
+/*- (void)setStateFinished {
     NSString *isFinished = NSStringFromSelector(@selector(isFinished));
     [self willChangeValueForKey:isFinished];
     self.state = finished;
     [self didChangeValueForKey:isFinished];
-}
+}*/
 
 - (void)setStateExecuting {
     NSString *isExecuting = NSStringFromSelector(@selector(isExecuting));

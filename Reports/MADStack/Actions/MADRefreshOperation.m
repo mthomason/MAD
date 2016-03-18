@@ -11,6 +11,9 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MADConstants.h>
+#import <Foundation/NSError.h>
+
+static const short errCache = 2;
 
 @interface MADRefreshOperation ()
     @property (nonatomic, weak) MTQuery *query;
@@ -49,7 +52,8 @@
     }
 
     if (!success) {
-        [self setStateError];
+        NSError *error = eerror;
+        [self finishWithError:error];
         return;
     }
     
@@ -61,11 +65,12 @@
     }
 
     if (!success) {
-        [self setStateError];
+        NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil];
+        [self finishWithError:error];
         return;
     }
 
-    [self setStateFinished];
+    [self finish];
 }
 
 @end

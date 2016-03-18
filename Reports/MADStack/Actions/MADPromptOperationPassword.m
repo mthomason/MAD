@@ -77,7 +77,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                 self.bypass = true;
                 self.source = credential_prompt;
                 self.password = self.credentials.password;
-                [self setStateFinished];
+                [self finish];
                 return;
             }
             
@@ -102,7 +102,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.source = keychain;
         self.bypass = true;
         self.gotCredentials = true;
-        [self setStateFinished];
+        [self finish];
     }
     
     if (promptOperationCredentialsDisplaying) {
@@ -119,7 +119,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     if (!showPrompt) {
         self.bypass = true;
-        [self setStateFinished];
+        [self finish];
         return;
     }
     
@@ -179,7 +179,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = success;
     self.password = password;
     self.gotCredentials = true;
-    [self setStateFinished];
+    [self finish];
 }
 
 - (void)userCancel {

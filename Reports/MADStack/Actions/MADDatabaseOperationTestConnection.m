@@ -105,10 +105,10 @@
     
     NSError * __autoreleasing error = NULL;
     if ((self.success = [queryTest.database executeQuery:queryTest withError:&error])) {
-        [self setStateFinished];
+        [self finish];
     } else {
         self.error = error;
-        [self setStateError];
+        [self finishWithError:error];
     }
     
 }

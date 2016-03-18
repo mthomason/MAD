@@ -13,11 +13,12 @@
 #import <UIKit/UIAlertController.h>
 #import "MADKeyChainGetCredentials.h"
 
-NSString * const MADTitleSaveCredentials        = @"Save Credentials";
-NSString * const MADMessageSaveCredentials      = @"Would you like to save the credentials to your "
-                                                        @"key chain?";
-NSString * const MADButtonContinue              = @"Continue";
+static NSString * const MADTitleSaveCredentials        = @"Save Credentials";
+static NSString * const MADMessageSaveCredentials      = @"Would you like to save the credentials to your key chain?";
+static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
+
+const short errUserCancel = 1;
 
 @interface MADKeyChainSaveCredentials()
 
@@ -38,6 +39,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 }
 
 - (BOOL)isAsynchronous { return YES; }
+
 
 - (void)start {
     
@@ -66,10 +68,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                andPassword: self.credential.password
                                                     forKey: self.key];
                 if (status == errSecSuccess) {
-                    [self setStateFinished];
+                    [self finish];
                 } else {
-                    [self setStateError];
-                }
+                    NSError *error = [NSError errorWithDomain:@"MADOSStatus" code:status userInfo:nil];
+                    [self finishWithError:error];
+                };
             }];
             break;
         }
@@ -80,9 +83,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
                 OSStatus status = [MTKeyChain savePassword: self.credential.password
                                                     forKey: self.key];
                 if (status == errSecSuccess) {
-                    [self setStateFinished];
+                    [self finish];
                 } else {
-                    [self setStateError];
+                    NSError *error = [NSError errorWithDomain:@"MADOSStatus" code:status userInfo:nil];
+                    [self finishWithError:error];
                 }
 
             }];
@@ -90,10 +94,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
             break;
         }
         case keychain:
-            [self setStateFinished];
+            [self finish];
             
         default:
-            [self setStateFinished];
+            [self finish];
             break;
     }
     

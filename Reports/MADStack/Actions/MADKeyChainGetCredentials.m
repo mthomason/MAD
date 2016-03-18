@@ -109,7 +109,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
             MADCredential *c = [[MADCredential alloc] initWithUsername:username andPassword:password];
             self.credential = c;
             self.source = keychain;
-            [self setStateFinished];
+            [self finish];
             break;
         }
             
@@ -125,9 +125,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
             [self promptForUsernameAndPassword];
             break;
         }
-        default:
-            [self setStateError];
+        default: {
+            NSError *error = [NSError errorWithDomain:@"MADKCGC" code:status userInfo:nil];
+            [self finishWithError:error];
             break;
+        }
     }
 }
 
@@ -143,7 +145,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                        andPassword: ((UITextField *)[alertController.textFields objectAtIndex:1]).text];
         self.credential = c;
         self.source = credential_prompt;
-        [self setStateFinished];
+        [self finish];
     };
     
     void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
@@ -199,7 +201,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                        andPassword: ((UITextField *)alertController.textFields.firstObject).text];
         self.credential = c;
         self.source = password_prompt;
-        [self setStateFinished];
+        [self finish];
     };
     
     void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
