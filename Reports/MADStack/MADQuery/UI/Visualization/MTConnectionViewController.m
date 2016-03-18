@@ -1,5 +1,5 @@
 //
-//  UITableViewControllerDataSourceSetupMySql.m
+//  MADConnectionViewController.m
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
@@ -27,10 +27,10 @@
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
 
-static NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
-static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
+static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
+static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
-@interface MTConnectionViewController()
+@interface MADConnectionViewController()
     <MADocumentDelegate, MTDatabaseProtocol>
 
     @property (nonatomic, strong) UIBarButtonItem *holderButton;
@@ -44,7 +44,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 
 @end
 
-@implementation MTConnectionViewController
+@implementation MADConnectionViewController
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -55,12 +55,12 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIProgressView *progressView = [MTConnectionViewController progressViewWithWidth:self.tableView.frame.size.width];
+    UIProgressView *progressView = [MADConnectionViewController progressViewWithWidth:self.tableView.frame.size.width];
     [self.tableView addSubview:progressView];
     self.progressView = progressView;
     
-    self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
-    self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
+    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
+    self.title = NSLocalizedString(MADConnectionViewControllerDefaultTitle, MADConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];
     
     self.navigationItem.hidesBackButton = NO;
@@ -287,17 +287,17 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 
     if (success) {
         
-        MTConnectionViewController * __weak weakself = self;
+        MADConnectionViewController * __weak weakself = self;
         MADocument *document = self.docToSave;
         [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
             
-            MTConnectionViewController *strongself = weakself;
+            MADConnectionViewController *strongself = weakself;
             strongself.navigationItem.prompt = readStatus;
             strongself.progressView.progress = progress;
             
         } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
             
-            __strong MTConnectionViewController *strongself = weakself;
+            __strong MADConnectionViewController *strongself = weakself;
             NSNumber *backgroundTask = @(bgTask);
             
             if (addConnectionSuccess) {
@@ -395,7 +395,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 
 - (void)displayErrors:(NSArray *)errors
   forConnectionString:(NSString *)connectionString {
-    [MTConnectionViewController viewController: self
+    [MADConnectionViewController viewController: self
                                  displayErrors: errors
                                     completion: ^(BOOL success) {
                                         [[MTKeyChain sharedObject] deleteKey:connectionString];
@@ -425,7 +425,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
                 }
                 
                 [self enableTextFields];
-                self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+                self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                     
@@ -442,7 +442,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
                       andBackgroundTask:(NSNumber *)backgroundTask {
     [self saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
         [self resetForm];
-        [MTConnectionViewController showLocalNotificationCreatedReportWithName:name];
+        [MADConnectionViewController showLocalNotificationCreatedReportWithName:name];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [[UIApplication sharedApplication] handoffBackground:backgroundTask];
         });
@@ -471,7 +471,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
                                                                      message:error.localizedFailureReason
                                                                andCompletion:^(UIAlertAction *action) {
                                                                    if (remaningErrors.count > 0) {
-                                                                       [MTConnectionViewController viewController:viewController
+                                                                       [MADConnectionViewController viewController:viewController
                                                                                                     displayErrors:remaningErrors
                                                                                                        completion:^(BOOL success) {
                                                                                                            completion(YES);
@@ -486,19 +486,19 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 }
 
 - (void)saveCloseAndExitWithCompletion:(void (^)(BOOL, NSError *))completion {
-    __weak MTConnectionViewController *weakself = self;
+    __weak MADConnectionViewController *weakself = self;
     
     [self.docToSave saveToURL: self.docToSave.fileURL
              forSaveOperation: UIDocumentSaveForCreating
             completionHandler: ^(BOOL success) {
                 
-                __strong MTConnectionViewController *strongself = weakself;
-                __weak MTConnectionViewController *weakself1 = strongself;
+                __strong MADConnectionViewController *strongself = weakself;
+                __weak MADConnectionViewController *weakself1 = strongself;
                 
                 if (success) {
                     [weakself1.docToSave closeWithCompletionHandler:^(BOOL success) {
                         
-                        __strong MTConnectionViewController *strongself1 = weakself1;
+                        __strong MADConnectionViewController *strongself1 = weakself1;
                         
                         [strongself1 finishDocument];
                         completion(success, nil);
@@ -510,7 +510,7 @@ static NSString * const MTConnectionViewControllerDefaultTitle = @"Database Sett
 
 - (void)finishDocument {
     [self.delegate viewControllerDidFinish: self];
-    self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
     [self enableTextFields];
 }
 

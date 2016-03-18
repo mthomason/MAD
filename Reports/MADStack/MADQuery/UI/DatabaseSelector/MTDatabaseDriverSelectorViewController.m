@@ -134,25 +134,25 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     NSString *dbId = nil;
     if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
-        ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
-        ((MTConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
+        ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
+        ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADIdentifierDatabaseMySQL;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
-        ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
-        ((MTConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
+        ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
+        ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADIdentifierDatabaseTDS;
 
     } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
-        ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
-        ((MTConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
+        ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
+        ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADIdentifierDatabaseSqlite3;
 
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {
-        [(MTConnectionViewController *)segue.destinationViewController setDatabaseType:dbId];
+        [(MADConnectionViewController *)segue.destinationViewController setDatabaseType:dbId];
     }
 }
 

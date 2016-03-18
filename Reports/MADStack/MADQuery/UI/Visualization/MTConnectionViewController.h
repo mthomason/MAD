@@ -1,13 +1,13 @@
 //
-//  MTConnectionViewController.h
+//  MADConnectionViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTConnectionViewController_h
-#define Reports_MTConnectionViewController_h
+#ifndef Reports_MADConnectionViewController_h
+#define Reports_MADConnectionViewController_h
 
 #import <UIKit/UIKit.h>
 #import <MADFileManager/MADFileManager.h>
@@ -22,7 +22,7 @@
 #import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
 
-@interface MTConnectionViewController : MADTableViewController
+@interface MADConnectionViewController : MADTableViewController
     <UITableViewDelegate,
         UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,
