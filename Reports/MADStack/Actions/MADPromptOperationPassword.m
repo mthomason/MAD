@@ -119,7 +119,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (void)userCancel {
     self.userContinue = false;
     self.password = nil;
-    [self setStateUserCancelled];
+    [self finish];
 }
 
 #pragma mark - UITextFieldDelegate

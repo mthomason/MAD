@@ -143,7 +143,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
         self.source = none;
-        [self setStateUserCancelled];
+        [self finish];
     };
     
     void (^ __nullable actionTextFieldWithConfigurationUsername)(UITextField *textField) = ^(UITextField *textField) {
@@ -200,7 +200,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
         self.credential = nil;
         self.source = none;
-        [self setStateUserCancelled];
+        [self finish];
     };
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {

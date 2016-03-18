@@ -290,27 +290,4 @@ static NSString * const MADOperatorSelectorState        = @"state";
     NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
 }
 
-#pragma mark - Convenience
-
-/*- (void)setStateFinished {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = finished;
-    [self didChangeValueForKey:isFinished];
-}*/
-
-- (void)setStateExecuting {
-    NSString *isExecuting = NSStringFromSelector(@selector(isExecuting));
-    [self willChangeValueForKey:isExecuting];
-    self.state = executing;
-    [self didChangeValueForKey:isExecuting];
-}
-
-- (void)setStateUserCancelled {
-    NSString *isFinished = NSStringFromSelector(@selector(isFinished));
-    [self willChangeValueForKey:isFinished];
-    self.state = usercancelled;
-    [self didChangeValueForKey:isFinished];
-}
-
 @end

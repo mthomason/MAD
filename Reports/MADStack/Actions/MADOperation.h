@@ -25,8 +25,6 @@ typedef NS_ENUM(char, MADOperationState) {
     finishing,
     finished,
     
-//    error,
-//    cancelled,
     usercancelled,
 };
 
@@ -48,10 +46,6 @@ typedef NS_ENUM(char, MADOperationState) {
     - (void)finished:(NSArray *)errors;
     - (void)execute;
     - (void)produceOperation:(NSOperation *)operation;
-
-    - (void)setStateError;
-    - (void)setStateExecuting;
-    - (void)setStateUserCancelled;
 
 @end
 

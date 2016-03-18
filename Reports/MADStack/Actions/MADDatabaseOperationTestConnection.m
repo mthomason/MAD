@@ -16,17 +16,17 @@
 @interface MADDatabaseOperationTestConnection ()
     <MTDatabaseProtocol>
 
-//Parameters
-@property (nonatomic, weak) MTDatabaseConnection *databaseConnection;
-@property (nonatomic, copy) MADCredential *credentials;
+    //Parameters
+    @property (nonatomic, weak) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, copy) MADCredential *credentials;
 
-//Store
-@property (nonatomic, strong) MTDatabase *database;
-@property (nonatomic, strong) MTDataTable *datatable;
+    //Store
+    @property (nonatomic, strong) MTDatabase *database;
+    @property (nonatomic, strong) MTDataTable *datatable;
 
-//Results
-@property (nonatomic, readwrite, strong) NSError *error;
-@property (nonatomic, readwrite, assign) bool success;
+    //Results
+    @property (nonatomic, readwrite, strong) NSError *error;
+    @property (nonatomic, readwrite, assign) bool success;
 
 @end
 
@@ -34,7 +34,8 @@
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     if (!self.credentials) {
-        [self setStateError];
+        NSError *error = [NSError errorWithDomain:@"MADDatabaseOperationTestConnection" code:38 userInfo:nil];
+        [self finishWithError:error];
     }
     MADCredential *credentialsCopy = self.credentials.copy;
     return credentialsCopy;
@@ -63,7 +64,8 @@
 - (void)execute {
     
     if (self.credentials == nil) {
-        for (NSOperation *operation in self.dependencies) {
+        NSArray <NSOperation *> *dependencies = self.dependencies;
+        for (NSOperation *operation in dependencies) {
             if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
                 if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
                     self.credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials;
@@ -95,7 +97,7 @@
         [self finish];
     } else {
         self.error = error;
-        [self finishWithError:error];
+        [self finishWithError:self.error];
     }
     
 }
