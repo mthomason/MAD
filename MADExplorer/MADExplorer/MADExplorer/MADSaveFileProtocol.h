@@ -6,8 +6,8 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADSaveFileProtocol_h
-#define MADSaveFileProtocol_h
+#ifndef MADExplorer_MADSaveFileProtocol_h
+#define MADExplorer_MADSaveFileProtocol_h
 
 @protocol MADSaveFileProtocol <NSObject>
 
@@ -15,4 +15,4 @@
 
 @end
 
-#endif /* MADSaveFileProtocol_h */
+#endif /* MADExplorer_MADSaveFileProtocol_h */

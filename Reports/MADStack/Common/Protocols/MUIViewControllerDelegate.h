@@ -10,9 +10,12 @@
 #define Reports_MUIViewControllerProtocol_h
 
 @protocol MTViewControllerProtocol
+
 @optional
-- (void)viewControllerDidFinish:(id)sender;
-- (void)viewControllerDidCancel:(id)sender;
+
+    - (void)viewControllerDidFinish:(id)sender;
+    - (void)viewControllerDidCancel:(id)sender;
+
 @end
 
 #endif

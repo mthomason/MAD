@@ -9,18 +9,9 @@
 #ifndef Reports_MADConnectionViewController_h
 #define Reports_MADConnectionViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MADFileManager/MADFileManager.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
-#import <MADExplorer/MADExplorer.h>
-#import <MAD/MADConstants.h>
-#import <MAD/MADocument.h>
-#import <MAD/MTKeyChain.h>
-#import <MAD/MTErrorContainer.h>
-#import <MAD/MTDatabaseConnection.h>
-#import <MAD/MTActivityIndicator.h>
-#import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
+#import "MUIViewControllerDelegate.h"
+#import <MADExplorer/MADSaveFileProtocol.h>
 
 @interface MADConnectionViewController : MADTableViewController
     <UITableViewDelegate,

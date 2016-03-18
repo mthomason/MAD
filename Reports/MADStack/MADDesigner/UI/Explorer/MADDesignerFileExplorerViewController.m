@@ -12,6 +12,8 @@
 #import <MADFoundation/UIApplication+MADAppDelegate.h>
 
 #import "MADStoryboard.h"
+
+#import <MAD/MADConstants.h>
 #import "Constants.h"
 
 #import "MADKeyChainGetCredentials.h"

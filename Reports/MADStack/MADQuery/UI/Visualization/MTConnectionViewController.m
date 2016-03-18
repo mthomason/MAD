@@ -11,11 +11,20 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import <MAD/MADConstants.h>
+
+#import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MTErrorContainer.h>
+
+#import <MAD/MTKeyChain.h>
 #import <MAD/MTDataTable+Factory.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADCredential.h>
-#import "UIApplication+Extras.h"
+
+#import <MADFileManager/MADFileUtilities.h>
+
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADKeyChainGetCredentials.h"
@@ -26,6 +35,9 @@
 
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import "UIApplication+Extras.h"
 
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";

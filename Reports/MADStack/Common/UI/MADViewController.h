@@ -9,7 +9,11 @@
 #ifndef MAD_MADViewController_h
 #define MAD_MADViewController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UITableViewController.h>
+#import <UIKit/UICollectionViewController.h>
+#import <UIKit/UISplitViewController.h>
+#import <UIKit/UIPageViewController.h>
 
 @class MADTabBarController;
 
