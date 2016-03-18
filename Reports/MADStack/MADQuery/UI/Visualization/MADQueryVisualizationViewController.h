@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryBuilderVisualizationViewController_h
 #define Reports_MTQueryBuilderVisualizationViewController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIViewController.h>
 #import "MADocumentProtocol.h"
 
 @interface MADQueryVisualizationViewController : UIViewController

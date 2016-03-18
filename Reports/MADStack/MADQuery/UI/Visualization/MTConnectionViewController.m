@@ -58,8 +58,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
     @property (nonatomic, strong) UIBarButtonItem *holderButton;
-    @property (nonatomic, strong) MADocument *docToSave;
     @property (nonatomic, strong) UIProgressView *progressView;
+
+    @property (nonatomic, strong) MADocument *docToSave;
     @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
     @property (nonatomic, strong) MTDatabase *databaseTest;
@@ -185,36 +186,45 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
+
     NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
     credentialQueue.maxConcurrentOperationCount = 2;
     
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
     NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
-    
-    //Operation: Read username.
+
+    // Operation: Read username.
+    // -------------------------
     MADKeyChainOperationGet *getUsername = [[MADKeyChainOperationGet alloc] initWithKey:keyUsername];
     getUsername.readOperationType = username;
 
-    //Condition: Username is missing.
-    MADOperationConditionMissingResultString *conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyUsername];
     
-    //Operation: Prompt for username if condition is met.
+    // Operation: Prompt for username if condition is met.
+    // ---------------------------------------------------
     MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithViewController:self];
     [promptCredntials addDependency:getUsername];
-    [promptCredntials addCondition:conditionReadUsernameFailed];
-
-    //Condition: Username is found.
-    MADOperationConditionHasResultString *conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
     
-    //Operation: Read password
+    // Condition: Username is missing.
+    // ---------------------------------------------------
+    MADOperationConditionMissingResultString *conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyUsername];
+    [promptCredntials addCondition:conditionReadUsernameFailed];
+    
+    // Operation: Read password
+    // ---------------------------------------------------
     MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword];
     [getPassword addDependency:getUsername];
+
+    // Condition: Username is found.
+    // ---------------------------------------------------
+    MADOperationConditionHasResultString *conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
     [getPassword addCondition:conditionReadUsername];
 
-    //Condition: Password is missing.
+    // Condition: Password is missing.
+    // ---------------------------------------------------
     MADOperationConditionMissingResultString *conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyPassword];
 
-    
+    // Operation: Prompt password
+    // ---------------------------------------------------
     MADPromptOperationPassword *promptPassword = [[MADPromptOperationPassword alloc] initWithViewController:self];
     [promptPassword addDependency:getUsername];
     [promptPassword addDependency:getPassword];
@@ -252,6 +262,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     //MADCredential *credentials = [[MADCredential alloc] initWithUsername:getUsername.result andPassword:getPassword.result];
     //return credentials;
+    
     return nil;
 }
 
