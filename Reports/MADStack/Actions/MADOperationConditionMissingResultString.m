@@ -34,13 +34,9 @@
     return NSStringFromClass(self.class);
 }
 
-- (BOOL)isMutuallyExclusive {
-    return NO;
-}
+- (BOOL)isMutuallyExclusive { return NO; }
 
-- (NSOperation *)dependencyForOperation:(MADOperation *)operation {
-    return nil;
-}
+- (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation
                   completion:(void (^)(MADOperationConditionResult *))completion {
