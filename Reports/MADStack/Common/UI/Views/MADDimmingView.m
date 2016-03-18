@@ -26,8 +26,7 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     id hitview = nil;
     
-    CGPoint pointNormalized = [self.container convertPoint: point
-                                                  fromView: self];
+    CGPoint pointNormalized = [self.container convertPoint: point fromView: self];
     CGRect rectNormalized;
     
     for (UIView *foundView in self.passthoughViews) {
