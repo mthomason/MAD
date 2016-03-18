@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADConnectionViewController_h
-#define Reports_MADConnectionViewController_h
+#ifndef MADDesigner_MADConnectionViewController_h
+#define MADDesigner_MADConnectionViewController_h
 
 #import "MADViewController.h"
 #import "MUIViewControllerDelegate.h"
@@ -19,28 +19,17 @@
         UIViewControllerAnimatedTransitioning,
         UITextFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) IBOutlet id <MADSaveFileProtocol> saveFileDelegate;
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
+    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
-@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+    @property (nonatomic, copy) NSString *databaseType;
 
-@property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
-@property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
-@property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
-@property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
+    - (IBAction)save:(id)sender;
 
-@property (nonatomic, copy) NSString *databaseType;
-
-- (IBAction)save:(id)sender;
-
-- (IBAction)usernameDidEndOnExit:(id)sender;
-- (IBAction)hostDidEndOnExit:(id)sender;
-- (IBAction)portDidEndOnExit:(id)sender;
+    - (IBAction)usernameDidEndOnExit:(id)sender;
+    - (IBAction)hostDidEndOnExit:(id)sender;
+    - (IBAction)portDidEndOnExit:(id)sender;
 
 @end
 

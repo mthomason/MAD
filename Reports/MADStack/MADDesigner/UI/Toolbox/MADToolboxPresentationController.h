@@ -6,19 +6,24 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADToolboxPresentationController_h
+#define Reports_MADToolboxPresentationController_h
+
 #import <UIKit/UIKit.h>
 
 @class MADDimmingView;
 
 @interface MADToolboxPresentationController : UIPresentationController
 
-@property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
-@property (nonatomic, strong) MADDimmingView *dimmingView;
-@property (nonatomic, weak) UIView *container;
-@property (nonatomic, strong) UIView *passthroughContainer;
-@property (nonatomic, strong) NSSet *passthroughContainers;
-@property (nonatomic, strong) NSSet *passthroughViews;
+    @property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
+    @property (nonatomic, strong) MADDimmingView *dimmingView;
+    @property (nonatomic, weak) UIView *container;
+    @property (nonatomic, strong) UIView *passthroughContainer;
+    @property (nonatomic, strong) NSSet *passthroughContainers;
+    @property (nonatomic, strong) NSSet *passthroughViews;
 
-- (BOOL)showOnSide;
+    - (BOOL)showOnSide;
 
 @end
+
+#endif

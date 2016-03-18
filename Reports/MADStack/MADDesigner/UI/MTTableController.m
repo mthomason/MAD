@@ -11,14 +11,25 @@
 #endif
 
 #import "MTTableController.h"
+#import <CoreData/NSManagedObjectID.h>
+#import <MAD/MTDataTable+Factory.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MAD/MTDatabaseConnection.h>
 
 #import "MTTableLayout.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
 #import <MAD/RptqQuery.h>
+#import <MADFoundation/MTDataTable.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseField.h>
+#import <MAD/MTQuery.h>
+#import <MAD/MTDataFormatter.h>
+#import <MAD/MTKeyChain.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface MTTableController ()
-<UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol> {
+    <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol> {
     bool _firstTimeViewDidAppear;
 }
 

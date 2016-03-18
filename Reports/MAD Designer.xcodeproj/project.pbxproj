@@ -3252,6 +3252,8 @@
 				4C26BA491BAF99F000456DC8 /* MTGroupByViewController.m */,
 				4C26BA4A1BAF99F000456DC8 /* MTTableCell.h */,
 				4C26BA4B1BAF99F000456DC8 /* MTTableCell.m */,
+				4C994F081BDC3B440058627A /* MADDocumentObjectCollectionViewCell.h */,
+				4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */,
 				4C26BA4C1BAF99F000456DC8 /* MTTableCellHeader.h */,
 				4C26BA4D1BAF99F000456DC8 /* MTTableCellHeader.m */,
 				4C26BA4E1BAF99F000456DC8 /* MTTableController.h */,
@@ -3262,8 +3264,6 @@
 				4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */,
 				4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */,
 				4C8DE26E1BAFA9A900AD1111 /* MTViewTableHeader.xib */,
-				4C994F081BDC3B440058627A /* MADDocumentObjectCollectionViewCell.h */,
-				4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";

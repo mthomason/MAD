@@ -9,11 +9,7 @@
 #ifndef Reports_MTReportDesignerFontSettingsViewController_h
 #define Reports_MTReportDesignerFontSettingsViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/MAD.h>
-#import <MAD/MADFont.h>
-#import <MAD/NSManagedObject+Extras.h>
-#import <MAD/MTAlignment.h>
+#import <UIKit/UITableViewController.h>
 #import "MTToolboxViewControllerProtocol.h"
 #import "MADFontSelectorViewController.h"
 #import "MADToolboxDisplayProtocol.h"
@@ -21,18 +17,20 @@
 @class MADocument, MADToolboxStyleViewController, MTFont;
 
 @protocol MTReportDesignerFontSettingsDelegate
-- (void)fontSettingsTableViewControllerDidSelectFontList:(MADToolboxStyleViewController *)controller;
+
+    - (void)fontSettingsTableViewControllerDidSelectFontList:(MADToolboxStyleViewController *)controller;
+
 @end
 
 @interface MADToolboxStyleViewController : UITableViewController
     <MADToolboxDisplayProtocol, MTToolboxViewControllerProtocol,
         MTReportDesignerFontSelectorDelegate>
 
-@property (nonatomic, weak) id <MTReportDesignerFontSettingsDelegate> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MTReportDesignerFontSettingsDelegate> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, weak) IBOutlet UILabel *labelFontName;
-@property (nonatomic, assign) BOOL clearsBackground;
+    @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
+    @property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 

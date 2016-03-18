@@ -9,22 +9,23 @@
 #ifndef Reports_MTAggregateFunctionsViewController_h
 #define Reports_MTAggregateFunctionsViewController_h
 
-#import <UIKit/UIKit.h>
-#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 #import "MADViewController.h"
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 
 @protocol MTAggregateFunctionsViewControllerDelegate
-- (void)didSelectFunction:(MTAggregateFunctionType)functionType;
+
+    - (void)didSelectFunction:(MTAggregateFunctionType)functionType;
+
 @end
 
 @interface MTAggregateFunctionsViewController : MADTableViewController
 
-@property (nonatomic, weak) id <MTAggregateFunctionsViewControllerDelegate> delegate;
-@property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
+    @property (nonatomic, weak) id <MTAggregateFunctionsViewControllerDelegate> delegate;
+    @property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
 
-- (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
+    - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
 
 @end
 

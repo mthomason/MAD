@@ -11,10 +11,15 @@
 #endif
 
 #import "MTDatabaseDriverSelectorViewController.h"
+
+#import <MAD/MTDatabaseConnection.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
 #import "MADVibrantTableViewCellImage.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
 #import "MADNavigationBarTitleView.h"
+#import "MTConnectionViewController.h"
 
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";
@@ -25,11 +30,9 @@ NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSe
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
 @interface MTDatabaseDriverSelectorViewController ()
-    <MTViewControllerProtocol,
-        MADVibrantTableViewCellDelegate,
-        UITableViewDelegate>
+    <MTViewControllerProtocol, MADVibrantTableViewCellDelegate, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
 
 @end
 
@@ -69,13 +72,9 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return 1; }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
-}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { return 2; }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType"];
@@ -95,13 +94,12 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
         default:
             break;
     }
-    [UITableViewCell appearance].textLabel.highlightedTextColor = [MADColorEverydayApps newColorBlue];
+    UIColor *newBlue = [MADColorEverydayApps newColorBlue];
+    [UITableViewCell appearance].textLabel.highlightedTextColor = newBlue;
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 104.000f;
-}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath { return 104.000f; }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     [cell.contentView setNeedsLayout];
@@ -114,14 +112,15 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
     switch (indexPath.row) {
+
         case 0:
-            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceMySqlIdentifier
-                                      sender: self];
+            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceMySqlIdentifier sender: self];
             break;
+            
         case 1:
-            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceSqlServerIdentifier
-                                      sender: self];
+            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceSqlServerIdentifier sender: self];
             break;
             
         default:

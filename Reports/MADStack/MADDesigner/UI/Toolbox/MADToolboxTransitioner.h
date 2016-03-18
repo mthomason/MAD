@@ -6,7 +6,12 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADToolboxTransitioner_h
+#define MAD_Designer_MADToolboxTransitioner_h
+
+#import <UIKit/UIViewControllerTransitioning.h>
+#import <UIKit/UIPopoverSupport.h>
+#import <UIKit/UIPopoverPresentationController.h>
 
 @protocol MADToolboxAnimatedTransitioningProtocol <NSObject>
 
@@ -40,3 +45,5 @@
     @property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
 
 @end
+
+#endif

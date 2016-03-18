@@ -38,8 +38,10 @@
 #import "MADNavigationController.h"
 #import "MADTabBarController.h"
 
-#import "UIStoryboard+Query.h"
+#import <MADExplorer/MADFileLocationManager.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
 
+#import "UIStoryboard+Query.h"
 #import "UINavigationController+MADQuery.h"
 #import "UINavigationController+Designer.h"
 #import "UITabBarController+Shared.h"

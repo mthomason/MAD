@@ -1,5 +1,5 @@
 //
-//  MNSDatabaseConnection.m
+//  MTDatabaseConnection.m
 //  Reports
 //
 //  Created by Michael Thomason on 11/23/12.

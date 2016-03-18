@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADDesigner_MADOpenFileSectionHeaderView_h
+#define MADDesigner_MADOpenFileSectionHeaderView_h
+
 #import <UIKit/UICollectionViewCell.h>
 
 typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
@@ -21,3 +24,5 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
     - (void)stopAnimating;
 
 @end
+
+#endif

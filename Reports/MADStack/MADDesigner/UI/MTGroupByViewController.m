@@ -12,12 +12,17 @@
 
 #import "MTGroupByViewController.h"
 #import "MADNavigationBarTitleView.h"
+#import <CoreData/NSManagedObjectContext.h>
+#import <MAD/MADocument.h>
+#import <MAD/RptqQueryGroup.h>
+#import <MAD/RptqQueryGroup+Extras.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 
 @interface MTGroupByViewController ()
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
+    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
 
 @end
 

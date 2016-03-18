@@ -9,12 +9,9 @@
 #ifndef Reports_MTDatabaseDriverSelectorViewController_h
 #define Reports_MTDatabaseDriverSelectorViewController_h
 
-#import <UIKit/UIKit.h>
-#import "MUIViewControllerDelegate.h"
 #import "MADViewController.h"
-#import "MTConnectionViewController.h"
-#import <MAD/MTDatabaseConnection.h>
-#import <MADExplorer/MADExplorer.h>
+#import <MADExplorer/MADSaveFileProtocol.h>
+#import "MUIViewControllerDelegate.h"
 
 extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier;
@@ -24,8 +21,8 @@ extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 @interface MTDatabaseDriverSelectorViewController : MADTableViewController
     <MADSaveFileProtocol>
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) IBOutlet id <MADSaveFileProtocol> saveFileDelegate;
+    @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
 @end
 

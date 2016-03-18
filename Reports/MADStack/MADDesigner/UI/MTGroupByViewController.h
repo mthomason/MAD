@@ -9,19 +9,21 @@
 #ifndef Reports_MTGroupByViewController_h
 #define Reports_MTGroupByViewController_h
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
 #import "MADViewController.h"
+#import <CoreData/NSFetchedResultsController.h>
+#import <MAD/RptqDocumentObjectAggregate.h>
+#import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
 extern NSString * const MTGroupByViewControllerIdentifier;
 
 @class MADocument;
 
 @protocol MTGroupByViewControllerDelegate
-- (void)didSelectGroupByPage;
-- (void)didSelectGroupByReport;
-- (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber;
+
+    - (void)didSelectGroupByPage;
+    - (void)didSelectGroupByReport;
+    - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber;
+
 @end
 
 @interface MTGroupByViewController : MADTableViewController

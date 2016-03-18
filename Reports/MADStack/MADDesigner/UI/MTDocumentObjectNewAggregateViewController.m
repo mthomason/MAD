@@ -35,7 +35,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         MTGroupByViewControllerDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property(nonatomic, strong) RptqDocumentObjectAggregate *aggregateDocumentObject;
+    @property(nonatomic, strong) RptqDocumentObjectAggregate *aggregateDocumentObject;
 
 @end
 

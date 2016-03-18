@@ -45,6 +45,18 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 @interface MADConnectionViewController()
     <MADocumentDelegate, MTDatabaseProtocol>
 
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
+
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
+
     @property (nonatomic, strong) UIBarButtonItem *holderButton;
     @property (nonatomic, strong) MADocument *docToSave;
     @property (nonatomic, strong) UIProgressView *progressView;

@@ -11,6 +11,9 @@
 #endif
 
 #import "MTTableLayout.h"
+#import <UIKit/UICollectionView.h>
+#import <UIKit/UITableView.h>
+#import <Foundation/NSIndexPath.h>
 
 @interface MTTableLayout ()
     <UICollectionViewDelegate>
@@ -32,24 +35,21 @@ typedef struct _ColumnWidth {
 
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         [self initalizeWithColumnCount:0 andRowCount:0];
     }
     return self;
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         [self initalizeWithColumnCount:0 andRowCount:0];
     }
     return self;
 }
 
 - (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         [self initalizeWithColumnCount:columnCount andRowCount:rowCount];
     }
     return self;

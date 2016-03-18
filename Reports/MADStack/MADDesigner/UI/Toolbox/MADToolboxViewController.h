@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADToolboxViewController_h
+#define MAD_MADToolboxViewController_h
+
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 #import "MADToolboxDisplayProtocol.h"
@@ -22,3 +25,5 @@
 @property (nonatomic, assign) BOOL clearsBackground;
 
 @end
+
+#endif

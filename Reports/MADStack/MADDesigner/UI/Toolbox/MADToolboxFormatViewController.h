@@ -9,9 +9,7 @@
 #ifndef Reports_MTReportDesignerDocumentObjectFormat_h
 #define Reports_MTReportDesignerDocumentObjectFormat_h
 
-#import <CoreData/CoreData.h>
-#import <MAD/MAD.h>
-#import <MAD/MTDatabaseField.h>
+#import <UIKit/UITableViewController.h>
 #import "MADToolboxDisplayProtocol.h"
 
 @class MADocument;
@@ -19,9 +17,8 @@
 @interface MADToolboxFormatViewController : UITableViewController
     <MADToolboxDisplayProtocol>
 
-@property (nonatomic, weak) MADocument *document;
-
-@property (nonatomic, assign) BOOL clearsBackground;
+    @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 

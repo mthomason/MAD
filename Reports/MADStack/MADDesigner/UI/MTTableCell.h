@@ -9,7 +9,9 @@
 #ifndef MAD_MTTableCell_Extras_h
 #define MAD_MTTableCell_Extras_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewCell.h>
+
+@class UILabel;
 
 @interface MTTableCell : UICollectionViewCell
 

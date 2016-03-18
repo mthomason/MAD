@@ -12,6 +12,12 @@
 
 #import "MADToolboxStyleViewController.h"
 #import "MADControlState.h"
+#import <CoreData/NSManagedObjectContext.h>
+#import <MAD/MADocument.h>
+#import <MAD/MADFont.h>
+#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+Extras.h>
+#import <MAD/NSManagedObject+Extras.h>
 
 static NSString * const MADIdentifierStoryboardSeguePushFontPicker = @"MADIdentifierStoryboardSeguePushFontPicker";
 
@@ -429,7 +435,8 @@ static const CGFloat BorderWidth = 1.0000f;
             self.fontLabelTableViewCell.userInteractionEnabled = NO;
             self.stepperFontSize.userInteractionEnabled = NO;
             
-            for (UIStepper *stepper in self.steppers) {
+            NSArray *steppers = self.steppers;
+            for (UIStepper *stepper in steppers) {
                 stepper.userInteractionEnabled = NO;
             }
             
@@ -465,7 +472,8 @@ static const CGFloat BorderWidth = 1.0000f;
             
         } else {
             
-            for (UIStepper *stepper in self.steppers) {
+            NSArray *steppers = self.steppers;
+            for (UIStepper *stepper in steppers) {
                 [stepper setUserInteractionEnabled:YES];
             }
             

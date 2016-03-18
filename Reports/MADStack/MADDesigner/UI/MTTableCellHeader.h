@@ -9,12 +9,13 @@
 #ifndef MAD_MTTableCellHeader_Extras_h
 #define MAD_MTTableCellHeader_Extras_h
 
-#import <UIKit/UIKit.h>
-#import <MADCocoaExtensions/MADCocoaExtensions.h>
+#import <UIKit/UICollectionViewCell.h>
+
+@class UILabel;
 
 @interface MTTableCellHeader : UICollectionReusableView
 
-@property (nonatomic, strong, readonly) UILabel *label;
+    @property (nonatomic, strong, readonly) UILabel *label;
 
 @end
 

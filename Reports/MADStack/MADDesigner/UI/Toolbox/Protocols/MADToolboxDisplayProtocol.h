@@ -13,7 +13,7 @@
 
 @required
 
-- (void)setClearsBackground:(BOOL)clearsBackground;
+    - (void)setClearsBackground:(BOOL)clearsBackground;
 
 @end
 

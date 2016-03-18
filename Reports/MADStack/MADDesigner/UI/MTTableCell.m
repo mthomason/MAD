@@ -11,10 +11,12 @@
 #endif
 
 #import "MTTableCell.h"
+#import <UIKit/UILabel.h>
+#import <QuartzCore/CALayer.h>
 
 @interface MTTableCell ()
 
-@property (nonatomic, strong, readwrite) UILabel *label;
+    @property (nonatomic, strong, readwrite) UILabel *label;
 
 @end
 

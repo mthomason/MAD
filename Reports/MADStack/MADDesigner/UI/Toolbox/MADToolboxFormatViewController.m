@@ -7,8 +7,24 @@
 //
 
 #import "MADToolboxFormatViewController.h"
-
 #import "MTToolboxViewControllerProtocol.h"
+#import <UIKit/UIStepper.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIFont.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/NSAttributedString.h>
+
+#import <CoreData/NSManagedObject.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseField.h>
+#import <MAD/RptqDocumentObject.h>
+#import <MAD/RptqDocumentObject+Extras.h>
+#import <MAD/RptqDocumentObjectLabelDataField.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqQueryField.h>
+#import <MADFoundation/MADDataType.h>
 
 @interface MADToolboxFormatViewController ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
