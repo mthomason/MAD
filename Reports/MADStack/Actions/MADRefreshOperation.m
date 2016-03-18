@@ -34,22 +34,10 @@ static const short errCache = 2;
 
 - (BOOL)isAsynchronous { return YES; }
 
-- (void)start {
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-    
-    [self setStateExecuting];
+- (void)execute {
     
     NSError * __autoreleasing eerror = NULL;
     bool success = [_database executeQuery:_query withError:&eerror];
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
 
     if (!success) {
         NSError *error = eerror;
@@ -59,11 +47,6 @@ static const short errCache = 2;
     
     success = [_datatable cacheForGroupIdentifier:MADIdentifierGroup];
     
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-
     if (!success) {
         NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil];
         [self finishWithError:error];

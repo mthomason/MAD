@@ -41,15 +41,8 @@ const short errUserCancel = 1;
 - (BOOL)isAsynchronous { return YES; }
 
 
-- (void)start {
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-    
-    [self setStateExecuting];
-    
+- (void)execute {
+        
     MADCredentialSource source = none;
     NSArray *dependencies = self.dependencies;
     for (MADKeyChainGetCredentials *dependency in dependencies) {

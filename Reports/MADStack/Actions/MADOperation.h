@@ -49,9 +49,7 @@ typedef NS_ENUM(char, MADOperationState) {
     - (void)execute;
     - (void)produceOperation:(NSOperation *)operation;
 
-    - (void)setStateCanceled;
     - (void)setStateError;
-    //- (void)setStateFinished;
     - (void)setStateExecuting;
     - (void)setStateUserCancelled;
 

@@ -14,9 +14,9 @@
 
 @interface MADKeyChainOperationGet ()
 
-@property (nonatomic, copy) NSString *key;
-@property (atomic, readwrite, copy) NSString *result;
-@property (atomic, readwrite, assign) bool success;
+    @property (nonatomic, copy) NSString *key;
+    @property (atomic, readwrite, copy) NSString *result;
+    @property (atomic, readwrite, assign) bool success;
 
 @end
 
@@ -32,14 +32,7 @@
 
 - (BOOL)isAsynchronous { return YES; }
 
-- (void)start {
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-    
-    [self setStateExecuting];
+- (void)execute {
  
     CFDataRef queryData = NULL;
     NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key];

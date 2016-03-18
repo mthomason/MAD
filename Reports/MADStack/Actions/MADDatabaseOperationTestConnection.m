@@ -60,14 +60,7 @@
 
 - (BOOL)isAsynchronous { return YES; }
 
-- (void)start {
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-
-    [self setStateExecuting];
+- (void)execute {
     
     if (self.credentials == nil) {
         for (NSOperation *operation in self.dependencies) {
@@ -82,6 +75,7 @@
     
     MTDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
+    
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
@@ -95,13 +89,6 @@
     db.delegate = self;
     queryTest.database = db;
     self.database = db;
-    
-    // One more chance to short
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
     
     NSError * __autoreleasing error = NULL;
     if ((self.success = [queryTest.database executeQuery:queryTest withError:&error])) {

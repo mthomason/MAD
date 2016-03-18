@@ -66,14 +66,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (BOOL)isAsynchronous { return YES; }
 
-- (void)start {
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-    
-    [self setStateExecuting];
+- (void)execute {
     
     const char PromptForUsernameAndPassword = 1;
     const char PromptForPassword = 2;

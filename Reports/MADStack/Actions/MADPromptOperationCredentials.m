@@ -40,7 +40,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
 @implementation MADPromptOperationCredentials
 
 - (instancetype)initWithViewController:(UIViewController *)viewController {
+
     if (self = [super init]) {
+    
         self.viewController = viewController;
         self.source = none;
         
@@ -54,43 +56,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (BOOL)isAsynchronous { return YES; }
 
-- (void)start {
-    
-    if ([self isCancelled]) {
-        [self setStateCanceled];
-        return;
-    }
-    [self setStateExecuting];
-    
-    bool showPrompt = false;
-    bool gotUsername = false;
-    bool gotPassword = false;
-    NSString *usernameC = nil;
-    NSString *passwordC = nil;
-    for (NSOperation *dependency in self.dependencies) {
-        if ([dependency isKindOfClass:[MADKeyChainOperationGet class]]) {
-            if (((MADKeyChainOperationGet *)dependency).success && ((MADKeyChainOperationGet *)dependency).readOperationType == username) {
-                gotUsername = true;
-                usernameC = ((MADKeyChainOperationGet *)dependency).result.copy;
-            } else if (((MADKeyChainOperationGet *)dependency).success && ((MADKeyChainOperationGet *)dependency).readOperationType == password) {
-                gotPassword = true;
-                passwordC = ((MADKeyChainOperationGet *)dependency).result.copy;
-            }
-        }
-    }
-    if (gotUsername && gotPassword) {
-        MADCredential *credentials = [[MADCredential alloc] initWithUsername:usernameC andPassword:passwordC];
-        self.credentials = credentials;
-        self.gotCredentials = true;
-        self.source = keychain;
-    }
-    showPrompt = !gotUsername;
-
-    if (!showPrompt) {
-        self.bypass = true;
-        [self finish];
-        return;
-    }
+- (void)execute {
 
     self.displayingPrompt = true;
 
