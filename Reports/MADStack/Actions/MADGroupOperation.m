@@ -35,7 +35,7 @@
 
 @implementation MADGroupOperation
 
-- (instancetype)initWithOperations:(NSArray <__kindof NSOperations *> *)operations {
+- (instancetype)initWithOperations:(NSArray <__kindof NSOperation *> *)operations {
 
     if (self = [super init]) {
         _internalQueue = [MADOperationQueue new];
