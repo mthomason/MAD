@@ -10,8 +10,9 @@
 #define MAD_Designer_MADPromptOperationCredentials_h
 
 #import "MADOperation.h"
-#import <UIKit/UIViewController.h>
 #import <MAD/MADCredential.h>
+
+@class UIViewController;
 
 @interface MADPromptOperationCredentials : MADOperation
     <MADOperationHoldsCredentialsProtocol>

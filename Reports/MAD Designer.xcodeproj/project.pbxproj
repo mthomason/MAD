@@ -3895,6 +3895,9 @@
 		4C59BDC21C9AAA1A0031BC6C /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				4C59BDC31C9AAA4E0031BC6C /* Categories */,
+				4C59BDA41C9A87890031BC6C /* Queue */,
+				4C59BDA21C9A70050031BC6C /* Observers */,
 				4C59BDC41C9AAA790031BC6C /* Conditions */,
 				4C4AA5701C92C3D2008558E4 /* MADOperation.h */,
 				4C4AA5711C92C3D2008558E4 /* MADOperation.m */,
@@ -3902,9 +3905,6 @@
 				4C59BDBD1C9AA7C10031BC6C /* MADBlockOperation.m */,
 				4C59BDBE1C9AA7C10031BC6C /* MADGroupOperation.h */,
 				4C59BDBF1C9AA7C10031BC6C /* MADGroupOperation.m */,
-				4C59BDA21C9A70050031BC6C /* Observers */,
-				4C59BDA41C9A87890031BC6C /* Queue */,
-				4C59BDC31C9AAA4E0031BC6C /* Categories */,
 			);
 			name = Core;
 			sourceTree = "<group>";

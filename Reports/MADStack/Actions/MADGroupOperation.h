@@ -15,10 +15,10 @@
 
 @interface MADGroupOperation : MADOperation
 
-- (instancetype)initWithOperations:(NSArray <__kindof NSOperations *> *)operations;
-- (void)addOperation:(NSOperation *)operation;
-- (void)aggregateError:(NSError *)error;
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors;
+    - (instancetype)initWithOperations:(NSArray <__kindof NSOperations *> *)operations;
+    - (void)addOperation:(NSOperation *)operation;
+    - (void)aggregateError:(NSError *)error;
+    - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors;
 
 @end
 
