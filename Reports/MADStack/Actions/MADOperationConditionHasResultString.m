@@ -51,7 +51,7 @@
                 ((NSObject <MADOperationResultStringProtocol> *) operation).success) {
             
             MADOperationConditionHasResultStringResult *result = [MADOperationConditionHasResultStringResult satisfied];
-            result.result = ((NSObject <MADOperationResultStringProtocol> *) operation).result;
+            result.result = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
             completion(result);
         
         } else {

@@ -8,6 +8,15 @@
 
 #import "MADOperationConditionResult.h"
 
+@protocol MADOperationConditionPolarQuestionAffirmativeResultProtocol <NSObject>
+
+- (bool)result;
+
+@end
+
 @interface MADOperationConditionPolarQuestionAffirmativeResult : MADOperationConditionResult
+    <MADOperationConditionPolarQuestionAffirmativeResultProtocol>
+
+    @property (nonatomic, assign) bool result;
 
 @end

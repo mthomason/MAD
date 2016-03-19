@@ -29,6 +29,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) NSString *password;
+    @property (nonatomic, readwrite, assign) bool gotPassword;
 
     @property (nonatomic, readwrite, assign) bool bypass;
     @property (nonatomic, readwrite, assign) bool userContinue;
@@ -87,9 +88,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
                                                                 style: UIAlertActionStyleCancel
                                                               handler: ^(UIAlertAction *action) {
+                                                                  MADPromptOperationPassword * sself = weakself;
                                                                   password = nil;
                                                                   success = false;
-                                                                  [weakself userCancel];
+                                                                  [sself userCancel];
                                                               }];
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
@@ -113,12 +115,16 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = success;
     self.password = password;
     self.gotCredentials = true;
+    self.gotPassword = true;
+    self.result = true;
     [self finish];
 }
 
 - (void)userCancel {
     self.userContinue = false;
     self.password = nil;
+    self.result = false;
+    self.gotPassword = false;
     [self finish];
 }
 

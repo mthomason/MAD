@@ -19,12 +19,26 @@ typedef NS_ENUM(short, MADCredentialSource) {
     password_prompt,
 };
 
+@protocol MADOperationHoldsUsernameProtocol <NSObject>
+
+    @property (nonatomic, readonly, copy) NSString *username;
+    @property (nonatomic, readonly, assign) bool gotUsername;
+
+@end
+
+@protocol MADOperationHoldsPasswordProtocol <NSObject>
+
+    @property (nonatomic, readonly, copy) NSString *password;
+    @property (nonatomic, readonly, assign) bool gotPassword;
+
+@end
+
 @interface MADCredential : NSObject <NSCopying>
 
-- (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password;
+    - (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password;
 
-@property (nonatomic, copy) NSString *username;
-@property (nonatomic, copy) NSString *password;
+    @property (nonatomic, copy) NSString *username;
+    @property (nonatomic, copy) NSString *password;
 
 @end
 

@@ -14,8 +14,8 @@
 
 @interface MADKeyChainOperationGet ()
 
-    @property (nonatomic, copy) NSString *key;
-    @property (atomic, readwrite, copy) NSString *result;
+    @property (nonatomic, readwrite, copy) NSString *key;
+    @property (atomic, readwrite, copy) NSString *value;
     @property (atomic, readwrite, assign) bool success;
 
 @end
@@ -49,13 +49,13 @@
         case errSecSuccess:
             
             result = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryData encoding: NSUTF8StringEncoding];
-            self.result = result;
+            self.value = result;
             self.success = true;
             [self finish];
             break;
             
         default:
-            self.result = nil;
+            self.value = nil;
             [self finish];
             break;
     }

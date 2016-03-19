@@ -12,9 +12,12 @@
 #import "MADOperation.h"
 #import <UIKit/UIViewController.h>
 #import <MAD/MADCredential.h>
+#import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+
 
 @interface MADPromptOperationPassword : MADOperation
-    <MADOperationHoldsCredentialsProtocol>
+    <MADOperationHoldsCredentialsProtocol, MADOperationHoldsPasswordProtocol,
+    MADOperationConditionPolarQuestionAffirmativeResultProtocol>
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
 
@@ -22,10 +25,14 @@
     @property (nonatomic, readonly, assign) bool gotCredentials;
 
     @property (nonatomic, readonly, copy) NSString *password;
+    @property (nonatomic, readonly, assign) bool gotPassword;
+
     @property (nonatomic, readonly, assign) MADCredentialSource source;
 
     @property (nonatomic, readonly, assign) bool bypass;
     @property (nonatomic, readonly, assign) bool userContinue;
+
+    @property (nonatomic, assign) bool result;
 
 @end
 

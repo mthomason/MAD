@@ -19,6 +19,8 @@ extern NSInteger const MTKeyErrorUserCanceled;
 
 + (MTKeyChain *)sharedObject;
 
++ (OSStatus)saveToken:(NSString *)token forKey:(NSString *)key;
+
 + (NSString *)keyForUsernameWithMainKey:(NSString *)key;
 + (NSString *)keyForPasswordWithMainKey:(NSString *)key;
 + (NSDictionary *)queryDefination:(NSString *)key;

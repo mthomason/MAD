@@ -6,8 +6,15 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADOperationConditionPolarQuestionAffirmative_h
+#define MAD_Designer_MADOperationConditionPolarQuestionAffirmative_h
 
-@interface MADOperationConditionPolarQuestionAffirmative : MADOperationCondition
+#import "MADOperationCondition.h"
+#import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+
+@interface MADOperationConditionPolarQuestionAffirmative : NSObject
+    <MADOperationCondition>
 
 @end
+
+#endif
