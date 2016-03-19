@@ -364,7 +364,7 @@ typedef void(^MTBlockResultVoid)(void);
                         for (RptqQueryLinks *link in updatedQuery.hasQueryLinks) {
                             if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
                                 [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
-                                MTConnectorView __weak *connectorView = self.controllersByObjectID[link.objectID];
+                                MTConnectorView * __weak connectorView = self.controllersByObjectID[link.objectID];
                                 [connectorView removeFromSuperview];
                                 [self.view setNeedsLayout];
                                 [self.view layoutIfNeeded];
@@ -498,8 +498,8 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
-    MADQueryVisualizationSchemaViewController __weak *leftTableViewController = self.controllersByObjectID[insertedQueryLinks.hasLeftField.inQueryTable.objectID];
-    MADQueryVisualizationSchemaViewController __weak *rightTableViewController = self.controllersByObjectID[insertedQueryLinks.hasRightField.inQueryTable.objectID];
+    MADQueryVisualizationSchemaViewController * __weak leftTableViewController = self.controllersByObjectID[insertedQueryLinks.hasLeftField.inQueryTable.objectID];
+    MADQueryVisualizationSchemaViewController * __weak rightTableViewController = self.controllersByObjectID[insertedQueryLinks.hasRightField.inQueryTable.objectID];
     [self.rootTables removeObject:insertedQueryLinks.hasLeftField.inQueryTable.objectID];
     if ([leftTableViewController isEqual:rightTableViewController] == NO) {
         [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];

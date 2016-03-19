@@ -24,7 +24,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
-    @property (nonatomic, strong) UIAlertController *alertController;
 
     @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) MADCredential *credentials;
@@ -87,18 +86,17 @@ static NSString * const MADButtonCancel                = @"Cancel";
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
-                                                              MADPromptOperationCredentials * __strong strongself = weakself;
-                                                              username = ((UITextField *)strongself.alertController.textFields.firstObject).text;
-                                                              password = ((UITextField *)[strongself.alertController.textFields objectAtIndex:1]).text;
-                                                              
+
+                                                              username = ((UITextField *)alertController.textFields.firstObject).text;
+                                                              password = ((UITextField *)[alertController.textFields objectAtIndex:1]).text;
 
                                                               MADCredential *credentials = nil;
                                                               if (username != nil && password != nil) {
                                                                   credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-                                                                  strongself.gotCredentials = true;
-                                                                  strongself.source = credential_prompt;
+                                                                  self.gotCredentials = true;
+                                                                  self.source = credential_prompt;
                                                               }
-                                                              [strongself finish:true credentials:credentials];
+                                                              [self finish:true credentials:credentials];
                                        
                                                               
                                                           }];
@@ -115,13 +113,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationUsername];
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationPassword];
     
-    self.alertController = alertController;
-    UIAlertController * __weak weakAlertController = self.alertController;
-    UIViewController * __weak wViewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *topViewController = wViewController;
-        topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: weakAlertController animated: YES completion:^{ }];
+        UIViewController *viewController = self.viewController;
+        viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [viewController  presentViewController: alertController animated: YES completion:^{ }];
     }];
 }
 
