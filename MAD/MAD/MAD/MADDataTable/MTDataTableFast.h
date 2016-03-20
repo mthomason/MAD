@@ -10,6 +10,8 @@
 #define Reports_MTDataTableFast_h
 
 #import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTCacheProtocol.h>
+#import <MADFoundation/MADDataProtocol.h>
 
 @class MTDatabaseCache, MTQuery;
 
@@ -17,6 +19,9 @@
     <NSCoding, NSFastEnumeration>
 
 @property (nonatomic, strong, readonly) MTDatabaseCache *databaseForSelects;
+
+@property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
+@property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
 - (NSString *)tableName;
 - (NSString *)columnKeyForColumnName:(NSString *)columnName;

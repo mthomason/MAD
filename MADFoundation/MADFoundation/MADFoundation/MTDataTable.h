@@ -11,8 +11,6 @@
 
 #import <Foundation/NSObject.h>
 #import <MADFoundation/NSFileManager+Common.h>
-#import <MADFoundation/MTCacheProtocol.h>
-#import <MADFoundation/MADDataProtocol.h>
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -29,9 +27,6 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
-
-@property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
-@property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
 @property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;

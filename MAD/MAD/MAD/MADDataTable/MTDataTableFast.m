@@ -239,7 +239,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (void)setCacheDelegate:(id<MTCacheProtocol>)cacheDelegate {
-    super.cacheDelegate = cacheDelegate;
+    _cacheDelegate = cacheDelegate;
     [self reopenDbConnection];
 }
 
