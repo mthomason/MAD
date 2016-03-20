@@ -44,14 +44,11 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
-- (NSURL *)urlForGroupIdentifier:(NSString *)groupIdentifier;
+- (bool)cacheWithUrl:(NSURL *)url;
 
-- (bool)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier;
-- (bool)cacheForGroupIdentifier:(NSString *)groupIdentifier;
 - (NSDictionary *)plist;
-
 - (void)loadWithPlist:(id)plist;
-- (void)loadFromCacheWithGroupIdentifier:(NSString *)groupIdentifier;
+- (void)loadFromCacheWithUrl:(NSURL *)url;
 
 - (void)addColumn:(MTDataColumn *)column;
 - (void)addRow:(NSArray *)row;
@@ -84,6 +81,8 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
+
+- (NSString *)filenameMDCache;
 
 @end
 

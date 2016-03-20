@@ -14,28 +14,28 @@
 
 @interface MADArrayCaching : NSEnumerator
 
-@property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
-@property (nonatomic, strong, readonly) NSString *identifier;
-@property (nonatomic, assign, readonly) int count;
+    @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
+    @property (nonatomic, strong, readonly) NSString *identifier;
+    @property (nonatomic, assign, readonly) int count;
 
-- (instancetype)initWithIdentifier:(NSString *)identifier;
-- (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;
+    - (instancetype)initWithIdentifier:(NSString *)identifier;
+    - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;
 
-- (void)initializeDatabase;
-- (void)finalizeDatabase;
+    - (void)initializeDatabase;
+    - (void)finalizeDatabase;
 
-- (NSURL *)url;
-- (id)objectAtIndex:(NSUInteger)index;
-- (void)addObject:(id)object;
-- (void)removeAllObjects;
+    - (NSURL *)url;
+    - (id)objectAtIndex:(NSUInteger)index;
+    - (void)addObject:(id)object;
+    - (void)removeAllObjects;
 
-- (void)beginBulkInserts;
-- (void)endBulkInserts;
+    - (void)beginBulkInserts;
+    - (void)endBulkInserts;
 
-+ (NSURL *)urlForIdentifier:(NSString *)identifer;
+    + (NSURL *)urlForIdentifier:(NSString *)identifer;
 
-- (void)resetEnumerator;
-- (id)objectAtIndexedSubscript:(NSUInteger)idx;
+    - (void)resetEnumerator;
+    - (id)objectAtIndexedSubscript:(NSUInteger)idx;
 
 @end
 

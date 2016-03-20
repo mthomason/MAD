@@ -144,26 +144,15 @@ static NSString * const StringEmpty = @"";
     return nil;    
 }
 
-+ (NSString *)keyUrl {
-    return @"url";
-}
++ (NSString *)keyUrl { return @"url"; }
 
 - (NSString *)filenameMDCache {
     NSString *tag = [NSString stringWithFormat:@"%lu", (unsigned long)self.tag];
     return [tag stringByAppendingString:@"mdcache"];
 }
 
-- (NSURL *)urlForGroupIdentifier:(NSString *)groupIdentifier {
-    NSString *filename = [self filenameMDCache];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectoryForGroupIdentifier:groupIdentifier/*MADIdentifierGroup*/] :
-    [self.cacheDelegate cachedFilesDirectory];
-    return [cacheDirectory URLByAppendingPathComponent:filename
-                                           isDirectory:NO];
-}
-
-- (void)loadFromCacheWithGroupIdentifier:(NSString *)groupIdentifier {
-    NSString *path = [self urlForGroupIdentifier:groupIdentifier].path;
-    NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: path];
+- (void)loadFromCacheWithUrl:(NSURL *)url {
+    NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: url.path];
     [inputStream open];
     switch ([inputStream streamStatus]) {
         case NSStreamStatusError:
@@ -182,13 +171,14 @@ static NSString * const StringEmpty = @"";
     }
 }
 
-- (bool)cachePlist:(id)data forGroupIdentifier:(NSString *)groupIdentifier {
+- (bool)cacheWithUrl:(NSURL *)url {
+    NSDictionary *plist = [self plist];
+
     NSError *error = nil;
-    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: data
+    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
                                                                format: NSPropertyListBinaryFormat_v1_0
                                                               options: 0
                                                                 error: &error];
-    NSURL *url = [self urlForGroupIdentifier:groupIdentifier];
     bool success = false;
     if (url) {
         success = [cache writeToURL:url
@@ -197,11 +187,6 @@ static NSString * const StringEmpty = @"";
         NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
     return success;
-}
-
-- (bool)cacheForGroupIdentifier:(NSString *)groupIdentifier {
-    NSDictionary *plist = [self plist];
-    return [self cachePlist:plist forGroupIdentifier:groupIdentifier];
 }
 
 - (NSDictionary *)plist {

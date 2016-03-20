@@ -8,6 +8,10 @@
 
 #import "MADOperation.h"
 
+@class MTQuery, MTDatabase, MTDataTable;
+
 @interface MADRefreshOperation : MADOperation
+
+- (instancetype)initQuery:(MTQuery *)query database:(MTDatabase *)database datatable:(MTDataTable *)datatable andCacheUrl:(NSURL *)cacheUrl;
 
 @end

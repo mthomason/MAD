@@ -151,6 +151,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 @property (nonatomic, strong, readwrite) NSURL *urlGuts;
 @property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
+@property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
 @property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
 @property (nonatomic, strong, readwrite) NSString *fileName;
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
@@ -888,6 +889,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
+- (NSURL *)cacheUrlForFilename:(NSString *)filename {
+    return [self.urlCachedFilesDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+}
+
 - (void)initalizeMainDataTable {
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypePhysical);
@@ -896,6 +901,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
     MTDataTableFast *datatable = (MTDataTableFast *)[MTDataTable dataTableFactory:parameters];
     datatable.cacheDelegate = self;
+    NSString *filename = [datatable filenameMDCache];
+    NSURL *cacheUrl = [self cacheUrlForFilename:filename];
+    self.urlDataTableCache = cacheUrl;
+    [datatable loadFromCacheWithUrl:cacheUrl];
     self.mainDataTable = datatable;
 }
 
@@ -928,8 +937,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (BOOL)cacheExist {
-    NSURL *url = [self.mainDataTable urlForGroupIdentifier:MADIdentifierGroup];
-    return [[NSFileManager defaultManager] fileExistsAtPath:url.path];
+    return [[NSFileManager defaultManager] fileExistsAtPath:self.urlDataTableCache.path];
 }
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cachedID {
@@ -962,6 +970,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     MTDataTableFast * __weak wMainDataTable = self.mainDataTable;
     __block bool didRefresh = false;
 
+    NSURL *cacheUrl = self.urlDataTableCache.copy;
     NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
         
         MTQuery *squery = wMainQuery;
@@ -969,8 +978,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         NSError * __autoreleasing eerror = NULL;
         bool success = [sdatabase executeQuery:squery withError:&eerror];
-        
-        [wMainDataTable cacheForGroupIdentifier:MADIdentifierGroup];
+        [wMainDataTable cacheWithUrl:cacheUrl];
         didRefresh = success ? true : false;
         return;
         
@@ -986,9 +994,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return success;
 }
 
-- (NSURL *)cachedDataUrl {
-    return [self.mainDataTable urlForGroupIdentifier:MADIdentifierGroup];
-}
+- (NSURL *)cachedDataUrl { return self.urlDataTableCache; }
 
 - (NSString *)fileHandle {
     return self.thumbnailURL.path.lastPathComponent;
