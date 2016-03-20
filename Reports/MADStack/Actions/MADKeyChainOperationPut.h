@@ -13,8 +13,8 @@
 
 @protocol MADKeyChainKeyValueProtocol <NSObject>
 
-- (NSString *)key;
-- (NSString *)value;
+    - (NSString *)key;
+    - (NSString *)value;
 
 @end
 

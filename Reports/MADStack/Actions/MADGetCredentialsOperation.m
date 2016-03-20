@@ -102,6 +102,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADOperationConditionPolarQuestionAffirmative *userEnteredPassword = [[MADOperationConditionPolarQuestionAffirmative alloc] init];
     [promptSavePassword addCondition:conditionReadPasswordFailed];
     [promptSavePassword addCondition:userEnteredPassword];
+    [promptSavePassword addCompletionBlock:^{
+        
+    }];
 
     // Operation: Save password
     // ---------------------------------------------------
@@ -121,5 +124,11 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     self = [super initWithOperations:operations];
     return self;
 }
+
+//- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+//    if (operation conformsToProtocol:<#(Protocol *)#>) {
+//        <#statements#>
+//    }
+//}
 
 @end

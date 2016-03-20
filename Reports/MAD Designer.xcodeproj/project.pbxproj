@@ -287,7 +287,6 @@
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
-		4C39D0281C92BBF900C70B10 /* MADKeyChainGetCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */; };
 		4C3C16051BC6D7AE0056A77C /* MADViewDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3C16041BC6D7AE0056A77C /* MADViewDebugging.m */; };
 		4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */; };
 		4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */; };
@@ -429,7 +428,6 @@
 		4C42DD681BCB0ADB0082D8E3 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C42DD491BCB0A1C0082D8E3 /* MADSqlite3.framework */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
-		4C4AA56F1C92C055008558E4 /* MADKeyChainSaveCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */; };
 		4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AA5711C92C3D2008558E4 /* MADOperation.m */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
@@ -3968,16 +3966,13 @@
 		4C5B560B1C9A2CD1005C19D9 /* KeyChain */ = {
 			isa = PBXGroup;
 			children = (
+				4C5C0DC61C9E0EBC00826BC2 /* Unused */,
 				4C5C0DBA1C9CED3C00826BC2 /* MADGetCredentialsOperation.h */,
 				4C5C0DBB1C9CED3C00826BC2 /* MADGetCredentialsOperation.m */,
 				4C5B56051C9931BA005C19D9 /* MADKeyChainOperationGet.h */,
 				4C5B56061C9931BA005C19D9 /* MADKeyChainOperationGet.m */,
 				4C5C0DBD1C9CF1D300826BC2 /* MADKeyChainOperationPut.h */,
 				4C5C0DBE1C9CF1D300826BC2 /* MADKeyChainOperationPut.m */,
-				4C39D0261C92BBF900C70B10 /* MADKeyChainGetCredentials.h */,
-				4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */,
-				4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */,
-				4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */,
 			);
 			name = KeyChain;
 			sourceTree = "<group>";
@@ -4022,6 +4017,17 @@
 				4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */,
 			);
 			name = Report;
+			sourceTree = "<group>";
+		};
+		4C5C0DC61C9E0EBC00826BC2 /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				4C39D0261C92BBF900C70B10 /* MADKeyChainGetCredentials.h */,
+				4C39D0271C92BBF900C70B10 /* MADKeyChainGetCredentials.m */,
+				4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */,
+				4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */,
+			);
+			name = Unused;
 			sourceTree = "<group>";
 		};
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
@@ -5989,7 +5995,6 @@
 				4CFEE8201BB7A3A300AFAA0A /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C59BDA11C9A68B70031BC6C /* MADOperationConditionHasResultString.m in Sources */,
 				4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */,
-				4C4AA56F1C92C055008558E4 /* MADKeyChainSaveCredentials.m in Sources */,
 				4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */,
 				4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */,
 				4C26B9CB1BAF123A00456DC8 /* MADToolboxNavigationController.m in Sources */,
@@ -6067,7 +6072,6 @@
 				4C4020371BAE92F200BAE5FC /* CGAffineTransform+Common.m in Sources */,
 				4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */,
 				4CFEE8211BB7A3A300AFAA0A /* MTCellEnterText.m in Sources */,
-				4C39D0281C92BBF900C70B10 /* MADKeyChainGetCredentials.m in Sources */,
 				4C26B96A1BAF11C800456DC8 /* MADInstallOperationSampleDocument.m in Sources */,
 				4C401FC71BAE8AD500BAE5FC /* MTViewControllerBarcode.m in Sources */,
 				4C40204A1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m in Sources */,

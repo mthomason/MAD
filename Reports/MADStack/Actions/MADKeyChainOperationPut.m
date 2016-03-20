@@ -11,7 +11,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSArray.h>
-#import <Foundation/NSDictionary.h>
 #import <MAD/MTKeyChain.h>
 
 static const short StatusNotFound = 35;

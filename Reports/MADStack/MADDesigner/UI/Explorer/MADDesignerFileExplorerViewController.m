@@ -16,8 +16,8 @@
 #import <MAD/MADConstants.h>
 #import "Constants.h"
 
-#import "MADKeyChainGetCredentials.h"
-#import "MADKeyChainSaveCredentials.h"
+//#import "MADKeyChainGetCredentials.h"
+//#import "MADKeyChainSaveCredentials.h"
 
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
@@ -381,7 +381,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 #pragma mark - MADDocumentDelegate
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    
+    /*
     NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
     credentialQueue.maxConcurrentOperationCount = 1;
     
@@ -392,8 +392,9 @@ NSString * const MADUtiType                                     = @"com.everyday
     [credentialQueue addOperation:cg];
     [credentialQueue addOperation:cs];
     [credentialQueue waitUntilAllOperationsAreFinished];
-    
     MADCredential *credentials = cg.credential.copy;
+    */
+    MADCredential *credentials = nil;
     return credentials;
     
 }

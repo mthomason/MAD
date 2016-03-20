@@ -27,8 +27,8 @@
 
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
-#import "MADKeyChainGetCredentials.h"
-#import "MADKeyChainSaveCredentials.h"
+//#import "MADKeyChainGetCredentials.h"
+//#import "MADKeyChainSaveCredentials.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADPromptOperationPassword.h"
@@ -402,6 +402,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark - MTDatabaseProtocol
 
 - (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {
+    /*
     NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
     credentialQueue.maxConcurrentOperationCount = 1;
     
@@ -412,8 +413,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [credentialQueue addOperation:cg];
     [credentialQueue addOperation:cs];
     [credentialQueue waitUntilAllOperationsAreFinished];
-    
     MADCredential *credentials = cg.credential.copy;
+    */
+    MADCredential *credentials = nil;
     return credentials;
 }
 
