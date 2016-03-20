@@ -565,9 +565,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperator = NO;
                 BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
                 
-                NSInteger numberOfColumns = dbnumcols(dbconn);
-                NSMutableArray *colmunHolder = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
-                
+                int numberOfColumns = dbnumcols(dbconn);
+                NSMutableArray *colmunHolder = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
                 static int disregardedBind = -1023;
                 
                 NSMutableDictionary *counters = [[NSMutableDictionary alloc] initWithDictionary:
@@ -644,7 +643,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                          [NSString stringWithCString:ci->Name encoding:NSStringEncodingConversionAllowLossy]);
                          */
                         
-                        NSString *fieldKey = fieldKeys[columnCtr];
+                        NSString *fieldKey = fieldKeys[(NSUInteger)columnCtr];
                         
                         NSNumber *columnNumber = @(columnCtr);
                         
