@@ -51,63 +51,68 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate, MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
 
-@property (nonatomic, assign) BOOL limitResultsDesignMode;
+    @property (nonatomic, assign) BOOL limitResultsDesignMode;
 
-@property (nonatomic, weak) id <MADocumentDelegate> documentDelegate;
+    @property (nonatomic, weak) id <MADocumentDelegate> documentDelegate;
 
-@property (nonatomic, strong) MTReportFormatter *reportFormatter;
-@property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
-@property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
-@property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
-@property (nonatomic, strong, readonly) MTQueryFull *mainQuery;
-@property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
-@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
-@property (nonatomic, strong) MTActivityIndicator *statusLabel;
+    @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 
-@property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
+    @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
+    @property (readonly) RptqDocument *activeDocumentModel;
 
-@property (readonly) RptqDocument *activeDocumentModel;
-@property (readonly) NSURL *cachedDataUrl;
+    @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 
-@property (nonatomic, strong, readonly) MTPaper *paper;
+    @property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
 
+    @property (nonatomic, strong, readonly) MTQueryFull *mainQuery;
+    @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 
-- (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
+    @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
-+ (BOOL)isRetnaDisplay;
+    @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 
-- (instancetype)initWithFileURL:(NSURL *)url;
-- (void)saveContext;
-- (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
+    @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
-- (bool)refreshWithError:(NSError * __autoreleasing *)error;
+    @property (nonatomic, strong, readonly) MTPaper *paper;
 
-- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
-           completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
+    @property (readonly) NSURL *cachedDataUrl;
 
-- (void)regenThumbnail;
+    - (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
 
-- (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
+    + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
+    + (BOOL)isRetnaDisplay;
 
-- (UIImage *)fullyRenderedThumbnail;
+    - (instancetype)initWithFileURL:(NSURL *)url;
+    - (void)saveContext;
+    - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
-- (void)initalizeMainQuery:(RptqDocument *)document;
-- (void)prepareForQuery;
+    - (bool)refreshWithError:(NSError * __autoreleasing *)error;
 
-- (void)reportFormatterDidFormatPage:(NSNotification *)sender;
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder;
-- (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable;
-- (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID;
-- (void)removeGroup:(RptqQueryGroup *)groupToRemove;
+    - (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
+               completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 
-- (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
+    - (void)regenThumbnail;
 
-- (NSDictionary *)layoutHeightsBySectionKey;
+    - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
-- (void)removeGuts; //Cleans any cache that may exist.
+    - (UIImage *)fullyRenderedThumbnail;
 
-- (NSString *)mimetype;
+    - (void)initalizeMainQuery:(RptqDocument *)document;
+    - (void)prepareForQuery;
+
+    - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
+    - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder;
+    - (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable;
+    - (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID;
+    - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
+
+    - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;
+
+    - (NSDictionary *)layoutHeightsBySectionKey;
+
+    - (void)removeGuts; //Cleans any cache that may exist.
+
+    - (NSString *)mimetype;
 
 @end
 

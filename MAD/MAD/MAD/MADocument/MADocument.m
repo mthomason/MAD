@@ -139,25 +139,30 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @interface MADocument ()
     <MTDatabaseProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
 
-@property (nonatomic, strong) UIImage *thumbnail;
+    @property (nonatomic, strong) UIImage *thumbnail;
 
-@property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
-@property (nonatomic, strong, readwrite) NSManagedObjectID *documentObjectID;
+    @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
+    @property (nonatomic, strong, readwrite) NSManagedObjectID *documentObjectID;
 
-@property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
-@property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
-@property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
+    @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
+    @property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
+    @property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
 
-@property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
-@property (nonatomic, strong, readwrite) NSURL *urlGuts;
-@property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
-@property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
-@property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
-@property (nonatomic, strong, readwrite) NSString *fileName;
-@property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
-@property (nonatomic, strong, readwrite) MTPaper *paper;
+    @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
-@property (nonatomic, assign) BOOL didRefresh;
+    @property (nonatomic, strong, readwrite) NSURL *urlGuts;
+    @property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
+
+    @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
+
+    @property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
+
+    @property (nonatomic, strong, readwrite) NSString *fileName;
+    @property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
+
+    @property (nonatomic, strong, readwrite) MTPaper *paper;
+
+    @property (nonatomic, assign) BOOL didRefresh;
 
 @end
 
