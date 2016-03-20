@@ -24,7 +24,7 @@
 #import <MAD/MADCredential.h>
 
 #import <MADFileManager/MADFileUtilities.h>
-
+#import "MADOperationQueue.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 //#import "MADKeyChainGetCredentials.h"
@@ -38,6 +38,8 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "UIApplication+Extras.h"
+
+#import "MADGetCredentialsOperation.h"
 
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
@@ -187,14 +189,20 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
 
-    NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
-    credentialQueue.maxConcurrentOperationCount = 2;
+    MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
+    //credentialQueue.maxConcurrentOperationCount = 2;
     
-    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
-    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+    //NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
+    //NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
 
     // Operation: Read username.
     // -------------------------
+    
+    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithKey:key viewController:self];
+    [credentialQueue addOperation:getCredentialsOperation];
+    //[credentialQueue waitUntilAllOperationsAreFinished];
+    
+    /*
     MADKeyChainOperationGet *getUsername = [[MADKeyChainOperationGet alloc] initWithKey:keyUsername];
     getUsername.readOperationType = username;
 
@@ -231,7 +239,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [promptPassword addCondition:conditionReadUsername];
     [promptPassword addCondition:conditionReadPasswordFailed];
     
-    
+    */
     
     /*
     

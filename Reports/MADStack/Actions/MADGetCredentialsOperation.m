@@ -109,8 +109,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Operation: Save password
     // ---------------------------------------------------
 
-    MADKeyChainOperationPut *putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword];
-    MADKeyChainOperationPut *putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername];
+    //MADKeyChainOperationPut *putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword];
+    //MADKeyChainOperationPut *putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername];
     
     
 
@@ -125,10 +125,11 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     return self;
 }
 
-//- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-//    if (operation conformsToProtocol:<#(Protocol *)#>) {
-//        <#statements#>
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+    NSLog(@"%@", operation);
+//    if (operation conformsToProtocol:(Protocol *)) {
+//        statements
 //    }
-//}
+}
 
 @end
