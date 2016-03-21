@@ -265,7 +265,7 @@ const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 
     viewControllerToShow.view.frame = self.view.bounds;
     
-    __weak MADToolboxViewController *weakself = self;
+    MADToolboxViewController * __weak weakself = self;
     [self addChildViewController:viewControllerToShow];
     [viewControllerToHide willMoveToParentViewController:nil];
     [viewControllerToShow beginAppearanceTransition:YES animated:YES];

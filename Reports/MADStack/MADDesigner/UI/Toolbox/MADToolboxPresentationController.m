@@ -42,7 +42,7 @@
 
 - (void)dismissalTransitionDidEnd:(BOOL)completed {
     [super presentationTransitionDidEnd:completed];
-    __weak MADToolboxPresentationController *weakself = self;
+    MADToolboxPresentationController * __weak weakself = self;
     [weakself removeObserver: weakself
                   forKeyPath: [MADToolboxPresentationController keyPathPassthroughContainer]];
     [weakself removeObserver: weakself

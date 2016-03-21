@@ -96,7 +96,7 @@
         CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
         CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
         CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
-        __weak MTViewControllerValueBasedOnField *weakself = self;
+        MTViewControllerValueBasedOnField * __weak weakself = self;
         UIViewAnimationOptions options;
         switch ([keyboardAnimationCurveUserInfoKey integerValue]) {
             case UIViewAnimationCurveEaseInOut:
@@ -137,7 +137,7 @@
 
     [self setQuerySampleDataField:querySampleDataField];
     
-    __weak MTViewControllerValueBasedOnField *weakself2 = self;
+    MTViewControllerValueBasedOnField * __weak weakself2 = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         __strong MTViewControllerValueBasedOnField *strongself2 = weakself2;
         
@@ -145,9 +145,9 @@
         bool success = [querySampleDataField performQueryWithError:&error];
         
         if (success) {
-            __weak MTViewControllerValueBasedOnField *weakself3 = strongself2;
+            MTViewControllerValueBasedOnField * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
-                __strong MTViewControllerValueBasedOnField *strongself5 = weakself3;
+                MTViewControllerValueBasedOnField *strongself5 = weakself3;
                 MTDataTable * __autoreleasing dt = [[querySampleDataField.database delegate] dataTableForQuery:querySampleDataField];
                 [strongself5 setDataTable: dt];
                 
@@ -167,13 +167,13 @@
             NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
             
             if ([NSThread isMainThread]) {
-                __weak UIViewController *weak1 = strongself2;
+                UIViewController * __weak weak1 = strongself2;
                 [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
                     [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak1];
                 }];
             } else {
                 NSError *serror = error;
-                __weak UIViewController *weak1 = strongself2;
+                UIViewController * __weak weak1 = strongself2;
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     [NSError presentError: serror
                          onViewController: weak1
@@ -200,7 +200,7 @@
     if (self.pickerData != nil) {
         result = self.pickerData.count;
     }
-    return result;
+    return (NSInteger)result;
 }
 
 #pragma mark - Picker View Delegate

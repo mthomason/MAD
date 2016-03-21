@@ -354,12 +354,12 @@ static const CGFloat BorderWidth = 1.0000f;
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 
-    __weak UIControl *weakControl = control;
+    UIControl * __weak weakControl = control;
     dispatch_async(queuePriorityBackground, ^{
-        __strong UIControl *strongControl = weakControl;
-        __weak UIControl *weakControl2 = strongControl;
+        UIControl *strongControl = weakControl;
+        UIControl * __weak weakControl2 = strongControl;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            __strong UIControl *strongControl2 = weakControl2;
+            UIControl *strongControl2 = weakControl2;
             
             strongControl2.selected = select;
             strongControl2.highlighted = highlight;

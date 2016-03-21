@@ -368,18 +368,18 @@
     NSSet *databaseSchemas = [self.hasDatabaseSchemas setByAddingObject: rptqDatabase];
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
-    __weak MTDatabase *weakDatabase = database;
+    MTDatabase * __weak weakDatabase = database;
     id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
     
     if (dbconnection) {
         
-        __weak id weakdbconnection = dbconnection;
-        __weak MTDatabase *weakDatabase2 = weakDatabase;
+        id __weak weakdbconnection = dbconnection;
+        MTDatabase * __weak weakDatabase2 = weakDatabase;
         
-        __block NSMutableDictionary *tablesAndFields = [[NSMutableDictionary alloc] init];
-        __block NSMutableArray *tables = [NSMutableArray array];
-        __block BOOL gotit = YES;
-        __block NSError *gotitError = nil;
+        NSMutableDictionary * __block tablesAndFields = [[NSMutableDictionary alloc] init];
+        NSMutableArray * __block tables = [NSMutableArray array];
+        BOOL __block gotit = YES;
+        NSError * __block gotitError = nil;
         
         dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
         dispatch_queue_t queueSave = dispatch_queue_create("com.everydayapps.mad.queue.save", DISPATCH_QUEUE_SERIAL);
@@ -391,7 +391,7 @@
         
         dispatch_async(queueTables, ^{
             
-            __weak MTDatabase *weakDatabase3 = weakDatabase2;
+            MTDatabase * __weak weakDatabase3 = weakDatabase2;
             [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
                 
                 NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
@@ -404,7 +404,7 @@
                         @autoreleasepool {
                             
                             NSString *name = [databaseTable name];
-                            __weak NSString *weakname = name;
+                            NSString * __weak weakname = name;
                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                 dispatch_sync(queueMain, ^{
                                     status(weakname, (counter + 1) / numberOfTables);

@@ -134,7 +134,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                 [self.optionsViewController setSampleBarcodeData:allObjects];
                 [self.optionsViewController.tableView reloadData];
             } else {
-                __weak MTViewControllerBarcode *weakself2 = self;
+                MTViewControllerBarcode * __weak weakself2 = self;
                 [NSError presentError: error
                      onViewController: weakself2
                            completion:^(BOOL presentErrorSuccess) {
@@ -159,12 +159,12 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                 [self.optionsViewController setSampleBarcodeData2dComponent:allObjects];
                 [self.optionsViewController.tableView reloadData];
             } else {
-                __weak MTViewControllerBarcode *weakself = self;
+                MTViewControllerBarcode * __weak weakself = self;
                 [NSError presentError: error
                      onViewController: weakself
                            completion:^(BOOL presentErrorSuccess) {
-                               __strong MTViewControllerBarcode *strongself2 = weakself;
-                               __weak MTViewControllerBarcode *weak = strongself2;
+                               MTViewControllerBarcode * __strong strongself2 = weakself;
+                               MTViewControllerBarcode * __weak weak = strongself2;
                                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                                [[MTKeyChain sharedObject] deleteKey:key usingViewController:weak];
                            }];

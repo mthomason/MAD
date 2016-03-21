@@ -821,7 +821,7 @@ static NSString * const StringEmpty = @"";
         [NSError presentError: error
              onViewController: self
                    completion:^(BOOL presentErrorSuccess) {
-                       __weak MTViewControllerBarcodeOptions *weakself = strongself;
+                       MTViewControllerBarcodeOptions * __weak weakself = strongself;
                        NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                        [[MTKeyChain sharedObject] deleteKey:key usingViewController:weakself];
                    }];

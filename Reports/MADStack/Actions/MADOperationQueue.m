@@ -19,7 +19,7 @@
 - (void)addOperation:(NSOperation *)operation {
     if ([operation isKindOfClass:[MADOperation class]]){
         MADOperation * op = (MADOperation *)operation;
-        __weak typeof(self) weakSelf = self;
+        typeof(self) __weak weakSelf = self;
         // Set up a `BlockObserver` to invoke the `OperationQueueDelegate` method.
         MADBlockObserver * delegate = [[MADBlockObserver alloc]
                                        initWithStartHandler:nil
@@ -90,8 +90,9 @@
          would lead to the operation strongly referencing itself and that's
          the pure definition of a memory leak.
          */
-        __weak typeof(self) weakSelf = self;
-        __weak NSOperation * weakOperation = operation;
+        
+        typeof(self) __weak weakSelf = self;
+        NSOperation * __weak weakOperation = operation;
         [operation addCompletionBlock:^{
             MADOperationQueue * queue = weakSelf;
             NSOperation * op = weakOperation;
@@ -122,6 +123,6 @@
             [op waitUntilFinished];
         }
     }
-    
 }
+
 @end

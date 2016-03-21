@@ -19,7 +19,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        __weak MTNavigationControllerHideBottomBarUnlicensed *weakself = self;
+        MTNavigationControllerHideBottomBarUnlicensed * __weak weakself = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser == NO) {
                 weakself.toolbarHidden = YES;

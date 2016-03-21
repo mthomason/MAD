@@ -172,7 +172,7 @@
         }
         [self disableUserInterface];
         
-        __weak MTLicensingViewController *weakself = self;
+        MTLicensingViewController * __weak weakself = self;
         MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
             [weakself initalizationComplete:success error:error];
         };
@@ -186,7 +186,7 @@
 
     [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
     
-    __block __weak MTLicensingViewController *weakViewController = self;
+    MTLicensingViewController * __block __weak weakViewController = self;
 
     MTStoreKitNonRenewableLicensedUser licenseUserCompletion = ^(BOOL isLicensedUser, NSDate *experationDate) {
         [weakViewController licenseUserCompletion:isLicensedUser andExperationDate:experationDate];

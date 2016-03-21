@@ -30,7 +30,7 @@
         networkActivityIndicatorVisible = NO;
     }
     if ([NSThread isMainThread] == NO) {
-        __weak UIApplication *weakself = self;
+        UIApplication * __weak weakself = self;
         if (weakself.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [weakself setNetworkActivityIndicatorVisible:networkActivityIndicatorVisible];

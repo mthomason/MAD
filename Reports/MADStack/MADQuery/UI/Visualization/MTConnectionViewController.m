@@ -531,22 +531,22 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 - (void)saveCloseAndExitWithCompletion:(void (^)(BOOL, NSError *))completion {
-    __weak MADConnectionViewController *weakself = self;
+    MADConnectionViewController * __weak weakself = self;
     
     [self.docToSave saveToURL: self.docToSave.fileURL
              forSaveOperation: UIDocumentSaveForCreating
             completionHandler: ^(BOOL success) {
                 
-                __strong MADConnectionViewController *strongself = weakself;
-                __weak MADConnectionViewController *weakself1 = strongself;
+                MADConnectionViewController *strongself = weakself;
+                MADConnectionViewController * __weak weakself1 = strongself;
                 
                 if (success) {
-                    [weakself1.docToSave closeWithCompletionHandler:^(BOOL success) {
+                    [weakself1.docToSave closeWithCompletionHandler:^(BOOL successClose) {
                         
-                        __strong MADConnectionViewController *strongself1 = weakself1;
+                        MADConnectionViewController *strongself1 = weakself1;
                         
                         [strongself1 finishDocument];
-                        completion(success, nil);
+                        completion(successClose, nil);
                         
                     }];
                 }

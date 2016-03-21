@@ -171,7 +171,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         [view addSubview:label];
         [self addSubview:view];
         
-        __weak UIView *blockView = view;
+        UIView * __weak blockView = view;
         [UIView animateWithDuration:0.3000f delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
             blockView.alpha = 1.0000f;
         } completion:^(BOOL finished) {

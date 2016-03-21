@@ -534,7 +534,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
                                                                                          applicationActivities:applicationActivities];
     
-    __weak __block MADViewerController *weakself = self;
+    MADViewerController * __block __weak weakself = self;
     UIActivityViewControllerCompletionWithItemsHandler activityViewControllerCompletionWithItemsHandler =
     ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
@@ -553,7 +553,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         
-                        __weak MADViewerController *weakself = self;
+                        MADViewerController * __weak weakself = self;
                         
                         if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
                             [UINavigationBar appearanceWhenContainedIn:[UIViewController class], nil].barTintColor           = [MADColorEverydayApps newColorAnalogous4];
@@ -585,7 +585,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     UIPopoverPresentationController *ppc = activityViewController.popoverPresentationController;
     ppc.barButtonItem = sender;
     
-    __weak MADViewerController *weakSelf = self;
+    MADViewerController * __weak weakSelf = self;
     [self presentViewController:activityViewController animated:YES completion:^{
         weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
     }];
@@ -593,7 +593,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (IBAction)reload {
-    __weak MADViewerController *blockself = self;
+    MADViewerController * __weak blockself = self;
     CGSize size = self.document.paper.paperSize;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
@@ -629,7 +629,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             self.lastCacheDate = [NSDate date];
         } else {
             
-            __weak MADViewerController *weakself2 = self;
+            MADViewerController * __weak weakself2 = self;
             [NSError presentError: error
                  onViewController: weakself2
                        completion:^(BOOL presentErrorSuccess) {
@@ -824,7 +824,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         MADViewerController * __strong strongViewer = blockViewer;
         [strongViewer reloadStepTwo:viewBounds];
-        __weak MADViewerController *blockViewer2 = strongViewer;
+        MADViewerController * __weak blockViewer2 = strongViewer;
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             
@@ -1036,7 +1036,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 // ???: Why is it like this?
 
 - (void)showPrintDialog {
-    __weak MADViewerController *weakself = self;
+    MADViewerController * __weak weakself = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -1052,7 +1052,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                         UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
-                        __weak MADViewerController *weakself2 = weakself;
+                        MADViewerController * __weak weakself2 = weakself;
                         void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                         ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                             weakself2.toolbarSlider.enabled = YES;

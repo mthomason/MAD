@@ -112,16 +112,16 @@
     UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
     
-    __weak MTTableController *weakSelf = self;
+    MTTableController * __weak weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         
-        __strong MTTableController *strongself = weakSelf;
-        __weak MTTableController *weakSelf2 = strongself;
+        MTTableController *strongself = weakSelf;
+        MTTableController * __weak weakSelf2 = strongself;
         NSError * __autoreleasing error = NULL;
         bool success = [strongself.tableFormatter.query performQueryWithError:&error];
         
-        __strong MTTableController *strongself2 = weakSelf2;
+        MTTableController *strongself2 = weakSelf2;
         
         
         [strongself2.navigationItem performSelectorOnMainThread: @selector(setRightBarButtonItem:)
@@ -146,11 +146,11 @@
             } else {
                 
                 NSError *serror = error;
-                __weak MTTableController *weakself4 = strongself2;
+                MTTableController * __weak weakself4 = strongself2;
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     
-                    __strong MTTableController *strongself3 = weakself4;
-                    __weak MTTableController *weakself5 = strongself3;
+                    MTTableController *strongself3 = weakself4;
+                    MTTableController * __weak weakself5 = strongself3;
                     
                     [NSError presentError: serror
                          onViewController: strongself3
