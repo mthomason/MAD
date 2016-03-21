@@ -1,5 +1,5 @@
 //
-//  MADOperationConditionSupport.h
+//  MADOperationConditionResult.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/16/16.

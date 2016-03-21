@@ -25,6 +25,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     @property (nonatomic, weak) UIViewController *viewController;
 
+    @property (nonatomic, readwrite, assign) bool alertDisplayed;
+    @property (nonatomic, readwrite, assign) NSUInteger operationId;
+
     @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) MADCredential *credentials;
 
@@ -42,6 +45,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     if (self = [super init]) {
     
+        self.operationId = self.hash;
         self.viewController = viewController;
         self.source = none;
         

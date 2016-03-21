@@ -11,14 +11,18 @@
 
 #import "MADOperation.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+#import "MADOperationConditionDisplayedAlert.h"
 
 @class UIViewController;
 
 @interface MADPromptOperationPolarQuestion : MADOperation
-    <MADOperationConditionPolarQuestionAffirmativeResultProtocol>
+    <MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
     
     - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
                    viewController:(UIViewController * __weak)viewController;
+
+    @property (nonatomic, readonly, assign) bool alertDisplayed;
+    @property (nonatomic, readonly, assign) NSUInteger operationId;
 
     @property (nonatomic, readonly, assign) bool result;
 

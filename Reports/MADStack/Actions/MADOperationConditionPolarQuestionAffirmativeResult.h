@@ -6,17 +6,27 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADOperationConditionPolarQuestionResultProtocol_h
+#define MAD_Designer_MADOperationConditionPolarQuestionResultProtocol_h
+
 #import "MADOperationConditionResult.h"
 
-@protocol MADOperationConditionPolarQuestionAffirmativeResultProtocol <NSObject>
+@protocol MADOperationConditionPolarQuestionResultProtocol <NSObject>
 
 - (bool)result;
 
 @end
 
 @interface MADOperationConditionPolarQuestionAffirmativeResult : MADOperationConditionResult
-    <MADOperationConditionPolarQuestionAffirmativeResultProtocol>
-
+    <MADOperationConditionPolarQuestionResultProtocol>
     @property (nonatomic, assign) bool result;
 
 @end
+
+@interface MADOperationConditionPolarQuestionNegativeResult : MADOperationConditionResult
+    <MADOperationConditionPolarQuestionResultProtocol>
+    @property (nonatomic, assign) bool result;
+
+@end
+
+#endif

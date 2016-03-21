@@ -9,7 +9,6 @@
 #ifndef MAD_Designer_MADOperationConditionHasResultString_h
 #define MAD_Designer_MADOperationConditionHasResultString_h
 
-#import <Foundation/NSObject.h>
 #import "MADOperationCondition.h"
 
 @interface MADOperationConditionHasResultString : NSObject

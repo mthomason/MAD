@@ -23,6 +23,15 @@ static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
 static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to save your password?";
 
+@interface MADGetCredentialsOperation ()
+
+    @property (nonatomic, copy) NSString *username;
+    @property (nonatomic, copy) NSString *password;
+    @property (nonatomic, assign) bool passwordSet;
+    @property (nonatomic, assign) bool usernameSet;
+
+@end
+
 @implementation MADGetCredentialsOperation
 
 - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
@@ -40,26 +49,19 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithViewController:viewController];
     [promptCredntials addDependency:getUsername];
-    [promptCredntials addCompletionBlock:^{
-        NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
-        NSString *message = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
-        
-        MADOperationQueue *queue = [[MADOperationQueue alloc] init];
-        MADPromptOperationPolarQuestion *savePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title
-                                                                                                       message:message
-                                                                                                viewController:viewController];
-        
-        [queue addOperation:savePassword];
-    }];
     
     // Condition: Username is missing.
     // ---------------------------------------------------
     MADOperationConditionMissingResultString *conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyUsername];
     [promptCredntials addCondition:conditionReadUsernameFailed];
     
+    
+    
+    
     // Operation: Read password
     // ---------------------------------------------------
     MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword];
+    getPassword.readOperationType = password;
     [getPassword addDependency:getUsername];
     
     // Condition: Username is found.
@@ -76,6 +78,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADPromptOperationPassword *promptPassword = [[MADPromptOperationPassword alloc] initWithViewController:viewController];
     [promptPassword addDependency:getUsername];
     [promptPassword addDependency:getPassword];
+    [promptPassword addDependency:promptCredntials];
     [promptPassword addCondition:conditionReadUsername];
     [promptPassword addCondition:conditionReadPasswordFailed];
     
@@ -121,15 +124,53 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
     NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,
                                                      getPassword, promptPassword];
-    self = [super initWithOperations:operations];
+    if (self = [super initWithOperations:operations]) {
+        self.username = nil;
+        self.password = nil;
+    }
     return self;
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    NSLog(@"%@", operation);
+    //NSLog(@"%@", operation);
+    if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+        if (((NSObject <MADOperationResultStringProtocol> *) operation).success) {
+            //NSLog(@"Key: %@", ((NSObject <MADOperationResultStringProtocol> *) operation).key);
+            switch (((NSObject <MADOperationResultStringProtocol> *) operation).readOperationType) {
+                case username:
+                    self.username = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
+                    self.usernameSet = true;
+                    break;
+
+                case password:
+                    self.password = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
+                    self.passwordSet = true;
+                    break;
+                    
+                default:
+                    break;
+            }
+            //NSLog(@"Val: %@", ((NSObject <MADOperationResultStringProtocol> *) operation).value);
+        }
+    }
+    
+    if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+        if (((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
+            self.username = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.username;
+            self.usernameSet = true;
+            self.password = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.password;
+            self.passwordSet = true;
+        }
+    }
+    
+    if (self.usernameSet && self.passwordSet) {
+        [self finish];
+    }
+    
 //    if (operation conformsToProtocol:(Protocol *)) {
 //        statements
 //    }
+
 }
 
 @end

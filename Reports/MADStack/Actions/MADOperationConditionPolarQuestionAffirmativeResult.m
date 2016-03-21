@@ -11,3 +11,7 @@
 @implementation MADOperationConditionPolarQuestionAffirmativeResult
 
 @end
+
+@implementation MADOperationConditionPolarQuestionNegativeResult
+
+@end

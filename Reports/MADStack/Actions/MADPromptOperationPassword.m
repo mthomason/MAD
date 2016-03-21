@@ -27,8 +27,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, weak) UIViewController *viewController;
     @property (nonatomic, strong) UIAlertController *alertController;
 
-    @property (nonatomic, assign, readwrite) MADCredentialSource source;
-    @property (nonatomic, copy, readwrite) NSString *password;
+    @property (nonatomic, readwrite, assign) bool alertDisplayed;
+    @property (nonatomic, readwrite, assign) NSUInteger operationId;
+
+    @property (nonatomic, readwrite, assign) MADCredentialSource source;
+    @property (nonatomic, readwrite, copy) NSString *password;
     @property (nonatomic, readwrite, assign) bool gotPassword;
 
     @property (nonatomic, readwrite, assign) bool bypass;
@@ -46,10 +49,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (instancetype)initWithViewController:(UIViewController *)viewController {
     if (self = [super init]) {
         self.viewController = viewController;
-        self.source = none;
-        
-        self.bypass = false;
-        self.userContinue = false;
+        self.operationId = self.hash;
+        _source = none;
+        _alertDisplayed = false;
+        _bypass = false;
+        _userContinue = false;
     }
     return self;
 }
@@ -66,7 +70,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     __block NSString *password;
     __block bool success = false;
-    
+
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
@@ -96,8 +100,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfiguration];
-    
     self.alertController = alertController;
+    self.alertDisplayed = true;
+
     UIAlertController * __weak weakAlertController = self.alertController;
     UIViewController * __weak wViewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {

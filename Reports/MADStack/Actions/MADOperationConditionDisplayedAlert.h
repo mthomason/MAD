@@ -6,8 +6,25 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADOperationConditionDisplayedAlert_h
+#define MAD_Designer_MADOperationConditionDisplayedAlert_h
 
-@interface MADOperationConditionDisplayedAlert : MADOperationCondition
+#import <Foundation/NSObject.h>
+#import "MADOperationCondition.h"
+
+@protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
+
+    - (bool)alertDisplayed;
+    - (NSUInteger)operationId;
 
 @end
+
+@interface MADOperationConditionDisplayedAlert : NSObject
+    <MADOperationCondition>
+
+    - (instancetype)initWithTag:(NSUInteger)tag;
+    @property (nonatomic, assign) bool reverseCondition;
+
+@end
+
+#endif

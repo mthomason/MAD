@@ -19,6 +19,9 @@ static NSString * const TextNo = @"No";
     @property (nonatomic, copy) NSString *message;
     @property (nonatomic, weak) UIViewController *viewController;
 
+    @property (nonatomic, readwrite, assign) bool alertDisplayed;
+    @property (nonatomic, readwrite, assign) NSUInteger operationId;
+
 @end
 
 @implementation MADPromptOperationPolarQuestion
@@ -26,6 +29,7 @@ static NSString * const TextNo = @"No";
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
+        _operationId = self.hash;
         _title = title.copy;
         _message = message.copy;
         _result = false;

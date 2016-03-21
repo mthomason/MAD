@@ -11,13 +11,17 @@
 
 #import "MADOperation.h"
 #import <MAD/MADCredential.h>
+#import "MADOperationConditionDisplayedAlert.h"
 
 @class UIViewController;
 
 @interface MADPromptOperationCredentials : MADOperation
-    <MADOperationHoldsCredentialsProtocol>
+    <MADOperationHoldsCredentialsProtocol, MADOperationConditionDisplayedAlertProtocol>
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
+
+    @property (nonatomic, readonly, assign) bool alertDisplayed;
+    @property (nonatomic, readonly, assign) NSUInteger operationId;
 
     @property (nonatomic, readonly, copy) MADCredential *credentials;
     @property (nonatomic, readonly, assign) bool gotCredentials;
