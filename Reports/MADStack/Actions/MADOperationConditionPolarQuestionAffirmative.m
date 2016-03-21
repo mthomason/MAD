@@ -41,30 +41,33 @@
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
         completion([MADOperationConditionResult failed:nil]);
-    } else {
-        
-        for (NSOperation *dependency in dependencies) {
-            if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
-                
-                if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result &&
-                    dependency.hash == self.tag) {
+        return;
+    }
+
+    MADOperationConditionResult *result = nil;
+    
+    for (NSOperation *dependency in dependencies) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
+            
+            if (dependency.hash == self.tag) {
+                if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
                     
-                    MADOperationConditionPolarQuestionAffirmativeResult *result = [MADOperationConditionPolarQuestionAffirmativeResult satisfied];
-                    result.result = true;
-                    completion(result);
-                    
+                    result = [MADOperationConditionPolarQuestionAffirmativeResult satisfied];
+                    ((MADOperationConditionPolarQuestionAffirmativeResult *)result).result = true;
                 } else {
-                    
-                    MADOperationConditionPolarQuestionAffirmativeResult *result = [MADOperationConditionPolarQuestionAffirmativeResult failed:nil];
-                    result.result = false;
-                    completion(result);
-                    
+                    result = [MADOperationConditionResult failed:nil];
                 }
-            } else {
-                completion([MADOperationConditionResult failed:nil]);
+                break;
             }
         }
     }
+
+    if (result != nil) {
+        completion(result);
+    } else {
+        completion([MADOperationConditionResult failed:nil]);
+    }
+
 }
 
 @end

@@ -43,32 +43,32 @@
         
         completion([MADOperationConditionResult failed:nil]);
         
-    } else {
+    }
+
+    MADOperationConditionResult *result = nil;
+    for (NSOperation *dependency in dependencies) {
         
-        for (NSOperation *dependency in dependencies) {
-
-
-            if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
-                
-                if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result &&
-                    dependency.hash == self.tag) {
+        
+        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
+            
+            if (dependency.hash == self.tag) {
+                if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
                     
-                    MADOperationConditionPolarQuestionNegativeResult *result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
-                    result.result = true;
-                    completion(result);
-                    
+                    result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
+                    ((MADOperationConditionPolarQuestionNegativeResult *)result).result = true;
                 } else {
-                    
-                    MADOperationConditionPolarQuestionNegativeResult *result = [MADOperationConditionPolarQuestionNegativeResult failed:nil];
-                    result.result = false;
-                    completion(result);
-                    
+                    result = [MADOperationConditionResult failed:nil];
                 }
-            } else {
-                completion([MADOperationConditionResult failed:nil]);
+                break;
             }
         }
     }
+    if (result != nil) {
+        completion(result);
+    } else {
+        completion([MADOperationConditionResult failed:nil]);
+    }
+    
 }
 
 @end

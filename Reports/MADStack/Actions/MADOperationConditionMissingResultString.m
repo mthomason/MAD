@@ -45,28 +45,34 @@
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
         completion([MADOperationConditionResult failed:nil]);
-    } else {
-        
-        for (NSOperation *dependency in dependencies) {
-            if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+        return;
+    }
+    
+    MADOperationConditionResult *result = nil;
+    for (NSOperation *dependency in dependencies) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+            
+            if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
                 
-                if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key] &&
-                    !((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
+                if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
                     
-                    MADOperationConditionHasResultStringResult *result = [MADOperationConditionHasResultStringResult satisfied];
-                    result.result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
-                    completion(result);
+                    result = [MADOperationConditionHasResultStringResult satisfied];
+                    ((MADOperationConditionHasResultStringResult *)result).result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
                     
                 } else {
-                    completion([MADOperationConditionResult failed:nil]);
+                    result = [MADOperationConditionResult failed:nil];
                 }
-                
-            } else {
-                completion([MADOperationConditionResult failed:nil]);
+                break;
             }
         }
-        
     }
+    
+    if (result != nil) {
+        completion(result);
+    } else {
+        completion([MADOperationConditionResult failed:nil]);
+    }
+    
 }
 
 @end

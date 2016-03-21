@@ -43,35 +43,38 @@
         
         completion([MADOperationConditionResult failed:nil]);
         
-    } else {
+    }
 
-        for (NSOperation *dependency in dependencies) {
+    MADOperationConditionResult *result = nil;
+    
 
-            if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)]) {
-                
-                bool condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed] && dependency.hash == self.tag;
-                
-                if (self.reverseCondition) {
-                    condition = !condition;
-                }
-                
-                if (condition) {
-                    
-                    MADOperationConditionResult *result = [MADOperationConditionResult satisfied];
-                    completion(result);
-                    
-                } else {
-                    
-                    MADOperationConditionResult *result = [MADOperationConditionResult failed:nil];
-                    completion(result);
-                    
-                }
-            } else {
-                completion([MADOperationConditionResult failed:nil]);
+    for (NSOperation *dependency in dependencies) {
+        
+        if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] && dependency.hash == self.tag) {
+            
+            bool condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
+            
+            if (self.reverseCondition) {
+                condition = !condition;
             }
             
+            if (condition) {
+                result = [MADOperationConditionResult satisfied];
+            } else {
+                result = [MADOperationConditionResult failed:nil];
+            }
+            
+            break;
         }
     }
+    
+    if (result != nil) {
+        completion(result);
+    } else {
+        completion([MADOperationConditionResult failed:nil]);
+    }
+
+    
 }
 
 @end
