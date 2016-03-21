@@ -26,7 +26,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, weak) UIViewController *viewController;
 
     @property (nonatomic, readwrite, assign) bool alertDisplayed;
-    @property (nonatomic, readwrite, assign) NSUInteger operationId;
 
     @property (nonatomic, assign, readwrite) MADCredentialSource source;
     @property (nonatomic, copy, readwrite) MADCredential *credentials;
@@ -45,7 +44,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     if (self = [super init]) {
     
-        self.operationId = self.hash;
         self.viewController = viewController;
         self.source = none;
         
@@ -86,23 +84,21 @@ static NSString * const MADButtonCancel                = @"Cancel";
         textField.delegate = self;
     };
     
-    MADPromptOperationCredentials *weakself = self;
+    MADPromptOperationCredentials * __weak weakself = self;
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
-
+                                                              MADPromptOperationCredentials *strongself = weakself;
                                                               username = ((UITextField *)alertController.textFields.firstObject).text;
                                                               password = ((UITextField *)[alertController.textFields objectAtIndex:1]).text;
 
                                                               MADCredential *credentials = nil;
                                                               if (username != nil && password != nil) {
                                                                   credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-                                                                  self.gotCredentials = true;
-                                                                  self.source = credential_prompt;
+                                                                  strongself.gotCredentials = true;
+                                                                  strongself.source = credential_prompt;
                                                               }
-                                                              [self finish:true credentials:credentials];
-                                       
-                                                              
+                                                              [strongself finish:true credentials:credentials];
                                                           }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel

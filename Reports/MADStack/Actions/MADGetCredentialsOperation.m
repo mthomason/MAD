@@ -19,6 +19,8 @@
 #import "MADKeyChainOperationPut.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 
+#import "MADOperationConditionDisplayedAlert.h"
+
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
 static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to save your password?";
@@ -81,6 +83,10 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptPassword addDependency:promptCredntials];
     [promptPassword addCondition:conditionReadUsername];
     [promptPassword addCondition:conditionReadPasswordFailed];
+    
+    MADOperationConditionDisplayedAlert *displayedAlert = [[MADOperationConditionDisplayedAlert alloc] initWithTag:promptCredntials.hash];
+    displayedAlert.reverseCondition = true;
+    [promptPassword addCondition:displayedAlert];
     
 
 

@@ -26,7 +26,6 @@
     @property (nonatomic, readonly, assign) bool gotCredentials;
 
     @property (nonatomic, readonly, assign) bool alertDisplayed;
-    @property (nonatomic, readonly, assign) NSUInteger operationId;
 
     @property (nonatomic, readonly, copy) NSString *password;
     @property (nonatomic, readonly, assign) bool gotPassword;

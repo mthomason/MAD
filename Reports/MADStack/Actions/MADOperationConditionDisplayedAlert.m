@@ -40,8 +40,8 @@
     
     if ([operation conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)]) {
         
-        bool condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)operation) alertDisplayed] &&
-                            ((NSObject <MADOperationConditionDisplayedAlertProtocol> *)operation).operationId == self.tag;
+        bool condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)operation) alertDisplayed] && operation.hash == self.tag;
+
         if (self.reverseCondition) {
             condition = !condition;
         }

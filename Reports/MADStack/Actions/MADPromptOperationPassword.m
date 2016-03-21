@@ -28,7 +28,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, strong) UIAlertController *alertController;
 
     @property (nonatomic, readwrite, assign) bool alertDisplayed;
-    @property (nonatomic, readwrite, assign) NSUInteger operationId;
 
     @property (nonatomic, readwrite, assign) MADCredentialSource source;
     @property (nonatomic, readwrite, copy) NSString *password;
@@ -49,7 +48,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (instancetype)initWithViewController:(UIViewController *)viewController {
     if (self = [super init]) {
         self.viewController = viewController;
-        self.operationId = self.hash;
         _source = none;
         _alertDisplayed = false;
         _bypass = false;

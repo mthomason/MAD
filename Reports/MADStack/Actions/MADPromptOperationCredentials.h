@@ -21,7 +21,6 @@
     - (instancetype)initWithViewController:(UIViewController *)viewController;
 
     @property (nonatomic, readonly, assign) bool alertDisplayed;
-    @property (nonatomic, readonly, assign) NSUInteger operationId;
 
     @property (nonatomic, readonly, copy) MADCredential *credentials;
     @property (nonatomic, readonly, assign) bool gotCredentials;

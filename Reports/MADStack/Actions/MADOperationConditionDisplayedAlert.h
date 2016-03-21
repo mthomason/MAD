@@ -15,7 +15,6 @@
 @protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
 
     - (bool)alertDisplayed;
-    - (NSUInteger)operationId;
 
 @end
 
