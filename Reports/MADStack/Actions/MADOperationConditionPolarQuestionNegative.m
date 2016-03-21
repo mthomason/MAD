@@ -40,27 +40,22 @@
     
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
-        
         completion([MADOperationConditionResult failed:nil]);
-        
+        return;
     }
 
     MADOperationConditionResult *result = nil;
     for (NSOperation *dependency in dependencies) {
-        
-        
-        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
-            
-            if (dependency.hash == self.tag) {
-                if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
-                    
-                    result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
-                    ((MADOperationConditionPolarQuestionNegativeResult *)result).result = true;
-                } else {
-                    result = [MADOperationConditionResult failed:nil];
-                }
-                break;
+        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
+            dependency.hash == self.tag) {
+            if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
+                
+                result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
+                ((MADOperationConditionPolarQuestionNegativeResult *)result).result = true;
+            } else {
+                result = [MADOperationConditionResult failed:nil];
             }
+            break;
         }
     }
     if (result != nil) {

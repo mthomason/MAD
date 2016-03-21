@@ -40,9 +40,8 @@
     
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
-        
         completion([MADOperationConditionResult failed:nil]);
-        
+        return;
     }
 
     MADOperationConditionResult *result = nil;

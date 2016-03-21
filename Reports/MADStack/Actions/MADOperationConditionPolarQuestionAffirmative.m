@@ -47,18 +47,17 @@
     MADOperationConditionResult *result = nil;
     
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
+            dependency.hash == self.tag) {
             
-            if (dependency.hash == self.tag) {
-                if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
-                    
-                    result = [MADOperationConditionPolarQuestionAffirmativeResult satisfied];
-                    ((MADOperationConditionPolarQuestionAffirmativeResult *)result).result = true;
-                } else {
-                    result = [MADOperationConditionResult failed:nil];
-                }
-                break;
+            if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
+                
+                result = [MADOperationConditionPolarQuestionAffirmativeResult satisfied];
+                ((MADOperationConditionPolarQuestionAffirmativeResult *)result).result = true;
+            } else {
+                result = [MADOperationConditionResult failed:nil];
             }
+            break;
         }
     }
 

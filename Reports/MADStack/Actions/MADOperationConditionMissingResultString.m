@@ -50,20 +50,18 @@
     
     MADOperationConditionResult *result = nil;
     for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
+            [self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
             
-            if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
+            if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
                 
-                if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
-                    
-                    result = [MADOperationConditionHasResultStringResult satisfied];
-                    ((MADOperationConditionHasResultStringResult *)result).result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
-                    
-                } else {
-                    result = [MADOperationConditionResult failed:nil];
-                }
-                break;
+                result = [MADOperationConditionHasResultStringResult satisfied];
+                ((MADOperationConditionHasResultStringResult *)result).result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
+                
+            } else {
+                result = [MADOperationConditionResult failed:nil];
             }
+            break;
         }
     }
     
