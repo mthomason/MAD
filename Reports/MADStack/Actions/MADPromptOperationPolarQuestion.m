@@ -47,6 +47,7 @@ static NSString * const TextNo = @"No";
                                                      handler: ^(UIAlertAction * _Nonnull action) {
                                                          MADPromptOperationPolarQuestion * __strong sself = weakSelf;
                                                          sself.result = true;
+                                                         sself.alertDisplayed = true;
                                                          [sself finish];
                                                      }];
     
@@ -55,6 +56,7 @@ static NSString * const TextNo = @"No";
                                                          handler: ^(UIAlertAction * _Nonnull action) {
                                                              MADPromptOperationPolarQuestion * __strong sself = weakSelf;
                                                              sself.result = false;
+                                                             sself.alertDisplayed = true;
                                                              [sself finish];
                                                          }];
     

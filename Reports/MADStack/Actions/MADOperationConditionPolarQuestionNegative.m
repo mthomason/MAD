@@ -8,6 +8,7 @@
 
 #import "MADOperationConditionPolarQuestionNegative.h"
 #import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
 #import "MADPromptOperationPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 
@@ -37,25 +38,36 @@
 - (void)evaluateForOperation:(MADOperation *)operation
                   completion:(void (^)(MADOperationConditionResult *))completion {
     
-
-    if ([operation conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
+    NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
+    if (dependencies.count == 0) {
         
-        if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)operation).result &&
-                operation.hash == self.tag) {
-        
-            MADOperationConditionPolarQuestionNegativeResult *result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
-            result.result = true;
-            completion(result);
-            
-        } else {
-        
-            MADOperationConditionPolarQuestionNegativeResult *result = [MADOperationConditionPolarQuestionNegativeResult failed:nil];
-            result.result = false;
-            completion(result);
-        
-        }
-    } else {
         completion([MADOperationConditionResult failed:nil]);
+        
+    } else {
+        
+        for (NSOperation *dependency in dependencies) {
+
+
+            if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)]) {
+                
+                if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result &&
+                    dependency.hash == self.tag) {
+                    
+                    MADOperationConditionPolarQuestionNegativeResult *result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
+                    result.result = true;
+                    completion(result);
+                    
+                } else {
+                    
+                    MADOperationConditionPolarQuestionNegativeResult *result = [MADOperationConditionPolarQuestionNegativeResult failed:nil];
+                    result.result = false;
+                    completion(result);
+                    
+                }
+            } else {
+                completion([MADOperationConditionResult failed:nil]);
+            }
+        }
     }
 }
 

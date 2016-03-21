@@ -9,6 +9,7 @@
 #import "MADOperationConditionHasResultString.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSArray.h>
 #import "MADOperationConditionHasResultStringResult.h"
 #import "MADOperation.h"
 #import "NSError+MADOperationErrors.h"
@@ -45,21 +46,31 @@
 - (void)evaluateForOperation:(MADOperation *)operation
                   completion:(void (^)(MADOperationConditionResult *))completion {
     
-    if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
-        
-        if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) operation).key] &&
-                ((NSObject <MADOperationResultStringProtocol> *) operation).success) {
-            
-            MADOperationConditionHasResultStringResult *result = [MADOperationConditionHasResultStringResult satisfied];
-            result.result = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
-            completion(result);
-        
-        } else {
-            completion([MADOperationConditionResult failed:nil]);
+    NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
+    
+    if (dependencies.count == 0) {
+        completion([MADOperationConditionResult failed:nil]);
+    } else {
+    
+        for (NSOperation *dependency in dependencies) {
+            if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+                
+                if ([self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key] &&
+                    ((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
+                    
+                    MADOperationConditionHasResultStringResult *result = [MADOperationConditionHasResultStringResult satisfied];
+                    result.result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
+                    completion(result);
+                    
+                } else {
+                    completion([MADOperationConditionResult failed:nil]);
+                }
+                
+            } else {
+                completion([MADOperationConditionResult failed:nil]);
+            }
         }
         
-    } else {
-        completion([MADOperationConditionResult failed:nil]);
     }
 }
 

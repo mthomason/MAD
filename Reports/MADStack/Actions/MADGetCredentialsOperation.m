@@ -52,6 +52,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithViewController:viewController];
     [promptCredntials addDependency:getUsername];
     
+    
+    
     // Condition: Username is missing.
     // ---------------------------------------------------
     MADOperationConditionMissingResultString *conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyUsername];
@@ -109,11 +111,10 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
 
     MADOperationConditionPolarQuestionAffirmative *userEnteredPassword = [[MADOperationConditionPolarQuestionAffirmative alloc] init];
+
     [promptSavePassword addCondition:conditionReadPasswordFailed];
     [promptSavePassword addCondition:userEnteredPassword];
-    [promptSavePassword addCompletionBlock:^{
-        
-    }];
+
 
     // Operation: Save password
     // ---------------------------------------------------
@@ -170,7 +171,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     }
     
     if (self.usernameSet && self.passwordSet) {
-        [self finish];
+        //[self finish];
     }
     
 //    if (operation conformsToProtocol:(Protocol *)) {

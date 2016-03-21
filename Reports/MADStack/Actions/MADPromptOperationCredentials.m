@@ -121,12 +121,14 @@ static NSString * const MADButtonCancel                = @"Cancel";
 }
 
 - (void)finish:(bool)success credentials:(MADCredential *)credentials {
+    self.alertDisplayed = true;
     self.userContinue = success;
     self.credentials = credentials;
     [self finish];
 }
 
 - (void)userCancel {
+    self.alertDisplayed = true;
     self.userContinue = false;
     self.credentials = nil;
     [self finish];

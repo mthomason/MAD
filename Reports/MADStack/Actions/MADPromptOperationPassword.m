@@ -84,6 +84,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                               MADPromptOperationPassword * sself = weakself;
                                                               password = ((UITextField *)sself.alertController.textFields.firstObject).text;
                                                               success = true;
+                                                              sself.alertDisplayed = true;
                                                               [sself finish:success password:password];
                                                           }];
     
@@ -93,6 +94,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                                   MADPromptOperationPassword * sself = weakself;
                                                                   password = nil;
                                                                   success = false;
+                                                                  sself.alertDisplayed = true;
                                                                   [sself userCancel];
                                                               }];
     [alertController addAction:actionAlertOK];
