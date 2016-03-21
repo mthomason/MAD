@@ -42,7 +42,7 @@
 - (void)evaluateForOperation:(MADOperation *)operation
                   completion:(void (^)(MADOperationConditionResult *))completion {
     
-    NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
+    NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
         completion([MADOperationConditionResult failed:nil]);
         return;
