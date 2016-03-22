@@ -68,8 +68,7 @@
                 
                 result = [MADOperationConditionHasResultStringResult satisfied];
                 
-                ((MADOperationConditionHasResultStringResult *)result).result =
-                ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
+                ((MADOperationConditionHasResultStringResult *)result).result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
                 
             } else {
                 MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];

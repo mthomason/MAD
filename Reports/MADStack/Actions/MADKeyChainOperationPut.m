@@ -34,10 +34,16 @@ static NSString * const ErrorDomain = @"MADKCP";
 - (void)execute {
 
     NSString *valueToWrite = nil;
+    
+    // Search the operations dependencies for the value to write.
+    //
     for (NSOperation *operation in self.dependencies) {
+    
         if ([operation conformsToProtocol:@protocol(MADKeyChainKeyValueProtocol)]) {
+        
             NSString *key = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) key];
             if ([key isEqualToString:self.key]) {
+            
                 NSString *value = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) value];
                 if (value != nil) {
                     valueToWrite = [NSString stringWithString:value];
@@ -47,17 +53,24 @@ static NSString * const ErrorDomain = @"MADKCP";
         }
     }
 
+    // Write the value to the keychain.
     if (valueToWrite != nil) {
+    
         OSStatus status = [MTKeyChain saveToken:valueToWrite forKey:self.key];
         if (status == errSecSuccess) {
             [self finish];
         } else {
+
             NSError *error = [NSError errorWithDomain:ErrorDomain code:status userInfo:nil];
             [self finishWithError:error];
+            
         }
+        
     } else {
+
         NSError *error = [NSError errorWithDomain:ErrorDomain code:StatusNotFound userInfo:nil];
         [self finishWithError:error];
+        
     }
 }
 
