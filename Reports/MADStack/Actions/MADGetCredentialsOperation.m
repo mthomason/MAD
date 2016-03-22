@@ -18,8 +18,8 @@
 #import "MADOperationQueue.h"
 #import "MADKeyChainOperationPut.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
-
 #import "MADOperationConditionDisplayedAlert.h"
+#import "MADOperationBooleanAnd.h"
 
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
@@ -68,10 +68,12 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     getPassword.readOperationType = password;
     [getPassword addDependency:getUsername];
     
+    
     // Condition: Username is found.
     // ---------------------------------------------------
     MADOperationConditionHasResultString *conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
     [getPassword addCondition:conditionReadUsername];
+    
     
     // Condition: Password is missing.
     // ---------------------------------------------------
@@ -83,14 +85,17 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptPassword addDependency:getUsername];
     [promptPassword addDependency:getPassword];
     [promptPassword addDependency:promptCredntials];
-    [promptPassword addCondition:conditionReadUsername];
-    [promptPassword addCondition:conditionReadPasswordFailed];
     
     MADOperationConditionDisplayedAlert *displayedAlert = [[MADOperationConditionDisplayedAlert alloc] initWithTag:promptCredntials.hash];
     displayedAlert.reverseCondition = true;
-    [promptPassword addCondition:displayedAlert];
-    
 
+    NSArray <NSObject <MADOperationCondition> *> *conditionsForPromptPassword = @[conditionReadUsername,
+                                                                                  conditionReadPasswordFailed,
+                                                                                  displayedAlert];
+
+    MADOperationBooleanAnd *conditionPromptPasswordBoolAnd = [[MADOperationBooleanAnd alloc] initWithConditions:conditionsForPromptPassword];
+
+    [promptPassword addCondition:conditionPromptPasswordBoolAnd];
 
     NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
     NSString *message = NSLocalizedString(TextSaveToKeyChainMessagePassword, TextSaveToKeyChainMessagePassword);

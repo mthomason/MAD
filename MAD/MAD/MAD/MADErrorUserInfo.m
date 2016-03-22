@@ -29,8 +29,8 @@
     return self;
 }
 
-- (NSError *)errorWithDomain: (NSString *)domain code: (NSInteger)code {
-    return [NSError errorWithDomain:domain code:code userInfo:self.userinfo];
+- (NSError *)errorWithDomain:(NSString *)domain code: (NSInteger)code {
+    return [NSError errorWithDomain:domain code:code userInfo: self.userinfo];
 }
 
 @end

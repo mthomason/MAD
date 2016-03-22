@@ -11,6 +11,9 @@
 #import <Foundation/NSArray.h>
 #import "MADPromptOperationPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+#import "MADOperationConditionResult.h"
+#import "NSError+MADOperationErrors.h"
+#import <MAD/MADErrorUserInfo.h>
 
 @interface MADOperationConditionPolarQuestionNegative ()
 
@@ -40,7 +43,9 @@
     
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
-        completion([MADOperationConditionResult failed:nil]);
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        completion([MADOperationConditionResult failed:error]);
         return;
     }
 
@@ -53,7 +58,9 @@
                 result = [MADOperationConditionPolarQuestionNegativeResult satisfied];
                 ((MADOperationConditionPolarQuestionNegativeResult *)result).result = true;
             } else {
-                result = [MADOperationConditionResult failed:nil];
+                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+                NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+                result = [MADOperationConditionResult failed:error];
             }
             break;
         }
@@ -61,7 +68,9 @@
     if (result != nil) {
         completion(result);
     } else {
-        completion([MADOperationConditionResult failed:nil]);
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        completion([MADOperationConditionResult failed:error]);
     }
     
 }

@@ -10,6 +10,9 @@
 #import "MADOperationConditionResult.h"
 #import "MADOperation.h"
 #import <Foundation/NSArray.h>
+#import "MADOperationConditionResult.h"
+#import "NSError+MADOperationErrors.h"
+#import <MAD/MADErrorUserInfo.h>
 
 @interface MADOperationConditionDisplayedAlert ()
 
@@ -40,7 +43,9 @@
     
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
-        completion([MADOperationConditionResult failed:nil]);
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        completion([MADOperationConditionResult failed:error]);
         return;
     }
 
@@ -60,7 +65,9 @@
             if (condition) {
                 result = [MADOperationConditionResult satisfied];
             } else {
-                result = [MADOperationConditionResult failed:nil];
+                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+                NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+                result = [MADOperationConditionResult failed:error];
             }
             
             break;
@@ -70,7 +77,9 @@
     if (result != nil) {
         completion(result);
     } else {
-        completion([MADOperationConditionResult failed:nil]);
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        completion([MADOperationConditionResult failed:error]);
     }
 
     

@@ -14,6 +14,8 @@
 #import "MADOperation.h"
 #import "NSError+MADOperationErrors.h"
 #import "MADKeyChainOperationGet.h"
+#import "MADOperationConditionResult.h"
+#import <MAD/MADErrorUserInfo.h>
 
 @interface MADOperationConditionHasResultString ()
 
@@ -49,7 +51,9 @@
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     
     if (dependencies.count == 0) {
-        completion([MADOperationConditionResult failed:nil]);
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        completion([MADOperationConditionResult failed:error]);
         return;
     }
     
@@ -63,11 +67,14 @@
             if (((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
                 
                 result = [MADOperationConditionHasResultStringResult satisfied];
+                
                 ((MADOperationConditionHasResultStringResult *)result).result =
                 ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
                 
             } else {
-                result = [MADOperationConditionResult failed:nil];
+                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+                NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+                result = [MADOperationConditionResult failed:error];
             }
             break;
         }
@@ -76,7 +83,9 @@
     if (result != nil) {
         completion(result);
     } else {
-        completion([MADOperationConditionResult failed:nil]);
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
+        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        completion([MADOperationConditionResult failed:error]);
     }
     
 }
