@@ -8,6 +8,7 @@
 
 #import "MADPromptOperationPolarQuestion.h"
 #import <UIKit/UIAlertController.h>
+#import "MADMutualExclusive.h"
 
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
@@ -31,6 +32,8 @@ static NSString * const TextNo = @"No";
         _title = title.copy;
         _message = message.copy;
         _result = false;
+        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
+        
     }
     return self;
 }

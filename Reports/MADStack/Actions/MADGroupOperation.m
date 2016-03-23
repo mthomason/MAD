@@ -42,7 +42,7 @@
         _internalQueue.suspended = YES;
         _internalQueue.delegate = self;
         
-        for (NSOperation * op in operations){
+        for (NSOperation *op in operations){
             [_internalQueue addOperation:op];
         }
     }

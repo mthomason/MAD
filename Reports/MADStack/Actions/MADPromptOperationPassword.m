@@ -14,6 +14,7 @@
 #import "MADTextField.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
+#import "MADMutualExclusive.h"
 
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
@@ -47,11 +48,13 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (instancetype)initWithViewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.viewController = viewController;
         _source = none;
         _alertDisplayed = false;
         _bypass = false;
         _userContinue = false;
+        self.viewController = viewController;
+        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
+
     }
     return self;
 }

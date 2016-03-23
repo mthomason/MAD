@@ -36,6 +36,15 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 @implementation MADGetCredentialsOperation
 
+- (MADCredential *)credentials {
+    if (self.passwordSet && self.usernameSet) {
+        MADCredential *credentials = [[MADCredential alloc] initWithUsername:self.username andPassword:self.password];
+        return credentials;
+    } else {
+        return nil;
+    }
+}
+
 - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
     
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
@@ -140,11 +149,11 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [putPassword addCondition:promptToSaveCredntialsAffirmative];
     [putPassword addCondition:promptToSavePasswordAffirmative];
 
-
     // Operation: Confirm Save Username and Password
-
-    NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials, getPassword, promptPassword,
-                                                     promptSaveCredntials, promptSavePassword, putUsername, putPassword];
+    NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,
+                                                     getPassword, promptPassword,
+                                                     promptSaveCredntials, promptSavePassword,
+                                                     putUsername, putPassword];
     if (self = [super initWithOperations:operations]) {
         self.username = nil;
         self.password = nil;
@@ -154,6 +163,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
 
+    // Operation 1 & 3: Credentials in keychain.
+    //  If results are read from keychain, then MADOperationResultStringProtocol.
+    //---
     if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
     
         if (((NSObject <MADOperationResultStringProtocol> *) operation).success) {
@@ -175,6 +187,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         }
     }
     
+    // Operation 2 & 4: Credentials from alert.
+    //  If results are read from keychain, then MADOperationResultStringProtocol.
+    //---
     if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
         if (((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
             self.username = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.username;
@@ -185,7 +200,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     }
     
     if (self.usernameSet && self.passwordSet) {
-        //[self finish];
+        [self finish];
     }
     
 //    if (operation conformsToProtocol:(Protocol *)) {

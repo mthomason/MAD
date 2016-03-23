@@ -13,6 +13,7 @@
 #import <MAD/MADCredential.h>
 #import "MADTextField.h"
 #import "MADKeyChainOperationGet.h"
+#import "MADMutualExclusive.h"
 
 static NSString * const MADTitleCredentials            = @"Credentials";
 static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
@@ -50,6 +51,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         self.displayingPrompt = false;
         self.bypass = false;
         self.gotCredentials = false;
+        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
         
     }
     return self;

@@ -11,11 +11,13 @@
 
 #import "MADGroupOperation.h"
 
-@class UIViewController;
+@class UIViewController, MADCredential;
 
 @interface MADGetCredentialsOperation : MADGroupOperation
 
-- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
+    - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
+
+    @property (readonly) MADCredential *credentials;
 
 @end
 
