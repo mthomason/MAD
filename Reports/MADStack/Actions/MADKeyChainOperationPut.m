@@ -37,7 +37,8 @@ static NSString * const ErrorDomain = @"MADKCP";
     
     // Search the operations dependencies for the value to write.
     //
-    for (NSOperation *operation in self.dependencies) {
+    NSArray<__kindof NSOperation *> *dependencies = self.dependencies;
+    for (NSOperation *operation in dependencies) {
     
         if ([operation conformsToProtocol:@protocol(MADKeyChainKeyValueProtocol)]) {
         

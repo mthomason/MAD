@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADAlertController_h
+#define MAD_Designer_MADAlertController_h
+
+#import <UIKit/UIAlertController.h>
 
 @protocol MADAlertControllerAlertRemovedProtocol;
 
@@ -18,6 +21,8 @@
 
 @protocol MADAlertControllerAlertRemovedProtocol <NSObject>
 
-- (void)alertControllerDidDisappear:(MADAlertController *)alertController;
+    - (void)alertControllerDidDisappear:(MADAlertController *)alertController;
 
 @end
+
+#endif

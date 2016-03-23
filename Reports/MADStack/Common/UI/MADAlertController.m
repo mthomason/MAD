@@ -15,11 +15,11 @@
 @implementation MADAlertController
 
 - (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     id <MADAlertControllerAlertRemovedProtocol> delegate = self.madAlertControllerAlertRemovedDelegate;
     if (delegate != nil) {
         [delegate alertControllerDidDisappear:self];
     }
-    [super viewDidDisappear:animated];
 }
 
 - (void)viewDidLoad {

@@ -53,6 +53,7 @@ static NSString * const TextNo = @"No";
                                                          MADPromptOperationPolarQuestion * __strong sself = weakSelf;
                                                          sself.result = true;
                                                          sself.alertDisplayed = true;
+                                                         [sself performSelectorInBackground:@selector(finish) withObject:nil];
                                                      }];
     
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
@@ -61,6 +62,7 @@ static NSString * const TextNo = @"No";
                                                              MADPromptOperationPolarQuestion * __strong sself = weakSelf;
                                                              sself.result = false;
                                                              sself.alertDisplayed = true;
+                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
                                                          }];
     
     [alertController addAction:actionOK];
@@ -77,7 +79,7 @@ static NSString * const TextNo = @"No";
 
 - (void)alertControllerDidDisappear:(MADAlertController *)alertController {
     alertController.madAlertControllerAlertRemovedDelegate = nil;
-    [self finish];
+    //[self finish];
 }
 
 @end

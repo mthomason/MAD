@@ -68,7 +68,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptCredntials addCondition:conditionReadUsernameFailed];
     
     
-    
     // ---------------------------------------------------
     // Operation 3: Read password
     // Conditions:  Username is found.
@@ -135,10 +134,10 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     MADKeyChainOperationPut *putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername];
     MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSaveCredntials.hash];
+    [putUsername addDependency:promptCredntials];
     [putUsername addDependency:promptSaveCredntials];
     [putUsername addCondition:promptToSaveCredntialsAffirmative];
 
-    
     // ---------------------------------------------------
     // Operation 8: Save password
     // Conditions:  User said yes to save credentials OR
@@ -147,9 +146,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADKeyChainOperationPut *putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword];
     MADOperationConditionPolarQuestionAffirmative *promptToSavePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSavePassword.hash];
     [putPassword addDependency:promptSaveCredntials];
-    [putPassword addDependency:promptSavePassword];
     [putPassword addCondition:promptToSaveCredntialsAffirmative];
-    [putPassword addCondition:promptToSavePasswordAffirmative];
 
     // Operation: Confirm Save Username and Password
     NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,

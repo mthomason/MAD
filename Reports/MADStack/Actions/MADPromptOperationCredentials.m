@@ -128,6 +128,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = success;
     self.credentials = credentials;
     self.result = true;
+    [self performSelectorInBackground:@selector(finish) withObject:nil];
 }
 
 - (void)userCancel {
@@ -135,6 +136,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = false;
     self.credentials = nil;
     self.result = false;
+    [self performSelectorInBackground:@selector(finish) withObject:nil];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -151,7 +153,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (void)alertControllerDidDisappear:(MADAlertController *)alertController {
     alertController.madAlertControllerAlertRemovedDelegate = nil;
-    [self finish];
+//    [self finish];
 }
 
 @end
