@@ -9,6 +9,7 @@
 #import "MADExclusivityController.h"
 #import "MADOperation.h"
 #import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 
 static id _sharedInstance = nil;
@@ -76,14 +77,13 @@ static id _sharedInstance = nil;
     }
     
     [operationsWithThisCategory addObject:operation];
-    
     _operations[category] = operationsWithThisCategory;
 
 }
 
 - (void)noqueue_removeOperation:(MADOperation*)operation category:(NSString *)category {
     NSMutableArray * matchingOperations = _operations[category];
-    if (matchingOperations){
+    if (matchingOperations) {
         [matchingOperations removeObject:operation];
         _operations[category] = matchingOperations;
     }

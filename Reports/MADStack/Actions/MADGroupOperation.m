@@ -54,10 +54,6 @@
     [super cancel];
 }
 
-- (void)main {
-    
-}
-
 - (void)execute {
     self.internalQueue.suspended = NO;
     [self.internalQueue addOperation:self.finishingOperation];

@@ -56,28 +56,26 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     NSMutableArray * results = [NSMutableArray arrayWithCapacity:conditions.count];
     
     // Ask each condition to evaluate and store its result in the "results" array.
-    [conditions enumerateObjectsUsingBlock:^(NSObject <MADOperationCondition> * condition, NSUInteger idx, BOOL *stop) {
-        
+    for (NSObject <MADOperationCondition> *condition in conditions) {
         dispatch_group_enter(conditionGroup);
         [condition evaluateForOperation:operation completion:^(MADOperationConditionResult * result) {
-            
-            results[idx] = result;
+            [results addObject:result];
             dispatch_group_leave(conditionGroup);
         }];
-    }];
+    }
     
     // After all the conditions have evaluated, this block will execute.
     dispatch_group_notify(conditionGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
         
         // Aggregate the errors that occurred, in order.
-        NSArray * failures = [[results filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"error != nil"]] valueForKeyPath:@"error"];
+        NSPredicate *hasError = [NSPredicate predicateWithFormat:@"error != nil"];
+        NSArray *resultsWithError = [results filteredArrayUsingPredicate:hasError];
+        NSArray *failures = [resultsWithError valueForKeyPath:@"error"];
         
-        /*
-         If any of the conditions caused this operation to be cancelled,
-         check for that.
-         */
+         // If any of the conditions caused this operation to be cancelled, check for that.
         if (operation.isCancelled) {
-            failures = [failures arrayByAddingObject: [NSError errorWithCode:MADConditionFailed]];
+            NSError *failure = [NSError errorWithCode:MADConditionFailed];
+            failures = [failures arrayByAddingObject: failure];
         }
         
         if (completion){
