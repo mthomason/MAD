@@ -14,7 +14,6 @@
 #import "MADOperationCondition.h"
 
 @class NSMutableArray<ObjectType>;
-//@class MADOperationCondition, MADOperationObserver;
 
 typedef NS_ENUM(char, MADOperationState) {
     initialized,

@@ -27,8 +27,6 @@
 #import "MADOperationQueue.h"
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
-//#import "MADKeyChainGetCredentials.h"
-//#import "MADKeyChainSaveCredentials.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADPromptOperationPassword.h"
@@ -45,7 +43,7 @@ static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MADConnectionViewController()
-    <MADocumentDelegate, MTDatabaseProtocol>
+    <MADocumentDelegate, MTDatabaseProtocol, MADOperationObserver>
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
@@ -69,6 +67,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, strong) MTDataTable *datatableTest;   // Holds datatable since used
                                                                 //  in static function
 
+    @property (nonatomic, strong) MADOperationQueue *credentialQueue;
+
 @end
 
 @implementation MADConnectionViewController
@@ -81,6 +81,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
+    self.credentialQueue = credentialQueue;
     
     UIProgressView *progressView = [MADConnectionViewController progressViewWithWidth:self.tableView.frame.size.width];
     [self.tableView addSubview:progressView];
@@ -99,6 +102,20 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
     titleView.text = NSLocalizedString(@"Database Settings", @"Database Settings");
     self.navigationItem.titleView = titleView;
+}
+
+#pragma mark - MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation {
+    
+}
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation {
+    
+}
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+     
 }
 
 #pragma mark - Actions
@@ -189,7 +206,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
 
-    MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
     //credentialQueue.maxConcurrentOperationCount = 2;
     
     //NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
@@ -199,7 +215,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     // -------------------------
     
     MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithKey:key viewController:self];
-    [credentialQueue addOperation:getCredentialsOperation];
+    [getCredentialsOperation addObserver:self];
+    [self.credentialQueue addOperation:getCredentialsOperation];
     //[credentialQueue waitUntilAllOperationsAreFinished];
     
     /*

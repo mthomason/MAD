@@ -17,107 +17,111 @@
 @implementation MADOperationQueue
 
 - (void)addOperation:(NSOperation *)operation {
-    if ([operation isKindOfClass:[MADOperation class]]){
+
+    if ([operation isKindOfClass:[MADOperation class]]) {
+    
         MADOperation * op = (MADOperation *)operation;
         typeof(self) __weak weakSelf = self;
+        
         // Set up a `BlockObserver` to invoke the `OperationQueueDelegate` method.
-        MADBlockObserver * delegate = [[MADBlockObserver alloc]
-                                       initWithStartHandler:nil
-                                       produceHandler:^(MADOperation * oper, NSOperation * newOp) {
-                                           [weakSelf addOperation:newOp]; }
-                                       finishHandler:^(MADOperation * oper, NSArray * errors) {
-                                           [weakSelf.delegate operationQueue:weakSelf operationDidFinish:oper withErrors:errors]; }];
+        MADBlockObserver * delegate = [[MADBlockObserver alloc] initWithStartHandler: nil produceHandler:^(MADOperation * oper, NSOperation * newOp) {
+
+            [weakSelf addOperation:newOp];
+            
+        } finishHandler:^(MADOperation * oper, NSArray * errors) {
+
+            MADOperationQueue *sself = weakSelf;
+            [sself.delegate operationQueue:sself operationDidFinish:oper withErrors:errors];
+            
+        }];
         
         [op addObserver:delegate];
         
         // Extract any dependencies needed by this operation.
-        NSMutableArray * dependencies = [NSMutableArray arrayWithCapacity:op.conditions.count];
-        [op.conditions enumerateObjectsUsingBlock:^(NSObject <MADOperationCondition> * condition, NSUInteger idx, BOOL *stop)
-         {
-             NSOperation * dependency = [condition dependencyForOperation:op];
-             if (dependency){
-                 [dependencies addObject:dependency];
-             }
-         }];
-        
-        [dependencies enumerateObjectsUsingBlock:^(NSOperation * dependency, NSUInteger idx, BOOL *stop)
-         {
-             [op addDependency:dependency];
-             [self addOperation:dependency];
-         }];
-        
-        /*
-         With condition dependencies added, we can now see if this needs
-         dependencies to enforce mutual exclusivity.
-         */
-        
-        NSMutableArray * concurrencyCategories = [NSMutableArray array];
-        
-        [op.conditions enumerateObjectsUsingBlock:^(NSObject <MADOperationCondition> *condition, NSUInteger idx, BOOL *stop){
-            if (![condition isMutuallyExclusive]){
-                return;
+        NSMutableArray *dependencies = [NSMutableArray arrayWithCapacity:op.conditions.count];
+        for (NSObject <MADOperationCondition> *condition in op.conditions) {
+
+            NSOperation *dependency = [condition dependencyForOperation:op];
+            if (dependency) {
+                [dependencies addObject:dependency];
             }
-            [concurrencyCategories addObject:condition.name];
-        }];
+
+        }
         
+        for (NSOperation *dependency in dependencies) {
+            [op addDependency:dependency];
+            [self addOperation:dependency];
+        }
+        
+        // With condition dependencies added, we can now see if this needs dependencies to enforce mutual exclusivity.
+        NSMutableArray * concurrencyCategories = [NSMutableArray array];
+        for (NSObject <MADOperationCondition> *condition in op.conditions) {
+
+            if ([condition isMutuallyExclusive]) {
+                [concurrencyCategories addObject:condition.name];
+            }
+
+        }
+
         if (concurrencyCategories.count) {
+        
             // Set up the mutual exclusivity dependencies.
             MADExclusivityController * exclusivityController = [MADExclusivityController sharedExclusivityController];
             
-            [exclusivityController addOperation:op categories:concurrencyCategories];
+            [exclusivityController addOperation: op categories: concurrencyCategories];
             
-            MADBlockObserver * obs = [[MADBlockObserver alloc]
-                                      initWithStartHandler:nil
-                                      produceHandler:nil
-                                      finishHandler:^(MADOperation * oper, NSArray * error) {
-                                          [exclusivityController removeOperation:oper categories:concurrencyCategories];
-                                      }];
+            MADBlockObserver * obs = [[MADBlockObserver alloc] initWithStartHandler:nil produceHandler:nil finishHandler:^(MADOperation * oper, NSArray * error) {
+                [exclusivityController removeOperation:oper categories:concurrencyCategories];
+            }];
             
             [op addObserver:obs];
         }
         
-        /*
-         Indicate to the operation that we've finished our extra work on it
-         and it's now it a state where it can proceed with evaluating conditions,
-         if appropriate.
-         */
+         // Indicate to the operation that we've finished our extra work on it and it's now it a state where it can proceed with evaluating conditions,
+         //     if appropriate.
+
         [op willEnqueue];
         
     } else {
-        /*
-         For regular `NSOperation`s, we'll manually call out to the queue's
-         delegate we don't want to just capture "operation" because that
-         would lead to the operation strongly referencing itself and that's
-         the pure definition of a memory leak.
-         */
+
+         // For regular `NSOperation`s, we'll manually call out to the queue's delegate we don't want to just capture "operation" because that
+         //     would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
         
         typeof(self) __weak weakSelf = self;
         NSOperation * __weak weakOperation = operation;
-        [operation addCompletionBlock:^{
-            MADOperationQueue * queue = weakSelf;
+        
+        [operation addCompletionBlock:^ {
+        
+            MADOperationQueue *queue = weakSelf;
+            id <MADOperationQueueDelegate> sdelegate = queue.delegate;
+            
             NSOperation * op = weakOperation;
-            if (queue && op){
-                if ([queue.delegate respondsToSelector:@selector(operationQueue:operationDidFinish:withErrors:)]){
-                    [queue.delegate operationQueue:queue operationDidFinish:op withErrors:nil];
+            if (queue && op) {
+                
+                if ([sdelegate respondsToSelector:@selector(operationQueue:operationDidFinish:withErrors:)]) {
+                    [sdelegate operationQueue:queue operationDidFinish:op withErrors:nil];
                 }
+                
             }
         }];
     }
-    if ([self.delegate respondsToSelector:@selector(operationQueue:willAddOperation:)]){
-        [self.delegate operationQueue:self willAddOperation:operation];
+
+    id <MADOperationQueueDelegate> sdelegate = self.delegate;
+    if ([sdelegate respondsToSelector:@selector(operationQueue:willAddOperation:)]) {
+        [sdelegate operationQueue:self willAddOperation:operation];
     }
+    
     [super addOperation:operation];
 }
 
 - (void)addOperations:(NSArray *)ops waitUntilFinished:(BOOL)wait {
 
-    /*
-     The base implementation of this method does not call `addOperation()`,
-     so we'll call it ourselves.
-     */
+    // The base implementation of this method does not call `addOperation()`, so we'll call it ourselves.
+
     for (NSOperation * op in ops){
         [self addOperation:op];
     }
+    
     if (wait){
         for (NSOperation * op in ops){
             [op waitUntilFinished];

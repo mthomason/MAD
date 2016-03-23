@@ -22,7 +22,6 @@
                    viewController:(UIViewController * __weak)viewController;
 
     @property (nonatomic, readonly, assign) bool alertDisplayed;
-
     @property (nonatomic, readonly, assign) bool result;
 
 @end

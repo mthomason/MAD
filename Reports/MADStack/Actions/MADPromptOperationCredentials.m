@@ -36,6 +36,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, readwrite, assign) bool displayingPrompt;
 
     @property (nonatomic, readwrite, assign) bool gotCredentials;
+    @property (nonatomic, readwrite, assign) bool result;
 
 @end
 
@@ -47,7 +48,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
         self.viewController = viewController;
         self.source = none;
-        
+        self.result = false;
         self.displayingPrompt = false;
         self.bypass = false;
         self.gotCredentials = false;
@@ -126,6 +127,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.alertDisplayed = true;
     self.userContinue = success;
     self.credentials = credentials;
+    self.result = true;
     [self finish];
 }
 
@@ -133,6 +135,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.alertDisplayed = true;
     self.userContinue = false;
     self.credentials = nil;
+    self.result = false;
     [self finish];
 }
 

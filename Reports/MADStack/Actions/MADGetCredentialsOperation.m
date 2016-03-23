@@ -199,9 +199,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         }
     }
     
-    if (self.usernameSet && self.passwordSet) {
-        [self finish];
-    }
+    //if (self.usernameSet && self.passwordSet) {
+    //    [self finish];
+    //}
     
 //    if (operation conformsToProtocol:(Protocol *)) {
 //        statements

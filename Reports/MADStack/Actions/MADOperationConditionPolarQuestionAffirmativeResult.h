@@ -13,7 +13,7 @@
 
 @protocol MADOperationConditionPolarQuestionResultProtocol <NSObject>
 
-- (bool)result;
+    - (bool)result;
 
 @end
 

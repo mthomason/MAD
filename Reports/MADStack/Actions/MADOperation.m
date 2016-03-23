@@ -29,6 +29,11 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 @implementation MADOperation
 
+- (void)dealloc {
+    [self.conditions removeAllObjects];
+    [self.observers removeAllObjects];
+}
+
 #pragma mark - Lazy Load
 
 - (NSMutableArray *)kad_internalErrors {

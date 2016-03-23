@@ -12,11 +12,13 @@
 #import "MADOperation.h"
 #import <MAD/MADCredential.h>
 #import "MADOperationConditionDisplayedAlert.h"
+#import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 
 @class UIViewController;
 
 @interface MADPromptOperationCredentials : MADOperation
-    <MADOperationHoldsCredentialsProtocol, MADOperationConditionDisplayedAlertProtocol>
+    <MADOperationConditionPolarQuestionResultProtocol,
+        MADOperationHoldsCredentialsProtocol, MADOperationConditionDisplayedAlertProtocol>
 
     - (instancetype)initWithViewController:(UIViewController *)viewController;
 
@@ -30,6 +32,7 @@
     @property (nonatomic, readonly, assign) bool bypass;
     @property (nonatomic, readonly, assign) bool userContinue;
     @property (nonatomic, readonly, assign) bool displayingPrompt;
+    @property (nonatomic, readonly, assign) bool result;
 
 @end
 
