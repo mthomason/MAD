@@ -104,25 +104,25 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptPassword addCondition:conditionPromptPasswordBoolAnd];
 
     NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
-    NSString *message = NSLocalizedString(TextSaveToKeyChainMessagePassword, TextSaveToKeyChainMessagePassword);
-
+    NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
 
     // ---------------------------------------------------
     // Operation 5: Prompt save username and password
     // Conditions:  User entered a username and password.
     // ---------------------------------------------------
-    MADPromptOperationPolarQuestion *promptSaveCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:message viewController:viewController];
+    MADPromptOperationPolarQuestion *promptSaveCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messageCredntialsPrompt viewController:viewController];
     [promptSaveCredntials addDependency:promptCredntials];
     
     MADOperationConditionPolarQuestionAffirmative *promptForCredentialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptCredntials.hash];
     [promptSaveCredntials addCondition:promptForCredentialsAffirmative];
 
+    NSString *messagePasswordPrompt = NSLocalizedString(TextSaveToKeyChainMessagePassword, TextSaveToKeyChainMessagePassword);
     
     // ---------------------------------------------------
     // Operation 6: Prompt save password
     // Conditions:  User entered a password.
     // ---------------------------------------------------
-    MADPromptOperationPolarQuestion *promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:message viewController:viewController];
+    MADPromptOperationPolarQuestion *promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messagePasswordPrompt viewController:viewController];
     [promptSavePassword addDependency:promptPassword];
 
     MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
@@ -146,6 +146,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     MADKeyChainOperationPut *putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword];
     MADOperationConditionPolarQuestionAffirmative *promptToSavePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSavePassword.hash];
+    [putPassword addDependency:promptSaveCredntials];
+    [putPassword addDependency:promptSavePassword];
     [putPassword addCondition:promptToSaveCredntialsAffirmative];
     [putPassword addCondition:promptToSavePasswordAffirmative];
 
@@ -154,10 +156,14 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
                                                      getPassword, promptPassword,
                                                      promptSaveCredntials, promptSavePassword,
                                                      putUsername, putPassword];
+
     if (self = [super initWithOperations:operations]) {
+
         self.username = nil;
         self.password = nil;
+
     }
+    
     return self;
 }
 

@@ -15,6 +15,7 @@
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADMutualExclusive.h"
+#import "MADAlertController.h"
 
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
@@ -23,10 +24,9 @@ static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 
 @interface MADPromptOperationPassword ()
-    <UITextFieldDelegate>
+    <UITextFieldDelegate, MADAlertControllerAlertRemovedProtocol>
 
     @property (nonatomic, weak) UIViewController *viewController;
-    @property (nonatomic, strong) UIAlertController *alertController;
 
     @property (nonatomic, readwrite, assign) bool alertDisplayed;
 
@@ -42,6 +42,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     @property (nonatomic, strong, readwrite) NSString *username;
 
+    //@property (nonatomic, strong) MADAlertController *alertController;
+
 @end
 
 @implementation MADPromptOperationPassword
@@ -52,7 +54,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _alertDisplayed = false;
         _bypass = false;
         _userContinue = false;
-        self.viewController = viewController;
+
+        _viewController = viewController;
         [self addCondition:[MADMutualExclusiveCondition alertMutex]];
 
     }
@@ -62,18 +65,12 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    
+
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
-    
-    __block NSString *password;
-    __block bool success = false;
-
-    NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-    NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
+    MADAlertController *alertController = [MADAlertController alertControllerWithTitle: title message: message
+                                                                        preferredStyle: UIAlertControllerStyleAlert];
+    alertController.madAlertControllerAlertRemovedDelegate = self;
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {
         [MADTextField configureTextFieldForPassword:&textField];
@@ -81,37 +78,34 @@ static NSString * const MADButtonCancel                = @"Cancel";
     };
     
     MADPromptOperationPassword * __weak weakself = self;
-    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
-                                                            style: UIAlertActionStyleDefault
-                                                          handler: ^(UIAlertAction *action) {
-                                                              MADPromptOperationPassword * sself = weakself;
-                                                              password = ((UITextField *)sself.alertController.textFields.firstObject).text;
-                                                              success = true;
-                                                              sself.alertDisplayed = true;
-                                                              [sself finish:success password:password];
-                                                          }];
+
+    NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
+    NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
-    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
-                                                                style: UIAlertActionStyleCancel
+    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault
+                                                          handler: ^(UIAlertAction *action) {
+        MADPromptOperationPassword *sself = weakself;
+        [sself finish: true password: ((UITextField *)alertController.textFields.firstObject).text];
+    }];
+    
+    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel style: UIAlertActionStyleCancel
                                                               handler: ^(UIAlertAction *action) {
-                                                                  MADPromptOperationPassword * sself = weakself;
-                                                                  password = nil;
-                                                                  success = false;
-                                                                  sself.alertDisplayed = true;
-                                                                  [sself userCancel];
-                                                              }];
+        MADPromptOperationPassword * sself = weakself;
+        sself.alertDisplayed = true;
+        [sself userCancel];
+    }];
+    
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfiguration];
-    self.alertController = alertController;
+
     self.alertDisplayed = true;
 
-    UIAlertController * __weak weakAlertController = self.alertController;
     UIViewController * __weak wViewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: weakAlertController animated: YES completion:^{ }];
+        [topViewController  presentViewController: alertController animated: YES completion:^{ }];
     }];
 
 }
@@ -119,13 +113,13 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (void)finish:(bool)success password:(NSString *)password {
     MADCredential *credentials = [[MADCredential alloc] initWithUsername:self.username andPassword:password];
     self.credentials = credentials;
+    self.alertDisplayed = true;
     self.source = password_prompt;
-    self.userContinue = success;
+    self.userContinue = true;
     self.password = password;
     self.gotCredentials = true;
     self.gotPassword = true;
     self.result = true;
-    [self finish];
 }
 
 - (void)userCancel {
@@ -133,7 +127,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = nil;
     self.result = false;
     self.gotPassword = false;
-    [self finish];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -144,6 +137,13 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     ((UILabel *)textField.leftView).textColor = [UIColor lightGrayColor];
+}
+
+#pragma mark - MADAlertControllerAlertRemovedProtocol
+
+- (void)alertControllerDidDisappear:(MADAlertController *)alertController {
+    alertController.madAlertControllerAlertRemovedDelegate = nil;
+    [self finish];
 }
 
 @end

@@ -14,6 +14,7 @@
 #import "MADTextField.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADMutualExclusive.h"
+#import "MADAlertController.h"
 
 static NSString * const MADTitleCredentials            = @"Credentials";
 static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
@@ -22,7 +23,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 
 @interface MADPromptOperationCredentials()
-    <UITextFieldDelegate>
+    <UITextFieldDelegate, MADAlertControllerAlertRemovedProtocol>
 
     @property (nonatomic, weak) UIViewController *viewController;
 
@@ -45,7 +46,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (instancetype)initWithViewController:(UIViewController *)viewController {
 
     if (self = [super init]) {
-    
         self.viewController = viewController;
         self.source = none;
         self.result = false;
@@ -66,9 +66,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
     NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    MADAlertController *alertController = [MADAlertController alertControllerWithTitle: title message: message
+                                                                        preferredStyle: UIAlertControllerStyleAlert];
+    alertController.madAlertControllerAlertRemovedDelegate = self;
 
     __block NSString *password;
     __block NSString *username;
@@ -128,7 +128,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = success;
     self.credentials = credentials;
     self.result = true;
-    [self finish];
 }
 
 - (void)userCancel {
@@ -136,7 +135,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = false;
     self.credentials = nil;
     self.result = false;
-    [self finish];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -147,6 +145,13 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     ((UILabel *)textField.leftView).textColor = [UIColor lightGrayColor];
+}
+
+#pragma mark - MADAlertControllerAlertRemovedProtocol
+
+- (void)alertControllerDidDisappear:(MADAlertController *)alertController {
+    alertController.madAlertControllerAlertRemovedDelegate = nil;
+    [self finish];
 }
 
 @end

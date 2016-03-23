@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MADAlertControllerAlertRemovedProtocol;
+
 @interface MADAlertController : UIAlertController
+
+    @property (nonatomic, weak) id <MADAlertControllerAlertRemovedProtocol> madAlertControllerAlertRemovedDelegate;
+
+@end
+
+@protocol MADAlertControllerAlertRemovedProtocol <NSObject>
+
+- (void)alertControllerDidDisappear:(MADAlertController *)alertController;
 
 @end

@@ -14,6 +14,14 @@
 
 @implementation MADAlertController
 
+- (void)viewDidDisappear:(BOOL)animated {
+    id <MADAlertControllerAlertRemovedProtocol> delegate = self.madAlertControllerAlertRemovedDelegate;
+    if (delegate != nil) {
+        [delegate alertControllerDidDisappear:self];
+    }
+    [super viewDidDisappear:animated];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
