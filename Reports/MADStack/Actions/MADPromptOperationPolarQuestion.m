@@ -9,14 +9,12 @@
 #import "MADPromptOperationPolarQuestion.h"
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
-#import "MADAlertController.h"
 #import "MADDefer.h"
 
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
 
 @interface MADPromptOperationPolarQuestion ()
-    <MADAlertControllerAlertRemovedProtocol>
 
     @property (nonatomic, readwrite, assign) bool result;
     @property (nonatomic, copy) NSString *title;
@@ -44,9 +42,8 @@ static NSString * const TextNo = @"No";
 - (void)execute {
     NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
-    MADAlertController *alertController = [MADAlertController alertControllerWithTitle: self.title message: self.message
-                                                                        preferredStyle: UIAlertControllerStyleAlert];
-    alertController.madAlertControllerAlertRemovedDelegate = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: self.title message: self.message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
     
     MADPromptOperationPolarQuestion * __weak weakSelf = self;
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes
@@ -81,12 +78,6 @@ static NSString * const TextNo = @"No";
         viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [viewController presentViewController: alertController animated: YES completion: nil];
     }];
-}
-
-#pragma mark - MADAlertControllerAlertRemovedProtocol
-
-- (void)alertControllerDidDisappear:(MADAlertController *)alertController {
-    alertController.madAlertControllerAlertRemovedDelegate = nil;
 }
 
 @end

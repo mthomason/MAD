@@ -226,10 +226,8 @@ static MTKeyChain *sharedSingleton = nil;
     return status;
 }
 
-- (void)saveUsername:(NSString *)username
-         andPassword:(NSString *)password
-              forKey:(NSString *)key
-        shortCircuit:(BOOL)shortCircuit
+- (void)saveUsername:(NSString *)username andPassword:(NSString *)password
+              forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit
           completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
     
     if (shortCircuit == NO) {

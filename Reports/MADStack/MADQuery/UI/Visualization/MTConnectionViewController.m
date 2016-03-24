@@ -107,15 +107,15 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark - MADOperationObserver
 
 - (void)operationDidStart:(MADOperation *)operation {
-    
+    NSLog(@"%s-%@", __PRETTY_FUNCTION__, operation);
 }
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation {
-    
+    NSLog(@"%s-%@-%@", __PRETTY_FUNCTION__, operation, newOperation);
 }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-     
+     NSLog(@"%s-%@\n%@", __PRETTY_FUNCTION__, operation, errors);
 }
 
 #pragma mark - Actions

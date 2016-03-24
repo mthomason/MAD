@@ -15,7 +15,6 @@
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADMutualExclusive.h"
-#import "MADAlertController.h"
 #import "MADDefer.h"
 
 static NSString * const MADTitlePassword               = @"Password";
@@ -25,7 +24,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 
 @interface MADPromptOperationPassword ()
-    <UITextFieldDelegate, MADAlertControllerAlertRemovedProtocol>
+    <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
 
@@ -88,9 +87,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
-    MADAlertController *alertController = [MADAlertController alertControllerWithTitle: title message: message
-                                                                        preferredStyle: UIAlertControllerStyleAlert];
-    alertController.madAlertControllerAlertRemovedDelegate = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {
         [MADTextField configureTextFieldForPassword:&textField];
@@ -161,13 +159,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     ((UILabel *)textField.leftView).textColor = [UIColor lightGrayColor];
-}
-
-#pragma mark - MADAlertControllerAlertRemovedProtocol
-
-- (void)alertControllerDidDisappear:(MADAlertController *)alertController {
-    alertController.madAlertControllerAlertRemovedDelegate = nil;
-    //[self finish];
 }
 
 @end
