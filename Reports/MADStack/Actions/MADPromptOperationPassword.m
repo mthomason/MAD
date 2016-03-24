@@ -16,6 +16,7 @@
 #import "MADPromptOperationCredentials.h"
 #import "MADMutualExclusive.h"
 #import "MADAlertController.h"
+#import "MADDefer.h"
 
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
@@ -31,25 +32,39 @@ static NSString * const MADButtonCancel                = @"Cancel";
     @property (nonatomic, readwrite, assign) bool alertDisplayed;
 
     @property (nonatomic, readwrite, assign) MADCredentialSource source;
+    @property (nonatomic, readwrite, copy) NSString *passwordKey;
     @property (nonatomic, readwrite, copy) NSString *password;
     @property (nonatomic, readwrite, assign) bool gotPassword;
 
     @property (nonatomic, readwrite, assign) bool bypass;
     @property (nonatomic, readwrite, assign) bool userContinue;
 
-    @property (nonatomic, readwrite, copy) MADCredential *credentials;
-    @property (nonatomic, readwrite, assign) bool gotCredentials;
 
     @property (nonatomic, strong, readwrite) NSString *username;
-
-    //@property (nonatomic, strong) MADAlertController *alertController;
 
 @end
 
 @implementation MADPromptOperationPassword
 
-- (instancetype)initWithViewController:(UIViewController *)viewController {
+- (NSString *)key {
+    return self.passwordKey;
+}
+
+- (NSString *)value {
+    return self.password;
+}
+
+- (bool)success {
+    return self.gotPassword;
+}
+
+- (MADKeyChainReadOperationTypes)readOperationType {
+    return password;
+}
+
+- (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController {
     if (self = [super init]) {
+        _passwordKey = passwordKey.copy;
         _source = none;
         _alertDisplayed = false;
         _bypass = false;
@@ -62,9 +77,14 @@ static NSString * const MADButtonCancel                = @"Cancel";
     return self;
 }
 
+- (NSString *)valueForKey:(NSString *)key {
+    return [key isEqualToString:self.passwordKey] ? self.password : nil;
+}
+
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
@@ -111,16 +131,15 @@ static NSString * const MADButtonCancel                = @"Cancel";
 }
 
 - (void)finish:(bool)success password:(NSString *)password {
-    MADCredential *credentials = [[MADCredential alloc] initWithUsername:self.username andPassword:password];
-    self.credentials = credentials;
     self.alertDisplayed = true;
     self.source = password_prompt;
     self.userContinue = true;
     self.password = password;
-    self.gotCredentials = true;
     self.gotPassword = true;
     self.result = true;
-    [self performSelectorInBackground:@selector(finish) withObject:nil];
+    defer(^{
+        [self performSelectorInBackground:@selector(finish) withObject:nil];
+    });
 }
 
 - (void)userCancel {
@@ -128,7 +147,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = nil;
     self.result = false;
     self.gotPassword = false;
-    [self performSelectorInBackground:@selector(finish) withObject:nil];
+    defer(^{
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+        [self performSelectorInBackground:@selector(finishWithError:) withObject:error];
+    });
 }
 
 #pragma mark - UITextFieldDelegate

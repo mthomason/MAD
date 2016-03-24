@@ -16,11 +16,11 @@
 
 @class MADocument, NSManagedObjectID, RptqQueryField;
 
-extern NSInteger const MTViewTagAggregateFunctions;
-extern NSInteger const MTViewTagGroupByOptions;
-extern NSInteger const MTViewTagDocumentObjectNewAggregate;
-extern NSInteger const MTViewTagDocumentObjectNewLabelStatic;
-extern NSInteger const MTViewTagFieldOrFormulaSelector;
+extern const NSInteger MTViewTagAggregateFunctions;
+extern const NSInteger MTViewTagGroupByOptions;
+extern const NSInteger MTViewTagDocumentObjectNewAggregate;
+extern const NSInteger MTViewTagDocumentObjectNewLabelStatic;
+extern const NSInteger MTViewTagFieldOrFormulaSelector;
 
 @protocol MADDesignerElementPickerDelegate <MTViewControllerProtocol>
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;

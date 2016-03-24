@@ -55,6 +55,8 @@
 }
 
 - (void)execute {
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+
     self.internalQueue.suspended = NO;
     [self.internalQueue addOperation:self.finishingOperation];
 }

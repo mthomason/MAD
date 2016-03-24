@@ -6,8 +6,29 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#if __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fno-objc-arc flag.
+#endif
+
 #import "MADDefer.h"
 
 @implementation MADDefer
 
++ (instancetype)defer:(void (^)())block {
+    MADDefer *defer =  [[MADDefer alloc] init];
+    defer.block = block;
+    return [defer autorelease];
+}
+
+- (void)dealloc {
+    if (_block)
+        _block();
+    [super dealloc];
+}
+
 @end
+
+void defer(void (^block)()) {
+    static MADDefer *__weak d;
+    d = [MADDefer defer:block];
+}

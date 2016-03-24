@@ -10,6 +10,7 @@
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
 #import "MADAlertController.h"
+#import "MADDefer.h"
 
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
@@ -41,6 +42,7 @@ static NSString * const TextNo = @"No";
 }
 
 - (void)execute {
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     MADAlertController *alertController = [MADAlertController alertControllerWithTitle: self.title message: self.message
                                                                         preferredStyle: UIAlertControllerStyleAlert];
@@ -53,7 +55,9 @@ static NSString * const TextNo = @"No";
                                                          MADPromptOperationPolarQuestion * __strong sself = weakSelf;
                                                          sself.result = true;
                                                          sself.alertDisplayed = true;
-                                                         [sself performSelectorInBackground:@selector(finish) withObject:nil];
+                                                         defer(^{
+                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
+                                                         });
                                                      }];
     
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
@@ -62,7 +66,11 @@ static NSString * const TextNo = @"No";
                                                              MADPromptOperationPolarQuestion * __strong sself = weakSelf;
                                                              sself.result = false;
                                                              sself.alertDisplayed = true;
-                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
+                                                             defer(^{
+                                                                 NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+                                                                 NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+                                                                 [sself performSelectorInBackground:@selector(finishWithError:) withObject:error];
+                                                             });
                                                          }];
     
     [alertController addAction:actionOK];
@@ -79,7 +87,6 @@ static NSString * const TextNo = @"No";
 
 - (void)alertControllerDidDisappear:(MADAlertController *)alertController {
     alertController.madAlertControllerAlertRemovedDelegate = nil;
-    //[self finish];
 }
 
 @end

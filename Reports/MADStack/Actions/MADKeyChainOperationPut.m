@@ -12,6 +12,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSArray.h>
 #import <MAD/MTKeyChain.h>
+#import <MAD/MADCredential.h>
 
 static const short StatusNotFound = 35;
 static NSString * const ErrorDomain = @"MADKCP";
@@ -19,19 +20,22 @@ static NSString * const ErrorDomain = @"MADKCP";
 @interface MADKeyChainOperationPut ()
 
     @property (nonatomic, copy) NSString *key;
+    @property (nonatomic, copy) NSString *keyDescription;
 
 @end
 
 @implementation MADKeyChainOperationPut
 
-- (instancetype)initWithKey:(NSString *)key {
+- (instancetype)initWithKey:(NSString *)key description:(NSString *)description {
     if (self = [super init]) {
         _key = key.copy;
+        _keyDescription = description.copy;
     }
     return self;
 }
 
 - (void)execute {
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     NSString *valueToWrite = nil;
     
@@ -41,26 +45,24 @@ static NSString * const ErrorDomain = @"MADKCP";
     for (NSOperation *operation in dependencies) {
     
         if ([operation conformsToProtocol:@protocol(MADKeyChainKeyValueProtocol)]) {
-        
-            NSString *key = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) key];
-            if ([key isEqualToString:self.key]) {
-            
-                NSString *value = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) value];
-                if (value != nil) {
-                    valueToWrite = [NSString stringWithString:value];
-                    break;
-                }
+            valueToWrite = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) valueForKey:self.key];
+            if (valueToWrite != nil) {
+                break;
             }
         }
+        
     }
 
     // Write the value to the keychain.
     if (valueToWrite != nil) {
     
-        OSStatus status = [MTKeyChain saveToken:valueToWrite forKey:self.key];
+        OSStatus status = [MTKeyChain saveToken:valueToWrite forKey:self.key withDescription:self.keyDescription];
         if (status == errSecSuccess) {
+        
             [self finish];
+
         } else {
+            NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
             NSError *error = [NSError errorWithDomain:ErrorDomain code:status userInfo:nil];
             [self finishWithError:error];
@@ -68,6 +70,7 @@ static NSString * const ErrorDomain = @"MADKCP";
         }
         
     } else {
+        NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
         NSError *error = [NSError errorWithDomain:ErrorDomain code:StatusNotFound userInfo:nil];
         [self finishWithError:error];

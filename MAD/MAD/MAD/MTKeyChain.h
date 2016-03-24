@@ -11,7 +11,9 @@
 
 #import <Foundation/NSObject.h>
 
-extern NSInteger const MTKeyErrorUserCanceled;
+extern const NSInteger MTKeyErrorUserCanceled;
+extern NSString * const MTKeyChainUsernameAccountDesc;
+extern NSString * const MTKeyChainPasswordAccountDesc;
 
 @class UIViewController;
 
@@ -19,11 +21,11 @@ extern NSInteger const MTKeyErrorUserCanceled;
 
 + (MTKeyChain *)sharedObject;
 
-+ (OSStatus)saveToken:(NSString *)token forKey:(NSString *)key;
++ (OSStatus)saveToken:(NSString *)token forKey:(NSString *)key withDescription:(NSString *)description;
++ (NSDictionary *)queryDefination:(NSString *)key withDescription:(NSString *)description;
 
 + (NSString *)keyForUsernameWithMainKey:(NSString *)key;
 + (NSString *)keyForPasswordWithMainKey:(NSString *)key;
-+ (NSDictionary *)queryDefination:(NSString *)key;
 + (NSDictionary *)queryUsernameDefination:(NSString *)key;
 + (NSDictionary *)queryPasswordDefination:(NSString *)key;
 + (OSStatus)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key;

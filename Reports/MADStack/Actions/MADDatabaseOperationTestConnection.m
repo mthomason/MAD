@@ -62,6 +62,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
     
     if (self.credentials == nil) {
         NSArray <NSOperation *> *dependencies = self.dependencies;

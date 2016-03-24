@@ -38,6 +38,7 @@
 
 /// Evaluate the condition, to see if it has been satisfied or not.
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion {
+    NSLog(@"%@: %s", [self name], __PRETTY_FUNCTION__);
 
     __block bool succes = true;
     for (NSObject <MADOperationCondition> *condition in self.conditions) {

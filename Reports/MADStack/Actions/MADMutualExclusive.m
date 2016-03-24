@@ -46,6 +46,8 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+    NSLog(@"%@: %s", [self name], __PRETTY_FUNCTION__);
+
     completion([MADOperationConditionResult satisfied]);
 }
 

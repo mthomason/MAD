@@ -28,7 +28,7 @@ typedef NS_ENUM(short, MADKeyChainReadOperationTypes) {
 @interface MADKeyChainOperationGet : MADOperation
     <MADOperationResultStringProtocol>
 
-    - (instancetype)initWithKey:(NSString *)key;
+    - (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description;
 
     @property (nonatomic, readonly, copy) NSString *key;
     @property (atomic, readonly, copy) NSString *value;

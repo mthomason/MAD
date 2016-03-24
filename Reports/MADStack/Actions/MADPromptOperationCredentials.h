@@ -13,14 +13,17 @@
 #import <MAD/MADCredential.h>
 #import "MADOperationConditionDisplayedAlert.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+#import "MADKeyChainOperationPut.h"
 
 @class UIViewController;
 
 @interface MADPromptOperationCredentials : MADOperation
-    <MADOperationConditionPolarQuestionResultProtocol,
+    <MADOperationConditionPolarQuestionResultProtocol, MADKeyChainKeyValueProtocol,
         MADOperationHoldsCredentialsProtocol, MADOperationConditionDisplayedAlertProtocol>
 
-    - (instancetype)initWithViewController:(UIViewController *)viewController;
+    - (instancetype)initWithUsernameKey:(NSString *)usernameKey passwordKey:(NSString *)passwordKey
+                                                          andViewController:(UIViewController *)viewController;
+    - (NSString *)valueForKey:(NSString *)key;
 
     @property (nonatomic, readonly, assign) bool alertDisplayed;
 

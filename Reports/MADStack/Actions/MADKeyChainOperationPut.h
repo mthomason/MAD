@@ -13,14 +13,13 @@
 
 @protocol MADKeyChainKeyValueProtocol <NSObject>
 
-    - (NSString *)key;
-    - (NSString *)value;
+    - (NSString *)valueForKey:(NSString *)key;
 
 @end
 
 @interface MADKeyChainOperationPut : MADOperation
 
-    - (instancetype)initWithKey:(NSString *)key;
+    - (instancetype)initWithKey:(NSString *)key description:(NSString *)description;
 
 @end
 

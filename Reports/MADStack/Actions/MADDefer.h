@@ -10,4 +10,9 @@
 
 @interface MADDefer : NSObject
 
+    @property (copy, nonatomic) void (^block)();
+    + (instancetype)defer:(void (^)())block;
+
 @end
+
+void defer(void (^block)());

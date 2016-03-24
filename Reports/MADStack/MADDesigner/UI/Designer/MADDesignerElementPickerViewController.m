@@ -27,11 +27,11 @@
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentObjectCollectionViewCell.h"
 
-NSInteger const MTViewTagAggregateFunctions = 2003;
-NSInteger const MTViewTagGroupByOptions = 2011;
-NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
-NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
-NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
+const NSInteger MTViewTagAggregateFunctions             = 2003;
+const NSInteger MTViewTagGroupByOptions                 = 2011;
+const NSInteger MTViewTagDocumentObjectNewAggregate     = 2017;
+const NSInteger MTViewTagDocumentObjectNewLabelStatic   = 2027;
+const NSInteger MTViewTagFieldOrFormulaSelector         = 2029;
 
 @interface MADDesignerElementPickerViewController ()
     <MTQueryBuilderChooseFieldDelegate,

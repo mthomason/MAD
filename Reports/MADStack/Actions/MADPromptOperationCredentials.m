@@ -15,6 +15,7 @@
 #import "MADKeyChainOperationGet.h"
 #import "MADMutualExclusive.h"
 #import "MADAlertController.h"
+#import "MADDefer.h"
 
 static NSString * const MADTitleCredentials            = @"Credentials";
 static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
@@ -26,6 +27,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
     <UITextFieldDelegate, MADAlertControllerAlertRemovedProtocol>
 
     @property (nonatomic, weak) UIViewController *viewController;
+    @property (nonatomic, copy) NSString *usernameKey;
+    @property (nonatomic, copy) NSString *passwordKey;
 
     @property (nonatomic, readwrite, assign) bool alertDisplayed;
 
@@ -43,24 +46,38 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 @implementation MADPromptOperationCredentials
 
-- (instancetype)initWithViewController:(UIViewController *)viewController {
+- (instancetype)initWithUsernameKey:(NSString *)usernameKey passwordKey:(NSString *)passwordKey
+                                                      andViewController:(UIViewController *)viewController {
 
     if (self = [super init]) {
-        self.viewController = viewController;
-        self.source = none;
-        self.result = false;
-        self.displayingPrompt = false;
-        self.bypass = false;
-        self.gotCredentials = false;
+        _usernameKey = usernameKey.copy;
+        _passwordKey = passwordKey.copy;
+        _viewController = viewController;
+        _source = none;
+        _result = false;
+        _displayingPrompt = false;
+        _bypass = false;
+        _gotCredentials = false;
         [self addCondition:[MADMutualExclusiveCondition alertMutex]];
         
     }
     return self;
 }
 
+- (NSString *)valueForKey:(NSString *)key {
+    if ([key isEqualToString:self.usernameKey]) {
+        return self.credentials.username;
+    } else if ([key isEqualToString:self.passwordKey]) {
+        return self.credentials.password;
+    } else {
+        return nil;
+    }
+}
+
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     self.displayingPrompt = true;
 
@@ -128,7 +145,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = success;
     self.credentials = credentials;
     self.result = true;
-    [self performSelectorInBackground:@selector(finish) withObject:nil];
+    defer(^{
+        [self performSelectorInBackground:@selector(finish) withObject:nil];
+    });
 }
 
 - (void)userCancel {
@@ -136,7 +155,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = false;
     self.credentials = nil;
     self.result = false;
-    [self performSelectorInBackground:@selector(finish) withObject:nil];
+    defer(^{
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+        [self performSelectorInBackground:@selector(finishWithError:) withObject:error];
+    });
 }
 
 #pragma mark - UITextFieldDelegate

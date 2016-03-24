@@ -63,10 +63,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)setState:(MADOperationState)newState {
     // Manually fire the KVO notifications for state change, since this is "private".
-
     [self willChangeValueForKey:@"state"];
     
     @synchronized(self) {
+            
         if (_state == finished) {
             return;
         }
