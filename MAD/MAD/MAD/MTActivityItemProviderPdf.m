@@ -14,7 +14,7 @@
 #import "MADocument.h"
 #import "MTReportFormatter.h"
 #import "MTReportViewerPrintPageRenderer.h"
-#import "MTActivityIndicator.h"
+#import "MADActivityIndicator.h"
 #import "MTPaper.h"
 #import "MTDataTableFast.h"
 #import "MTNotificationDidFormatPage.h"
@@ -69,7 +69,7 @@
 
     [self disableUserInteraction:window.view];
     UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForBaselineLayout;
-    MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f)];
+    MADActivityIndicator *activityView = [[MADActivityIndicator alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f)];
     activityView.center = mainWindow.center;
     
     [mainWindow performSelectorOnMainThread: @selector(addSubview:)

@@ -36,7 +36,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
 @class NSManagedObjectID, UIImage, UIPrintPageRenderer, MTErrorContainer;
 @class MTDatabaseConnection, RptqDocument, MTReportFormatter, MTDataTableFast, MTQuery;
-@class MTActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable, MADocument;
+@class MADActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable, MADocument;
 @class RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper;
 @class MTReportViewerPrintPageRenderer, MADCredential, MADocumentState;
 
@@ -69,7 +69,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
-    @property (nonatomic, strong) MTActivityIndicator *statusLabel;
+    @property (nonatomic, strong) MADActivityIndicator *statusLabel;
 
     @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 

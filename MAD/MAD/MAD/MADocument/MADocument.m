@@ -19,7 +19,7 @@
 #import "MADConstants.h"
 #import "MADCredential.h"
 
-#import "MTActivityIndicator.h"
+#import "MADActivityIndicator.h"
 #import "MADocumentState.h"
 
 #import "MTDataTable+Factory.h"
