@@ -1,24 +1,24 @@
 //
-//  MTNotificationDidReadRows.h
+//  MADNotificationDidReadRows.h
 //  MAD
 //
 //  Created by Michael Thomason on 6/12/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTNotificationDidReadRows_h
-#define Reports_MTNotificationDidReadRows_h
+#ifndef Reports_MADNotificationDidReadRows_h
+#define Reports_MADNotificationDidReadRows_h
 
 #import <Foundation/NSObject.h>
 
-extern NSString * const MTNotificationDidReadRowsName;
+extern NSString * const MADNotificationDidReadRowsName;
 extern NSString * const MTDatabaseNumberOfRowsReadKey;
 
 @class MTDatabase;
 
-@interface MTNotificationDidReadRows : NSObject
+@interface MADNotificationDidReadRows : NSObject
 
-+ (MTNotificationDidReadRows *)sharedObject;
++ (MADNotificationDidReadRows *)sharedObject;
 - (void)database:(MTDatabase *)database readRow:(NSUInteger)row;
 
 @end

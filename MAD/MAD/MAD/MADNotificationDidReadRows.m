@@ -1,12 +1,12 @@
 //
-//  MTNotificationDidReadRows.m
+//  MADNotificationDidReadRows.m
 //  MAD
 //
 //  Created by Michael Thomason on 6/12/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTNotificationDidReadRows.h"
+#import "MADNotificationDidReadRows.h"
 #import <Foundation/NSValue.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNotification.h>
@@ -14,21 +14,21 @@
 #import <dispatch/once.h>
 #import <math.h>
 
-NSString * const MTNotificationDidReadRowsName = @"MTNotificationDidReadRows";
+NSString * const MADNotificationDidReadRowsName = @"MADNotificationDidReadRows";
 NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";
 
 static const short RowIntervalInital = 7;
 static const short RowIntervalInitalMax = 511;
 
-@interface MTNotificationDidReadRows ()
+@interface MADNotificationDidReadRows ()
 
 @property (nonatomic, assign) unsigned int rowInterval;
 
 @end
 
-@implementation MTNotificationDidReadRows
+@implementation MADNotificationDidReadRows
 
-static MTNotificationDidReadRows *sharedSingleton = nil;
+static MADNotificationDidReadRows *sharedSingleton = nil;
 
 + (void)initialize {
     static dispatch_once_t onceToken;
@@ -38,7 +38,7 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
     });
 }
 
-+ (MTNotificationDidReadRows *)sharedObject {
++ (MADNotificationDidReadRows *)sharedObject {
     return sharedSingleton;
 }
 
@@ -72,7 +72,7 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
         
         NSDictionary *parameters = [self parametersWithNumberOfRows:row];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            NSNotification *notification = [NSNotification notificationWithName: MTNotificationDidReadRowsName
+            NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName
                                                                          object: database
                                                                        userInfo: parameters];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
