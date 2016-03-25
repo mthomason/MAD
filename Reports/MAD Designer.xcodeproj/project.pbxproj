@@ -791,6 +791,11 @@
 		4C994F4E1BE47EC10058627A /* MADTextInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F4D1BE47EC10058627A /* MADTextInputController.m */; };
 		4CA0C6B01CA3A48900222B8D /* MADDefer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6AF1CA3A48900222B8D /* MADDefer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4CA0C6B31CA51F7800222B8D /* MADPromptOperationDisplayError.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6B21CA51F7800222B8D /* MADPromptOperationDisplayError.m */; };
+		4CA0C6B71CA5401000222B8D /* MADCreateDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6B61CA5401000222B8D /* MADCreateDocumentOperation.m */; };
+		4CA0C6BA1CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6B91CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m */; };
+		4CA0C6BD1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */; };
+		4CA0C6C01CA5499400222B8D /* MADOperationBackgroundTaskEnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */; };
+		4CA0C6C31CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -2019,6 +2024,16 @@
 		4CA0C6AF1CA3A48900222B8D /* MADDefer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDefer.m; sourceTree = "<group>"; };
 		4CA0C6B11CA51F7800222B8D /* MADPromptOperationDisplayError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPromptOperationDisplayError.h; sourceTree = "<group>"; };
 		4CA0C6B21CA51F7800222B8D /* MADPromptOperationDisplayError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPromptOperationDisplayError.m; sourceTree = "<group>"; };
+		4CA0C6B51CA5401000222B8D /* MADCreateDocumentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperation.h; sourceTree = "<group>"; };
+		4CA0C6B61CA5401000222B8D /* MADCreateDocumentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperation.m; sourceTree = "<group>"; };
+		4CA0C6B81CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationCreateDocument.h; sourceTree = "<group>"; };
+		4CA0C6B91CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationCreateDocument.m; sourceTree = "<group>"; };
+		4CA0C6BB1CA5496700222B8D /* MADOperationBackgroundTaskBegin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationBackgroundTaskBegin.h; sourceTree = "<group>"; };
+		4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskBegin.m; sourceTree = "<group>"; };
+		4CA0C6BE1CA5499400222B8D /* MADOperationBackgroundTaskEnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationBackgroundTaskEnd.h; sourceTree = "<group>"; };
+		4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskEnd.m; sourceTree = "<group>"; };
+		4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationAddConnection.h; sourceTree = "<group>"; };
+		4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationAddConnection.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -2717,6 +2732,7 @@
 				4C5B560D1C9A2D4C005C19D9 /* Database */,
 				4C5B560C1C9A2D07005C19D9 /* Alerts */,
 				4C5B560B1C9A2CD1005C19D9 /* KeyChain */,
+				4CA0C6B41CA5400100222B8D /* Document */,
 				4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */,
 				4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */,
 				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
@@ -4275,6 +4291,23 @@
 				4C8F99BF1ACA97C8006D3996 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CA0C6B41CA5400100222B8D /* Document */ = {
+			isa = PBXGroup;
+			children = (
+				4CA0C6B51CA5401000222B8D /* MADCreateDocumentOperation.h */,
+				4CA0C6B61CA5401000222B8D /* MADCreateDocumentOperation.m */,
+				4CA0C6B81CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.h */,
+				4CA0C6B91CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m */,
+				4CA0C6BB1CA5496700222B8D /* MADOperationBackgroundTaskBegin.h */,
+				4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */,
+				4CA0C6BE1CA5499400222B8D /* MADOperationBackgroundTaskEnd.h */,
+				4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */,
+				4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */,
+				4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */,
+			);
+			name = Document;
 			sourceTree = "<group>";
 		};
 		4CB56E581AC683CC00756775 /* atomic */ = {
@@ -6033,6 +6066,7 @@
 				4C59BDBA1C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */,
+				4CA0C6B71CA5401000222B8D /* MADCreateDocumentOperation.m in Sources */,
 				4C60C5B91BB11E94004D9758 /* UIManagedDocument+URLs.m in Sources */,
 				4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
 				4C59BDB71C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m in Sources */,
@@ -6042,6 +6076,7 @@
 				4C26B9CF1BAF123A00456DC8 /* MADToolboxStyleViewController.m in Sources */,
 				4C401F7C1BAE7EB500BAE5FC /* MTBorderedView.m in Sources */,
 				4C26BA5A1BAF99F000456DC8 /* MADCollectionViewLayoutGrouped.m in Sources */,
+				4CA0C6C01CA5499400222B8D /* MADOperationBackgroundTaskEnd.m in Sources */,
 				4C26B9C91BAF123A00456DC8 /* MADTabBarController.m in Sources */,
 				4C59BDC71C9AB5540031BC6C /* MADOperationConditionMissingResultString.m in Sources */,
 				4CC886031C7AA861003E18D2 /* UIStoryboard+About.m in Sources */,
@@ -6091,6 +6126,7 @@
 				4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */,
 				4C5C0DB91C9BFF7E00826BC2 /* MADPromptOperationPolarQuestion.m in Sources */,
 				4C26B9CA1BAF123A00456DC8 /* MADToolboxFormatViewController.m in Sources */,
+				4CA0C6BA1CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m in Sources */,
 				4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */,
 				4C26BA371BAF99BE00456DC8 /* Constants.m in Sources */,
 				4C40203C1BAE92F200BAE5FC /* MTGraph+RptqQuery.m in Sources */,
@@ -6232,6 +6268,7 @@
 				4C4020661BAE92F200BAE5FC /* UIViewController+Viewer.m in Sources */,
 				4C26BA381BAF99BE00456DC8 /* MADPromptManager.m in Sources */,
 				4CC886161C7AADC0003E18D2 /* UIStoryboard+ObjectSelector.m in Sources */,
+				4CA0C6BD1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m in Sources */,
 				4C5B55FE1C98DD4D005C19D9 /* MADPromptOperationPassword.m in Sources */,
 				4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */,
 				4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */,
@@ -6249,6 +6286,7 @@
 				4C40204C1BAE92F200BAE5FC /* UIButton+FollowTwitter.m in Sources */,
 				4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */,
 				4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */,
+				4CA0C6C31CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m in Sources */,
 				4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */,

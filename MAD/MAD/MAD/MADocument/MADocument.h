@@ -114,6 +114,8 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (NSString *)mimetype;
 
+    - (void)setMainDatabase:(MTDatabase *)mainDatabase;
+
 @end
 
 #endif

@@ -11,6 +11,7 @@
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSValue.h>
 #import <dispatch/once.h>
+#import <math.h>
 
 NSString * const MTNotificationDidFormatPagesName = @"MTNotificationDidFormatPages";
 NSString * const MTDatabaseNumberOfPagesFormattedKey = @"MTDatabaseNumberOfPagesFormattedKey";

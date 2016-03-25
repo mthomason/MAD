@@ -214,11 +214,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection viewController: self];
     [getCredentialsOperation addObserver:self];
     
-    //MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
-    //[testConnectionOperation addDependency:getCredentialsOperation];
-    
     [self.credentialQueue addOperation: getCredentialsOperation];
-    //[self.credentialQueue addOperation: testConnectionOperation];
 
     self.getCredentialsOperation = getCredentialsOperation;
 
@@ -245,7 +241,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
     NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
     
-
     //Create MADocument File and Remove Cache
     MADocument *doc = [[MADocument alloc] initWithFileURL: uniqueURL];
     doc.documentDelegate = self;

@@ -7,9 +7,13 @@
 //
 
 #import "MADCreateDocumentOperation.h"
-#import "MADGetCredentialsOperation.h"
-
 #import <MAD/MTDatabaseConnection.h>
+
+#import "MADGetCredentialsOperation.h"
+#import "MADCreateDocumentOperationCreateDocument.h"
+#import "MADOperationBackgroundTaskBegin.h"
+#import "MADOperationBackgroundTaskEnd.h"
+#import "MADCreateDocumentOperationAddConnection.h"
 
 @interface MADCreateDocumentOperation ()
 
@@ -27,12 +31,33 @@
     if (self = [super init]) {
     
         MADGetCredentialsOperation *getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection:databaseConnection viewController:viewController];
+      
+        MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
+        [taskBegin addDependency:getCredentials];
+        
+        MADCreateDocumentOperationCreateDocument *createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
+        [createDocument addDependency:taskBegin];
+        
+        MADCreateDocumentOperationAddConnection *addConnection = [[MADCreateDocumentOperationAddConnection alloc] init];
+        [addConnection addDependency:createDocument];
         
         
-
         
-        // Operation: Confirm Save Username and Password
-        NSArray <__kindof NSOperation *> *operations = @[getCredentials];
+        
+        
+        
+        MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
+        [taskEnd addDependency:createDocument];
+        
+        
+        
+        
+        NSArray <__kindof NSOperation *> *operations = @[getCredentials,
+                                                         taskBegin,
+                                                         createDocument,
+                                                         taskEnd];
+        
+        
         
         MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -47,7 +72,12 @@
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-
+    /*if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+        NSObject <MADOperationHoldsCredentialsProtocol> *credentialsObject = (NSObject <MADOperationHoldsCredentialsProtocol> *)operation;
+        if ([credentialsObject gotCredentials]) {
+            
+        }
+    }*/
 }
 
 @end

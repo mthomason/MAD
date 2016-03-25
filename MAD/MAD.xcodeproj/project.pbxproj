@@ -1056,8 +1056,11 @@
 		4C95C84F1BADE77100459CB0 /* MAD */ = {
 			isa = PBXGroup;
 			children = (
+				4CC281F21BADE80500775B72 /* MADConstants.h */,
+				4CC281F31BADE80500775B72 /* MADConstants.m */,
 				4C24809A1C8B20E00058E6B4 /* MADFonts.h */,
 				4C24809B1C8B20E00058E6B4 /* MADFonts.m */,
+				4CA0C6C41CA564C000222B8D /* Notifications */,
 				4C401E5D1BAE4F2F00BAE5FC /* Categories */,
 				4C401E4C1BAE4E8200BAE5FC /* MADDataTable */,
 				4C401E431BAE4D7800BAE5FC /* MADocument */,
@@ -1069,8 +1072,6 @@
 				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
 				4CC2820D1BADE81A00775B72 /* MTAlignment.h */,
 				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
-				4CC281F21BADE80500775B72 /* MADConstants.h */,
-				4CC281F31BADE80500775B72 /* MADConstants.m */,
 				4CC282361BADE81A00775B72 /* MADFont.h */,
 				4CC282371BADE81A00775B72 /* MADFont.m */,
 				4CC282381BADE81A00775B72 /* MTKeyChain.h */,
@@ -1093,10 +1094,6 @@
 				4CC282291BADE81A00775B72 /* MTDataFormatter.m */,
 				4CC282341BADE81A00775B72 /* MTErrorContainer.h */,
 				4CC282351BADE81A00775B72 /* MTErrorContainer.m */,
-				4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */,
-				4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */,
-				4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */,
-				4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */,
 				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
 				4CC281F11BADE80500775B72 /* MADArrayCaching.m */,
 				4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */,
@@ -1136,6 +1133,17 @@
 				4C994F341BDDD85D0058627A /* MADAccessibilityLine.m */,
 			);
 			name = MADReportObjectRepresentation;
+			sourceTree = "<group>";
+		};
+		4CA0C6C41CA564C000222B8D /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */,
+				4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */,
+				4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */,
+				4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */,
+			);
+			name = Notifications;
 			sourceTree = "<group>";
 		};
 		4CC283C91BADE90600775B72 /* rptq */ = {

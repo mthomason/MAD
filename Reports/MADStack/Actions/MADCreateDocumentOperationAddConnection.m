@@ -8,6 +8,58 @@
 
 #import "MADCreateDocumentOperationAddConnection.h"
 
+#import <MAD/MADocument.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+
+#import "MADCreateDocumentOperationCreateDocument.h"
+
+@interface MADCreateDocumentOperationAddConnection ()
+
+    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+
+@end
+
 @implementation MADCreateDocumentOperationAddConnection
+
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+    if (self = [super init]) {
+        self.databaseConnection = databaseConnection;
+    }
+    return self;
+}
+
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)execute {
+    MADocument *document = nil;
+    NSArray<NSOperation *> *dependencies = self.dependencies;
+    for (NSOperation *dependency in dependencies) {
+        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
+            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+            break;
+        }
+    }
+
+    RptqDocument *rptqDocument = [document activeDocumentModel];
+    MTDatabase *database = [MTDatabase databaseFactory:self.databaseConnection];
+
+    if (database) {
+        [document setMainDatabase:database];
+        
+        [rptqDocument addDatabase: document.mainDatabase
+                           status: ^(NSString *message, float progress) {
+        //                       status(message, progress);
+                           } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+        //                       completion(success, errorContainer);
+                           }];
+        
+    } else {
+        //completion(NO, nil);
+    }
+
+}
 
 @end
