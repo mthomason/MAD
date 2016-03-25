@@ -11,10 +11,17 @@
 @class MTDatabaseConnection;
 @class MADCredential;
 
+@protocol MADDatabaseOperationTestConnectionProtocol <NSObject>
+
+    @property (nonatomic, readonly, strong) NSError *error;
+    @property (nonatomic, readonly, assign) bool success;
+
+@end
+
 @interface MADDatabaseOperationTestConnection : MADOperation
 
-@property (nonatomic, readonly, strong) NSError *error;
-@property (nonatomic, readonly, assign) bool success;
+    @property (nonatomic, readonly, strong) NSError *error;
+    @property (nonatomic, readonly, assign) bool success;
 
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection;
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection credentials:(MADCredential *)credentials;

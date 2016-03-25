@@ -57,9 +57,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     return self.gotPassword;
 }
 
-- (MADKeyChainReadOperationTypes)readOperationType {
-    return password;
-}
+- (MADKeyChainReadOperationTypes)readOperationType { return MADKeyChainReadOperationTypePassword; }
 
 - (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController {
     if (self = [super init]) {

@@ -15,6 +15,7 @@
 
 + (instancetype)dataTableFactory:(NSDictionary *)parameters NS_RETURNS_RETAINED;
 + (instancetype)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED;
++ (instancetype)dataTableOfType:(MTDataTableType)type withObjectId:(NSUInteger)objectId  NS_RETURNS_RETAINED;
 
 @end
 

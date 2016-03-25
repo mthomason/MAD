@@ -211,8 +211,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     // Operation: Get credentials.
     // ---------------------------------------------------
-    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithKey: databaseConnection.connectionString
-                                                                                           viewController: self];
+    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection viewController: self];
     [getCredentialsOperation addObserver:self];
     
     MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
@@ -222,7 +221,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self.credentialQueue addOperation: testConnectionOperation];
 
     self.getCredentialsOperation = getCredentialsOperation;
-    
+
     return nil;
 }
 
@@ -237,8 +236,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self disableNavigation];
     
     MADBarButtonItem *barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
-                                                                                     target: nil
-                                                                                     action: nil];
+                                                                                     target: nil action: nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
     NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);

@@ -7,15 +7,17 @@
 //
 
 #import "MADGetCredentialsOperation.h"
-#import "NSOperation+Advanced.h"
 #import <MAD/MTKeyChain.h>
+#import <MAD/MTDatabaseConnection.h>
+#import "NSOperation+Advanced.h"
+#import "MADOperationQueue.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
 #import "MADPromptOperationPassword.h"
 #import "MADPromptOperationPolarQuestion.h"
-#import "MADOperationQueue.h"
+#import "MADDatabaseOperationTestConnection.h"
 #import "MADKeyChainOperationPut.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
@@ -52,9 +54,12 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (bool)gotCredentials { return self.usernameSet && self.passwordSet; }
 
-- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
+- (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
+                            viewController: (UIViewController *)viewController {
     
     if (self = [super init]) {
+    
+        NSString *key = databaseConnection.connectionString;
         NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
         NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
         
@@ -62,7 +67,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         // Operation 1: Read username.
         // -------------------------
         MADKeyChainOperationGet *getUsername = [[MADKeyChainOperationGet alloc] initWithKey:keyUsername withDescription:MTKeyChainUsernameAccountDesc];
-        getUsername.readOperationType = username;
+        getUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         
         // ---------------------------------------------------
         // Operation 2: Prompt for credentials if condition is met.
@@ -81,7 +86,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         // Conditions:  Username is found.
         // ---------------------------------------------------
         MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword withDescription:MTKeyChainPasswordAccountDesc];
-        getPassword.readOperationType = password;
+        getPassword.readOperationType = MADKeyChainReadOperationTypePassword;
         [getPassword addDependency:getUsername];
         
         // Condition: Username is found.
@@ -113,6 +118,23 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
         NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
         
+        
+        // ---------------------------------------------------
+        // Operation 5a: Test the connection
+        // ---------------------------------------------------
+        MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+        [testConnectionOperation addDependency:getUsername];
+        [testConnectionOperation addDependency:getPassword];
+        [testConnectionOperation addDependency:promptCredntials];
+        [testConnectionOperation addDependency:promptPassword];
+        //[testConnectionOperation addCondition: conditionReadPasswordFailed];
+        
+        MADOperationConditionPolarQuestionAffirmative *promptForCredentialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptCredntials.hash];
+        MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
+        
+        [testConnectionOperation addCondition: promptForCredentialsAffirmative];
+        [testConnectionOperation addCondition: promptForPasswordAffirmative];
+        
         // ---------------------------------------------------
         // Operation 5: Prompt save username and password
         // Conditions:  User entered a username and password.
@@ -120,7 +142,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         MADPromptOperationPolarQuestion *promptSaveCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messageCredntialsPrompt viewController:viewController];
         [promptSaveCredntials addDependency:promptCredntials];
         
-        MADOperationConditionPolarQuestionAffirmative *promptForCredentialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptCredntials.hash];
         [promptSaveCredntials addCondition:promptForCredentialsAffirmative];
         
         NSString *messagePasswordPrompt = NSLocalizedString(TextSaveToKeyChainMessagePassword, TextSaveToKeyChainMessagePassword);
@@ -132,7 +153,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         MADPromptOperationPolarQuestion *promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messagePasswordPrompt viewController:viewController];
         [promptSavePassword addDependency:promptPassword];
         
-        MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
         [promptSavePassword addCondition:promptForPasswordAffirmative];
         
         // ---------------------------------------------------
@@ -207,12 +227,12 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         if (((NSObject <MADOperationResultStringProtocol> *) operation).success) {
 
             switch (((NSObject <MADOperationResultStringProtocol> *) operation).readOperationType) {
-                case username:
+                case MADKeyChainReadOperationTypeUsername:
                     self.username = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
                     self.usernameSet = true;
                     break;
 
-                case password:
+                case MADKeyChainReadOperationTypePassword:
                     self.password = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
                     self.passwordSet = true;
                     break;

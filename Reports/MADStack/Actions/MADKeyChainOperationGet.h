@@ -12,8 +12,8 @@
 #import "MADOperation.h"
 
 typedef NS_ENUM(short, MADKeyChainReadOperationTypes) {
-    username,
-    password,
+    MADKeyChainReadOperationTypeUsername,
+    MADKeyChainReadOperationTypePassword,
 };
 
 @protocol MADOperationResultStringProtocol <NSObject>

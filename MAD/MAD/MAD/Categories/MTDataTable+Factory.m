@@ -14,24 +14,14 @@
 @implementation MTDataTable (Factory)
 
 + (instancetype)dataTableFactory:(NSDictionary *)parameters NS_RETURNS_RETAINED {
+
     NSNumber *keyDataTableType = @(MTDataTableTypeOfTable);
     NSNumber *keyDataTableObjectId = @(MTDataTableObjectId);
-    NSNumber *keyDataTableNumberOfColumns = @(MTDataTableNumberOfColumns);
     
     NSNumber *dataTableType = parameters[keyDataTableType];
     NSNumber *dataTableObjectId = parameters[keyDataTableObjectId];
-    NSNumber *datatableNumberOfColumns = parameters[keyDataTableNumberOfColumns];
     
-    NSUInteger numberOfColumns = 0;
-    BOOL numberOfColumnsHack = NO;
     BOOL objectIdSet = NO;
-    
-    id result = nil;
-    
-    if (datatableNumberOfColumns != nil) {
-        numberOfColumnsHack = YES;
-        numberOfColumns = [datatableNumberOfColumns unsignedIntegerValue];
-    }
     
     //Default type is virtual. If there is no object id, then type MUST be virtual.  That's
     //  because we won't know where to store it.
@@ -45,18 +35,20 @@
         objectIdSet = YES;
         objectId = [dataTableObjectId unsignedIntegerValue];
     }
+    if (objectIdSet) {
+        return [MTDataTable dataTableOfType:type withObjectId:objectId];
+    } else {
+        NSAssert(false, @"Not implemented.");
+        return nil;
+    }
+}
+
++ (instancetype)dataTableOfType:(MTDataTableType)type withObjectId:(NSUInteger)objectId  NS_RETURNS_RETAINED {
     
+    id result = nil;
     switch (type) {
         case MTDataTableTypeVirtual: {
-            if (objectIdSet) {
-                result = [[MTDataTableVirtual alloc] initWithId:objectId];
-            } else {
-                if (numberOfColumnsHack) {
-                    result = [[MTDataTableVirtual alloc] initWithNumberOfColumns:numberOfColumns];
-                } else {
-                    result = [[MTDataTableVirtual alloc] initWithId:objectId];
-                }
-            }
+            result = [[MTDataTableVirtual alloc] initWithId:objectId];
             break;
         }
         case MTDataTableTypePhysical: {
@@ -68,7 +60,7 @@
             break;
     }
     return result;
-
+    
 }
 
 + (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier NS_RETURNS_RETAINED {

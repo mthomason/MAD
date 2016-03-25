@@ -57,11 +57,15 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     
     // Ask each condition to evaluate and store its result in the "results" array.
     for (NSObject <MADOperationCondition> *condition in conditions) {
+
         dispatch_group_enter(conditionGroup);
         [condition evaluateForOperation:operation completion:^(MADOperationConditionResult * result) {
+
             [results addObject:result];
             dispatch_group_leave(conditionGroup);
+
         }];
+
     }
     
     // After all the conditions have evaluated, this block will execute.

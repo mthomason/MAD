@@ -63,8 +63,10 @@ static NSString * const TextNo = @"No";
                                                              sself.result = false;
                                                              sself.alertDisplayed = true;
                                                              defer(^{
-                                                                 NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
-                                                                 [sself performSelectorInBackground:@selector(finishWithError:) withObject:error];
+                                                                 NSError *error = [NSError errorWithDomain: NSStringFromClass([self class])
+                                                                                                      code: 173 userInfo: nil];
+                                                                 [sself performSelectorInBackground: @selector(finishWithError:)
+                                                                                         withObject: error];
                                                              });
                                                          }];
     

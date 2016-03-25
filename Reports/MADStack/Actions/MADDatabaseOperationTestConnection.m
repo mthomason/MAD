@@ -12,6 +12,9 @@
 #import <MAD/MTQueryTest.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MTDataTable+Factory.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MADErrorUserInfo.h>
+#import "MADKeyChainOperationGet.h"
 
 @interface MADDatabaseOperationTestConnection ()
     <MTDatabaseProtocol>
@@ -32,15 +35,6 @@
 
 @implementation MADDatabaseOperationTestConnection
 
-- (MADCredential *)getCredentialsForKey:(NSString *)key {
-    if (!self.credentials) {
-        NSError *error = [NSError errorWithDomain:@"MADDatabaseOperationTestConnection" code:38 userInfo:nil];
-        [self finishWithError:error];
-    }
-    MADCredential *credentialsCopy = self.credentials.copy;
-    return credentialsCopy;
-}
-
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection {
     if (self = [super init]) {
         self.databaseConnection = connection;
@@ -50,7 +44,8 @@
     return self;
 }
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection credentials:(MADCredential *)credentials {
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection
+                               credentials:(MADCredential *)credentials {
     if (self = [super init]) {
         self.databaseConnection = connection;
         self.credentials = credentials;
@@ -63,27 +58,62 @@
 
 - (void)execute {
 
+    // Find credentials from dependencies.
     if (self.credentials == nil) {
+        
+        NSString *username = nil;
+        NSString *password = nil;
+        
         NSArray <NSOperation *> *dependencies = self.dependencies;
         for (NSOperation *operation in dependencies) {
+
             if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+ 
                 if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
                     self.credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials;
                     break;
                 }
+                
+            } else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+                if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
+                    switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
+                        case MADKeyChainReadOperationTypeUsername:
+                            username = ((NSObject <MADOperationResultStringProtocol> *)operation).value;
+                            break;
+                        case MADKeyChainReadOperationTypePassword:
+                            password = ((NSObject <MADOperationResultStringProtocol> *)operation).value;
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        
+        if (self.credentials == nil) {
+            if (username != nil && password != nil) {
+                MADCredential *credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
+                self.credentials = credentials;
             }
         }
     }
     
+    // If we still don't have credentials, then fail.
+    if (self.credentials == nil) {
+        NSString *testFailed = NSLocalizedString(@"Test Failed", @"Test Failed");
+        NSString *credentialsNotFound = NSLocalizedString(@"Credentials not found.", @"Credentials not found.");
+        MADErrorUserInfo *errorInfo = [[MADErrorUserInfo alloc] initWithTitle:testFailed andMessage:credentialsNotFound];
+        NSError *error = [errorInfo errorWithDomain:NSStringFromClass([self class]) code:-1];
+        self.error = error;
+        [self finishWithError:error];
+        return;
+    }
+    
     MTDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
-    
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypeVirtual);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(databaseConnection.hash);
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    MTDataTable *datatable = [MTDataTable dataTableFactory:parameters];
+    MTDataTable *datatable = [MTDataTable dataTableOfType: MTDataTableTypeVirtual
+                                             withObjectId: databaseConnection.hash];
     
     self.datatable = datatable;
     
@@ -96,8 +126,9 @@
     if ((self.success = [queryTest.database executeQuery:queryTest withError:&error])) {
         [self finish];
     } else {
+        NSError *err = error;
         self.error = error;
-        [self finishWithError:self.error];
+        [self finishWithError:err];
     }
     
 }
