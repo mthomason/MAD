@@ -25,7 +25,7 @@
 #import <MAD/MTQuery.h>
 #import <MAD/MTActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
-#import <MAD/MTNotificationDidReadRows.h>
+#import <MAD/MADNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
 
 #import <MADFoundation/MTDataTable.h>
@@ -451,7 +451,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
-    NSNumber *rowNumber = sender.userInfo[MTDatabaseNumberOfRowsReadKey];
+    NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
     [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
@@ -651,13 +651,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)addObserverDidReadRowsToDatabase:(MTDatabase *)database {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportDocumentDidReadRows:)
-                                                 name: MTNotificationDidReadRowsName
+                                                 name: MADNotificationDidReadRowsName
                                                object: database];
 }
 
 - (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MTNotificationDidReadRowsName
+                                                    name: MADNotificationDidReadRowsName
                                                   object: database];
 }
 

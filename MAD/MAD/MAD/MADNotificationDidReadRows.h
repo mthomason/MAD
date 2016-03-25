@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 
 extern NSString * const MADNotificationDidReadRowsName;
-extern NSString * const MTDatabaseNumberOfRowsReadKey;
+extern NSString * const MADDatabaseNumberOfRowsReadKey;
 
 @class MTDatabase;
 

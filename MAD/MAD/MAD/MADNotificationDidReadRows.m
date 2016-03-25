@@ -15,7 +15,7 @@
 #import <math.h>
 
 NSString * const MADNotificationDidReadRowsName = @"MADNotificationDidReadRows";
-NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";
+NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadKey";
 
 static const short RowIntervalInital = 7;
 static const short RowIntervalInitalMax = 511;
@@ -57,7 +57,7 @@ static MADNotificationDidReadRows *sharedSingleton = nil;
 - (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
     NSNumber *rowCounterWrapper = @(row);
     NSDictionary * __autoreleasing parameters = @{
-                                                  MTDatabaseNumberOfRowsReadKey : rowCounterWrapper,
+                                                  MADDatabaseNumberOfRowsReadKey : rowCounterWrapper,
                                                   };
     return parameters;
 }

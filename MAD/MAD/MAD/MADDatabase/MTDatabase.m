@@ -16,7 +16,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseConnection.h"
 #import "MTKeyChain.h"
-#import "MTNotificationDidReadRows.h"
+#import "MADNotificationDidReadRows.h"
 #import "MADCredential.h"
 #import "MADErrorUserInfo.h"
 
@@ -204,7 +204,7 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 }
 
 - (void)readRow:(NSUInteger)row {
-    [[MTNotificationDidReadRows sharedObject] database:self readRow:row];
+    [[MADNotificationDidReadRows sharedObject] database:self readRow:row];
 }
 
 - (void)closeProcess:(id)process {}
