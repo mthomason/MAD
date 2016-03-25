@@ -21,7 +21,7 @@ static const NSInteger PageIntervalInitalMax = 7;
 
 @interface MADNotificationDidFormatPage ()
 
-@property (nonatomic, assign) NSUInteger pageInterval;
+    @property (nonatomic, assign) NSUInteger pageInterval;
 
 @end
 

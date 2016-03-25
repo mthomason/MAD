@@ -18,8 +18,8 @@ extern NSString * const MADDatabaseNumberOfRowsReadKey;
 
 @interface MADNotificationDidReadRows : NSObject
 
-+ (MADNotificationDidReadRows *)sharedObject;
-- (void)database:(MTDatabase *)database readRow:(NSUInteger)row;
+    + (MADNotificationDidReadRows *)sharedObject;
+    - (void)database:(MTDatabase *)database readRow:(NSUInteger)row;
 
 @end
 

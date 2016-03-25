@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MADProgress : NSObject
+@interface MADProgress : NSObject <NSCopying>
+
+    - (instancetype)initWithMessage:(NSString *)message andProgress:(float)progress;
+
+    @property (nonatomic, copy, readonly) NSString *message;
+    @property (nonatomic, assign, readonly) float progress;
 
 @end
