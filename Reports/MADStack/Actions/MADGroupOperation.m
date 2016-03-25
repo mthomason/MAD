@@ -10,7 +10,7 @@
 #import "MADOperationQueue.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
-
+#import "MADDefer.h"
 /**
  A subclass of `Operation` that executes zero or more operations as part of its
  own execution. This class of operation is very useful for abstracting several
@@ -27,26 +27,34 @@
 
 @interface MADGroupOperation () <MADOperationQueueDelegate>
 
-    @property (nonatomic, strong) MADOperationQueue * internalQueue;
-    @property (nonatomic, copy) NSBlockOperation * finishingOperation;
     @property (nonatomic, strong) NSMutableArray <__kindof NSError *> *aggregatedErrors;
 
 @end
 
 @implementation MADGroupOperation
 
-- (instancetype)initWithOperations:(NSArray <__kindof NSOperation *> *)operations {
+- (void)addOperations:(NSArray <__kindof NSOperation *> *)operations {
+    [self addOperations:operations finishingOperation:nil];
+}
 
-    if (self = [super init]) {
-        _internalQueue = [MADOperationQueue new];
-        _internalQueue.suspended = YES;
-        _internalQueue.delegate = self;
-        
-        for (NSOperation *op in operations){
-            [_internalQueue addOperation:op];
-        }
+
+- (void)addOperations:(NSArray <__kindof NSOperation *> *)operations finishingOperation:(NSBlockOperation *)finishingOperation {
+    if (finishingOperation == nil) {
+        MADGroupOperation * __weak wself = self;
+        _finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
+            MADGroupOperation *sself = wself;
+            [sself finish];
+        }];
+    } else {
+        _finishingOperation = finishingOperation;
     }
-    return self;
+    _internalQueue = [MADOperationQueue new];
+    _internalQueue.suspended = YES;
+    _internalQueue.delegate = self;
+    for (NSOperation *op in operations){
+        [_internalQueue addOperation:op];
+    }
+    
 }
 
 - (void)cancel {
@@ -55,8 +63,6 @@
 }
 
 - (void)execute {
-    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
-
     self.internalQueue.suspended = NO;
     [self.internalQueue addOperation:self.finishingOperation];
 }

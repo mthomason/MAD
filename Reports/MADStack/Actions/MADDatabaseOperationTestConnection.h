@@ -8,9 +8,15 @@
 
 #import "MADOperation.h"
 
+@class MTDatabaseConnection;
+@class MADCredential;
+
 @interface MADDatabaseOperationTestConnection : MADOperation
 
 @property (nonatomic, readonly, strong) NSError *error;
 @property (nonatomic, readonly, assign) bool success;
+
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection;
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection credentials:(MADCredential *)credentials;
 
 @end

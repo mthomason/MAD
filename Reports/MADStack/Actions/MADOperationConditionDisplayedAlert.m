@@ -38,9 +38,7 @@
 
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
-- (void)evaluateForOperation:(MADOperation *)operation
-                  completion:(void (^)(MADOperationConditionResult *))completion {
-    NSLog(@"%@: %s", [self name], __PRETTY_FUNCTION__);
+- (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
@@ -51,8 +49,6 @@
     }
 
     MADOperationConditionResult *result = nil;
-    
-
     for (NSOperation *dependency in dependencies) {
         
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] && dependency.hash == self.tag) {
@@ -82,8 +78,6 @@
         NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
         completion([MADOperationConditionResult failed:error]);
     }
-
-    
 }
 
 @end

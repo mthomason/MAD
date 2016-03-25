@@ -40,7 +40,6 @@ static NSString * const TextNo = @"No";
 }
 
 - (void)execute {
-    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: self.title message: self.message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
@@ -64,7 +63,6 @@ static NSString * const TextNo = @"No";
                                                              sself.result = false;
                                                              sself.alertDisplayed = true;
                                                              defer(^{
-                                                                 NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
                                                                  NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
                                                                  [sself performSelectorInBackground:@selector(finishWithError:) withObject:error];
                                                              });

@@ -35,7 +35,6 @@ static NSString * const ErrorDomain = @"MADKCP";
 }
 
 - (void)execute {
-    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     NSString *valueToWrite = nil;
     
@@ -62,7 +61,6 @@ static NSString * const ErrorDomain = @"MADKCP";
             [self finish];
 
         } else {
-            NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
             NSError *error = [NSError errorWithDomain:ErrorDomain code:status userInfo:nil];
             [self finishWithError:error];
@@ -70,7 +68,6 @@ static NSString * const ErrorDomain = @"MADKCP";
         }
         
     } else {
-        NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
         NSError *error = [NSError errorWithDomain:ErrorDomain code:StatusNotFound userInfo:nil];
         [self finishWithError:error];

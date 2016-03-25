@@ -204,7 +204,6 @@ static NSString * const MADOperatorSelectorState        = @"state";
  their readiness state.
  */
 - (void)execute {
-    NSLog(@"%@ must override `execute()`.", NSStringFromClass(self.class));
     [self finish];
 }
 
@@ -281,6 +280,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (void)waitUntilFinished {
+    [super waitUntilFinished];
     /*
      Waiting on operations is almost NEVER the right thing to do. It is
      usually superior to use proper locking constructs, such as `dispatch_semaphore_t`
@@ -292,7 +292,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
      app, as incentive for you to find a more appropriate way to express
      the behavior you're wishing to create.
      */
-    NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
+    //NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
 }
 
 @end

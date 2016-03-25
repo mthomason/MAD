@@ -39,6 +39,8 @@
 
 #import "MADGetCredentialsOperation.h"
 
+#import "MADDatabaseOperationTestConnection.h"
+
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
@@ -68,6 +70,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
                                                                 //  in static function
 
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
+    @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
 
 @end
 
@@ -204,89 +207,21 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return progressView;
 }
 
-- (MADCredential *)getCredentialsForKey:(NSString *)key {
-
-    //credentialQueue.maxConcurrentOperationCount = 2;
+- (MADCredential *)getCredentialsForDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
     
-    //NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
-    //NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
-
-    // Operation: Read username.
-    // -------------------------
-    
-    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithKey:key viewController:self];
+    // Operation: Get credentials.
+    // ---------------------------------------------------
+    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithKey: databaseConnection.connectionString
+                                                                                           viewController: self];
     [getCredentialsOperation addObserver:self];
-    [self.credentialQueue addOperation:getCredentialsOperation];
-    //[credentialQueue waitUntilAllOperationsAreFinished];
     
-    /*
-    MADKeyChainOperationGet *getUsername = [[MADKeyChainOperationGet alloc] initWithKey:keyUsername];
-    getUsername.readOperationType = username;
+    MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+    [testConnectionOperation addDependency:getCredentialsOperation];
+    
+    [self.credentialQueue addOperation: getCredentialsOperation];
+    [self.credentialQueue addOperation: testConnectionOperation];
 
-    
-    // Operation: Prompt for username if condition is met.
-    // ---------------------------------------------------
-    MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithViewController:self];
-    [promptCredntials addDependency:getUsername];
-    
-    // Condition: Username is missing.
-    // ---------------------------------------------------
-    MADOperationConditionMissingResultString *conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyUsername];
-    [promptCredntials addCondition:conditionReadUsernameFailed];
-    
-    // Operation: Read password
-    // ---------------------------------------------------
-    MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword];
-    [getPassword addDependency:getUsername];
-
-    // Condition: Username is found.
-    // ---------------------------------------------------
-    MADOperationConditionHasResultString *conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
-    [getPassword addCondition:conditionReadUsername];
-
-    // Condition: Password is missing.
-    // ---------------------------------------------------
-    MADOperationConditionMissingResultString *conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyPassword];
-
-    // Operation: Prompt password
-    // ---------------------------------------------------
-    MADPromptOperationPassword *promptPassword = [[MADPromptOperationPassword alloc] initWithViewController:self];
-    [promptPassword addDependency:getUsername];
-    [promptPassword addDependency:getPassword];
-    [promptPassword addCondition:conditionReadUsername];
-    [promptPassword addCondition:conditionReadPasswordFailed];
-    
-    */
-    
-    /*
-    
-    getPassword.readOperationType = password;
-    [promptCredntials addDependency:getPassword];
-    
-    MADPromptOperationPassword *promptPassword = [[MADPromptOperationPassword alloc] initWithViewController:self];
-    [promptPassword addDependency:getUsername];
-    [promptPassword addDependency:getPassword];
-    [promptPassword addDependency:promptCredntials];
-
-    [credentialQueue addOperation:getUsername];
-    [credentialQueue addOperation:getPassword];
-    [credentialQueue addOperation:promptCredntials];
-    [credentialQueue addOperation:promptPassword];
-    
-    
-    */
-    //MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
-    //MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
-    
-    //[cs addDependency:cg];
-    //[credentialQueue addOperation:cg];
-    //[credentialQueue addOperation:cs];
-
-    
-    //[credentialQueue waitUntilAllOperationsAreFinished];
-    
-    //MADCredential *credentials = [[MADCredential alloc] initWithUsername:getUsername.result andPassword:getPassword.result];
-    //return credentials;
+    self.getCredentialsOperation = getCredentialsOperation;
     
     return nil;
 }

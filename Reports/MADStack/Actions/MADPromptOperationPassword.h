@@ -19,8 +19,11 @@
 
 
 @interface MADPromptOperationPassword : MADOperation
-    <MADOperationResultStringProtocol, MADKeyChainKeyValueProtocol, MADOperationHoldsPasswordProtocol,
-        MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
+    <MADOperationResultStringProtocol,
+        MADKeyChainKeyValueProtocol,
+        MADOperationHoldsPasswordProtocol,
+        MADOperationConditionPolarQuestionResultProtocol,
+        MADOperationConditionDisplayedAlertProtocol>
 
     - (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController;
     - (NSString *)valueForKey:(NSString *)key;

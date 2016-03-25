@@ -36,17 +36,17 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     CFDataRef queryData = NULL;
     NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key withDescription:self.keyDescription];
     OSStatus queryStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryDefination, (CFTypeRef *)&queryData);
 
     if (queryData == NULL) {
-        NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
         [self finishWithError:error];
         return;
+
     }
     
     NSString *result;
@@ -61,7 +61,7 @@
             break;
             
         default:
-            NSLog(@"Error: %@-%s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+
             self.value = nil;
             NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
             [self finishWithError:error];

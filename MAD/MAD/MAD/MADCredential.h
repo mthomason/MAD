@@ -44,8 +44,8 @@ typedef NS_ENUM(short, MADCredentialSource) {
 
 @protocol MADOperationHoldsCredentialsProtocol <NSObject>
 
-    @property (nonatomic, readonly, copy) MADCredential *credentials;
-    @property (nonatomic, readonly, assign) bool gotCredentials;
+    - (MADCredential *)credentials;
+    - (bool)gotCredentials;
 
 @end
 

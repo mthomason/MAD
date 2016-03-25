@@ -44,7 +44,6 @@
 }
 
 - (void)execute {
-    NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
 
     OperationCompletionBlock completion = ^{
         [self finish];

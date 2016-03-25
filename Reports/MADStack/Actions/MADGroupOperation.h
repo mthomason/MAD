@@ -11,11 +11,15 @@
 
 #import "MADOperation.h"
 
-@class NSOperation;
+@class NSOperation, MADOperationQueue;
 
 @interface MADGroupOperation : MADOperation
 
-    - (instancetype)initWithOperations:(NSArray <__kindof NSOperation *> *)operations;
+    @property (nonatomic, strong) MADOperationQueue *internalQueue;
+    @property (nonatomic, strong) NSBlockOperation *finishingOperation;
+
+    - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations
+       finishingOperation:(NSBlockOperation *)finishingOperation;
     - (void)addOperation:(NSOperation *)operation;
     - (void)aggregateError:(NSError *)error;
     - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors;

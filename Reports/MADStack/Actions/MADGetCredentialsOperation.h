@@ -10,14 +10,16 @@
 #define MAD_Designer_MADGetCredentialsOperation_h
 
 #import "MADGroupOperation.h"
+#import <MAD/MADCredential.h>
 
 @class UIViewController, MADCredential;
 
 @interface MADGetCredentialsOperation : MADGroupOperation
+    <MADOperationHoldsCredentialsProtocol>
 
     - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
-
     @property (readonly) MADCredential *credentials;
+    @property (readonly) bool gotCredentials;
 
 @end
 
