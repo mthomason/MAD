@@ -28,7 +28,7 @@
 #import "MTReportFormatter.h"
 #import "MTDatabaseConnection.h"
 
-#import "MTNotificationDidFormatPage.h"
+#import "MADNotificationDidFormatPage.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"

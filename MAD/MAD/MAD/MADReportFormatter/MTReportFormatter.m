@@ -35,7 +35,7 @@
 
 #import "MADArrayCaching.h"
 
-#import "MTNotificationDidFormatPage.h"
+#import "MADNotificationDidFormatPage.h"
 #import "MTReportFormatterPageDefinition.h"
 
 #import "NSData+Comparson.h"
@@ -585,7 +585,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self cleanupTemporaryPageIndexes];
     
     self.machineState.pageCounter++;
-    [[MTNotificationDidFormatPage sharedObject] reportFormatter:self
+    [[MADNotificationDidFormatPage sharedObject] reportFormatter:self
                                                   formattedPage:self.machineState.pageCounter];
     RptqDocumentSection *pageHeaderSection = [self.machineState.document hasPageHeaderSection];
     

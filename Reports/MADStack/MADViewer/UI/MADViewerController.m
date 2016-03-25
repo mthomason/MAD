@@ -24,7 +24,7 @@
 #import <MAD/MTDataTableFast.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTActivityItemProviderPdf.h>
-#import <MAD/MTNotificationDidFormatPage.h>
+#import <MAD/MADNotificationDidFormatPage.h>
 #import <MAD/MTNotificationDidReadRows.h>
 #import <MAD/MTKeyChain.h>
 
@@ -840,13 +840,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)watchFormatter:(MTReportFormatter *)formatter {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportFormatterDidFormatPage:)
-                                                 name: MTNotificationDidFormatPagesName
+                                                 name: MADNotificationDidFormatPagesName
                                                object: formatter];
 }
 
 - (void)ignoreFormatter:(MTReportFormatter *)formatter {
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MTNotificationDidFormatPagesName
+                                                    name: MADNotificationDidFormatPagesName
                                                   object: formatter];
 }
 

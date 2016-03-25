@@ -17,7 +17,7 @@
 #import "MADActivityIndicator.h"
 #import "MTPaper.h"
 #import "MTDataTableFast.h"
-#import "MTNotificationDidFormatPage.h"
+#import "MADNotificationDidFormatPage.h"
 
 @interface  MTActivityItemProviderPdf ()
 
@@ -100,7 +100,7 @@
         
         [[NSNotificationCenter defaultCenter] addObserver: weakdoc
                                                  selector: @selector(reportFormatterDidFormatPage:)
-                                                     name: MTNotificationDidFormatPagesName
+                                                     name: MADNotificationDidFormatPagesName
                                                    object: rf];
         
         
@@ -113,7 +113,7 @@
         
         
         [[NSNotificationCenter defaultCenter] removeObserver: weakdoc
-                                                        name: MTNotificationDidFormatPagesName
+                                                        name: MADNotificationDidFormatPagesName
                                                       object: rf];
         
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: rf

@@ -1,33 +1,33 @@
 //
-//  MTNotificationDidFormatPage.m
+//  MADNotificationDidFormatPage.m
 //  MAD
 //
 //  Created by Michael Thomason on 7/11/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTNotificationDidFormatPage.h"
+#import "MADNotificationDidFormatPage.h"
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSValue.h>
 #import <dispatch/once.h>
 #import <math.h>
 
-NSString * const MTNotificationDidFormatPagesName = @"MTNotificationDidFormatPages";
+NSString * const MADNotificationDidFormatPagesName = @"MADNotificationDidFormatPages";
 NSString * const MTDatabaseNumberOfPagesFormattedKey = @"MTDatabaseNumberOfPagesFormattedKey";
 
 static const NSInteger PageIntervalInital = 1;
 static const NSInteger PageIntervalInitalMax = 7;
 
-@interface MTNotificationDidFormatPage ()
+@interface MADNotificationDidFormatPage ()
 
 @property (nonatomic, assign) NSUInteger pageInterval;
 
 @end
 
-@implementation MTNotificationDidFormatPage
+@implementation MADNotificationDidFormatPage
 
-static MTNotificationDidFormatPage *sharedSingleton = nil;
+static MADNotificationDidFormatPage *sharedSingleton = nil;
 
 + (void)initialize {
     static dispatch_once_t onceToken;
@@ -37,7 +37,7 @@ static MTNotificationDidFormatPage *sharedSingleton = nil;
     });
 }
 
-+ (MTNotificationDidFormatPage *)sharedObject {
++ (MADNotificationDidFormatPage *)sharedObject {
     return sharedSingleton;
 }
 
@@ -65,7 +65,7 @@ static MTNotificationDidFormatPage *sharedSingleton = nil;
     if (page % self.pageInterval == 0) {
         if (page == 0) [self initalizeRowInterval];
         NSDictionary *parameters = [self parametersWithNumberOfPages:page];
-        NSNotification *notification = [NSNotification notificationWithName:MTNotificationDidFormatPagesName object:reportFormatter userInfo:parameters];
+        NSNotification *notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName object:reportFormatter userInfo:parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
         if ([self pageInterval] < PageIntervalInitalMax) {
             if (page > self.pageInterval) {

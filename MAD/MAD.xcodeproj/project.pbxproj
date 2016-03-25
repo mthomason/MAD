@@ -260,8 +260,8 @@
 		4CC282741BADE82000775B72 /* MADFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282371BADE81A00775B72 /* MADFont.m */; };
 		4CC282751BADE82100775B72 /* MTKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282381BADE81A00775B72 /* MTKeyChain.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282761BADE82100775B72 /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282391BADE81A00775B72 /* MTKeyChain.m */; };
-		4CC282771BADE82100775B72 /* MTNotificationDidFormatPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CC282781BADE82100775B72 /* MTNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */; };
+		4CC282771BADE82100775B72 /* MADNotificationDidFormatPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2823A1BADE81A00775B72 /* MADNotificationDidFormatPage.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC282781BADE82100775B72 /* MADNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823B1BADE81A00775B72 /* MADNotificationDidFormatPage.m */; };
 		4CC282791BADE82200775B72 /* MTNotificationDidReadRows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC2827A1BADE82200775B72 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */; };
 		4CC283B71BADE8C400775B72 /* MTReportViewerPrintPageRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283121BADE85000775B72 /* MTReportViewerPrintPageRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -645,8 +645,8 @@
 		4CC282371BADE81A00775B72 /* MADFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFont.m; path = MAD/MADFont.m; sourceTree = "<group>"; };
 		4CC282381BADE81A00775B72 /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKeyChain.h; path = MAD/MTKeyChain.h; sourceTree = "<group>"; };
 		4CC282391BADE81A00775B72 /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKeyChain.m; path = MAD/MTKeyChain.m; sourceTree = "<group>"; };
-		4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNotificationDidFormatPage.h; path = MAD/MTNotificationDidFormatPage.h; sourceTree = "<group>"; };
-		4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTNotificationDidFormatPage.m; path = MAD/MTNotificationDidFormatPage.m; sourceTree = "<group>"; };
+		4CC2823A1BADE81A00775B72 /* MADNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNotificationDidFormatPage.h; path = MAD/MADNotificationDidFormatPage.h; sourceTree = "<group>"; };
+		4CC2823B1BADE81A00775B72 /* MADNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNotificationDidFormatPage.m; path = MAD/MADNotificationDidFormatPage.m; sourceTree = "<group>"; };
 		4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTNotificationDidReadRows.h; path = MAD/MTNotificationDidReadRows.h; sourceTree = "<group>"; };
 		4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTNotificationDidReadRows.m; path = MAD/MTNotificationDidReadRows.m; sourceTree = "<group>"; };
 		4CC283121BADE85000775B72 /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTReportViewerPrintPageRenderer.h; path = MAD/MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
@@ -1138,8 +1138,8 @@
 		4CA0C6C41CA564C000222B8D /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				4CC2823A1BADE81A00775B72 /* MTNotificationDidFormatPage.h */,
-				4CC2823B1BADE81A00775B72 /* MTNotificationDidFormatPage.m */,
+				4CC2823A1BADE81A00775B72 /* MADNotificationDidFormatPage.h */,
+				4CC2823B1BADE81A00775B72 /* MADNotificationDidFormatPage.m */,
 				4CC2823C1BADE81A00775B72 /* MTNotificationDidReadRows.h */,
 				4CC2823D1BADE81A00775B72 /* MTNotificationDidReadRows.m */,
 			);
@@ -1465,7 +1465,7 @@
 				4CC281FB1BADE80500775B72 /* MADConstants.h in Headers */,
 				4CC283B91BADE8C600775B72 /* MTTableFormatter.h in Headers */,
 				4CC282791BADE82200775B72 /* MTNotificationDidReadRows.h in Headers */,
-				4CC282771BADE82100775B72 /* MTNotificationDidFormatPage.h in Headers */,
+				4CC282771BADE82100775B72 /* MADNotificationDidFormatPage.h in Headers */,
 				4CC282471BADE81A00775B72 /* MTActivityItemProviderPdf.h in Headers */,
 				4C401E371BAE3DCB00BAE5FC /* MTDatabaseSqlite3.h in Headers */,
 				4C401DC51BAE3BD600BAE5FC /* MTQueryCacheEndTransaction.h in Headers */,
@@ -1657,7 +1657,7 @@
 				4CC284101BADE93C00775B72 /* RptqDocumentObjectFormula.m in Sources */,
 				4C401D691BAE3AF800BAE5FC /* MTPaperGovernmentLegal.m in Sources */,
 				4CC2841A1BADE94A00775B72 /* RptqDocumentObjectLabelLink.m in Sources */,
-				4CC282781BADE82100775B72 /* MTNotificationDidFormatPage.m in Sources */,
+				4CC282781BADE82100775B72 /* MADNotificationDidFormatPage.m in Sources */,
 				4CC2842C1BADE96500775B72 /* RptqQuerySort.m in Sources */,
 				4CC284841BADE9C000775B72 /* RptqDocumentObjectLabel+Extras.m in Sources */,
 				4CC284121BADE93F00775B72 /* RptqDocumentObjectGroupKey.m in Sources */,
