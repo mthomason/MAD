@@ -214,11 +214,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection viewController: self];
     [getCredentialsOperation addObserver:self];
     
-    MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
-    [testConnectionOperation addDependency:getCredentialsOperation];
+    //MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+    //[testConnectionOperation addDependency:getCredentialsOperation];
     
     [self.credentialQueue addOperation: getCredentialsOperation];
-    [self.credentialQueue addOperation: testConnectionOperation];
+    //[self.credentialQueue addOperation: testConnectionOperation];
 
     self.getCredentialsOperation = getCredentialsOperation;
 
@@ -261,13 +261,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.databaseConnection = databaseConnection;
     
     
-    [self getCredentialsForKey: databaseConnection.connectionString];
-
-    
-    
-    
-    /*
-    
+    [self getCredentialsForDatabaseConnection: databaseConnection];
     
     
     //Mark the start of a background task
@@ -326,10 +320,51 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     errors = NULL;
  
-    
-    
-    
-    */
+}
+
+- (void)buildDocument {
+    __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
+
+    MADConnectionViewController * __weak weakself = self;
+    MADocument *document = self.docToSave;
+    [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
+        
+        MADConnectionViewController *strongself = weakself;
+        strongself.navigationItem.prompt = readStatus;
+        strongself.progressView.progress = progress;
+        
+    } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
+        
+        __strong MADConnectionViewController *strongself = weakself;
+        NSNumber *backgroundTask = @(bgTask);
+        
+        if (addConnectionSuccess) {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileURL.lastPathComponent
+                                              andBackgroundTask: backgroundTask];
+                    
+                });
+            });
+            
+            
+        } else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    [strongself closeAndDeleteWithErrors:errorContainer
+                                        connectionString:strongself.databaseConnection.connectionString
+                                       andBackgroundTask:backgroundTask];
+                    
+                });
+            });
+        }
+        
+    }];
+
 }
 
 - (bool)testConnection:(MTDatabaseConnection *)connection withErrors:(NSArray * __autoreleasing *)errors {

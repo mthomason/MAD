@@ -17,6 +17,7 @@
 #import "MADOperationConditionHasResultString.h"
 #import "MADPromptOperationPassword.h"
 #import "MADPromptOperationPolarQuestion.h"
+#import "MADPromptOperationDisplayError.h"
 #import "MADDatabaseOperationTestConnection.h"
 #import "MADKeyChainOperationPut.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
@@ -120,26 +121,43 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         
         
         // ---------------------------------------------------
-        // Operation 5a: Test the connection
+        // Operation 5a: Test the connection (credentials prompt)
         // ---------------------------------------------------
-        MADDatabaseOperationTestConnection *testConnectionOperation = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
-        [testConnectionOperation addDependency:getUsername];
-        [testConnectionOperation addDependency:getPassword];
-        [testConnectionOperation addDependency:promptCredntials];
-        [testConnectionOperation addDependency:promptPassword];
-        //[testConnectionOperation addCondition: conditionReadPasswordFailed];
+        MADDatabaseOperationTestConnection *testConnectionOperationCredentials = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+        [testConnectionOperationCredentials addDependency:getUsername];
+        [testConnectionOperationCredentials addDependency:getPassword];
+        [testConnectionOperationCredentials addDependency:promptCredntials];
         
         MADOperationConditionPolarQuestionAffirmative *promptForCredentialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptCredntials.hash];
-        MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
+        [testConnectionOperationCredentials addCondition: promptForCredentialsAffirmative];
         
-        [testConnectionOperation addCondition: promptForCredentialsAffirmative];
-        [testConnectionOperation addCondition: promptForPasswordAffirmative];
+        // ---------------------------------------------------
+        // Operation 5a: Test the connection (password prompt)
+        // ---------------------------------------------------
+        MADDatabaseOperationTestConnection *testConnectionOperationPassword = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+        [testConnectionOperationPassword addDependency:getUsername];
+        [testConnectionOperationPassword addDependency:getPassword];
+        [testConnectionOperationPassword addDependency:promptPassword];
+        
+        MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
+        [testConnectionOperationPassword addCondition: promptForPasswordAffirmative];
+
+        // ---------------------------------------------------
+        // Operation 5b: Display connection error if one exist
+        // ---------------------------------------------------
+        
+        MADPromptOperationDisplayError *displayErrorCredentials = [[MADPromptOperationDisplayError alloc] initWithViewController:viewController];
+        [displayErrorCredentials addDependency:testConnectionOperationCredentials];
+
+        MADPromptOperationDisplayError *displayErrorPassword = [[MADPromptOperationDisplayError alloc] initWithViewController:viewController];
+        [displayErrorPassword addDependency:testConnectionOperationPassword];
         
         // ---------------------------------------------------
         // Operation 5: Prompt save username and password
         // Conditions:  User entered a username and password.
         // ---------------------------------------------------
         MADPromptOperationPolarQuestion *promptSaveCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messageCredntialsPrompt viewController:viewController];
+        [promptSaveCredntials addDependency:testConnectionOperationCredentials];
         [promptSaveCredntials addDependency:promptCredntials];
         
         [promptSaveCredntials addCondition:promptForCredentialsAffirmative];
@@ -151,6 +169,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         // Conditions:  User entered a password.
         // ---------------------------------------------------
         MADPromptOperationPolarQuestion *promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messagePasswordPrompt viewController:viewController];
+        [promptSavePassword addDependency:testConnectionOperationPassword];
         [promptSavePassword addDependency:promptPassword];
         
         [promptSavePassword addCondition:promptForPasswordAffirmative];
@@ -186,6 +205,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         // Operation: Confirm Save Username and Password
         NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,
                                                          getPassword, promptPassword,
+                                                         testConnectionOperationCredentials, testConnectionOperationPassword,
+                                                         displayErrorCredentials, displayErrorPassword,
                                                          promptSaveCredntials, promptSavePassword,
                                                          putUsername, putPassword];
         self.username = nil;

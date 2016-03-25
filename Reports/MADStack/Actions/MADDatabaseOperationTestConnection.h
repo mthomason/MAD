@@ -7,6 +7,7 @@
 //
 
 #import "MADOperation.h"
+#import "MADPromptOperationDisplayError.h"
 
 @class MTDatabaseConnection;
 @class MADCredential;
@@ -19,11 +20,13 @@
 @end
 
 @interface MADDatabaseOperationTestConnection : MADOperation
+    <MADPromptOperationDisplayErrorProtocol, MADDatabaseOperationTestConnectionProtocol>
 
     @property (nonatomic, readonly, strong) NSError *error;
     @property (nonatomic, readonly, assign) bool success;
 
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection;
-- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection credentials:(MADCredential *)credentials;
+    - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection;
+    - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection
+                                   credentials:(MADCredential *)credentials;
 
 @end

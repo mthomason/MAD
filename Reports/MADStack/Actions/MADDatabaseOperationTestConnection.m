@@ -130,7 +130,14 @@
         self.error = error;
         [self finishWithError:err];
     }
-    
 }
+
+- (bool)displayError { return !self.success && self.error != nil; }
+
+- (NSUInteger)tag { return self.hash; }
+
+- (MADCredential *)getCredentialsForKey:(NSString *)key { return self.credentials; }
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query { return self.datatable; }
 
 @end
