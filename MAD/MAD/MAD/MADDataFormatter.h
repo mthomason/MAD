@@ -1,19 +1,19 @@
 //
-//  MTDataFormatter.h
+//  MADDataFormatter.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/24/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTDataFormatter_h
-#define MAD_MTDataFormatter_h
+#ifndef MAD_MADDataFormatter_h
+#define MAD_MADDataFormatter_h
 
 #import <Foundation/NSObject.h>
 
 @class RptqQuery, MTQuery, MTDataTable;
 
-@interface MTDataFormatter : NSObject
+@interface MADDataFormatter : NSObject
 
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, assign) BOOL didRefresh;

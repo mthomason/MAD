@@ -9,11 +9,11 @@
 #ifndef MAD_MTTableFormatter_h
 #define MAD_MTTableFormatter_h
 
-#import <MAD/MTDataFormatter.h>
+#import <MAD/MADDataFormatter.h>
 
 @class MTQuery;
 
-@interface MTTableFormatter : MTDataFormatter
+@interface MTTableFormatter : MADDataFormatter
 
 @property (nonatomic, assign) BOOL didRefresh;
 

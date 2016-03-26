@@ -24,7 +24,7 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseField.h>
 #import <MAD/MTQuery.h>
-#import <MAD/MTDataFormatter.h>
+#import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -35,7 +35,7 @@
 
 @property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, strong) MTDataTable *datatable;
-@property (nonatomic, strong, readwrite) MTDataFormatter *tableFormatter;
+@property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
 @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
 @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
 
@@ -64,7 +64,7 @@
         MTDataTable *datatable = [MTTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         tableLayout.delegate = self;
-        MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
+        MADDataFormatter *tableFormatter = [[MADDataFormatter alloc] initWithQuery:query];
         self.tableFormatter = tableFormatter;
         self.query = query;
         

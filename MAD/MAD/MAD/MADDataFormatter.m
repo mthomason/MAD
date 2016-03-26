@@ -10,16 +10,16 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataFormatter.h"
+#import "MADDataFormatter.h"
 
-@interface MTDataFormatter ()
+@interface MADDataFormatter ()
 
 @end
 
-@implementation MTDataFormatter
+@implementation MADDataFormatter
 
 + (instancetype)reportFormatterWithQuery:(MTQuery *)query NS_RETURNS_RETAINED {
-    MTDataFormatter *result = [[MTDataFormatter alloc] initWithQuery:query];
+    MADDataFormatter *result = [[MADDataFormatter alloc] initWithQuery:query];
     return result;
 }
 

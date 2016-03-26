@@ -11,11 +11,11 @@
 
 #import "MADViewController.h"
 
-@class MTDataFormatter, MTQuery;
+@class MADDataFormatter, MTQuery;
 
 @interface MTTableController : MADCollectionViewController
 
-@property (nonatomic, strong, readonly) MTDataFormatter *tableFormatter;
+@property (nonatomic, strong, readonly) MADDataFormatter *tableFormatter;
 
 - (instancetype)initWithQuery:(MTQuery *)query;
 - (NSUInteger)rowCount;
