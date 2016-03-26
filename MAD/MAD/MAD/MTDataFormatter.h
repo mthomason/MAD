@@ -15,11 +15,11 @@
 
 @interface MTDataFormatter : NSObject
 
-@property (nonatomic, strong) MTQuery *query;
-@property (nonatomic, assign) BOOL didRefresh;
-@property (nonatomic, assign, readonly) BOOL needsFormat;
+    @property (nonatomic, strong) MTQuery *query;
+    @property (nonatomic, assign) BOOL didRefresh;
+    @property (nonatomic, assign, readonly) BOOL needsFormat;
 
-- (instancetype)initWithQuery:(MTQuery *)query NS_RETURNS_RETAINED;
+    - (instancetype)initWithQuery:(MTQuery *)query NS_RETURNS_RETAINED;
 
 @end
 
