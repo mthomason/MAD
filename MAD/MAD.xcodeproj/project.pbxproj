@@ -258,8 +258,8 @@
 		4CC2824A1BADE81B00775B72 /* MTAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2820D1BADE81A00775B72 /* MTAlignment.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282651BADE81E00775B72 /* MADDataFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282281BADE81A00775B72 /* MADDataFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC282661BADE81E00775B72 /* MADDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282291BADE81A00775B72 /* MADDataFormatter.m */; };
-		4CC282711BADE82000775B72 /* MTErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282341BADE81A00775B72 /* MTErrorContainer.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CC282721BADE82000775B72 /* MTErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282351BADE81A00775B72 /* MTErrorContainer.m */; };
+		4CC282711BADE82000775B72 /* MADErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282341BADE81A00775B72 /* MADErrorContainer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4CC282721BADE82000775B72 /* MADErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282351BADE81A00775B72 /* MADErrorContainer.m */; };
 		4CC282731BADE82000775B72 /* MADFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282361BADE81A00775B72 /* MADFont.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282741BADE82000775B72 /* MADFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282371BADE81A00775B72 /* MADFont.m */; };
 		4CC282751BADE82100775B72 /* MTKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282381BADE81A00775B72 /* MTKeyChain.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -647,8 +647,8 @@
 		4CC2820D1BADE81A00775B72 /* MTAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTAlignment.h; path = MAD/MTAlignment.h; sourceTree = "<group>"; };
 		4CC282281BADE81A00775B72 /* MADDataFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataFormatter.h; path = MAD/MADDataFormatter.h; sourceTree = "<group>"; };
 		4CC282291BADE81A00775B72 /* MADDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataFormatter.m; path = MAD/MADDataFormatter.m; sourceTree = "<group>"; };
-		4CC282341BADE81A00775B72 /* MTErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTErrorContainer.h; path = MAD/MTErrorContainer.h; sourceTree = "<group>"; };
-		4CC282351BADE81A00775B72 /* MTErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTErrorContainer.m; path = MAD/MTErrorContainer.m; sourceTree = "<group>"; };
+		4CC282341BADE81A00775B72 /* MADErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADErrorContainer.h; path = MAD/MADErrorContainer.h; sourceTree = "<group>"; };
+		4CC282351BADE81A00775B72 /* MADErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADErrorContainer.m; path = MAD/MADErrorContainer.m; sourceTree = "<group>"; };
 		4CC282361BADE81A00775B72 /* MADFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFont.h; path = MAD/MADFont.h; sourceTree = "<group>"; };
 		4CC282371BADE81A00775B72 /* MADFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFont.m; path = MAD/MADFont.m; sourceTree = "<group>"; };
 		4CC282381BADE81A00775B72 /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKeyChain.h; path = MAD/MTKeyChain.h; sourceTree = "<group>"; };
@@ -1100,8 +1100,8 @@
 				4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */,
 				4CC282281BADE81A00775B72 /* MADDataFormatter.h */,
 				4CC282291BADE81A00775B72 /* MADDataFormatter.m */,
-				4CC282341BADE81A00775B72 /* MTErrorContainer.h */,
-				4CC282351BADE81A00775B72 /* MTErrorContainer.m */,
+				4CC282341BADE81A00775B72 /* MADErrorContainer.h */,
+				4CC282351BADE81A00775B72 /* MADErrorContainer.m */,
 				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
 				4CC281F11BADE80500775B72 /* MADArrayCaching.m */,
 				4CC281F41BADE80500775B72 /* MADDocumentObjectType.h */,
@@ -1493,7 +1493,7 @@
 				4C401E591BAE4E9400BAE5FC /* MTDataTableLocation.h in Headers */,
 				4C994F4A1BE33F300058627A /* MADReportSectionRowsRepresentation.h in Headers */,
 				4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */,
-				4CC282711BADE82000775B72 /* MTErrorContainer.h in Headers */,
+				4CC282711BADE82000775B72 /* MADErrorContainer.h in Headers */,
 				4C401E551BAE4E9400BAE5FC /* MTDataTableFast.h in Headers */,
 				4C401DDF1BAE3BD700BAE5FC /* MTQueryCustomNoResults.h in Headers */,
 				4CC282451BADE81A00775B72 /* MADActivityIndicator.h in Headers */,
@@ -1796,7 +1796,7 @@
 				4CC284001BADE92800775B72 /* RptqDatabase.m in Sources */,
 				4CA0C6CC1CA56CAD00222B8D /* MADProgress.m in Sources */,
 				4CC2842A1BADE96200775B72 /* RptqQueryPredicate.m in Sources */,
-				4CC282721BADE82000775B72 /* MTErrorContainer.m in Sources */,
+				4CC282721BADE82000775B72 /* MADErrorContainer.m in Sources */,
 				4C401E041BAE3CAD00BAE5FC /* MTReportFormatterCache.m in Sources */,
 				4C401DE01BAE3BD700BAE5FC /* MTQueryCustomNoResults.m in Sources */,
 				4C0590D01C7B6F3C00A1EC4A /* MTReportFormatterState.m in Sources */,

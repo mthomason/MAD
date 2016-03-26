@@ -12,7 +12,7 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADNotificationProgress.h>
-#import <MAD/MTErrorContainer.h>
+#import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 
@@ -57,7 +57,7 @@
         
             [[MADNotificationProgress sharedObject] updateProgressWithMessage:message progress:progress];
             
-        } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+        } completion:^(BOOL success, MADErrorContainer *errorContainer) {
         
             self.success = success;
             if (success) {

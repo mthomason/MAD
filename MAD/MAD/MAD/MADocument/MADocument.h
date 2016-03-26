@@ -34,7 +34,7 @@ extern NSString * const MADMimeType;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
-@class NSManagedObjectID, UIImage, UIPrintPageRenderer, MTErrorContainer;
+@class NSManagedObjectID, UIImage, UIPrintPageRenderer, MADErrorContainer;
 @class MTDatabaseConnection, RptqDocument, MTReportFormatter, MTDataTableFast, MTQuery;
 @class MADActivityIndicator, RptqQueryGroup, RptqDatabaseSchemaTable, MADocument;
 @class RptqDocumentSection, RptqDocumentObject, MTDatabase, MTPaper;
@@ -89,7 +89,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (bool)refreshWithError:(NSError * __autoreleasing *)error;
 
     - (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
-               completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
+               completion:(void(^)(BOOL success, MADErrorContainer *error))completion;
 
     - (void)regenThumbnail;
 

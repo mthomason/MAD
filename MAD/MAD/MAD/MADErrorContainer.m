@@ -1,25 +1,25 @@
 //
-//  MTErrorContainer.m
+//  MADErrorContainer.m
 //  MAD
 //
 //  Created by Michael Thomason on 8/16/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTErrorContainer.h"
+#import "MADErrorContainer.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <Foundation/NSError.h>
 
 static NSString * const MADErrorContainerError  = @"e";
 static NSString * const MADErrorContainerDate   = @"d";
 
-@interface MTErrorContainer ()
+@interface MADErrorContainer ()
 
     @property (nonatomic, strong) NSMutableArray <__kindof NSDictionary *> *errors;
 
 @end
 
-@implementation MTErrorContainer
+@implementation MADErrorContainer
 
 - (instancetype)init {
     self = [super init];

@@ -51,7 +51,7 @@
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectLabelLink.h"
 
-#import "MTErrorContainer.h"
+#import "MADErrorContainer.h"
 #import "MTDatabaseTable.h"
 
 #import <CoreData/NSFetchRequest.h>
@@ -310,9 +310,9 @@
 
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *status, float progress))status
-         completion:(void (^)(BOOL success, MTErrorContainer *error))completion {
+         completion:(void (^)(BOOL success, MADErrorContainer *error))completion {
     
-    __block MTErrorContainer *errorContainer = [MTErrorContainer new];
+    __block MADErrorContainer *errorContainer = [MADErrorContainer new];
     RptqDocument * __weak rptqDocument = self;
     NSManagedObjectContext * __weak managedObjectContext = rptqDocument.managedObjectContext;
     NSNumber *connectionId = @(self.hasDatabaseSchemas.count + 1);
@@ -473,7 +473,7 @@
                     });
                     
                 } else {
-                    MTErrorContainer *errorContainer = [[MTErrorContainer alloc] init];
+                    MADErrorContainer *errorContainer = [[MADErrorContainer alloc] init];
                     [errorContainer addError:error];
                     completion(NO, errorContainer);
                 }

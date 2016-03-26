@@ -14,7 +14,7 @@
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
-@class NSManagedObjectContext, MTDatabase, RptqDocumentSection, RptqDocumentObject, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;
+@class NSManagedObjectContext, MTDatabase, RptqDocumentSection, RptqDocumentObject, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MADErrorContainer;
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
@@ -30,7 +30,7 @@
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
 - (void)addDatabase:(MTDatabase *)database status:(void (^)(NSString *status, float progress))status
-         completion:(void (^)(BOOL success, MTErrorContainer *error))completion;
+         completion:(void (^)(BOOL success, MADErrorContainer *error))completion;
 
 - (void)addQueryLink:(RptqQueryLinks *)queryLink;
 - (void)addPredicate:(RptqQueryPredicate *)predicate;

@@ -16,7 +16,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
-#import <MAD/MTErrorContainer.h>
+#import <MAD/MADErrorContainer.h>
 
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTDataTable+Factory.h>
@@ -277,7 +277,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
             strongself.navigationItem.prompt = readStatus;
             strongself.progressView.progress = progress;
             
-        } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
+        } completion:^(BOOL addConnectionSuccess, MADErrorContainer *errorContainer) {
             
             __strong MADConnectionViewController *strongself = weakself;
             NSNumber *backgroundTask = @(bgTask);
@@ -329,7 +329,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
         strongself.navigationItem.prompt = readStatus;
         strongself.progressView.progress = progress;
         
-    } completion:^(BOOL addConnectionSuccess, MTErrorContainer *errorContainer) {
+    } completion:^(BOOL addConnectionSuccess, MADErrorContainer *errorContainer) {
         
         __strong MADConnectionViewController *strongself = weakself;
         NSNumber *backgroundTask = @(bgTask);
@@ -427,7 +427,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
                                     }];
 }
 
-- (void)closeAndDeleteWithErrors:(MTErrorContainer *)errorContainer
+- (void)closeAndDeleteWithErrors:(MADErrorContainer *)errorContainer
                 connectionString:(NSString *)connectionString
                andBackgroundTask:(NSNumber *)backgroundTask {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -548,7 +548,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 }
 
-- (void)showErrorLog:(MTErrorContainer *)errorContainer {
+- (void)showErrorLog:(MADErrorContainer *)errorContainer {
     if (errorContainer && [errorContainer count] > 0) {
         NSString *errorText = [errorContainer errorLogCompact];
         

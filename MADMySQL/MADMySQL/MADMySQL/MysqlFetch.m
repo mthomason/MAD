@@ -66,7 +66,7 @@
                         addColumn: (MTDataColumn *)addColumn
                            addRow: (void (^)())addRow
                    endBulkInserts: (void (^)())endBulkInserts
-                       completion: (void(^)(BOOL success, MTErrorContainer *error))completion*/ {
+                       completion: (void(^)(BOOL success, MADErrorContainer *error))completion*/ {
 
     MysqlFetch *mf = [[MysqlFetch alloc] init];
     NSError *errorFetch = nil;
