@@ -54,14 +54,18 @@
         [document setMainDatabase:database];
         
         [rptqDocument addDatabase: document.mainDatabase status: ^(NSString *message, float progress) {
+        
             [[MADNotificationProgress sharedObject] updateProgressWithMessage:message progress:progress];
+            
         } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+        
             self.success = success;
             if (success) {
                 [self finish];
             } else {
                 [self finish:[errorContainer allObjects]];
             }
+            
         }];
         
     } else {

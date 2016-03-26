@@ -376,10 +376,10 @@
         id __weak weakdbconnection = dbconnection;
         MTDatabase * __weak weakDatabase2 = weakDatabase;
         
-        NSMutableDictionary * __block tablesAndFields = [[NSMutableDictionary alloc] init];
-        NSMutableArray * __block tables = [NSMutableArray array];
-        BOOL __block gotit = YES;
-        NSError * __block gotitError = nil;
+        NSMutableDictionary * __block tablesAndFields   = [[NSMutableDictionary alloc] init];
+        NSMutableArray * __block tables                 = [NSMutableArray array];
+        BOOL __block gotit                              = YES;
+        NSError * __block gotitError                    = nil;
         
         dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
         dispatch_queue_t queueSave = dispatch_queue_create("com.everydayapps.mad.queue.save", DISPATCH_QUEUE_SERIAL);
