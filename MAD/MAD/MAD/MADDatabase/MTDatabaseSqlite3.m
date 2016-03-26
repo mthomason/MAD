@@ -144,6 +144,30 @@ void sqliteLog(void *foo, const char* statement) {
     }];
 }
 
+- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
+    NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
+    BOOL success = NO;
+    sqlite3_stmt *statement;
+    NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
+    const char *queryStartChar = [queryStart UTF8String];
+    char *sql = sqlite3_mprintf((char *) queryStartChar);
+    
+    if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+        success = YES;
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            
+            const unsigned char *resultString = sqlite3_column_text(statement, 0);
+            NSString *tableName = @((char *)resultString);
+            
+            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            [result addObject:databaseTable];
+        }
+    }
+    sqlite3_finalize(statement);
+    sqlite3_free(sql);
+    return result;
+}
+
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
@@ -167,46 +191,6 @@ void sqliteLog(void *foo, const char* statement) {
 	sqlite3_free(sql);
     completion(success, nil, result);
 }
-
-- (void)getFieldsForTableName: (NSString *)tableName connection:(id)process
-                   completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-    [self getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
-        completion(success, error, fields);
-    }];
-}
-
-- (void)getFieldsForTableName: (NSString *)tableName
-                   completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    BOOL success = NO;
-	sqlite3_stmt *statement;
-	NSString *queryStart = [NSString stringWithFormat: @"PRAGMA \"main\".table_info(\"%@\");", tableName];
-    const char *queryStartChar = [queryStart UTF8String];
-	char *sql = sqlite3_mprintf((char *) queryStartChar);
-    
-	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-        success = YES;
-		while (sqlite3_step(statement) == SQLITE_ROW) {
-            
-            const unsigned char *resultName = sqlite3_column_text(statement, 1);
-            const unsigned char *resultType = sqlite3_column_text(statement, 2);
-            BOOL isPk = sqlite3_column_int(statement, 5) > 0;
-            NSString *fieldName = @((char *)resultName);
-            NSString *fieldType = @((char *)resultType);
-            MTDataType dataType = [MTDatabaseSqlite3 dataTypeForNativeType: fieldType];
-            
-            MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
-            [databaseField setFieldType:dataType];
-            [databaseField setFieldTypeNative:dataType];
-            [databaseField setPrimaryKey:isPk];
-            [result addObject:databaseField];
-		}
-	}
-	sqlite3_finalize(statement);
-	sqlite3_free(sql);
-    completion(success, nil, result);
-}
-
 
 //Converting native type to affinity type
 // using http://www.sqlite.org/datatype3.html

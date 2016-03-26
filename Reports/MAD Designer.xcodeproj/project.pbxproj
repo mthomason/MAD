@@ -796,6 +796,7 @@
 		4CA0C6BD1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */; };
 		4CA0C6C01CA5499400222B8D /* MADOperationBackgroundTaskEnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */; };
 		4CA0C6C31CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */; };
+		4CA0C6D01CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -2034,6 +2035,8 @@
 		4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskEnd.m; sourceTree = "<group>"; };
 		4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationAddConnection.h; sourceTree = "<group>"; };
 		4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationAddConnection.m; sourceTree = "<group>"; };
+		4CA0C6CE1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationImportSchema.h; sourceTree = "<group>"; };
+		4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationImportSchema.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -2725,6 +2728,7 @@
 		4C26B95F1BAF11C800456DC8 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				4CA0C6CD1CA68BBA00222B8D /* Startup */,
 				4C59BDC21C9AAA1A0031BC6C /* Core */,
 				4C59BD9E1C9A688C0031BC6C /* Conditions */,
 				4C5B560F1C9A2DF7005C19D9 /* Report */,
@@ -2733,12 +2737,6 @@
 				4C5B560C1C9A2D07005C19D9 /* Alerts */,
 				4C5B560B1C9A2CD1005C19D9 /* KeyChain */,
 				4CA0C6B41CA5400100222B8D /* Document */,
-				4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */,
-				4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */,
-				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
-				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
-				4C5B56021C98F838005C19D9 /* MADTextField.h */,
-				4C5B56031C98F838005C19D9 /* MADTextField.m */,
 			);
 			name = Operations;
 			path = MADStack/Actions;
@@ -4063,6 +4061,8 @@
 		4C5B560C1C9A2D07005C19D9 /* Alerts */ = {
 			isa = PBXGroup;
 			children = (
+				4C5B56021C98F838005C19D9 /* MADTextField.h */,
+				4C5B56031C98F838005C19D9 /* MADTextField.m */,
 				4CA0C6B11CA51F7800222B8D /* MADPromptOperationDisplayError.h */,
 				4CA0C6B21CA51F7800222B8D /* MADPromptOperationDisplayError.m */,
 				4C5B55FC1C98DD4D005C19D9 /* MADPromptOperationPassword.h */,
@@ -4298,6 +4298,8 @@
 			children = (
 				4CA0C6B51CA5401000222B8D /* MADCreateDocumentOperation.h */,
 				4CA0C6B61CA5401000222B8D /* MADCreateDocumentOperation.m */,
+				4CA0C6CE1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.h */,
+				4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */,
 				4CA0C6B81CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.h */,
 				4CA0C6B91CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m */,
 				4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */,
@@ -4308,6 +4310,17 @@
 				4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */,
 			);
 			name = Document;
+			sourceTree = "<group>";
+		};
+		4CA0C6CD1CA68BBA00222B8D /* Startup */ = {
+			isa = PBXGroup;
+			children = (
+				4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */,
+				4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */,
+				4C26B9661BAF11C800456DC8 /* MADOperationRegisterDefaults.h */,
+				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
+			);
+			name = Startup;
 			sourceTree = "<group>";
 		};
 		4CB56E581AC683CC00756775 /* atomic */ = {
@@ -6064,6 +6077,7 @@
 				4C4020621BAE92F200BAE5FC /* UIViewController+Designer.m in Sources */,
 				4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */,
 				4C59BDBA1C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m in Sources */,
+				4CA0C6D01CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* UITableViewControllerOpperators.m in Sources */,
 				4CA0C6B71CA5401000222B8D /* MADCreateDocumentOperation.m in Sources */,

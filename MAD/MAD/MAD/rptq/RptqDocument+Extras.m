@@ -403,27 +403,18 @@
                     for (MTDatabaseTable *databaseTable in tables) {
                         @autoreleasepool {
                             
-                            NSString *name = [databaseTable name];
-                            NSString * __weak weakname = name;
+                            NSString * __weak name = databaseTable.name;
                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                 dispatch_sync(queueMain, ^{
-                                    status(weakname, (counter + 1) / numberOfTables);
+                                    status(name, (counter + 1) / numberOfTables);
                                 });
                             });
                             
-                            __block NSMutableArray *fields = [[NSMutableArray alloc] init];
-                            [weakDatabase3 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
-                                if (success && error == nil) {
-                                    [fields setArray:results];
-                                    gotit = success; gotitError = error;
-                                } else {
-                                    if (error) {
-                                        [errorContainer addError:error];
-                                    }
-                                }
-                                
-                            }];
-                            tablesAndFields[[databaseTable name]] = fields;
+                            NSError *getFieldsError = NULL;
+                            NSArray *fieldsForTable = [weakDatabase3 fieldsForTable:databaseTable.name connection:weakdbconnection error:&getFieldsError];
+                            NSArray *fields = fieldsForTable.copy;
+                            tablesAndFields[databaseTable.name] = fields;
+                            
                         }
                         counter++;
                     }

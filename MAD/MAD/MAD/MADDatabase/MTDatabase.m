@@ -133,8 +133,7 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
                                  userInfo: nil];
 }
 
-- (void)getFieldsForTableName: (NSString *)tableName
-               completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+- (NSArray *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
@@ -211,11 +210,6 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     NSError *error = [NSError errorWithDomain:@"MTDatabase" code:383414 userInfo:@{}];
-    completion(NO, error, nil);
-}
-
-- (void)getFieldsForTableName:(NSString *)tableName connection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:382428 userInfo:@{}];
     completion(NO, error, nil);
 }
 
