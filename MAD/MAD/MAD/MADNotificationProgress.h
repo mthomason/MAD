@@ -18,6 +18,7 @@ extern NSString * const MADNotificationProgressIdentifier;
 @interface MADNotificationProgress : NSObject
 
     + (MADNotificationProgress *)sharedObject;
+    - (void)updateProgressWithMessage:(NSString *)message progress:(float)progress;
     - (void)updateProgress:(MADProgress *)progress;
 
 @end

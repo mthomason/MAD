@@ -572,6 +572,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)forcePageBreakWithFooterHeight:(CGFloat)footerHeight {
+
     CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + footerHeight;
     self.machineState.counterHeightUsedCurrentPage = newHeight;
     [self addPageFooter];
@@ -585,12 +586,15 @@ NSString * const MTNullIdentifier = @"(null)";
     [self cleanupTemporaryPageIndexes];
     
     self.machineState.pageCounter++;
-    [[MADNotificationDidFormatPage sharedObject] reportFormatter:self
-                                                  formattedPage:self.machineState.pageCounter];
+    
+    [[MADNotificationDidFormatPage sharedObject] reportFormatter: self
+                                                   formattedPage: self.machineState.pageCounter];
+    
     RptqDocumentSection *pageHeaderSection = [self.machineState.document hasPageHeaderSection];
     
     //Reset height of the page to zero plus the hight of the page header section
     self.machineState.counterHeightUsedCurrentPage = [self heightForSection:pageHeaderSection];
+    
     [self addPageHeader];
 }
 

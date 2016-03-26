@@ -8,10 +8,14 @@
 
 #import "MTErrorContainer.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <Foundation/NSError.h>
+
+static NSString * const MADErrorContainerError  = @"e";
+static NSString * const MADErrorContainerDate   = @"d";
 
 @interface MTErrorContainer ()
 
-@property (nonatomic, strong) NSMutableArray *errors;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSDictionary *> *errors;
 
 @end
 
@@ -32,8 +36,8 @@
 
 - (void)addError:(NSError *)error {
     NSDictionary *errorHolder = @{
-                                  @"e" : error,
-                                  @"d" : [NSDate date]
+                                  MADErrorContainerError    : error,
+                                  MADErrorContainerDate     : [NSDate date]
                                   };
     [self.errors addObject:errorHolder];
 }
@@ -49,8 +53,8 @@
 - (NSString *)errorLogWithFormatString:(NSString *)formatString {
     NSMutableString *result = [NSMutableString new];
     for (NSDictionary *errorHolder in self.errors) {
-        NSString *dateString = [NSDateFormatter localizedStringFromDate:errorHolder[@"d"] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
-        NSError *error = errorHolder[@"e"];
+        NSString *dateString = [NSDateFormatter localizedStringFromDate:errorHolder[MADErrorContainerDate] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+        NSError *error = errorHolder[MADErrorContainerError];
         NSString *errorString = [NSString stringWithFormat:formatString, dateString, error.localizedFailureReason, error.localizedDescription];
         [result appendString:errorString];
     }
@@ -59,8 +63,9 @@
 
 - (void)presentAllErrorsWithCompletion:(void (^)(BOOL success))completion {
     if (self.errors.count > 0) {
-        NSError *errorToShow = self.errors.lastObject;
-        [self.errors removeObject:errorToShow];
+        NSDictionary *errorHolder = self.errors.lastObject;
+        NSError *errorToShow = [errorHolder objectForKey:MADErrorContainerError];
+        [self.errors removeLastObject];
         [NSError presentError: errorToShow
              onViewController: nil
                    completion: ^(BOOL success) {
@@ -73,6 +78,15 @@
             completion(YES);
         }
     }
+}
+
+- (NSArray <__kindof NSError *> *)allObjects {
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:self.errors.count];
+    for (NSDictionary *containers in self.errors) {
+        NSError *error = ((NSError *)[containers objectForKey:@"e"]).copy;
+        [results addObject:error];
+    }
+    return results;
 }
 
 @end

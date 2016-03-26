@@ -11,6 +11,8 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADNotificationProgress.h>
+#import <MAD/MTErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 
@@ -18,6 +20,7 @@
 
 @interface MADCreateDocumentOperationAddConnection ()
 
+    @property (nonatomic, assign) bool success;
     @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
 @end
@@ -27,6 +30,7 @@
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
+        self.success = false;
     }
     return self;
 }
@@ -49,15 +53,22 @@
     if (database) {
         [document setMainDatabase:database];
         
-        [rptqDocument addDatabase: document.mainDatabase
-                           status: ^(NSString *message, float progress) {
-        //                       status(message, progress);
-                           } completion:^(BOOL success, MTErrorContainer *errorContainer) {
-        //                       completion(success, errorContainer);
-                           }];
+        [rptqDocument addDatabase: document.mainDatabase status: ^(NSString *message, float progress) {
+            [[MADNotificationProgress sharedObject] updateProgressWithMessage:message progress:progress];
+        } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+            self.success = success;
+            if (success) {
+                [self finish];
+            } else {
+                [self finish:[errorContainer allObjects]];
+            }
+        }];
         
     } else {
-        //completion(NO, nil);
+        self.success = false;
+        NSString *domain = NSStringFromClass(self.class);
+        NSError *error = [NSError errorWithDomain:domain code:289 userInfo:nil];
+        [self finishWithError:error];
     }
 
 }

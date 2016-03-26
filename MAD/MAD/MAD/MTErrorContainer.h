@@ -17,6 +17,7 @@
 - (NSString *)errorLog;
 - (NSString *)errorLogCompact;
 - (NSUInteger)count;
+- (NSArray <__kindof NSError *> *)allObjects;
 
 @end
 

@@ -4300,12 +4300,12 @@
 				4CA0C6B61CA5401000222B8D /* MADCreateDocumentOperation.m */,
 				4CA0C6B81CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.h */,
 				4CA0C6B91CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m */,
+				4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */,
+				4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */,
 				4CA0C6BB1CA5496700222B8D /* MADOperationBackgroundTaskBegin.h */,
 				4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */,
 				4CA0C6BE1CA5499400222B8D /* MADOperationBackgroundTaskEnd.h */,
 				4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */,
-				4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */,
-				4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */,
 			);
 			name = Document;
 			sourceTree = "<group>";
