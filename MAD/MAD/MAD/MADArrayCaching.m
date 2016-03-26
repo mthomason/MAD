@@ -106,7 +106,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:url];
-    MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
+    MTDatabaseCache *database = [MTDatabaseCache newDatabaseWithConnection:databaseConnection];
 #ifdef MAD_MTArrayCached_DEBUG
     sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
 #endif

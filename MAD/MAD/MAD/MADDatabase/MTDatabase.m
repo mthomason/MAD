@@ -40,21 +40,19 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
     return self;
 }
 
-+ (instancetype)databaseFactory:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED {
-
-    NSString *identifier = [connection databaseTypeIdentifier];
++ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED {
     
     id result = nil;
     
-    if ([MADIdentifierDatabaseMySQL isEqualToString:identifier]) {
+    if ([MADIdentifierDatabaseMySQL isEqualToString:connection.databaseTypeIdentifier]) {
         
         result = [[MTDatabaseMySql alloc] init];
         
-    } else if ([MADIdentifierDatabaseTDS isEqualToString:identifier]) {
+    } else if ([MADIdentifierDatabaseTDS isEqualToString:connection.databaseTypeIdentifier]) {
         
         result = [[MTDatabaseSqlServer alloc] init];
         
-    } else if ([MADIdentifierDatabaseSqlite3 isEqualToString:identifier]) {
+    } else if ([MADIdentifierDatabaseSqlite3 isEqualToString:connection.databaseTypeIdentifier]) {
         
         result = [[MTDatabaseSqlite3 alloc] init];
     }

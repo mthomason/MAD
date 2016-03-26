@@ -251,7 +251,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX];
     self.databaseForInserts = database;
     
-    MTDatabaseCache *database2 = [MTDatabaseCache databaseFactory:connection];
+    MTDatabaseCache *database2 = [MTDatabaseCache newDatabaseWithConnection:connection];
     self.databaseForSelects = database2;
 }
 

@@ -117,7 +117,7 @@
     
     self.datatable = datatable;
     
-    MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+    MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
     db.delegate = self;
     queryTest.database = db;
     self.database = db;

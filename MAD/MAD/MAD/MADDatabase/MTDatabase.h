@@ -46,7 +46,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 @property (nonatomic, strong) NSMutableArray *errors;
 
-+ (instancetype)databaseFactory:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED;
++ (instancetype)newDatabaseWithConnection:(MTDatabaseConnection *)connection NS_RETURNS_RETAINED;
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 

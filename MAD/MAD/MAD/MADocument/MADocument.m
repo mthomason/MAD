@@ -747,7 +747,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
            completion:(void(^)(BOOL success, MADErrorContainer *error))completion {
     
     RptqDocument *rptqDocument = [self activeDocumentModel];
-    MTDatabase *database = [MTDatabase databaseFactory:connection];
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:connection];
     if (database) {
         [self setMainDatabase:database];
         
@@ -927,7 +927,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:query.inDatabase.ownedByUser];
-    MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+    MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
     db.delegate = self;
     self.mainDatabase = db;
 }

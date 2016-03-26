@@ -38,7 +38,7 @@
         
         RptqUserCredentals * __weak userCredentals = ((RptqDatabaseSchemaField *)object).inTable.inDatabase.ownedByUser;
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         db.delegate = self;
         
         NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;

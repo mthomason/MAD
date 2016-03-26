@@ -64,7 +64,7 @@
         
         if (url != nil) {
             MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
-            MTDatabase *db = [MTDatabase databaseFactory:connection];
+            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
             NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
             [self setDatabase:(MTDatabaseCache *)db];
         }

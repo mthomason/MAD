@@ -76,42 +76,62 @@
 
 #pragma mark - Static
 
-+ (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                                            label:(NSString *)label
-                                                      labelPlural:(NSString *)labelPlural
-                                                             name:(NSString *)name
-                                                     andQueryable:(BOOL)queryable NS_RETURNS_RETAINED {
-
-    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
++ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                               label:(NSString *)label
+                                                         labelPlural:(NSString *)labelPlural
+                                                                name:(NSString *)name
+                                                        andQueryable:(BOOL)queryable {
+    
+    NSString *entityName = NSStringFromClass([self class]);
+    
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
-    RptqDatabaseSchemaTable *rptqTable = [[RptqDatabaseSchemaTable alloc] initWithEntity:tableEntity
-                              insertIntoManagedObjectContext:managedObjectContext];
-    [rptqTable setLabel: label];
-    [rptqTable setLabel_plural: labelPlural];
-    [rptqTable setName: name];
-    [rptqTable setQueryable: @(queryable)];
+    RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:managedObjectContext];
+    
+    
+    NSString *rLabel = [[NSString alloc] initWithString:label];
+    rptqTable.label = rLabel;
+    
+    NSString *rLabelPlural = [[NSString alloc] initWithString:labelPlural];
+    rptqTable.label_plural = rLabelPlural;
+    
+    NSString *rName = [[NSString alloc] initWithString: name];
+    rptqTable.name = rName;
+    
+    NSNumber *rQueryable = [[NSNumber alloc] initWithBool: queryable];
+    rptqTable.queryable = rQueryable;
+    
     return rptqTable;
 }
 
-+ (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                         andTable:(MTDatabaseTable *)table NS_RETURNS_RETAINED {
-    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
++ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                            andTable:(MTDatabaseTable *)table {
+    
+    NSString *entityName = NSStringFromClass([self class]);
+    
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
-    RptqDatabaseSchemaTable *rptqTable = [[RptqDatabaseSchemaTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
-    [rptqTable setLabel: [table label]];
-    [rptqTable setLabel_plural: [table labelPlural]];
-    [rptqTable setName: [table name]];
-    [rptqTable setQueryable: @([table queryable])];
+    RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
+    
+    NSString *label = [[NSString alloc] initWithString:table.label];
+    rptqTable.label = label;
+    
+    NSString *labelPlural = [[NSString alloc] initWithString:table.labelPlural];
+    rptqTable.label_plural = labelPlural;
+
+    NSString *name = [[NSString alloc] initWithString: table.name];
+    rptqTable.name = name;
+    
+    NSNumber *queryable = [[NSNumber alloc] initWithBool: table.queryable];
+    rptqTable.queryable = queryable;
+    
     return rptqTable;
 }
 
-+ (instancetype)databaseSchemaTableForDatabase:(RptqDatabase *)database
-                                  andTableName:(NSString *)name {
++ (RptqDatabaseSchemaTable *)databaseSchemaTableForDatabase:(RptqDatabase *)database andTableName:(NSString *)name {
 
-    NSSet *tables = [database hasTables];
+    NSSet *tables = database.hasTables;
     RptqDatabaseSchemaTable *result = nil;
     for (RptqDatabaseSchemaTable *table in tables) {
-        if ([[table name] isEqualToString:name]) {
+        if ([table.name isEqualToString:name]) {
             result = table;
             break;
         }

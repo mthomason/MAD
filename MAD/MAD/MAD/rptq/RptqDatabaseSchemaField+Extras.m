@@ -63,24 +63,36 @@
 
 #pragma mark - Static
 
-+ (instancetype)databaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                         andField:(MTDatabaseField *)field NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                            andField:(MTDatabaseField *)field {
     
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
-    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName
-                                                   inManagedObjectContext: objectContext];
+    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
 
     RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity
                                                           insertIntoManagedObjectContext: objectContext];
-    [rptqField setLabel:            [field label]];
-    [rptqField setName:             [field name]];
-    [rptqField setDataType:         @([field fieldType])];
-    [rptqField setDataTypeNative:   @([field fieldTypeNative])];
-    [rptqField setDecimals:         @([field decimals])];
-    [rptqField setWidth:            @([field width])];
-    [rptqField setPrimaryKey:       @([field primaryKey])];
-    return rptqField;
+    NSString *label = [[NSString alloc] initWithString: field.label];
+    rptqField.label = label;
+    
+    NSString *name = [[NSString alloc] initWithString:field.name];
+    rptqField.name = name;
+    
+    NSNumber *dataType = [[NSNumber alloc] initWithUnsignedInteger: field.fieldType];
+    rptqField.dataType = dataType;
+    
+    NSNumber *dataTypeNative = [[NSNumber alloc] initWithInteger:field.fieldTypeNative];
+    rptqField.dataTypeNative = dataTypeNative;
+    
+    NSNumber *decimals = [[NSNumber alloc] initWithUnsignedInteger:field.decimals];
+    rptqField.decimals = decimals;
+    
+    NSNumber *width = [[NSNumber alloc] initWithUnsignedInteger:field.width];
+    rptqField.width = width;
+    
+    NSNumber *primaryKey = [[NSNumber alloc] initWithBool:field.primaryKey];
+    rptqField.primaryKey = primaryKey;
 
+    return rptqField;
 }
 
 - (MTDatabaseField *)databaseFieldWrapper {

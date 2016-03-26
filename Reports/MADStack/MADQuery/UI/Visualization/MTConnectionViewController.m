@@ -374,7 +374,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     self.datatableTest = datatable;
     
-    MTDatabase *db = [MTDatabase databaseFactory:connection];
+    MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     queryTest.database = db;
     self.databaseTest = db;

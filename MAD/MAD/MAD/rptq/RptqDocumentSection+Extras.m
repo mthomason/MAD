@@ -189,7 +189,6 @@
     NSNumber *heightWrapper = @(height + 44.0000f);
     self.layoutHeight = layoutHeightWrapper;
     self.height = heightWrapper;
-    [self.managedObjectContext save:nil];
 }
 
 #pragma mark - Static

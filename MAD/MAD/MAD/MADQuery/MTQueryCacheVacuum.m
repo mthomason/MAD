@@ -33,7 +33,7 @@
         MTDatabaseConnection *connection = object[keyMTQueryCacheDeleteAllFromTableConnection];
         [self setConnection:connection];
         
-        MTDatabase *db = [MTDatabase databaseFactory:connection];
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
         [self setDatabase:db];
         [self setQueryObject:object];
         

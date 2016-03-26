@@ -975,12 +975,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [documentSection setInterfaceHeight: collectionViewContentSize.height];
+        [documentSection.managedObjectContext save:nil];
     
     NSString *key = [documentSection sectionKey];
     UICollectionView *collectionView = self.sectionViews[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
     [documentSection setInterfaceHeight: collectionViewContentSize.height];
+    [documentSection.managedObjectContext save:nil];
     
     [self.view setNeedsUpdateConstraints];
     

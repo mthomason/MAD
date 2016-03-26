@@ -346,7 +346,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
     RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
 
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:databaseSchemas.ownedByUser];
-    MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
     
     CGFloat originY = pageRect.origin.y;
     NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
@@ -472,7 +472,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
     
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:databaseSchemas.ownedByUser];
-    MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
     
     NSUInteger numberOfPages = self.reportFormatter.numberOfPages;
     if (pageIndex < numberOfPages) {

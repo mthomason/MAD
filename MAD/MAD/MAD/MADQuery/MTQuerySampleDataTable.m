@@ -40,7 +40,7 @@
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
-        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;
         self.dataTableMaxFieldLength = dataTable;

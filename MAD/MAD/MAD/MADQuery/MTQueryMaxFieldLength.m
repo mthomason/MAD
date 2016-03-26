@@ -42,7 +42,7 @@
 
         RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
     }
     

@@ -52,7 +52,7 @@
     }
 
     [document activeDocumentModel];
-    MTDatabase *database = [MTDatabase databaseFactory:self.databaseConnection];
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
 
     if (database) {
     

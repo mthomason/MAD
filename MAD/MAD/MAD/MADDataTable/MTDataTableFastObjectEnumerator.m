@@ -53,7 +53,7 @@ void sqliteCallback(void *foo, const char* statement) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         self.fastEnumerationObjects = fastEnumerationObjects;
 
-        MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
+        MTDatabaseCache *database = [MTDatabaseCache newDatabaseWithConnection:databaseConnection];
         self.databaseForQuery = database;
 
         self.empty = columnKeys.count == 0;
