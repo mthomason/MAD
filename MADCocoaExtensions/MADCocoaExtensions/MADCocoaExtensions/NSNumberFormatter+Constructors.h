@@ -9,11 +9,11 @@
 #ifndef MADExtensions_NSNumberFormatter_Constructors_h
 #define MADExtensions_NSNumberFormatter_Constructors_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSNumberFormatter.h>
 
 @interface NSNumberFormatter (Constructors)
 
-+ (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED;
+    + (instancetype)twoDecimalPlaces NS_RETURNS_RETAINED;
 
 @end
 

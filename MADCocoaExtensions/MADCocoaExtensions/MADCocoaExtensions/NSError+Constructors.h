@@ -9,8 +9,9 @@
 #ifndef Reports_NSError_Constructors_h
 #define Reports_NSError_Constructors_h
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/NSError.h>
+
+@class UIViewController;
 
 @interface NSError (Constructors)
 

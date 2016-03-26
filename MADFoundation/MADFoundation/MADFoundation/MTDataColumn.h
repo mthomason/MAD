@@ -9,7 +9,7 @@
 #ifndef Reports_MTDataColumn_h
 #define Reports_MTDataColumn_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MTDataColumn : NSObject
     <NSCoding>

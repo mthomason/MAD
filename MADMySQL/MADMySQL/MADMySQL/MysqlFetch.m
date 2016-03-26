@@ -13,6 +13,14 @@
 #import "MysqlFetch.h"
 #import <MADFoundation/MTDataTable.h>
 #import <MADFoundation/MTDataColumn.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSSet.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSDecimalNumber.h>
+#import <Foundation/NSDateFormatter.h>
+#import <Foundation/NSCalendar.h>
+#import <string.h>
 
 #import "mysql.h"
 

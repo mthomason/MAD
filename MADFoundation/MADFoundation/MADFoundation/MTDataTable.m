@@ -12,6 +12,12 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSStream.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSPropertyList.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSException.h>
 
 static NSString * const StringEmpty = @"";
 

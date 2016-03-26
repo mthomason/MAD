@@ -13,6 +13,12 @@
 #import "MTDataTableFastObjectEnumerator.h"
 #import <MADFoundation/MTDataColumn.h>
 #import <MADCocoaExtensions/MTLog.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSKeyValueCoding.h>
 #import "MTQuery.h"
 #import "MTDatabaseSqlite3.h"
 

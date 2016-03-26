@@ -7,16 +7,22 @@
 //
 
 #import "MTDataTableVirtual.h"
+#import <Foundation/NSStream.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSIndexSet.h>
+#import <Foundation/NSSortDescriptor.h>
 #import <MADFoundation/MTDataColumn.h>
 #import <MAD/RptqDocumentObjectAggregate+Extras.h>
 
-
 @interface MTDataTableVirtual ()
 
-@property (nonatomic, strong) NSInputStream *inputStream;
-@property (nonatomic, strong) NSOutputStream *outputStream;
+    @property (nonatomic, strong) NSInputStream *inputStream;
+    @property (nonatomic, strong) NSOutputStream *outputStream;
 
-@property (nonatomic, strong, readwrite) NSMutableArray *sortIndex;     // A sorted array of dictionaries
+    @property (nonatomic, strong, readwrite) NSMutableArray *sortIndex;     // A sorted array of dictionaries
 
 @end
 

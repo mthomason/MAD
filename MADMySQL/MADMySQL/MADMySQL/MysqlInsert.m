@@ -14,8 +14,15 @@
 #import "MysqlConnection.h"
 #import "NSString+MysqlEscape.h"
 #import "MysqlException.h"
+
 #import "mysql.h"
 #import "mysqld_error.h"
+
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSNull.h>
+#import <string.h>
 
 @implementation MysqlInsert
 

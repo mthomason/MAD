@@ -7,6 +7,8 @@
 //
 
 #import "MADThread.h"
+#import <Foundation/NSThread.h>
+#import <dispatch/queue.h>
 
 @implementation MADThread
 

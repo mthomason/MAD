@@ -13,11 +13,11 @@
 
 @interface MADErrorContainer : NSObject
 
-- (void)addError:(NSError *)error;
-- (NSString *)errorLog;
-- (NSString *)errorLogCompact;
-- (NSUInteger)count;
-- (NSArray <__kindof NSError *> *)allObjects;
+    - (void)addError:(NSError *)error;
+    - (NSString *)errorLog;
+    - (NSString *)errorLogCompact;
+    - (NSUInteger)count;
+    - (NSArray <__kindof NSError *> *)allObjects;
 
 @end
 

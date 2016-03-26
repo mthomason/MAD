@@ -9,7 +9,7 @@
 #ifndef MAD_MysqlException_h
 #define MAD_MysqlException_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSException.h>
 
 @class MysqlConnection;
 

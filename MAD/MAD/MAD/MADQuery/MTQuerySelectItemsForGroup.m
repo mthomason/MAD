@@ -8,15 +8,18 @@
 
 #import "MTQuerySelectItemsForGroup.h"
 #import <MADFoundation/MTDataColumn.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSArray.h>
 #import "MTDatabaseDataBinding.h"
 
 @interface MTQuerySelectItemsForGroup ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSString *columnName;
-@property (nonatomic, strong) NSArray *sortDescriptors;
-@property (nonatomic, strong) NSArray *columnKeys;
-@property (nonatomic, strong) NSArray *whereClause;
+    @property (nonatomic, strong) NSString *tableName;
+    @property (nonatomic, strong) NSString *columnName;
+    @property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, strong) NSArray *columnKeys;
+    @property (nonatomic, strong) NSArray *whereClause;
 
 @end
 

@@ -7,8 +7,13 @@
 //
 
 #import "MADLocalFileCoordinator.h"
+#import <MADFoundation/NSFileManager+Common.h>
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSCompoundPredicate.h>
+#import <Foundation/NSURL.h>
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
+#import <dispatch/queue.h>
 
 NSString * const MADPredicateFormatSelfInObject                 = @"self in %@";
 NSString * const MADPredicateFormatComparsonPathExtension       = @"(pathExtension = %@)";
@@ -26,6 +31,7 @@ NSString * const MADPredicateFormatComparsonLastPathComponent   = @"(lastPathCom
 @end
 
 @implementation MADLocalFileCoordinator
+
 @synthesize delegate = _delegate;
 
 #pragma mark - Initialization

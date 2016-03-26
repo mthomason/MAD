@@ -8,7 +8,12 @@
 
 #import "MADErrorContainer.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSDate.h>
+#import <Foundation/NSDateFormatter.h>
 
 static NSString * const MADErrorContainerError  = @"e";
 static NSString * const MADErrorContainerDate   = @"d";

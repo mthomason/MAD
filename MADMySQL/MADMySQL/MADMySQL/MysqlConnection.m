@@ -18,6 +18,16 @@
 
 #import "mysql.h"
 
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSThread.h>
+#import <string.h>
+
+
 @interface MysqlConnection ()
 
     @property (readonly) MYSQL *connection;

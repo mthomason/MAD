@@ -20,6 +20,7 @@
 #import "RptqDocumentObjectFormula.h"
 #import "RptqDocumentObjectGroupKey.h"
 #import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectImage.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentSection.h"
@@ -291,7 +292,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
     
-    MTDocumentObjectType objectType = [[documentObject type] unsignedIntegerValue];
+    MTDocumentObjectType objectType = (MTDocumentObjectType)documentObject.type.unsignedIntegerValue;
     NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
     
     switch (objectType) {

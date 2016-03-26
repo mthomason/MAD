@@ -8,6 +8,7 @@
 
 #import "MADInterfaceControllerDocumentsLocal.h"
 #import "MADRowTypeDocumentsLocal.h"
+#import <Foundation/NSFileManager.h>
 
 @interface MADInterfaceControllerDocumentsLocal()
 

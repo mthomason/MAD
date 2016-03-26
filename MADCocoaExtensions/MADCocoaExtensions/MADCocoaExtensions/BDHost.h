@@ -12,7 +12,7 @@
 #ifndef MADExtensions_BDHost_h
 #define MADExtensions_BDHost_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface BDHost : NSObject
 

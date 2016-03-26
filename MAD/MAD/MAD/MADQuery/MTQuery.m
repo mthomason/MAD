@@ -56,6 +56,11 @@
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
+#import <Foundation/NSNull.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
+
 NSString * const MTQueryKeyType             = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject           = @"MTQueryKeyObject";
 NSString * const MTQueryKeyPredicateColumn  = @"c";

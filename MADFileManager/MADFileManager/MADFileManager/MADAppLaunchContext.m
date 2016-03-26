@@ -7,6 +7,10 @@
 //
 
 #import "MADAppLaunchContext.h"
+#import <UIKit/UIDocument.h>
+#import <Foundation/NSUserActivity.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSURL.h>
 
 NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey = @"MADUserInfoKeyFileURL";
 
@@ -32,12 +36,6 @@ NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey = @"MADUs
         }
         
         NSAssert(_fileURL != nil, @"`listURL must not be `nil`.");
-        
-//        NSNumber *listInfoColorNumber = userActivity.userInfo[AAPLAppConfigurationUserActivityListColorUserInfoKey];
-        
-    //    NSAssert(listInfoColorNumber != nil && listInfoColorNumber.integerValue >= 0 && listInfoColorNumber.integerValue < 6, @"The `userInfo` dictionary provided contains an invalid entry for the list color.");
-        // Set the `listColor` by converting the `NSNumber` to an NSInteger and casting to `AAPLListColor`.
-    //    _listColor = (AAPLListColor)listInfoColorNumber.integerValue;
     }
     
     return self;
@@ -51,25 +49,10 @@ NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey = @"MADUs
         
         NSParameterAssert(fileURL.path != nil);
         // Construct a file URL from the path of the lister:// URL.
+
         _fileURL = [NSURL fileURLWithPath:fileURL.path isDirectory:NO];
         
         NSAssert(_fileURL != nil, @"`listURL must not be `nil`.");
-        
-        // Extract the query items to initialize the `listColor` property from the `color` query item.
-        //NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:listerURL resolvingAgainstBaseURL:NO];
-        //NSArray *queryItems = urlComponents.queryItems;
-        
-        // Construct a predicate to extract the `color` query item.
-        //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@", AAPLAppConfigurationListerColorQueryKey];
-        //NSArray *colorQueryItems = [queryItems filteredArrayUsingPredicate:predicate];
-        
-        //NSAssert(colorQueryItems.count == 1, @"URL provided should contain only one `color` query item.");
-        
-        //NSURLQueryItem *colorQueryItem = colorQueryItems.firstObject;
-        
-        //NSAssert(colorQueryItem.value != nil, @"URL provided contains an invalid value for `color`.");
-        // Set the `listColor` by converting the `NSString` value to an NSInteger and casting to `AAPLListColor`.
-        //_listColor = colorQueryItem.value.integerValue;
     }
     
     return self;

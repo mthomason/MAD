@@ -9,14 +9,14 @@
 #ifndef Reports_MTDocumentCellProtocol_h
 #define Reports_MTDocumentCellProtocol_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @protocol MTDocumentCellProtocol <NSObject>
 
-- (void)email:(id)cell;
-- (void)rename:(id)sender;
-- (void)actionDuplicate:(id)sender;
-- (void)activateEditMode:(id)sender;
+    - (void)email:(id)cell;
+    - (void)rename:(id)sender;
+    - (void)actionDuplicate:(id)sender;
+    - (void)activateEditMode:(id)sender;
 
 @end
 

@@ -8,6 +8,9 @@
 
 #import "MADNotificationProgress.h"
 #import "MADProgress.h"
+#import <Foundation/NSNotification.h>
+#import <Foundation/NSOperation.h>
+#import <Foundation/NSDate.h>
 #import <dispatch/once.h>
 
 NSString * const MADNotificationProgressIdentifier = @"MADProgressNotification";

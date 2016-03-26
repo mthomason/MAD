@@ -9,17 +9,18 @@
 #ifndef MADDesigner_MADAppLaunchContext_h
 #define MADDesigner_MADAppLaunchContext_h
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
+
+@class NSUserActivity;
 
 extern NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey;
 
 @interface MADAppLaunchContext : NSObject
 
-@property (nonatomic, strong, readonly) NSURL *fileURL;
+    @property (nonatomic, strong, readonly) NSURL *fileURL;
 
 /*!
- * Initializes an \c AAPLAppLaunchContext instance with the color and URL designated by the user activity.
+ * Initializes an \c MADAppLaunchContext instance with the color and URL designated by the user activity.
  *
  * \param userActivity
  * The userActivity providing the file URL and list color to launch to.
@@ -27,7 +28,7 @@ extern NSString * const MADAppConfigurationUserActivityListURLPathUserInfoKey;
 - (instancetype)initWithUserActivity:(NSUserActivity *)userActivity;
 
 /*!
- * Initializes an \c AAPLAppLaunchContext instance with the color and URL designated by the lister:// URL.
+ * Initializes an \c MADAppLaunchContext instance with the color and URL designated by the lister:// URL.
  *
  * \param listerURL
  * The URL adhering to the lister:// scheme providing the file URL and list color to launch to.

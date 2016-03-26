@@ -8,6 +8,8 @@
 
 #import "MTQueryCacheSelectGroupKeys.h"
 #import <MADFoundation/MTDataColumn.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
 #import "MTDatabaseSqlite3.h"
 
 static NSString * const JoinPredicateWhere = @" WHERE ";
@@ -16,7 +18,6 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
 
 @property (nonatomic, strong) NSString *tableName;
 @property (nonatomic, strong) NSString *columnName;
-//@property (nonatomic, strong) NSArray *predicates;
 @property (nonatomic, assign) BOOL accending;
 
 @property (nonatomic, strong) NSString *sqlSpeedSorting;

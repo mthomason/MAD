@@ -8,16 +8,11 @@
 
 #import "MADRowTypeKeyValue.h"
 
-
 @interface MADRowTypeKeyValue()
 
 @end
-
 
 @implementation MADRowTypeKeyValue
 
 
 @end
-
-
-

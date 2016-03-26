@@ -6,9 +6,14 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Designer_MADBackgroundObserver_h
+#define MAD_Designer_MADBackgroundObserver_h
+
 #import <Foundation/Foundation.h>
 #import "MADOperationObserver.h"
 
 @interface MADBackgroundObserver : NSObject <MADOperationObserver>
 
 @end
+
+#endif

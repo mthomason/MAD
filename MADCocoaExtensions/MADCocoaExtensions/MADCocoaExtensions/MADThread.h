@@ -9,12 +9,12 @@
 #ifndef Reports_NSThread_Extras_h
 #define Reports_NSThread_Extras_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MADThread : NSObject
 
-+ (void)completeOnMainThread:(void(^)(BOOL success, id obj))completion withObject:(id)obj andSuccess:(BOOL)success;
-+ (void)safeSwitchToMainThread:(void(^)())completion;
+    + (void)completeOnMainThread:(void(^)(BOOL success, id obj))completion withObject:(id)obj andSuccess:(BOOL)success;
+    + (void)safeSwitchToMainThread:(void(^)())completion;
 
 @end
 

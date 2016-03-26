@@ -9,17 +9,16 @@
 #ifndef MADDesigner_MADLocalFileCoordinator_h
 #define MADDesigner_MADLocalFileCoordinator_h
 
-#import <Foundation/Foundation.h>
-#import <MADFoundation/NSFileManager+Common.h>
+#import <Foundation/NSObject.h>
 #import "MADFileCoordinator.h"
 
 @interface MADLocalFileCoordinator : NSObject <MADFileCoordinator>
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup
-              firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
-
-- (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)fileGroup
+    - (instancetype)initWithPathExtension:(NSString *)pathExtension identifier:(NSString *)fileGroup
                   firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
+
+    - (instancetype)initWithLastPathComponent:(NSString *)lastPathComponent identifier:(NSString *)fileGroup
+                      firstQueryUpdateHandler:(void (^)(void))firstQueryUpdateHandler;
 
 @end
 

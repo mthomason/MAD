@@ -7,6 +7,7 @@
 //
 
 #import "MADProgress.h"
+#import <Foundation/NSString.h>
 
 @interface MADProgress ()
 

@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADDefer_h
+#define MAD_Designer_MADDefer_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADDefer : NSObject
 
@@ -16,3 +19,5 @@
 @end
 
 void defer(void (^block)());
+
+#endif

@@ -8,6 +8,10 @@
 
 #import "MTQueryCacheSelectLimitOffset.h"
 #import <MADFoundation/MTDataColumn.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSSortDescriptor.h>
 #import "MTDatabaseSqlite3.h"
 
 @interface MTQueryCacheSelectLimitOffset ()

@@ -10,6 +10,8 @@
 //
 
 #import "BDHost.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSArray.h>
 #import <CFNetwork/CFNetwork.h>
 #import <netinet/in.h>
 #import <netdb.h>

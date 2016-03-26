@@ -11,6 +11,12 @@
 #endif
 
 #import "MTDataColumn.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSCoder.h>
 
 @interface MTDataColumn ()
 

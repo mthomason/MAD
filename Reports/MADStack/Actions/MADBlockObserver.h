@@ -16,9 +16,9 @@
 
 @interface MADBlockObserver : NSObject <MADOperationObserver>
 
-- (instancetype)initWithStartHandler:(void(^)(MADOperation *))startHandler
-                      produceHandler:(void(^)(MADOperation *, NSOperation *))produceHandler
-                       finishHandler:(void(^)(MADOperation *, NSArray *))finishHandler;
+    - (instancetype)initWithStartHandler:(void(^)(MADOperation *))startHandler
+                          produceHandler:(void(^)(MADOperation *, NSOperation *))produceHandler
+                           finishHandler:(void(^)(MADOperation *, NSArray *))finishHandler;
 
 @end
 

@@ -6,7 +6,10 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADProgress_h
+#define MAD_Designer_MADProgress_h
+
+#import <Foundation/NSObject.h>
 
 @interface MADProgress : NSObject <NSCopying>
 
@@ -16,3 +19,5 @@
     @property (nonatomic, assign, readonly) float progress;
 
 @end
+
+#endif

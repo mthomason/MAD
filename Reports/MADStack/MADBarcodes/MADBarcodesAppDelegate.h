@@ -9,8 +9,7 @@
 #ifndef MAD_Designer_MADBarcodesAppDelegate_h
 #define MAD_Designer_MADBarcodesAppDelegate_h
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
+#import <UIKit/UIApplication.h>
 
 @interface MADBarcodesAppDelegate : UIResponder
     <UIApplicationDelegate>
