@@ -11,7 +11,6 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
-#import <MAD/MADNotificationProgress.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -27,6 +26,10 @@
 
 @implementation MADCreateDocumentOperationAddConnection
 
+- (instancetype)init {
+    return [self initWithDatabaseConnection:nil];
+}
+
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
         self.databaseConnection = databaseConnection;
@@ -38,6 +41,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -47,34 +51,23 @@
         }
     }
 
-    RptqDocument *rptqDocument = [document activeDocumentModel];
+    [document activeDocumentModel];
     MTDatabase *database = [MTDatabase databaseFactory:self.databaseConnection];
 
     if (database) {
+    
         [document setMainDatabase:database];
-        
-        [rptqDocument addDatabase: document.mainDatabase status: ^(NSString *message, float progress) {
-        
-            [[MADNotificationProgress sharedObject] updateProgressWithMessage:message progress:progress];
-            
-        } completion:^(BOOL success, MADErrorContainer *errorContainer) {
-        
-            self.success = success;
-            if (success) {
-                [self finish];
-            } else {
-                [self finish:[errorContainer allObjects]];
-            }
-            
-        }];
-        
+        self.success = true;
+        [self finish];
+
     } else {
+
         self.success = false;
         NSString *domain = NSStringFromClass(self.class);
         NSError *error = [NSError errorWithDomain:domain code:289 userInfo:nil];
         [self finishWithError:error];
+    
     }
-
 }
 
 @end

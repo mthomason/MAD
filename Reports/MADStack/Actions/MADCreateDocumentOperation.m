@@ -14,6 +14,7 @@
 #import "MADOperationBackgroundTaskBegin.h"
 #import "MADOperationBackgroundTaskEnd.h"
 #import "MADCreateDocumentOperationAddConnection.h"
+#import "MADCreateDocumentOperationImportSchema.h"
 
 @interface MADCreateDocumentOperation ()
 
@@ -38,13 +39,11 @@
         MADCreateDocumentOperationCreateDocument *createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
         [createDocument addDependency:taskBegin];
         
-        MADCreateDocumentOperationAddConnection *addConnection = [[MADCreateDocumentOperationAddConnection alloc] init];
+        MADCreateDocumentOperationAddConnection *addConnection = [[MADCreateDocumentOperationAddConnection alloc] initWithDatabaseConnection:databaseConnection];
         [addConnection addDependency:createDocument];
         
-        
-        
-        
-        
+        MADCreateDocumentOperationImportSchema *importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
+        [importSchema addDependency:addConnection];
         
         MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
         [taskEnd addDependency:createDocument];

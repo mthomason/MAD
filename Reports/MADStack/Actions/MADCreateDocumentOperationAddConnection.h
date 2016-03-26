@@ -11,7 +11,11 @@
 
 #import "MADOperation.h"
 
+@class MTDatabaseConnection;
+
 @interface MADCreateDocumentOperationAddConnection : MADOperation
+
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
 
 @end
 
