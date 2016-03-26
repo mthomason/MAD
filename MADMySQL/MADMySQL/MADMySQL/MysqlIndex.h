@@ -9,18 +9,16 @@
 #ifndef MAD_MysqlIndex_h
 #define MAD_MysqlIndex_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MysqlConnection;
 
-@interface MysqlIndex : NSObject
-{
+@interface MysqlIndex : NSObject {
     MysqlConnection *connection;
 }
 
-@property(readonly)MysqlConnection *connection;
-
-+ (MysqlIndex *)indexWithConnection:(MysqlConnection *)aConnection;
+    @property(readonly)MysqlConnection *connection;
+    + (MysqlIndex *)indexWithConnection:(MysqlConnection *)aConnection;
 
 @end
 

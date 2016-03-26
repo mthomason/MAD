@@ -13,49 +13,46 @@
 #import "MysqlDelete.h"
 #import "MysqlConnection.h"
 #import "MysqlException.h"
-#import "NSString+MysqlEscape.h"
+#import "mysql.h"
 
 @implementation MysqlDelete
 
-@synthesize tableName,qualifier,affectedRows;
++ (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection {
 
-+ (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection
-{
     if (!aConnection) {
         [MysqlException raiseConnection:nil withFormat:@"Connection is nil"];
     }
     
     MysqlDelete *newObject=[[self alloc] init];
     newObject->connection = aConnection;
-    newObject->tableName=nil;
-    newObject->qualifier=nil;
+    newObject->_tableName=nil;
+    newObject->_qualifier=nil;
     return newObject;
 }
 
 
 - (NSString *)command {
-    NSString *cmd = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@",tableName,qualifier];
+    NSString *cmd = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@", _tableName, _qualifier];
     return cmd;
 }
 
 
-- (void)execute
-{
+- (void)execute {
     @synchronized (connection) {
-        if (!tableName) {
+        if (!_tableName) {
             [MysqlException raiseConnection:connection withFormat:@"Delete is missing table name"];
         }
-        if (!qualifier) {
+        if (!_qualifier) {
             [MysqlException raiseConnection:connection withFormat:@"Delete is unqualified. Use TRUNCATE to wipe out tables"];
         }
         
         NSString *cmd = [self command];
         if (mysql_query(connection.connection, [cmd UTF8String])) {
-            [MysqlException raiseConnection:connection
-                                 withFormat:@"Could not perform mysql update %@ #%d:%s",cmd,mysql_errno(connection.connection), mysql_error(connection.connection)];
+            [MysqlException raiseConnection: connection
+                                 withFormat: @"Could not perform mysql update %@ #%d:%s", cmd, mysql_errno(connection.connection), mysql_error(connection.connection)];
         } else {
             unsigned long long rowCount = mysql_affected_rows(connection.connection);
-            affectedRows = @(rowCount);
+            _affectedRows = @(rowCount);
             MysqlLog(@"%@ rows affected by %@",affectedRows,cmd);
         }
     }

@@ -14,6 +14,4 @@
 
 @implementation MysqlFetchField
 
-@synthesize name,fieldType,width,primaryKey,decimals;
-
 @end

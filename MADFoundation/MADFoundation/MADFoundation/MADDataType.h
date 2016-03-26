@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTDataType_h
-#define MAD_MTDataType_h
+#ifndef MADFoundation_MTDataType_h
+#define MADFoundation_MTDataType_h
+
+#import <Foundation/NSObject.h>
 
 typedef NS_ENUM(NSUInteger, MTDataType) {
     MTDataTypeBit           = 0,
@@ -38,7 +40,7 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
 
 @interface MADDataType : NSObject
 
-+ (SEL)selectorForSorting:(MTDataType)dataType;
+    + (SEL)selectorForSorting:(MTDataType)dataType;
 
 @end
 

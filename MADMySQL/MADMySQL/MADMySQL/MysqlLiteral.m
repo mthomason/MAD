@@ -15,12 +15,12 @@
 
 @implementation MysqlLiteral
 
-@synthesize string;
++ (MysqlLiteral *)literalWithString:(NSString *)s {
 
-+(MysqlLiteral *)literalWithString:(NSString *)s {
     MysqlLiteral *newObject = [[self alloc] init];
-    newObject->string=[s copy];
+    newObject->_string= s.copy;
     return newObject;
+
 }
 
 @end

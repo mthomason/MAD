@@ -9,8 +9,7 @@
 #ifndef MAD_MysqlConnection_h
 #define MAD_MysqlConnection_h
 
-#import <Foundation/Foundation.h>
-#import "mysql.h"
+#import <Foundation/NSObject.h>
 
 @class MysqlServer;
 
@@ -19,25 +18,29 @@
     MysqlServer *server;
 }
 
-@property(readonly) MYSQL *connection;
-@property(readonly) BOOL transactionsEnabled;
-@property(readonly) MysqlServer *server;
+    - (unsigned int)errorNumber;
+    - (const char *)errorText;
 
-+ (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
-+ (MysqlConnection *)connectToServer:(MysqlServer *)server;
-+ (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError **)error;
+    - (void *)connection;
 
-- (void)enableTransactions;
-- (void)disableTransactions;
-- (void)commitTransaction;
-- (void)rollbackTransaction;
+    @property(readonly) BOOL transactionsEnabled;
+    @property(readonly) MysqlServer *server;
 
-- (void)enableStrictSql;
+    + (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
+    + (MysqlConnection *)connectToServer:(MysqlServer *)server;
+    + (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError **)error;
 
-- (void)enableTriggers;
-- (void)disableTriggers;
+    - (void)enableTransactions;
+    - (void)disableTransactions;
+    - (void)commitTransaction;
+    - (void)rollbackTransaction;
 
-- (void)startIdle;
+    - (void)enableStrictSql;
+
+    - (void)enableTriggers;
+    - (void)disableTriggers;
+
+    - (void)startIdle;
 
 @end
 

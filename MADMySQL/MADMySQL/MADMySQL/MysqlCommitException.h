@@ -9,7 +9,6 @@
 #ifndef MAD_MysqlCommitException_h
 #define MAD_MysqlCommitException_h
 
-#import <Foundation/Foundation.h>
 #import "MysqlException.h"
 
 @interface MysqlCommitException : MysqlException

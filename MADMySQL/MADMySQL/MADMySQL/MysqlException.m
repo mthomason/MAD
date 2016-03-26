@@ -8,7 +8,7 @@
 
 #import "MysqlException.h"
 #import "MysqlConnection.h"
-
+#import "mysql.h"
 
 @implementation MysqlException
 
@@ -33,12 +33,16 @@
 + (NSError *)errorWithConnection:(MysqlConnection *)connection
                           domain:(NSString *)domain
                          andCode:(NSInteger)code {
+    
     NSString *errorString = [[NSString alloc] initWithFormat:@"MySQL says %d! %s.",
                              mysql_errno(connection.connection),
                              mysql_error(connection.connection)];
-    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : errorString,
-                                NSLocalizedFailureReasonErrorKey : @"Executing Error"};
+    NSDictionary *errorInfo = @{
+                                NSLocalizedDescriptionKey : errorString,
+                                NSLocalizedFailureReasonErrorKey : @"Executing Error"
+                                };
     return [NSError errorWithDomain:domain code:code userInfo:errorInfo];
+    
 }
 
 @end

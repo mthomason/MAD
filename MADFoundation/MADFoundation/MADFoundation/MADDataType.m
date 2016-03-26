@@ -6,8 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <MADFoundation/MADDataType.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSString.h>
 #import "NSData+Comparson.h"
 
 @implementation MADDataType

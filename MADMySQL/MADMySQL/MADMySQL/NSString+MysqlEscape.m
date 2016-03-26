@@ -10,8 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MysqlConnection.h"
 #import "NSString+MysqlEscape.h"
+#import "MysqlConnection.h"
+#import <string.h>
+#import "mysql.h"
 
 @implementation NSString(MysqlEscape)
 

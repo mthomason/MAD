@@ -16,12 +16,8 @@
 
 @implementation MysqlServer
 
-@synthesize host,user,password,schema;
-@synthesize port,flags,connectionTimeout;
-
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         self.host = @"localhost";
         self.user = @"username";
         self.password = @"password";
@@ -34,7 +30,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MysqlServer: %@:%d as user %@", host, port, user];
+    return [NSString stringWithFormat:@"MysqlServer: %@:%d as user %@", _host, _port, _user];
 }
 
 @end

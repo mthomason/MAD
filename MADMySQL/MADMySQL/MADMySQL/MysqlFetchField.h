@@ -9,22 +9,15 @@
 #ifndef MAD_MysqlFetchField_h
 #define MAD_MysqlFetchField_h
 
-#import <Foundation/Foundation.h>
-#import "mysql.h"
+#import <Foundation/NSObject.h>
 
-@interface MysqlFetchField : NSObject {
-    NSString *name;
-    enum enum_field_types fieldType;
-    NSUInteger width;
-    NSUInteger decimals;
-    BOOL primaryKey;
-}
+@interface MysqlFetchField : NSObject
 
-@property(retain) NSString *name;
-@property(assign) enum enum_field_types fieldType;
-@property(assign) NSUInteger width;
-@property(assign) NSUInteger decimals;
-@property(assign) BOOL primaryKey;
+    @property(copy) NSString *name;
+    @property(assign) NSInteger fieldType;
+    @property(assign) NSUInteger width;
+    @property(assign) NSUInteger decimals;
+    @property(assign) BOOL primaryKey;
 
 @end
 

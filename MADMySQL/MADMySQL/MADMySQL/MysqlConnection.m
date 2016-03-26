@@ -16,9 +16,25 @@
 #import "MysqlCommitException.h"
 #import "MysqlRollbackException.h"
 
+#import "mysql.h"
+
+@interface MysqlConnection ()
+
+    @property (readonly) MYSQL *connection;
+
+@end
+
 @implementation MysqlConnection
 
 @synthesize transactionsEnabled, server;
+
+- (unsigned int)errorNumber {
+    return mysql_errno(self.connection);
+}
+
+- (const char *)errorText {
+    return mysql_error(self.connection);
+}
 
 + (MysqlConnection *)connectToServer:(MysqlServer *)server {
     MysqlConnection *newObject = [[self alloc] init];

@@ -8,7 +8,6 @@
 
 #import "MTDataTypeMySQL.h"
 #import "mysql.h"
-#import "mysql_com.h"
 
 @implementation MTDataTypeMySQL
 

@@ -9,7 +9,7 @@
 #ifndef MAD_MysqlInsert_h
 #define MAD_MysqlInsert_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MysqlConnection;
 
@@ -22,14 +22,14 @@
     BOOL ignoreDuplicateErrors;
 }
 
-@property(retain) NSString *table;
-@property(retain) NSDictionary  *rowData;
-@property(readonly) NSNumber *affectedRows;
-@property(readonly) NSNumber *rowid;
-@property(assign) BOOL ignoreDuplicateErrors;
+    @property(strong) NSString *table;
+    @property(strong) NSDictionary  *rowData;
+    @property(readonly) NSNumber *affectedRows;
+    @property(readonly) NSNumber *rowid;
+    @property(assign) BOOL ignoreDuplicateErrors;
 
-+ (MysqlInsert *)insertWithConnection:(MysqlConnection *)aConnection;
-- (void)execute;
+    + (MysqlInsert *)insertWithConnection:(MysqlConnection *)aConnection;
+    - (void)execute;
 
 @end
 

@@ -13,12 +13,10 @@
 
 @class MysqlConnection;
 
-@interface MysqlException : NSException {
+@interface MysqlException : NSException
 
-}
-+ (void)raiseConnection:(MysqlConnection *)aConnection withFormat:(NSString *)format,...  __attribute__ ((noreturn));;
-
-+ (NSError *)errorWithConnection:(MysqlConnection *)connection domain:(NSString *)domain andCode:(NSInteger)code;
+    + (void)raiseConnection:(MysqlConnection *)aConnection withFormat:(NSString *)format,...  __attribute__ ((noreturn));;
+    + (NSError *)errorWithConnection:(MysqlConnection *)connection domain:(NSString *)domain andCode:(NSInteger)code;
 
 @end
 

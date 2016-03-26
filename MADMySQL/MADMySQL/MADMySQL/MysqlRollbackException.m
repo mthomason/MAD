@@ -8,7 +8,6 @@
 
 #import "MysqlRollbackException.h"
 
-
 @implementation MysqlRollbackException
 
 @end

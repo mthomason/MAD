@@ -11,13 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MysqlLiteral : NSObject {
-    NSString *string;
-}
+@interface MysqlLiteral : NSObject
 
-@property(readonly) NSString *string;
+@property (readonly) NSString *string;
 
-+ (MysqlLiteral *)literalWithString:(NSString *)s;
+    + (MysqlLiteral *)literalWithString:(NSString *)s;
 
 @end
 

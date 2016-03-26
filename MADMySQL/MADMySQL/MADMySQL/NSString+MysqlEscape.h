@@ -9,9 +9,13 @@
 #ifndef MAD_NSString_MysqlEscape_h
 #define MAD_NSString_MysqlEscape_h
 
+#import <Foundation/NSString.h>
+
+@class MysqlConnection;
+
 @interface NSString(MysqlEscape)
 
-- (NSString *)mysqlEscapeInConnection:(MysqlConnection *)connection;
+    - (NSString *)mysqlEscapeInConnection:(MysqlConnection *)connection;
 
 @end
 

@@ -6,11 +6,16 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MADMySql_MADDataTypeMySQL_h
+#define MADMySql_MADDataTypeMySQL_h
+
+#import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface MTDataTypeMySQL : NSObject
 
-+ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType;
+    + (MTDataType)dataTypeForNativeType:(NSInteger)nativeType;
 
 @end
+
+#endif

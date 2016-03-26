@@ -13,6 +13,7 @@
 #import "MysqlTruncate.h"
 #import "MysqlConnection.h"
 #import "MysqlException.h"
+#import "mysql.h"
 
 @implementation MysqlTruncate
 

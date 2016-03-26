@@ -11,25 +11,15 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MysqlServer : NSObject {
-    NSString *host;
-    NSString *user;
-    NSString *password;
-    NSString *schema;
-    unsigned int port;
-    unsigned long flags;
-    unsigned int connectionTimeout;
-}
+@interface MysqlServer : NSObject
 
-@property(copy) NSString *host;
-@property(copy) NSString *user;
-@property(copy) NSString *password;
-@property(copy) NSString *schema;
-@property(assign) unsigned int port;
-@property(assign) unsigned long flags;
-@property(assign) unsigned int connectionTimeout;
-
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+    @property(copy) NSString *host;
+    @property(copy) NSString *user;
+    @property(copy) NSString *password;
+    @property(copy) NSString *schema;
+    @property(assign) unsigned int port;
+    @property(assign) unsigned long flags;
+    @property(assign) unsigned int connectionTimeout;
 
 @end
 

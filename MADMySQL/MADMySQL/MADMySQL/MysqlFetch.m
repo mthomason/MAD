@@ -11,6 +11,8 @@
 #endif
 
 #import "MysqlFetch.h"
+#import <MADFoundation/MTDataTable.h>
+#import <MADFoundation/MTDataColumn.h>
 
 #import "mysql.h"
 

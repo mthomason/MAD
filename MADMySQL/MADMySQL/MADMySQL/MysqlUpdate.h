@@ -15,19 +15,15 @@
 
 @interface MysqlUpdate : NSObject {
     MysqlConnection *connection;
-    NSString *table;
-    NSDictionary *rowData;
-    NSDictionary *qualifier;
-    NSNumber *affectedRows;
 }
 
-@property(retain) NSString *table;
-@property(retain) NSDictionary  *rowData;
-@property(retain) NSDictionary  *qualifier;
-@property(readonly) NSNumber *affectedRows;
+    @property(strong) NSString *table;
+    @property(strong) NSDictionary *rowData;
+    @property(strong) NSDictionary *qualifier;
+    @property(readonly) NSNumber *affectedRows;
 
-+ (MysqlUpdate *)updateWithConnection:(MysqlConnection *)aConnection;
-- (void)execute;
+    + (MysqlUpdate *)updateWithConnection:(MysqlConnection *)aConnection;
+    - (void)execute;
 
 @end
 

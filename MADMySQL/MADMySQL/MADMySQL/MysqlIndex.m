@@ -12,8 +12,6 @@
 
 #import "MysqlIndex.h"
 #import "MysqlConnection.h"
-#import "MysqlException.h"
-#import "MysqlFetch.h"
 
 @implementation MysqlIndex
 

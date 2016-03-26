@@ -14,14 +14,15 @@
 #import "MysqlConnection.h"
 #import "NSString+MysqlEscape.h"
 #import "MysqlException.h"
+#import "mysql.h"
 #import "mysqld_error.h"
 
 @implementation MysqlInsert
 
-@synthesize table,rowData,affectedRows,rowid,ignoreDuplicateErrors;
+@synthesize table, rowData, affectedRows, rowid, ignoreDuplicateErrors;
 
-+ (MysqlInsert *)insertWithConnection:(MysqlConnection *)aConnection
-{
++ (MysqlInsert *)insertWithConnection:(MysqlConnection *)aConnection {
+
     if (!aConnection) {
         [MysqlException raiseConnection:nil withFormat:@"Connection is nil"];
     }
@@ -33,8 +34,8 @@
 }
 
 
-- (void)execute
-{
+- (void)execute {
+
     if (!table) {
         [MysqlException raiseConnection:connection withFormat: @"No table specified for insert"];
     }
@@ -45,9 +46,8 @@
     
     @synchronized(connection) {
         
-        NSArray *keys = [rowData allKeys];
-        
-        NSMutableString *cmd = [NSMutableString string];
+        NSArray *keys = rowData.allKeys;
+        NSMutableString *cmd = [NSMutableString new];
         [cmd appendFormat:@"INSERT INTO %@ ( ",table];
         BOOL firstAdd=YES;
         for (NSString *columnName in keys) {
@@ -116,9 +116,11 @@
                 binding[x].buffer_length= strlen(ch);
             }
         }
+        
         if (mysql_stmt_bind_param(myStatement,(MYSQL_BIND *)binding)) {
             [MysqlException raiseConnection:connection withFormat:@"mysql_stmt_bind_param failed %s", mysql_stmt_error(myStatement)];
         }
+        
         if (mysql_stmt_execute(myStatement)) {
             if (ignoreDuplicateErrors && mysql_errno(connection.connection)==ER_DUP_ENTRY) {
                 NSLog(@"mysql_stmt_execute failure ignore %s", mysql_stmt_error(myStatement));
@@ -126,12 +128,14 @@
                 [MysqlException raiseConnection:connection withFormat:@"mysql_stmt_execute failed %s", mysql_stmt_error(myStatement)];
             }
         }
+        
         unsigned long long rowCount = mysql_affected_rows(connection.connection);
         affectedRows = @(rowCount);
         rowid=@(mysql_insert_id(connection.connection));
         if (mysql_stmt_close(myStatement)) {
             [MysqlException raiseConnection:connection withFormat:@" mysql_stmt_close failed %s", mysql_stmt_error(myStatement)];
         }
+        
         for (NSUInteger x=0; x < [keys count];x++) {
             NSString *key= keys[x];
             NSObject *object = rowData[key];
@@ -139,6 +143,7 @@
                 free(binding[x].is_null);
             }
         }
+        
         free(binding);
     }
 }

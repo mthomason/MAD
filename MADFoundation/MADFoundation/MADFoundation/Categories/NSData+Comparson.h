@@ -9,11 +9,11 @@
 #ifndef Reports_NSData_Compression_h
 #define Reports_NSData_Compression_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSData.h>
 
 @interface NSData (Comparson)
 
-- (NSComparisonResult)compareData:(NSData *)data;
+    - (NSComparisonResult)compareData:(NSData *)data;
 
 @end
 

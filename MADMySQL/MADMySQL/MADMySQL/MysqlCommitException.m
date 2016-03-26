@@ -8,7 +8,6 @@
 
 #import "MysqlCommitException.h"
 
-
 @implementation MysqlCommitException
 
 @end

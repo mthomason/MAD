@@ -9,23 +9,20 @@
 #ifndef MAD_MysqlDelete_h
 #define MAD_MysqlDelete_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MysqlConnection;
 
 @interface MysqlDelete : NSObject {
     MysqlConnection *connection;
-    NSString *tableName;
-    NSString *qualifier;
-    NSNumber *affectedRows;
 }
 
-@property(copy) NSString *tableName;
-@property(copy) NSString *qualifier;
-@property(readonly) NSNumber *affectedRows;
+    @property(copy) NSString *tableName;
+    @property(copy) NSString *qualifier;
+    @property(readonly) NSNumber *affectedRows;
 
-+ (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection;
-- (void)execute;
+    + (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection;
+    - (void)execute;
 
 @end
 

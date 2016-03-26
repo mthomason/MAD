@@ -18,11 +18,11 @@
     MysqlConnection *connection;
 }
 
-@property(copy) NSString *tableName;
+    @property(copy) NSString *tableName;
 
-+ (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection;
-+ (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection forTable:(NSString *)aTableName;
-- (void)execute;
+    + (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection;
+    + (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection forTable:(NSString *)aTableName;
+    - (void)execute;
 
 @end
 
