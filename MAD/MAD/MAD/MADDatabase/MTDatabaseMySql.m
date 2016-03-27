@@ -135,6 +135,37 @@
     return error;
 }
 
+- (void)enumerateTablesFromConnection:(id)dbconn
+                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    NSError *error = nil;
+    MysqlConnection *conn = dbconn;
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+                                             dataTable: &dataTableVirtual
+                                          onConnection: conn
+                                                 error: &error];
+    NSMutableArray *results = nil;
+    if (error == nil) {
+        NSUInteger resultsCount = [dataTable count];
+        results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+        NSUInteger counter = 0;
+        BOOL stop = NO;
+        for (NSUInteger i=0; i<[dataTable count]; i++) {
+            @autoreleasepool {
+                NSString *tableName = [dataTable objectAtRow:i column:0];
+                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                [results addObject:table];
+                block(table, counter, &stop);
+                if (stop) break;
+                counter++;
+            }
+        }
+    }
+    completion(error == nil, error, results);
+}
+
 - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
 
     NSError *error = nil;
