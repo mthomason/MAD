@@ -198,7 +198,7 @@
 		4C9373C31BAD26AB00D6BD62 /* x509_vfy.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C93735F1BAD26AB00D6BD62 /* x509_vfy.h */; };
 		4C9373C51BAD26AB00D6BD62 /* x509v3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373611BAD26AB00D6BD62 /* x509v3.h */; };
 		4C9373CB1BAD28AC00D6BD62 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9373CA1BAD28AC00D6BD62 /* libc++.tbd */; };
-		4C9373E81BAD2A8300D6BD62 /* MysqlCommitException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */; };
+		4C9373E81BAD2A8300D6BD62 /* MysqlCommitException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9373E91BAD2A8300D6BD62 /* MysqlConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C9373EA1BAD2A8300D6BD62 /* MysqlFetch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C9373EB1BAD2A8300D6BD62 /* MysqlFetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */; };
@@ -210,7 +210,7 @@
 		4C9373F11BAD2A8300D6BD62 /* MysqlInsert.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D51BAD2A8300D6BD62 /* MysqlInsert.h */; };
 		4C9373F21BAD2A8300D6BD62 /* MysqlTruncate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D61BAD2A8300D6BD62 /* MysqlTruncate.h */; };
 		4C9373F31BAD2A8300D6BD62 /* MysqlTruncate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373D71BAD2A8300D6BD62 /* MysqlTruncate.m */; };
-		4C9373F41BAD2A8300D6BD62 /* MysqlException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D81BAD2A8300D6BD62 /* MysqlException.h */; };
+		4C9373F41BAD2A8300D6BD62 /* MysqlException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D81BAD2A8300D6BD62 /* MysqlException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9373F51BAD2A8300D6BD62 /* MysqlIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D91BAD2A8300D6BD62 /* MysqlIndex.h */; };
 		4C9373F61BAD2A8300D6BD62 /* MysqlLiteral.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373DA1BAD2A8300D6BD62 /* MysqlLiteral.h */; };
 		4C9373F71BAD2A8300D6BD62 /* MysqlRollbackException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373DB1BAD2A8300D6BD62 /* MysqlRollbackException.h */; };

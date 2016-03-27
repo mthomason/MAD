@@ -43,8 +43,6 @@
 
 @interface MysqlFetch ()
 
-@property(strong, readwrite) NSArray *fieldNames;
-@property(strong, readwrite) NSArray *fields;
 @property(strong, readwrite) NSArray *results;
 
 @end
@@ -317,6 +315,54 @@ char *mySQLTypeForType(int type) {
 #endif
 }
 
++ (NSData *)dataForColumnBindings:(MYSQL_BIND)bindings column:(int)x statement:(MYSQL_STMT *)statement fetchResults:(int)fetchResults NS_RETURNS_RETAINED {
+    void *previousBuffer=bindings.buffer;
+    unsigned long previousBufferSize=bindings.buffer_length;
+    bindings.buffer_length=*(bindings.length);
+    bindings.buffer=malloc(bindings.buffer_length);
+    
+    mysql_stmt_fetch_column(statement, (MYSQL_BIND *)&(bindings), x , 0);
+    
+    NSData * result = [[NSData alloc] initWithBytes:bindings.buffer length:*(bindings.length)];
+    
+    free(bindings.buffer);
+    bindings.buffer_length=previousBufferSize;
+    bindings.buffer=previousBuffer;
+
+    return result;
+}
+
++ (NSData *)dataForColumnBindings:(MYSQL_BIND)binding column:(int)x statement:(MYSQL_STMT *)statement NS_RETURNS_RETAINED {
+
+    id result = [[NSData alloc] initWithBytes:binding.buffer length:*(binding.length)];
+    
+    //Trying to add support for MYSQL_TYPE_TEXT, which is just like a blob with a string in it.
+    if (((NSData *)result).bytes != nil) {
+
+        NSString *theDataString = [[NSString alloc] initWithUTF8String:((NSData *)result).bytes];
+        if (theDataString != nil) {
+        
+            if ([theDataString isKindOfClass:[NSString class]]) {
+                if (theDataString.length != 0) {
+                    result = theDataString;
+                }
+                
+            } else if ([theDataString isKindOfClass:[NSNumber class]]) {
+                result = theDataString;
+            } else {
+                result = theDataString;
+            }
+        }
+        if (![result respondsToSelector:@selector(compare:)]) {
+            NSString *utf8String = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+            result = utf8String;
+        }
+    } else {
+        result = [NSNull null];
+    }
+    return result;
+}
+
 - (void)fetchResultsFromConnection:(MysqlConnection *)connection intoDataTable:(MTDataTable **)dataTable withStatement:(MYSQL_STMT *)statement fetch:(MysqlFetch *)mf andBindings:(MYSQL_BIND *)bindings  {
     [*dataTable beginBulkInsert];
     int fetchResults;
@@ -345,58 +391,23 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_LONG_BLOB:
                         case MYSQL_TYPE_BLOB: {
                             if (fetchResults== MYSQL_DATA_TRUNCATED && *(bindings[x].error)){
-                                void *previousBuffer=bindings[x].buffer;
-                                unsigned long previousBufferSize=bindings[x].buffer_length;
-                                bindings[x].buffer_length=*(bindings[x].length);
-                                bindings[x].buffer=malloc(bindings[x].buffer_length);
-                                
-                                mysql_stmt_fetch_column(statement, (MYSQL_BIND *)&(bindings[x]), x , 0);
-                                
-                                NSData *theData = [NSData dataWithBytes:bindings[x].buffer length:*(bindings[x].length)];
-                                dict[key] = theData;
-                                free(bindings[x].buffer);
-                                bindings[x].buffer_length=previousBufferSize;
-                                bindings[x].buffer=previousBuffer;
+                                NSData *data = [MysqlFetch dataForColumnBindings:bindings[x] column:x statement:statement fetchResults:fetchResults];
+                                dict[key] = data;
                             } else {
-                                NSData *theData = [NSData dataWithBytes:bindings[x].buffer length:*(bindings[x].length)];
-                                dict[key] = theData;
-                                
-                                //Trying to add support for MYSQL_TYPE_TEXT, which is just like a blob with a string in it.
-                                if (theData.bytes != nil) {
-                                    NSString *theDataString = [NSString stringWithUTF8String:theData.bytes];
-                                    if (theDataString != nil) {
-                                        if ([theDataString isKindOfClass:[NSString class]]) {
-                                            // FIXME: This is a hack.
-                                            if (rowCounter == 0) {
-                                                MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
-                                                NSNumber * __autoreleasing columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
-                                                [column setColumnType:columnTypeString];
-                                            }
-                                            if (theDataString.length != 0) {
-                                                dict[key] = theDataString;
-                                            } else {
-                                                NSData * __autoreleasing theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
-                                                dict[key] = theData;
-                                                
-                                            }
-                                        } else if ([theDataString isKindOfClass:[NSNumber class]]) {
-                                            if (rowCounter == 0) {
-                                                MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
-                                                NSNumber * __autoreleasing columnTypeString = [NSNumber numberWithUnsignedInteger: MTDataTypeInteger];
-                                                [column setColumnType:columnTypeString];
-                                            }
-                                            dict[key] = theDataString;
-                                        } else {
-                                            dict[key] = theDataString;
-                                        }
+                            
+                                id data = [MysqlFetch dataForColumnBindings:bindings[x] column:x statement:statement];
+                                if (rowCounter == 0) {
+                                    if ([data isKindOfClass:[NSString class]]) {
+                                        MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
+                                        NSNumber * __autoreleasing columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
+                                        [column setColumnType:columnTypeString];
+                                    } else if ([data isKindOfClass:[NSNumber class]]) {
+                                        MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
+                                        NSNumber * __autoreleasing columnTypeString = [NSNumber numberWithUnsignedInteger: MTDataTypeInteger];
+                                        [column setColumnType:columnTypeString];
                                     }
-                                    if (![dict[key] respondsToSelector:@selector(compare:)]) {
-                                        NSString * __autoreleasing utf8String = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
-                                        dict[key] = utf8String;
-                                    }
-                                } else {
-                                    dict[key] = [NSNull null];
                                 }
+                                dict[key] = data;
                             }
                         } break;
                             
@@ -408,8 +419,7 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_SET:
                         case MYSQL_TYPE_YEAR:
                         case MYSQL_TYPE_GEOMETRY:
-                        case MYSQL_TYPE_BIT:
-                        {
+                        case MYSQL_TYPE_BIT: {
                             // TODO - the encoding type should really be read from mysql
                             NSString * __autoreleasing theString = [[NSString alloc] initWithBytes: bindings[x].buffer
                                                                                             length: *(bindings[x].length)
@@ -419,12 +429,14 @@ char *mySQLTypeForType(int type) {
                             
                         case MYSQL_TYPE_LONGLONG:{
                             SInt64 *aValue = (SInt64 *)bindings[x].buffer;
-                            dict[key] = @(*aValue);
+                            NSNumber *n = @(*aValue);
+                            dict[key] = n;
                         } break;
                             
                         case MYSQL_TYPE_LONG: {
                             SInt32 *aValue = (SInt32 *)bindings[x].buffer;
-                            dict[key] = @((long)*aValue);
+                            NSNumber *n = @((long)*aValue);
+                            dict[key] = n;
                         } break;
                             
                         case MYSQL_TYPE_TINY: {

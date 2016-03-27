@@ -10,6 +10,7 @@
 #define MAD_MysqlFetch_h
 
 #import <Foundation/NSObject.h>
+#import "mysql.h"
 
 @class MysqlConnection, MTDataTable, MTQuery;
 
@@ -21,11 +22,15 @@
 
 @interface MysqlFetch : NSObject
 
-    @property (nonatomic, weak) id <MysqlFetchDelegate> delegate;
+    @property(nonatomic, weak) id <MysqlFetchDelegate> delegate;
+
+    @property(strong, readwrite) NSArray *fieldNames;
+    @property(strong, readwrite) NSArray *fields;
 
     - (MTDataTable *)fetchWithCommand:(NSString *)s dataTable:(MTDataTable **)dataTable
                          onConnection:(MysqlConnection *)connection error:(NSError **)error;
-
+    + (MYSQL_BIND)bindDataForStatement:(MYSQL_STMT *)myStatement andField:(NSUInteger)x;
+    
 @end
 
 #endif
