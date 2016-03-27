@@ -87,6 +87,10 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (void)readRow:(NSUInteger)row;
 
+- (void)enumerateTablesFromConnection:(id)dbconn
+                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL, NSError *, NSArray *))completion;
+
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
 @end
