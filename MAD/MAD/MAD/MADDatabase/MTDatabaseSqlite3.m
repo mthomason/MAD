@@ -138,6 +138,39 @@ void sqliteLog(void *foo, const char* statement) {
     return exist;
 }
 
+- (void)enumerateTablesFromConnection:(id)process
+                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    BOOL success = NO;
+    sqlite3_stmt *statement;
+    NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
+    const char *queryStartChar = [queryStart UTF8String];
+    char *sql = sqlite3_mprintf((char *) queryStartChar);
+    
+    if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+        success = YES;
+        BOOL stop = NO;
+        NSUInteger counter = 0;
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            
+            const unsigned char *resultString = sqlite3_column_text(statement, 0);
+            NSString *tableName = @((char *)resultString);
+            
+            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
+            [result addObject:databaseTable];
+            block(databaseTable, counter, &stop);
+            if (stop) break;
+            counter++;
+        }
+    }
+    sqlite3_finalize(statement);
+    sqlite3_free(sql);
+    completion(success, nil, result);
+    
+}
+
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         completion(success, error, tables);
