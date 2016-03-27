@@ -55,7 +55,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_url == nil) {
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {

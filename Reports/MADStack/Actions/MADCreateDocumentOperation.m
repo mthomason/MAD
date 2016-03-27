@@ -34,10 +34,12 @@
     
     if (self = [super init]) {
     
-        MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename:filename
-        pathExtension: MADFileExtentionMobleApplicationDocument andDocumentsDirectory: documentsDirectory];
+        MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
+                                                                                                                     pathExtension: MADFileExtentionMobleApplicationDocument
+                                                                                                             andDocumentsDirectory: documentsDirectory];
         
-        MADGetCredentialsOperation *getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection:databaseConnection viewController:viewController];
+        MADGetCredentialsOperation *getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                     viewController: viewController];
       
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
         [taskBegin addDependency:getCredentials];
@@ -69,8 +71,6 @@
                                                          addConnection,
                                                          importSchema,
                                                          taskEnd];
-        
-        
         
         MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{

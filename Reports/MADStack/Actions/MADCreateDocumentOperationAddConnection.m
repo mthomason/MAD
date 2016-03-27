@@ -41,14 +41,16 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
+    
         if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
             document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
+        
     }
 
     [document activeDocumentModel];

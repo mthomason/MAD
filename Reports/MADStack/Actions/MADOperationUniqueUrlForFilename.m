@@ -9,6 +9,7 @@
 #import "MADOperationUniqueUrlForFilename.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSError.h>
 #import <Foundation/NSPathUtilities.h>
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -38,10 +39,18 @@
 }
 
 - (void)execute {
-    NSString *filename = [self.desiredFilename stringByAppendingPathExtension:self.pathExtension];
-    NSURL *desiredUrl = [self.documentsDirectory URLByAppendingPathComponent: filename isDirectory:NO];
-    NSURL *uniqueUrl = [MADFileUtilities uniqueURLForURL: desiredUrl];
-    self.uniqueUrl = uniqueUrl;
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSURL *uniqueUrl = [MADFileUtilities uniqueUrlInDirectory:self.documentsDirectory
+                                            withDesiredHandle:self.desiredFilename andExtension:self.pathExtension];
+    if (uniqueUrl != nil) {
+        self.uniqueUrl = uniqueUrl;
+        [self finish];
+    } else {
+        NSString *domain = NSStringFromClass(self.class);
+        NSError *error = [NSError errorWithDomain:domain code:389 userInfo:nil];
+        [self finishWithError:error];
+    }
+    
 }
 
 @end

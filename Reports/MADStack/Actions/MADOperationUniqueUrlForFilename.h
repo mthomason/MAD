@@ -16,7 +16,8 @@
 @end
 
 @interface MADOperationUniqueUrlForFilename : MADOperation
-
+    <MADOperationUniqueUrlForFilenameProtocol>
+    
     - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
                       andDocumentsDirectory:(NSURL *)documentsDirectory;
 

@@ -14,13 +14,12 @@
 @class MADocument;
 
 @protocol MADCreateDocumentOperationCreateDocumentProtocol <NSObject>
-
     @property (readonly) MADocument *document;
-
 @end
 
 @interface MADCreateDocumentOperationCreateDocument : MADOperation
-
+    <MADCreateDocumentOperationCreateDocumentProtocol>
+    
 @end
 
 #endif

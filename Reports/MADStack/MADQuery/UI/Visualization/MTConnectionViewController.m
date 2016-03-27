@@ -41,6 +41,8 @@
 
 #import "MADDatabaseOperationTestConnection.h"
 
+#import "MADCreateDocumentOperation.h"
+
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
@@ -211,7 +213,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     // Operation: Get credentials.
     // ---------------------------------------------------
-    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection viewController: self];
+    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                          viewController: self];
     [getCredentialsOperation addObserver:self];
     
     [self.credentialQueue addOperation: getCredentialsOperation];
@@ -258,10 +261,16 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
                                                                                                   host:self.textFieldHost.text
                                                                                               database:self.textFieldDatabase.text
                                                                                                   port:self.textFieldPort.text.integerValue];
+    
+    //[self getCredentialsForDatabaseConnection: databaseConnection];
+    
+    
+    MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename:filename
+                                                                                   documentsDirectory:self.saveFileDelegate.documentDirectory
+                                                                                   databaseConnection:databaseConnection viewController:self];
+    [self.credentialQueue addOperation:createDocument];
+    
     self.databaseConnection = databaseConnection;
-    
-    
-    [self getCredentialsForDatabaseConnection: databaseConnection];
     
     
     /*

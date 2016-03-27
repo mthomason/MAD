@@ -27,7 +27,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
+    NSLog(@"%s", __PRETTY_FUNCTION__);
      self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
         self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
