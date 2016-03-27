@@ -63,18 +63,57 @@
     return NSStringFromClass([self class]);
 }
 
++ (NSString *)tableForField:(MYSQL_FIELD)field NS_RETURNS_RETAINED {
+    NSString *table = [[NSString alloc]  initWithBytes: field.table
+                                                length: field.table_length
+                                              encoding: NSUTF8StringEncoding];
+    return table;
+}
+
++ (NSString *)fieldNameForField:(MYSQL_FIELD)field andTable:(NSString *)table NS_RETURNS_RETAINED {
+    NSString *fieldKeyName = [self fieldNameForField:field];
+    NSString *fieldName;
+    fieldName = table.length > 0 ? [[NSString alloc] initWithFormat:@"`%@`.`%@`", table, fieldKeyName] :
+                                   [[NSString alloc] initWithFormat:@"`%@`", fieldKeyName];
+    return fieldName;
+}
+
+
++ (NSString *)fieldNameForField:(MYSQL_FIELD)field NS_RETURNS_RETAINED {
+    NSString *fieldName = [[NSString alloc]  initWithBytes: field.name
+                                                    length: field.name_length
+                                                  encoding: NSUTF8StringEncoding];
+    return fieldName;
+}
+
++ (MTDataColumn *)dataColumnForFieldName:(NSString *)fieldName mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
+    
+    MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
+    
+    NSInteger ftype = myField.type;
+    NSNumber *fieldType = @(ftype);
+    NSNumber *fieldLength = @(myField.length);
+    NSNumber *fieldPercision = @(myField.decimals);
+    NSNumber *fieldTypeMad = @(0);
+    
+    dataColumn.fieldName = fieldName;
+    dataColumn.nativeColumnType = fieldType;
+    dataColumn.dataLength = fieldLength;
+    dataColumn.dataPercision = fieldPercision;
+    dataColumn.columnType = fieldTypeMad;
+    dataColumn.primaryKey = IS_PRI_KEY(myField.flags) ? YES : NO;
+    
+    NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
+    [dataColumn setColumnType:cType];
+
+    return dataColumn;
+}
 
 - (MTDataTable *)fetchWithCommand: (NSString *)command
                         dataTable: (MTDataTable **)dataTable
                      onConnection: (MysqlConnection *)connection
                     extendedNames: (BOOL)useExtendedNames
-                            error: (NSError * __autoreleasing *)error
-                           /*status: (void (^)(NSString *status, CGFloat progress))status
-                 beginBulkInserts: (void (^)())beginBulkInserts
-                        addColumn: (MTDataColumn *)addColumn
-                           addRow: (void (^)())addRow
-                   endBulkInserts: (void (^)())endBulkInserts
-                       completion: (void(^)(BOOL success, MADErrorContainer *error))completion*/ {
+                            error: (NSError * __autoreleasing *)error {
 
     MysqlFetch *mf = [[MysqlFetch alloc] init];
     NSError *errorFetch = nil;
@@ -86,9 +125,13 @@
     }
     
     if (errorFetch == nil) {
+
         MYSQL_STMT *myStatement = mysql_stmt_init(connection.connection);
-        const char *cCommand = [command UTF8String];
+
+        const char *cCommand = command.UTF8String;
+
         int prepareResult = mysql_stmt_prepare(myStatement, cCommand, strlen(cCommand));
+
         if (prepareResult) {
             const char *err = mysql_stmt_error(myStatement);
             unsigned int code = mysql_stmt_errno(myStatement);
@@ -102,7 +145,7 @@
             
             // build out and connect the bindings
             
-            MYSQL_BIND *bindings = calloc(myStatement->field_count,sizeof(MYSQL_BIND));
+            MYSQL_BIND *bindings = calloc(myStatement->field_count, sizeof(MYSQL_BIND));
             
             // Notes on how MySQL numeric datatypes are handled in the code following:
             //
@@ -128,63 +171,24 @@
             [*dataTable removeAllObjects];
             
             for (NSUInteger x=0; x < myStatement->field_count;x++) {
-                NSString *table=[[NSString alloc]  initWithBytes:myStatement->fields[x].table
-                                                          length:myStatement->fields[x].table_length
-                                                        encoding:NSUTF8StringEncoding];
+            
+                NSString *table = [MysqlFetch tableForField: myStatement->fields[x]];
                 [sourceTables addObject:table];
                 
-                NSString *fieldName;
-                if (useExtendedNames || [sourceTables count]>1){
-                    NSString *fieldKeyName=[[NSString alloc]  initWithBytes:myStatement->fields[x].name
-                                                                     length:myStatement->fields[x].name_length
-                                                                   encoding:NSUTF8StringEncoding];
-                    if ([table length] > 0) {
-                        fieldName=[[NSString alloc] initWithFormat:@"`%@`.`%@`", table, fieldKeyName];
-                    } else {
-                        fieldName=[[NSString alloc] initWithFormat:@"`%@`", fieldKeyName];
-                    }
-                } else {
-                    fieldName= [[NSString alloc]  initWithBytes: myStatement->fields[x].name
-                                                         length: myStatement->fields[x].name_length
-                                                       encoding: NSUTF8StringEncoding];
-                }
+                NSString *fieldName = useExtendedNames || sourceTables.count > 1 ? [MysqlFetch fieldNameForField:myStatement->fields[x] andTable:table] :
+                                                                                   [MysqlFetch fieldNameForField:myStatement->fields[x]];
                 [fieldNameCollector addObject:fieldName];
                 
-                MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
-                
-                MysqlFetchField *field = [[MysqlFetchField alloc] init];
-                
-                
+                MysqlFetchField *field = [[MysqlFetchField alloc] initWithField:myStatement->fields[x] fieldName:fieldName];
                 [fieldCollector addObject:field];
-                field.name=fieldName;
-                field.width=myStatement->fields[x].length;
-                field.decimals=myStatement->fields[x].decimals;
-                field.fieldType=myStatement->fields[x].type;
-                if (IS_PRI_KEY(myStatement->fields[x].flags)) field.primaryKey=YES;
                 
-                bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
-                
-                NSInteger ftype = myStatement->fields[x].type;
-                NSNumber *fieldType = @(ftype);
-                NSNumber *fieldLength = @(myStatement->fields[x].length);
-                NSNumber *fieldPercision = @(myStatement->fields[x].decimals);
-                NSNumber *fieldTypeMad = @(0);
-                
-                [dataColumn setFieldName:field.name];
-                [dataColumn setNativeColumnType:fieldType];
-                [dataColumn setDataLength:fieldLength];
-                [dataColumn setDataPercision:fieldPercision];
-                [dataColumn setColumnType:fieldTypeMad];
-                [dataColumn setPrimaryKey:field.primaryKey];
-                
-                NSNumber *cType = @([MTDataTypeMySQL dataTypeForNativeType:ftype]);
-                [dataColumn setColumnType:cType];
-                
+                MTDataColumn *dataColumn = [MysqlFetch dataColumnForFieldName:fieldName mySqlField:myStatement->fields[x]];
                 [*dataTable addColumn:dataColumn];
                 
+                bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
+
             }
             
-            //[*dataTable beginBulkInsert];
             
             [mf setFieldNames:fieldNameCollector];
             [mf setFields:fieldCollector];
@@ -414,21 +418,25 @@ char *mySQLTypeForType(int type) {
                                         if ([theDataString isKindOfClass:[NSString class]]) {
                                             // FIXME: This is a hack.
                                             if (rowCounter == 0) {
-                                                MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
-                                                NSNumber * __autoreleasing columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
+                                                NSString *columnKeys = (*dataTable).columnKeys[x];
+                                                MTDataColumn *column = (*dataTable).columns[columnKeys];
+                                                
+                                                NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
                                                 [column setColumnType:columnTypeString];
+                                                
                                             }
                                             if (theDataString.length != 0) {
                                                 dict[key] = theDataString;
                                             } else {
-                                                NSData * __autoreleasing theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
+                                            
+                                                NSData *theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
                                                 dict[key] = theData;
                                                 
                                             }
                                         } else if ([theDataString isKindOfClass:[NSNumber class]]) {
                                             if (rowCounter == 0) {
                                                 MTDataColumn *column = [*dataTable columns][[*dataTable columnKeys][x]];
-                                                NSNumber * __autoreleasing columnTypeString = [NSNumber numberWithUnsignedInteger: MTDataTypeInteger];
+                                                NSNumber *columnTypeString = [NSNumber numberWithUnsignedInteger: MTDataTypeInteger];
                                                 [column setColumnType:columnTypeString];
                                             }
                                             dict[key] = theDataString;
@@ -437,7 +445,7 @@ char *mySQLTypeForType(int type) {
                                         }
                                     }
                                     if (![dict[key] respondsToSelector:@selector(compare:)]) {
-                                        NSString * __autoreleasing utf8String = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
+                                        NSString *utf8String = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
                                         dict[key] = utf8String;
                                     }
                                 } else {
@@ -457,9 +465,9 @@ char *mySQLTypeForType(int type) {
                         case MYSQL_TYPE_BIT:
                         {
                             // TODO - the encoding type should really be read from mysql
-                            NSString * __autoreleasing theString = [[NSString alloc] initWithBytes: bindings[x].buffer
-                                                                                            length: *(bindings[x].length)
-                                                                                          encoding: NSUTF8StringEncoding];
+                            NSString * theString = [[NSString alloc] initWithBytes: bindings[x].buffer
+                                                                            length: *(bindings[x].length)
+                                                                          encoding: NSUTF8StringEncoding];
                             dict[key] = theString;
                         } break;
                             

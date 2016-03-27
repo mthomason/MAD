@@ -10,6 +10,7 @@
 #define MAD_MysqlFetchField_h
 
 #import <Foundation/NSObject.h>
+#import "mysql.h"
 
 @interface MysqlFetchField : NSObject
 
@@ -18,6 +19,8 @@
     @property(assign) NSUInteger width;
     @property(assign) NSUInteger decimals;
     @property(assign) BOOL primaryKey;
+
+    - (instancetype)initWithField:(MYSQL_FIELD)field fieldName:(NSString *)fieldName;
 
 @end
 

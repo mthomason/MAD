@@ -435,10 +435,13 @@
                         @autoreleasepool {
                             
                             NSString * __weak name = databaseTable.name;
+                            
                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+
                                 dispatch_sync(queueMain, ^{
                                     status(name, (counter + 1) / numberOfTables);
                                 });
+                            
                             });
                             
                             NSError *getFieldsError = NULL;
