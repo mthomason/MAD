@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
     <NSCoding, NSFastEnumeration>
 
 @property (nonatomic, strong, readwrite) NSString *name;
-@property (nonatomic, strong, readwrite) NSMutableArray <NSString *> *columnKeys;
+@property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
 @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;

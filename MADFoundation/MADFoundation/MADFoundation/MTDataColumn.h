@@ -27,15 +27,15 @@
 @property (nonatomic, assign, getter = isNotNull) bool notNull;
 @property (nonatomic, assign, getter = isAutoIncrement) bool autoIncrement;
 
-- (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
-- (instancetype)initWithPlist:(id)plist;
+    - (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
+    - (instancetype)initWithPlist:(id)plist;
 
-- (NSDictionary *)plist;
-- (void)removeAllObjects;
+    - (NSDictionary *)plist;
+    - (void)removeAllObjects;
 
-- (void)addObject:(id)object;                           //Adds to end of column data
-- (instancetype)objectAtIndex:(NSUInteger)index;        //Object at row number
-- (void)addRows:(NSUInteger)count;                      //Adds specifc number of rows with default value.
+    - (void)addObject:(id)object;                           //Adds to end of column data
+    - (instancetype)objectAtIndex:(NSUInteger)index;        //Object at row number
+    - (void)addRows:(NSUInteger)count;                      //Adds specifc number of rows with default value.
 
 @end
 
