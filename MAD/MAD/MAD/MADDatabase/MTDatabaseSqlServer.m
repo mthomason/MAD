@@ -75,6 +75,63 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     [self.errors addObject:notification.object];
 }
 
+- (void)enumerateTablesFromConnection:(id)process
+                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    id results = nil;
+    NSError *error = nil;
+    DBPROCESS *dbconn = [process process];
+    if (dbconn) {
+        
+        dbcmd(dbconn, "SELECT name FROM sys.tables");
+        
+        RETCODE success = dbsqlexec(dbconn);
+        
+        if (success != SUCCEED) {
+            
+            NSString *message = @"Sql Syntax Error";
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            error = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
+            
+        }
+        
+        int numberOfColumns = dbnumcols(dbconn);
+        
+        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
+        
+        while (dbresults(dbconn) != NO_MORE_RESULTS) {
+            
+            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+            DBINT columnLength      = dbcollen(dbconn, 1);
+            char *sybVarCharBind;
+            DBINT sybVarCharBindNull;
+            
+            sybVarCharBind = malloc((size_t) sizeof(char) * (unsigned long)( columnLength + 1 ) );
+            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
+            dbnullbind(dbconn, 1, &sybVarCharBindNull);
+            
+            NSUInteger counter = 0;
+            BOOL stop = NO;
+            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                
+                if (sybVarCharBindNull != -1) {
+                    if (sybVarCharBind != nil) {
+                        NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                       encoding: NSStringEncodingConversionAllowLossy];
+                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                        [results addObject:table];
+                        block(table, counter, &stop);
+                        if (stop) break;
+                        counter++;
+                    }
+                }
+            }
+            free(sybVarCharBind);
+        }
+    }
+    completion(error == nil, error, results);
+}
+
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     
     id results = nil;
