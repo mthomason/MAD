@@ -440,7 +440,8 @@
                             
                             NSError *getFieldsError = NULL;
                             NSArray *fieldsForTable = [weakDatabase3 fieldsForTable:databaseTable.name connection:weakdbconnection error:&getFieldsError];
-                            NSArray *fields = fieldsForTable.copy;
+                            
+                            NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
                             tablesAndFields[databaseTable.name] = fields;
                             
                         }
