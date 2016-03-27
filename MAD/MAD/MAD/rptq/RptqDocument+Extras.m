@@ -398,7 +398,7 @@
     [self storeDatabaseConnectionDefination:database];
     
     __block MADErrorContainer *errorContainer = [MADErrorContainer new];
-    RptqDocument * __weak rptqDocument = self;
+    //RptqDocument * __weak rptqDocument = self;
     
     MTDatabase * __weak weakDatabase = database;
     id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
@@ -422,7 +422,7 @@
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
         // Operation: Get tables
-        dispatch_async(queueTables, ^{
+        //dispatch_async(queueTables, ^{
             
             MTDatabase * __weak weakDatabase3 = weakDatabase2;
             [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
@@ -476,7 +476,7 @@
                 }
             }];
             
-        });
+        //});
         
         
     } else {

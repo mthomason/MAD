@@ -9,6 +9,7 @@
 #import "MADCreateDocumentOperationCreateDocument.h"
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
+#import "MADOperationUniqueUrlForFilename.h"
 
 @interface MADCreateDocumentOperationCreateDocument ()
     <MADocumentDelegate>
@@ -54,6 +55,14 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    
+    if (_url == nil) {
+        for (NSOperation *dependency in self.dependencies) {
+            if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {
+                _url = ((NSObject <MADOperationUniqueUrlForFilenameProtocol> *)dependency).uniqueUrl.copy;
+            }
+        }
+    }
     
     //Create MADocument File and Remove Cache
     MADocument *document = [[MADocument alloc] initWithFileURL: self.url];

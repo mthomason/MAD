@@ -8,7 +8,9 @@
 
 #import "MADCreateDocumentOperation.h"
 #import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADConstants.h>
 
+#import "MADOperationUniqueUrlForFilename.h"
 #import "MADGetCredentialsOperation.h"
 #import "MADCreateDocumentOperationCreateDocument.h"
 #import "MADOperationBackgroundTaskBegin.h"
@@ -26,17 +28,22 @@
     NSLog(@"Operation deallocated.");
 }
 
-- (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
-                            viewController: (UIViewController *)viewController {
+- (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
+              databaseConnection: (MTDatabaseConnection *)databaseConnection
+                  viewController: (UIViewController *)viewController {
     
     if (self = [super init]) {
     
+        MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename:filename
+        pathExtension: MADFileExtentionMobleApplicationDocument andDocumentsDirectory: documentsDirectory];
+        
         MADGetCredentialsOperation *getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection:databaseConnection viewController:viewController];
       
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
         [taskBegin addDependency:getCredentials];
         
         MADCreateDocumentOperationCreateDocument *createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
+        [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];
         
 
@@ -55,9 +62,12 @@
         
         
         
-        NSArray <__kindof NSOperation *> *operations = @[getCredentials,
+        NSArray <__kindof NSOperation *> *operations = @[uniqueUrlForFilename,
+                                                         getCredentials,
                                                          taskBegin,
                                                          createDocument,
+                                                         addConnection,
+                                                         importSchema,
                                                          taskEnd];
         
         

@@ -218,6 +218,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
     self.getCredentialsOperation = getCredentialsOperation;
 
+
+
+
     return nil;
 }
 
@@ -241,6 +244,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
     NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
     
+    
+    
     //Create MADocument File and Remove Cache
     MADocument *doc = [[MADocument alloc] initWithFileURL: uniqueURL];
     doc.documentDelegate = self;
@@ -258,6 +263,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     [self getCredentialsForDatabaseConnection: databaseConnection];
     
+    
+    /*
     
     //Mark the start of a background task
     __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
@@ -312,8 +319,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
         [self resetAfterConnectionString: self.databaseConnection.connectionString
                               failedTest: errors];
     }
-    
     errors = NULL;
+     */
  
 }
 

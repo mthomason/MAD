@@ -15,8 +15,9 @@
 
 @interface MADCreateDocumentOperation : MADGroupOperation
 
-    - (instancetype)initWithDatabaseConnection: (MTDatabaseConnection *)databaseConnection
-                                viewController: (UIViewController *)viewController;
+    - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
+                  databaseConnection: (MTDatabaseConnection *)databaseConnection
+                      viewController: (UIViewController *)viewController;
 
 @end
 

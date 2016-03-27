@@ -797,6 +797,7 @@
 		4CA0C6C01CA5499400222B8D /* MADOperationBackgroundTaskEnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */; };
 		4CA0C6C31CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */; };
 		4CA0C6D01CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */; };
+		4CA0C6D51CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -2037,6 +2038,8 @@
 		4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationAddConnection.m; sourceTree = "<group>"; };
 		4CA0C6CE1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationImportSchema.h; sourceTree = "<group>"; };
 		4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationImportSchema.m; sourceTree = "<group>"; };
+		4CA0C6D31CA7D17000222B8D /* MADOperationUniqueUrlForFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationUniqueUrlForFilename.h; sourceTree = "<group>"; };
+		4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationUniqueUrlForFilename.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -4285,6 +4288,8 @@
 				4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */,
 				4CA0C6BE1CA5499400222B8D /* MADOperationBackgroundTaskEnd.h */,
 				4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */,
+				4CA0C6D31CA7D17000222B8D /* MADOperationUniqueUrlForFilename.h */,
+				4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */,
 			);
 			name = Document;
 			sourceTree = "<group>";
@@ -6101,6 +6106,7 @@
 				4CA0C6C01CA5499400222B8D /* MADOperationBackgroundTaskEnd.m in Sources */,
 				4C26B9C91BAF123A00456DC8 /* MADTabBarController.m in Sources */,
 				4C59BDC71C9AB5540031BC6C /* MADOperationConditionMissingResultString.m in Sources */,
+				4CA0C6D51CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m in Sources */,
 				4CC886031C7AA861003E18D2 /* UIStoryboard+About.m in Sources */,
 				4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */,
 				4C4020451BAE92F200BAE5FC /* NSLayoutConstraint+Extras.m in Sources */,

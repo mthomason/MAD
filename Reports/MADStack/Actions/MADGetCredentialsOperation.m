@@ -74,7 +74,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         // Operation 2: Prompt for credentials if condition is met.
         // Conditions:  Username is missing.
         // ---------------------------------------------------
-        MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithUsernameKey:keyUsername passwordKey:keyPassword andViewController:viewController];
+        MADPromptOperationCredentials *promptCredntials = [[MADPromptOperationCredentials alloc] initWithUsernameKey: keyUsername passwordKey: keyPassword
+                                                                                                   andViewController: viewController];
         [promptCredntials addDependency:getUsername];
         
         // Condition: Username is missing.
@@ -86,7 +87,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         // Operation 3: Read password
         // Conditions:  Username is found.
         // ---------------------------------------------------
-        MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey:keyPassword withDescription:MTKeyChainPasswordAccountDesc];
+        MADKeyChainOperationGet *getPassword = [[MADKeyChainOperationGet alloc] initWithKey: keyPassword
+                                                                            withDescription: MTKeyChainPasswordAccountDesc];
         getPassword.readOperationType = MADKeyChainReadOperationTypePassword;
         [getPassword addDependency:getUsername];
         
@@ -132,7 +134,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         [testConnectionOperationCredentials addCondition: promptForCredentialsAffirmative];
         
         // ---------------------------------------------------
-        // Operation 5a: Test the connection (password prompt)
+        // Operation 5b: Test the connection (password prompt)
         // ---------------------------------------------------
         MADDatabaseOperationTestConnection *testConnectionOperationPassword = [[MADDatabaseOperationTestConnection alloc] initWithDatabaseConnection: databaseConnection];
         [testConnectionOperationPassword addDependency:getUsername];
@@ -143,7 +145,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         [testConnectionOperationPassword addCondition: promptForPasswordAffirmative];
 
         // ---------------------------------------------------
-        // Operation 5b: Display connection error if one exist
+        // Operation 5c: Display connection error if one exist
         // ---------------------------------------------------
         
         MADPromptOperationDisplayError *displayErrorCredentials = [[MADPromptOperationDisplayError alloc] initWithViewController:viewController];
@@ -153,7 +155,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         [displayErrorPassword addDependency:testConnectionOperationPassword];
         
         // ---------------------------------------------------
-        // Operation 5: Prompt save username and password
+        // Operation 5d: Prompt save username and password
         // Conditions:  User entered a username and password.
         // ---------------------------------------------------
         MADPromptOperationPolarQuestion *promptSaveCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messageCredntialsPrompt viewController:viewController];

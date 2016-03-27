@@ -210,14 +210,14 @@
               withDesiredHandle:(NSString *)desiredFileHandle
                    andExtension:(NSString *)extension {
     
-    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
     NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
     NSURL *fileUrl = extension.length > 0 ?
     [baseUrl URLByAppendingPathExtension: extension] :
     baseUrl;
     NSInteger ctr = 0;
     BOOL isDir1;
-    while ([defaultFileManager fileExistsAtPath:fileUrl.path isDirectory:&isDir1] || [defaultFileManager isUbiquitousItemAtURL:fileUrl]) {
+    while ([[NSFileManager defaultManager] fileExistsAtPath:fileUrl.path isDirectory:&isDir1] ||
+           [[NSFileManager defaultManager] isUbiquitousItemAtURL:fileUrl]) {
         
         NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
         NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
