@@ -18,8 +18,7 @@
 @dynamic didRefresh;
 
 - (instancetype)initWithQuery:(MTQuery *)query {
-    self = [super initWithQuery:query];
-    if (self) {
+    if (self = [super initWithQuery:query]) {
 
         self.query = query;
         self.didRefresh = NO;
@@ -30,8 +29,6 @@
 
 #pragma mark - Reading cached data
 
-- (BOOL)needsFormat {
-    return [super needsFormat];
-}
+- (BOOL)needsFormat { return [super needsFormat]; }
 
 @end

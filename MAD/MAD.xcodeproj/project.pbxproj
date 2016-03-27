@@ -981,6 +981,10 @@
 				4C401E001BAE3CAD00BAE5FC /* MTReportFormatterPageDefinition.m */,
 				4C0590CD1C7B6F3C00A1EC4A /* MTReportFormatterState.h */,
 				4C0590CE1C7B6F3C00A1EC4A /* MTReportFormatterState.m */,
+				4CC283141BADE85000775B72 /* MTTableFormatter.h */,
+				4CC283151BADE85000775B72 /* MTTableFormatter.m */,
+				4CC282281BADE81A00775B72 /* MADDataFormatter.h */,
+				4CC282291BADE81A00775B72 /* MADDataFormatter.m */,
 			);
 			name = MADReportFormatter;
 			sourceTree = "<group>";
@@ -1064,10 +1068,9 @@
 		4C95C84F1BADE77100459CB0 /* MAD */ = {
 			isa = PBXGroup;
 			children = (
+				4CA0C6D11CA79E7000222B8D /* Misc */,
 				4CC281F21BADE80500775B72 /* MADConstants.h */,
 				4CC281F31BADE80500775B72 /* MADConstants.m */,
-				4C24809A1C8B20E00058E6B4 /* MADFonts.h */,
-				4C24809B1C8B20E00058E6B4 /* MADFonts.m */,
 				4CA0C6C41CA564C000222B8D /* Notifications */,
 				4C401E5D1BAE4F2F00BAE5FC /* Categories */,
 				4C401E4C1BAE4E8200BAE5FC /* MADDataTable */,
@@ -1080,16 +1083,10 @@
 				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
 				4CC2820D1BADE81A00775B72 /* MTAlignment.h */,
 				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
-				4CC282361BADE81A00775B72 /* MADFont.h */,
-				4CC282371BADE81A00775B72 /* MADFont.m */,
-				4CC282381BADE81A00775B72 /* MTKeyChain.h */,
-				4CC282391BADE81A00775B72 /* MTKeyChain.m */,
 				4CC283C51BADE8EA00775B72 /* RptqDocumentSectionEnumerator.h */,
 				4CC283C61BADE8EA00775B72 /* RptqDocumentSectionEnumerator.m */,
 				4CC283121BADE85000775B72 /* MTReportViewerPrintPageRenderer.h */,
 				4CC283131BADE85000775B72 /* MTReportViewerPrintPageRenderer.m */,
-				4CC283141BADE85000775B72 /* MTTableFormatter.h */,
-				4CC283151BADE85000775B72 /* MTTableFormatter.m */,
 				4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */,
 				4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */,
 				4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */,
@@ -1098,8 +1095,6 @@
 				4CC282091BADE81A00775B72 /* MADActivityIndicator.m */,
 				4CC2820A1BADE81A00775B72 /* MTActivityItemProviderPdf.h */,
 				4CC2820B1BADE81A00775B72 /* MTActivityItemProviderPdf.m */,
-				4CC282281BADE81A00775B72 /* MADDataFormatter.h */,
-				4CC282291BADE81A00775B72 /* MADDataFormatter.m */,
 				4CC282341BADE81A00775B72 /* MADErrorContainer.h */,
 				4CC282351BADE81A00775B72 /* MADErrorContainer.m */,
 				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
@@ -1156,6 +1151,19 @@
 				4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */,
 			);
 			name = Notifications;
+			sourceTree = "<group>";
+		};
+		4CA0C6D11CA79E7000222B8D /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				4C24809A1C8B20E00058E6B4 /* MADFonts.h */,
+				4C24809B1C8B20E00058E6B4 /* MADFonts.m */,
+				4CC282361BADE81A00775B72 /* MADFont.h */,
+				4CC282371BADE81A00775B72 /* MADFont.m */,
+				4CC282381BADE81A00775B72 /* MTKeyChain.h */,
+				4CC282391BADE81A00775B72 /* MTKeyChain.m */,
+			);
+			name = Misc;
 			sourceTree = "<group>";
 		};
 		4CC283C91BADE90600775B72 /* rptq */ = {

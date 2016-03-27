@@ -1441,8 +1441,8 @@
 		4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationControllerHideBottomBarUnlicensed.m; sourceTree = "<group>"; };
 		4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerDynamicItem.h; sourceTree = "<group>"; };
 		4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
-		4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectionViewController.h; sourceTree = "<group>"; };
-		4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectionViewController.m; sourceTree = "<group>"; };
+		4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTConnectionViewController.h; path = Visualization/MTConnectionViewController.h; sourceTree = "<group>"; };
+		4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTConnectionViewController.m; path = Visualization/MTConnectionViewController.m; sourceTree = "<group>"; };
 		4C26BA781BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorViewController.h; sourceTree = "<group>"; };
 		4C26BA791BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorViewController.m; sourceTree = "<group>"; };
 		4C26BA841BAF9B3000456DC8 /* MADObjectIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADObjectIdentifier.h; sourceTree = "<group>"; };
@@ -2904,8 +2904,6 @@
 				4C8DE28E1BAFB26700AD1111 /* MADQueryVisualization.storyboard */,
 				4C26BA1A1BAF150F00456DC8 /* MADQueryVisualizationViewController.h */,
 				4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */,
-				4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */,
-				4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */,
 				4C26BA121BAF150F00456DC8 /* MADQueryVisualizationCacheData.h */,
 				4C26BA131BAF150F00456DC8 /* MADQueryVisualizationCacheData.m */,
 				4C26BA141BAF150F00456DC8 /* MADQueryVisualizationDefination.h */,
@@ -3536,33 +3534,12 @@
 		4C401F121BAE703200BAE5FC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */,
+				4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */,
+				4CA0C6D21CA79F0C00222B8D /* Misc */,
 				4C401F131BAE703200BAE5FC /* Cells */,
 				4C26BA771BAF9AA700456DC8 /* DatabaseSelector */,
 				4C26BA111BAF150F00456DC8 /* Visualization */,
-				4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.h */,
-				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */,
-				4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */,
-				4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */,
-				4C4020D11BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.h */,
-				4C4020D21BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m */,
-				4C4020D31BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.h */,
-				4C4020D41BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m */,
-				4C4020D71BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.h */,
-				4C4020D81BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m */,
-				4C4020D91BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.h */,
-				4C4020DA1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m */,
-				4C26BA6B1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
-				4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
-				4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */,
-				4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */,
-				4C8DE2701BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.h */,
-				4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */,
-				4C4020771BAE966000BAE5FC /* MADQueryNavigationController.h */,
-				4C4020781BAE966000BAE5FC /* MADQueryNavigationController.m */,
-				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
-				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
-				4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */,
-				4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -4321,6 +4298,37 @@
 				4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */,
 			);
 			name = Startup;
+			sourceTree = "<group>";
+		};
+		4CA0C6D21CA79F0C00222B8D /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.h */,
+				4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerSplitParentViewController.m */,
+				4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */,
+				4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */,
+				4C4020D11BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.h */,
+				4C4020D21BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m */,
+				4C4020D31BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.h */,
+				4C4020D41BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstTableViewController.m */,
+				4C4020D71BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.h */,
+				4C4020D81BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondFieldViewController.m */,
+				4C4020D91BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.h */,
+				4C4020DA1BAE988900BAE5FC /* MTQueryBuilderAddLinkSecondTableViewController.m */,
+				4C26BA6B1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
+				4C26BA6C1BAF9A7300456DC8 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
+				4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */,
+				4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */,
+				4C8DE2701BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.h */,
+				4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */,
+				4C4020771BAE966000BAE5FC /* MADQueryNavigationController.h */,
+				4C4020781BAE966000BAE5FC /* MADQueryNavigationController.m */,
+				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
+				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
+				4CFEE8221BB7AE0800AFAA0A /* UINavigationController+MADQuery.h */,
+				4CFEE8231BB7AE0800AFAA0A /* UINavigationController+MADQuery.m */,
+			);
+			name = Misc;
 			sourceTree = "<group>";
 		};
 		4CB56E581AC683CC00756775 /* atomic */ = {

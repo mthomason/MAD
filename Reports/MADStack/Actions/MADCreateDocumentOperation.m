@@ -39,9 +39,13 @@
         MADCreateDocumentOperationCreateDocument *createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
         [createDocument addDependency:taskBegin];
         
+
         MADCreateDocumentOperationAddConnection *addConnection = [[MADCreateDocumentOperationAddConnection alloc] initWithDatabaseConnection:databaseConnection];
         [addConnection addDependency:createDocument];
         
+        
+        
+
         MADCreateDocumentOperationImportSchema *importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
         [importSchema addDependency:addConnection];
         
