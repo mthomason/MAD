@@ -142,7 +142,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (void)enumerateTablesFromConnection:(id)process
-                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     
     NSMutableArray *result = [[NSMutableArray alloc] init];

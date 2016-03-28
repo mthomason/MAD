@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeVerify
 };
 
-@class MADCredential, MTDatabaseConnection, MTDatabase, MTQuery, MTDataTable;
+@class MADCredential, MTDatabaseConnection, MTDatabase, MTDatabaseTable, MTQuery, MTDataTable;
 
 @protocol MTDatabaseProtocol <NSObject>
 @required
@@ -88,8 +88,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)readRow:(NSUInteger)row;
 
 - (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
-                           completion:(void (^)(BOOL, NSError *, NSArray *))completion;
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 

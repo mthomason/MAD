@@ -80,8 +80,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (void)enumerateTablesFromConnection:(id)process
-                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
-                           completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
     id results = nil;
     NSError *error = nil;
     DBPROCESS *dbconn = [process process];

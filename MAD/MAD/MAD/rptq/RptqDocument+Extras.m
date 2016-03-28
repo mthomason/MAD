@@ -396,26 +396,22 @@
     
     __block MADErrorContainer *errorContainer = [MADErrorContainer new];
     
-    MTDatabase * __weak weakDatabase = database;
     id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
     
     if (dbconnection) {
-        
-        id __weak weakdbconnection = dbconnection;
-        MTDatabase * __weak weakDatabase2 = weakDatabase;
         
         NSMutableDictionary * __block tablesAndFields   = [[NSMutableDictionary alloc] init];
         NSMutableArray * __block tables                 = [NSMutableArray array];
         BOOL __block gotit                              = YES;
         NSError * __block gotitError                    = nil;
         
-        dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(queueTables, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+        [database enumerateTablesFromConnection:dbconnection usingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+            
+        } completion:^(BOOL success, NSError *errors, NSArray *results) {
+            
+        }];
         
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        
-        MTDatabase * __weak weakDatabase3 = weakDatabase2;
-        [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
+        [database getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
             
             if (success) {
                 
@@ -429,7 +425,7 @@
                         status(name, (counter + 1) / numberOfTables);
                         
                         NSError *getFieldsError = NULL;
-                        NSArray *fieldsForTable = [weakDatabase3 fieldsForTable:databaseTable.name connection:weakdbconnection error:&getFieldsError];
+                        NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
                         
                         NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
                         tablesAndFields[databaseTable.name] = fields;
@@ -443,7 +439,7 @@
                 MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields];
                 [errorContainer addErrorsFromContainer:additionalErrors];
                 
-                [weakDatabase3 closeProcess:weakdbconnection];
+                [database closeProcess:dbconnection];
                 completion(gotit, errorContainer);
                 
             } else {

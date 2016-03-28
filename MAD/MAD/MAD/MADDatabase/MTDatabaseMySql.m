@@ -145,7 +145,7 @@
 }
 
 - (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(id obj, NSUInteger index, BOOL *stop))block
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     NSError *error = nil;
     MysqlConnection *connection = dbconn;
