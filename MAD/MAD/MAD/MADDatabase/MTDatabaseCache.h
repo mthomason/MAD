@@ -14,11 +14,11 @@
 
 @interface MTDatabaseCache : MTDatabase
 
-- (void *)databaseHandle;
-- (BOOL)tableExist:(NSString *)tablename;
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType;
-- (void)beginBulkInsert;
-- (void)endBulkInsert;
+    - (void *)databaseHandle;
+    - (BOOL)tableExist:(NSString *)tablename;
+    - (NSString *)nativeTypeForDataType:(MTDataType)dataType;
+    - (void)beginBulkInsert;
+    - (void)endBulkInsert;
 
 @end
 
