@@ -118,16 +118,17 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
             BOOL stop = NO;
             while (dbnextrow(dbconn) != NO_MORE_ROWS) {
                 
-                if (sybVarCharBindNull != -1) {
-                    if (sybVarCharBind != nil) {
-                        NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
-                                                                       encoding: NSStringEncodingConversionAllowLossy];
-                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                        [results addObject:table];
-                        block(table, counter, &stop);
-                        if (stop) break;
-                        counter++;
-                    }
+                if (sybVarCharBindNull != -1 && sybVarCharBind != NULL) {
+                    
+                    NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                   encoding: NSStringEncodingConversionAllowLossy];
+                    
+                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                    [results addObject:table];
+                    
+                    block(table, counter, &stop);
+                    if (stop) break;
+                    counter++;
                 }
             }
             free(sybVarCharBind);
