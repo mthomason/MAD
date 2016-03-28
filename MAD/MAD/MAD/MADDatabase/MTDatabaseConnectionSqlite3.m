@@ -46,4 +46,9 @@
     return url;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithUrl:self.databaseUrl];
+    return copy;
+}
+
 @end

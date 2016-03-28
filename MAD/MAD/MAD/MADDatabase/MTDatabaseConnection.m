@@ -39,7 +39,7 @@ NSString * const MADStringEmpty = @"";
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self setDatabaseTypeIdentifier: nil];
+        _databaseTypeIdentifier = nil;
     }
     return self;
 }
@@ -78,6 +78,13 @@ NSString * const MADStringEmpty = @"";
     
     return resultCredentals;
 
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] init];
+    id databaseTypeIdentifier = [self.databaseTypeIdentifier copyWithZone:zone];
+    ((MTDatabaseConnection *)copy).databaseTypeIdentifier = databaseTypeIdentifier;
+    return copy;
 }
 
 + (instancetype)databaseConnectionFactory:(id)connectionObject NS_RETURNS_RETAINED {

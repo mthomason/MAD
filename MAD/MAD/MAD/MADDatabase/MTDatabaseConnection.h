@@ -18,6 +18,7 @@ extern NSString * const MADIdentifierDatabaseTDS;
 extern NSString * const MADIdentifierDatabaseSqlite3;
 
 @interface MTDatabaseConnection : NSObject
+    //<NSCopying>
 
     + (NSString *)IPAddressForServer:(NSString *)server;
 

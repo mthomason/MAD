@@ -14,8 +14,9 @@
 
 @interface MTDatabaseConnectionMySql ()
 
-    @property (nonatomic, readwrite, copy)      NSString  *database;
+    @property (nonatomic, readwrite, copy)      NSString  *host;
     @property (nonatomic, readwrite, copy)      NSString  *internalServer;
+    @property (nonatomic, readwrite, copy)      NSString  *database;
     @property (nonatomic, readwrite, assign)    NSInteger port;
 
 @end
@@ -26,6 +27,7 @@
     if (self = [super init]) {
         NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
         NSString *internalServer = [host stringByTrimmingCharactersInSet: whitespace];
+        _host = host;
         _internalServer = internalServer.copy;
         _database = database.copy;
         _port = port;
@@ -54,15 +56,14 @@
     return database;
 }
 
-- (void)setServer:(NSString *)server {
-    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString * __autoreleasing internalServer = [server stringByTrimmingCharactersInSet: whitespace];
-    _internalServer = internalServer.copy;
+- (NSString *)server {
+    NSString * __autoreleasing internalServer = _internalServer.copy;
+    return internalServer;
 }
 
-- (NSString *)server {
-    NSString * __autoreleasing internalServer = self.internalServer.copy;
-    return internalServer;
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host database:self.database andPort:self.port];
+    return copy;
 }
 
 @end

@@ -12,12 +12,12 @@
 #import "MTDatabaseConnection.h"
 
 @interface MTDatabaseConnectionMySql : MTDatabaseConnection
-
+    <NSCopying>
+    
     - (instancetype)initWithHost:(NSString *)host
                         database:(NSString *)database
                          andPort:(NSInteger)port;
 
-    @property (nonatomic, readonly, copy)      NSString  *server;
     @property (nonatomic, readonly, copy)      NSString  *database;
     @property (nonatomic, readonly, assign)    NSInteger port;
 

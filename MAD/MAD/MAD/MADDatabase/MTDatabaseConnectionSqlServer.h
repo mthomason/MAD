@@ -12,7 +12,8 @@
 #import "MTDatabaseConnection.h"
 
 @interface MTDatabaseConnectionSqlServer : MTDatabaseConnection
-
+    <NSCopying>
+    
     - (instancetype)initWithHost:(NSString *)host
                           server:(NSString *)server
                         database:(NSString *)database
