@@ -19,30 +19,31 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
 
 @interface MTDatabaseConnection : NSObject
 
-@property (nonatomic, strong) NSString  *databaseTypeIdentifier;
-@property (nonatomic, strong) NSURL     *databaseUrl;
-@property (nonatomic, strong) NSString  *username;
-@property (nonatomic, strong) NSString  *password;
-@property (nonatomic, strong) NSString  *server;
-@property (nonatomic, strong) NSString  *database;
-@property (nonatomic, strong) NSString  *host;
-@property (nonatomic, assign) NSInteger port;
-@property (nonatomic, strong, readonly) NSString *IPAddressOrServer;
+    + (NSString *)IPAddressForServer:(NSString *)server;
 
-- (NSString *)appname;
+    @property (nonatomic, strong) NSString  *databaseTypeIdentifier;
 
-+ (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier NS_RETURNS_RETAINED;
-+ (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
-                                             host:(NSString *)host
-                                         database:(NSString *)database
-                                             port:(NSInteger)port NS_RETURNS_RETAINED;
-+ (instancetype)databaseConnectionFactory:(id)credentals NS_RETURNS_RETAINED;
 
-- (NSString *)identifier;
-+ (NSString *)identifier;
+    + (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier NS_RETURNS_RETAINED;
 
-- (NSString *)connectionString;
-- (bool)testConnectionWithErrors:(NSArray * __autoreleasing *)errors;
+    + (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
+                                                 host:(NSString *)host
+                                             database:(NSString *)database
+                                                 port:(NSInteger)port NS_RETURNS_RETAINED;
+    + (instancetype)databaseConnectionFactory:(id)credentals NS_RETURNS_RETAINED;
+
+    - (NSString *)appname;
+
+    - (NSString *)identifier;
+    + (NSString *)identifier;
+
+    - (NSString *)connectionString;
+
+    //Convinence functions.. only return valid values if subclasses implement them.
+    - (NSURL *)databaseUrl;
+    - (NSString *)database;
+    - (NSString *)server;
+    - (NSInteger)port;
 
 @end
 

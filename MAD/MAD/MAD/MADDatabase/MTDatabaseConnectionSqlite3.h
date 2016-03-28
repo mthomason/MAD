@@ -13,7 +13,8 @@
 
 @interface MTDatabaseConnectionSqlite3 : MTDatabaseConnection
 
-- (instancetype)initWithUrl:(NSURL *)url;
+    - (instancetype)initWithUrl:(NSURL *)url;
+    @property (nonatomic, readonly, copy) NSURL *databaseUrl;
 
 @end
 

@@ -49,9 +49,13 @@
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>
 
+    @property (nonatomic, strong) MTDatabaseConnectionMySql *databaseConnection;
+
 @end
 
 @implementation MTDatabaseMySql
+
+@dynamic databaseConnection;
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
     return [self.delegate dataTableForQuery:query];
@@ -62,7 +66,7 @@
 }
 
 // FIXME: Return error.
-- (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MTDatabaseConnectionMySql *)connection credentals:(MADCredential *)credentals {
 
     if (credentals == nil) {
         credentals = [self getCredentalsWithConnection:connection];

@@ -378,31 +378,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 }
 
-- (bool)testConnection:(MTDatabaseConnection *)connection withErrors:(NSArray * __autoreleasing *)errors {
-    
-    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: connection];
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypeVirtual);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(connection.hash);
-    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    MTDataTable *datatable = [MTDataTable dataTableFactory:parameters];
-    
-    self.datatableTest = datatable;
-    
-    MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
-    db.delegate = self;
-    queryTest.database = db;
-    self.databaseTest = db;
-    
-    NSError * __autoreleasing error = NULL;
-    bool success = [queryTest.database executeQuery:queryTest withError:&error];
-    if (!success && errors == NULL) {
-        *errors = error ? [queryTest.database.errors arrayByAddingObject:error] : [NSArray arrayWithArray:queryTest.database.errors];
-    }
-    return success;
-}
-
 #pragma mark - MTDatabaseProtocol
 
 - (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {

@@ -33,12 +33,15 @@ NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 
 @property (atomic, assign) sqlite3_stmt *bulkStatement;
 
-@property (nonatomic, assign, getter=isOpen) bool open;
-@property (nonatomic, strong) NSCalendar *currentCalandar;
+    @property (nonatomic, assign, getter=isOpen) bool open;
+    @property (nonatomic, strong) NSCalendar *currentCalandar;
+    @property (nonatomic, strong) MTDatabaseConnectionSqlite3 *databaseConnection;
 
 @end
 
 @implementation MTDatabaseSqlite3
+
+@dynamic databaseConnection;
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2);
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {

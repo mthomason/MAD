@@ -40,9 +40,9 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 @interface MTDatabase : NSObject
 
-@property (nonatomic, weak) id <MTDatabaseProtocol> delegate;
-@property (nonatomic, weak) id <MADErrorHandler> delegateError;
-@property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+    @property (nonatomic, weak) id <MTDatabaseProtocol> delegate;
+    @property (nonatomic, weak) id <MADErrorHandler> delegateError;
+    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
 @property (nonatomic, strong) NSMutableArray *errors;
 

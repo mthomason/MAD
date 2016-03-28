@@ -24,36 +24,22 @@
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
 NSString * const MADIdentifierDatabaseTDS       = @"TDS";
 NSString * const MADIdentifierDatabaseSqlite3   = @"Sqlite 3";
-
 NSString * const MADStringEmpty = @"";
 
 @interface MTDatabaseConnection ()
-
-@property (nonatomic, strong) NSString *internalServer;
 
 @end
 
 @implementation MTDatabaseConnection
 
-
-- (void)setServer:(NSString *)server {
-    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *internalServer = [server stringByTrimmingCharactersInSet: whitespace];
-    self.internalServer = internalServer;
-}
-
-- (NSString *)server {
-    return self.internalServer;
-}
-
-- (NSString *)IPAddressOrServer {
-    NSString *address = [BDHost addressForHostname:self.server];
-    return address == nil ? self.server : [NSString stringWithString:address];
++ (NSString *)IPAddressForServer:(NSString *)server {
+    NSString *address = [BDHost addressForHostname:server];
+    return address == nil ? server : [NSString stringWithString:address];
 }
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self nullValues];
+        [self setDatabaseTypeIdentifier: nil];
     }
     return self;
 }
@@ -64,14 +50,6 @@ NSString * const MADStringEmpty = @"";
                                              port:(NSInteger)port NS_RETURNS_RETAINED {
     
     id result = [self databaseConnectionFactoryEmpty:typeIdentifier];
-    
-    NSString *h   = [NSString stringWithString: host];
-    NSString *d = [NSString stringWithString: database];
-    
-    ((MTDatabaseConnection *) result).server = h;
-    ((MTDatabaseConnection *) result).database = d;
-    ((MTDatabaseConnection *) result).port = port;
-    
     return result;
 }
 
@@ -128,6 +106,7 @@ NSString * const MADStringEmpty = @"";
         } else if ([credentals.database_driver_type isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
             
             NSString *databaseFilename = credentals.mysql_database;
+            
             // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
             //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
             //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
@@ -150,52 +129,26 @@ NSString * const MADStringEmpty = @"";
     return resultCredentals;
 }
 
-- (NSString *)appname {
-    return @"mad";
-}
-
-- (void)nullValues {
-    [self setDatabaseTypeIdentifier: nil];
-    [self setDatabaseUrl: nil];
-    [self setServer: nil];
-    [self setDatabase: nil];
-    [self setHost: nil];
-    [self setUsername: nil];
-    [self setPassword: nil];
-    [self setPort: 0];
-}
+- (NSString *)appname { return @"mad"; }
 
 - (NSString *)identifier {
     return [MTDatabaseConnection identifier];
 }
 
-+ (NSString *)identifier {
-    return @"NONE";
-}
++ (NSString *)identifier { @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                                          reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTDatabaseConnection; don't use it directly.", NSStringFromSelector(_cmd)]
+                                                        userInfo: nil]; }
 
-- (NSString *)connectionString {
-    NSString * __autoreleasing connectionString = [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
-    return connectionString;
-}
+- (NSString *)connectionString { @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                                                reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTDatabaseConnection; don't use it directly.", NSStringFromSelector(_cmd)]
+                                                              userInfo: nil]; }
 
-- (bool)testConnectionWithErrors:(NSArray * __autoreleasing *)errors {
-    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: self];
-    NSError * __autoreleasing error = NULL;
-    bool success = [queryTest.database executeQuery:queryTest withError:&error];
-    if (!success && errors == NULL) {
-        *errors = error ? [queryTest.database.errors arrayByAddingObject:error] : [NSArray arrayWithArray:queryTest.database.errors];
-    }
-    return success;
-}
+- (NSURL *)databaseUrl { return nil; }
 
-- (void)testConnection:(void(^)(BOOL success, NSArray *errors))completion {
-    
-    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: self];
-    NSError * __autoreleasing error = NULL;
-    bool success = [queryTest.database executeQuery:queryTest withError:&error];
-    NSArray *displayErrors = error ? [queryTest.database.errors arrayByAddingObject:error] : [NSArray arrayWithArray:queryTest.database.errors];
-    completion(success, displayErrors);
+- (NSString *)database { return nil; }
 
-}
+- (NSString *)server { return nil; }
+
+- (NSInteger)port { return 0; }
 
 @end

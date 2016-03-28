@@ -13,10 +13,15 @@
 
 @interface MTDatabaseConnectionSqlServer : MTDatabaseConnection
 
-- (instancetype)initWithHost:(NSString *)host
-                      server:(NSString *)server
-                    database:(NSString *)database
-                     andPort:(NSInteger)port;
+    - (instancetype)initWithHost:(NSString *)host
+                          server:(NSString *)server
+                        database:(NSString *)database
+                         andPort:(NSInteger)port;
+
+    @property (nonatomic, readonly, copy) NSString  *database;
+    @property (nonatomic, readonly, copy) NSString  *server;
+    @property (nonatomic, readonly, copy) NSString  *host;
+    @property (nonatomic, readonly, assign) NSInteger port;
 
 @end
 

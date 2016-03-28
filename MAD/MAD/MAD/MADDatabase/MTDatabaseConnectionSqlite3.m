@@ -12,20 +12,25 @@
 
 #import "MTDatabaseConnectionSqlite3.h"
 
+@interface MTDatabaseConnectionSqlite3 ()
+
+    @property (nonatomic, readwrite, copy) NSURL *databaseUrl;
+
+@end
+
 @implementation MTDatabaseConnectionSqlite3
 
 - (instancetype)initWithUrl:(NSURL *)url {
-    
-    self = [super init];
-    if (self) {
-
-        NSURL *databaseUrl = [url copy];
-        self.databaseUrl = databaseUrl;
-        self.databaseTypeIdentifier = [self identifier];
-
+    if (self = [super init]) {
+        _databaseUrl = url.copy;
+        self.databaseTypeIdentifier = MADIdentifierDatabaseSqlite3;
     }
     return self;
-    
+}
+
+- (NSString *)connectionString {
+    NSString * __autoreleasing connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]", self.databaseTypeIdentifier, self.databaseUrl];
+    return connectionString;
 }
 
 - (NSString *)identifier {
@@ -34,6 +39,11 @@
 
 + (NSString *)identifier {
     return MADIdentifierDatabaseSqlite3;
+}
+
+- (NSURL *)databaseUrl {
+    NSURL * __autoreleasing url = _databaseUrl.copy;
+    return url;
 }
 
 @end

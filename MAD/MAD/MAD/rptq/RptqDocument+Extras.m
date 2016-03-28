@@ -353,8 +353,6 @@
             userCredentals.mysql_host = database.databaseConnection.server;
             userCredentals.mysql_database = database.databaseConnection.database;
             userCredentals.mysql_port = port;
-            userCredentals.mysql_username = database.databaseConnection.username;
-            userCredentals.mysql_password = database.databaseConnection.password;
         }
         
     } else if ([database.identifier isEqualToString:MADIdentifierDatabaseTDS]) {
@@ -364,8 +362,6 @@
             userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMicrosoftSqlServer);
             userCredentals.tds_server = database.databaseConnection.server;
             userCredentals.tds_host = database.databaseConnection.server;
-            userCredentals.tds_username = database.databaseConnection.username;
-            userCredentals.tds_password = database.databaseConnection.password;
             userCredentals.tds_database = database.databaseConnection.database;
             userCredentals.tds_port = port;
         }

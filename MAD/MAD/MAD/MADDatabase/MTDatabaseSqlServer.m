@@ -8,7 +8,7 @@
 
 #import "MTDatabaseSqlServer.h"
 
-#import "MTDatabaseConnection.h"
+#import "MTDatabaseConnectionSqlServer.h"
 
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
@@ -54,9 +54,13 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 @interface MTDatabaseSqlServer ()
 
+    @property (nonatomic, strong) MTDatabaseConnectionSqlServer *databaseConnection;
+
 @end
 
 @implementation MTDatabaseSqlServer
+
+@dynamic databaseConnection;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -1448,15 +1452,16 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         }
         DBSETLSECURE(login);
         if (*error == nil) {
-            
-            char *s = (char *)[self.databaseConnection.IPAddressOrServer cStringUsingEncoding:NSUTF8StringEncoding];
-
+        
+            NSString *IPAddress = [MTDatabaseConnection IPAddressForServer:self.databaseConnection.server];
+            char *s = (char *)[IPAddress cStringUsingEncoding:NSUTF8StringEncoding];
             dbconn = dbopen(login, s);
             if (dbconn == NULL) {
                 NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
                 NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
                 *error = [NSError errorWithDomain:MADDomainTDS code:2 userInfo:errorInfo];
             }
+            
         }
         connected = (*error == nil);
         
