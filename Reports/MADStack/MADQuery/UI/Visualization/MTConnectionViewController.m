@@ -41,6 +41,8 @@
 
 #import "MADDatabaseOperationTestConnection.h"
 
+#import "MADOperationObserver.h"
+
 #import "MADCreateDocumentOperation.h"
 
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";

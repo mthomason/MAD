@@ -34,6 +34,7 @@
     
     if (self = [super init]) {
     
+        NSLog(@"%s", __PRETTY_FUNCTION__);
         MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
                                                                                                                      pathExtension: MADFileExtentionMobleApplicationDocument
                                                                                                              andDocumentsDirectory: documentsDirectory];
@@ -45,6 +46,7 @@
         [taskBegin addDependency:getCredentials];
         
         MADCreateDocumentOperationCreateDocument *createDocument = [[MADCreateDocumentOperationCreateDocument alloc] init];
+        [createDocument addDependency:getCredentials];  // This is because the document uses this task as delegate to get credentials.
         [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];
         
@@ -56,6 +58,7 @@
         
 
         MADCreateDocumentOperationImportSchema *importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
+        [importSchema addDependency:createDocument];
         [importSchema addDependency:addConnection];
         
         MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];

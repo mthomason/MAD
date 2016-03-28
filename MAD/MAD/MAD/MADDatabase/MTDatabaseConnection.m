@@ -49,8 +49,28 @@ NSString * const MADStringEmpty = @"";
                                          database:(NSString *)database
                                              port:(NSInteger)port NS_RETURNS_RETAINED {
     
-    id result = [self databaseConnectionFactoryEmpty:typeIdentifier];
-    return result;
+    id resultCredentals = nil;
+    
+    if ([[MTDatabaseConnectionMySql identifier] isEqualToString:typeIdentifier]) {
+        
+        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: host
+                                                                  database: database
+                                                                   andPort: port];
+        
+    } else if ([[MTDatabaseConnectionSqlServer identifier] isEqualToString:typeIdentifier]) {
+        
+        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: host
+                                                                        server: host
+                                                                      database: database
+                                                                       andPort: port];
+        
+    } else if ([[MTDatabaseConnectionSqlite3 identifier] isEqualToString:typeIdentifier]) {
+        
+        resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+        
+    }
+    
+    return resultCredentals;
 }
 
 + (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier NS_RETURNS_RETAINED {

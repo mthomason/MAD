@@ -27,7 +27,7 @@
     if (self = [super init]) {
         NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
         NSString *internalServer = [host stringByTrimmingCharactersInSet: whitespace];
-        _host = host;
+        _host = host.copy;
         _internalServer = internalServer.copy;
         _database = database.copy;
         _port = port;

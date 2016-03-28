@@ -165,14 +165,14 @@
     
     if (!error) {
         //Delete any contents of the existing object modal.
-        if (documents && [documents count] > 0) {
-            [documents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [objectContext deleteObject: obj];
-            }];
+        if (documents && documents.count > 0) {
+            for (RptqDocument *document in documents) {
+                [objectContext deleteObject:document];
+            }
         }
     }
-    NSEntityDescription *entityDescription                     = [NSEntityDescription entityForName:rptqDocumentName inManagedObjectContext: objectContext];
-    RptqDocument *document                      = [[RptqDocument alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:objectContext];
+    NSEntityDescription *entityDescription  = [NSEntityDescription entityForName:rptqDocumentName inManagedObjectContext: objectContext];
+    RptqDocument *document                  = [[RptqDocument alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:objectContext];
 
     Class sectionClass = [RptqDocumentSection class];
     NSString *rptqDocumentSection = NSStringFromClass(sectionClass);
@@ -257,6 +257,7 @@
 
     NSNumber *hasDetailSectionVisibility = @YES;
     document.hasDetailSection.visibility = hasDetailSectionVisibility;
+    
 
     return document;
 }

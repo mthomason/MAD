@@ -235,10 +235,12 @@ static NSString * const MADOperatorSelectorState        = @"state";
  `finishWithError()` method.
  */
 - (void)finish {
+    NSLog(@"Finish: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     [self finish:nil];
 }
 
 - (void)finishWithError:(NSError *)error {
+    NSLog(@"Finish with error: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     if (error) {
         [self finish:@[error]];
     } else {
@@ -251,6 +253,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
  operation has finished.
  */
 - (void)finish:(NSArray *)errors {
+    NSLog(@"Finish with errors: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = YES;
         self.state = finishing;
