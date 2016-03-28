@@ -20,6 +20,9 @@
 #import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 
 
+static NSString * const SetDatasource = @"Set Datasource";
+static NSString * const StringEmpty = @"";
+
 @interface MTViewControllerBarcodeOptions ()
     <MTDatabaseProtocol, MTTableViewControllerStaticSelectRowDelegate>
 
@@ -100,9 +103,6 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
     [super viewWillAppear:animated];
 }
 
-static NSString * const SetDatasource = @"Set Datasource";
-static NSString * const StringEmpty = @"";
-
 - (void)customInit {
     self.borderWidth = 5;
     [self setSampleBarcodeIndex: 0];
@@ -153,15 +153,17 @@ static NSString * const StringEmpty = @"";
 
     if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
 
+        MADocument *document = self.document;
         [self setSelectingField1:YES];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:document];
 
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
         
+        MADocument *document = self.document;
         [self setSelectingField2:YES];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:document];
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
         
@@ -173,7 +175,7 @@ static NSString * const StringEmpty = @"";
 
         MTViewControllerBarcodeType *barcodeTypeViewController = segue.destinationViewController;
         MTBarcode *barcode = [self.delegate barcodeToDisplay];
-        [barcodeTypeViewController setInitalKey:[barcode barcodeType]];
+        [barcodeTypeViewController setInitalKey: barcode.barcodeType];
         [barcodeTypeViewController setDelegate:self];
 
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
@@ -209,9 +211,9 @@ static NSString * const StringEmpty = @"";
         ((MTTableViewControllerBarcodeExtraMicroQrCode *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
-        
+        MADocument *document = self.document;
         ((MTTableViewControllerBarcodeExtraMaxicode *)segue.destinationViewController).delegate = self;
-        ((MTTableViewControllerBarcodeExtraMaxicode *)segue.destinationViewController).document = self.document;
+        ((MTTableViewControllerBarcodeExtraMaxicode *)segue.destinationViewController).document = document;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
         
