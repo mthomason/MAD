@@ -18,6 +18,7 @@
     - (NSString *)errorLogCompact;
     - (NSUInteger)count;
     - (NSArray <__kindof NSError *> *)allObjects;
+    - (void)addErrorsFromContainer:(MADErrorContainer *)container;
 
 @end
 

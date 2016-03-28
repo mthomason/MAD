@@ -40,9 +40,11 @@ static NSString * const MADErrorContainerDate   = @"d";
 }
 
 - (void)addError:(NSError *)error {
+    NSError *errorCopy = error.copy;
+    NSDate *date = [NSDate date];
     NSDictionary *errorHolder = @{
-                                  MADErrorContainerError    : error,
-                                  MADErrorContainerDate     : [NSDate date]
+                                  MADErrorContainerError    : errorCopy,
+                                  MADErrorContainerDate     : date
                                   };
     [self.errors addObject:errorHolder];
 }
@@ -92,6 +94,16 @@ static NSString * const MADErrorContainerDate   = @"d";
         [results addObject:error];
     }
     return results;
+}
+
+- (void)addErrorsFromContainer:(MADErrorContainer *)additionalErrorContainer {
+    NSArray *adderrs = [additionalErrorContainer allObjects];
+    for (NSError *err in adderrs) {
+        @autoreleasepool {
+            [self addError:err];
+        }
+    }
+
 }
 
 @end

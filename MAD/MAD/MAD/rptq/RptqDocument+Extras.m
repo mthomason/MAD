@@ -395,7 +395,6 @@
     [self storeDatabaseConnectionDefination:database];
     
     __block MADErrorContainer *errorContainer = [MADErrorContainer new];
-    //RptqDocument * __weak rptqDocument = self;
     
     MTDatabase * __weak weakDatabase = database;
     id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
@@ -411,70 +410,48 @@
         NSError * __block gotitError                    = nil;
         
         dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
-        dispatch_queue_t queueSave = dispatch_queue_create("com.everydayapps.mad.queue.save", DISPATCH_QUEUE_SERIAL);
-        dispatch_queue_t queueMain = dispatch_get_main_queue();
         dispatch_set_target_queue(queueTables, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-        dispatch_set_target_queue(queueSave, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
-        // Operation: Get tables
-        //dispatch_async(queueTables, ^{
+        MTDatabase * __weak weakDatabase3 = weakDatabase2;
+        [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
             
-            MTDatabase * __weak weakDatabase3 = weakDatabase2;
-            [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
+            if (success) {
                 
-                if (success) {
-                    
-                    [tables setArray:resultTables];
-                    NSUInteger counter = 0, numberOfTables = tables.count;
-                    for (MTDatabaseTable *databaseTable in tables) {
-                        @autoreleasepool {
-                            
-                            NSString * __weak name = databaseTable.name;
-                            
-                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-
-                                dispatch_sync(queueMain, ^{
-                                    status(name, (counter + 1) / numberOfTables);
-                                });
-                            
-                            });
-                            
-                            NSError *getFieldsError = NULL;
-                            NSArray *fieldsForTable = [weakDatabase3 fieldsForTable:databaseTable.name connection:weakdbconnection error:&getFieldsError];
-                            
-                            NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
-                            tablesAndFields[databaseTable.name] = fields;
-                            
-                        }
-                        counter++;
+                [tables setArray:resultTables];
+                NSUInteger counter = 0, numberOfTables = tables.count;
+                for (MTDatabaseTable *databaseTable in tables) {
+                    @autoreleasepool {
+                        
+                        NSString *name = databaseTable.name.copy;
+                        
+                        status(name, (counter + 1) / numberOfTables);
+                        
+                        NSError *getFieldsError = NULL;
+                        NSArray *fieldsForTable = [weakDatabase3 fieldsForTable:databaseTable.name connection:weakdbconnection error:&getFieldsError];
+                        
+                        NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
+                        tablesAndFields[databaseTable.name] = fields;
+                        
                     }
-                    
-                    gotit = success; gotitError = error;
-                    
-                    // Operation: Get field schema data
-                    //dispatch_sync(queueMain, ^{
-                    
-                    MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields];
-                    NSArray *adderrs = [additionalErrors allObjects];
-                    for (NSError *err in adderrs) {
-                        [errorContainer addError:err];
-                    }
-                    [weakDatabase3 closeProcess:weakdbconnection];
-                    completion(gotit, errorContainer);
-                    
-                    //});
-                    
-                } else {
-                    MADErrorContainer *errorContainer = [[MADErrorContainer alloc] init];
-                    [errorContainer addError:error];
-                    completion(NO, errorContainer);
+                    counter++;
                 }
-            }];
-            
-        //});
-        
+                
+                gotit = success; gotitError = error;
+                
+                MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields];
+                [errorContainer addErrorsFromContainer:additionalErrors];
+                
+                [weakDatabase3 closeProcess:weakdbconnection];
+                completion(gotit, errorContainer);
+                
+            } else {
+                MADErrorContainer *errorContainer = [[MADErrorContainer alloc] init];
+                [errorContainer addError:error];
+                completion(NO, errorContainer);
+            }
+        }];
         
     } else {
         completion(NO, nil);
