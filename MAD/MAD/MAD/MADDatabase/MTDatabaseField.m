@@ -12,6 +12,7 @@
 
 #import "MTDatabaseField.h"
 #import "NSData+Comparson.h"
+#import <Foundation/NSString.h>
 
 @interface MTDatabaseField ()
 
@@ -20,20 +21,26 @@
 @implementation MTDatabaseField
 
 - (instancetype)initWithName:(NSString *)name {
-    self = [self init];
-    if (self) {
-        self.label = name;
-        self.name = name;
-        self.calculatedWidth = 0;
+    if (self = [self init]) {
+        _name = name.copy;
+        _calculatedWidth = 0;
     }
     return self;
 }
 
-
-
-- (BOOL)isNumeric {
-    return [MTDatabaseField isNumeric:[self fieldType]];
+- (instancetype)copyWithZone:(NSZone *)zone {
+    MTDatabaseField *copy = [[[self class] allocWithZone:zone] init];
+    NSString *name = _name.copy;
+    copy.name = name;
+    copy.fieldType = _fieldType;
+    copy.fieldTypeNative = _fieldTypeNative;
+    copy.width = _width;
+    copy.decimals = _decimals;
+    copy.primaryKey = _primaryKey;
+    return copy;
 }
+
+- (BOOL)isNumeric { return [MTDatabaseField isNumeric: _fieldType]; }
 
 + (BOOL)isNumeric:(MTDataType)dataType {
     BOOL result;

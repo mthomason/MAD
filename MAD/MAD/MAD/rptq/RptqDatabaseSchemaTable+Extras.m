@@ -111,10 +111,10 @@
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
     RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
     
-    NSString *label = [[NSString alloc] initWithString:table.label];
+    NSString *label = [[NSString alloc] initWithString:table.name];
     rptqTable.label = label;
     
-    NSString *labelPlural = [[NSString alloc] initWithString:table.labelPlural];
+    NSString *labelPlural = [[NSString alloc] initWithString:table.name];
     rptqTable.label_plural = labelPlural;
 
     NSString *name = [[NSString alloc] initWithString: table.name];

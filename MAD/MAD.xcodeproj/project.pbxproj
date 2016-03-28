@@ -810,6 +810,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C04EE6B1CA9587700582422 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				4C401E0D1BAE3DCB00BAE5FC /* MTDatabaseConnection.h */,
+				4C401E0E1BAE3DCB00BAE5FC /* MTDatabaseConnection.m */,
+				4C401E0F1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h */,
+				4C401E101BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.m */,
+				4C401E111BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.h */,
+				4C401E121BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.m */,
+				4C401E131BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.h */,
+				4C401E141BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.m */,
+			);
+			name = Connection;
+			sourceTree = "<group>";
+		};
+		4C04EE6C1CA9589200582422 /* Drivers */ = {
+			isa = PBXGroup;
+			children = (
+				4C04EE6F1CA958D900582422 /* SQL Server */,
+				4C04EE6E1CA958C600582422 /* Sqlite3 */,
+				4C04EE6D1CA958BA00582422 /* MySQL */,
+			);
+			name = Drivers;
+			sourceTree = "<group>";
+		};
+		4C04EE6D1CA958BA00582422 /* MySQL */ = {
+			isa = PBXGroup;
+			children = (
+				4C401E191BAE3DCB00BAE5FC /* MTDatabaseMySql.h */,
+				4C401E1A1BAE3DCB00BAE5FC /* MTDatabaseMySql.m */,
+			);
+			name = MySQL;
+			sourceTree = "<group>";
+		};
+		4C04EE6E1CA958C600582422 /* Sqlite3 */ = {
+			isa = PBXGroup;
+			children = (
+				4C401E1D1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.h */,
+				4C401E1E1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m */,
+			);
+			name = Sqlite3;
+			sourceTree = "<group>";
+		};
+		4C04EE6F1CA958D900582422 /* SQL Server */ = {
+			isa = PBXGroup;
+			children = (
+				4C401E1F1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h */,
+				4C401E201BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m */,
+				4C401E1B1BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.h */,
+				4C401E1C1BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.m */,
+			);
+			name = "SQL Server";
+			sourceTree = "<group>";
+		};
 		4C401CD71BAE3AD600BAE5FC /* MADPaper */ = {
 			isa = PBXGroup;
 			children = (
@@ -992,32 +1046,18 @@
 		4C401E081BAE3D7800BAE5FC /* MADDatabase */ = {
 			isa = PBXGroup;
 			children = (
+				4C04EE6C1CA9589200582422 /* Drivers */,
+				4C04EE6B1CA9587700582422 /* Connection */,
 				4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */,
 				4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */,
-				4C401E0B1BAE3DCB00BAE5FC /* MTDatabaseCache.h */,
-				4C401E0C1BAE3DCB00BAE5FC /* MTDatabaseCache.m */,
-				4C401E0D1BAE3DCB00BAE5FC /* MTDatabaseConnection.h */,
-				4C401E0E1BAE3DCB00BAE5FC /* MTDatabaseConnection.m */,
-				4C401E0F1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h */,
-				4C401E101BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.m */,
-				4C401E111BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.h */,
-				4C401E121BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.m */,
-				4C401E131BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.h */,
-				4C401E141BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlServer.m */,
-				4C401E151BAE3DCB00BAE5FC /* MTDatabaseDataBinding.h */,
-				4C401E161BAE3DCB00BAE5FC /* MTDatabaseDataBinding.m */,
-				4C401E171BAE3DCB00BAE5FC /* MTDatabaseField.h */,
-				4C401E181BAE3DCB00BAE5FC /* MTDatabaseField.m */,
-				4C401E191BAE3DCB00BAE5FC /* MTDatabaseMySql.h */,
-				4C401E1A1BAE3DCB00BAE5FC /* MTDatabaseMySql.m */,
-				4C401E1B1BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.h */,
-				4C401E1C1BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.m */,
-				4C401E1D1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.h */,
-				4C401E1E1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m */,
-				4C401E1F1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h */,
-				4C401E201BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m */,
 				4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */,
 				4C401E221BAE3DCB00BAE5FC /* MTDatabaseTable.m */,
+				4C401E171BAE3DCB00BAE5FC /* MTDatabaseField.h */,
+				4C401E181BAE3DCB00BAE5FC /* MTDatabaseField.m */,
+				4C401E0B1BAE3DCB00BAE5FC /* MTDatabaseCache.h */,
+				4C401E0C1BAE3DCB00BAE5FC /* MTDatabaseCache.m */,
+				4C401E151BAE3DCB00BAE5FC /* MTDatabaseDataBinding.h */,
+				4C401E161BAE3DCB00BAE5FC /* MTDatabaseDataBinding.m */,
 			);
 			name = MADDatabase;
 			sourceTree = "<group>";

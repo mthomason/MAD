@@ -12,13 +12,12 @@
 #import <Foundation/NSObject.h>
 
 @interface MTDatabaseTable : NSObject
+    <NSCopying>
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *label;
-@property (nonatomic, strong) NSString *labelPlural;
-@property (nonatomic, assign) BOOL queryable;
+    @property (nonatomic, copy) NSString *name;
+    @property (nonatomic, assign) BOOL queryable;
 
-- (instancetype)initWithTableName:(NSString *)tableName NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithTableName:(NSString *)tableName NS_DESIGNATED_INITIALIZER;
 
 @end
 

@@ -13,23 +13,23 @@
 #import <MADFoundation/MADDataType.h>
 
 @interface MTDatabaseField : NSObject
+    <NSCopying>
+    
+    - (instancetype)initWithName:(NSString *)name;
 
-- (instancetype)initWithName:(NSString *)name;
+    @property (nonatomic, copy) NSString *name;
+    @property (nonatomic, assign) NSUInteger calculatedWidth;
 
-@property (nonatomic, strong) NSString *label;
-@property (nonatomic, strong) NSString *name;
+    @property (nonatomic, assign) MTDataType fieldType;
+    @property (nonatomic, assign) NSInteger fieldTypeNative;
+    @property (nonatomic, assign) NSUInteger width;
+    @property (nonatomic, assign) NSUInteger decimals;
+    @property (nonatomic, assign) BOOL primaryKey;
 
-@property (nonatomic, assign) MTDataType fieldType;
-@property (nonatomic, assign) NSInteger fieldTypeNative;
-@property (nonatomic, assign) NSUInteger width;
-@property (nonatomic, assign) NSUInteger decimals;
-@property (nonatomic, assign) NSUInteger calculatedWidth;
-@property (nonatomic, assign) BOOL primaryKey;
+    - (BOOL)isNumeric;
+    + (BOOL)isNumeric:(MTDataType)dataType;
 
-- (BOOL)isNumeric;
-+ (BOOL)isNumeric:(MTDataType)dataType;
-
-- (SEL)selectorForSorting;
+    - (SEL)selectorForSorting;
 
 @end
 

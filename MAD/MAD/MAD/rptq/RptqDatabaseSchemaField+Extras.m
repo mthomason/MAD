@@ -71,7 +71,7 @@
 
     RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity
                                                           insertIntoManagedObjectContext: objectContext];
-    NSString *label = [[NSString alloc] initWithString: field.label];
+    NSString *label = [[NSString alloc] initWithString: field.name];
     rptqField.label = label;
     
     NSString *name = [[NSString alloc] initWithString:field.name];
@@ -97,12 +97,11 @@
 
 - (MTDatabaseField *)databaseFieldWrapper {
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
-    [result setLabel:[self label]];
-    [result setName:self.name];
-    [result setFieldType:(MTDataType)[[self dataType] integerValue]];
-    [result setFieldTypeNative:[[self dataTypeNative] integerValue]];
-    [result setDecimals:[[self decimals] unsignedIntegerValue]];
-    [result setPrimaryKey:[[self primaryKey] boolValue]];
+    result.name = self.name;
+    result.fieldType = (MTDataType)self.dataType.integerValue;
+    result.fieldTypeNative = self.dataTypeNative.integerValue;
+    result.decimals = self.decimals.unsignedIntegerValue;
+    result.primaryKey = self.primaryKey.boolValue;
     return result;
 }
 
@@ -112,11 +111,12 @@
 }
 
 - (NSString *)display {
-    return [[NSString stringWithFormat:@"%@.%@", [[self inTable] name], self.name] lowercaseString];
+    NSString *display = [NSString stringWithFormat:@"%@.%@", self.inTable.name, self.name];
+    return display.lowercaseString;
 }
 
 - (SEL)selectorForSorting {
-    return [MADDataType selectorForSorting:[[self dataType] unsignedIntegerValue]];
+    return [MADDataType selectorForSorting:self.dataType.unsignedIntegerValue];
 }
 
 #pragma mark - MTProtocolLog
@@ -141,7 +141,7 @@
         result = YES;
     } else {
         RptqDatabaseSchemaField *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:s.identifier];
     }
     return result;
 }

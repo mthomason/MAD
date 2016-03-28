@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDatabaseTable.h"
+#import <Foundation/NSString.h>
 
 @interface MTDatabaseTable ()
 
@@ -22,21 +23,22 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.name = nil;
-        self.label = nil;
-        self.labelPlural = nil;
+        _name = nil;
     }
     return self;
 }
 
 - (instancetype)initWithTableName:(NSString *)tableName {
-    self = [super init];
-    if (self) {
-        self.name = tableName;
-        self.label = tableName;
-        self.labelPlural = tableName;
+    if (self = [super init]) {
+        _name = tableName.copy;
     }
     return self;
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+    MTDatabaseTable *copy = [[[self class] allocWithZone:zone] initWithTableName:_name];
+    copy.queryable = _queryable;
+    return copy;
 }
 
 @end
