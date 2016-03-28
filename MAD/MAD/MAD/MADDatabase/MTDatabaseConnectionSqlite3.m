@@ -28,6 +28,11 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithUrl:self.databaseUrl];
+    return copy;
+}
+
 - (NSString *)connectionString {
     NSString * __autoreleasing connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]", self.databaseTypeIdentifier, self.databaseUrl];
     return connectionString;
@@ -44,11 +49,6 @@
 - (NSURL *)databaseUrl {
     NSURL * __autoreleasing url = _databaseUrl.copy;
     return url;
-}
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithUrl:self.databaseUrl];
-    return copy;
 }
 
 @end

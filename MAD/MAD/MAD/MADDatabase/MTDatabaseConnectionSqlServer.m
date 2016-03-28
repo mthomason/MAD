@@ -40,6 +40,11 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host server:self.internalServer database:self.database andPort:self.port];
+    return copy;
+}
+
 - (NSString *)connectionString {
     NSString * __autoreleasing connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%@:%ld]%@", self.databaseTypeIdentifier, self.host, self.server,  (long)self.port, self.database];
     return connectionString;
@@ -70,10 +75,5 @@
 }
 
 - (NSInteger)port { return _port; }
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host server:self.internalServer database:self.database andPort:self.port];
-    return copy;
-}
 
 @end

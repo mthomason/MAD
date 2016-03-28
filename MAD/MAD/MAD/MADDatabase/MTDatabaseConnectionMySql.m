@@ -36,6 +36,11 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host database:self.database andPort:self.port];
+    return copy;
+}
+
 - (NSString *)identifier {
     return MADIdentifierDatabaseMySQL;
 }
@@ -59,11 +64,6 @@
 - (NSString *)server {
     NSString * __autoreleasing internalServer = _internalServer.copy;
     return internalServer;
-}
-
-- (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host database:self.database andPort:self.port];
-    return copy;
 }
 
 @end
