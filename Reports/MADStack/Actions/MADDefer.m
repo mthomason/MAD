@@ -29,6 +29,6 @@
 @end
 
 void defer(void (^block)()) {
-    static MADDefer *__weak d;
+    static MADDefer *d;
     d = [MADDefer defer:block];
 }
