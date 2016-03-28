@@ -828,40 +828,16 @@
 		4C04EE6C1CA9589200582422 /* Drivers */ = {
 			isa = PBXGroup;
 			children = (
-				4C04EE6F1CA958D900582422 /* SQL Server */,
-				4C04EE6E1CA958C600582422 /* Sqlite3 */,
-				4C04EE6D1CA958BA00582422 /* MySQL */,
-			);
-			name = Drivers;
-			sourceTree = "<group>";
-		};
-		4C04EE6D1CA958BA00582422 /* MySQL */ = {
-			isa = PBXGroup;
-			children = (
-				4C401E191BAE3DCB00BAE5FC /* MTDatabaseMySql.h */,
-				4C401E1A1BAE3DCB00BAE5FC /* MTDatabaseMySql.m */,
-			);
-			name = MySQL;
-			sourceTree = "<group>";
-		};
-		4C04EE6E1CA958C600582422 /* Sqlite3 */ = {
-			isa = PBXGroup;
-			children = (
 				4C401E1D1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.h */,
 				4C401E1E1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m */,
-			);
-			name = Sqlite3;
-			sourceTree = "<group>";
-		};
-		4C04EE6F1CA958D900582422 /* SQL Server */ = {
-			isa = PBXGroup;
-			children = (
+				4C401E191BAE3DCB00BAE5FC /* MTDatabaseMySql.h */,
+				4C401E1A1BAE3DCB00BAE5FC /* MTDatabaseMySql.m */,
 				4C401E1F1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h */,
 				4C401E201BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m */,
 				4C401E1B1BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.h */,
 				4C401E1C1BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.m */,
 			);
-			name = "SQL Server";
+			name = Drivers;
 			sourceTree = "<group>";
 		};
 		4C401CD71BAE3AD600BAE5FC /* MADPaper */ = {

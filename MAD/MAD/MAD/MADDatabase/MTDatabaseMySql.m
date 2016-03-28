@@ -144,65 +144,6 @@
     return NSStringFromClass([self class]);
 }
 
-- (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
-                           completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-    NSError *error = nil;
-    MysqlConnection *connection = dbconn;
-    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-                                             dataTable: &dataTableVirtual
-                                          onConnection: connection
-                                                 error: &error];
-
-    
-    NSMutableArray *results = nil;
-    if (error == nil) {
-        NSUInteger resultsCount = [dataTable count];
-        results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-        NSUInteger counter = 0;
-        BOOL stop = NO;
-        for (NSUInteger i=0; i<[dataTable count]; i++) {
-            @autoreleasepool {
-                NSString *tableName = [dataTable objectAtRow:i column:0];
-                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                [results addObject:table];
-                block(table, counter, &stop);
-                if (stop) break;
-                counter++;
-            }
-        }
-    }
-    completion(error == nil, error, results);
-}
-
-- (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-
-    NSError *error = nil;
-    MysqlConnection *conn = dbconn;
-    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-                                             dataTable: &dataTableVirtual
-                                          onConnection: conn
-                                         extendedNames: YES
-                                                 error: &error];
-    NSMutableArray *results = nil;
-    if (error == nil) {
-        NSUInteger resultsCount = [dataTable count];
-        results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-        for (NSUInteger i=0; i<[dataTable count]; i++) {
-            @autoreleasepool {
-                NSString *tableName = [dataTable objectAtRow:i column:0];
-                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                [results addObject:table];
-            }
-        }
-    }
-    completion(error == nil, error, results);
-}
-
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
@@ -233,6 +174,139 @@
         completion(NO, nil, nil);
     }
 }
+
+- (void)closeProcess:(id)process {
+    mysql_close(((MysqlConnection *)process).connection);
+}
+
+- (NSString *)identifier {
+    return MADIdentifierDatabaseMySQL;
+}
+
++ (NSString *)identifier {
+    return MADIdentifierDatabaseMySQL;
+}
+
++ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
+    return safeIdentifier;
+}
+
+- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    NSString * __autoreleasing safeIdentifier = [MTDatabaseMySql safeQueryField:fieldName andTable:tableName];
+    return safeIdentifier;
+}
+
+- (NSString *)safeIdentifierForTable:(NSString *)tableName andField:(NSString *)fieldName {
+    NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
+    return safeIdentifier;
+}
+
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
+    NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`", fieldOrTableName];
+    return safeIdentifier;
+}
+
+#pragma mark - Reading Tables
+
+- (void)enumerateTablesFromConnection:(id)dbconn
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    NSError *error = nil;
+    MysqlConnection *connection = dbconn;
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+                                             dataTable: &dataTableVirtual
+                                          onConnection: connection
+                                                 error: &error];
+    
+    
+    NSMutableArray *results = nil;
+    if (error == nil) {
+
+        NSUInteger resultsCount = [dataTable count];
+        results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+        NSUInteger counter = 0;
+
+        BOOL stop = NO;
+        for (NSUInteger i=0; i<[dataTable count]; i++) {
+            @autoreleasepool {
+
+                NSString *tableName = [dataTable objectAtRow:i column:0];
+                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+
+                [results addObject:table];
+
+                block(table, counter, &stop);
+                if (stop) break;
+                counter++;
+
+            }
+        }
+    }
+    completion(error == nil, error, results);
+}
+
+- (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    
+    NSError *error = nil;
+    MysqlConnection *conn = dbconn;
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+                                             dataTable: &dataTableVirtual
+                                          onConnection: conn
+                                         extendedNames: YES
+                                                 error: &error];
+    NSMutableArray *results = nil;
+    if (error == nil) {
+        NSUInteger resultsCount = [dataTable count];
+        results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+        for (NSUInteger i=0; i<[dataTable count]; i++) {
+            @autoreleasepool {
+                NSString *tableName = [dataTable objectAtRow:i column:0];
+                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                [results addObject:table];
+            }
+        }
+    }
+    completion(error == nil, error, results);
+}
+
+
+- (NSArray *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
+    
+    NSError *errorFetch = nil;
+    MysqlConnection *conn = dbconn;
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+                                             dataTable: &dataTableVirtual
+                                          onConnection: conn
+                                         extendedNames: YES
+                                                 error: &errorFetch];
+    if (outError == nil && errorFetch != nil) {
+        NSDictionary *userInfo = @{NSUnderlyingErrorKey: errorFetch};
+        NSString *domain = NSStringFromClass(self.class);
+        *outError = [NSError errorWithDomain:domain code:934 userInfo:userInfo];
+    }
+    NSMutableArray *results = nil;
+    if (errorFetch == nil) {
+        NSUInteger resultsCount = [dataTable count];
+        results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+        for (NSUInteger i=0; i<resultsCount; i++) {
+            @autoreleasepool {
+                NSString *tableName = [dataTable objectAtRow:i column:0];
+                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                [results addObject:table];
+            }
+        }
+    }
+    return results;
+}
+
+#pragma mark - Reading Fields
 
 - (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error {
     
@@ -281,41 +355,9 @@
     if (error == NULL && errorResult != nil) {
         *error = errorResult;
     }
-
+    
     NSArray * __autoreleasing resultValues = resultsDictionary.allValues;
     return resultValues;
-}
-
-- (void)closeProcess:(id)process {
-    mysql_close(((MysqlConnection *)process).connection);
-}
-
-- (NSString *)identifier {
-    return MADIdentifierDatabaseMySQL;
-}
-
-+ (NSString *)identifier {
-    return MADIdentifierDatabaseMySQL;
-}
-
-+ (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
-    return safeIdentifier;
-}
-
-- (NSString *)safeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString * __autoreleasing safeIdentifier = [MTDatabaseMySql safeQueryField:fieldName andTable:tableName];
-    return safeIdentifier;
-}
-
-- (NSString *)safeIdentifierForTable:(NSString *)tableName andField:(NSString *)fieldName {
-    NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
-    return safeIdentifier;
-}
-
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
-    NSString * __autoreleasing safeIdentifier = [NSString stringWithFormat:@"`%@`", fieldOrTableName];
-    return safeIdentifier;
 }
 
 @end

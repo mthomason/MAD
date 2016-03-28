@@ -178,22 +178,23 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
     return @"MAX";
 }
 
+static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
+                                                @"%@ %@ %@ "
+                                                @"%@ %@ "
+                                                @"LIMIT 511;";
+
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
     NSString *safeField = [self safeQueryField: fieldName
                                       andTable: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                            andTableName: tableName];
     NSString *safeTable = [self safeIdentifier:tableName];
-    return [NSString stringWithFormat:@"%@ DISTINCT "
-                                                    @"%@ %@ %@ "
-                                                    @"%@ %@ "
-                                                    @"LIMIT 511;",
-                                                    [self selectPart],
-                                                    safeField,
-                                                    [self tableAliasConnector],
-                                                    safeFieldAlias,
-                                                    MADSqlTextFromPart,
-                                                    safeTable];
+
+    NSString *selectPart = [self selectPart];
+    NSString *tableAliasConnector = [self tableAliasConnector];
+    return [NSString stringWithFormat:MADTextSqlSelectSampleDataForField,
+                                                    selectPart, safeField, tableAliasConnector,
+                                                    safeFieldAlias, MADSqlTextFromPart, safeTable];
 }
 
 - (NSString *)nativeTypeForDataType:(MTDataType)dataType {
@@ -206,9 +207,24 @@ NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
 - (void)closeProcess:(id)process {}
 
+- (NSArray *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
 - (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:383414 userInfo:@{}];
-    completion(NO, error, nil);
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
+- (void)enumerateTablesFromConnection:(id)dbconn
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
 }
 
 @end

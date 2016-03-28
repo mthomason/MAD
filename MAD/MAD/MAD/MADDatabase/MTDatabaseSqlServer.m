@@ -79,214 +79,6 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     [self.errors addObject:notification.object];
 }
 
-- (void)enumerateTablesFromConnection:(id)process
-                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
-                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
-    id results = nil;
-    NSError *error = nil;
-    DBPROCESS *dbconn = [process process];
-    if (dbconn) {
-        
-        dbcmd(dbconn, "SELECT name FROM sys.tables");
-        
-        RETCODE success = dbsqlexec(dbconn);
-        
-        if (success != SUCCEED) {
-            
-            NSString *message = @"Sql Syntax Error";
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-            error = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
-            
-        }
-        
-        int numberOfColumns = dbnumcols(dbconn);
-        
-        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
-        
-        while (dbresults(dbconn) != NO_MORE_RESULTS) {
-            
-            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
-            DBINT columnLength      = dbcollen(dbconn, 1);
-            char *sybVarCharBind;
-            DBINT sybVarCharBindNull;
-            
-            sybVarCharBind = malloc((size_t) sizeof(char) * (unsigned long)( columnLength + 1 ) );
-            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
-            dbnullbind(dbconn, 1, &sybVarCharBindNull);
-            
-            NSUInteger counter = 0;
-            BOOL stop = NO;
-            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
-                
-                if (sybVarCharBindNull != -1 && sybVarCharBind != NULL) {
-                    
-                    NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
-                                                                   encoding: NSStringEncodingConversionAllowLossy];
-                    
-                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                    [results addObject:table];
-                    
-                    block(table, counter, &stop);
-                    if (stop) break;
-                    counter++;
-                }
-            }
-            free(sybVarCharBind);
-        }
-    }
-    completion(error == nil, error, results);
-}
-
-- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-    
-    id results = nil;
-    NSError *error = nil;
-    DBPROCESS *dbconn = [process process];
-    if (dbconn) {
-        
-        dbcmd(dbconn, "SELECT name FROM sys.tables");
-        
-        RETCODE success = dbsqlexec(dbconn);
-        
-        if (success != SUCCEED) {
-            
-            NSString *message = @"Sql Syntax Error";
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-            error = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
-            
-        }
-        
-        int numberOfColumns = dbnumcols(dbconn);
-        
-        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
-        
-        while (dbresults(dbconn) != NO_MORE_RESULTS) {
-            
-            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
-            DBINT columnLength      = dbcollen(dbconn, 1);
-            char *sybVarCharBind;
-            DBINT sybVarCharBindNull;
-            
-            sybVarCharBind = malloc((size_t) sizeof(char) * (unsigned long)( columnLength + 1 ) );
-            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
-            dbnullbind(dbconn, 1, &sybVarCharBindNull);
-            
-            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
-                
-                if (sybVarCharBindNull != -1) {
-                    if (sybVarCharBind != nil) {
-                        NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
-                                                                       encoding: NSStringEncodingConversionAllowLossy];
-                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                        [results addObject:table];
-                    }
-                }
-            }
-            free(sybVarCharBind);
-        }
-        
-        //dbclose(dbconn);
-        
-    }
-    completion(error == nil, error, results);
-}
-
-- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
-    NSMutableArray *results = nil;
-    RETCODE sqlReturnCode = FAIL;
-    DBPROCESS *dbconn = [process process];
-    if (dbconn) {
-        NSString *query = [NSString stringWithFormat:@"SELECT name, system_type_id, max_length, precision, scale FROM sys.columns WHERE object_id = OBJECT_ID('%@')", tableName];
-        dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
-        
-        sqlReturnCode = dbsqlexec(dbconn);
-        
-        if (sqlReturnCode != SUCCEED && error == NULL) {
-            NSString * const message = @"Sql Syntax Error";
-            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-            *error = [NSError errorWithDomain:MADDomainTDS code:3456 userInfo:errorInfo];
-            NSAssert(error == NULL, @"Syntax error fields for table: %@", *error);
-        }
-        
-        int numberOfColumns = dbnumcols(dbconn);
-        
-        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
-        
-        //BOOL success = success == SUCCEED;
-        //NSMutableDictionary *resultsDictionary = nil;
-        
-        if (sqlReturnCode == SUCCEED) {
-            
-            while (dbresults(dbconn) != NO_MORE_RESULTS) {
-                
-                //DBINT columnNumberBytes     = dbdatlen(dbconn, 1);
-                DBINT nameLenght            = dbcollen(dbconn, 1);
-                //DBINT typeLenght            = dbcollen(dbconn, 2);
-                //DBINT lengthLenght          = dbcollen(dbconn, 3);
-                //DBINT percisionLenght       = dbcollen(dbconn, 4);
-                //DBINT scaleLenght           = dbcollen(dbconn, 5);
-                
-                //int columnType1 = dbcoltype(dbconn, 1);
-                //int columnType2 = dbcoltype(dbconn, 2);
-                //int columnType3 = dbcoltype(dbconn, 3);
-                //int columnType4 = dbcoltype(dbconn, 4);
-                //int columnType5 = dbcoltype(dbconn, 5);
-                
-                char *nameBind;
-                int typeBind, lengthBind, percisionBind, scaleBind;
-                
-                DBINT nameBindNull, typeBindNull, lengthBindNull, percisionBindNull, scaleBindNull;
-                NSInteger nameSize = ( nameLenght + 1 );
-                nameBind = malloc( sizeof(char) * (unsigned long)nameSize );
-                dbbind(dbconn, 1, NTBSTRINGBIND, ( nameLenght + 1 ), (BYTE *)nameBind);
-                dbnullbind(dbconn, 1, &nameBindNull);
-                
-                dbbind(dbconn, 2, INTBIND, sizeof(int), (BYTE *)&typeBind);
-                dbnullbind(dbconn, 2, &typeBindNull);
-                
-                dbbind(dbconn, 3, INTBIND, sizeof(int), (BYTE *)&lengthBind);
-                dbnullbind(dbconn, 3, &lengthBindNull);
-                
-                dbbind(dbconn, 4, INTBIND, sizeof(int), (BYTE *)&percisionBind);
-                dbnullbind(dbconn, 4, &percisionBindNull);
-                
-                dbbind(dbconn, 5, INTBIND, sizeof(int), (BYTE *)&scaleBind);
-                dbnullbind(dbconn, 5, &scaleBindNull);
-                
-                while (dbnextrow(dbconn) != NO_MORE_ROWS) {
-                    
-                    
-                    NSString *name = nil;
-                    
-                    if (nameBindNull != -1) {
-                        if (nameBind != nil) {
-                            
-                            NSString *object = [[NSString alloc] initWithCString: nameBind
-                                                                        encoding: NSStringEncodingConversionAllowLossy];
-                            name = object;
-                        }
-                    }
-                    if (name != nil) {
-                        MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
-                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
-                        databaseField.fieldTypeNative = fieldTypeCalculated;
-                        databaseField.fieldType = fieldTypeCalculated;
-                        databaseField.width = (NSUInteger)lengthBind;
-                        databaseField.decimals = (NSUInteger)scaleBind;
-                        databaseField.primaryKey = 0;
-                        
-                        [results addObject:databaseField];
-                        
-                    }
-                }
-                free(nameBind);
-            }
-        }
-    }
-    return results;
-}
-
-
 - (void)closeProcess:(id)process {
     DBPROCESS *dbconn = [process process];
     dbclose(dbconn);
@@ -1553,6 +1345,270 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                      safeField, [self tableAliasConnector], safeFieldAlias,
                      MADSqlTextFromPart, safeTable];
     return sql;
+}
+
+#pragma mark - Reading Tables
+
+- (NSArray *)getTablesFromConnection:(id)process error:(NSError * __autoreleasing *)outError {
+    id results = nil;
+//    NSError *error = nil;
+    DBPROCESS *dbconn = [process process];
+    if (dbconn) {
+        
+        dbcmd(dbconn, "SELECT name FROM sys.tables");
+        
+        RETCODE success = dbsqlexec(dbconn);
+        
+        if (success != SUCCEED) {
+            
+            NSString *message = @"Sql Syntax Error";
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            *outError = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
+            
+        }
+        
+        int numberOfColumns = dbnumcols(dbconn);
+        
+        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
+        
+        while (dbresults(dbconn) != NO_MORE_RESULTS) {
+            
+            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+            DBINT columnLength      = dbcollen(dbconn, 1);
+            char *sybVarCharBind;
+            DBINT sybVarCharBindNull;
+            
+            sybVarCharBind = malloc((size_t) sizeof(char) * (unsigned long)( columnLength + 1 ) );
+            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
+            dbnullbind(dbconn, 1, &sybVarCharBindNull);
+            
+            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                
+                if (sybVarCharBindNull != -1) {
+                    if (sybVarCharBind != nil) {
+                        NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                       encoding: NSStringEncodingConversionAllowLossy];
+                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                        [results addObject:table];
+                    }
+                }
+            }
+            free(sybVarCharBind);
+        }
+        
+        //dbclose(dbconn);
+        
+    }
+    return results;
+}
+
+- (void)enumerateTablesFromConnection:(id)process
+                           usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
+    id results = nil;
+    NSError *error = nil;
+    DBPROCESS *dbconn = [process process];
+    if (dbconn) {
+        
+        dbcmd(dbconn, "SELECT name FROM sys.tables");
+        
+        RETCODE success = dbsqlexec(dbconn);
+        
+        if (success != SUCCEED) {
+            
+            NSString *message = @"Sql Syntax Error";
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            error = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
+            
+        }
+        
+        int numberOfColumns = dbnumcols(dbconn);
+        
+        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
+        
+        while (dbresults(dbconn) != NO_MORE_RESULTS) {
+            
+            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+            DBINT columnLength      = dbcollen(dbconn, 1);
+            char *sybVarCharBind;
+            DBINT sybVarCharBindNull;
+            
+            sybVarCharBind = malloc((size_t) sizeof(char) * (unsigned long)( columnLength + 1 ) );
+            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
+            dbnullbind(dbconn, 1, &sybVarCharBindNull);
+            
+            NSUInteger counter = 0;
+            BOOL stop = NO;
+            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                
+                if (sybVarCharBindNull != -1 && sybVarCharBind != NULL) {
+                    
+                    NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                   encoding: NSStringEncodingConversionAllowLossy];
+                    
+                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                    [results addObject:table];
+                    
+                    block(table, counter, &stop);
+                    if (stop) break;
+                    counter++;
+                }
+            }
+            free(sybVarCharBind);
+        }
+    }
+    completion(error == nil, error, results);
+}
+
+- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    
+    id results = nil;
+    NSError *error = nil;
+    DBPROCESS *dbconn = [process process];
+    if (dbconn) {
+        
+        dbcmd(dbconn, "SELECT name FROM sys.tables");
+        
+        RETCODE success = dbsqlexec(dbconn);
+        
+        if (success != SUCCEED) {
+            
+            NSString *message = @"Sql Syntax Error";
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            error = [NSError errorWithDomain:MADDomainTDS code:534 userInfo:errorInfo];
+            
+        }
+        
+        int numberOfColumns = dbnumcols(dbconn);
+        
+        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
+        
+        while (dbresults(dbconn) != NO_MORE_RESULTS) {
+            
+            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+            DBINT columnLength      = dbcollen(dbconn, 1);
+            char *sybVarCharBind;
+            DBINT sybVarCharBindNull;
+            
+            sybVarCharBind = malloc((size_t) sizeof(char) * (unsigned long)( columnLength + 1 ) );
+            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
+            dbnullbind(dbconn, 1, &sybVarCharBindNull);
+            
+            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                
+                if (sybVarCharBindNull != -1) {
+                    if (sybVarCharBind != nil) {
+                        NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                       encoding: NSStringEncodingConversionAllowLossy];
+                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                        [results addObject:table];
+                    }
+                }
+            }
+            free(sybVarCharBind);
+        }
+        
+        //dbclose(dbconn);
+        
+    }
+    completion(error == nil, error, results);
+}
+
+#pragma mark - Reading Fields
+
+- (NSArray *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
+    NSMutableArray *results = nil;
+    RETCODE sqlReturnCode = FAIL;
+    DBPROCESS *dbconn = [process process];
+    if (dbconn) {
+        NSString *query = [NSString stringWithFormat:@"SELECT name, system_type_id, max_length, precision, scale FROM sys.columns WHERE object_id = OBJECT_ID('%@')", tableName];
+        dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
+        
+        sqlReturnCode = dbsqlexec(dbconn);
+        
+        if (sqlReturnCode != SUCCEED && error == NULL) {
+            NSString * const message = @"Sql Syntax Error";
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            *error = [NSError errorWithDomain:MADDomainTDS code:3456 userInfo:errorInfo];
+            NSAssert(error == NULL, @"Syntax error fields for table: %@", *error);
+        }
+        
+        int numberOfColumns = dbnumcols(dbconn);
+        
+        results = [[NSMutableArray alloc] initWithCapacity: (NSUInteger)numberOfColumns];
+        
+        //BOOL success = success == SUCCEED;
+        //NSMutableDictionary *resultsDictionary = nil;
+        
+        if (sqlReturnCode == SUCCEED) {
+            
+            while (dbresults(dbconn) != NO_MORE_RESULTS) {
+                
+                //DBINT columnNumberBytes     = dbdatlen(dbconn, 1);
+                DBINT nameLenght            = dbcollen(dbconn, 1);
+                //DBINT typeLenght            = dbcollen(dbconn, 2);
+                //DBINT lengthLenght          = dbcollen(dbconn, 3);
+                //DBINT percisionLenght       = dbcollen(dbconn, 4);
+                //DBINT scaleLenght           = dbcollen(dbconn, 5);
+                
+                //int columnType1 = dbcoltype(dbconn, 1);
+                //int columnType2 = dbcoltype(dbconn, 2);
+                //int columnType3 = dbcoltype(dbconn, 3);
+                //int columnType4 = dbcoltype(dbconn, 4);
+                //int columnType5 = dbcoltype(dbconn, 5);
+                
+                char *nameBind;
+                int typeBind, lengthBind, percisionBind, scaleBind;
+                
+                DBINT nameBindNull, typeBindNull, lengthBindNull, percisionBindNull, scaleBindNull;
+                NSInteger nameSize = ( nameLenght + 1 );
+                nameBind = malloc( sizeof(char) * (unsigned long)nameSize );
+                dbbind(dbconn, 1, NTBSTRINGBIND, ( nameLenght + 1 ), (BYTE *)nameBind);
+                dbnullbind(dbconn, 1, &nameBindNull);
+                
+                dbbind(dbconn, 2, INTBIND, sizeof(int), (BYTE *)&typeBind);
+                dbnullbind(dbconn, 2, &typeBindNull);
+                
+                dbbind(dbconn, 3, INTBIND, sizeof(int), (BYTE *)&lengthBind);
+                dbnullbind(dbconn, 3, &lengthBindNull);
+                
+                dbbind(dbconn, 4, INTBIND, sizeof(int), (BYTE *)&percisionBind);
+                dbnullbind(dbconn, 4, &percisionBindNull);
+                
+                dbbind(dbconn, 5, INTBIND, sizeof(int), (BYTE *)&scaleBind);
+                dbnullbind(dbconn, 5, &scaleBindNull);
+                
+                while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                    
+                    
+                    NSString *name = nil;
+                    
+                    if (nameBindNull != -1) {
+                        if (nameBind != nil) {
+                            
+                            NSString *object = [[NSString alloc] initWithCString: nameBind
+                                                                        encoding: NSStringEncodingConversionAllowLossy];
+                            name = object;
+                        }
+                    }
+                    if (name != nil) {
+                        MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
+                        MTDataType fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
+                        databaseField.fieldTypeNative = fieldTypeCalculated;
+                        databaseField.fieldType = fieldTypeCalculated;
+                        databaseField.width = (NSUInteger)lengthBind;
+                        databaseField.decimals = (NSUInteger)scaleBind;
+                        databaseField.primaryKey = 0;
+                        
+                        [results addObject:databaseField];
+                        
+                    }
+                }
+                free(nameBind);
+            }
+        }
+    }
+    return results;
 }
 
 @end

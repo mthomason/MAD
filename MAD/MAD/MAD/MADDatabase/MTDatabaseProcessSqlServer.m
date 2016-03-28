@@ -13,15 +13,12 @@
 }
 
 - (instancetype)initWithProcess:(DBPROCESS *)process {
-    self = [self init];
-    if (self) {
+    if (self = [self init]) {
         dbconn = process;
     }
     return self;
 }
 
-- (DBPROCESS *)process {
-    return dbconn;
-}
+- (DBPROCESS *)process { return dbconn; }
 
 @end

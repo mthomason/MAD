@@ -405,8 +405,17 @@
         BOOL __block gotit                              = YES;
         NSError * __block gotitError                    = nil;
         
-        [database enumerateTablesFromConnection:dbconnection usingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        [database enumerateTablesFromConnection:dbconnection usingBlock:^(MTDatabaseTable *databaseTable, NSUInteger index, BOOL *stop) {
+            //NSString *name = databaseTable.name.copy;
             
+            //status(name, (index + 1) / numberOfTables);
+            
+            NSError *getFieldsError = NULL;
+            NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
+            
+            NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
+            tablesAndFields[databaseTable.name] = fields;
+
         } completion:^(BOOL success, NSError *errors, NSArray *results) {
             
         }];
