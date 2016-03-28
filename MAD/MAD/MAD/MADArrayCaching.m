@@ -139,7 +139,8 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
 
 - (void)endBulkInserts {
     [self.database endBulkInsert];
-    [self reopenDatabaseAtUrl:[self url]];
+    NSURL *url = [self url];
+    [self reopenDatabaseAtUrl: url];
     [self prepareStatements];
 }
 
