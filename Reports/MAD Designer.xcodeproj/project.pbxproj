@@ -30,6 +30,8 @@
 		4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */; };
 		4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153DB1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m */; };
 		4C0153E11C9FD5B700FCD3C1 /* MADOperationBooleanAnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153E01C9FD5B700FCD3C1 /* MADOperationBooleanAnd.m */; };
+		4C04EE721CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04EE711CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m */; };
+		4C04EE751CAA59EE00582422 /* MADDocumentOperationCloseDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04EE741CAA59EE00582422 /* MADDocumentOperationCloseDocument.m */; };
 		4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */; };
 		4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0A077019C95EAC0059E1D9 /* StoreKit.framework */; };
 		4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -1269,6 +1271,10 @@
 		4C0153DB1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionDisplayedAlert.m; sourceTree = "<group>"; };
 		4C0153DF1C9FD5B700FCD3C1 /* MADOperationBooleanAnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationBooleanAnd.h; sourceTree = "<group>"; };
 		4C0153E01C9FD5B700FCD3C1 /* MADOperationBooleanAnd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationBooleanAnd.m; sourceTree = "<group>"; };
+		4C04EE701CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationSaveAndCloseNewDocument.h; sourceTree = "<group>"; };
+		4C04EE711CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationSaveAndCloseNewDocument.m; sourceTree = "<group>"; };
+		4C04EE731CAA59EE00582422 /* MADDocumentOperationCloseDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentOperationCloseDocument.h; sourceTree = "<group>"; };
+		4C04EE741CAA59EE00582422 /* MADDocumentOperationCloseDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentOperationCloseDocument.m; sourceTree = "<group>"; };
 		4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentScroller.h; sourceTree = "<group>"; };
 		4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentScroller.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -4278,18 +4284,22 @@
 			children = (
 				4CA0C6B51CA5401000222B8D /* MADCreateDocumentOperation.h */,
 				4CA0C6B61CA5401000222B8D /* MADCreateDocumentOperation.m */,
-				4CA0C6CE1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.h */,
-				4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */,
 				4CA0C6B81CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.h */,
 				4CA0C6B91CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m */,
 				4CA0C6C11CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.h */,
 				4CA0C6C21CA55F0100222B8D /* MADCreateDocumentOperationAddConnection.m */,
+				4CA0C6CE1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.h */,
+				4CA0C6CF1CA68F1400222B8D /* MADCreateDocumentOperationImportSchema.m */,
 				4CA0C6BB1CA5496700222B8D /* MADOperationBackgroundTaskBegin.h */,
 				4CA0C6BC1CA5496700222B8D /* MADOperationBackgroundTaskBegin.m */,
 				4CA0C6BE1CA5499400222B8D /* MADOperationBackgroundTaskEnd.h */,
 				4CA0C6BF1CA5499400222B8D /* MADOperationBackgroundTaskEnd.m */,
 				4CA0C6D31CA7D17000222B8D /* MADOperationUniqueUrlForFilename.h */,
 				4CA0C6D41CA7D17000222B8D /* MADOperationUniqueUrlForFilename.m */,
+				4C04EE701CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.h */,
+				4C04EE711CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m */,
+				4C04EE731CAA59EE00582422 /* MADDocumentOperationCloseDocument.h */,
+				4C04EE741CAA59EE00582422 /* MADDocumentOperationCloseDocument.m */,
 			);
 			name = Document;
 			sourceTree = "<group>";
@@ -6078,8 +6088,10 @@
 				4C8DE2621BAFA96300AD1111 /* MADSearchBar.m in Sources */,
 				4C401F751BAE7EB500BAE5FC /* MADSliderPageVertical.m in Sources */,
 				4C401F781BAE7EB500BAE5FC /* MADDimmingView.m in Sources */,
+				4C04EE751CAA59EE00582422 /* MADDocumentOperationCloseDocument.m in Sources */,
 				4C26BAA11BAF9D6D00456DC8 /* UIFlexableSizeView.m in Sources */,
 				4C26BA211BAF150F00456DC8 /* MADQueryVisualizationDefination.m in Sources */,
+				4C04EE721CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m in Sources */,
 				4CFEE7FB1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C26B9F91BAF14A500456DC8 /* MADDesignerElementView.m in Sources */,
 				4CC886041C7AA861003E18D2 /* UIStoryboard+Licensing.m in Sources */,

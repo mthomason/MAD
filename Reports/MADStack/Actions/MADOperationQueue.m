@@ -7,12 +7,12 @@
 //
 
 #import "MADOperationQueue.h"
+#import <Foundation/NSArray.h>
 #import "MADOperation.h"
 #import "NSOperation+Advanced.h"
 #import "MADBlockObserver.h"
 #import "MADOperationCondition.h"
 #import "MADExclusivityController.h"
-#import <Foundation/NSArray.h>
 
 @implementation MADOperationQueue
 

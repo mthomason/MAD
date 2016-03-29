@@ -17,6 +17,8 @@
 #import "MADOperationBackgroundTaskEnd.h"
 #import "MADCreateDocumentOperationAddConnection.h"
 #import "MADCreateDocumentOperationImportSchema.h"
+#import "MADCreateDocumentOperationSaveAndCloseNewDocument.h"
+#import "MADDocumentOperationCloseDocument.h"
 
 @interface MADCreateDocumentOperation ()
 
@@ -61,8 +63,14 @@
         [importSchema addDependency:createDocument];
         [importSchema addDependency:addConnection];
         
+        MADCreateDocumentOperationSaveAndCloseNewDocument *saveOperation = [[MADCreateDocumentOperationSaveAndCloseNewDocument alloc] init];
+        [saveOperation addDependency:importSchema];
+        
+        MADDocumentOperationCloseDocument *closeDocument = [[MADDocumentOperationCloseDocument alloc] init];
+        [closeDocument addDependency:saveOperation];
+        
         MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
-        [taskEnd addDependency:importSchema];
+        [taskEnd addDependency:closeDocument];
         
         
         
@@ -73,6 +81,8 @@
                                                          createDocument,
                                                          addConnection,
                                                          importSchema,
+                                                         saveOperation,
+                                                         closeDocument,
                                                          taskEnd];
         
         MADGroupOperation * __weak wself = self;
