@@ -87,7 +87,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (void)readRow:(NSUInteger)row;
 
-- (NSArray *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)error;
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)error;
 - (void)enumerateTablesFromConnection:(id)dbconn
                            usingBlock:(void (^)(MTDatabaseTable *obj, NSUInteger index, BOOL *stop))block
                            completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;

@@ -62,7 +62,7 @@
         [importSchema addDependency:addConnection];
         
         MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
-        [taskEnd addDependency:createDocument];
+        [taskEnd addDependency:importSchema];
         
         
         

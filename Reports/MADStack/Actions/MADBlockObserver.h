@@ -10,9 +10,22 @@
 #define MAD_Designer_MADBlockObserver_h
 
 #import <Foundation/NSObject.h>
-#import "MADOperationObserver.h"
 
-@class NSOperation;
+@class MADOperation, NSOperation;
+
+    // The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
+    @protocol MADOperationObserver <NSObject>
+
+    // Invoked immediately prior to the `Operation`'s `execute()` method.
+    - (void)operationDidStart:(MADOperation *)operation;
+
+    // Invoked when `Operation.produceOperation(_:)` is executed.
+    - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation;
+
+    // Invoked as an `Operation` finishes, along with any errors produced during execution (or readiness evaluation).
+    - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors;
+
+@end
 
 @interface MADBlockObserver : NSObject <MADOperationObserver>
 

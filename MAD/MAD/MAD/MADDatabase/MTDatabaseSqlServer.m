@@ -1349,7 +1349,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 #pragma mark - Reading Tables
 
-- (NSArray *)getTablesFromConnection:(id)process error:(NSError * __autoreleasing *)outError {
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)process error:(NSError * __autoreleasing *)outError {
     id results = nil;
 //    NSError *error = nil;
     DBPROCESS *dbconn = [process process];

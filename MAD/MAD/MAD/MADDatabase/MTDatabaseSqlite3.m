@@ -833,7 +833,7 @@ void sqliteLog(void *foo, const char* statement) {
     }];
 }
 
-- (NSArray *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
     sqlite3_stmt *statement;

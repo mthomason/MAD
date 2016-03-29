@@ -18,13 +18,16 @@
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADErrorContainer.h>
 
+#import "MADOperationObserver.h"
+#import "MADOperationQueue.h"
+
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTDataTable+Factory.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADCredential.h>
 
 #import <MADFileManager/MADFileUtilities.h>
-#import "MADOperationQueue.h"
+
 #import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADKeyChainOperationGet.h"
@@ -41,15 +44,13 @@
 
 #import "MADDatabaseOperationTestConnection.h"
 
-#import "MADOperationObserver.h"
-
 #import "MADCreateDocumentOperation.h"
 
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MADConnectionViewController()
-    <MADocumentDelegate, MTDatabaseProtocol, MADOperationObserver>
+    <MADOperationObserver, MADocumentDelegate, MTDatabaseProtocol>
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
@@ -485,45 +486,43 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
     NSArray *remaningErrors = [errors subarrayWithRange:range];
-    UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle:error.localizedDescription
-                                                                     message:error.localizedFailureReason
+    
+    UIAlertController *alert = [UIAlertController errorDisplayErrorWithTitle:error.localizedDescription message:error.localizedFailureReason
                                                                andCompletion:^(UIAlertAction *action) {
-                                                                   if (remaningErrors.count > 0) {
-                                                                       [MADConnectionViewController viewController:viewController
-                                                                                                    displayErrors:remaningErrors
-                                                                                                       completion:^(BOOL success) {
-                                                                                                           completion(YES);
-                                                                                                       }];
-                                                                   } else {
-                                                                       completion(YES);
-                                                                   }
-                                                               }];
+        if (remaningErrors.count > 0) {
+            [MADConnectionViewController viewController:viewController displayErrors:remaningErrors completion:^(BOOL success) {
+                completion(YES);
+            }];
+        } else {
+            completion(YES);
+        }
+    }];
 
     [viewController presentViewController:alert animated:YES completion:nil];
 
 }
 
 - (void)saveCloseAndExitWithCompletion:(void (^)(BOOL, NSError *))completion {
+
     MADConnectionViewController * __weak weakself = self;
     
-    [self.docToSave saveToURL: self.docToSave.fileURL
-             forSaveOperation: UIDocumentSaveForCreating
-            completionHandler: ^(BOOL success) {
+    [self.docToSave saveToURL: self.docToSave.fileURL forSaveOperation: UIDocumentSaveForCreating completionHandler: ^(BOOL success) {
                 
-                MADConnectionViewController *strongself = weakself;
-                MADConnectionViewController * __weak weakself1 = strongself;
+        MADConnectionViewController *strongself = weakself;
+        MADConnectionViewController * __weak weakself1 = strongself;
                 
-                if (success) {
-                    [weakself1.docToSave closeWithCompletionHandler:^(BOOL successClose) {
+        if (success) {
+        
+            [weakself1.docToSave closeWithCompletionHandler:^(BOOL successClose) {
                         
-                        MADConnectionViewController *strongself1 = weakself1;
+                MADConnectionViewController *strongself1 = weakself1;
+                [strongself1 finishDocument];
+                completion(successClose, nil);
                         
-                        [strongself1 finishDocument];
-                        completion(successClose, nil);
-                        
-                    }];
-                }
             }];
+            
+        }
+    }];
 }
 
 - (void)finishDocument {

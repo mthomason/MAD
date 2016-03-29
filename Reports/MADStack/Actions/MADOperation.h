@@ -10,7 +10,7 @@
 #define MAD_Designer_MADOperation_h
 
 #import <Foundation/NSOperation.h>
-#import "MADOperationObserver.h"
+#import "MADBlockObserver.h"
 #import "MADOperationCondition.h"
 
 @class NSMutableArray<ObjectType>;

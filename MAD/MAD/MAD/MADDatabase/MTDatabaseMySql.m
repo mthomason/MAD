@@ -275,7 +275,7 @@
 }
 
 
-- (NSArray *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
     
     NSError *errorFetch = nil;
     MysqlConnection *conn = dbconn;

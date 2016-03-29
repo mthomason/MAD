@@ -207,7 +207,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (void)closeProcess:(id)process {}
 
-- (NSArray *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
+- (NSArray <MTDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError *__autoreleasing *)error {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
