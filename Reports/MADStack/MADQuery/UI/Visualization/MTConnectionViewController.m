@@ -271,6 +271,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename:filename
                                                                                    documentsDirectory:self.saveFileDelegate.documentDirectory
                                                                                    databaseConnection:databaseConnection viewController:self];
+    [createDocument addObserver:self];
     [self.credentialQueue addOperation:createDocument];
     
     self.databaseConnection = databaseConnection;
