@@ -349,8 +349,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
             MTDatabaseSqlite3 * dbForInserts = ((MTDatabaseSqlite3 *)self.databaseForInserts);
             struct sqlite3 *db = dbForInserts.database;
 
-            dispatch_queue_t q = self.queueBulkAdd;
-            dispatch_async(q, ^{
+            //dispatch_queue_t q = self.queueBulkAdd;
+            //dispatch_async(q, ^{
 
                 [MTDatabaseSqlite3 executeQueryWithSql:sql
                                                       database:db
@@ -358,7 +358,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                                 queryFieldKeys:fieldKeys
                                      queryPartOfTransactionSet:YES];
 
-            });
+            //});
 
             rowData = nil; // release?
             sql = nil;

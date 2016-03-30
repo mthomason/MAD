@@ -146,7 +146,6 @@ NSString * const MTNullIdentifier = @"(null)";
                                              CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f)) :
                             UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
     
-    
     MTReportFormatterState *machineState = [MTReportFormatterState new];
     [self setMachineState:machineState];
     [self initalizeStateMachine];

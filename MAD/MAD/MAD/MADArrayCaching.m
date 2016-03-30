@@ -14,6 +14,7 @@
 #import "MTQuery.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
+#import "MTQueryCacheAddColumn.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -245,18 +246,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName
       createTable:(BOOL)create unique:(BOOL)unique {
     
-    NSNumber *createTable = @(create);
-    NSDictionary *queryDefination = @{
-                                      @(MTQueryCacheAddColumnDataColumn) : column,
-                                      @(MTQueryCacheAddColumnTableName) : table,
-                                      @(MTQueryCacheAddColumnColumnName) : columnName,
-                                      @(MTQueryCacheAddColumnCreateTable) : createTable,
-                                      @(MTQueryCacheAddColumnUnique) : @(unique),
-                                      };
-    NSError * __autoreleasing error = NULL;
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    MTQueryCacheAddColumn *queryCacheAddColumn = [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column
+                                                                                      createTable:create ? true : false
+                                                                                 uniqueColumnHack:unique ? true : false];
+    queryCacheAddColumn.database = self.database;
     bool success = false;
-    success = [self.database executeQuery:query withError:&error];
+    NSError * __autoreleasing error = NULL;
+    success = [self.database executeQuery:queryCacheAddColumn withError:&error];
 }
 
 - (NSData *)dataForObject:(id)object {

@@ -412,6 +412,7 @@ void sqliteLog(void *foo, const char* statement) {
              queryFieldKeys:(NSArray *)queryFieldKeys
   queryPartOfTransactionSet:(bool)queryPartOfTransactionSet {
 
+    NSLog(@"SQL: %@", queryString);
     BOOL success = YES;
 
     if (queryString.length > 0) {
@@ -420,7 +421,8 @@ void sqliteLog(void *foo, const char* statement) {
         char *sql = sqlite3_mprintf(queryString.UTF8String);
         
         if (statement == NULL) {
-            success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
+            int prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
+            success = SQLITE_OK == prepare_result;
             if (queryBinaryBindings.count > 0) {
                 for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
                     [MTDatabaseSqlite3 bindStatement:&statement withBindings:databinding];
@@ -433,11 +435,11 @@ void sqliteLog(void *foo, const char* statement) {
                 }
             }
         }
+        NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
         
         sqlite3_step(statement);
 //        sqlite3_reset(statement);
         
-        NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
 
         sqlite3_finalize(statement);
         statement = NULL;
@@ -451,8 +453,8 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = YES;
     
     NSString *queryString = [NSString stringWithString: [query getSqlWithError:&error]];
-    //NSLog(@"Query String: %@", queryString);
-    
+    NSLog(@"SQL2: %@", queryString);
+
     if (queryString.length > 0) {
         
         sqlite3_stmt *statement = NULL;
@@ -557,7 +559,7 @@ void sqliteLog(void *foo, const char* statement) {
             }
         } else {
             // FIXME: Handle failures.
-            sqlite3_step(statement);
+            int result = sqlite3_step(statement);
         }
         if ([query partOfTransactionSet] == NO) {
             success = SQLITE_OK == sqlite3_finalize(statement);
@@ -804,7 +806,8 @@ void sqliteLog(void *foo, const char* statement) {
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     const char *queryStartChar = [queryStart UTF8String];
     char *sql = sqlite3_mprintf((char *) queryStartChar);
-    
+    NSLog(@"SQL3: %s", sql);
+
     if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
         BOOL stop = NO;

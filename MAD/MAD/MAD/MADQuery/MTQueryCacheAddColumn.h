@@ -11,7 +11,13 @@
 
 #import "MTQueryCache.h"
 
+@class MTDataColumn;
+
 @interface MTQueryCacheAddColumn : MTQueryCache
+
+    - (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName
+                               column:(MTDataColumn *)dataColumn
+                          createTable:(bool)createTable uniqueColumnHack:(bool)uniqueColumnHack;
 
 @end
 

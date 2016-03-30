@@ -19,11 +19,11 @@
 
 @interface MTQueryCacheAddColumn ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSString *columnName;
+@property (nonatomic, copy) NSString *tableName;
+@property (nonatomic, copy) NSString *columnName;
 @property (nonatomic, strong) MTDataColumn *column;
-@property (nonatomic, assign) BOOL createTable;
-@property (nonatomic, assign) BOOL uniqueColumnHack;
+@property (nonatomic, assign) bool createTable;
+@property (nonatomic, assign) bool uniqueColumnHack;
 
 @end
 
@@ -32,8 +32,7 @@
 // FIXME: This is currently SQLite specific.
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddColumn expects NSDictionary.");
         
@@ -75,13 +74,30 @@
     return self;
 }
 
+- (instancetype)initWithTableName:(NSString *)tableName columnName:(NSString *)columnName column:(MTDataColumn *)dataColumn createTable:(bool)createTable uniqueColumnHack:(bool)uniqueColumnHack {
+    if (self = [super init]) {
+        
+        _createTable = createTable;
+        _uniqueColumnHack = uniqueColumnHack;
+        _tableName = tableName.copy;
+        _columnName = columnName.copy;
+        self.column = dataColumn;
+        
+    }
+    return self;
+}
+
+
+
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     
     NSString *tableName = [self tableName];
     NSString *columnName = [self columnName];
     
-    NSString *columnAffinity = [[self database] nativeTypeForDataType:[[[self column] columnType] unsignedIntegerValue]];
+    MTDatabaseCache *database = [self database];
+    MTDataType datatype = [[[self column] columnType] unsignedIntegerValue];
+    NSString *columnAffinity = [database nativeTypeForDataType:datatype];
 
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
@@ -92,9 +108,8 @@
         unique = @"PRIMARY KEY";
     }
     NSString *sql = [self createTable] ?
-    
-    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, unique] :
-                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@;", tableName, columnDefination];
+                                [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, unique] :
+                                [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@;", tableName, columnDefination];
     
     return sql;
 }
