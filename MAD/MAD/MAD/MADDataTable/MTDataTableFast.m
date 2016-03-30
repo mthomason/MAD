@@ -22,6 +22,7 @@
 #import "MTQuery.h"
 #import "MTQueryCacheAddRow.h"
 #import "MTQueryCacheIndexDrop.h"
+#import "MTQueryCacheAddColumn.h"
 #import "MTQueryCacheVacuum.h"
 #import "MTQueryCacheDropTable.h"
 #import "MTQueryCacheDeleteAllFromTable.h"
@@ -311,18 +312,10 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
-    NSNumber *createTable = @(create);
-    NSDictionary *queryDefination = @{
-                                      @(MTQueryCacheAddColumnDataColumn) : column,
-                                      @(MTQueryCacheAddColumnTableName) : table,
-                                      @(MTQueryCacheAddColumnColumnName) : columnName,
-                                      @(MTQueryCacheAddColumnCreateTable) : createTable,
-                                      @(MTQueryCacheAddColumnUnique) : @(unique),
-                                      };
-    
     bool success = false;
     NSError * __autoreleasing errorQuery = NULL;
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    MTQueryCacheAddColumn *query = [[MTQueryCacheAddColumn alloc] initWithTableName:table columnName:columnName column:column createTable:create ? true : false uniqueColumnHack:unique ? true : false];
+    query.database = _databaseForInserts;
     success = [_databaseForInserts executeQuery:query withError:&errorQuery];
     NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts.databaseHandle), __PRETTY_FUNCTION__);
 
@@ -349,21 +342,11 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
             MTDatabaseSqlite3 * dbForInserts = ((MTDatabaseSqlite3 *)self.databaseForInserts);
             struct sqlite3 *db = dbForInserts.database;
 
-            //dispatch_queue_t q = self.queueBulkAdd;
-            //dispatch_async(q, ^{
-
-                [MTDatabaseSqlite3 executeQueryWithSql:sql
-                                                      database:db
-                                           queryBinaryBindings:binaryBindings
-                                                queryFieldKeys:fieldKeys
-                                     queryPartOfTransactionSet:YES];
-
-            //});
-
-            rowData = nil; // release?
-            sql = nil;
-            fieldKeys = nil;
-            binaryBindings = nil;
+            [MTDatabaseSqlite3 executeQueryWithSql: sql
+                                          database: db
+                               queryBinaryBindings: binaryBindings
+                                    queryFieldKeys: fieldKeys
+                         queryPartOfTransactionSet: YES];
        
         }
         
@@ -385,11 +368,12 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                           };
 
         MTQuery *query = self.bulkInsertLoop ? self.bulkInsertQuery :
-                                [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
+                                                [[MTQueryCacheAddRow alloc] initWithObject:queryDefination];
         
+        query.database = _databaseForInserts;
         bool success;
         NSError * __autoreleasing errorQuery = NULL;
-        success = [self.databaseForInserts executeQuery:query withError:&errorQuery];
+        success = [_databaseForInserts executeQuery:query withError:&errorQuery];
 
     }
     
