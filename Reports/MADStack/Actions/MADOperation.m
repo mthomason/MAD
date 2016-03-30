@@ -253,7 +253,6 @@ static NSString * const MADOperatorSelectorState        = @"state";
  operation has finished.
  */
 - (void)finish:(NSArray *)errors {
-    NSLog(@"Finish with errors: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = YES;
         self.state = finishing;

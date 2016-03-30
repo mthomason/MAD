@@ -36,7 +36,6 @@
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddColumn expects NSDictionary.");
         
-        NSNumber *keyMTQueryCacheAddColumnUrl = @(MTQueryCacheAddColumnUrl);
         NSNumber *keyMTQueryCacheAddColumnDataColumn = @(MTQueryCacheAddColumnDataColumn);
         NSNumber *keyMTQueryCacheAddColumnTableName = @(MTQueryCacheAddColumnTableName);
         NSNumber *keyMTQueryCacheAddColumnColumnName = @(MTQueryCacheAddColumnColumnName);
@@ -46,7 +45,6 @@
         [self setColumn:column];
         
         NSString *tableName = object[keyMTQueryCacheAddColumnTableName];
-        NSURL *url = object[keyMTQueryCacheAddColumnUrl];
         NSString *columnName = object[keyMTQueryCacheAddColumnColumnName];
         NSNumber *createTable = object[keyMTQueryCacheAddColumnCreateTable];
         NSNumber *uniqueObj = object[@(MTQueryCacheAddColumnUnique)];
@@ -61,12 +59,6 @@
         
         [self setTableName:tableName];
         
-        if (url != nil) {
-            MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
-            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
-            NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
-            [self setDatabase:(MTDatabaseCache *)db];
-        }
         [self setQueryObject:object];
         
 
