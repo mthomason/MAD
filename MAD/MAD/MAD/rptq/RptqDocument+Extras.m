@@ -526,8 +526,10 @@
             
         } else {
             
-            NSString *failure = [[NSString alloc] initWithFormat:@"Table %@ not Added", tableName];
-            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : @"Fields not found.",
+            NSString *failureFormat = NSLocalizedString(@"Table %@ not Added.", @"Table %@ not Added.");
+            NSString *description = NSLocalizedString(@"Fields not found.", @"Fields not found.");
+            NSString *failure = [[NSString alloc] initWithFormat:failureFormat, tableName];
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : description,
                                        NSLocalizedFailureReasonErrorKey : failure};
             NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:userInfo];
             [errorContainer addError:error];
