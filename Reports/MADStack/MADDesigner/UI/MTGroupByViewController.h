@@ -29,13 +29,13 @@ extern NSString * const MTGroupByViewControllerIdentifier;
 @interface MTGroupByViewController : MADTableViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, weak) id <MTGroupByViewControllerDelegate> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MTGroupByViewControllerDelegate> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
-@property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;
+    @property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
+    @property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;
 
-- (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(NSInteger)sectionNumber;
+    - (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(NSInteger)sectionNumber;
 
 @end
 

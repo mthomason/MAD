@@ -16,13 +16,13 @@
 @class MTQueryBuilderAddLinkFirstFieldViewController, RptqQueryField;
 
 @protocol MTQueryBuilderAddLinkFirstFieldDelegate
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqQueryField *)result;
+    - (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqQueryField *)result;
 @end
 
 @interface MTQueryBuilderAddLinkFirstFieldViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstFieldDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstFieldDelegate> delegate;
 
 @end
 

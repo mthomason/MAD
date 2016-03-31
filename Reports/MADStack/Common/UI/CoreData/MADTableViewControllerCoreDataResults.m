@@ -13,9 +13,7 @@
 #import "MADTableViewControllerCoreDataResults.h"
 
 @interface MADTableViewControllerCoreDataResults()
-
     @property (nonatomic, assign) BOOL beganUpdates;
-
 @end
 
 @implementation MADTableViewControllerCoreDataResults

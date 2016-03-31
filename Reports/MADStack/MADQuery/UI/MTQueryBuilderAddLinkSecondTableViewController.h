@@ -16,13 +16,13 @@
 @class MTQueryBuilderAddLinkSecondTableViewController, RptqQueryTable;
 
 @protocol MTQueryBuilderAddLinkSecondTableDelegate
-- (void)viewControllerDidFinishWithSecondTable:(RptqQueryTable *)result;
+    - (void)viewControllerDidFinishWithSecondTable:(RptqQueryTable *)result;
 @end
 
 @interface MTQueryBuilderAddLinkSecondTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondTableDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondTableDelegate> delegate;
 
 @end
 

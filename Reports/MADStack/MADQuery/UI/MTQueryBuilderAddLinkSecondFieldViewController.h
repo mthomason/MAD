@@ -17,13 +17,13 @@
 @class MTQueryBuilderAddLinkSecondFieldViewController, RptqQueryField;
 
 @protocol MTQueryBuilderAddLinkSecondFieldDelegate
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqQueryField *)result;
+    - (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqQueryField *)result;
 @end
 
 @interface MTQueryBuilderAddLinkSecondFieldViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondFieldDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondFieldDelegate> delegate;
 
 @end
 

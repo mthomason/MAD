@@ -17,15 +17,15 @@
 
 @protocol MTQueryBuilderAddLinkFirstTableDelegate
 @optional
-- (void)viewControllerDidFinishWithTable:(RptqQueryTable *)result;
+    - (void)viewControllerDidFinishWithTable:(RptqQueryTable *)result;
 @end
 
 @interface MTQueryBuilderAddLinkFirstTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstTableDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstTableDelegate> delegate;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 

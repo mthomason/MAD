@@ -17,16 +17,16 @@
 @class MTQueryBuilderAddTableViewController, RptqDatabaseSchemaTable;
 
 @protocol MTQueryBuilderAddTableDelegate
-- (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable;
+    - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable;
 @end
 
 @interface MTQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddTableDelegate, MTViewControllerProtocol> delegate;
-@property (nonatomic, copy) NSArray *excludeResults;
+    @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddTableDelegate, MTViewControllerProtocol> delegate;
+    @property (nonatomic, copy) NSArray *excludeResults;
 
-- (IBAction)done:(id)sender;
+    - (IBAction)done:(id)sender;
 
 @end
 
