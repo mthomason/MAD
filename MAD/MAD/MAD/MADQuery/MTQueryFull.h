@@ -11,9 +11,14 @@
 
 #import "MTQuery.h"
 
+@class NSManagedObjectID;
+
 @interface MTQueryFull : MTQuery
 
-- (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error;
+    - (instancetype)initWithQueryObjectId:(NSManagedObjectID *)objectID andQueryLimit:(NSInteger)queryLimit;
+    - (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error;
+
+    @property (nonatomic, assign) NSInteger limitResults;
 
 @end
 

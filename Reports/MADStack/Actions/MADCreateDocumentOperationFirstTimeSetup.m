@@ -12,11 +12,13 @@
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
+#import <MAD/MTDataTableFast.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+extras.h>
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+extras.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
 @interface MADCreateDocumentOperationFirstTimeSetup ()
@@ -67,16 +69,20 @@
         
         //Initalize main database
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+        
         RptqQuery *query = rptqDatabase.hasQueries.anyObject;
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         document.mainDatabase = db;
         
-        //Initalize main query
+        MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQueryObjectId:query.objectID andQueryLimit:NSNotFound];
+        madQuery.dataDelegate = document;
         
-        //Initalize section layout managers
+        NSArray *sortDescriptors = [query sortDescriptorsForDatabase:document.mainDatabase];
+        [document.mainDataTable sortUsingDescriptors:sortDescriptors];
         
-        //Initalize report formatter
+        document.mainQuery = madQuery;
+
 
     }];
 

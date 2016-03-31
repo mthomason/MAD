@@ -144,7 +144,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 
     @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
-    @property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
     @property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
 
     @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing

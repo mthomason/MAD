@@ -65,7 +65,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
 
-    @property (nonatomic, strong, readonly) MTQueryFull *mainQuery;
+    @property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
     @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 
     @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;

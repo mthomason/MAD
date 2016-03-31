@@ -56,8 +56,7 @@
 
 @interface MTQueryFull ()
 
-@property (nonatomic, assign) NSInteger limitResults;
-@property (nonatomic, copy) NSManagedObjectID *objectID;
+    @property (nonatomic, copy) NSManagedObjectID *objectID;
 
 @end
 
