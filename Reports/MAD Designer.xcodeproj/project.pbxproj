@@ -99,7 +99,7 @@
 		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4C26B9531BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */; };
-		4C26B9541BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9521BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m */; };
+		4C26B9541BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9521BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m */; };
 		4C26B9681BAF11C800456DC8 /* MADOperationArchiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */; };
 		4C26B9691BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9631BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m */; };
 		4C26B96A1BAF11C800456DC8 /* MADInstallOperationSampleDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9651BAF11C800456DC8 /* MADInstallOperationSampleDocument.m */; };
@@ -1296,8 +1296,8 @@
 		4C26B94E1BAF0D4300456DC8 /* MADSectionHeaderViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionHeaderViewDelegate.h; sourceTree = "<group>"; };
 		4C26B94F1BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
-		4C26B9511BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewTableSectionHeaderDatabaseTable.h; sourceTree = "<group>"; };
-		4C26B9521BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderDatabaseTable.m; sourceTree = "<group>"; };
+		4C26B9511BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseTableSectionHeaderView.h; sourceTree = "<group>"; };
+		4C26B9521BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseTableSectionHeaderView.m; sourceTree = "<group>"; };
 		4C26B9601BAF11C800456DC8 /* MADOperationArchiveData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationArchiveData.h; sourceTree = "<group>"; };
 		4C26B9611BAF11C800456DC8 /* MADOperationArchiveData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationArchiveData.m; sourceTree = "<group>"; };
 		4C26B9621BAF11C800456DC8 /* MADInstallOperationSampleDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInstallOperationSampleDatabase.h; sourceTree = "<group>"; };
@@ -2728,8 +2728,8 @@
 				4C26B94E1BAF0D4300456DC8 /* MADSectionHeaderViewDelegate.h */,
 				4C26B94F1BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.h */,
 				4C26B9501BAF0D4300456DC8 /* UITableViewControllerCoreDataResults.m */,
-				4C26B9511BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.h */,
-				4C26B9521BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m */,
+				4C26B9511BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.h */,
+				4C26B9521BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -6319,7 +6319,7 @@
 				4C5B56071C9931BA005C19D9 /* MADKeyChainOperationGet.m in Sources */,
 				4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */,
 				4C4020EA1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m in Sources */,
-				4C26B9541BAF0D4300456DC8 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
+				4C26B9541BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m in Sources */,
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,
 				4CFEE8121BB7A22800AFAA0A /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,

@@ -181,7 +181,7 @@
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
     if (!sectionInfo.headerView) {
         CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, HEADER_HEIGHT);
-        UIViewTableSectionHeaderDatabaseTable *vsht = [[UIViewTableSectionHeaderDatabaseTable alloc] initWithFrame: rect
+        MADDatabaseTableSectionHeaderView *vsht = [[MADDatabaseTableSectionHeaderView alloc] initWithFrame: rect
                                                                                                              title: sectionInfo.table.alias
                                                                                                            section: section
                                                                                                           delegate: self];
@@ -222,7 +222,7 @@
 
 #pragma mark Section header delegate
 
-- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
+- (void)sectionHeaderView:(MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
 	
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)sectionOpened];
     sectionInfo.open = YES;
@@ -249,7 +249,7 @@
 		
 		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = self.sectionInfoArray[(NSUInteger)previousOpenSectionIndex];
         previousOpenSection.open = NO;
-        [previousOpenSection.headerView toggleOpenWithUserAction:NO];
+        [previousOpenSection.headerView toggleOpenWithUserAction:false];
         NSUInteger countOfRowsToDelete = previousOpenSection.fields.count;
         for (NSUInteger i = 0; i < countOfRowsToDelete; i++) {
             @autoreleasepool {
@@ -280,7 +280,7 @@
 }
 
 
-- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)sectionClosed {
+- (void)sectionHeaderView:(MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionClosed:(NSInteger)sectionClosed {
     
     /*
      Create an array of the index paths of the rows in the section that was closed, then delete those rows from the table view.

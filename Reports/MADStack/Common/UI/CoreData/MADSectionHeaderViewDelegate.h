@@ -9,12 +9,12 @@
 #ifndef MAD_MADSectionHeaderViewDelegate_h
 #define MAD_MADSectionHeaderViewDelegate_h
 
-@class UIViewTableSectionHeaderDatabaseTable;
+@class MADDatabaseTableSectionHeaderView;
 
 @protocol MADSectionHeaderViewDelegate <NSObject>
 @optional
-- (void)sectionHeaderView: (UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened: (NSInteger)section;
-- (void)sectionHeaderView: (UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed: (NSInteger)section;
+- (void)sectionHeaderView: (MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionOpened: (NSInteger)section;
+- (void)sectionHeaderView: (MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionClosed: (NSInteger)section;
 @end
 
 #endif

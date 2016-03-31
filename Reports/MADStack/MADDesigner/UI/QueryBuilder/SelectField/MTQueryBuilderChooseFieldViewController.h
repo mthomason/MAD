@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "MADDatabaseTableSectionHeaderView.h"
 #import "MADViewController.h"
 #import "MTUnwindProtocol.h"
 #import "MTQueryBuilderChooseFieldDelegate.h"

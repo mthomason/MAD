@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "MADDatabaseTableSectionHeaderView.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 static NSString * const TextAccessibilityHint = @"Toggles database field visibility.";
 static const CGFloat ButtonSize = 35.00000f;
 static const CGFloat PaddingSize = 5.00000f;
 
-@interface UIViewTableSectionHeaderDatabaseTable ()
+@interface MADDatabaseTableSectionHeaderView ()
 
     @property (nonatomic, strong) UILabel *titleLabel;
     @property (nonatomic, strong) UIButton *disclosureButton;
@@ -22,7 +22,7 @@ static const CGFloat PaddingSize = 5.00000f;
 
 @end
 
-@implementation UIViewTableSectionHeaderDatabaseTable
+@implementation MADDatabaseTableSectionHeaderView
 
 
 - (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <MADSectionHeaderViewDelegate>)delegate {
@@ -77,11 +77,11 @@ static const CGFloat PaddingSize = 5.00000f;
 }
 
 - (IBAction)toggleOpen:(id)sender {
-    [self toggleOpenWithUserAction:YES];
+    [self toggleOpenWithUserAction:true];
 }
 
 
-- (void)toggleOpenWithUserAction:(BOOL)userAction {
+- (void)toggleOpenWithUserAction:(bool)userAction {
     
     [self.disclosureButton setSelected: !self.disclosureButton.isSelected];
     
