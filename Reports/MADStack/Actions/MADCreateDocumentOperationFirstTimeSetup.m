@@ -65,12 +65,18 @@
         MTPaper *paper = [[MTPaper alloc] initWithType: rptqDocument.paperType];
         document.paper = paper;
         
+        //Initalize main database
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
-        
         RptqQuery *query = rptqDatabase.hasQueries.anyObject;
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         document.mainDatabase = db;
+        
+        //Initalize main query
+        
+        //Initalize section layout managers
+        
+        //Initalize report formatter
 
     }];
 
