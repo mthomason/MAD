@@ -19,6 +19,7 @@
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
 #import <MAD/MTQueryFull.h>
+#import <MAD/MADSectionLayoutManager.h>
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
@@ -50,7 +51,9 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @end
 
 @interface MADocument : UIManagedDocument
-    <UIPrintInteractionControllerDelegate, MTReportFormatterDataSource, MTDatabaseProtocol, MTCacheProtocol, MADDataProtocol>
+    <UIPrintInteractionControllerDelegate,
+        MTReportFormatterDataSource, MTDatabaseProtocol,
+        MTCacheProtocol, MADDataProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
 
     @property (nonatomic, assign) BOOL limitResultsDesignMode;
 

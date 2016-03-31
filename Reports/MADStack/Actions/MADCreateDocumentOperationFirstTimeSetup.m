@@ -19,6 +19,9 @@
 #import <MAD/RptqDatabase+extras.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+extras.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSectionEnumerator.h>
+#import <MAD/MADSectionLayoutManager.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
 @interface MADCreateDocumentOperationFirstTimeSetup ()
@@ -49,12 +52,10 @@
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
-        
         if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
             document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
-        
     }
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -80,9 +81,18 @@
         
         NSArray *sortDescriptors = [query sortDescriptorsForDatabase:document.mainDatabase];
         [document.mainDataTable sortUsingDescriptors:sortDescriptors];
-        
+
         document.mainQuery = madQuery;
 
+        NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
+        RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:rptqDocument];
+        for (RptqDocumentSection *reportSection in sectionEnumerator) {
+            
+            MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
+            layoutManager.delegate = document;
+            [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
+        }
+        document.sectionLayoutManagers = sectionLayoutManagers;
 
     }];
 

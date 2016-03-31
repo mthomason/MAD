@@ -137,7 +137,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
 @interface MADocument ()
-    <MADReportDesignerSectionElementLayoutManagerDelegate>
 
     @property (nonatomic, strong) UIImage *thumbnail;
 
