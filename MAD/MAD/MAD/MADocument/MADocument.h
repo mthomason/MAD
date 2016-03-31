@@ -14,6 +14,7 @@
 #import <UIKit/UIManagedDocument.h>
 #import <UIKit/UIPrintInteractionController.h>
 #import <MAD/MTReportFormatter.h>
+#import <MAD/MTDatabase.h>
 #import <MADFoundation/MTCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MAD/MADSortOrder.h>
@@ -49,7 +50,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @end
 
 @interface MADocument : UIManagedDocument
-    <UIPrintInteractionControllerDelegate, MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
+    <UIPrintInteractionControllerDelegate, MTReportFormatterDataSource, MTDatabaseProtocol, MTCacheProtocol, MADDataProtocol>
 
     @property (nonatomic, assign) BOOL limitResultsDesignMode;
 

@@ -11,7 +11,12 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADocument.h>
+#import <MAD/MTDatabase.h>
+#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+extras.h>
+#import <MAD/RptqQuery.h>
 #import "MADCreateDocumentOperationCreateDocument.h"
 
 @interface MADCreateDocumentOperationFirstTimeSetup ()
@@ -53,11 +58,19 @@
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
     [private performBlockAndWait:^{
+    
         RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
         document.documentObjectID = rptqDocument.objectID;
         
         MTPaper *paper = [[MTPaper alloc] initWithType: rptqDocument.paperType];
         document.paper = paper;
+        
+        RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+        
+        RptqQuery *query = rptqDatabase.hasQueries.anyObject;
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
+        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        document.mainDatabase = db;
 
     }];
 

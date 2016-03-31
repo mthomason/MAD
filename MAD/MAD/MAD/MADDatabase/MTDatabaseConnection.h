@@ -17,6 +17,8 @@ extern NSString * const MADIdentifierDatabaseMySQL;
 extern NSString * const MADIdentifierDatabaseTDS;
 extern NSString * const MADIdentifierDatabaseSqlite3;
 
+@class RptqUserCredentals;
+
 @interface MTDatabaseConnection : NSObject
     <NSCopying>
 
@@ -31,7 +33,10 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
                                                  host:(NSString *)host
                                              database:(NSString *)database
                                                  port:(NSInteger)port NS_RETURNS_RETAINED;
+    // Currently only returns SQLite3 type.
     + (instancetype)newDatabaseConnectionForObject:(id)credentals NS_RETURNS_RETAINED;
+    + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url NS_RETURNS_RETAINED;
+    + (instancetype)newDatabaseConnectionForUserCredentals:(RptqUserCredentals *)credentals NS_RETURNS_RETAINED;
 
     - (NSString *)appname;
 

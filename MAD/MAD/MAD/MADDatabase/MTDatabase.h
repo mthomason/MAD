@@ -1,5 +1,5 @@
 //
-//  MNSDatabase.h
+//  MADDatabase.h
 //  Reports
 //
 //  Created by Michael Thomason on 11/9/12.

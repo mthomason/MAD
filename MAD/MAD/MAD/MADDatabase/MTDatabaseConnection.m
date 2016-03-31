@@ -107,49 +107,56 @@ NSString * const MADStringEmpty = @"";
     return copy;
 }
 
+// Currently only returns SQLite3 type.
++ (instancetype)newDatabaseConnectionForUrl:(NSURL *)url NS_RETURNS_RETAINED {
+    id resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+    return resultCredentals;
+}
+
++ (instancetype)newDatabaseConnectionForUserCredentals:(RptqUserCredentals *)credentals NS_RETURNS_RETAINED {
+    id resultCredentals = nil;
+    
+    NSString *mysqlConnectionId = [MTDatabaseConnectionMySql identifier];
+    
+    if ([credentals.database_driver_type isEqualToString:mysqlConnectionId]) {
+        
+        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: credentals.mysql_host
+                                                                  database: credentals.mysql_database
+                                                                   andPort: credentals.mysql_port.integerValue];
+        
+    } else if ([credentals.database_driver_type isEqualToString:[MTDatabaseConnectionSqlServer identifier]]) {
+        
+        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: credentals.tds_host
+                                                                        server: credentals.tds_server
+                                                                      database: credentals.tds_database
+                                                                       andPort: credentals.tds_port.integerValue];
+        
+    } else if ([credentals.database_driver_type isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
+        
+        NSString *databaseFilename = credentals.mysql_database;
+        
+        // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
+        //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
+        //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
+        
+        NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
+        NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent:databaseFilename isDirectory:NO];
+        NSURL *databaseUrl = [NSURL fileURLWithPath:dbUrl.path];
+        resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:databaseUrl];
+        
+    }
+    return resultCredentals;
+}
+
 + (instancetype)newDatabaseConnectionForObject:(id)connectionObject NS_RETURNS_RETAINED {
     
     id resultCredentals = nil;
     
-    
     if ([connectionObject isKindOfClass:[RptqUserCredentals class]]) {
-        
-        RptqUserCredentals *credentals = (RptqUserCredentals *)connectionObject;
-        NSString *mysqlConnectionId = [MTDatabaseConnectionMySql identifier];
-        
-        if ([credentals.database_driver_type isEqualToString:mysqlConnectionId]) {
-            
-            resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: credentals.mysql_host
-                                                                      database: credentals.mysql_database
-                                                                       andPort: credentals.mysql_port.integerValue];
-            
-        } else if ([credentals.database_driver_type isEqualToString:[MTDatabaseConnectionSqlServer identifier]]) {
-            
-            resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: credentals.tds_host
-                                                                            server: credentals.tds_server
-                                                                          database: credentals.tds_database
-                                                                           andPort: credentals.tds_port.integerValue];
-            
-        } else if ([credentals.database_driver_type isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
-            
-            NSString *databaseFilename = credentals.mysql_database;
-            
-            // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
-            //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
-            //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
-            
-            NSURL *appSupportDirectory = [[NSFileManager defaultManager] localApplicationSupportDirectoryForGroupIdentifier:MADIdentifierGroup];
-            NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent:databaseFilename isDirectory:NO];
-            
-            NSURL *databaseUrl = [NSURL fileURLWithPath:dbUrl.path];
-            
-            resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:databaseUrl];
-            
-        }
+        resultCredentals = [self newDatabaseConnectionForUserCredentals:connectionObject];
 
     } else if ([connectionObject isKindOfClass:[NSURL class]]) {
-        NSURL *url = (NSURL *)connectionObject;
-        resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+        resultCredentals = [self newDatabaseConnectionForUrl:connectionObject];
     }
     
     
