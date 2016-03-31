@@ -32,6 +32,7 @@
 		4C0153E11C9FD5B700FCD3C1 /* MADOperationBooleanAnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153E01C9FD5B700FCD3C1 /* MADOperationBooleanAnd.m */; };
 		4C04EE721CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04EE711CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m */; };
 		4C04EE751CAA59EE00582422 /* MADDocumentOperationCloseDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04EE741CAA59EE00582422 /* MADDocumentOperationCloseDocument.m */; };
+		4C04EE781CAD6F1900582422 /* MADCreateDocumentOperationFirstTimeSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04EE771CAD6F1900582422 /* MADCreateDocumentOperationFirstTimeSetup.m */; };
 		4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */; };
 		4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0A077019C95EAC0059E1D9 /* StoreKit.framework */; };
 		4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -1275,6 +1276,8 @@
 		4C04EE711CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationSaveAndCloseNewDocument.m; sourceTree = "<group>"; };
 		4C04EE731CAA59EE00582422 /* MADDocumentOperationCloseDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentOperationCloseDocument.h; sourceTree = "<group>"; };
 		4C04EE741CAA59EE00582422 /* MADDocumentOperationCloseDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentOperationCloseDocument.m; sourceTree = "<group>"; };
+		4C04EE761CAD6F1800582422 /* MADCreateDocumentOperationFirstTimeSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCreateDocumentOperationFirstTimeSetup.h; sourceTree = "<group>"; };
+		4C04EE771CAD6F1900582422 /* MADCreateDocumentOperationFirstTimeSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCreateDocumentOperationFirstTimeSetup.m; sourceTree = "<group>"; };
 		4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentScroller.h; sourceTree = "<group>"; };
 		4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentScroller.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -4300,6 +4303,8 @@
 				4C04EE711CAA58C500582422 /* MADCreateDocumentOperationSaveAndCloseNewDocument.m */,
 				4C04EE731CAA59EE00582422 /* MADDocumentOperationCloseDocument.h */,
 				4C04EE741CAA59EE00582422 /* MADDocumentOperationCloseDocument.m */,
+				4C04EE761CAD6F1800582422 /* MADCreateDocumentOperationFirstTimeSetup.h */,
+				4C04EE771CAD6F1900582422 /* MADCreateDocumentOperationFirstTimeSetup.m */,
 			);
 			name = Document;
 			sourceTree = "<group>";
@@ -6150,6 +6155,7 @@
 				4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C5B560A1C998B1D005C19D9 /* MADDatabaseOperationTestConnection.m in Sources */,
 				4C26B9CE1BAF123A00456DC8 /* MADToolboxStyleStyleViewController.m in Sources */,
+				4C04EE781CAD6F1900582422 /* MADCreateDocumentOperationFirstTimeSetup.m in Sources */,
 				4C4021001BAE98C300BAE5FC /* MTReportViewerReportPageView.m in Sources */,
 				4C26B9691BAF11C800456DC8 /* MADInstallOperationSampleDatabase.m in Sources */,
 				4C401F261BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m in Sources */,

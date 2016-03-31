@@ -180,7 +180,6 @@
     Class sectionRowsClass = [RptqDocumentSectionRows class];
     NSString *rptqDocumentSectionRows = NSStringFromClass(sectionRowsClass);
 
-    
     id hasReportHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection inManagedObjectContext: objectContext];
     document.hasReportHeaderSection = hasReportHeaderSection;
 
@@ -195,7 +194,6 @@
     
     id hasDetailSection = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSection inManagedObjectContext: objectContext];
     document.hasDetailSection = hasDetailSection;
-
     
     RptqDocumentSectionRows *headerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows inManagedObjectContext: objectContext];
     NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];

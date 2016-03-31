@@ -7,7 +7,63 @@
 //
 
 #import "MADCreateDocumentOperationFirstTimeSetup.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <MAD/MTDatabaseConnection.h>
+#import <MAD/MADocument.h>
+#import <MAD/RptqDocument+extras.h>
+#import "MADCreateDocumentOperationCreateDocument.h"
+
+@interface MADCreateDocumentOperationFirstTimeSetup ()
+
+    @property (nonatomic, assign) bool success;
+    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
+
+@end
 
 @implementation MADCreateDocumentOperationFirstTimeSetup
+
+- (instancetype)init {
+    return [self initWithDatabaseConnection:nil];
+}
+
+- (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection {
+    if (self = [super init]) {
+        self.databaseConnection = databaseConnection;
+        self.success = false;
+    }
+    return self;
+}
+
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)execute {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    MADocument *document = nil;
+    NSArray <NSOperation *> *dependencies = self.dependencies;
+    for (NSOperation *dependency in dependencies) {
+        
+        if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
+            document = ((id <MADCreateDocumentOperationCreateDocumentProtocol>)dependency).document;
+            break;
+        }
+        
+    }
+    
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = document.managedObjectContext;
+    [private performBlockAndWait:^{
+        RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
+        document.documentObjectID = rptqDocument.objectID;
+        
+        MTPaper *paper = [[MTPaper alloc] initWithType: rptqDocument.paperType];
+        document.paper = paper;
+
+    }];
+
+    [document activeDocumentModel];
+    [self finish];
+}
+
 
 @end

@@ -19,6 +19,7 @@
 #import "MADCreateDocumentOperationImportSchema.h"
 #import "MADCreateDocumentOperationSaveAndCloseNewDocument.h"
 #import "MADDocumentOperationCloseDocument.h"
+#import "MADCreateDocumentOperationFirstTimeSetup.h"
 
 @interface MADCreateDocumentOperation ()
 
@@ -52,13 +53,14 @@
         [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];
         
+        
+        MADCreateDocumentOperationFirstTimeSetup *firstTimeSetup = [[MADCreateDocumentOperationFirstTimeSetup alloc] init];
+        [firstTimeSetup addDependency:createDocument];
 
         MADCreateDocumentOperationAddConnection *addConnection = [[MADCreateDocumentOperationAddConnection alloc] initWithDatabaseConnection:databaseConnection];
         [addConnection addDependency:createDocument];
+        [addConnection addDependency:firstTimeSetup];
         
-        
-        
-
         MADCreateDocumentOperationImportSchema *importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
         [importSchema addDependency:createDocument];
         [importSchema addDependency:addConnection];
@@ -71,9 +73,6 @@
         
         MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
         [taskEnd addDependency:closeDocument];
-        
-        
-        
         
         NSArray <__kindof NSOperation *> *operations = @[uniqueUrlForFilename,
                                                          getCredentials,

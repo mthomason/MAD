@@ -142,7 +142,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     @property (nonatomic, strong) UIImage *thumbnail;
 
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
-    @property (nonatomic, strong, readwrite) NSManagedObjectID *documentObjectID;
 
     @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
     @property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
@@ -159,8 +158,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     @property (nonatomic, strong, readwrite) NSString *fileName;
     @property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
-
-    @property (nonatomic, strong, readwrite) MTPaper *paper;
 
     @property (nonatomic, assign) BOOL didRefresh;
 
@@ -764,13 +761,23 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (RptqDocument *)activeDocumentModel {
-    RptqDocument *document;
+    RptqDocument *document = nil;
     if (self.documentObjectID == nil) {
-
+        /*
+        NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        bgContext.parentContext = self.managedObjectContext;
+        [bgContext performBlock:^{
+        
+            
+        }];
+        
+        */
+        
         document = [RptqDocument documentForManagedObjectContext: self.managedObjectContext];
         if (document == nil) {
             document = [RptqDocument newDocumentForManagedObjectContext: self.managedObjectContext];
         }
+
         
         self.documentObjectID = document.objectID;
         

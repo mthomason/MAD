@@ -57,7 +57,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 
-    @property (nonatomic, strong, readonly) NSManagedObjectID *documentObjectID;
+    @property (nonatomic, copy) NSManagedObjectID *documentObjectID;
     @property (readonly) RptqDocument *activeDocumentModel;
 
     @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
@@ -73,7 +73,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
-    @property (nonatomic, strong, readonly) MTPaper *paper;
+    @property (nonatomic, strong) MTPaper *paper;
 
     @property (readonly) NSURL *cachedDataUrl;
 
