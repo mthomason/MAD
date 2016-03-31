@@ -744,7 +744,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         NSDictionary *queryDefination = [self queryDefinationSelect];
         MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefination];
 
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:[self urlFastCache]];
         objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
                                                                                        columns:self.columns
                                                                                     columnKeys:self.columnKeys
@@ -775,7 +775,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                   @(MTQuerySelectColumns) : self.columns
                                   };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectGroupKeys object: querySelect];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject: [self urlFastCache]];
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                              columns: self.columns
                                                                           columnKeys: columnKeys
@@ -816,7 +816,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : self.sortDescriptors,
                               };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject: [self urlFastCache]];
     
     MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
     [rowid setColumnType:@(MTDataTypeInteger)];
@@ -852,7 +852,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     } else {
         MTQuery *query = [self queryForAllRowsWithKeys:columnKeys];
         
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject: [self urlFastCache]];
         
         enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                  columns: self.columns
@@ -867,7 +867,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
     MTQuery *query = [self queryForAllItemsAllRows];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject: [self urlFastCache]];
     
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                                               columns: self.columns
@@ -1016,7 +1016,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
     
     NSArray *columnKeys = self.columnKeys;
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:[self urlFastCache]];
     NSEnumerator *data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
                                                                                      columns:columns
                                                                                   columnKeys:columnKeys

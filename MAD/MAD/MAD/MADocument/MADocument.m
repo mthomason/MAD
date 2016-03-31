@@ -933,7 +933,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)initalizeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:query.inDatabase.ownedByUser];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
     db.delegate = self;
     self.mainDatabase = db;

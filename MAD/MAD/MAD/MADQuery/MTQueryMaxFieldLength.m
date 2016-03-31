@@ -41,7 +41,7 @@
         RptqDatabaseSchemaField *field = [array firstObject];
 
         RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:userCredentals];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
     }

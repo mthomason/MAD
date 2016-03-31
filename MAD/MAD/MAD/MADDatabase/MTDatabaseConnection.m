@@ -107,7 +107,7 @@ NSString * const MADStringEmpty = @"";
     return copy;
 }
 
-+ (instancetype)databaseConnectionFactory:(id)connectionObject NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseConnectionForObject:(id)connectionObject NS_RETURNS_RETAINED {
     
     id resultCredentals = nil;
     

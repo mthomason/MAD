@@ -102,7 +102,7 @@ static NSString * const SqlDelimitorObject = @", %@";
         self.columnKeys = columnKeys;
 
         if (url != nil) {
-            MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
+            MTDatabaseConnection *connection = [MTDatabaseConnection newDatabaseConnectionForObject:url];
             MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
             NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
             self.database = db;
