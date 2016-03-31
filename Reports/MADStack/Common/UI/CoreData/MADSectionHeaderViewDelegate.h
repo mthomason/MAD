@@ -13,8 +13,8 @@
 
 @protocol MADSectionHeaderViewDelegate <NSObject>
 @optional
-- (void)sectionHeaderView: (MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionOpened: (NSInteger)section;
-- (void)sectionHeaderView: (MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionClosed: (NSInteger)section;
+    - (void)sectionHeaderView: (MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionOpened: (NSInteger)section;
+    - (void)sectionHeaderView: (MADDatabaseTableSectionHeaderView *)sectionHeaderView sectionClosed: (NSInteger)section;
 @end
 
 #endif

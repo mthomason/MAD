@@ -79,25 +79,25 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         MTQueryBuilderPredicateFormatDelegate,
         MTTabBarImageProtocol>
 
-@property (nonatomic, assign) bool suspendAutomaticTrackingOfChangesInManagedObjectContext;
+    @property (nonatomic, assign) bool suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
+    @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
+    @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerTables;
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerLinks;
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerPredicates;
+    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerTables;
+    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerLinks;
+    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
+    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
-@property (nonatomic, assign) BOOL beganUpdates;
-@property (nonatomic, assign) BOOL toolbarIconShown;
+    @property (nonatomic, assign) BOOL beganUpdates;
+    @property (nonatomic, assign) BOOL toolbarIconShown;
 
-@property (atomic, assign) NSInteger lastSelectedRowNumber;
+    @property (atomic, assign) NSInteger lastSelectedRowNumber;
 
-@property (nonatomic, assign) CGFloat headerSectionHeight;
+    @property (nonatomic, assign) CGFloat headerSectionHeight;
 
-- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
-- (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
+    - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
+    - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
 @end
 
@@ -503,13 +503,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     id queryBuilderDataModel = [self datamodel];
-    NSInteger numberOfSections = [queryBuilderDataModel[MTTableHeaderSectionKey] count];
+    NSInteger numberOfSections = (NSInteger)[queryBuilderDataModel[MTTableHeaderSectionKey] count];
     return numberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: section];
+    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: (NSUInteger)section];
     
     NSDictionary *rowsDict = [self datamodel][MTTableSectionRowKey];
     NSInteger numberOfRows = 0;
@@ -519,22 +519,22 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         switch (ts) {
             case MTQuerySectionsTables: {
                 sectionData = self.fetchedResultsControllerTables.sections[0];
-                numberOfRows = sectionData.numberOfObjects;
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsLinks: {
                 sectionData = self.fetchedResultsControllerLinks.sections[0];
-                numberOfRows = sectionData.numberOfObjects;
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsPredicate: {
                 sectionData = self.fetchedResultsControllerPredicates.sections[0];
-                numberOfRows = sectionData.numberOfObjects;
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsGroups: {
                 sectionData = self.fetchedResultsControllerGroups.sections[0];
-                numberOfRows = sectionData.numberOfObjects;
+                numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             default:
@@ -546,8 +546,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger section = indexPath.section;
-    MTQuerySections sectionType = [self tableSectionTypeForIndexPathSection: section];
+    MTQuerySections sectionType = [self tableSectionTypeForIndexPathSection: (NSUInteger)indexPath.section];
 	return (sectionType == MTQuerySectionsTables ||
             sectionType == MTQuerySectionsGroups ||
             sectionType == MTQuerySectionsPredicate ||
@@ -555,13 +554,13 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self tableSectionTypeForIndexPathSection:indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
+    return ([self tableSectionTypeForIndexPathSection:(NSUInteger)indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
                                             forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:indexPath.section];
+    MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:(NSUInteger)indexPath.section];
 
     switch (editingStyle) {
 
@@ -581,7 +580,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: toIndexPath.section];
+    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: (NSUInteger)toIndexPath.section];
     switch (ts) {
         case MTQuerySectionsGroups: {
 
@@ -612,18 +611,19 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     UITableViewCell *result = nil;
 
     NSInteger row = indexPath.row;
-    MTQuerySections section = [self tableSectionTypeForIndexPathSection: indexPath.section];
+    MTQuerySections section = [self tableSectionTypeForIndexPathSection: (NSUInteger)indexPath.section];
 
     switch (section) {
 
         // MARK: Display and identify the data source and data sources
         case MTQuerySectionsDatasource: {
+        
             static NSString *MADIdentifierTableViewCellDataSource = @"MADIdentifierTableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MADIdentifierTableViewCellDataSource];
 
             RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
-
             if (database.ownedByUser) {
+
                 NSString *databaseType = [NSString stringWithFormat:@"%@", database.ownedByUser.database_driver_type];
                 NSString *schemaName = [database.ownedByUser databaseSchemaName];
                 NSString *localizedMessage = NSLocalizedString(@"You are connecting to a %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@.");
@@ -635,21 +635,18 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                 UIFont *fontItalic = [UIFont italicSystemFontOfSize:font.pointSize];
                 
                 NSDictionary *additionalAttributeStroke = @{ NSFontAttributeName : fontItalic };
-                NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString: message
-                                                                                                      attributes: attributes];
-                [messageAttributed removeAttribute: NSFontAttributeName
-                                             range: rangeOfDatabaseTypeName];
-                [messageAttributed removeAttribute: NSFontAttributeName
-                                             range: rangeOfSchemaName];
-                [messageAttributed addAttributes: additionalAttributeStroke
-                                           range: rangeOfDatabaseTypeName];
-                [messageAttributed addAttributes: additionalAttributeStroke
-                                           range: rangeOfSchemaName];
+
+                NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString: message attributes: attributes];
+                [messageAttributed removeAttribute: NSFontAttributeName range: rangeOfDatabaseTypeName];
+                [messageAttributed removeAttribute: NSFontAttributeName range: rangeOfSchemaName];
+                [messageAttributed addAttributes: additionalAttributeStroke range: rangeOfDatabaseTypeName];
+                [messageAttributed addAttributes: additionalAttributeStroke range: rangeOfSchemaName];
+                
                 result.textLabel.text = message;
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
-                //result.accessoryType = UITableViewCellAccessoryDetailButton;
                 result.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
+
             }
             result.textLabel.numberOfLines = 0;
             break;
@@ -677,39 +674,31 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryLinks *links = [[self fetchedResultsControllerLinks] objectAtIndexPath: indexPath];
+            NSIndexPath *indexPathLinks = [NSIndexPath indexPathForRow: row inSection: 0];
+            RptqQueryLinks *links = [self.fetchedResultsControllerLinks objectAtIndexPath: indexPathLinks];
             
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             
             NSString *messageText = @"%@ %@ %@";
             
-            NSString *pre = [[links tableleft] capitalizedString];
-            NSString *post = [[links fieldleft] capitalizedString];
-            NSString *leftString = [NSString stringWithFormat:@"%@.%@", pre, post];
-            
-            pre = links.tableright.capitalizedString;
-            post = links.fieldright.capitalizedString;
-            NSString *rightString = [NSString stringWithFormat:@"%@.%@", pre, post];
+            NSString *leftString = [NSString stringWithFormat:@"%@.%@", links.tableleft.capitalizedString, links.fieldleft.capitalizedString];
+            NSString *rightString = [NSString stringWithFormat:@"%@.%@", links.tableright.capitalizedString, links.fieldright.capitalizedString];
 
-            [(MADTableViewCellQueryLink *)result setTableID: [links objectID]];
+            [(MADTableViewCellQueryLink *)result setTableID: links.objectID];
             result.textLabel.numberOfLines = 0;
 
             NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
             paragraphStyle.headIndent = 20.0000f;
+            
             NSString *linksDescription = [links linkDescription];
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
-            NSDictionary *attributes = @{ NSFontAttributeName : font,
-                                          NSParagraphStyleAttributeName : paragraphStyle };
+            NSDictionary *attributes = @{ NSFontAttributeName : font, NSParagraphStyleAttributeName : paragraphStyle };
             UIColor *color = [MADColorEverydayApps newColorBlue];
-            NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption,
-                                             NSForegroundColorAttributeName :  color};
+            NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption, NSForegroundColorAttributeName :  color};
             NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
-            NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText
-                                                                                        attributes: attributes];
-            [message addAttributes:attributesAlt
-                             range:rangeLinkDesc];
+            NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText attributes: attributes];
+            [message addAttributes:attributesAlt range:rangeLinkDesc];
             result.textLabel.attributedText = message;
 
             break;
@@ -753,14 +742,15 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         case MTQuerySectionsPredicate: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryPredicate *predicate = [self.fetchedResultsControllerPredicates objectAtIndexPath: indexPath];
+            
+            NSIndexPath *indexPathPredicates = [NSIndexPath indexPathForRow: row inSection: 0];
+            RptqQueryPredicate *predicate = [self.fetchedResultsControllerPredicates objectAtIndexPath: indexPathPredicates];
             
             NSString *leftFieldDisplay = nil, *rightFieldDisplay = nil;
             if ([predicate fieldleftpred] != nil) {
-                leftFieldDisplay = [predicate fieldleftpred];
+                leftFieldDisplay = predicate.fieldleftpred;
             } else {
-                leftFieldDisplay = [[predicate hasLeftField] toString];
+                leftFieldDisplay = [predicate.hasLeftField toString];
             }
             
             if ([predicate fieldrightpred] != nil) {
