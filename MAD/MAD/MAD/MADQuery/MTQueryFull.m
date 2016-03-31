@@ -52,17 +52,25 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MTQueryFull ()
 
 @property (nonatomic, assign) NSInteger limitResults;
-@property (nonatomic, strong) RptqQuery *queryObject;
+@property (nonatomic, copy) NSManagedObjectID *objectID;
 
 @end
 
 @implementation MTQueryFull
 
-@dynamic queryObject;
+
+- (instancetype)initWithQueryObjectId:(NSManagedObjectID *)objectID andQueryLimit:(NSInteger)queryLimit {
+    if (self = [super init]) {
+        _objectID = objectID.copy;
+        _limitResults = queryLimit;
+    }
+    return self;
+}
 
 - (instancetype)initWithObject:(NSDictionary *)object {
     if (self = [super initWithObject:object]) {
@@ -76,37 +84,38 @@
         self.limitResults = numberOfResults.integerValue;
         
         RptqQuery *queryObject = parameters[parameterScheam];
-        [self setQueryObject:queryObject];
+        _objectID = queryObject.objectID.copy;
 
         
     }
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError **)error {
+- (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error {
     [super getSqlWithError:error];
-    return [self getSqlOnlyActiveFields:YES error:error];
+    return [self getSqlOnlyActiveFields:YES managedObjectContext:managedObjectContext error:error];
 }
 
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
+- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error {
     
     //BOOL limitQueryResults =
+    RptqQuery *queryObject = [managedObjectContext objectWithID:self.objectID];
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
-    if (self.queryObject.hasQueryTables.count > 0) {
+    if (queryObject.hasQueryTables.count > 0) {
         
         MTDatabase *database = [self.dataDelegate database];
         
         NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
-        NSString *predicatePart = [self sqlWhereClauseWithQuery:self.queryObject];
+        NSString *predicatePart = [self sqlWhereClauseWithQuery:queryObject];
         NSString *limitPart = [[self.dataDelegate database] sqlLimitClause:self.limitResults];
         
         [result appendString:selectPart];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
-        NSSet *hasTables = [self.queryObject hasQueryTables];
+        NSSet *hasTables = [queryObject hasQueryTables];
         
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
@@ -116,7 +125,7 @@
         }
         
         //Create an edge in the graph for each query link.
-        NSSet *hasQueryLinks = [self.queryObject hasQueryLinks];
+        NSSet *hasQueryLinks = queryObject.hasQueryLinks;
         NSNumber *weight = @(1);
         for (RptqQueryLinks *queryLink in hasQueryLinks) {
             
@@ -143,7 +152,7 @@
             // MAKR: List each field in the query.
             NSString *sqlSelectExpression = [self sqlSelectExpressionWithTables:[topologicalSort toArray]
                                                           usingOnlyActiveFields:onlyActiveFields
-                                                        forManagedObjectContext:[self.queryObject managedObjectContext]];
+                                                        forManagedObjectContext:managedObjectContext];
             if ([sqlSelectExpression length] > 0) {
                 [result appendString:sqlSelectExpression];
                 
@@ -160,7 +169,7 @@
                     }
                 }
                 [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
-                                               forManagedObjectContext:[self.queryObject managedObjectContext]]];
+                                               forManagedObjectContext:managedObjectContext]];
                 
             } else {
                 NSString *message = NSLocalizedString(@"Empty query while using \"only active fields.\" You may need to reference some query fields.", @"Empty query while using \"only active fields.\" You may need to reference some query fields.");

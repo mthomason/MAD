@@ -226,7 +226,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return @"";
 }
 
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
+- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error {
     return @"";
 }
 

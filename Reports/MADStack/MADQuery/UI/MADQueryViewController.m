@@ -119,8 +119,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     return action == @selector(unwindToQueryBuilder:) ?
                         self :
-                        [super viewControllerForUnwindSegueAction: action
-                                               fromViewController: fromViewController
+                        [super viewControllerForUnwindSegueAction: action fromViewController: fromViewController
                                                        withSender: sender];
 }
 
@@ -139,15 +138,12 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)dealloc {
     _document = nil;
     [MADQueryViewController deleteCoreDataCache];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIContentSizeCategoryDidChangeNotification
+    [[NSNotificationCenter defaultCenter] removeObserver: self name: UIContentSizeCategoryDidChangeNotification
                                                   object: nil];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
+    if (self = [super initWithCoder:aDecoder]) {
         [self setToolbarIconShown:NO];
     }
     return self;
@@ -299,7 +295,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         } else {
             viewController = segue.destinationViewController;
         }
-        viewController.query = self.document.mainQuery;
+        MADocument *document = self.document;
+        viewController.document = document;
         [self.tabBarController disableTabBarItems];
         
     } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
@@ -320,8 +317,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                      ascending: YES];
                     request.sortDescriptors = @[sortDescriptor];
 
+                    MADocument *document = self.document;
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: self.document.managedObjectContext
+                                                                                          managedObjectContext: document.managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
@@ -334,9 +332,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
-                    
+
+                    MADocument *document = self.document;
                     MTQueryBuilderLinkBuilderViewController *tvc = (MTQueryBuilderLinkBuilderViewController *)navControl.topViewController;
-                    tvc.document = self.document;
+                    tvc.document = document;
                     if (tvc) {
                         tvc.delegate = self;
                     }
@@ -351,7 +350,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
                     MTQueryBuilderPredicateFormatViewController *tvc = (MTQueryBuilderPredicateFormatViewController *)navControl.topViewController;
                     if (tvc) {
-                        tvc.document = self.document;
+                        MADocument *document = self.document;
+                        tvc.document = document;
                         tvc.delegate = self;
                     }
                 }
@@ -364,7 +364,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
                     MTQueryBuilderAddGroupViewController *tvc = (MTQueryBuilderAddGroupViewController *)navControl.topViewController;
                     if (tvc) {
-                        tvc.document = self.document;
+                        MADocument *document = self.document;
+                        tvc.document = document;
                         tvc.delegate = self;
                     }
                 }
@@ -375,11 +376,12 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
-                        RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
-                        RptqDocumentSection *section = [query documentSectionForRow: self.lastSelectedRowNumber];
+                        MADocument *document = self.document;
+                        RptqQuery *query = document.activeDocumentModel.defaultDatabase.defaultQuery;
+                        RptqDocumentSection *section = [query documentSectionForRow: (NSUInteger)self.lastSelectedRowNumber];
                         tvc.initalHeightValue = section.height.floatValue;
                         tvc.initalVisibility = section.visibility.boolValue;
-                        tvc.initalNumberOfRows = section.numberOfRows.integerValue;
+                        tvc.initalNumberOfRows = section.numberOfRows.unsignedIntegerValue;
                     }
                 }
     }
@@ -405,33 +407,37 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
     }];
-    
-    [self.document.activeDocumentModel addPredicate:predicate];
-    [self.document saveContext];
+    MADocument *document = self.document;
+    [document.activeDocumentModel addPredicate:predicate];
+    [document saveContext];
 }
 
 #pragma mark - MTReportDesignerSectionLayoutSettingsDelegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    [self.document.activeDocumentModel setHeight:height forSectionAtRow:self.lastSelectedRowNumber];
-    [self.document saveContext];
+    MADocument *document = self.document;
+    [document.activeDocumentModel setHeight:height forSectionAtRow:(NSUInteger)self.lastSelectedRowNumber];
+    [document saveContext];
     
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
-    [self.document.activeDocumentModel setVisibility: isVisible forSectionAtRow: self.lastSelectedRowNumber];
-    [self.document saveContext];
+    MADocument *document = self.document;
+    [document.activeDocumentModel setVisibility: isVisible forSectionAtRow:(NSUInteger) self.lastSelectedRowNumber];
+    [document saveContext];
 }
 
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
-    [self.document.activeDocumentModel setNewPageAfter: newPageAfter forSectionAtRow: self.lastSelectedRowNumber];
-    [self.document saveContext];
+    MADocument *document = self.document;
+    [document.activeDocumentModel setNewPageAfter: newPageAfter forSectionAtRow:(NSUInteger) self.lastSelectedRowNumber];
+    [document saveContext];
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
-    [self.document.activeDocumentModel setNumberOfRows: numberOfRows forSectionAtRow: self.lastSelectedRowNumber];
-    [self.document saveContext];
+    MADocument *document = self.document;
+    [document.activeDocumentModel setNumberOfRows: numberOfRows forSectionAtRow:(NSUInteger) self.lastSelectedRowNumber];
+    [document saveContext];
 }
 
 #pragma mark MUIViewControllerDelegate
@@ -456,15 +462,17 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self.document.activeDocumentModel addQueryLink:link];
-    [self.document saveContext];
+    MADocument *document = self.document;
+    [document.activeDocumentModel addQueryLink:link];
+    [document saveContext];
     NSInteger suspectedSection = 2;
-    MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
+    
+    MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection:(NSUInteger)suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
-        NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
+        NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
         [self.tableView reloadSections: linksSection withRowAnimation: UITableViewRowAnimationAutomatic];
     }
-    [self.document saveToURL: self.document.fileURL
+    [document saveToURL: document.fileURL
             forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
@@ -1159,7 +1167,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)reloadMainDocumentAnimated:(BOOL)animated {
     
     MADocument *reportDocument = self.document;
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    NSAssert(reportDocument != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     if (reportDocument) {
         
         NSManagedObjectContext *managedObjectContext = reportDocument.managedObjectContext;
@@ -1171,7 +1179,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
+            request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", query.objectID];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias"
                                                                              ascending: YES];
             [request setSortDescriptors: @[sortDescriptor]];

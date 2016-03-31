@@ -13,6 +13,8 @@
 
 @interface MTQueryFull : MTQuery
 
+- (NSString *)getSqlWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error;
+
 @end
 
 #endif

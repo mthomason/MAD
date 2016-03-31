@@ -91,8 +91,10 @@
 }
 
 - (void)viewDidLoad {
-    NSAssert(self.document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     [super viewDidLoad];
+    
+    MADocument *doc = self.document;
+    NSAssert(doc != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
     
     id <UISplitViewControllerDelegate> __weak delegate = self;
     self.delegate = delegate;
@@ -101,7 +103,7 @@
     titleView.text = self.title;
     self.navigationItem.titleView = titleView;
     
-    self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+    self.tabBarController.navigationItem.prompt = doc.fileURL.lastPathComponent;
 
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
@@ -109,7 +111,7 @@
     self.barButtonItemSQL.tintColor = [UIColor whiteColor];
     [UIBarButtonItem appearanceWhenContainedIn:[MADQueryBuilderSplitViewController class], nil].tintColor = [MADColorEverydayApps newColorWhite];
 
-    self.queryBuilderControllerAdvanced.document = self.document;
+    self.queryBuilderControllerAdvanced.document = doc;
 }
 
 - (UINavigationController *)detailNavigationController {
@@ -148,7 +150,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:MADSegueShowSql]) {
-        
+        MADocument *document = self.document;
         MADViewControllerSQL *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
             viewController = (MADViewControllerSQL *)((UINavigationController *)segue.destinationViewController).topViewController;
@@ -156,10 +158,11 @@
             viewController = segue.destinationViewController;
         }
         viewController.delegate = self;
-        viewController.query = self.document.mainQuery;
+        viewController.document = document;
         
     } else if (sender == self) {
-        [segue.destinationViewController setDocument:self.document];
+        MADocument *document = self.document;
+        [segue.destinationViewController setDocument:document];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
     } else {
         if (self.popover != nil) {
@@ -187,9 +190,10 @@
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;
-    [self.document.managedObjectContext save:&error];
+    MADocument *document = self.document;
+    [document.managedObjectContext save:&error];
     if (error != nil) {
-        [self.document.managedObjectContext save:&error];
+        [document.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish:self];
 }

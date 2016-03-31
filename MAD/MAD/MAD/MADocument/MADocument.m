@@ -891,8 +891,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSMutableDictionary *extraParameters = parameters.mutableCopy;
         NSNumber *queryLimit = @(self.limitResultsDesignMode ? 50 : NSNotFound);
         extraParameters[@"MADQueryLimit"] = queryLimit;
-        MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull
-                                                            object:extraParameters];
+        MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithObject:extraParameters];
         defaultQuery.dataDelegate = self;
         
         NSArray *sortDescriptors = [self readCurrentSortDescriptors];

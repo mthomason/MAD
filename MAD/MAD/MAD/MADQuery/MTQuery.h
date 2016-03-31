@@ -140,29 +140,31 @@ extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
 @class MTDatabase, MTDataTable, RptqQuery, NSMutableArray, NSMutableDictionary;
+@class NSManagedObjectContext;
 
 @interface MTQuery : NSObject
 
-@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+    @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-@property (nonatomic, weak) MTDataTable *dataTable;
-@property (nonatomic, strong, readwrite) MTDatabase *database;
+    @property (nonatomic, weak) MTDataTable *dataTable;
+    @property (nonatomic, strong, readwrite) MTDatabase *database;
 
-@property (nonatomic, strong) id queryObject;
-@property (nonatomic, strong) NSMutableDictionary *fields;
-@property (nonatomic, strong) NSMutableArray *fieldKeys;
-@property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind NSData to insert statements
-@property (nonatomic, strong) NSDictionary *columns;            //MTDataColumns by key
+    @property (nonatomic, strong) id queryObject;
+    @property (nonatomic, strong) NSMutableDictionary *fields;
+    @property (nonatomic, strong) NSMutableArray *fieldKeys;
+    @property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind NSData to insert statements
+    @property (nonatomic, strong) NSDictionary *columns;            //MTDataColumns by key
 
-@property (nonatomic, assign, readonly) MTQueryType type;
+    @property (nonatomic, assign, readonly) MTQueryType type;
 
 
-- (id)initWithQueryType:(MTQueryType)type object:(id)object;
+    - (id)initWithQueryType:(MTQueryType)type object:(id)object;
 
-- (NSString *)getSqlWithError:(NSError **)error;
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
+    - (NSString *)getSqlWithError:(NSError **)error;
+    - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error;    //Only on MTQueryFull
 
-- (bool)performQueryWithError:(NSError * __autoreleasing *)error;
+    - (bool)performQueryWithError:(NSError * __autoreleasing *)error;
+
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only

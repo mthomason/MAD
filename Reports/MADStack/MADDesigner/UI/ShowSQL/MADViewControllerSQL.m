@@ -11,6 +11,8 @@
 #endif
 
 #import "MADViewControllerSQL.h"
+#import <MAD/MADocument.h>
+#import <MAD/MTQuery.h>
 
 @implementation MADViewControllerSQL
 
@@ -21,8 +23,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    MADocument *doc = self.document;
     NSError *error = nil;
-    NSString *sqlStatement = [self.query getSqlOnlyActiveFields:NO error:&error];
+    NSString *sqlStatement = [doc.mainQuery getSqlOnlyActiveFields:NO managedObjectContext:doc.managedObjectContext error:&error];
     
     if (error) {
         sqlStatement = error.localizedDescription;
