@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import "UITableViewControllerCoreDataResults.h"
+#import "MADTableViewControllerCoreDataResults.h"
 #import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderAddLinkSecondFieldViewController, RptqQueryField;
@@ -20,7 +20,7 @@
 - (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqQueryField *)result;
 @end
 
-@interface MTQueryBuilderAddLinkSecondFieldViewController : UITableViewControllerCoreDataResults
+@interface MTQueryBuilderAddLinkSecondFieldViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondFieldDelegate> delegate;

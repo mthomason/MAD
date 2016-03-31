@@ -79,7 +79,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         MTQueryBuilderPredicateFormatDelegate,
         MTTabBarImageProtocol>
 
-@property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
+@property (nonatomic, assign) bool suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
@@ -490,11 +490,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: true];
 
     [self.document addQuerySelectSchemeTable:schemaTable];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: false];
 
     [self performFetchTables];
 }
@@ -918,7 +918,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
+    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
         [self.tableView beginUpdates];
         [self setBeganUpdates: YES];
     }
@@ -1008,7 +1008,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                inSection: updateSection];
         if (path) {
-            if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
+            if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
                 NSArray *indexPaths = @[path];
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
@@ -1721,7 +1721,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
+    self.suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
     
     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
     RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
@@ -1771,7 +1771,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     [tableView endUpdates];
     
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    self.suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
 }
 
 - (void)deleteQueryLinksFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {

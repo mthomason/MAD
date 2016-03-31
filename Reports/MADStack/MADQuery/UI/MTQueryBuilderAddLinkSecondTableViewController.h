@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import "UITableViewControllerCoreDataResults.h"
+#import "MADTableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkSecondTableViewController, RptqQueryTable;
 
@@ -19,7 +19,7 @@
 - (void)viewControllerDidFinishWithSecondTable:(RptqQueryTable *)result;
 @end
 
-@interface MTQueryBuilderAddLinkSecondTableViewController : UITableViewControllerCoreDataResults
+@interface MTQueryBuilderAddLinkSecondTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondTableDelegate> delegate;

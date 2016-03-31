@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import "UITableViewControllerCoreDataResults.h"
+#import "MADTableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkFirstTableViewController, RptqQueryTable;
 
@@ -20,7 +20,7 @@
 - (void)viewControllerDidFinishWithTable:(RptqQueryTable *)result;
 @end
 
-@interface MTQueryBuilderAddLinkFirstTableViewController : UITableViewControllerCoreDataResults
+@interface MTQueryBuilderAddLinkFirstTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstTableDelegate> delegate;

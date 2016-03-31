@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MAD/MAD.h>
-#import "UITableViewControllerCoreDataResults.h"
+#import "MADTableViewControllerCoreDataResults.h"
 #import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderAddTableViewController, RptqDatabaseSchemaTable;
@@ -20,7 +20,7 @@
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable;
 @end
 
-@interface MTQueryBuilderAddTableViewController : UITableViewControllerCoreDataResults
+@interface MTQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddTableDelegate, MTViewControllerProtocol> delegate;

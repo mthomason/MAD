@@ -1,24 +1,24 @@
 //
-//  CoreDataTableViewController.m
-//  Reports
+//  MADTableViewControllerCoreDataResults.m
+//  MAD Designer
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2016 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "UITableViewControllerCoreDataResults.h"
+#import "MADTableViewControllerCoreDataResults.h"
 
-@interface UITableViewControllerCoreDataResults()
+@interface MADTableViewControllerCoreDataResults()
 
-@property (nonatomic, assign) BOOL beganUpdates;
+    @property (nonatomic, assign) BOOL beganUpdates;
 
 @end
 
-@implementation UITableViewControllerCoreDataResults
+@implementation MADTableViewControllerCoreDataResults
 
 #pragma mark - Fetching
 
@@ -71,7 +71,7 @@
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    if (![self suspendAutomaticTrackingOfChangesInManagedObjectContext]) {
+    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
         [self.tableView beginUpdates];
         [self setBeganUpdates: YES];
     }
@@ -142,12 +142,12 @@
 }
 
 - (void)endSuspensionOfUpdatesDueToContextChanges {
-    _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
+    _suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
 }
 
-- (void)setSuspendAutomaticTrackingOfChangesInManagedObjectContext:(BOOL)suspend {
+- (void)setSuspendAutomaticTrackingOfChangesInManagedObjectContext:(bool)suspend {
     if (suspend) {
-        _suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
+        _suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
     } else {
         [self performSelector:@selector(endSuspensionOfUpdatesDueToContextChanges) withObject:0 afterDelay:0];
     }
