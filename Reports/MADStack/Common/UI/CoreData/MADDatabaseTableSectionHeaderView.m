@@ -1,9 +1,9 @@
 //
-//  CoreDataTableViewController.m
+//  MADDatabaseTableSectionHeaderView.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2016 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDatabaseTableSectionHeaderView.h"
