@@ -84,10 +84,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
 
-    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerTables;
-    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerLinks;
-    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
-    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerPredicates;
+    @property (nonatomic, strong) NSFetchedResultsController *queryTablesController;
+    @property (nonatomic, strong) NSFetchedResultsController *queryLinksController;
+    @property (nonatomic, strong) NSFetchedResultsController *queryGroupsController;
+    @property (nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
 
     @property (nonatomic, assign) BOOL beganUpdates;
     @property (nonatomic, assign) BOOL toolbarIconShown;
@@ -518,22 +518,22 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     if (numberOfRows < 0) {
         switch (ts) {
             case MTQuerySectionsTables: {
-                sectionData = self.fetchedResultsControllerTables.sections[0];
+                sectionData = self.queryTablesController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsLinks: {
-                sectionData = self.fetchedResultsControllerLinks.sections[0];
+                sectionData = self.queryLinksController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsPredicate: {
-                sectionData = self.fetchedResultsControllerPredicates.sections[0];
+                sectionData = self.queryPredicatesController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
             case MTQuerySectionsGroups: {
-                sectionData = self.fetchedResultsControllerGroups.sections[0];
+                sectionData = self.queryGroupsController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
                 break;
             }
@@ -586,14 +586,14 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
             NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
             NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
-            RptqQueryGroup *fromGroup = [self.fetchedResultsControllerGroups objectAtIndexPath: fromIndex];
-            RptqQueryGroup *toGroup = [self.fetchedResultsControllerGroups objectAtIndexPath: toIndex];
+            RptqQueryGroup *fromGroup = [self.queryGroupsController objectAtIndexPath: fromIndex];
+            RptqQueryGroup *toGroup = [self.queryGroupsController objectAtIndexPath: toIndex];
             NSInteger fromWeight = [[toGroup weight] integerValue];
             NSInteger toWeight = [[fromGroup weight] integerValue];
             [toGroup setWeight:@(toWeight)];
             [fromGroup setWeight:@(fromWeight)];
             NSError *error = nil;
-            [[self.fetchedResultsControllerGroups managedObjectContext] save:&error];
+            [[self.queryGroupsController managedObjectContext] save:&error];
             [self performFetchGroups];
             break;
         }
@@ -657,7 +657,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryTable *tablea = [self.fetchedResultsControllerTables objectAtIndexPath: path];
+            RptqQueryTable *tablea = [self.queryTablesController objectAtIndexPath: path];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             result.textLabel.text = [NSString stringWithFormat:@"%@", tablea.alias];
             result.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -675,7 +675,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             NSIndexPath *indexPathLinks = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryLinks *links = [self.fetchedResultsControllerLinks objectAtIndexPath: indexPathLinks];
+            RptqQueryLinks *links = [self.queryLinksController objectAtIndexPath: indexPathLinks];
             
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
@@ -708,7 +708,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         case MTQuerySectionsGroups: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            RptqQueryGroup *group = [self.fetchedResultsControllerGroups objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
+            RptqQueryGroup *group = [self.queryGroupsController objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             [result backgroundView].backgroundColor = [UIColor whiteColor];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
@@ -744,7 +744,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             
             NSIndexPath *indexPathPredicates = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryPredicate *predicate = [self.fetchedResultsControllerPredicates objectAtIndexPath: indexPathPredicates];
+            RptqQueryPredicate *predicate = [self.queryPredicatesController objectAtIndexPath: indexPathPredicates];
             
             NSString *leftFieldDisplay = nil, *rightFieldDisplay = nil;
             if ([predicate fieldleftpred] != nil) {
@@ -919,23 +919,23 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
     NSNumber *sectionNumber;
-    if ([controller isEqual:self.fetchedResultsControllerTables]) {
+    if ([controller isEqual:self.queryTablesController]) {
         
         sectionNumber = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
         [result addObject: sectionNumber];
 
-    } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
+    } else if ([controller isEqual:[self queryLinksController]]) {
 
         sectionNumber = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
         [result addObject: sectionNumber];
 
-    } else if ([controller isEqual:self.fetchedResultsControllerGroups]) {
+    } else if ([controller isEqual:self.queryGroupsController]) {
 
         NSInteger sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
         sectionNumber = @(sectionGroup);
         [result addObject: sectionNumber];
     
-    } else if ([controller isEqual:self.fetchedResultsControllerPredicates]) {
+    } else if ([controller isEqual:self.queryPredicatesController]) {
     
         NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsPredicate];
         sectionNumber = @(section);
@@ -1044,19 +1044,19 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)performFetchTables {
-    [self performFetchWithController:self.fetchedResultsControllerTables];
+    [self performFetchWithController:self.queryTablesController];
 }
 
 - (void)performFetchLinks {
-    [self performFetchWithController:[self fetchedResultsControllerLinks]];
+    [self performFetchWithController:[self queryLinksController]];
 }
 
 - (void)performFetchGroups {
-    [self performFetchWithController:self.fetchedResultsControllerGroups];
+    [self performFetchWithController:self.queryGroupsController];
 }
 
 - (void)performFetchPredicate {
-    [self performFetchWithController:self.fetchedResultsControllerPredicates];
+    [self performFetchWithController:self.queryPredicatesController];
 }
 
 - (void)performFetchWithController:(NSFetchedResultsController *)controller {
@@ -1180,7 +1180,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setFetchedResultsControllerTables: frc];
+            [self setQueryTablesController: frc];
             [self performFetchTables];
             frc = nil;
         }
@@ -1195,7 +1195,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setFetchedResultsControllerLinks: frc];
+            [self setQueryLinksController: frc];
             [self performFetchLinks];
             frc = nil;
         }
@@ -1210,7 +1210,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setFetchedResultsControllerGroups: frc];
+            [self setQueryGroupsController: frc];
             [self performFetchGroups];
             frc = nil;
             
@@ -1227,7 +1227,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
             frc.delegate = self;
-            [self setFetchedResultsControllerPredicates: frc];
+            [self setQueryPredicatesController: frc];
             [self performFetchPredicate];
             frc = nil;
         }
@@ -1476,7 +1476,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
     
     NSIndexPath *indexPathUpdate = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
-    RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: indexPathUpdate];
+    RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: indexPathUpdate];
     MTTableController *tableController = [self tableControllerForTable:table];
     [self.navigationController pushViewController: tableController
                                          animated: YES];
@@ -1528,7 +1528,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
-    NSFetchedResultsController *fetchedLinkes = [self fetchedResultsControllerLinks];
+    NSFetchedResultsController *fetchedLinkes = [self queryLinksController];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
     
     for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
@@ -1572,10 +1572,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         NSIndexPath *groupIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = nil;
 
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsControllerGroups sections] objectAtIndex:0];
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.queryGroupsController sections] objectAtIndex:0];
         if (row < (NSInteger)sectionInfo.numberOfObjects) {
             NSIndexPath *testGroupIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            NSManagedObject *object = [self.fetchedResultsControllerGroups objectAtIndexPath:testGroupIndexPath];
+            NSManagedObject *object = [self.queryGroupsController objectAtIndexPath:testGroupIndexPath];
             
             if (!error && object && [object isKindOfClass:[RptqQueryGroup class]]) {
                 RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
@@ -1611,7 +1611,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             object = [context existingObjectWithID:[tableViewCellPredicate tableID] error:&error];
         } else {
             NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            object = [self.fetchedResultsControllerPredicates objectAtIndexPath: testPredicateIndexPath];
+            object = [self.queryPredicatesController objectAtIndexPath: testPredicateIndexPath];
         }
         if (!error && object && [object isKindOfClass:[RptqQueryPredicate class]]) {
             RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
@@ -1717,6 +1717,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
     MADocument *doc = self.document;
     NSManagedObjectContext *managedObjectContext = doc.managedObjectContext;
+
     RptqQuery *query = doc.activeDocumentModel.defaultDatabase.defaultQuery;
     NSInteger numberOfTables = (NSInteger)[query numberOfTables];
     
@@ -1724,7 +1725,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:oldTableLayoutResult];
     
     NSIndexPath *tableIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
-    RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: tableIndex];
+    RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: tableIndex];
     
     NSManagedObjectID *deleatedTableObjectId = table.objectID;
     [query removeHasQueryTablesObject:table];
@@ -1795,23 +1796,19 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     switch (querySection) {
             
         case MTQuerySectionsTables:
-            [self deleteQueryTableFromTableView: tableView
-                                    atIndexPath: indexPath];
+            [self deleteQueryTableFromTableView: tableView atIndexPath: indexPath];
             break;
             
         case MTQuerySectionsLinks:
-            [self deleteQueryLinksFromTableView: tableView
-                                    atIndexPath: indexPath];
+            [self deleteQueryLinksFromTableView: tableView atIndexPath: indexPath];
             break;
             
         case MTQuerySectionsGroups:
-            [self deleteQueryGroupFromTableView: tableView
-                                    atIndexPath: indexPath];
+            [self deleteQueryGroupFromTableView: tableView atIndexPath: indexPath];
             break;
             
         case MTQuerySectionsPredicate:
-            [self deleteQueryPredicateFromTableView: tableView
-                                        atIndexPath: indexPath];
+            [self deleteQueryPredicateFromTableView: tableView atIndexPath: indexPath];
             break;
             
         default:
