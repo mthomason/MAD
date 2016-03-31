@@ -455,6 +455,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark UIManagedDocument
 
 - (NSManagedObjectModel *)managedObjectModel {
+
     if (self.objectModel == nil) {
         
         NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
@@ -742,8 +743,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (void)addConnection:(MTDatabaseConnection *)connection
-               status:(void (^)(NSString *status, float progress))status
+- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MADErrorContainer *error))completion {
     
     RptqDocument *rptqDocument = [self activeDocumentModel];
@@ -769,7 +769,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
         document = [RptqDocument documentForManagedObjectContext: self.managedObjectContext];
         if (document == nil) {
-            document = [RptqDocument documentFactory:self.managedObjectContext];
+            document = [RptqDocument newDocumentForManagedObjectContext: self.managedObjectContext];
         }
         
         self.documentObjectID = document.objectID;

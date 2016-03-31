@@ -9,12 +9,16 @@
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+static NSString * const TextAccessibilityHint = @"Toggles database field visibility.";
+static const CGFloat ButtonSize = 35.00000f;
+static const CGFloat PaddingSize = 5.00000f;
+
 @interface UIViewTableSectionHeaderDatabaseTable ()
 
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UIButton *disclosureButton;
-@property (nonatomic, assign) NSInteger section;
-@property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
+    @property (nonatomic, strong) UILabel *titleLabel;
+    @property (nonatomic, strong) UIButton *disclosureButton;
+    @property (nonatomic, assign) NSInteger section;
+    @property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
 
 @end
 
@@ -25,44 +29,48 @@
     
     if (self = [self initWithFrame:frame]) {
         
-        // Set up the tap gesture recognizer.
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
-        [self addGestureRecognizer:tapGesture];
         
-        self.delegate =  delegate;
-        [self setUserInteractionEnabled: YES];
-        
-        [self setSection: sectionNumber];
+        _delegate =  delegate;
+        _section = sectionNumber;
         CGRect titleLabelFrame = self.bounds;
-        titleLabelFrame.origin.x += 35.00000f;
-        titleLabelFrame.size.width -= 35.0000f;
-        CGRectInset(titleLabelFrame, 0.0000f, 5.0000f);
+        titleLabelFrame.origin.x += ButtonSize;
+        titleLabelFrame.size.width -= ButtonSize;
+        CGRectInset(titleLabelFrame, 0.0000f, PaddingSize);
 
         UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
         label.isAccessibilityElement = NO;
         label.text = title;
+        
         UIFont *font = [UIFont boldSystemFontOfSize:17.0000f];
         label.font = font;
+        
         UIColor *blueColor = [MADColorEverydayApps newColorBlue];
         label.textColor = blueColor;
         label.backgroundColor =  [UIColor clearColor];
+        
         [self addSubview:label];
         self.titleLabel = label;
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.isAccessibilityElement = NO;
-        button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);
+        button.frame = CGRectMake(0.0000f, PaddingSize, ButtonSize, ButtonSize);
         
         UIImage *caratOpen = [UIImage imageNamed:@"MADImageCaratOpen"];
         UIImage *caratClosed = [UIImage imageNamed:@"MADImageCarat"];
-        [button setImage:caratClosed forState:UIControlStateNormal];
-        [button setImage:caratOpen forState:UIControlStateSelected];
+        
+        [button setImage: caratClosed   forState:UIControlStateNormal];
+        [button setImage: caratOpen     forState:UIControlStateSelected];
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
+
+        // Set up the tap gesture recognizer.
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
+        [self addGestureRecognizer:tapGesture];
         
         self.disclosureButton = button;
         
         self.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        self.userInteractionEnabled = YES;
     }
     
     return self;
@@ -75,17 +83,17 @@
 
 - (void)toggleOpenWithUserAction:(BOOL)userAction {
     
-    [self.disclosureButton setSelected: ![self.disclosureButton isSelected]];
+    [self.disclosureButton setSelected: !self.disclosureButton.isSelected];
     
     if (userAction) {
+        id <MADSectionHeaderViewDelegate> superDelegate = self.delegate;
         if ([self.disclosureButton isSelected]) {
-            if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
-                [self.delegate sectionHeaderView:self sectionOpened:[self section]];
+            if ([superDelegate respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
+                [superDelegate sectionHeaderView:self sectionOpened:self.section];
             }
-        }
-        else {
-            if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionClosed:)]) {
-                [self.delegate sectionHeaderView:self sectionClosed:[self section]];
+        } else {
+            if ([superDelegate respondsToSelector:@selector(sectionHeaderView:sectionClosed:)]) {
+                [superDelegate sectionHeaderView:self sectionClosed:self.section];
             }
         }
     }
@@ -120,7 +128,7 @@
 }
 
 - (NSString *)accessibilityHint {
-    return NSLocalizedString(@"Toggles database field visibility.", @"Toggles database field visibility.");
+    return NSLocalizedString(TextAccessibilityHint, TextAccessibilityHint);
 }
 
 @end

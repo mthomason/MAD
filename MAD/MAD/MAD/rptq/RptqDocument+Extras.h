@@ -18,7 +18,7 @@
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
-+ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
++ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 @property (readonly)RptqDatabase *defaultDatabase;

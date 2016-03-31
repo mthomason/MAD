@@ -155,7 +155,7 @@
 
 #pragma mark - Static
 
-+ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
++ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
     
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
@@ -266,10 +266,10 @@
     Class docClass = [RptqDocument class];
     NSString *entityName = NSStringFromClass(docClass);
     NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
-    [docFetchRequest setFetchLimit:1];
+    docFetchRequest.fetchLimit = 1;
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-    return [documents lastObject];
+    return documents.lastObject;
 }
 
 - (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
@@ -561,7 +561,7 @@
     NSManagedObjectContext *mangedObjectContext = [self managedObjectContext];
     
     NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
-    MTDocumentObjectType objectType = objectTypeObj.unsignedIntegerValue;
+    MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;
     
     NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: entityName
