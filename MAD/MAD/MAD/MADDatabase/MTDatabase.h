@@ -29,8 +29,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @protocol MTDatabaseProtocol <NSObject>
 @required
 @optional
-- (MADCredential *)getCredentialsForKey:(NSString *)key;
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query;
+    - (MADCredential *)getCredentialsForKey:(NSString *)key;
+    - (MTDataTable *)dataTableForQuery:(MTQuery *)query;
 @end
 
 @protocol MADErrorHandler <NSObject>

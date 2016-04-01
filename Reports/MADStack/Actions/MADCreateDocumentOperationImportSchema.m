@@ -71,46 +71,47 @@
         
         id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
         
-        if (dbconnection) {
-            
-            NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
-            NSMutableArray *tables                 = [NSMutableArray array];
-            NSError *gotitError                    = nil;
-            
-            
-            NSError *error = NULL;
-            NSArray *resultTables = [database getTablesFromConnection:dbconnection error:&error];
-            
-            [tables setArray:resultTables];
-            NSUInteger counter = 0;//, numberOfTables = tables.count;
-            for (MTDatabaseTable *databaseTable in tables) {
-                @autoreleasepool {
-                    
-                    //NSString *name = databaseTable.name.copy;
-                    
-                    //status(name, (counter + 1) / numberOfTables);
-                    
-                    NSError *getFieldsError = NULL;
-                    NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
-                    
-                    NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
-                    tablesAndFields[databaseTable.name] = fields;
-                    
-                }
-                counter++;
+        NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
+        NSMutableArray *tables                 = [NSMutableArray array];
+        NSError *gotitError                    = nil;
+        
+        
+        NSError *error = NULL;
+        NSArray *resultTables = [database getTablesFromConnection:dbconnection error:&error];
+        
+        [tables setArray:resultTables];
+        
+        NSUInteger counter = 0; //, numberOfTables = tables.count;
+        for (MTDatabaseTable *databaseTable in tables) {
+            @autoreleasepool {
+                
+                //NSString *name = databaseTable.name.copy;
+                
+                //status(name, (counter + 1) / numberOfTables);
+                
+                NSError *getFieldsError = NULL;
+                NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
+                
+                NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
+                tablesAndFields[databaseTable.name] = fields;
+                
             }
-            
-            gotitError = error;
-            
-            MADErrorContainer *additionalErrors = [rptqDocument storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:private];
-            [errorContainer addErrorsFromContainer:additionalErrors];
-            
-            [database closeProcess:dbconnection];
+            counter++;
         }
         
+        gotitError = error;
         
-        NSError *error = nil;
-        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+        MADErrorContainer *additionalErrors = [rptqDocument storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:private];
+        [errorContainer addErrorsFromContainer:additionalErrors];
+        
+        [database closeProcess:dbconnection];
+        
+        NSError *saveError = nil;
+        if (![private save:&saveError]) {
+            NSLog(@"Error saving context: %@\n%@", saveError.localizedDescription, saveError.userInfo);
+        } else {
+            success = true;
+        }
 
     }];
     

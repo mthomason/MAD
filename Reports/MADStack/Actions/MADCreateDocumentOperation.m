@@ -38,6 +38,7 @@
     if (self = [super init]) {
     
         NSLog(@"%s", __PRETTY_FUNCTION__);
+        
         MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
                                                                                                                      pathExtension: MADFileExtentionMobleApplicationDocument
                                                                                                              andDocumentsDirectory: documentsDirectory];
@@ -66,12 +67,15 @@
         [importSchema addDependency:addConnection];
         
         MADCreateDocumentOperationSaveAndCloseNewDocument *saveOperation = [[MADCreateDocumentOperationSaveAndCloseNewDocument alloc] init];
+        [saveOperation addDependency:createDocument];
         [saveOperation addDependency:importSchema];
         
         MADDocumentOperationCloseDocument *closeDocument = [[MADDocumentOperationCloseDocument alloc] init];
+        [closeDocument addDependency:createDocument];
         [closeDocument addDependency:saveOperation];
         
         MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
+        [taskEnd addDependency:taskBegin];
         [taskEnd addDependency:closeDocument];
         
         NSArray <__kindof NSOperation *> *operations = @[uniqueUrlForFilename,

@@ -67,13 +67,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, strong) UIBarButtonItem *holderButton;
     @property (nonatomic, strong) UIProgressView *progressView;
 
-    @property (nonatomic, strong) MADocument *docToSave;
-    @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
-
-    @property (nonatomic, strong) MTDatabase *databaseTest;
-    @property (nonatomic, strong) MTDataTable *datatableTest;   // Holds datatable since used
-                                                                //  in static function
-
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
     @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
 
@@ -124,6 +117,12 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
      NSLog(@"%s-%@\n%@", __PRETTY_FUNCTION__, operation, errors);
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self.delegate viewControllerDidFinish: self];
+        self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
+        [self enableTextFields];
+    }];
 }
 
 #pragma mark - Actions
@@ -223,19 +222,14 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self.credentialQueue addOperation: getCredentialsOperation];
 
     self.getCredentialsOperation = getCredentialsOperation;
-
-
-
-
     return nil;
 }
 
-- (IBAction)save:(id)sender {
-    
+- (void)disableUserInteractionWithMessage:(NSString *)message {
     [self removeKeyboard];
     [self disableTextFields];
     
-    self.navigationItem.prompt = @"Importing schema.";
+    self.navigationItem.prompt = message;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [self disableNavigation];
@@ -243,228 +237,38 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADBarButtonItem *barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
                                                                                      target: nil action: nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-    
-    NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
-    
-    NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-    
-    id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
-    NSURL *desiredUrl = [saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
-    NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
-    
-    
-    
-    //Create MADocument File and Remove Cache
-    MADocument *doc = [[MADocument alloc] initWithFileURL: uniqueURL];
-    doc.documentDelegate = self;
-    [doc removeGuts];
-    self.docToSave = doc;
-    
-    
-    //Create a database connection
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType: self.databaseType
-                                                                                              host: self.textFieldHost.text
-                                                                                          database: self.textFieldDatabase.text
-                                                                                              port: self.textFieldPort.text.integerValue];
-    
-    MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename:filename
-                                                                                   documentsDirectory:saveFileDelegate.documentDirectory
-                                                                                   databaseConnection:databaseConnection viewController:self];
-    [createDocument addObserver:self];
-    [self.credentialQueue addOperation:createDocument];
-    
-    self.databaseConnection = databaseConnection;
-    
-    
-    /*
-    
-    //Mark the start of a background task
-    __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
-
-    //Test the connection
-    NSArray *errors = NULL;
-    bool success = [self testConnection:databaseConnection withErrors:&errors];
-
-    if (success) {
-        
-        MADConnectionViewController * __weak weakself = self;
-        MADocument *document = self.docToSave;
-        [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
-            
-            MADConnectionViewController *strongself = weakself;
-            strongself.navigationItem.prompt = readStatus;
-            strongself.progressView.progress = progress;
-            
-        } completion:^(BOOL addConnectionSuccess, MADErrorContainer *errorContainer) {
-            
-            __strong MADConnectionViewController *strongself = weakself;
-            NSNumber *backgroundTask = @(bgTask);
-            
-            if (addConnectionSuccess) {
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileURL.lastPathComponent
-                                                  andBackgroundTask: backgroundTask];
-                        
-                    });
-                });
-                
-                
-            } else {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        [strongself closeAndDeleteWithErrors:errorContainer
-                                            connectionString:strongself.databaseConnection.connectionString
-                                           andBackgroundTask:backgroundTask];
-                        
-                    });
-                });
-            }
-            
-        }];
-        
-    } else {
-        [self resetAfterConnectionString: self.databaseConnection.connectionString
-                              failedTest: errors];
-    }
-    errors = NULL;
-     */
- 
 }
 
-- (void)buildDocument {
-/*    __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
+- (IBAction)save:(id)sender {
+    NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
+    
+    NSString *message = NSLocalizedString(@"Importing schema.", @"Importing schema.");
+    [self disableUserInteractionWithMessage:message];
+    
+    
+    id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
+    
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType: self.databaseType host: self.textFieldHost.text
+                                                                                          database: self.textFieldDatabase.text port: self.textFieldPort.text.integerValue];
+    
+    MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename: self.textFieldReportName.text documentsDirectory: saveFileDelegate.documentDirectory
+                                                                                   databaseConnection: databaseConnection viewController:self];
+    [createDocument addObserver:self];
+    [self.credentialQueue addOperation:createDocument];
 
-    MADConnectionViewController * __weak weakself = self;
-    MADocument *document = self.docToSave;
-    [document addConnection:self.databaseConnection status:^(NSString *readStatus, float progress) {
-        
-        MADConnectionViewController *strongself = weakself;
-        strongself.navigationItem.prompt = readStatus;
-        strongself.progressView.progress = progress;
-        
-    } completion:^(BOOL addConnectionSuccess, MADErrorContainer *errorContainer) {
-        
-        __strong MADConnectionViewController *strongself = weakself;
-        NSNumber *backgroundTask = @(bgTask);
-        
-        if (addConnectionSuccess) {
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    [strongself saveAndCloseNewDocumentWithName: strongself.docToSave.fileURL.lastPathComponent
-                                              andBackgroundTask: backgroundTask];
-                    
-                });
-            });
-            
-            
-        } else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    [strongself closeAndDeleteWithErrors:errorContainer
-                                        connectionString:strongself.databaseConnection.connectionString
-                                       andBackgroundTask:backgroundTask];
-                    
-                });
-            });
-        }
-        
-    }];
-*/
 }
 
 #pragma mark - MTDatabaseProtocol
 
-- (MADCredential *)getCredentialsForDatabase:(MTDatabase *)database andKey:(NSString *)key {
-    /*
-    NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
-    credentialQueue.maxConcurrentOperationCount = 1;
-    
-    MADKeyChainGetCredentials *cg = [[MADKeyChainGetCredentials alloc] initWithKey:key viewController:self];
-    MADKeyChainSaveCredentials *cs = [[MADKeyChainSaveCredentials alloc] initWithKey:key viewController:self];
-    
-    [cs addDependency:cg];
-    [credentialQueue addOperation:cg];
-    [credentialQueue addOperation:cs];
-    [credentialQueue waitUntilAllOperationsAreFinished];
-    MADCredential *credentials = cg.credential.copy;
-    */
-    MADCredential *credentials = nil;
-    return credentials;
-}
-
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
-    return [self datatableTest];
-}
-
-- (void)resetAfterConnectionString:(NSString *)connectionString
-                        failedTest:(NSArray *)errors {
+- (void)resetAfterConnectionString:(NSString *)connectionString failedTest:(NSArray *)errors {
     [self resetForm];
     [self displayErrors:errors forConnectionString:connectionString];
 
 }
 
-- (void)displayErrors:(NSArray *)errors
-  forConnectionString:(NSString *)connectionString {
-    [MADConnectionViewController viewController: self
-                                 displayErrors: errors
-                                    completion: ^(BOOL success) {
-                                        [[MTKeyChain sharedObject] deleteKey:connectionString];
-                                    }];
-}
-
-- (void)closeAndDeleteWithErrors:(MADErrorContainer *)errorContainer
-                connectionString:(NSString *)connectionString
-               andBackgroundTask:(NSNumber *)backgroundTask {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            
-            [self showErrorLog:errorContainer];
-            [self resetForm];
-            [[MTKeyChain sharedObject] deleteKey:connectionString];
-            
-            [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
-                
-                self.navigationItem.rightBarButtonItem.enabled = YES;
-                [self enableNavigation];
-                
-                if (error != nil) {
-                    UILocalNotification *notification = [[UILocalNotification alloc] init];
-                    NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
-                    notification.alertBody = [NSString stringWithFormat:localizedErrorString, error.localizedDescription];
-                    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                }
-                
-                [self enableTextFields];
-                self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                    
-                    [[UIApplication sharedApplication] handoffBackground:backgroundTask];
-                    
-                });
-            }];
-            
-        });
-    });
-}
-
-- (void)saveAndCloseNewDocumentWithName:(NSString *)name
-                      andBackgroundTask:(NSNumber *)backgroundTask {
-    [self saveCloseAndExitWithCompletion:^(BOOL success, NSError *error) {
-        [self resetForm];
-        [MADConnectionViewController showLocalNotificationCreatedReportWithName:name];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [[UIApplication sharedApplication] handoffBackground:backgroundTask];
-        });
+- (void)displayErrors:(NSArray *)errors forConnectionString:(NSString *)connectionString {
+    [MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL success) {
+        [[MTKeyChain sharedObject] deleteKey:connectionString];
     }];
 }
 
@@ -480,9 +284,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     NSError *error = errors.lastObject;
 
-    [UIAlertController alertControllerWithTitle: error.localizedDescription
-                                                                   message: error.localizedFailureReason
-                                                            preferredStyle: UIAlertControllerStyleAlert];
+    [UIAlertController alertControllerWithTitle: error.localizedDescription message: error.localizedFailureReason
+                                 preferredStyle: UIAlertControllerStyleAlert];
     
     NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
     NSArray *remaningErrors = [errors subarrayWithRange:range];
@@ -500,35 +303,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
     [viewController presentViewController:alert animated:YES completion:nil];
 
-}
-
-- (void)saveCloseAndExitWithCompletion:(void (^)(BOOL, NSError *))completion {
-
-    MADConnectionViewController * __weak weakself = self;
-    
-    [self.docToSave saveToURL: self.docToSave.fileURL forSaveOperation: UIDocumentSaveForCreating completionHandler: ^(BOOL success) {
-                
-        MADConnectionViewController *strongself = weakself;
-        MADConnectionViewController * __weak weakself1 = strongself;
-                
-        if (success) {
-        
-            [weakself1.docToSave closeWithCompletionHandler:^(BOOL successClose) {
-                        
-                MADConnectionViewController *strongself1 = weakself1;
-                [strongself1 finishDocument];
-                completion(successClose, nil);
-                        
-            }];
-            
-        }
-    }];
-}
-
-- (void)finishDocument {
-    [self.delegate viewControllerDidFinish: self];
-    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
-    [self enableTextFields];
 }
 
 + (void)showLocalNotificationCreatedReportWithName:(NSString *)name {
