@@ -25,10 +25,14 @@
 
 - (void)execute {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-     self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-        self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+    MADOperationBackgroundTaskBegin * __weak weakself = self;
+    UIBackgroundTaskIdentifier identifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        MADOperationBackgroundTaskBegin *sself = weakself;
+        [[UIApplication sharedApplication] endBackgroundTask:sself.backgroundTaskIdentifier];
+        sself.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
     }];
+
+    self.backgroundTaskIdentifier = identifier;
     
     if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
         [self finish];

@@ -31,10 +31,13 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (instancetype)init {
     if (self = [super init]) {
+    
         NSMutableArray *mad_internalErrors = [[NSMutableArray alloc] init];
         self.mad_internalErrors = mad_internalErrors;
+        
         NSMutableArray *conditions = [[NSMutableArray alloc] init];
         self.conditions = conditions;
+        
         NSMutableArray *observers = [[NSMutableArray alloc] init];
         self.observers = observers;
     }
@@ -50,8 +53,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 // use the KVO mechanism to indicate that changes to "state" affect other properties as well
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
-    if ([@[@"isReady", @"isExecuting", @"isFinished"] containsObject:key]) {
-        return [NSSet setWithArray:@[@"state"]];
+    if ([@[MADOperatorSelectorIsReady, MADOperatorSelectorIsExecuting, MADOperatorSelectorIsFinished] containsObject:key]) {
+        return [NSSet setWithArray:@[MADOperatorSelectorState]];
     }
     return [super keyPathsForValuesAffectingValueForKey:key];
 }
@@ -66,7 +69,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)setState:(MADOperationState)newState {
     // Manually fire the KVO notifications for state change, since this is "private".
-    [self willChangeValueForKey:@"state"];
+    [self willChangeValueForKey:MADOperatorSelectorState];
     
     @synchronized(self) {
             
@@ -77,7 +80,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
         _state = newState;
     }
     
-    [self didChangeValueForKey:@"state"];
+    [self didChangeValueForKey:MADOperatorSelectorState];
 }
 
 - (BOOL)isReady {
@@ -183,16 +186,16 @@ static NSString * const MADOperatorSelectorState        = @"state";
     }
 }
 
-/**
- `execute()` is the entry point of execution for all `Operation` subclasses.
- If you subclass `Operation` and wish to customize its execution, you would
- do so by overriding the `execute()` method.
+    /**
+     `execute()` is the entry point of execution for all `Operation` subclasses.
+        If you subclass `Operation` and wish to customize its execution, you would
+        do so by overriding the `execute()` method.
  
- At some point, your `Operation` subclass must call one of the "finish"
- methods defined below; this is how you indicate that your operation has
- finished its execution, and that operations dependent on yours can re-evaluate
- their readiness state.
- */
+        At some point, your `Operation` subclass must call one of the "finish"
+        methods defined below; this is how you indicate that your operation has
+        finished its execution, and that operations dependent on yours can re-evaluate
+        their readiness state.
+     */
 - (void)execute {
     [self finish];
 }
@@ -216,14 +219,14 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 #pragma mark - Finishing
 
-/**
- Most operations may finish with a single error, if they have one at all.
- This is a convenience method to simplify calling the actual `finish()`
- method. This is also useful if you wish to finish with an error provided
- by the system frameworks. As an example, see `DownloadEarthquakesOperation`
- for how an error from an `NSURLSession` is passed along via the
- `finishWithError()` method.
- */
+    /**
+    Most operations may finish with a single error, if they have one at all.
+        This is a convenience method to simplify calling the actual `finish()`
+        method. This is also useful if you wish to finish with an error provided
+        by the system frameworks. As an example, see `DownloadEarthquakesOperation`
+        for how an error from an `NSURLSession` is passed along via the
+        `finishWithError()` method.
+    */
 - (void)finish {
     NSLog(@"Finish: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     [self finish:nil];
@@ -239,10 +242,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
     }
 }
 
-/**
- A private property to ensure we only notify the observers once that the
- operation has finished.
- */
+    /**
+        A private property to ensure we only notify the observers once that the
+        operation has finished.
+     */
 - (void)finish:(NSArray *)errors {
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = YES;
