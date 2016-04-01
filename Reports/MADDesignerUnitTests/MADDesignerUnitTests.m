@@ -30,10 +30,10 @@
 
 - (void)testExample {
     
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactoryWithType:MADIdentifierDatabaseMySQL
-                                                                                                  host:@"edadb.cqyrz0epxrje.us-east-1.rds.amazonaws.com"
-                                                                                              database:@"employees"
-                                                                                                  port:3306];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType:MADIdentifierDatabaseMySQL
+                                                                                              host:@"edadb.cqyrz0epxrje.us-east-1.rds.amazonaws.com"
+                                                                                          database:@"employees"
+                                                                                              port:3306];
     
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
     NSError * __autoreleasing error = NULL;

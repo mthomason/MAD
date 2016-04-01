@@ -247,7 +247,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSString *filename = [self.textFieldReportName.text stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-    NSURL *desiredUrl = [self.saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
+    
+    id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
+    NSURL *desiredUrl = [saveFileDelegate.documentDirectory URLByAppendingPathComponent: filename isDirectory:NO];
     NSURL *uniqueURL = [MADFileUtilities uniqueURLForURL: desiredUrl];
     
     
@@ -260,16 +262,16 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     
     //Create a database connection
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactoryWithType:self.databaseType
-                                                                                                  host:self.textFieldHost.text
-                                                                                              database:self.textFieldDatabase.text
-                                                                                                  port:self.textFieldPort.text.integerValue];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType:self.databaseType
+                                                                                              host:self.textFieldHost.text
+                                                                                          database:self.textFieldDatabase.text
+                                                                                              port:self.textFieldPort.text.integerValue];
     
     //[self getCredentialsForDatabaseConnection: databaseConnection];
     
     
     MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename:filename
-                                                                                   documentsDirectory:self.saveFileDelegate.documentDirectory
+                                                                                   documentsDirectory:saveFileDelegate.documentDirectory
                                                                                    databaseConnection:databaseConnection viewController:self];
     [createDocument addObserver:self];
     [self.credentialQueue addOperation:createDocument];

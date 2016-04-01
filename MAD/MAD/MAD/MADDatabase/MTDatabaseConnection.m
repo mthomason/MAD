@@ -44,10 +44,10 @@ NSString * const MADStringEmpty = @"";
     return self;
 }
 
-+ (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
-                                             host:(NSString *)host
-                                         database:(NSString *)database
-                                             port:(NSInteger)port NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseConnectionWithType:(NSString *)typeIdentifier
+                                         host:(NSString *)host
+                                     database:(NSString *)database
+                                         port:(NSInteger)port NS_RETURNS_RETAINED {
     
     id resultCredentals = nil;
     

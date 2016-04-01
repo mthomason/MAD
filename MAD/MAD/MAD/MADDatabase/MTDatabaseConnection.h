@@ -29,10 +29,10 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
 
     + (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier NS_RETURNS_RETAINED;
 
-    + (instancetype)databaseConnectionFactoryWithType:(NSString *)typeIdentifier
-                                                 host:(NSString *)host
-                                             database:(NSString *)database
-                                                 port:(NSInteger)port NS_RETURNS_RETAINED;
+    + (instancetype)newDatabaseConnectionWithType:(NSString *)typeIdentifier
+                                             host:(NSString *)host
+                                         database:(NSString *)database
+                                             port:(NSInteger)port NS_RETURNS_RETAINED;
     // Currently only returns SQLite3 type.
     + (instancetype)newDatabaseConnectionForObject:(id)credentals NS_RETURNS_RETAINED;
     + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url NS_RETURNS_RETAINED;
