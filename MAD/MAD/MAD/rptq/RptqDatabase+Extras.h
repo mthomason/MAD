@@ -33,16 +33,17 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
 
 @interface RptqDatabase (Extras) <MTProtocolCompare>
 
-+ (RptqDatabase *)databaseForDocument:(RptqDocument *)document
-                      andConnecitonId:(NSNumber *)connectionId;
+    + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
+                          andConnecitonId:(NSNumber *)connectionId;
 
-+ (RptqDatabase *)databaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                              driverType:(NSString *)driverIdentifier
-                                            connectionId:(NSNumber *)connectionId NS_RETURNS_RETAINED;
-@property (readonly) RptqQuery *defaultQuery;
-- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
+    + (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                   driverType:(NSString *)driverIdentifier
+                                                 connectionId:(NSNumber *)connectionId NS_RETURNS_RETAINED;
 
-- (MNSDatabaseType)databaseType;
+    @property (readonly) RptqQuery *defaultQuery;
+
+    - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
+    - (MNSDatabaseType)databaseType;
 
 @end
 

@@ -74,22 +74,22 @@
     NSString *label = [[NSString alloc] initWithString: field.name];
     rptqField.label = label;
     
-    NSString *name = [[NSString alloc] initWithString:field.name];
+    NSString *name = [[NSString alloc] initWithString: field.name];
     rptqField.name = name;
     
     NSNumber *dataType = [[NSNumber alloc] initWithUnsignedInteger: field.fieldType];
     rptqField.dataType = dataType;
     
-    NSNumber *dataTypeNative = [[NSNumber alloc] initWithInteger:field.fieldTypeNative];
+    NSNumber *dataTypeNative = [[NSNumber alloc] initWithInteger: field.fieldTypeNative];
     rptqField.dataTypeNative = dataTypeNative;
     
-    NSNumber *decimals = [[NSNumber alloc] initWithUnsignedInteger:field.decimals];
+    NSNumber *decimals = [[NSNumber alloc] initWithUnsignedInteger: field.decimals];
     rptqField.decimals = decimals;
     
-    NSNumber *width = [[NSNumber alloc] initWithUnsignedInteger:field.width];
+    NSNumber *width = [[NSNumber alloc] initWithUnsignedInteger: field.width];
     rptqField.width = width;
     
-    NSNumber *primaryKey = [[NSNumber alloc] initWithBool:field.primaryKey];
+    NSNumber *primaryKey = [[NSNumber alloc] initWithBool: field.primaryKey];
     rptqField.primaryKey = primaryKey;
 
     return rptqField;

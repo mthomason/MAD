@@ -335,13 +335,13 @@
     return [section producesFormFeed];
 }
 
-- (void)storeDatabaseConnectionDefination:(MTDatabase *)database  {
+- (void)storeDatabaseConnectionDefination:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSNumber *connectionId = @(self.hasDatabaseSchemas.count + 1);
-    RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: self.managedObjectContext
-                                                                           driverType: database.identifier
-                                                                         connectionId: connectionId];
+    RptqDatabase *rptqDatabase = [RptqDatabase newDatabaseFactoryForManagedObjectContext: managedObjectContext
+                                                                              driverType: database.identifier
+                                                                            connectionId: connectionId];
     
-    RptqUserCredentals *userCredentals = [RptqUserCredentals userCredentalsFactory: self.managedObjectContext];
+    RptqUserCredentals *userCredentals = [RptqUserCredentals userCredentalsFactory: managedObjectContext];
     [userCredentals setDatabase_driver_type: database.identifier];
     
     if ([database.identifier isEqualToString:MADIdentifierDatabaseMySQL]) {
@@ -378,7 +378,7 @@
     [rptqDatabase setOwnedByUser: userCredentals];
     NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
     RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId
-                                                        inManagedObjectContext: self.managedObjectContext];
+                                                        inManagedObjectContext: managedObjectContext];
     [rptqDatabase addHasQueriesObject:newQuery];
     
     NSSet *databaseSchemas = [self.hasDatabaseSchemas setByAddingObject: rptqDatabase];
@@ -390,7 +390,7 @@
              status:(void (^)(NSString *status, float progress))status
          completion:(void (^)(BOOL success, MADErrorContainer *error))completion {
 
-    [self storeDatabaseConnectionDefination:database];
+    [self storeDatabaseConnectionDefination:database forManagedObjectContext:self.managedObjectContext];
     
     __block MADErrorContainer *errorContainer = [MADErrorContainer new];
     
@@ -428,7 +428,7 @@
         
         gotitError = error;
         
-        MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields];
+        MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:self.managedObjectContext];
         [errorContainer addErrorsFromContainer:additionalErrors];
         
         [database closeProcess:dbconnection];
@@ -495,7 +495,7 @@
     
 }
 
-- (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables fieldsByTable:(NSDictionary *)fieldsByTable {
+- (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables fieldsByTable:(NSDictionary *)fieldsByTable andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     MADErrorContainer * __autoreleasing errorContainer = [[MADErrorContainer alloc] init];
     for (MTDatabaseTable *table in tables) {
@@ -505,14 +505,12 @@
         
         if (fields.count) {
             
-            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext: self.managedObjectContext
-                                                                                                                      andTable: table];
+            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
             [self.defaultDatabase addHasTablesObject: rptqTable];
             
             NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
             for (MTDatabaseField *field in fields) {
-                RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: self.managedObjectContext
-                                                                                                                            andField: field];
+                RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
                 [schemaFields addObject:schemaField];
             }
             
@@ -534,11 +532,6 @@
             
         }
     }
-    
-    
-    NSError *saveError = nil;
-    [self.managedObjectContext save:&saveError];
-    NSAssert(saveError == nil, @"%@", saveError);
     return errorContainer;
 }
 

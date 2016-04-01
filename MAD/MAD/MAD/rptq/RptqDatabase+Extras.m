@@ -100,20 +100,23 @@
     return currentDatabase;
 }
 
-+ (RptqDatabase *)databaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                driverType:(NSString *)driverIdentifier
-                                              connectionId:(NSNumber *)connectionId NS_RETURNS_RETAINED {
++ (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                              driverType:(NSString *)driverIdentifier
+                                            connectionId:(NSNumber *)connectionID NS_RETURNS_RETAINED {
 
-    NSString *entityName = NSStringFromClass([RptqDatabase class]);
+    NSString *entityName = NSStringFromClass([self class]);
     NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: entityName
                                                       inManagedObjectContext: objectContext];
+    
+    RptqDatabase *database = [[self alloc] initWithEntity: databaseEntity
+                           insertIntoManagedObjectContext: objectContext];
 
-    RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
-                                   insertIntoManagedObjectContext:objectContext];
-
-    NSString *databaseDriverType = [NSString stringWithString: driverIdentifier];
+    NSString *databaseDriverType = [[NSString alloc] initWithString: driverIdentifier];
     database.databaseDriverType = databaseDriverType;
-    database.identifier = connectionId;
+    
+    NSNumber *identifier = connectionID.copy;
+    database.identifier = identifier;
+    
     return database;
 }
 
