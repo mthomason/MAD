@@ -338,7 +338,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 - (void)buildDocument {
-    __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
+/*    __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
 
     MADConnectionViewController * __weak weakself = self;
@@ -379,7 +379,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
         }
         
     }];
-
+*/
 }
 
 #pragma mark - MTDatabaseProtocol

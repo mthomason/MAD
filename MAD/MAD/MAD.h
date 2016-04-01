@@ -17,6 +17,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADActivityProtocol.h>
 
 #import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseTable.h>
 #import <MAD/MTDatabaseField.h>
 
 #import <MAD/MTDatabaseCache.h>

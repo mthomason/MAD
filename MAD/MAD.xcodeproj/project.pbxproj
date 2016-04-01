@@ -197,7 +197,7 @@
 		4C401E381BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E1E1BAE3DCB00BAE5FC /* MTDatabaseSqlite3.m */; };
 		4C401E391BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E1F1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h */; };
 		4C401E3A1BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E201BAE3DCB00BAE5FC /* MTDatabaseSqlServer.m */; };
-		4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */; };
+		4C401E3B1BAE3DCB00BAE5FC /* MTDatabaseTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E211BAE3DCB00BAE5FC /* MTDatabaseTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E3C1BAE3DCB00BAE5FC /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E221BAE3DCB00BAE5FC /* MTDatabaseTable.m */; };
 		4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E441BAE4D8C00BAE5FC /* MADocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E451BAE4D8C00BAE5FC /* MADocument.m */; };

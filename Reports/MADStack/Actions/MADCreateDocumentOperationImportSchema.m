@@ -10,6 +10,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
+#import <MAD/MTDatabaseTable.h>
+#import <MAD/MTDatabaseField.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADErrorContainer.h>
@@ -57,17 +59,58 @@
     private.parentContext = document.managedObjectContext;
     [private performBlockAndWait:^{
 
-        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: document.managedObjectContext];
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
         
         MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
         document.mainDatabase = database;
         
-        [rptqDocument addDatabase: document.mainDatabase forManagedObjectContext:document.managedObjectContext status: ^(NSString *message, float progress) {
-            NSLog(@"%@ - %f", message, progress);
-        } completion:^(BOOL addDatabaseSuccess, MADErrorContainer *errorContainer) {
-            success = addDatabaseSuccess ? true : false;
-        }];
-
+        
+        [rptqDocument storeDatabaseConnectionDefination:database forManagedObjectContext:private];
+        
+        MADErrorContainer *errorContainer = [MADErrorContainer new];
+        
+        id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
+        
+        if (dbconnection) {
+            
+            NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
+            NSMutableArray *tables                 = [NSMutableArray array];
+            NSError *gotitError                    = nil;
+            
+            
+            NSError *error = NULL;
+            NSArray *resultTables = [database getTablesFromConnection:dbconnection error:&error];
+            
+            [tables setArray:resultTables];
+            NSUInteger counter = 0;//, numberOfTables = tables.count;
+            for (MTDatabaseTable *databaseTable in tables) {
+                @autoreleasepool {
+                    
+                    //NSString *name = databaseTable.name.copy;
+                    
+                    //status(name, (counter + 1) / numberOfTables);
+                    
+                    NSError *getFieldsError = NULL;
+                    NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
+                    
+                    NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
+                    tablesAndFields[databaseTable.name] = fields;
+                    
+                }
+                counter++;
+            }
+            
+            gotitError = error;
+            
+            MADErrorContainer *additionalErrors = [rptqDocument storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:private];
+            [errorContainer addErrorsFromContainer:additionalErrors];
+            
+            [database closeProcess:dbconnection];
+        }
+        
+        
+        NSError *error = nil;
+        if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
 
     }];
     

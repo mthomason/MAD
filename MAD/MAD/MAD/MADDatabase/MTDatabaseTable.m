@@ -15,7 +15,7 @@
 
 @interface MTDatabaseTable ()
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
 @end
 
