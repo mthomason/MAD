@@ -46,8 +46,7 @@
             layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
             layout.objectID = object.objectID;
             CGSize size = object.size;
-            layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue,
-                                      size.width, size.height);
+            layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue, size.width, size.height);
             [self addItem:layout];
             itemCounter++;
         }
@@ -120,7 +119,9 @@
             }
         }
     }
-    placedItem.frame = CGRectMake(round(placedItem.frame.origin.x), round(placedItem.frame.origin.y), placedItem.frame.size.width, placedItem.frame.size.height);
+    placedItem.frame = CGRectMake(roundf(placedItem.frame.origin.x),
+                                  roundf(placedItem.frame.origin.y),
+                                  placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
 - (NSArray *)positionUnplacedItems:(NSArray *)unplacedItems aroundPlacedItems:(NSArray *)placedItems {

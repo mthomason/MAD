@@ -228,8 +228,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (instancetype)initWithFileURL:(NSURL *)url {
-    self = [super initWithFileURL:url];
-    if (self) {
+    if (self = [super initWithFileURL:url]) {
         
         NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
         NSNumber *inferMappingModelAutomaticallyOption = @(YES);

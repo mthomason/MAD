@@ -24,8 +24,7 @@
 }
 
 - (instancetype)initWithQuery:(MTQuery *)query {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         self.query = query;
         self.didRefresh = NO;
     }
@@ -34,8 +33,6 @@
 
 #pragma mark - Reading cached data
 
-- (BOOL)needsFormat {
-    return YES;
-}
+- (BOOL)needsFormat { return YES; }
 
 @end

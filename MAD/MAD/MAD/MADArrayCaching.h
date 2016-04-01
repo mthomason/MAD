@@ -16,7 +16,7 @@
 
     @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
     @property (nonatomic, strong, readonly) NSString *identifier;
-    @property (nonatomic, assign, readonly) int count;
+    @property (readonly) long long int count;
 
     - (instancetype)initWithIdentifier:(NSString *)identifier;
     - (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;

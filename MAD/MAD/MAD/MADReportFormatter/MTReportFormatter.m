@@ -46,10 +46,10 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
 
-    @property (nonatomic, strong, readwrite) MTReportFormatterPageDefinition *page;
-
-    @property (nonatomic, assign) MTReportFormatterOptions options;
     @property (nonatomic, weak, readwrite) MADocument *layout;
+    @property (nonatomic, assign) MTReportFormatterOptions options;
+
+    @property (nonatomic, strong, readwrite) MTReportFormatterPageDefinition *page;
 
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportIndexes;
     @property (nonatomic, strong, readwrite) MADArrayCaching *reportLayout;
@@ -92,27 +92,31 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)dealloc { }
 
-- (instancetype)initWithQuery: (MTQueryFull *)query
-                       layout: (MADocument *)layout
-                      options: (MTReportFormatterOptions)options  {
-    self = [super initWithQuery:query];
-    if (self) {
+- (instancetype)initWithDocument: (MADocument *)layout options: (MTReportFormatterOptions)options  {
+    if (self = [super init]) {
         self.options = options;
         self.layout = layout;
+        self.didRefresh = NO;
     }
     return self;
+}
+
++ (instancetype)newReportFormatterWithDocument: (MADocument *)layout
+                                       options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
+    return result;
 }
 
 + (instancetype)reportFormatterWithQuery: (MTQuery *)query
                                   layout: (MADocument *)layout
                                  options: (MTReportFormatterOptions)options NS_RETURNS_RETAINED {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDocument:layout options:options];
     return result;
 }
 
 - (NSArray *)layoutForPage:(NSUInteger)page {
     NSArray *result = [NSArray arrayWithArray:self.reportLayout[page]];
-    return (page < [self.reportLayout count]) ? result : nil;
+    return (page < (NSUInteger)[self.reportLayout count]) ? result : nil;
 }
 
 - (NSUInteger)layoutIdentifier {
@@ -468,7 +472,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     BOOL firstRow = YES;
         
-    NSArray *sqg = [self.query.queryObject sortedQueryGroups];
+    NSArray *sqg = [self.layout.mainQuery.queryObject sortedQueryGroups];
     [self setSortedQueryGroups:sqg];
     
     bool rowIdOnly = true;
@@ -670,7 +674,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)numberOfPages {
-    return self.reportLayout.count;
+    return (NSUInteger)self.reportLayout.count;
 }
 
 

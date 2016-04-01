@@ -78,6 +78,7 @@
                                                          getCredentials,
                                                          taskBegin,
                                                          createDocument,
+                                                         firstTimeSetup,
                                                          addConnection,
                                                          importSchema,
                                                          saveOperation,

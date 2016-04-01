@@ -374,11 +374,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return [MTQuery queryDefinitionSelect:queryDefinationSelect withLimit:1 andOffset:0];
 }
 
-- (int)count {
-    int lastRowid = 0;
+- (long long int)count {
+    sqlite_int64 lastRowid = 0;
     int stepResult = sqlite3_step(_statementCount);
     if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
-        lastRowid = sqlite3_column_int(_statementCount, 0) + 1;
+        lastRowid = sqlite3_column_int64(_statementCount, 0) + 1;
         sqlite3_reset(_statementCount);
     }
     return lastRowid;
