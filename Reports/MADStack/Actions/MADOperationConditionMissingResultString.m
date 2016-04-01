@@ -81,8 +81,8 @@
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        MADOperationConditionResult *cresult = [MADOperationConditionResult newOperationConditionResultFailed:error];
-        completion(cresult);
+        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        completion(result);
     }
     
 }

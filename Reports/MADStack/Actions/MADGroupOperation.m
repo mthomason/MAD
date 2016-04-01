@@ -40,11 +40,11 @@
 
 - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations finishingOperation:(NSBlockOperation *)finishingOperation {
     if (finishingOperation == nil) {
-        MADGroupOperation * __weak wself = self;
+        /*MADGroupOperation * __weak wself = self;
         _finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
             MADGroupOperation *sself = wself;
             [sself finish];
-        }];
+        }];*/
     } else {
         _finishingOperation = finishingOperation;
     }

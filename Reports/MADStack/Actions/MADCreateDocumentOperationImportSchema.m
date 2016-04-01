@@ -78,7 +78,7 @@
         
         NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
         NSMutableArray *tables                 = [NSMutableArray array];
-        NSError *gotitError                    = nil;
+//        NSError *gotitError                    = nil;
         
         
         NSError *error = NULL;
@@ -104,7 +104,7 @@
             counter++;
         }
         
-        gotitError = error;
+        //gotitError = error;
         
         MADErrorContainer *additionalErrors = [rptqDocument storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:private];
         [errorContainer addErrorsFromContainer:additionalErrors];

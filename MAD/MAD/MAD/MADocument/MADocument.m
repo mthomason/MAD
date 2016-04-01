@@ -230,13 +230,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (instancetype)initWithFileURL:(NSURL *)url {
     if (self = [super initWithFileURL:url]) {
         
-        NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
-        NSNumber *inferMappingModelAutomaticallyOption = @(YES);
-        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption, migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
-        //NSDictionary *options = @{
-        //                          NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-        //                          NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
-        //                          };
+        NSNumber *migratePersistentStoresAutomaticallyOption =  [[NSNumber alloc] initWithBool:YES];
+        NSNumber *inferMappingModelAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
+        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption,
+                                                                             migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
         
         self.persistentStoreOptions = options;
         

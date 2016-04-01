@@ -33,6 +33,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
     if (self = [super init]) {
         NSMutableArray *mad_internalErrors = [[NSMutableArray alloc] init];
         self.mad_internalErrors = mad_internalErrors;
+        NSMutableArray *conditions = [[NSMutableArray alloc] init];
+        self.conditions = conditions;
+        NSMutableArray *observers = [[NSMutableArray alloc] init];
+        self.observers = observers;
     }
     return self;
 }
@@ -136,13 +140,6 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 #pragma mark - Conditions
 
-- (NSMutableArray *)conditions {
-    if (!_conditions) {
-        _conditions = [NSMutableArray array];
-    }
-    return _conditions;
-}
-
 - (void)addCondition:(NSObject <MADOperationCondition>*)condition {
     NSAssert(self.state < evaluatingConditions, @"Cannot modify observers after execution has begun.");
     [self.conditions addObject:condition];
@@ -154,13 +151,6 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 #pragma mark - Observers
-
-- (NSMutableArray *)observers {
-    if (!_observers) {
-        _observers = [NSMutableArray array];
-    }
-    return _observers;
-}
 
 - (void)addObserver:(NSObject <MADOperationObserver> *)observer {
     NSAssert(self.state < executing, @"Cannot modify observers after execution has begun.");

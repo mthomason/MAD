@@ -215,32 +215,28 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 //        NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
 //            [self finish];
 //        }];
-        MADGroupOperation * __weak wself = self;
+        /*MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
             MADGroupOperation *sself = wself;
             [sself finish];
-        }];
+        }];*/
         
-        [self addOperations:operations finishingOperation:finishingOperation];
+        [self addOperations:operations finishingOperation:nil];
     }
     
     return self;
 }
-/*
+
 - (void)execute {
     
-    MADGroupOperation * __weak wself = self;
-    self.finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-        MADGroupOperation *sself = wself;
-        defer(^{
-            [sself finish];
-        });
+    NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self finish];
     }];
     
     self.internalQueue.suspended = NO;
-    [self.internalQueue addOperation:self.finishingOperation];
+    [self.internalQueue addOperation:finishingOperation];
 }
-*/
+
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
 
     // Operation 1 & 3: Credentials in keychain.
