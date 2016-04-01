@@ -14,10 +14,10 @@
 
 @interface RptqUserCredentals (Extras) <MTProtocolCompare>
 
-+ (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
+    + (instancetype)newUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
 
-+ (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
-- (NSString *)databaseSchemaName;
+    + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
+    - (NSString *)databaseSchemaName;
 
 @end
 

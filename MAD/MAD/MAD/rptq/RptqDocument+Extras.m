@@ -341,36 +341,59 @@
                                                                               driverType: database.identifier
                                                                             connectionId: connectionId];
     
-    RptqUserCredentals *userCredentals = [RptqUserCredentals userCredentalsFactory: managedObjectContext];
-    [userCredentals setDatabase_driver_type: database.identifier];
+    RptqUserCredentals *userCredentals = [RptqUserCredentals newUserCredentalsForManagedObjectContext: managedObjectContext];
     
-    if ([database.identifier isEqualToString:MADIdentifierDatabaseMySQL]) {
+    NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
+    userCredentals.database_driver_type = databaseIdentifier;
+    
+    if ([databaseIdentifier isEqualToString:MADIdentifierDatabaseMySQL]) {
         
         if (database.databaseConnection != nil) {
-            NSNumber *port = @(database.databaseConnection.port);
-            userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMySQL);
-            userCredentals.mysql_host = database.databaseConnection.server;
-            userCredentals.mysql_database = database.databaseConnection.database;
+        
+            NSNumber *port = [[NSNumber alloc] initWithInteger:database.databaseConnection.port];
             userCredentals.mysql_port = port;
+
+            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithUnsignedInteger:MNSDatabaseTypeMySQL];
+            userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
+
+            NSString *server = [[NSString alloc] initWithString:database.databaseConnection.server];
+            userCredentals.mysql_host = server;
+
+            NSString *db = [[NSString alloc] initWithString:database.databaseConnection.database];
+            userCredentals.mysql_database = db;
         }
         
-    } else if ([database.identifier isEqualToString:MADIdentifierDatabaseTDS]) {
+    } else if ([databaseIdentifier isEqualToString:MADIdentifierDatabaseTDS]) {
         
         if (database.databaseConnection != nil) {
-            NSNumber *port = @(database.databaseConnection.port);
-            userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeMicrosoftSqlServer);
-            userCredentals.tds_server = database.databaseConnection.server;
-            userCredentals.tds_host = database.databaseConnection.server;
-            userCredentals.tds_database = database.databaseConnection.database;
+
+            NSNumber *port = [[NSNumber alloc] initWithInteger:database.databaseConnection.port];
             userCredentals.tds_port = port;
+
+            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithUnsignedInteger: MNSDatabaseTypeMicrosoftSqlServer];
+            userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
+ 
+            NSString *server = [[NSString alloc] initWithString: database.databaseConnection.server];
+            userCredentals.tds_server = server;
+
+            NSString *host = [[NSString alloc] initWithString: database.databaseConnection.server];
+            userCredentals.tds_host = host;
+
+            NSString *db  = [[NSString alloc] initWithString: database.databaseConnection.database];
+            userCredentals.tds_database = db;
+            
         }
         
-    } else if ([database.identifier isEqualToString:MADIdentifierDatabaseSqlite3]) {
+    } else if ([databaseIdentifier isEqualToString:MADIdentifierDatabaseSqlite3]) {
         
         if (database.databaseConnection != nil) {
-            // FIXME: Storing Sqlite3 database url in mysql holder.
-            userCredentals.mysql_database = database.databaseConnection.databaseUrl.path.lastPathComponent;
-            userCredentals.inDatabase.databaseDriverTypeEnum = @(MNSDatabaseTypeSqlite3);
+
+// FIXME: Storing Sqlite3 database url in mysql holder.
+            NSString *db = [[NSString alloc] initWithString:database.databaseConnection.databaseUrl.path.lastPathComponent];
+            userCredentals.mysql_database = db;
+
+            NSNumber *databaseDriverTypeEnum = [[NSNumber alloc] initWithUnsignedInteger: MNSDatabaseTypeSqlite3];
+            userCredentals.inDatabase.databaseDriverTypeEnum = databaseDriverTypeEnum;
         }
         
     }
@@ -381,16 +404,18 @@
                                                         inManagedObjectContext: managedObjectContext];
     [rptqDatabase addHasQueriesObject:newQuery];
     
+    
     NSSet *databaseSchemas = [self.hasDatabaseSchemas setByAddingObject: rptqDatabase];
-    [self setHasDatabaseSchemas: databaseSchemas];
+    NSSet *dbs = [[NSSet alloc] initWithSet:databaseSchemas];
+    self.hasDatabaseSchemas = dbs;
 
 }
 
-- (void)addDatabase:(MTDatabase *)database
+- (void)addDatabase:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
              status:(void (^)(NSString *status, float progress))status
          completion:(void (^)(BOOL success, MADErrorContainer *error))completion {
 
-    [self storeDatabaseConnectionDefination:database forManagedObjectContext:self.managedObjectContext];
+    [self storeDatabaseConnectionDefination:database forManagedObjectContext:managedObjectContext];
     
     __block MADErrorContainer *errorContainer = [MADErrorContainer new];
     
@@ -398,10 +423,10 @@
     
     if (dbconnection) {
         
-        NSMutableDictionary * __block tablesAndFields   = [[NSMutableDictionary alloc] init];
-        NSMutableArray * __block tables                 = [NSMutableArray array];
-        BOOL __block gotit                              = YES;
-        NSError * __block gotitError                    = nil;
+        NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
+        NSMutableArray *tables                 = [NSMutableArray array];
+        BOOL gotit                             = YES;
+        NSError *gotitError                    = nil;
         
         
         NSError *error = NULL;
@@ -428,7 +453,7 @@
         
         gotitError = error;
         
-        MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:self.managedObjectContext];
+        MADErrorContainer *additionalErrors = [self storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:managedObjectContext];
         [errorContainer addErrorsFromContainer:additionalErrors];
         
         [database closeProcess:dbconnection];

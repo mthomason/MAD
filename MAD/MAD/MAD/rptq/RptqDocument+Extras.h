@@ -29,7 +29,8 @@
     - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)addDatabase:(MTDatabase *)database status:(void (^)(NSString *status, float progress))status
+    - (void)addDatabase:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                 status:(void (^)(NSString *status, float progress))status
              completion:(void (^)(BOOL success, MADErrorContainer *error))completion;
 
     - (void)addQueryLink:(RptqQueryLinks *)queryLink;

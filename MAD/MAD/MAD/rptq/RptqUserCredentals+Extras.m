@@ -111,8 +111,8 @@
 
 #pragma mark - Static
 
-+ (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
-    NSString *entityName = NSStringFromClass([RptqUserCredentals class]);
++ (instancetype)newUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED {
+    NSString *entityName = NSStringFromClass([self class]);
     NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext: objectContext];
     id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
     return userCredentals;

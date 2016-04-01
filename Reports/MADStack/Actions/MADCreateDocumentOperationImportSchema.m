@@ -52,21 +52,22 @@
         }
     }
 
-    RptqDocument *rptqDocument = [document activeDocumentModel];
-    [rptqDocument addDatabase: document.mainDatabase status: ^(NSString *message, float progress) {
+    RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: document.managedObjectContext];
+    
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
+        document.mainDatabase = database;
         
-        [[MADNotificationProgress sharedObject] updateProgressWithMessage:message progress:progress];
-        
+    [rptqDocument addDatabase: document.mainDatabase forManagedObjectContext:document.managedObjectContext status: ^(NSString *message, float progress) {
+        NSLog(@"%@ - %f", message, progress);
     } completion:^(BOOL success, MADErrorContainer *errorContainer) {
-        
-        self.success = success;
         if (success) {
-            [self finish];
+          [self finish];
         } else {
-            [self finish:[errorContainer allObjects]];
+            NSArray *errors = errorContainer.allObjects.copy;
+            [self finishWithError:errors.lastObject];
         }
-        
     }];
+    
     
 }
 

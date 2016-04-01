@@ -737,7 +737,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
+/*- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
            completion:(void(^)(BOOL success, MADErrorContainer *error))completion {
     
     RptqDocument *rptqDocument = [self activeDocumentModel];
@@ -745,7 +745,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (database) {
         [self setMainDatabase:database];
         
-        [rptqDocument addDatabase: self.mainDatabase
+        [rptqDocument addDatabase: self.mainDatabase forManagedObjectContext:managedObjectContext
                            status: ^(NSString *message, float progress) {
             status(message, progress);
         } completion:^(BOOL success, MADErrorContainer *errorContainer) {
@@ -755,7 +755,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     } else {
         completion(NO, nil);
     }
-}
+}*/
 
 - (RptqDocument *)activeDocumentModel {
     RptqDocument *document = nil;
