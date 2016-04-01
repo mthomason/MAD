@@ -13,6 +13,10 @@
 
 @implementation MADCreateDocumentOperationSaveAndCloseNewDocument
 
+- (BOOL)isAsynchronous {
+    return NO;
+}
+
 - (void)execute {
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -22,18 +26,22 @@
             break;
         }
     }
-    
-    [document saveToURL: document.fileURL forSaveOperation: UIDocumentSaveForCreating completionHandler: ^(BOOL success) {
-        if (success) {
-            [self finish];
-        } else {
-            NSString *title = NSLocalizedString(@"Error Creating Document", @"Error Creating Document");
-            NSString *message = NSLocalizedString(@"Failed to save.", @"Failed to save.");
-            MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-            NSDictionary *userInfoDictionary = [NSDictionary dictionaryWithDictionary:userInfo.userinfo];
-            NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:893 userInfo:userInfoDictionary];
-            [self finishWithError:error];
-        }
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+
+        [document saveToURL: document.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+            if (success) {
+                [self finish];
+            } else {
+                NSString *title = NSLocalizedString(@"Error Creating Document", @"Error Creating Document");
+                NSString *message = NSLocalizedString(@"Failed to save.", @"Failed to save.");
+                MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+                NSDictionary *userInfoDictionary = [NSDictionary dictionaryWithDictionary:userInfo.userinfo];
+                NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:893 userInfo:userInfoDictionary];
+                [self finishWithError:error];
+            }
+        }];
+        
     }];
 }
 

@@ -262,13 +262,10 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     
     //Create a database connection
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType:self.databaseType
-                                                                                              host:self.textFieldHost.text
-                                                                                          database:self.textFieldDatabase.text
-                                                                                              port:self.textFieldPort.text.integerValue];
-    
-    //[self getCredentialsForDatabaseConnection: databaseConnection];
-    
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionWithType: self.databaseType
+                                                                                              host: self.textFieldHost.text
+                                                                                          database: self.textFieldDatabase.text
+                                                                                              port: self.textFieldPort.text.integerValue];
     
     MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename:filename
                                                                                    documentsDirectory:saveFileDelegate.documentDirectory

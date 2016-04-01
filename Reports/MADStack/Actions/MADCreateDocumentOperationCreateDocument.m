@@ -69,8 +69,18 @@
     document.documentDelegate = self;
     [document removeGuts];
     self.document = document;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self.document saveToURL:self.url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            if (success) {
+                [self finish];
+            } else {
+                NSString *domain = NSStringFromClass([self class]);
+                NSError *error = [NSError errorWithDomain:domain code:347 userInfo:nil];
+                [self finishWithError:error];
+            }
+        }];
+    }];
     
-    [self finish];
     
 }
 

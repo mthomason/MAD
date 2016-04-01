@@ -279,8 +279,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                             object: self];
 
         self.didRefresh = NO;
-        
-        
     }
     return self;
 }
@@ -387,18 +385,21 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
     [super handleError:error userInteractionPermitted:userInteractionPermitted];
-    if (userInteractionPermitted) {
+    //if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
-            [NSError presentError: err
-                 onViewController: nil
-                       completion: NULL];
+            NSLog(@"Error saving context1: %@\n%@", [err localizedDescription], [err userInfo]);
+            //[NSError presentError: err
+            NSLog(@"Error saving context2: %@\n%@", [error localizedDescription], [error userInfo]);
+            //     onViewController: nil
+            //           completion: NULL];
         } else {
-            [NSError presentError: error
-                 onViewController: nil
-                       completion: NULL];
+            NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+            //[NSError presentError: error
+            //     onViewController: nil
+            //           completion: NULL];
         }
-    }
+    //}
 }
 
 - (UIImage *)fullyRenderedThumbnail {
@@ -434,6 +435,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
      NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
      *outError = error;
      */
+    
+    
     
     return @{
              NSURLThumbnailDictionaryKey : thumbnails
