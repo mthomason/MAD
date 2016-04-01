@@ -53,7 +53,7 @@
 
 - (void)execute {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    MADocument *document = nil;
+    MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
@@ -63,11 +63,13 @@
     }
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = document.managedObjectContext;
-    [private performBlockAndWait:^{
     
+    private.parentContext = document.managedObjectContext;
+    MADocument * __weak wdoc = document;
+    [private performBlockAndWait:^{
+        MADocument *doc = wdoc;
         RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
-        document.documentObjectID = rptqDocument.objectID;
+        doc.documentObjectID = rptqDocument.objectID;
 
         NSError *error = nil;
         if (![private save:&error]) NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);

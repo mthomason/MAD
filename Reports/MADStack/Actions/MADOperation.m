@@ -103,7 +103,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (BOOL)isExecuting {return self.state == executing; }
 
-- (BOOL)isFinished { return self.state == finished || self.state == usercancelled; }
+- (BOOL)isFinished { return self.state == finished; }
 
 
 - (BOOL)userInitiated { return self.qualityOfService == NSQualityOfServiceUserInitiated; }

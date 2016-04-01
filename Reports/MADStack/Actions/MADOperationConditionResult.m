@@ -83,7 +83,8 @@ NSString * MADOperationConditionKey = @"OperationCondition";
         }
         
         if (completion) {
-            completion(failures);
+            NSArray *a = [[NSArray alloc] initWithArray:failures];
+            completion(a);
         }
     });
 }

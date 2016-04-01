@@ -22,7 +22,7 @@
 }
 
 - (void)execute {
-    MADocument *document = nil;
+    MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
@@ -32,8 +32,9 @@
     }
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        if (document.documentState != UIDocumentStateClosed) {
-            [document closeWithCompletionHandler:^(BOOL success) {
+        MADocument *doc = document;
+        if (doc.documentState != UIDocumentStateClosed) {
+            [doc closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
                     [self finish];
                 } else {

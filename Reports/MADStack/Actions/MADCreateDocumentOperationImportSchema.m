@@ -49,7 +49,7 @@
 
 - (void)execute {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    MADocument *document = nil;
+    MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADCreateDocumentOperationCreateDocumentProtocol)]) {
@@ -61,12 +61,13 @@
     bool __block success = false;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
+    MADocument * __weak weakdoc = document;
     [private performBlockAndWait:^{
-
+        MADocument *doc = weakdoc;
         RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
         
         MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
-        document.mainDatabase = database;
+        doc.mainDatabase = database;
         
         
         [rptqDocument storeDatabaseConnectionDefination:database forManagedObjectContext:private];
