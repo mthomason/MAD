@@ -26,6 +26,10 @@
 
 @implementation MADCreateDocumentOperationAddConnection
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)init {
     return [self initWithDatabaseConnection:nil];
 }

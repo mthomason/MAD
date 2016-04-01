@@ -17,11 +17,8 @@
 
 @implementation MADOperationBackgroundTaskBegin
 
-- (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description {
-    if (self = [super init]) {
-
-    }
-    return self;
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
 }
 
 - (BOOL)isAsynchronous { return YES; }

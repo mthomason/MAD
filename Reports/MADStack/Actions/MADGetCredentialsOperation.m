@@ -214,10 +214,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         self.username = nil;
         self.password = nil;
         
-        MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-            MADGroupOperation *sself = wself;
-            [sself finish];
+            [self finish];
         }];
         
         [self addOperations:operations finishingOperation:finishingOperation];

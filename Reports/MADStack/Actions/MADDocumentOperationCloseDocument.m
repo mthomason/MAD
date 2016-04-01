@@ -13,6 +13,10 @@
 
 @implementation MADDocumentOperationCloseDocument
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (void)execute {
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;

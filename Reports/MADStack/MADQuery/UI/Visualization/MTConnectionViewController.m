@@ -28,7 +28,6 @@
 
 #import <MADFileManager/MADFileUtilities.h>
 
-#import "MADBarButtonItem.h"
 #import "MADNavigationBarTitleView.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
@@ -234,8 +233,12 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     [self disableNavigation];
     
-    MADBarButtonItem *barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
-                                                                                     target: nil action: nil];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator startAnimating];
+    activityIndicator.hidden = NO;
+    activityIndicator.hidesWhenStopped = NO;
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    barButtonItem.isAccessibilityElement = NO;
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
 }
 

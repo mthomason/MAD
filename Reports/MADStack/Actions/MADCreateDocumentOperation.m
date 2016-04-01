@@ -28,7 +28,7 @@
 @implementation MADCreateDocumentOperation
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated.");
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory

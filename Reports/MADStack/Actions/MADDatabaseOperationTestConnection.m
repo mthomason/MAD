@@ -35,6 +35,10 @@
 
 @implementation MADDatabaseOperationTestConnection
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection {
     if (self = [super init]) {
         self.databaseConnection = connection;

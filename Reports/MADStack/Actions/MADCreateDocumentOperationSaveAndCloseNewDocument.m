@@ -13,6 +13,10 @@
 
 @implementation MADCreateDocumentOperationSaveAndCloseNewDocument
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (BOOL)isAsynchronous {
     return YES;
 }

@@ -24,6 +24,10 @@ static NSString * const TextYes = @"Dismiss";
 
 @implementation MADPromptOperationDisplayError
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithViewController:(UIViewController * __weak)viewController {
     return [self initWithError:nil tagDependency:0 viewController:viewController];
 }
@@ -45,7 +49,8 @@ static NSString * const TextYes = @"Dismiss";
         _viewController = viewController;
         _error = error.copy;
         _result = false;
-        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
+        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        [self addCondition:condition];
     }
     return self;
 }

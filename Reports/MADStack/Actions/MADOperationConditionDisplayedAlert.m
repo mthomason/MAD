@@ -22,6 +22,10 @@
 
 @implementation MADOperationConditionDisplayedAlert
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithTag:(NSUInteger)tag {
     if (self = [super init]) {
         _tag = tag;

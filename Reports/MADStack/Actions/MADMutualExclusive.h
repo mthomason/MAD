@@ -15,9 +15,9 @@
 @interface MADMutualExclusiveCondition : NSObject
     <MADOperationCondition>
 
-    + (instancetype)mutualExclusiveForClass:(Class)class;
-    + (instancetype)alertMutex;
-    + (instancetype)viewControllerMutex;
+    + (instancetype)newMutualExclusiveConditionForClass:(Class)class;
+    + (instancetype)newMutualExclusiveConditionAlertMutex;
+    + (instancetype)newMutualExclusiveConditionViewControllerMutex;
 
 @end
 

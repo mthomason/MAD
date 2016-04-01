@@ -26,6 +26,10 @@
 
 @implementation MADOperationConditionMissingResultString
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithKey:(NSString *)key {
     if (self = [super init]) {
         self.key = key;

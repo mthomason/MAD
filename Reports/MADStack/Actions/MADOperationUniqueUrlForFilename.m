@@ -24,6 +24,10 @@
 
 @implementation MADOperationUniqueUrlForFilename
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
                   andDocumentsDirectory:(NSURL *)documentsDirectory {
     if (self = [super init]) {

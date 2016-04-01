@@ -26,6 +26,10 @@ static NSString * const TextNo = @"No";
 
 @implementation MADPromptOperationPolarQuestion
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
@@ -33,7 +37,8 @@ static NSString * const TextNo = @"No";
         _title = title.copy;
         _message = message.copy;
         _result = false;
-        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
+        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        [self addCondition:condition];
         
     }
     return self;

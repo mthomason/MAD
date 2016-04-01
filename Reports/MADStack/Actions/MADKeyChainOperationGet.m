@@ -24,6 +24,10 @@
 
 @implementation MADKeyChainOperationGet
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description {
     if (self = [super init]) {
         _key = key.copy;
@@ -39,22 +43,25 @@
 
     CFDataRef queryData = NULL;
     NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key withDescription:self.keyDescription];
-    OSStatus queryStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryDefination, (CFTypeRef *)&queryData);
-
+    CFDictionaryRef queryDefinationC = (__bridge_retained CFDictionaryRef)queryDefination;
+    OSStatus queryStatus = SecItemCopyMatching(queryDefinationC, (CFTypeRef *)&queryData);
+    CFRelease(queryDefinationC);
+    
     if (queryData == NULL) {
-
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
+        NSString *domain = NSStringFromClass([self class]);
+        NSError *error = [NSError errorWithDomain:domain code:queryStatus userInfo:nil];
         [self finishWithError:error];
         return;
 
     }
-    
+    NSData *resultData = (__bridge_transfer NSData *)queryData;
+
     NSString *result;
     
     switch (queryStatus) {
         case errSecSuccess:
             
-            result = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryData encoding: NSUTF8StringEncoding];
+            result = [[NSString alloc] initWithData: resultData encoding: NSUTF8StringEncoding];
             self.value = result;
             self.success = true;
             [self finish];
@@ -63,9 +70,13 @@
         default:
 
             self.value = nil;
-            NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
-            [self finishWithError:error];
             break;
+    }
+    if (self.success) {
+        [self finish];
+    } else {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
+        [self finishWithError:error];
     }
 }
 

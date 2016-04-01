@@ -232,10 +232,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
         NSNumber *inferMappingModelAutomaticallyOption = @(YES);
-        NSDictionary *options = @{
-                                  NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                                  NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
-                                  };
+        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption, migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, nil];
+        //NSDictionary *options = @{
+        //                          NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+        //                          NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
+        //                          };
         
         self.persistentStoreOptions = options;
         

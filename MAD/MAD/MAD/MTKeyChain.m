@@ -91,10 +91,12 @@ static MTKeyChain *sharedSingleton = nil;
 }
 
 + (NSDictionary *)queryDefination:(NSString *)key withDescription:(NSString *)description {
-    const NSNumber *yes = @YES;
+    NSNumber *yes = @YES;
+    NSString *keyCopy = key.copy;
+    NSString *descriptionCopy = description.copy;
     NSDictionary *query = @{(__bridge id)(kSecClass) : (__bridge id)(kSecClassGenericPassword),
-                            (__bridge id)(kSecAttrService) : key,
-                            (__bridge id)(kSecAttrAccount) : description, // MTKeyChainPasswordAccountDesc,
+                            (__bridge id)(kSecAttrService) : keyCopy,
+                            (__bridge id)(kSecAttrAccount) : descriptionCopy,
                             (__bridge id)(kSecReturnData) : yes};
     return query;
 }

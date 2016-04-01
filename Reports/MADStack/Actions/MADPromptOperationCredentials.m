@@ -45,6 +45,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 @implementation MADPromptOperationCredentials
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithUsernameKey:(NSString *)usernameKey passwordKey:(NSString *)passwordKey
                                                       andViewController:(UIViewController *)viewController {
 
@@ -57,7 +61,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _displayingPrompt = false;
         _bypass = false;
         _gotCredentials = false;
-        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
+        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        [self addCondition:condition];
         
     }
     return self;

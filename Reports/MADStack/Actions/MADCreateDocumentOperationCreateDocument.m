@@ -23,6 +23,10 @@
 
 @implementation MADCreateDocumentOperationCreateDocument
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     if (self.credentials == nil) {
 

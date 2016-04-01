@@ -68,7 +68,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _userContinue = false;
 
         _viewController = viewController;
-        [self addCondition:[MADMutualExclusiveCondition alertMutex]];
+        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        [self addCondition:condition];
 
     }
     return self;

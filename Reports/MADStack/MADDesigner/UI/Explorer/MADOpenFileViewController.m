@@ -22,8 +22,6 @@
 
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
-#import "MADBarButtonItem.h"
-
 #import "MADProgressView.h"
 
 
@@ -537,9 +535,12 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
         
         if ((self.rightBarButtonItemActivityIndicatorVisible = rightBarButtonItemActivityIndicatorVisible)) {
             self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
-            barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
-                                                                           target: nil
-                                                                           action: nil];
+            
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            [activityIndicator startAnimating];
+            activityIndicator.hidden = NO;
+            activityIndicator.hidesWhenStopped = NO;
+            barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
             barButtonItem.isAccessibilityElement = NO;
         } else {
             barButtonItem = (UIBarButtonItem *)self.rightBarButtonItemHolderWhileActivity;

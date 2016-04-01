@@ -19,19 +19,20 @@
 
 @implementation MADMutualExclusiveCondition
 
-+ (instancetype)alertMutex {
++ (instancetype)newMutualExclusiveConditionAlertMutex {
     Class acClass = [UIAlertController class];
-    return [MADMutualExclusiveCondition mutualExclusiveForClass:acClass];
+    return [MADMutualExclusiveCondition newMutualExclusiveConditionForClass:acClass];
 }
 
-+ (instancetype)viewControllerMutex {
++ (instancetype)newMutualExclusiveConditionViewControllerMutex {
     Class vcClass = [UIViewController class];
-    return [MADMutualExclusiveCondition mutualExclusiveForClass:vcClass];
+    return [MADMutualExclusiveCondition newMutualExclusiveConditionForClass:vcClass];
 }
 
-+ (instancetype)mutualExclusiveForClass:(Class)class {
++ (instancetype)newMutualExclusiveConditionForClass:(Class)class {
     MADMutualExclusiveCondition *mutex = [[MADMutualExclusiveCondition alloc] init];
-    mutex.className = NSStringFromClass(class);
+    NSString *className = NSStringFromClass(class);
+    mutex.className = className;
     return mutex;
 }
 
