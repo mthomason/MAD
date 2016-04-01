@@ -558,8 +558,8 @@ void sqliteLog(void *foo, const char* statement) {
                 
             }
         } else {
-            // FIXME: Handle failures.
-            int result = sqlite3_step(statement);
+// FIXME: Handle failures.
+            sqlite3_step(statement);
         }
         if ([query partOfTransactionSet] == NO) {
             success = SQLITE_OK == sqlite3_finalize(statement);
@@ -583,7 +583,7 @@ void sqliteLog(void *foo, const char* statement) {
             NSString *title = NSLocalizedString(@"Error", @"Error");
             NSString *domain = @"MTSqlite3";
             MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-            error = [NSError errorWithDomain:domain code:4784 userInfo:errorUserInfo.userinfo];
+            error = [errorUserInfo errorWithDomain:domain code:4784];
         }
         sqlite3_free(sql);
         

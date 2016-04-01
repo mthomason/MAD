@@ -413,26 +413,31 @@ char *mySQLTypeForType(int type) {
                                 
                             } else {
                             
-                                NSData *theData = [NSData dataWithBytes:bindings[x].buffer length:*(bindings[x].length)];
+                                NSData *theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
                                 dict[key] = theData;
                                 
                                 //Trying to add support for MYSQL_TYPE_TEXT, which is just like a blob with a string in it.
                                 if (theData.bytes != nil) {
-                                    NSString *theDataString = [NSString stringWithUTF8String:theData.bytes];
+                                    NSString *theDataString = [[NSString alloc] initWithUTF8String:theData.bytes];
                                     
                                     if (theDataString != nil) {
+
                                         if ([theDataString isKindOfClass:[NSString class]]) {
                                         
                                             // FIXME: This is a hack.
                                             if (rowCounter == 0) {
+                                                
                                                 MTDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
                                                 
                                                 NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeString];
                                                 column.columnType = columnTypeString;
+                                            
                                             }
                                             
                                             if (theDataString.length != 0) {
+                                                
                                                 dict[key] = theDataString;
+                                                
                                             } else {
                                             
                                                 NSData *theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
@@ -442,9 +447,9 @@ char *mySQLTypeForType(int type) {
                                         } else if ([theDataString isKindOfClass:[NSNumber class]]) {
                                             
                                             if (rowCounter == 0) {
+                                            
                                                 MTDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
-                                                
-                                                NSNumber *columnTypeString = [NSNumber numberWithUnsignedInteger: MTDataTypeInteger];
+                                                NSNumber *columnTypeString = [[NSNumber alloc] initWithUnsignedInteger: MTDataTypeInteger];
                                                 column.columnType = columnTypeString;
                                                 
                                             }

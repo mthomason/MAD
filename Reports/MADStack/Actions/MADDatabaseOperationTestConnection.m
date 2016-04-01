@@ -41,9 +41,9 @@
 
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection {
     if (self = [super init]) {
-        self.databaseConnection = connection;
-        self.success = false;
-        self.credentials = nil;
+        _databaseConnection = connection;
+        _credentials = nil;
+        _success = false;
     }
     return self;
 }
@@ -51,9 +51,9 @@
 - (instancetype)initWithDatabaseConnection:(MTDatabaseConnection *)connection
                                credentials:(MADCredential *)credentials {
     if (self = [super init]) {
-        self.databaseConnection = connection;
-        self.credentials = credentials;
-        self.success = false;
+        _databaseConnection = connection;
+        _credentials = credentials.copy;
+        _success = false;
     }
     return self;
 }
@@ -74,18 +74,20 @@
             if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
  
                 if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
-                    self.credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials;
+                    MADCredential *credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials.copy;
+                    self.credentials = credentials;
                     break;
                 }
                 
             } else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
                 if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
+                    NSString *value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
                     switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
                         case MADKeyChainReadOperationTypeUsername:
-                            username = ((NSObject <MADOperationResultStringProtocol> *)operation).value;
+                            username = value;
                             break;
                         case MADKeyChainReadOperationTypePassword:
-                            password = ((NSObject <MADOperationResultStringProtocol> *)operation).value;
+                            password = value;
                             break;
                             
                         default:

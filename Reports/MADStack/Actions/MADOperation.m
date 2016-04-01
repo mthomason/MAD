@@ -184,7 +184,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
     NSAssert(self.state == ready, @"This operation must be performed on an operation queue.");
     if (self.kad_internalErrors.count == 0 && !self.cancelled) {
         self.state = executing;
-        for (NSObject <MADOperationObserver>* observer in self.observers) {
+        NSArray *observers = self.observers;
+        for (NSObject <MADOperationObserver> *observer in observers) {
             [observer operationDidStart:self];
         }
         [self execute];
@@ -242,7 +243,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (void)finishWithError:(NSError *)error {
     NSLog(@"Finish with error: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     if (error) {
-        [self finish:@[error]];
+        NSArray *errorArray = [[NSArray alloc] initWithObjects:error, nil];
+        [self finish:errorArray];
     } else {
         [self finish:nil];
     }
@@ -257,13 +259,17 @@ static NSString * const MADOperatorSelectorState        = @"state";
         self.hasFinishedAlready = YES;
         self.state = finishing;
         
-        NSArray * combinedErrors = self.kad_internalErrors.copy;
+        NSArray *combinedErrors;
         if (errors) {
-            combinedErrors = [combinedErrors arrayByAddingObjectsFromArray:errors];
+            NSArray *combined = [self.kad_internalErrors arrayByAddingObjectsFromArray:errors];
+            combinedErrors = combined.copy;
+        } else {
+            combinedErrors = self.kad_internalErrors.copy;
         }
         [self finished:combinedErrors];
         
-        for (NSObject <MADOperationObserver>* observer in self.observers) {
+        NSArray *observers = self.observers;
+        for (NSObject <MADOperationObserver> *observer in observers) {
             [observer operationDidFinish:self errors:combinedErrors];
         }
         

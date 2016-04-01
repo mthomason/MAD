@@ -23,6 +23,10 @@
 
 @implementation MADOperationConditionPolarQuestionNegative
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithTag:(NSUInteger)tag {
     if (self = [super init]) {
         _tag = tag;
@@ -44,8 +48,9 @@
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
-        completion([MADOperationConditionResult failed:error]);
+        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
+        MADOperationConditionResult *result = [MADOperationConditionResult failed:error];
+        completion(result);
         return;
     }
 
@@ -59,7 +64,7 @@
                 ((MADOperationConditionPolarQuestionNegativeResult *)result).result = true;
             } else {
                 MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-                NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+                NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
                 result = [MADOperationConditionResult failed:error];
             }
             break;
@@ -69,7 +74,7 @@
         completion(result);
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
         completion([MADOperationConditionResult failed:error]);
     }
     

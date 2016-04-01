@@ -13,11 +13,15 @@
 
 @interface MADErrorUserInfo ()
 
-@property (nonatomic, strong, readwrite) NSDictionary *userinfo;
+    @property (nonatomic, strong, readwrite) NSDictionary *userinfo;
 
 @end
 
 @implementation MADErrorUserInfo
+
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
 
 - (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message {
     if (self = [super init]) {
@@ -30,7 +34,9 @@
 }
 
 - (NSError *)errorWithDomain:(NSString *)domain code: (NSInteger)code {
-    return [NSError errorWithDomain:domain code:code userInfo: self.userinfo];
+    NSDictionary *userinfo = [[NSDictionary alloc] initWithDictionary:self.userinfo];
+    NSError *error = [NSError errorWithDomain:domain code:code userInfo: userinfo];
+    return error;
 }
 
 @end

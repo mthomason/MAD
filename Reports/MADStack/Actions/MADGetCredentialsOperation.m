@@ -211,14 +211,12 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
                                                          displayErrorCredentials, displayErrorPassword,
                                                          promptSaveCredntials, promptSavePassword,
                                                          putUsername, putPassword];
-        self.username = nil;
-        self.password = nil;
         
-        NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-            [self finish];
-        }];
+//        NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
+//            [self finish];
+//        }];
         
-        [self addOperations:operations finishingOperation:finishingOperation];
+        [self addOperations:operations finishingOperation:nil];
     }
     
     return self;
@@ -248,16 +246,19 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         if (((NSObject <MADOperationResultStringProtocol> *) operation).success) {
 
             switch (((NSObject <MADOperationResultStringProtocol> *) operation).readOperationType) {
-                case MADKeyChainReadOperationTypeUsername:
-                    self.username = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
+                case MADKeyChainReadOperationTypeUsername: {
+                    NSString *username = ((NSObject <MADOperationResultStringProtocol> *) operation).value.copy;
+                    self.username = username;
                     self.usernameSet = true;
                     break;
-
-                case MADKeyChainReadOperationTypePassword:
-                    self.password = ((NSObject <MADOperationResultStringProtocol> *) operation).value;
+                }
+                
+                case MADKeyChainReadOperationTypePassword: {
+                    NSString *password = ((NSObject <MADOperationResultStringProtocol> *) operation).value.copy;
+                    self.password = password;
                     self.passwordSet = true;
                     break;
-                    
+                }
                 default:
                     break;
             }
@@ -269,9 +270,11 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     //---
     if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
         if (((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
-            self.username = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.username;
+            NSString *username = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.username.copy;
+            NSString *password = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.password.copy;
+            self.username = username;
             self.usernameSet = true;
-            self.password = ((NSObject <MADOperationHoldsCredentialsProtocol> *)operation).credentials.password;
+            self.password = password;
             self.passwordSet = true;
         }
     }

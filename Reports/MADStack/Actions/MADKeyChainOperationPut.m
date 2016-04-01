@@ -26,6 +26,10 @@ static NSString * const ErrorDomain = @"MADKCP";
 
 @implementation MADKeyChainOperationPut
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithKey:(NSString *)key description:(NSString *)description {
     if (self = [super init]) {
         _key = key.copy;

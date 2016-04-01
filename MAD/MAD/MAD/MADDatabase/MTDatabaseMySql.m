@@ -122,7 +122,7 @@
         if (sqlError) {
             MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription andMessage:sqlError.localizedFailureReason];
             if (error != NULL) {
-                *error = [NSError errorWithDomain:sqlError.domain code:sqlError.code userInfo:errorUserInfo.userinfo];
+                *error = [errorUserInfo errorWithDomain:sqlError.domain code:sqlError.code];
             }
         } else {
             result = true;

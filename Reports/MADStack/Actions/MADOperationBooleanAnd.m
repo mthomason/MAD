@@ -23,6 +23,10 @@
 
 @implementation MADOperationBooleanAnd
 
+- (void)dealloc {
+    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithConditions:(NSArray <NSObject <MADOperationCondition> *> *)conditions {
     if (self = [super init]) {
         _conditions = conditions.copy;
@@ -54,7 +58,7 @@
         completion([MADOperationConditionResult satisfied]);
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
-        NSError *error = [NSError errorWithDomain:self.name code:MADConditionFailed userInfo:errorUserInfo.userinfo];
+        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
         completion([MADOperationConditionResult failed:error]);
     }
 }

@@ -63,7 +63,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    @property (nonatomic, strong) UIBarButtonItem *holderButton;
+    //@property (nonatomic, strong) UIBarButtonItem *holderButton;
     @property (nonatomic, strong) UIProgressView *progressView;
 
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
@@ -340,14 +340,14 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.backBarButtonItem.enabled = NO;
     [self.navigationItem setHidesBackButton:YES animated:YES];
-    self.holderButton = self.navigationItem.rightBarButtonItem;
+    //self.holderButton = self.navigationItem.rightBarButtonItem;
 }
 
 - (void)enableNavigation {
     self.navigationItem.leftBarButtonItem.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
     [self.navigationItem setHidesBackButton:NO animated:YES];
-    [self.navigationItem setRightBarButtonItem:self.holderButton animated:YES];
+    //[self.navigationItem setRightBarButtonItem:self.holderButton animated:YES];
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }

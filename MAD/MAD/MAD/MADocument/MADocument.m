@@ -1027,14 +1027,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
     NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
     MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-    return [NSError errorWithDomain: MADDocumentErrorDomain code: 36732 userInfo: errorUserInfo.userinfo];
+    return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 36732];
 }
 
 + (NSError *)errorFailedToOpenDocument {
     NSString *title = NSLocalizedString(@"Failed to open document.", @"Failed to open document.");
     NSString *message = NSLocalizedString(@"Document may be incomplete, missing, or corrupt.", @"Document may be incomplete, missing, or corrupt.");
     MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-    return [NSError errorWithDomain: MADDocumentErrorDomain code: 260 userInfo: errorUserInfo.userinfo];
+    return [errorUserInfo errorWithDomain: MADDocumentErrorDomain code: 260];
 }
 
 - (void)regenThumbnail {

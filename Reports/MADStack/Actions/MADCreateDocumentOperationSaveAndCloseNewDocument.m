@@ -40,8 +40,7 @@
                     NSString *title = NSLocalizedString(@"Error Creating Document", @"Error Creating Document");
                     NSString *message = NSLocalizedString(@"Failed to close.", @"Failed to close.");
                     MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-                    NSDictionary *userInfoDictionary = [NSDictionary dictionaryWithDictionary:userInfo.userinfo];
-                    NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:893 userInfo:userInfoDictionary];
+                    NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
                     [self finishWithError:error];
                 }
             }];

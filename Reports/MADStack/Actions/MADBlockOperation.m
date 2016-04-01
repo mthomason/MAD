@@ -17,13 +17,13 @@
 @implementation MADBlockOperation
 
 /**
- The designated initializer.
+    The designated initializer.
  
- - parameter block: The closure to run when the operation executes. This
- closure will be run on an arbitrary queue. The parameter passed to the
- block **MUST** be invoked by your code, or else the `BlockOperation`
- will never finish executing. If this parameter is `nil`, the operation
- will immediately finish.
+    - parameter block: The closure to run when the operation executes. This
+        closure will be run on an arbitrary queue. The parameter passed to the
+        block **MUST** be invoked by your code, or else the `BlockOperation`
+        will never finish executing. If this parameter is `nil`, the operation
+        will immediately finish.
  */
 
 - (instancetype)initWithBlock:(OperationBlock)block {
