@@ -47,7 +47,8 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-    completion([MADOperationConditionResult satisfied]);
+    MADOperationConditionResult *result = [MADOperationConditionResult newOperationConditionResultSatisfied];
+    completion(result);
 }
 
 @end

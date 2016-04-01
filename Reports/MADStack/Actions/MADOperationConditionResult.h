@@ -20,8 +20,8 @@ extern NSString * MADOperationConditionKey;
     @property (nonatomic, readonly) BOOL isSucceed;
     @property (nonatomic, readonly) NSError * error;
 
-    + (instancetype)satisfied;
-    + (instancetype)failed:(NSError *)error;
+    + (instancetype)newOperationConditionResultSatisfied;
+    + (instancetype)newOperationConditionResultFailed:(NSError *)error;
     + (void)evaluateConditions:(NSArray *)conditions operation:(MADOperation *)operation completion:(void(^)(NSArray * errors))completion;
 
 @end

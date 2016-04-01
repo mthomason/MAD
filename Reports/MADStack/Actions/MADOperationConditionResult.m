@@ -25,15 +25,15 @@ NSString * MADOperationConditionKey = @"OperationCondition";
 
 @implementation MADOperationConditionResult
 
-+ (instancetype)satisfied {
-    return [self isSucceed:YES error:nil];
++ (instancetype)newOperationConditionResultSatisfied {
+    return [self newOperationConditionResultIsSucceed:YES error:nil];
 }
 
-+ (instancetype)failed:(NSError *)error {
-    return [self isSucceed:NO error:error];
++ (instancetype)newOperationConditionResultFailed:(NSError *)error {
+    return [self newOperationConditionResultIsSucceed:NO error:error];
 }
 
-+ (instancetype)isSucceed:(BOOL)isSucceed error:(NSError *)error {
++ (instancetype)newOperationConditionResultIsSucceed:(BOOL)isSucceed error:(NSError *)error {
     MADOperationConditionResult *newResult = [self new];
     newResult.isSucceed = isSucceed;
     newResult.error = error;
@@ -82,7 +82,7 @@ NSString * MADOperationConditionKey = @"OperationCondition";
             failures = [failures arrayByAddingObject: failure];
         }
         
-        if (completion){
+        if (completion) {
             completion(failures);
         }
     });

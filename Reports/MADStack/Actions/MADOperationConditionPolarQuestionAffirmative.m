@@ -49,7 +49,8 @@
     if (dependencies.count == 0) {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        completion([MADOperationConditionResult failed:error]);
+        MADOperationConditionResult *result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        completion(result);
         return;
     }
 
@@ -61,12 +62,13 @@
             
             if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
 
-                result = [MADOperationConditionResult satisfied];
+                result = [MADOperationConditionResult newOperationConditionResultSatisfied];
                 
             } else {
+
                 MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
                 NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-                result = [MADOperationConditionResult failed:error];
+                result = [MADOperationConditionResult newOperationConditionResultFailed:error];
                 
             }
             break;
@@ -78,7 +80,8 @@
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        completion([MADOperationConditionResult failed:error]);
+        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        completion(result);
     }
 
 }

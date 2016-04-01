@@ -22,25 +22,24 @@ static NSString * const MADOperatorSelectorState        = @"state";
     MADOperationState _state;
 }
 
-    @property (nonatomic, strong) NSMutableArray * mad_internalErrors;
+    @property (nonatomic, strong) NSMutableArray *mad_internalErrors;
     @property (nonatomic, assign) bool hasFinishedAlready;
 
 @end
 
 @implementation MADOperation
 
+- (instancetype)init {
+    if (self = [super init]) {
+        NSMutableArray *mad_internalErrors = [[NSMutableArray alloc] init];
+        self.mad_internalErrors = mad_internalErrors;
+    }
+    return self;
+}
+
 - (void)dealloc {
     [self.conditions removeAllObjects];
     [self.observers removeAllObjects];
-}
-
-#pragma mark - Lazy Load
-
-- (NSMutableArray *)kad_internalErrors {
-    if (!_mad_internalErrors) {
-        _mad_internalErrors = [NSMutableArray array];
-    }
-    return _mad_internalErrors;
 }
 
 #pragma mark - KVO
@@ -130,7 +129,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     self.state = evaluatingConditions;
     
     [MADOperationConditionResult evaluateConditions:self.conditions operation:self completion:^(NSArray * failures) {
-        [self.kad_internalErrors addObjectsFromArray:failures];
+        [self.mad_internalErrors addObjectsFromArray:failures];
         self.state = ready;
     }];
 }
@@ -182,7 +181,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)main {
     NSAssert(self.state == ready, @"This operation must be performed on an operation queue.");
-    if (self.kad_internalErrors.count == 0 && !self.cancelled) {
+    if (self.mad_internalErrors.count == 0 && !self.cancelled) {
         self.state = executing;
         NSArray *observers = self.observers;
         for (NSObject <MADOperationObserver> *observer in observers) {
@@ -214,7 +213,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)cancelWithError:(NSError *)error {
     if (error) {
-        [self.kad_internalErrors addObject:error];
+        [self.mad_internalErrors addObject:error];
     }
     [self cancel];
 }
@@ -261,10 +260,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
         
         NSArray *combinedErrors;
         if (errors) {
-            NSArray *combined = [self.kad_internalErrors arrayByAddingObjectsFromArray:errors];
+            NSArray *combined = [self.mad_internalErrors arrayByAddingObjectsFromArray:errors];
             combinedErrors = combined.copy;
         } else {
-            combinedErrors = self.kad_internalErrors.copy;
+            combinedErrors = self.mad_internalErrors.copy;
         }
         [self finished:combinedErrors];
         

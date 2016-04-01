@@ -55,11 +55,13 @@
     }
     
     if (succes) {
-        completion([MADOperationConditionResult satisfied]);
+        MADOperationConditionResult *result = [MADOperationConditionResult newOperationConditionResultSatisfied];
+        completion(result);
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified" andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        completion([MADOperationConditionResult failed:error]);
+        MADOperationConditionResult *result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        completion(result);
     }
 }
 
