@@ -7,7 +7,7 @@
 //
 
 #import "MADCreateDocumentOperationImportSchema.h"
-
+#import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
@@ -52,22 +52,30 @@
         }
     }
 
-    RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: document.managedObjectContext];
-    
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
+    bool __block success = false;
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = document.managedObjectContext;
+    [private performBlockAndWait:^{
+
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: document.managedObjectContext];
+        
+        MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
         document.mainDatabase = database;
         
-    [rptqDocument addDatabase: document.mainDatabase forManagedObjectContext:document.managedObjectContext status: ^(NSString *message, float progress) {
-        NSLog(@"%@ - %f", message, progress);
-    } completion:^(BOOL success, MADErrorContainer *errorContainer) {
-        if (success) {
-          [self finish];
-        } else {
-            NSArray *errors = errorContainer.allObjects.copy;
-            [self finishWithError:errors.lastObject];
-        }
+        [rptqDocument addDatabase: document.mainDatabase forManagedObjectContext:document.managedObjectContext status: ^(NSString *message, float progress) {
+            NSLog(@"%@ - %f", message, progress);
+        } completion:^(BOOL addDatabaseSuccess, MADErrorContainer *errorContainer) {
+            success = addDatabaseSuccess ? true : false;
+        }];
+
+
     }];
     
+    if (success) {
+        [self finish];
+    } else {
+        [self finishWithError:nil];
+    }
     
 }
 

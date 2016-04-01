@@ -417,7 +417,7 @@
 
     [self storeDatabaseConnectionDefination:database forManagedObjectContext:managedObjectContext];
     
-    __block MADErrorContainer *errorContainer = [MADErrorContainer new];
+    MADErrorContainer *errorContainer = [MADErrorContainer new];
     
     id dbconnection = [database connectWithConnection:database.databaseConnection credentals:nil];
     
