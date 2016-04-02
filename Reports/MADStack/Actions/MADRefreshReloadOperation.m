@@ -14,6 +14,8 @@
 
 #import "MADGetCredentialsOperation.h"
 #import "MADRefreshOperationInitalizeMainDataTable.h"
+#import "MADRefreshOperationInitalize.h"
+#import "MADRefreshOperation.h"
 
 @interface MADRefreshReloadOperation ()
     @property (nonatomic, readwrite, strong) MADGetCredentialsOperation *getCredentials;
@@ -43,9 +45,21 @@
         self.getCredentials = getCredentials;
         
         MADRefreshOperationInitalizeMainDataTable *initalizeMainDataTable = [[MADRefreshOperationInitalizeMainDataTable alloc] initWithDocument:document];
+
         
+        MADRefreshOperationInitalize *initalize = [[MADRefreshOperationInitalize alloc] initWithDocument:document];
+
+        MADRefreshOperation *refresh = [[MADRefreshOperation alloc] initWithDocument:document];
         
+        NSArray <__kindof NSOperation *> *operations = @[getCredentials, initalizeMainDataTable, initalize, refresh];
         
+        MADGroupOperation * __weak wself = self;
+        NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
+            MADGroupOperation *sself = wself;
+            [sself finish];
+        }];
+        
+        [self addOperations:operations finishingOperation:finishingOperation];
 
     }
     return self;

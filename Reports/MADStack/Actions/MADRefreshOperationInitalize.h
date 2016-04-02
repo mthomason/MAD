@@ -6,8 +6,17 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADRefreshOperationInitalize_h
+#define Reports_MADRefreshOperationInitalize_h
+
 #import "MADOperation.h"
+
+@class MADocument;
 
 @interface MADRefreshOperationInitalize : MADOperation
 
+    - (instancetype)initWithDocument:(MADocument *)document;
+
 @end
+
+#endif

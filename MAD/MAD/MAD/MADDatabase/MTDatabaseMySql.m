@@ -131,11 +131,18 @@
     return result ? YES : NO;
 }
 
+- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    myFetch.delegate = self;
+    NSError *fetchError = nil;
+    [myFetch fetchWithCommand: sql dataTable: &dataTable onConnection:dbconn extendedNames:YES error: &fetchError];
+    return fetchError == nil;
+}
+
 + (NSError *)errorCouldNotGetCredientals {
     NSString *title = NSLocalizedString(@"Notice", @"Notice");
     NSString *failureReason = NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.");
-    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title,
-                                NSLocalizedFailureReasonErrorKey : failureReason};
+    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : failureReason};
     NSError *error = [NSError errorWithDomain:@"MTDatabase" code:43421 userInfo:errorInfo];
     return error;
 }
@@ -153,10 +160,8 @@
         NSError *fetchError = nil;
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
         MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-        MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;"
-                                                 dataTable:&dataTableVirtual
-                                              onConnection: conn
-                                                     error: &fetchError];
+        MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
+                                              onConnection: conn error: &fetchError];
         NSMutableArray *results = nil;
         if (fetchError == nil) {
             NSUInteger resultsCount = [dataTable count];

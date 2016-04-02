@@ -97,7 +97,6 @@
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error {
     
-    //BOOL limitQueryResults =
     RptqQuery *queryObject = [managedObjectContext objectWithID:self.objectID];
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
