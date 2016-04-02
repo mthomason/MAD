@@ -107,29 +107,25 @@ static NSString * const MADButtonCancel                = @"Cancel";
     };
     
     MADPromptOperationCredentials * __weak weakself = self;
-    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
-                                                            style: UIAlertActionStyleDefault
-                                                          handler: ^(UIAlertAction *action) {
-                                                              MADPromptOperationCredentials *strongself = weakself;
-                                                              username = ((UITextField *)alertController.textFields.firstObject).text;
-                                                              password = ((UITextField *)[alertController.textFields objectAtIndex:1]).text;
+    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
+        MADPromptOperationCredentials *strongself = weakself;
+        username = ((UITextField *)alertController.textFields.firstObject).text;
+        password = ((UITextField *)[alertController.textFields objectAtIndex:1]).text;
 
-                                                              MADCredential *credentials = nil;
-                                                              if (username != nil && password != nil) {
-                                                                  credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-                                                                  strongself.gotCredentials = true;
-                                                                  strongself.source = credential_prompt;
-                                                              }
-                                                              [strongself finish:true credentials:credentials];
-                                                          }];
+        MADCredential *credentials = nil;
+        if (username != nil && password != nil) {
+            credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
+            strongself.gotCredentials = true;
+            strongself.source = credential_prompt;
+        }
+        [strongself finish:true credentials:credentials];
+    }];
     
-    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
-                                                                style: UIAlertActionStyleCancel
-                                                              handler: ^(UIAlertAction *action) {
-                                                                  password = nil; username = nil;
-                                                                  success = false;
-                                                                  [weakself userCancel];
-                                                              }];
+    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel style: UIAlertActionStyleCancel handler: ^(UIAlertAction *action) {
+        password = nil; username = nil;
+        success = false;
+        [weakself userCancel];
+    }];
     [alertController addAction:actionAlertOK];
     [alertController addAction:actionAlertCancel];
     [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationUsername];

@@ -100,23 +100,19 @@ static NSString * const TextYes = @"Dismiss";
         localizedFailureReason = underlyingError.localizedFailureReason;
     }
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason
-                                                                             message: localizedDescription
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason message: localizedDescription
                                                                       preferredStyle: UIAlertControllerStyleAlert];
-
 
     MADPromptOperationDisplayError * __weak weakSelf = self;
     NSString *title = NSLocalizedString(TextYes, TextYes);
-    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title
-                                                       style: UIAlertActionStyleDefault
-                                                     handler: ^(UIAlertAction * _Nonnull action) {
-                                                         MADPromptOperationDisplayError * __strong sself = weakSelf;
-                                                         sself.result = true;
-                                                         sself.alertDisplayed = true;
-                                                         defer(^{
-                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
-                                                         });
-                                                     }];
+    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
+        MADPromptOperationDisplayError * __strong sself = weakSelf;
+        sself.result = true;
+        sself.alertDisplayed = true;
+        defer(^{
+            [sself performSelectorInBackground:@selector(finish) withObject:nil];
+        });
+    }];
     
     [alertController addAction:actionOK];
     

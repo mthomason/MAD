@@ -85,8 +85,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title message: message preferredStyle: UIAlertControllerStyleAlert];
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {
         [MADTextField configureTextFieldForPassword:&textField];
@@ -98,14 +97,12 @@ static NSString * const MADButtonCancel                = @"Cancel";
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
-    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault
-                                                          handler: ^(UIAlertAction *action) {
+    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
         MADPromptOperationPassword *sself = weakself;
         [sself finish: true password: ((UITextField *)alertController.textFields.firstObject).text];
     }];
     
-    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel style: UIAlertActionStyleCancel
-                                                              handler: ^(UIAlertAction *action) {
+    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel style: UIAlertActionStyleCancel handler: ^(UIAlertAction *action) {
         MADPromptOperationPassword * sself = weakself;
         sself.alertDisplayed = true;
         [sself userCancel];

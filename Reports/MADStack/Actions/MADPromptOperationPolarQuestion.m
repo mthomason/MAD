@@ -50,30 +50,24 @@ static NSString * const TextNo = @"No";
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
     MADPromptOperationPolarQuestion * __weak weakSelf = self;
-    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes
-                                                       style: UIAlertActionStyleDefault
-                                                     handler: ^(UIAlertAction * _Nonnull action) {
-                                                         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
-                                                         sself.result = true;
-                                                         sself.alertDisplayed = true;
-                                                         defer(^{
-                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
-                                                         });
-                                                     }];
+    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
+        MADPromptOperationPolarQuestion * __strong sself = weakSelf;
+        sself.result = true;
+        sself.alertDisplayed = true;
+        defer(^{
+            [sself performSelectorInBackground:@selector(finish) withObject:nil];
+        });
+    }];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
-                                                           style: UIAlertActionStyleCancel
-                                                         handler: ^(UIAlertAction * _Nonnull action) {
-                                                             MADPromptOperationPolarQuestion * __strong sself = weakSelf;
-                                                             sself.result = false;
-                                                             sself.alertDisplayed = true;
-                                                             defer(^{
-                                                                 NSError *error = [NSError errorWithDomain: NSStringFromClass([self class])
-                                                                                                      code: 173 userInfo: nil];
-                                                                 [sself performSelectorInBackground: @selector(finishWithError:)
-                                                                                         withObject: error];
-                                                             });
-                                                         }];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo style: UIAlertActionStyleCancel handler: ^(UIAlertAction * _Nonnull action) {
+        MADPromptOperationPolarQuestion * __strong sself = weakSelf;
+        sself.result = false;
+        sself.alertDisplayed = true;
+        defer(^{
+            NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: 173 userInfo: nil];
+            [sself performSelectorInBackground: @selector(finishWithError:) withObject: error];
+        });
+    }];
     
     [alertController addAction:actionOK];
     [alertController addAction:actionCancel];
