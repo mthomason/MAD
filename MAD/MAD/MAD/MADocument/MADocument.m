@@ -143,14 +143,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 
     @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
-    @property (nonatomic, strong, readwrite) MTDataTableFast *mainDataTable;
 
     @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
     @property (nonatomic, strong, readwrite) NSURL *urlGuts;
     @property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
-
-    @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
 
     @property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
 
@@ -964,9 +961,27 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                            waitUntilDone: NO];
 }
 
+- (void)prepairForRefresh {
+    [self initalizeMainDataTable];
+    
+    RptqDocument *document = [self activeDocumentModel];
+    [self initalizeMainQuery:document];
+    [self initalizeReportFormatter];
+    self.mainQuery.database.delegate = self;
+    
+    self.mainQuery.dataTable = self.mainDataTable;
+    
+}
+
+- (void)finishRefresh:(bool)success {
+    self.didRefresh = success ? YES : NO;
+}
+
 - (bool)refreshWithError:(NSError * __autoreleasing *)error {
     bool success = false;
+
     [self initalizeMainDataTable];
+
     RptqDocument *document = [self activeDocumentModel];
     [self initalizeMainQuery:document];
     [self initalizeReportFormatter];

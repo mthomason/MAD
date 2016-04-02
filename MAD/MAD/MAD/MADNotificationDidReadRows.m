@@ -11,19 +11,15 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSOperation.h>
+#import <Foundation/NSDate.h>
 #import <dispatch/once.h>
 #import <math.h>
 
 NSString * const MADNotificationDidReadRowsName = @"MADNotificationDidReadRows";
 NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadKey";
 
-static const short RowIntervalInital = 7;
-static const short RowIntervalInitalMax = 511;
-
 @interface MADNotificationDidReadRows ()
-
-@property (nonatomic, assign) unsigned int rowInterval;
-
+    @property (nonatomic, copy) NSDate *lastUpdate;
 @end
 
 @implementation MADNotificationDidReadRows
@@ -34,7 +30,8 @@ static MADNotificationDidReadRows *sharedSingleton = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[super allocWithZone:NULL] init];
-        [sharedSingleton initalizeRowInterval];
+        NSDate *lastUpdate = [NSDate date].copy;
+        sharedSingleton.lastUpdate = lastUpdate;
     });
 }
 
@@ -50,29 +47,16 @@ static MADNotificationDidReadRows *sharedSingleton = nil;
     return self;
 }
 
-- (void)initalizeRowInterval {
-    self.rowInterval = RowIntervalInital;
-}
-
-- (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
-    NSNumber *rowCounterWrapper = @(row);
-    NSDictionary * __autoreleasing parameters = [[NSDictionary alloc] initWithObjectsAndKeys:rowCounterWrapper, MADDatabaseNumberOfRowsReadKey, nil];
-    return parameters;
-}
-
 - (void)database:(id)database readRow:(NSUInteger)row {
-    if (row % self.rowInterval == 0) {
-        if (row == 0) [self initalizeRowInterval];
- 
-        if (self.rowInterval < RowIntervalInitalMax && row > self.rowInterval) {
-            self.rowInterval = (NSUInteger)ceill((long double)self.rowInterval * 1.19);
-        }
+    if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {
+        NSDate *lastUpdate = [NSDate date].copy;
+        self.lastUpdate = lastUpdate;
         
-        NSDictionary *parameters = [self parametersWithNumberOfRows:row];
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName object: database userInfo: parameters];
-            [[NSNotificationCenter defaultCenter] postNotification:notification];
-        }];
+        NSNumber *rowCounterWrapper = [[NSNumber alloc] initWithUnsignedInteger: row];
+        NSDictionary * parameters = [[NSDictionary alloc] initWithObjectsAndKeys:rowCounterWrapper, MADDatabaseNumberOfRowsReadKey, nil];
+
+        NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName object: database userInfo: parameters];
+        [[NSNotificationCenter defaultCenter] postNotification:notification];
     }
 }
 

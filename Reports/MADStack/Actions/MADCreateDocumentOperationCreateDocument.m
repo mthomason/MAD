@@ -24,7 +24,7 @@
 @implementation MADCreateDocumentOperationCreateDocument
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -34,16 +34,12 @@
         for (NSOperation *dependency in dependencies) {
         
             if ([dependency conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
-            
                 id <MADOperationHoldsCredentialsProtocol> holdCredentials = (id <MADOperationHoldsCredentialsProtocol>)dependency;
                 if ([holdCredentials gotCredentials]) {
                     self.credentials = [holdCredentials credentials];
                 }
-
             }
-            
         }
-        
     }
     return self.credentials;
 }

@@ -9,9 +9,11 @@
 #import "MADLabelStatus.h"
 #import <UIKit/NSAttributedString.h>
 
-NSString * const MADTextReadRecords = @"\nRead %@ records.";
-NSString * const MADTextFormattingPage = @"Formatting page %@.";
-NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
+static NSString * const MADTextReadRecords = @"\nRead %@ records.";
+static NSString * const MADTextFormattingPage = @"Formatting page %@.";
+static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
+
+static const CGFloat ToolbarFontPointSize = 8.0000f;
 
 @interface MADLabelStatus ()
 
@@ -79,37 +81,25 @@ NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
 - (void)updateStatusWithRecordsRead:(NSString *)message {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
     self.statusMessage2 = attributedString;
-    if ([NSThread isMainThread]) {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self updateDisplay];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateDisplay];
-        });
-    }
+    }];
 }
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
     self.statusMessage3 = attributedString;
-    if ([NSThread isMainThread]) {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self updateDisplay];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateDisplay];
-        });
-    }
+    }];
 }
 
 - (void)updateStatusWithTime:(NSString *)timeMessage {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
     self.statusMessage1 = attributedString;
-    if ([NSThread isMainThread]) {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self updateDisplay];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateDisplay];
-        });
-    }
+    }];
 }
 
 - (void)updateStatusLabel:(NSAttributedString *)timeMessage
@@ -134,27 +124,24 @@ NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
 + (NSDictionary *)attributesStatusLabelCentered {
     NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
     paragraphStyleCentered.alignment = NSTextAlignmentLeft;
-    return @{
-             NSParagraphStyleAttributeName : paragraphStyleCentered
-             };
+    NSDictionary * __autoreleasing attributesStatusLabelCentered = [[NSDictionary alloc] initWithObjectsAndKeys:paragraphStyleCentered, NSParagraphStyleAttributeName, nil];
+    return attributesStatusLabelCentered;
 }
 
 + (NSDictionary *)attributesStatusLabelBold {
     UIColor *textColor = [UIColor whiteColor];
-    UIFont *fontBold = [UIFont boldSystemFontOfSize:8.0000f];
-    return @{
-             NSForegroundColorAttributeName : textColor,
-             NSFontAttributeName : fontBold,
-             };
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:ToolbarFontPointSize];
+    NSDictionary * __autoreleasing attributesStatusLabelBold = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
+                                                                                                            fontBold, NSFontAttributeName, nil];
+    return attributesStatusLabelBold;
 }
 
 + (NSDictionary *)attributesStatusLabelLight {
     UIColor *textColor = [UIColor whiteColor];
-    UIFont *font = [UIFont systemFontOfSize:8.0000f];
-    return @{
-             NSForegroundColorAttributeName : textColor,
-             NSFontAttributeName : font,
-             };
+    UIFont *font = [UIFont systemFontOfSize:ToolbarFontPointSize];
+    NSDictionary * __autoreleasing attributesStatusLabelLight = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
+                                                                font, NSFontAttributeName, nil];
+    return attributesStatusLabelLight;
 }
 
 @end

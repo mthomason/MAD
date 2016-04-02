@@ -66,12 +66,14 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
 
-    @property (nonatomic, strong, readonly) MTDataTableFast *mainDataTable;
+    @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
 
-    @property (nonatomic, strong, readwrite) MTQueryFull *mainQuery;
-    @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
+    @property (nonatomic, strong, readonly)     NSString *fileName;
+    @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
+    @property (nonatomic, strong, readonly)     MTDatabase *mainDatabase;
+    @property (nonatomic, copy, readwrite)       NSURL *urlDataTableCache;
 
-    @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
+    @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
 
     @property (nonatomic, strong) MADActivityIndicator *statusLabel;
 
@@ -101,6 +103,10 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (UIImage *)fullyRenderedThumbnail;
 
+    - (void)prepairForRefresh;
+    - (void)finishRefresh:(bool)success;
+
+    - (void)initalizeMainDataTable;
     - (void)initalizeMainQuery:(RptqDocument *)document;
     - (void)prepareForQuery;
 
@@ -119,6 +125,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (NSString *)mimetype;
 
     - (void)setMainDatabase:(MTDatabase *)mainDatabase;
+    - (NSURL *)cacheUrlForFilename:(NSString *)filename;
 
 @end
 

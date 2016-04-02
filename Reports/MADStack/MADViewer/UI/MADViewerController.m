@@ -617,16 +617,45 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTDatabase *database = document.mainDatabase;
         [self addObserverDidReadRowsToDatabase:database];
         
-        
-        
         NSString *connectionString = document.mainDatabase.databaseConnection.connectionString;
         
         NSError *error = nil;
-        bool success = [document refreshWithError:&error];
+        
+        bool success = false;
+        
+        [document prepairForRefresh];
+        
+        
+        NSURL *cacheUrl = document.urlDataTableCache.copy;
+        MTQuery * __weak wMainQuery = document.mainQuery;
+        MTDatabase * __weak wMainDatabase = document.mainDatabase;
+        MTDataTableFast * __weak wMainDataTable = document.mainDataTable;
+        __block bool didRefresh = false;
+        NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
+            
+            MTQuery *squery = wMainQuery;
+            MTDatabase *sdatabase = wMainDatabase;
+            
+            NSError * __autoreleasing eerror = NULL;
+            didRefresh = [sdatabase executeQuery:squery withError:&eerror];
+            [wMainDataTable cacheWithUrl:cacheUrl];
+            return;
+            
+        }];
+        
+        NSOperationQueue *queue = [NSOperationQueue new];
+        queue.maxConcurrentOperationCount = 1;
+        [queue addOperation:operationRefresh];
+        [queue waitUntilAllOperationsAreFinished];
+        
+        [document finishRefresh:didRefresh];
+        
         
         
         if (success) {
+        
             self.lastCacheDate = [NSDate date];
+            
         } else {
             
             MADViewerController * __weak weakself2 = self;
@@ -639,25 +668,25 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: weakself3];
                            }
                        }];
+            
         }
+        
         [self removeObserverDidReadRowsFromDatabase:database];
         [self setDisplayActive];
         [self reload];
         [self timerDealloc];
         [self uiUpdateTimeSinceLastRefresh: NULL];
+        
     }
 }
 
 - (void)addObserverDidReadRowsToDatabase:(MTDatabase *)database {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reportDocumentDidReadRows:)
-                                                 name: MADNotificationDidReadRowsName
-                                               object: database];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reportDocumentDidReadRows:)
+                                                 name: MADNotificationDidReadRowsName object: database];
 }
 
 - (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationDidReadRowsName
+    [[NSNotificationCenter defaultCenter] removeObserver: self name: MADNotificationDidReadRowsName
                                                   object: database];
 }
 

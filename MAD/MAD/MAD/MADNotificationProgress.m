@@ -30,7 +30,8 @@ NSString * const MADNotificationProgressKey = @"p";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[super allocWithZone:NULL] init];
-        sharedSingleton.lastUpdate = [NSDate date];
+        NSDate *lastUpdate = [NSDate date].copy;
+        sharedSingleton.lastUpdate = lastUpdate;
         [sharedSingleton initalizeProgressNotification];
     });
 }
@@ -73,7 +74,8 @@ NSString * const MADNotificationProgressKey = @"p";
 
 - (void)updateProgress:(MADProgress *)progress {
     if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {
-        self.lastUpdate = [NSDate date];
+        NSDate *lastUpdate = [NSDate date].copy;
+        self.lastUpdate = lastUpdate;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
             NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier object: progress userInfo: nil];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
