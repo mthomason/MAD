@@ -100,7 +100,8 @@ static NSString * const TextYes = @"Dismiss";
         localizedFailureReason = underlyingError.localizedFailureReason;
     }
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason message: localizedDescription
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason
+                                                                             message: localizedDescription
                                                                       preferredStyle: UIAlertControllerStyleAlert];
 
     MADPromptOperationDisplayError * __weak weakSelf = self;

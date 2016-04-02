@@ -238,7 +238,7 @@
 		4C994F511BE485F80058627A /* MADDocumentObjectType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F501BE485F80058627A /* MADDocumentObjectType.m */; };
 		4CA0C6C71CA56AC000222B8D /* MADNotificationProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C51CA56AC000222B8D /* MADNotificationProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA0C6C81CA56AC000222B8D /* MADNotificationProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C61CA56AC000222B8D /* MADNotificationProgress.m */; };
-		4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C91CA56CAD00222B8D /* MADProgress.h */; };
+		4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C91CA56CAD00222B8D /* MADProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA0C6CC1CA56CAD00222B8D /* MADProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */; };
 		4CC281F81BADE80500775B72 /* MADActivityProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC281F91BADE80500775B72 /* MADArrayCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC281F01BADE80500775B72 /* MADArrayCaching.h */; };

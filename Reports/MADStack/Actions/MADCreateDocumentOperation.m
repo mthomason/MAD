@@ -9,7 +9,7 @@
 #import "MADCreateDocumentOperation.h"
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MADConstants.h>
-
+#import <MAD/MADNotificationProgress.h>
 #import "MADOperationUniqueUrlForFilename.h"
 #import "MADGetCredentialsOperation.h"
 #import "MADCreateDocumentOperationCreateDocument.h"
@@ -22,13 +22,14 @@
 #import "MADCreateDocumentOperationFirstTimeSetup.h"
 
 @interface MADCreateDocumentOperation ()
+    <MADCreateDocumentOperationImportSchemaProtocol>
 
 @end
 
 @implementation MADCreateDocumentOperation
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
@@ -36,8 +37,6 @@
                   viewController: (UIViewController *)viewController {
     
     if (self = [super init]) {
-    
-        NSLog(@"%s", __PRETTY_FUNCTION__);
         
         MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
                                                                                                                      pathExtension: MADFileExtentionMobleApplicationDocument
@@ -54,7 +53,6 @@
         [createDocument addDependency:uniqueUrlForFilename];
         [createDocument addDependency:taskBegin];
         
-        
         MADCreateDocumentOperationFirstTimeSetup *firstTimeSetup = [[MADCreateDocumentOperationFirstTimeSetup alloc] init];
         [firstTimeSetup addDependency:createDocument];
 
@@ -65,6 +63,7 @@
         MADCreateDocumentOperationImportSchema *importSchema = [[MADCreateDocumentOperationImportSchema alloc] initWithDatabaseConnection:databaseConnection];
         [importSchema addDependency:createDocument];
         [importSchema addDependency:addConnection];
+        importSchema.parentOperation = self;
         
         MADCreateDocumentOperationSaveAndCloseNewDocument *saveOperation = [[MADCreateDocumentOperationSaveAndCloseNewDocument alloc] init];
         [saveOperation addDependency:createDocument];
@@ -78,16 +77,11 @@
         [taskEnd addDependency:taskBegin];
         [taskEnd addDependency:closeDocument];
         
-        NSArray <__kindof NSOperation *> *operations = @[uniqueUrlForFilename,
-                                                         getCredentials,
-                                                         taskBegin,
-                                                         createDocument,
-                                                         firstTimeSetup,
-                                                         addConnection,
-                                                         importSchema,
-                                                         saveOperation,
-                                                         closeDocument,
-                                                         taskEnd];
+        NSArray <__kindof NSOperation *> *operations = @[uniqueUrlForFilename, getCredentials,
+                                                         taskBegin, createDocument,
+                                                         firstTimeSetup, addConnection,
+                                                         importSchema, saveOperation,
+                                                         closeDocument, taskEnd];
         
         MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -101,13 +95,10 @@
     return self;
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    /*if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
-        NSObject <MADOperationHoldsCredentialsProtocol> *credentialsObject = (NSObject <MADOperationHoldsCredentialsProtocol> *)operation;
-        if ([credentialsObject gotCredentials]) {
-            
-        }
-    }*/
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors { }
+
+- (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {
+    [[MADNotificationProgress sharedObject] updateProgressOfObject:self withMessage:message progress:progress];
 }
 
 @end

@@ -13,8 +13,8 @@
 
 @class MADOperation, NSOperation;
 
-    // The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
-    @protocol MADOperationObserver <NSObject>
+// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
+@protocol MADOperationObserver <NSObject>
 
     // Invoked immediately prior to the `Operation`'s `execute()` method.
     - (void)operationDidStart:(MADOperation *)operation;

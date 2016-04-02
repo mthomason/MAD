@@ -56,9 +56,7 @@ static MADNotificationDidReadRows *sharedSingleton = nil;
 
 - (NSDictionary *)parametersWithNumberOfRows:(NSUInteger)row {
     NSNumber *rowCounterWrapper = @(row);
-    NSDictionary * __autoreleasing parameters = @{
-                                                  MADDatabaseNumberOfRowsReadKey : rowCounterWrapper,
-                                                  };
+    NSDictionary * __autoreleasing parameters = [[NSDictionary alloc] initWithObjectsAndKeys:rowCounterWrapper, MADDatabaseNumberOfRowsReadKey, nil];
     return parameters;
 }
 
@@ -72,9 +70,7 @@ static MADNotificationDidReadRows *sharedSingleton = nil;
         
         NSDictionary *parameters = [self parametersWithNumberOfRows:row];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName
-                                                                         object: database
-                                                                       userInfo: parameters];
+            NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName object: database userInfo: parameters];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
         }];
     }

@@ -12,12 +12,14 @@
 #import <Foundation/NSObject.h>
 
 extern NSString * const MADNotificationProgressIdentifier;
+extern NSString * const MADNotificationProgressKey;
 
 @class MADProgress;
 
 @interface MADNotificationProgress : NSObject
 
     + (MADNotificationProgress *)sharedObject;
+    - (void)updateProgressOfObject:(id)object withMessage:(NSString *)message progress:(float)progress;
     - (void)updateProgressWithMessage:(NSString *)message progress:(float)progress;
     - (void)updateProgress:(MADProgress *)progress;
 

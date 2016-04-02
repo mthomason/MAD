@@ -49,6 +49,7 @@
 
 - (void)execute {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -78,22 +79,19 @@
         
         NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
         NSMutableArray *tables                 = [NSMutableArray array];
-//        NSError *gotitError                    = nil;
-        
         
         NSError *error = NULL;
         NSArray *resultTables = [database getTablesFromConnection:dbconnection error:&error];
         
         [tables setArray:resultTables];
         
-        NSUInteger counter = 0; //, numberOfTables = tables.count;
+        NSUInteger counter = 0, numberOfTables = tables.count;
         for (MTDatabaseTable *databaseTable in tables) {
             @autoreleasepool {
                 
-                //NSString *name = databaseTable.name.copy;
-                
-                //status(name, (counter + 1) / numberOfTables);
-                
+                NSString *name = databaseTable.name.copy;
+                [self.parentOperation updateImportProgressWithMessage:name progress:(counter + 1) / numberOfTables];
+                                
                 NSError *getFieldsError = NULL;
                 NSArray *fieldsForTable = [database fieldsForTable:databaseTable.name connection:dbconnection error:&getFieldsError];
                 
@@ -103,8 +101,6 @@
             }
             counter++;
         }
-        
-        //gotitError = error;
         
         MADErrorContainer *additionalErrors = [rptqDocument storeTablesAndFieldsForTables:tables fieldsByTable:tablesAndFields andManagedObjectContext:private];
         [errorContainer addErrorsFromContainer:additionalErrors];

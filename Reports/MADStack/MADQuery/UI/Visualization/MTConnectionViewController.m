@@ -13,6 +13,7 @@
 #import "MTConnectionViewController.h"
 #import <MAD/MADConstants.h>
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTDatabaseConnection.h>
@@ -26,6 +27,9 @@
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADCredential.h>
 
+#import <MAD/MADProgress.h>
+#import <MAD/MADNotificationProgress.h>
+
 #import <MADFileManager/MADFileUtilities.h>
 
 #import "MADNavigationBarTitleView.h"
@@ -36,7 +40,6 @@
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "UIApplication+Extras.h"
 
 #import "MADGetCredentialsOperation.h"
@@ -89,9 +92,13 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self.tableView addSubview:progressView];
     self.progressView = progressView;
     
-    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
-    self.title = NSLocalizedString(MADConnectionViewControllerDefaultTitle, MADConnectionViewControllerDefaultTitle);
-    [self setClearsSelectionOnViewWillAppear: YES];
+    NSString *prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
+    self.navigationItem.prompt = prompt;
+    
+    NSString *title = NSLocalizedString(MADConnectionViewControllerDefaultTitle, MADConnectionViewControllerDefaultTitle);
+    self.title = title;
+    
+    self.clearsSelectionOnViewWillAppear = YES;
     
     self.navigationItem.hidesBackButton = NO;
     self.navigationItem.leftItemsSupplementBackButton = YES;
@@ -104,20 +111,41 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.navigationItem.titleView = titleView;
 }
 
+#pragma mark - Post Report Notifications
+
+- (void)addObserverToObjectForProgress:(id)obj {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(objectDidUpdateProgress:)
+                                                 name: MADNotificationProgressIdentifier
+                                               object: obj];
+}
+
+- (void)removeObserverFromObjectForProgress:(id)obj {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationProgressIdentifier
+                                                  object: obj];
+}
+
+#pragma mark - Progress Notifications
+
+- (void)objectDidUpdateProgress:(NSNotification *)sender {
+    MADProgress *progress = sender.userInfo[MADNotificationProgressKey];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        self.progressView.progress = progress.progress;
+        NSString *message = progress.message.copy;
+        self.navigationItem.prompt = message;
+    }];
+}
+
 #pragma mark - MADOperationObserver
 
-- (void)operationDidStart:(MADOperation *)operation {
-    NSLog(@"%s-%@", __PRETTY_FUNCTION__, operation);
-}
+- (void)operationDidStart:(MADOperation *)operation { }
 
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation {
-    NSLog(@"%s-%@-%@", __PRETTY_FUNCTION__, operation, newOperation);
-}
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-     NSLog(@"%s-%@\n%@", __PRETTY_FUNCTION__, operation, errors);
-    
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self removeObserverFromObjectForProgress:operation];
         [self.delegate viewControllerDidFinish: self];
         self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
         [self enableTextFields];
@@ -257,6 +285,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     MADCreateDocumentOperation *createDocument = [[MADCreateDocumentOperation alloc] initWithFilename: self.textFieldReportName.text documentsDirectory: saveFileDelegate.documentDirectory
                                                                                    databaseConnection: databaseConnection viewController:self];
     [createDocument addObserver:self];
+    [self addObserverToObjectForProgress:createDocument];
     [self.credentialQueue addOperation:createDocument];
 
 }
@@ -340,14 +369,12 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.backBarButtonItem.enabled = NO;
     [self.navigationItem setHidesBackButton:YES animated:YES];
-    //self.holderButton = self.navigationItem.rightBarButtonItem;
 }
 
 - (void)enableNavigation {
     self.navigationItem.leftBarButtonItem.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
     [self.navigationItem setHidesBackButton:NO animated:YES];
-    //[self.navigationItem setRightBarButtonItem:self.holderButton animated:YES];
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
