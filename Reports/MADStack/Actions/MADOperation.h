@@ -31,7 +31,6 @@ typedef NS_ENUM(char, MADOperationState) {
 
     @property (nonatomic, strong) NSMutableArray <__kindof NSObject <MADOperationCondition> *> *conditions;
     @property (nonatomic, strong) NSMutableArray <__kindof NSObject <MADOperationObserver> *> *observers;
-    //@property (nonatomic, strong) NSMutableArray <__kindof NSError *> *internalErrors;
 
     - (void)addObserver:(NSObject <MADOperationObserver> *)observer;
     - (void)addCondition:(NSObject <MADOperationCondition> *)condition;

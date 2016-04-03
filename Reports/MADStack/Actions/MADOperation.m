@@ -22,7 +22,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     MADOperationState _state;
 }
 
-    @property (nonatomic, strong) NSMutableArray *mad_internalErrors;
+    @property (nonatomic, strong) NSMutableArray *internalErrors;
     @property (nonatomic, assign) bool hasFinishedAlready;
 
 @end
@@ -30,23 +30,27 @@ static NSString * const MADOperatorSelectorState        = @"state";
 @implementation MADOperation
 
 - (instancetype)init {
-    if (self = [super init]) {
-    
-        NSMutableArray *mad_internalErrors = [[NSMutableArray alloc] init];
-        self.mad_internalErrors = mad_internalErrors;
-        
-        NSMutableArray *conditions = [[NSMutableArray alloc] init];
-        self.conditions = conditions;
-        
-        NSMutableArray *observers = [[NSMutableArray alloc] init];
-        self.observers = observers;
-    }
+    if (self = [super init]) { }
     return self;
 }
 
 - (void)dealloc {
     [self.conditions removeAllObjects];
     [self.observers removeAllObjects];
+}
+
+#pragma mark - Lazy Load
+
+- (NSMutableArray *)internalErrors {
+    return (_internalErrors == nil) ? _internalErrors = [[NSMutableArray alloc] init] : _internalErrors;
+}
+
+- (NSMutableArray <__kindof NSObject <MADOperationCondition> *> *)conditions {
+    return (_conditions == nil) ? _conditions = [[NSMutableArray alloc] init] : _conditions;
+}
+
+- (NSMutableArray <__kindof NSObject <MADOperationObserver> *> *)observers {
+    return (_observers == nil) ? _observers = [[NSMutableArray alloc] init] : _observers;
 }
 
 #pragma mark - KVO
@@ -91,13 +95,12 @@ static NSString * const MADOperatorSelectorState        = @"state";
             return self.cancelled;
 
         case pending:
-
-            if (self.cancelled) {   // If the operation has been cancelled, "isReady" should return true
+            if (self.cancelled) {                                   // If the operation has been cancelled, "isReady" should return true
                 return YES;
             } else {
 
-                if (super.ready) { [self evaluateConditions]; } // If super isReady, conditions can be evaluated
-                return NO;  // Until conditions have been evaluated, "isReady" returns false
+                if (super.ready) { [self evaluateConditions]; }     // If super isReady, conditions can be evaluated
+                return NO;                                          // Until conditions have been evaluated, "isReady" returns false
             }
 
         case ready:
@@ -136,7 +139,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
     self.state = evaluatingConditions;
     
     [MADOperationConditionResult evaluateConditions:self.conditions operation:self completion:^(NSArray * failures) {
-        [self.mad_internalErrors addObjectsFromArray:failures];
+        [self.internalErrors addObjectsFromArray:failures];
         self.state = ready;
     }];
 }
@@ -174,13 +177,18 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)main {
     NSAssert(self.state == ready, @"This operation must be performed on an operation queue.");
-    if (self.mad_internalErrors.count == 0 && !self.cancelled) {
+    
+    if (!self.cancelled && self.internalErrors.count == 0) {
+
         self.state = executing;
+
         NSArray *observers = self.observers;
         for (NSObject <MADOperationObserver> *observer in observers) {
             [observer operationDidStart:self];
         }
+
         [self execute];
+
     } else {
         [self finish];
     }
@@ -206,7 +214,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)cancelWithError:(NSError *)error {
     if (error) {
-        [self.mad_internalErrors addObject:error];
+        [self.internalErrors addObject:error];
     }
     [self cancel];
 }
@@ -253,10 +261,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
         
         NSArray *combinedErrors;
         if (errors) {
-            NSArray *combined = [self.mad_internalErrors arrayByAddingObjectsFromArray:errors];
+            NSArray *combined = [self.internalErrors arrayByAddingObjectsFromArray:errors];
             combinedErrors = combined.copy;
         } else {
-            combinedErrors = self.mad_internalErrors.copy;
+            combinedErrors = self.internalErrors.copy;
         }
         [self finished:combinedErrors];
         
