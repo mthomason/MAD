@@ -187,7 +187,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)handleSliderChangedPage:(UISlider *)sender {
-    [self.sliderDelegate sliderDidChangeToPage:lroundf(sender.value)];
+    [self.sliderDelegate sliderDidChangeToPage:(NSUInteger)abs(lroundf(sender.value))];
 }
 
 - (void)handleSliderDidFinishDrag:(UISlider *)sender {

@@ -21,6 +21,7 @@
 @implementation MADRefreshOperationInitalizeMainDataTable
 
 - (instancetype)initWithDocument:(MADocument *)document {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         _document = document;
         _success = false;
@@ -31,6 +32,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     MADocument *document = self.document;
     NSNumber *typeKey = @(MTDataTableTypeOfTable);

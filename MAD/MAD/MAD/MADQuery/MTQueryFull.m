@@ -12,6 +12,11 @@
 
 #import "MTQueryFull.h"
 
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+
+#import "RptqDatabase.h"
+
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
@@ -47,7 +52,6 @@
 #import <MADDataStructures/MADAlgorithmElementProperties.h>
 
 #import "MTDatabaseConnection.h"
-#import "RptqDatabase.h"
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -96,17 +100,18 @@
 }
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields managedObjectContext:(NSManagedObjectContext *)managedObjectContext error:(NSError **)error {
-    
-    RptqQuery *queryObject = [managedObjectContext objectWithID:self.objectID];
-    
-    NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
+    RptqDocument *document = [RptqDocument documentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+    RptqQuery *queryObject = database.hasQueries.anyObject;
+
+    NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
     
     if (queryObject.hasQueryTables.count > 0) {
         
         MTDatabase *database = [self.dataDelegate database];
         
         NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
-        NSString *predicatePart = [self sqlWhereClauseWithQuery:queryObject];
+        NSString *predicatePart = [self sqlWhereClauseWithQuery: queryObject];
         NSString *limitPart = [[self.dataDelegate database] sqlLimitClause:self.limitResults];
         
         [result appendString:selectPart];
@@ -118,7 +123,7 @@
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
             @autoreleasepool {
-                [graph addVertexWithObject:[table objectID]];
+                [graph addVertexWithObject: table.objectID];
             }
         }
         
@@ -127,9 +132,9 @@
         NSNumber *weight = @(1);
         for (RptqQueryLinks *queryLink in hasQueryLinks) {
             
-            MTVertex *vertexOrigin =        [graph vertexForObject:queryLink.hasLeftField.inQueryTable.objectID];
-            MTVertex *vertexDestination =   [graph vertexForObject:queryLink.hasRightField.inQueryTable.objectID];
-            
+            MTVertex *vertexOrigin =        [graph vertexForObject: queryLink.hasLeftField.inQueryTable.objectID];
+            MTVertex *vertexDestination =   [graph vertexForObject: queryLink.hasRightField.inQueryTable.objectID];
+
             [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:queryLink.objectID andWeight:weight];
         }
         

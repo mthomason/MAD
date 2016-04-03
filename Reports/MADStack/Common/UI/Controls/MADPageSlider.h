@@ -10,7 +10,7 @@
 
 @protocol MADPageSliderProtocol <NSObject>
 
-- (void)sliderDidChangeToPage:(NSInteger)page;
+    - (void)sliderDidChangeToPage:(NSUInteger)page;
 
 @end
 

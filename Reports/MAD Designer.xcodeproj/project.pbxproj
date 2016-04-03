@@ -4098,12 +4098,12 @@
 			children = (
 				4CF6AFBE1CAFB55C00D3AD11 /* MADRefreshReloadOperation.h */,
 				4CF6AFBF1CAFB55C00D3AD11 /* MADRefreshReloadOperation.m */,
-				4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */,
-				4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */,
 				4CF6AFC11CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.h */,
 				4CF6AFC21CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.m */,
 				4CF6AFC41CAFC14200D3AD11 /* MADRefreshOperationInitalize.h */,
 				4CF6AFC51CAFC14200D3AD11 /* MADRefreshOperationInitalize.m */,
+				4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */,
+				4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */,
 			);
 			name = Report;
 			sourceTree = "<group>";

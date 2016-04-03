@@ -14,12 +14,16 @@
 #import <MAD/MADConstants.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSURL.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import "MADRefreshOperationInitalize.h"
+#import <MAD/MADCredential.h>
 
 static const short errCache = 2;
 
 @interface MADRefreshOperation ()
 
-    @property (nonatomic, weak) MTQuery *query;
+    @property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) MTQueryFull *query;
     @property (nonatomic, weak) MTDatabase *database;
     @property (nonatomic, weak) MTDataTableFast *datatable;
     @property (nonatomic, copy) NSURL *cacheUrl;
@@ -28,8 +32,14 @@ static const short errCache = 2;
 
 @implementation MADRefreshOperation
 
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)initWithDocument:(MADocument *)document {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
+        _document = document;
         _query = document.mainQuery;
         _database = document.mainDatabase;
         _datatable = document.mainDataTable;
@@ -37,29 +47,39 @@ static const short errCache = 2;
     return self;
 }
 
-- (instancetype)initQuery:(MTQuery *)query database:(MTDatabase *)database datatable:(MTDataTableFast *)datatable andCacheUrl:(NSURL *)cacheUrl {
-    if (self = [super init]) {
-        _query = query;
-        _database = database;
-        _datatable = datatable;
-        _cacheUrl = cacheUrl.copy;
-    }
-    return self;
-}
-
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    MADCredential *credientals = nil;
+    for (NSOperation *dependency in self.dependencies) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)] &&
+            ((id <MADOperationHoldsCredentialsProtocol>)dependency).gotCredentials) {
+            credientals = ((id <MADOperationHoldsCredentialsProtocol>)dependency).credentials;
+        }
+    }
+    
+    if (credientals == nil) {
+        NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache + 1 userInfo:nil];
+        [self finishWithError:error];
+        return;
+    }
     
     NSError * __autoreleasing eerror = NULL;
     MTDatabase *database = _database;
 
     MTDatabaseConnection *connectionSettings = [database databaseConnection];
-    id dbconn = [database connectWithConnection:connectionSettings credentals:nil];
+    id dbconn = [database connectWithConnection:connectionSettings credentals:credientals];
     
-    MTQuery *query = _query;
-    NSError *sqlError = NULL;
-    NSString *queryString = [query getSqlWithError:&sqlError];
+    MTQueryFull *query = _query;
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+    private.parentContext = _document.managedObjectContext;
+    
+    __block NSString *queryString = nil;
+    [private performBlockAndWait:^{
+        NSError *sqlError = NULL;
+        queryString = [query getSqlWithManagedObjectContext:private error:&sqlError];
+    }];
     
     NSError *executeError = NULL;
     MTDataTableFast *datatable = _datatable;

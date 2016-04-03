@@ -11,12 +11,11 @@
 
 #import "MADOperation.h"
 
-@class MADocument, MTQuery, MTDatabase, MTDataTableFast;
+@class MADocument;
 
 @interface MADRefreshOperation : MADOperation
 
     - (instancetype)initWithDocument:(MADocument *)document;
-    - (instancetype)initQuery:(MTQuery *)query database:(MTDatabase *)database datatable:(MTDataTableFast *)datatable andCacheUrl:(NSURL *)cacheUrl;
 
 @end
 

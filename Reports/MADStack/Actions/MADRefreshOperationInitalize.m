@@ -21,6 +21,7 @@
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
+#import "MADRefreshOperationInitalizeMainDataTable.h"
 
 @interface MADRefreshOperationInitalize ()
 
@@ -32,6 +33,7 @@
 @implementation MADRefreshOperationInitalize
 
 - (instancetype)initWithDocument:(MADocument *)document {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         _document = document;
         _success = false;
@@ -42,14 +44,27 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = self.document.managedObjectContext;
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    MADocument *doc;
 
+        for (NSOperation *dependency in self.dependencies) {
+            if ([dependency conformsToProtocol:@protocol(MADRefreshOperationInitalizeMainDataTableProtocol)]) {
+                doc = ((id <MADRefreshOperationInitalizeMainDataTableProtocol>)dependency).document;
+                break;
+            }
+        }
+   
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = doc.managedObjectContext;
+
+    MADocument * __weak wdocument = doc;
     [private performBlockAndWait:^{
-    
-        MADocument *document = self.document;
-        RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
+        MADocument *document = wdocument;
+
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        if (rptqDocument == nil) {
+            rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
+        }
         document.documentObjectID = rptqDocument.objectID;
         
         MTPaper *paper = [[MTPaper alloc] initWithType: rptqDocument.paperType];
@@ -96,10 +111,9 @@
             
             document.reportFormatter = reportFormatter;
         }
-        
+        [self finish];
     }];
     
-    [self finish];
 }
 
 @end

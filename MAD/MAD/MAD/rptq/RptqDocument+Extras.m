@@ -261,9 +261,7 @@
 }
 
 + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    Class docClass = [RptqDocument class];
-    NSString *entityName = NSStringFromClass(docClass);
-    NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
     docFetchRequest.fetchLimit = 1;
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];

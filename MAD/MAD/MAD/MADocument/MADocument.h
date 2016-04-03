@@ -94,9 +94,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     - (bool)refreshWithError:(NSError * __autoreleasing *)error;
 
-    /*- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
-               completion:(void(^)(BOOL success, MADErrorContainer *error))completion;*/
-
     - (void)regenThumbnail;
 
     - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;

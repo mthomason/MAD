@@ -48,6 +48,8 @@
 #import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
 
+#import "MADOperationQueue.h"
+#import "MADRefreshReloadOperation.h"
 
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
@@ -68,45 +70,48 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTTabBarImageProtocol,
         MTActivityItemProviderDelegate>
 
-@property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
+    @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
 
 #pragma mark - Attributes
 #pragma mark Display Varables
 
-@property (nonatomic, assign) NSUInteger numberOfPages;
-@property (nonatomic, assign) NSUInteger currentPageIndex;
-@property (nonatomic, assign, readwrite) CGFloat zoomScale;
-@property (nonatomic, strong) NSDate *lastCacheDate;
+    @property (nonatomic, assign) NSUInteger numberOfPages;
+    @property (nonatomic, assign) NSUInteger currentPageIndex;
+    @property (nonatomic, assign, readwrite) CGFloat zoomScale;
+    @property (nonatomic, strong) NSDate *lastCacheDate;
 
 #pragma mark Timer (Updates last refresh date on tick)
 
-@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
+    @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
 #pragma mark User Interface
 
-@property (nonatomic, weak) MADPageSlider *toolbarSlider;
-@property (nonatomic, weak) MADLabelStatus *labelStatus;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
+    @property (nonatomic, weak) MADPageSlider *toolbarSlider;
+    @property (nonatomic, weak) MADLabelStatus *labelStatus;
+    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
-@property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
-@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
+    @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
+    @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 #pragma mark Controllers
 
-@property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
+    @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
 #pragma mark Identifiers
 
-@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
+    @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 
 #pragma mark Viewer State
 
-@property (atomic, assign, getter=isRefreshing) bool refreshing;
-@property (nonatomic, assign) bool didRefreshBeforeReaload;
-@property (nonatomic, assign) bool activityExporting;
-@property (nonatomic, assign) bool startedRefresh;
-@property (nonatomic, assign) bool pageIsAnimating;
-@property (nonatomic, assign) bool updatingOfTimerIsPaused;
+    @property (atomic, assign, getter=isRefreshing) bool refreshing;
+    @property (nonatomic, assign) bool didRefreshBeforeReaload;
+    @property (nonatomic, assign) bool activityExporting;
+    @property (nonatomic, assign) bool startedRefresh;
+    @property (nonatomic, assign) bool pageIsAnimating;
+    @property (nonatomic, assign) bool updatingOfTimerIsPaused;
+
+    @property (nonatomic, strong) MADOperationQueue *refreshQueue;
+    @property (nonatomic, strong) MADRefreshReloadOperation *refreshReloadOperation;
 
 @end
 
@@ -195,7 +200,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MADPageSliderDelegate
 
-- (void)sliderDidChangeToPage:(NSInteger)page {
+- (void)sliderDidChangeToPage:(NSUInteger)page {
     [self moveToPageAtIndex:page];
 }
 
@@ -207,6 +212,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MADOperationQueue *refreshQueue = [[MADOperationQueue alloc] init];
+    self.refreshQueue = refreshQueue;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
@@ -572,7 +580,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 }
                 weakself.toolbarSlider.enabled = YES;
                 weakself.activityExporting = false;
-            } else {    // Cancel button
+            } else {
                 weakself.toolbarSlider.enabled = YES;
                 weakself.activityExporting = false;
                 [weakself.tabBarController enableTabBarItems];
@@ -613,6 +621,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.refreshing = true;
         [self setDisplayInactive];
 
+        MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:self.document viewController:self databaseConnection:self.document.mainDatabase.databaseConnection];
+        [self.refreshQueue addOperation:refreshReloadOperation];
+        
+        //[self.refreshQueue waitUntilAllOperationsAreFinished];
+        
+        /*
         MADocument *document = self.document;
         MTDatabase *database = document.mainDatabase;
         [self addObserverDidReadRowsToDatabase:database];
@@ -631,6 +645,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MTDatabase * __weak wMainDatabase = document.mainDatabase;
         MTDataTableFast * __weak wMainDataTable = document.mainDataTable;
         __block bool didRefresh = false;
+        
         NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
             
             MTQuery *squery = wMainQuery;
@@ -647,15 +662,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         queue.maxConcurrentOperationCount = 1;
         [queue addOperation:operationRefresh];
         [queue waitUntilAllOperationsAreFinished];
+        */
+        //[self.document finishRefresh:YES];
         
-        [document finishRefresh:didRefresh];
         
         
-        
-        if (success) {
+        //if (success) {
         
             self.lastCacheDate = [NSDate date];
-            
+           /*
         } else {
             
             MADViewerController * __weak weakself2 = self;
@@ -669,13 +684,19 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                            }
                        }];
             
-        }
+        }*/
         
-        [self removeObserverDidReadRowsFromDatabase:database];
-        [self setDisplayActive];
-        [self reload];
-        [self timerDealloc];
-        [self uiUpdateTimeSinceLastRefresh: NULL];
+        //[self removeObserverDidReadRowsFromDatabase:database];
+        
+        
+        
+        
+        
+        
+//        [self setDisplayActive];
+//        [self reload];
+//        [self timerDealloc];
+//        [self uiUpdateTimeSinceLastRefresh: NULL];
         
     }
 }

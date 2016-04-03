@@ -13,7 +13,12 @@
 
 @class MADocument;
 
+@protocol MADRefreshOperationInitalizeMainDataTableProtocol <NSObject>
+    @property (readonly) MADocument *document;
+@end
+
 @interface MADRefreshOperationInitalizeMainDataTable : MADOperation
+    <MADRefreshOperationInitalizeMainDataTableProtocol>
 
     - (instancetype)initWithDocument:(MADocument *)document;
 

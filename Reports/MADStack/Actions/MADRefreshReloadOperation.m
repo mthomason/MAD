@@ -28,6 +28,7 @@
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.getCredentials.gotCredentials) {
         MADCredential * __autoreleasing c = self.getCredentials.credentials.copy;
         return c;
@@ -38,18 +39,27 @@
 
 - (instancetype)initWithDocument: (MADocument *)document viewController:(UIViewController *)viewController
               databaseConnection: (MTDatabaseConnection *)databaseConnection {
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     if (self = [super init]) {
 
         MADGetCredentialsOperation *getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
                                                                                                      viewController: viewController];
         self.getCredentials = getCredentials;
+
         
         MADRefreshOperationInitalizeMainDataTable *initalizeMainDataTable = [[MADRefreshOperationInitalizeMainDataTable alloc] initWithDocument:document];
-
+//        [initalizeMainDataTable addDependency: getCredentials];
         
         MADRefreshOperationInitalize *initalize = [[MADRefreshOperationInitalize alloc] initWithDocument:document];
+        [initalize addDependency: initalizeMainDataTable];
+        [initalize addDependency: getCredentials];
 
         MADRefreshOperation *refresh = [[MADRefreshOperation alloc] initWithDocument:document];
+        [refresh addDependency: initalizeMainDataTable];
+        [refresh addDependency: getCredentials];
+        [refresh addDependency: initalize];
         
         NSArray <__kindof NSOperation *> *operations = @[getCredentials, initalizeMainDataTable, initalize, refresh];
         
