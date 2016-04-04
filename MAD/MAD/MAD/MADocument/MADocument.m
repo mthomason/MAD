@@ -138,6 +138,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @interface MADocument ()
 
+    @property (nonatomic, strong, readwrite) NSManagedObjectModel *madObjectModel;
+
     @property (nonatomic, strong) UIImage *thumbnail;
 
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
@@ -148,11 +150,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     @property (nonatomic, strong, readwrite) NSURL *urlGuts;
     @property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
-
     @property (nonatomic, strong, readwrite) NSURL *urlMetaPlaylist;
 
     @property (nonatomic, strong, readwrite) NSString *fileName;
-    @property (nonatomic, strong, readwrite) NSManagedObjectModel *objectModel;
 
     @property (nonatomic, assign) BOOL didRefresh;
 
@@ -165,8 +165,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
+
     return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
                       andRetinaDisplay: [self isRetnaDisplay]];
+
 }
 
 + (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
@@ -278,7 +280,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return self;
 }
 
-
 - (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
     [self regenThumbnail];
     MADocument * __weak weakself = self;
@@ -324,10 +325,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return success;
 }
 
-- (BOOL)writeContents:(id)contents
-        andAttributes:(NSDictionary *)additionalFileAttributes
-          safelyToURL:(NSURL *)url
-     forSaveOperation:(UIDocumentSaveOperation)saveOperation
+- (BOOL)writeContents:(id)contents andAttributes:(NSDictionary *)additionalFileAttributes
+          safelyToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
                 error:(NSError **)outError {
     
     [super writeContents:contents andAttributes:additionalFileAttributes
@@ -356,28 +355,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return success;
 }
 
-- (bool)wrapFileOverwrite:(BOOL)overwrite {
-    NSError *fileWrapperError = nil;
-    bool success = false;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
-                                                            options: NSFileWrapperReadingImmediate
-                                                              error: &fileWrapperError];
-    
-    NSURL *resultUrl;
-    if (fileWrapperError == nil) {
-        if (overwrite) {
-            NSData *data = [fileWrapper serializedRepresentation];
-            NSError *errorWriting = nil;
-            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting] ? true : false;
-        } else {
-            resultUrl = [self.fileURL uniqueUrl];
-            NSData *data = [fileWrapper serializedRepresentation];
-            success = [data writeToURL:resultUrl atomically:YES] ? true : false;
-        }
-    }
-    return success;
-}
-
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
     [super handleError:error userInteractionPermitted:userInteractionPermitted];
     //if (userInteractionPermitted) {
@@ -397,29 +374,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     //}
 }
 
-- (UIImage *)fullyRenderedThumbnail {
-    MTReportViewerPrintPageRenderer *printPageRender =
-    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter
-                                                           dataTable: self.mainDataTable];
-    
-    CGRect letterRect = [MTPaper rectLetter];
-    UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x,
-                                                                        CGPointZero.y,
-                                                                        (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
-                                                                        (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
-                                                       size: MADFloat_1024
-                                                 edgeEffect: NO
-                                                 zoomEffect: NO
-                                               squareEffect: YES
-                                                 cornerSize: 0.0000f
-                                                      scale: 1.0000f];
-    return thumbnail;
-}
-
-- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url
-                            forSaveOperation:(UIDocumentSaveOperation)saveOperation
+- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation
                                        error:(NSError **)outError {
-
+    
     UIImage *thumbnail = [self fullyRenderedThumbnail];
     NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
     
@@ -439,8 +396,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 
-- (NSString *)fileNameExtensionForType: (NSString *)typeName
-                         saveOperation: (UIDocumentSaveOperation)saveOperation {
+- (NSString *)fileNameExtensionForType: (NSString *)typeName saveOperation: (UIDocumentSaveOperation)saveOperation {
     return MADFileExtentionMobleApplicationDocument;
 }
 
@@ -448,25 +404,23 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSManagedObjectModel *)managedObjectModel {
 
-    if (self.objectModel == nil) {
+    if (_madObjectModel == nil) {
+    
         
         NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
                                                               ofType: MADManagedObjectModelExtention];
         NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
         NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-        self.objectModel = mom;
+        _madObjectModel = mom;
         
     }
-    return self.objectModel;
-}
-
-+ (NSString *)persistentStoreName {
-    return MTPersistentStoreAliasMad;
+    return _madObjectModel;
 }
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
 
     NSError *readError = nil;
+
     NSData *imageData = nil;
     if ([[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path]) {
         imageData = [NSData dataWithContentsOfURL: self.thumbnailURL options:NSDataReadingUncached error:&readError];
@@ -474,12 +428,15 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     if (imageData != nil) {
         UIImage *image = [UIImage imageWithData: imageData];
+        
         if (image != nil) {
+
             UIImage *extraImage = [UIImage imageWithData:imageData];
             NSString *key = [MADocument isRetnaDisplay] ?
                                     MTDocumentInfoKeyThumbnailRetna :
                                     MTDocumentInfoKeyThumbnailStandard;
             self.extraInformation[key] = extraImage;
+
         }
     }
     
@@ -487,18 +444,20 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSString *lastGenerator = [NSString stringWithString: dicionary[MTDocumentInfoKeyGenerator]];
     NSNumber *lastVersion = ((NSNumber *)dicionary[MTDocumentInfoKeyVersion]).copy;
     
-    if (lastGenerator == nil) lastGenerator = @"MAD Designer";
-    if (lastVersion == nil) lastVersion = @(1.0);
+    if (lastGenerator == nil) {
+        NSString *generator = @"MAD Designer";
+        lastGenerator = generator;
+    }
+    
+    if (lastVersion == nil) {
+        NSNumber *lastDocVersoin = [[NSNumber alloc] initWithDouble:1.0];
+        lastVersion = lastDocVersoin;
+    }
     
     self.extraInformation[MTDocumentInfoKeyGenerator] = lastGenerator;
     self.extraInformation[MTDocumentInfoKeyVersion] = lastVersion;
     
     return YES;
-}
-
-- (NSURL *)thumbnailURL {
-    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension
-                            andRetinaDisplay: [MADocument isRetnaDisplay]];
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
@@ -513,10 +472,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return self.extraInformation;
 }
 
-- (BOOL)writeAdditionalContent: (id)content
-                         toURL: (NSURL *)absoluteURL
-           originalContentsURL: (NSURL *)absoluteOriginalContentsURL
-                         error: (NSError **)error {
+- (BOOL)writeAdditionalContent: (id)content toURL: (NSURL *)absoluteURL
+           originalContentsURL: (NSURL *)absoluteOriginalContentsURL error: (NSError **)error {
     
     BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
 
@@ -543,6 +500,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return writeAdditionalContent;
 }
 
++ (NSString *)persistentStoreName { return MTPersistentStoreAliasMad; }
+
 #pragma mark - Reporting Functions
 #pragma mark Query Building
 
@@ -551,8 +510,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [document.defaultDatabase.defaultQuery addQueryTableBasedOnSchemaTable:schemaTable];
 }
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
-                       andSortOrder:(MNSSortOrder)sortOrder; {
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder; {
     RptqDocument *document = [self activeDocumentModel];
     RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID
                                                   managedObjectContext: self.managedObjectContext];
@@ -568,8 +526,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 }
 
-- (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField
-                                andSort:(MNSSortOrder)sortOrder {
+- (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
     
     NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
                                                                    inManagedObjectContext:self.managedObjectContext];
@@ -1190,6 +1147,49 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
+}
+
+- (UIImage *)fullyRenderedThumbnail {
+    MTReportViewerPrintPageRenderer *printPageRender =
+    [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter dataTable: self.mainDataTable];
+    
+    CGRect letterRect = [MTPaper rectLetter];
+    UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                        (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
+                                                                        (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
+                                                       size: MADFloat_1024
+                                                 edgeEffect: NO zoomEffect: NO squareEffect: YES
+                                                 cornerSize: 0.0000f scale: 1.0000f];
+    return thumbnail;
+}
+
+- (bool)wrapFileOverwrite:(BOOL)overwrite {
+    NSError *fileWrapperError = nil;
+    bool success = false;
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
+                                                            options: NSFileWrapperReadingImmediate
+                                                              error: &fileWrapperError];
+    
+    NSURL *resultUrl;
+    
+    if (fileWrapperError == nil) {
+        if (overwrite) {
+            NSData *data = [fileWrapper serializedRepresentation];
+            NSError *errorWriting = nil;
+            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting] ? true : false;
+        } else {
+            resultUrl = [self.fileURL uniqueUrl];
+            NSData *data = [fileWrapper serializedRepresentation];
+            success = [data writeToURL:resultUrl atomically:YES] ? true : false;
+        }
+    }
+    
+    return success;
+}
+
+- (NSURL *)thumbnailURL {
+    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension
+                            andRetinaDisplay: [MADocument isRetnaDisplay]];
 }
 
 #pragma mark File Name

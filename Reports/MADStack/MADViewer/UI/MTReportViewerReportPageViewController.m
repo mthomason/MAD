@@ -190,7 +190,6 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    CGSize currentSize = self.view.bounds.size;
     CGPoint currentContentOffset = self.documentScroller.contentOffset;
     CGPoint nextContentOffset = CGPointMake( (size.width != self.documentScroller.contentSize.width)?(size.width - self.documentScroller.contentSize.width) / 2 : 0.0f, currentContentOffset.y);
     
@@ -200,9 +199,9 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
         self.documentScroller.contentOffset = nextContentOffset;
         self.documentScroller.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-
-        self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
-        self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(self.document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
+        MADocument *document = self.document;
+        self.documentScroller.maximumZoomScale = maximumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
+        self.documentScroller.minimumZoomScale = minimumZoomScaleForPaperInContainer(document.paper.paperSize, self.documentScroller.bounds.size, PageEdgeInsetMargin);
         
     }];
 }

@@ -412,7 +412,7 @@ void sqliteLog(void *foo, const char* statement) {
              queryFieldKeys:(NSArray *)queryFieldKeys
   queryPartOfTransactionSet:(bool)queryPartOfTransactionSet {
 
-    NSLog(@"SQL: %@", queryString);
+    //NSLog(@"SQL: %@", queryString);
     BOOL success = YES;
 
     if (queryString.length > 0) {

@@ -125,7 +125,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+
     if ([operation isKindOfClass:[MADRefreshReloadOperation class]]) {
+
         MADocument *operationDocument = ((MADRefreshReloadOperation *)operation).document;
         [operationDocument finishRefresh:((MADRefreshReloadOperation *)operation).completedSuccessfully];
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
@@ -138,10 +140,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 [self timerDealloc];
                 [self uiUpdateTimeSinceLastRefresh: NULL];
                 [self setDisplayActive];
+                [self removeObserverDidReadRowsFromDatabase:self.document.mainDatabase];
+
 
             }];
         }
     }
+
 }
 
 #pragma mark - Dealloc
@@ -411,27 +416,28 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         pageAttributes.contentSizeInital = visiblePageViewController.documentScroller.contentSize;
         pageAttributes.contentScaleFactor = visiblePageViewController.documentView.contentScaleFactor;
         
-        MADReportPageViewController *pageOne = [[MADReportPageViewController alloc] initWithDocument: self.document
-                                                                                  andPageAttributtes: pageAttributes];
+        MADReportPageViewController *pageOne = [[MADReportPageViewController alloc] initWithDocument: self.document andPageAttributtes: pageAttributes];
 
         pageOne.view.frame = self.view.bounds;
         pageOne.view.backgroundColor = self.view.backgroundColor;
         pageOne.delegate = self;
         
         __block MADViewerController *reportViewer = self;
-        [self.view bringSubviewToFront:self.toolbarSlider];
+        
+        [self.view bringSubviewToFront: self.toolbarSlider];
+ 
         NSArray *viewControllers = @[pageOne];
-        [self setViewControllers: viewControllers
-                       direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO completion:^(BOOL finished) {
-                            if (finished) {
-                                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSlider];
-                                [pageOne.view setNeedsDisplay];
-                                reportViewer.updatingOfTimerIsPaused = false;
-                                reportViewer.refreshing = false;
-                                reportViewer = nil;
-                            }
-                        }];
+        [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward animated: NO completion:^(BOOL finished) {
+        
+            if (finished) {
+                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSlider];
+                [pageOne.view setNeedsDisplay];
+                reportViewer.updatingOfTimerIsPaused = false;
+                reportViewer.refreshing = false;
+                reportViewer = nil;
+            }
+
+        }];
         result = YES;
     }
     return result;
@@ -649,6 +655,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self setDisplayInactive];
 
         MADocument *document = self.document;
+
+        [self addObserverDidReadRowsToDatabase:document.mainDatabase];
+        
         MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:document viewController:self databaseConnection:document.mainDatabase.databaseConnection];
         [refreshReloadOperation addObserver:self];
         [self.refreshQueue addOperation:refreshReloadOperation];
@@ -733,15 +742,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageAttributes.contentOffsetInital = CGPointZero;
     pageAttributes.contentScaleFactor = 0.0;
 
-    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
-                                                                                        pageAttributes: pageAttributes
-                                                                                                 frame: self.view.bounds
-                                                                                           andDelegate: self];
+    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document pageAttributes: pageAttributes frame: self.view.bounds andDelegate: self];
     
     NSArray *viewControllers = @[pageOne];
     
-    [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward
-                    animated: NO completion: nil];
+    [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward animated: NO completion: nil];
     
     self.refreshing = false;
     self.startedRefresh = false;
@@ -767,8 +772,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = self.startedRefresh;
     [document.reportFormatter formatForSize:size contentChanged:self.startedRefresh];
     
-    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                                                                               dataTable: document.mainDataTable];
+    MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter dataTable: document.mainDataTable];
     self.printPageRendererReport = printPageRender;
     [self ignoreFormatter: document.reportFormatter];
     
@@ -888,15 +892,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
 }
 
-- (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
-      viewControllerBeforeViewController:(MADReportPageViewController *)pageViewControllerPrevious {
+- (UIViewController *)pageViewController:(MADViewerController *)viewerViewController viewControllerBeforeViewController:(MADReportPageViewController *)pageViewControllerPrevious {
     
     MADReportPageViewController *result = nil;
     if (viewerViewController.pageIsAnimating == false) {
         
         NSUInteger visiblePageNumber = 0;
         if (pageViewControllerPrevious != nil && [pageViewControllerPrevious respondsToSelector:@selector(pageNumber)]) {
+        
             visiblePageNumber = pageViewControllerPrevious.pageViewAttributes.pageNumber;
+            
         }
         if (visiblePageNumber - 1 > 0) {
             
@@ -937,20 +942,23 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     if (completed || finished) {
         pageViewController.pageIsAnimating = false;
+
         if (pageViewController.viewControllers.count > 0) {
             MADReportPageViewController *viewController = pageViewController.viewControllers[0];
             [pageViewController setCurrentPageIndex: viewController.pageViewAttributes.pageNumber - 1];
             [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
             [pageViewController.toolbarSlider.pageSlider setValue: pageViewController.currentPageIndex animated: YES];
         }
+
     }
 
 }
 
-- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController
-                   spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+- (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+
     pageViewController.pageIsAnimating = false;
     return UIPageViewControllerSpineLocationMin;
+
 }
 
 - (void)pageViewController:(MADViewerController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
@@ -1000,6 +1008,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)uiUpdateRecordsRead {
+
     if ([NSThread isMainThread]) {
         NSNumber *numberOfResults = @([self.document.mainDataTable numberOfRows]);
         [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
@@ -1008,6 +1017,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             [self uiUpdateRecordsRead];
         });
     }
+
 }
 
 - (void)uiUpdateNumberOfPages {
@@ -1027,11 +1037,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {
+
     MADPageSlider *slider = self.toolbarSlider;
     if (round(slider.maximumValue) != round(numberOfPages)) {
         slider.maximumValue = numberOfPages;
     }
     [self.labelStatus updatePageStatus:self.numberOfPages currentPageIndex:self.currentPageIndex];
+
 }
 
 #pragma mark - MTActivityItemProviderDelegate
