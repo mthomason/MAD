@@ -540,16 +540,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)setPageingEnabled:(BOOL)enabled {
     NSArray *gestureRecognizers = self.gestureRecognizers;
-    for (UIGestureRecognizer *gestureRecognizer in gestureRecognizers) {
+    [gestureRecognizers enumerateObjectsUsingBlock:^(UIGestureRecognizer * _Nonnull gestureRecognizer, NSUInteger idx, BOOL * _Nonnull stop) {
         gestureRecognizer.enabled = enabled;
-    }
+    }];
 }
 
 - (void)setTabBarItemsEnabled:(BOOL)enabled {
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
-    for (UITabBarItem *item in tabBarItems) {
-        item.enabled = enabled;
-    }
+    [tabBarItems enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(UITabBarItem * _Nonnull tabBarItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            tabBarItem.enabled = enabled;
+        }];
+    }];
 }
 
 #pragma mark - Actions
