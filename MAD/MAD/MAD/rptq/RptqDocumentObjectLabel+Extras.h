@@ -10,10 +10,9 @@
 #define Reports_RptqDocumentObjectLabel_Extras_h
 
 #import "RptqDocumentObjectLabel.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <MADFoundation/MADDataType.h>
 
-@interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare>
+@interface RptqDocumentObjectLabel (Extras)
 
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 

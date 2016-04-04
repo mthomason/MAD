@@ -10,9 +10,8 @@
 #define Reports_RptqUserCredentals_Extras_h
 
 #import "RptqUserCredentals.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 
-@interface RptqUserCredentals (Extras) <MTProtocolCompare>
+@interface RptqUserCredentals (Extras)
 
     + (instancetype)newUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
 

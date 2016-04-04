@@ -253,19 +253,6 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return [self toStringHumanReadable];
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        RptqQueryLinks *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
-    }
-    return result;
-}
-
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQueryLinks  ***********\n"];

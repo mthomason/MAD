@@ -65,18 +65,6 @@
     }
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        result = [self.identifier isEqualToNumber:((RptqQuerySort *)sender).identifier];
-    }
-    return result;
-}
-
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"***********   RptqQuerySort   ***********\n"];

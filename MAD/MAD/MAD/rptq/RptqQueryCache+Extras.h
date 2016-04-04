@@ -10,9 +10,8 @@
 #define Reports_RptqQueryCache_Extras_h
 
 #import "RptqQueryCache.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 
-@interface RptqQueryCache (Extras) <MTProtocolCompare>
+@interface RptqQueryCache (Extras)
 
 + (instancetype)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

@@ -10,7 +10,6 @@
 #define Reports_RptqQueryLinks_Extras_h
 
 #import "RptqQueryLinks.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 extern NSString * const MNSJoinTypeInnerJoin;
@@ -54,7 +53,7 @@ typedef NS_ENUM(unsigned char, MNSLinkType) {
 
 @class RptqDocument, RptqQueryLinks;
 
-@interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>
+@interface RptqQueryLinks (Extras) <MTProtocolLog>
 
 + (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
                                    rightField:(RptqQueryField *)fieldRight

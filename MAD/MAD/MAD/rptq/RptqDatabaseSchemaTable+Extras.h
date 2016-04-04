@@ -10,12 +10,11 @@
 #define Reports_RptqDatabaseSchemaTable_Extras_h
 
 #import "RptqDatabaseSchemaTable.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 @class MTDatabaseTable;
 
-@interface RptqDatabaseSchemaTable (Extras) <MTProtocolCompare, MTProtocolLog>
+@interface RptqDatabaseSchemaTable (Extras) <MTProtocolLog>
 
 + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                                label:(NSString *)label

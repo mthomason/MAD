@@ -10,18 +10,17 @@
 #define Reports_RptqDocument_Extras_h
 
 #import "RptqDocument.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
 @class NSManagedObjectContext, MTDatabase, RptqDocumentSection, RptqDocumentObject, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MADErrorContainer;
 
-@interface RptqDocument (Extras) <MTProtocolCompare>
+@interface RptqDocument (Extras)
 
-+ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
-+ (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+    @property (readonly)RptqDatabase *defaultDatabase;
 
-@property (readonly)RptqDatabase *defaultDatabase;
+    + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
+    + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
     - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
     - (void)storeDatabaseConnectionDefination:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;

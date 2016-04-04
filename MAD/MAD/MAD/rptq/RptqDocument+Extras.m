@@ -761,18 +761,6 @@
     [managedObjectContext save:nil];
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(RptqDocument *)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        result = [self.identifier isEqualToNumber:sender.identifier];
-    }
-    return result;
-}
-
 - (id)debugQuickLookObject {
     NSMutableString *document = [[NSMutableString alloc] init];
     [document appendFormat:@"*********\n"];

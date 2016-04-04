@@ -118,15 +118,10 @@
     return [self.databaseSchemaTable.name stringByAppendingString:indexString];
 }
 
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        RptqQueryTable *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
-    }
-    return result;
+- (BOOL)isEqualTo:(RptqQueryTable *)sender {
+    return [sender isEqual:sender] ?
+        YES :
+        ([sender isKindOfClass:self.class] && [self.identifier isEqualToNumber:sender.identifier]);
 }
 
 

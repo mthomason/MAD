@@ -10,7 +10,6 @@
 #define Reports_RptqQueryPredicate_Extras_h
 
 #import "RptqQueryPredicate.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 
 typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 	MNSPredicateOperatorEqual = 0,
@@ -30,7 +29,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 
 @class RptqDocument;
 
-@interface RptqQueryPredicate (Extras) <MTProtocolCompare>
+@interface RptqQueryPredicate (Extras)
 
 + (instancetype)predicateFactoryWithLeftField:(RptqQueryField *)leftField
                             comparsonOperator:(MNSPredicateOperator)comparsonOperator

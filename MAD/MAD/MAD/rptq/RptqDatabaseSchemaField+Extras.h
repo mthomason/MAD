@@ -10,12 +10,11 @@
 #define Reports_RptqDatabaseSchemaField_Extras_h
 
 #import "RptqDatabaseSchemaField.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 @class MTDatabaseField;
 
-@interface RptqDatabaseSchemaField (Extras) <MTProtocolCompare, MTProtocolLog>
+@interface RptqDatabaseSchemaField (Extras) <MTProtocolLog>
 
 + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                          andField:(MTDatabaseField *)field;

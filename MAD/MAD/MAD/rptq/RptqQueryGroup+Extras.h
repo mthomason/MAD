@@ -10,20 +10,19 @@
 #define Reports_RptqQueryGroup_Extras_h
 
 #import "RptqQueryGroup.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import "MADSortOrder.h"
 
 @class RptqQueryField;
 
-@interface RptqQueryGroup (Extras) <MTProtocolCompare>
+@interface RptqQueryGroup (Extras)
 
-+ (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;
+    + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;
 
-- (NSString *)fieldNameNice;
-- (NSString *)fieldNameQuery;
-- (NSString *)sortDisplayNice;
-- (NSInteger)lastWeight;
-- (NSInteger)location;
+    - (NSString *)fieldNameNice;
+    - (NSString *)fieldNameQuery;
+    - (NSString *)sortDisplayNice;
+    - (NSInteger)lastWeight;
+    - (NSInteger)location;
 
 @end
 

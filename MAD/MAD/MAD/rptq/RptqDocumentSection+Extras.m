@@ -339,19 +339,6 @@
     return result;
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        RptqDocumentSection *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
-    }
-    return result;
-}
-
 #pragma mark - Handling Rows
 
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {

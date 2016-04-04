@@ -148,17 +148,6 @@
     return MNSPredicateOperatorSymbols[self.comparson.unsignedIntegerValue];
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    
-    if ([self isEqual:sender]) {
-        return YES;
-    } else {
-        return [self.identifier isEqualToNumber:((RptqQueryPredicate *)sender).identifier];
-    }
-}
-
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];

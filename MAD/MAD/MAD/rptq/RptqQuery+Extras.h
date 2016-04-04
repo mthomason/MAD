@@ -10,11 +10,10 @@
 #define Reports_RptqQuery_Extras_h
 
 #import "RptqQuery.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 
 @class RptqDocument, MTDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 
-@interface RptqQuery (Extras) <MTProtocolCompare>
+@interface RptqQuery (Extras)
 
 - (RptqDocumentSection *)documentSectionForRow:(NSUInteger)row;
 - (RptqQueryGroup *)firstQueryGroup;

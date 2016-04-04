@@ -10,10 +10,9 @@
 #define Reports_RptqQueryField_Extras_h
 
 #import "RptqQueryField.h"
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
-@interface RptqQueryField (Extras) <MTProtocolLog, MTProtocolCompare>
+@interface RptqQueryField (Extras) <MTProtocolLog>
 
 + (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED;
 + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;

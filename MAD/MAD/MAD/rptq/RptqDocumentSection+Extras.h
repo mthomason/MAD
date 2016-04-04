@@ -13,7 +13,6 @@
 #import <CoreGraphics/CGBase.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADReportSectionRepresentation.h>
-#import <MADDataStructures/MTProtocolCompare.h>
 
 typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
     RptqDocumentSectionWrappingStyleStandard = 1,
@@ -23,7 +22,7 @@ typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
 @class RptqQuery, RptqDocumentObject, RptqDocumentSectionRows;
 @class NSIndexPath;
 
-@interface RptqDocumentSection (Extras) <MTProtocolCompare>
+@interface RptqDocumentSection (Extras)
 
 @property (nonatomic, retain, readonly) NSString *sectionKey;
 

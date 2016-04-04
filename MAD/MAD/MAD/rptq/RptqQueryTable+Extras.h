@@ -16,12 +16,12 @@
 
 @interface RptqQueryTable (Extras) <MTProtocolCompare>
 
-+ (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
-                                           database:(RptqDatabase *)database NS_RETURNS_RETAINED;
-+ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+                                               database:(RptqDatabase *)database NS_RETURNS_RETAINED;
+    + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-- (NSString *)queryAlias;
-- (NSString *)tableAlias;
+    - (NSString *)queryAlias;
+    - (NSString *)tableAlias;
 
 @end
 

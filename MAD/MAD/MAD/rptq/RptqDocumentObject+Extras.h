@@ -14,7 +14,6 @@
 #import <MAD/MADDocumentObjectType.h>
 #import <MADFoundation/MADDataType.h>
 #import <MADDataStructures/MTProtocolLog.h>
-#import <MADDataStructures/MTProtocolCompare.h>
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
@@ -30,7 +29,7 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 extern NSString * const MTDocumentObjectDefinationField1;
 extern NSString * const MTDocumentObjectDefinationField2;
 
-@interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
+@interface RptqDocumentObject (Extras) <MTProtocolLog, RptqDocumentObjectFactory>
 
 + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
 

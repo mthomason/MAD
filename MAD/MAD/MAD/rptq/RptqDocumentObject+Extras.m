@@ -338,22 +338,8 @@ static NSNumberFormatter *currencyNumberFormatter;
     self.sizeheight = sizeHeight;
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        result = [self.identifier isEqualToNumber:((RptqDocumentObject *)sender).identifier];
-    }
-    return result;
-}
-
-#pragma mark - MTProtocolCompare
 
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
-
     
     NSString *result;
     switch (dataType) {

@@ -133,19 +133,6 @@
     return [NSString stringWithFormat:@"%@", self];
 }
 
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        RptqDatabaseSchemaField *s = sender;
-        result = [self.identifier isEqualToNumber:s.identifier];
-    }
-    return result;
-}
-
 - (NSString *)fieldTypeDisplay {
 
     NSString *result = nil;
