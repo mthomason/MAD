@@ -130,87 +130,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [operationDocument finishRefresh:((MADRefreshReloadOperation *)operation).completedSuccessfully];
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
 
-            CGSize paperSize = operationDocument.paper.paperSize;
-
-            MADocument * __weak weakDocument = operationDocument;
-            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
                 
-                MADocument *document = weakDocument;
-
                 self.lastCacheDate = [NSDate date];
                 [self setDisplayActive];
-/*
-                if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
-                    self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
-                }
-                
-                [self setDisplayInactive];
-                [document prepareForQuery];
-                
-                
-                [self watchFormatter: document.reportFormatter];
-                
-                document.reportFormatter.didRefresh = self.startedRefresh;
-                document.reportFormatter.cachedDelegate = document;
-                document.reportFormatter.dataDelegate = document;                  [document.reportFormatter formatForSize:paperSize contentChanged:YES];
-                
-                MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
-                                                                                                                           dataTable: document.mainDataTable];
-                self.printPageRendererReport = printPageRender;
-                [self ignoreFormatter: document.reportFormatter];
-            
-
-
-                MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
-                pageAttributes.pageNumber = self.currentPageNumber;
-                pageAttributes.numberOfPages = document.reportFormatter.numberOfPages;
-                
-                // FIXME: Don't reset the display size to the paper size.
-                pageAttributes.contentSizeInital = document.paper.paperSize;
-                pageAttributes.zoomScaleInital = 1.0000f;
-                pageAttributes.contentScaleFactor = 0.0;
-                
-                MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
-                                                                                                    pageAttributes: pageAttributes
-                                                                                                             frame: self.view.bounds
-                                                                                                       andDelegate: self];
-                
-                NSArray *viewControllers = @[pageOne];
-                
-                [self setViewControllers: viewControllers
-                               direction: UIPageViewControllerNavigationDirectionForward
-                                animated: NO completion:^(BOOL finished) {
-                                    [pageOne.view setNeedsDisplay];
-                                }];
-                
-                self.refreshing = false;
-                self.startedRefresh = false;
-                
-                NSNumber *numberOfResults = @([document.mainDataTable numberOfRows]);
-                [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
-                
-                document.reportFormatter.didRefresh = NO;
-                if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
-                    
-                    UILocalNotification *notification = [[UILocalNotification alloc] init];
-                    if (self.didRefreshBeforeReaload) {
-                        notification.alertBody = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
-                        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                        self.didRefreshBeforeReaload = false;
-                    }
-                    
-                    NSNumber *bgtask = @(self.backgroundTaskIdRefresh);
-                    self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-                    [[UIApplication sharedApplication] handoffBackground:bgtask];
-                }*/
-[self reload];
+                [self reload];
                 [self timerDealloc];
                 [self uiUpdateTimeSinceLastRefresh: NULL];
                 [self setDisplayActive];
 
             }];
-            //});
         }
     }
 }

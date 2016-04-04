@@ -83,9 +83,10 @@
     
     NSArray <__kindof NSOperation *> *operations = @[self.getCredentials, initalizeMainDataTable, initalize, refresh];
         
-    MADGroupOperation * __weak wself = self;
+    MADRefreshReloadOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-        MADGroupOperation *sself = wself;
+        MADRefreshReloadOperation *sself = wself;
+        sself.completedSuccessfully = true;
         [sself finish];
     }];
     
