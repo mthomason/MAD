@@ -15,14 +15,11 @@
 
 #import <CoreData/CoreData.h>
 
-#import <MAD/MADConstants.h>
 #import <MAD/MTReportViewerPrintPageRenderer.h>
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
-#import <MAD/MTReportFormatter.h>
 #import <MAD/MTDatabaseConnection.h>
 #import <MAD/MTDataTableFast.h>
-#import <MAD/MTQuery.h>
+
 #import <MAD/MTActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 #import <MAD/MADNotificationDidReadRows.h>
@@ -51,10 +48,7 @@
 #import "MADOperationQueue.h"
 #import "MADRefreshReloadOperation.h"
 
-NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
-NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
-
-
+static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADTextNoCache = @"No Cache";
 
 static const CGFloat MADSliderPaginationWidth = 40.0000f;
@@ -976,8 +970,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
-                                                  target: self selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil
-                                                 repeats: NO];
+                                                  target: self selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil repeats: NO];
     self.timerLabelTimeSinceRefreh = t;
 }
 
