@@ -108,7 +108,6 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
     self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
     self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
 
-    
     if (self.labels == nil) {
         return;
     }
@@ -137,6 +136,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
         if (i % 2 == 0) {
             
             NSString *pageNumber = [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
+            
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, self.stringHeight)];
             label.backgroundColor = [UIColor clearColor];
             label.textAlignment = NSTextAlignmentRight;
@@ -164,7 +164,6 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
         }
         drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + self.stringHeight + distanceBetweenTicks);
     }
-    
 }
 
 - (void)setDisplayEnabled {

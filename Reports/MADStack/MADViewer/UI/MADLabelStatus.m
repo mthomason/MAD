@@ -10,7 +10,7 @@
 #import <UIKit/NSAttributedString.h>
 
 static NSString * const MADTextReadRecords = @"\nRead %@ records.";
-static NSString * const MADTextFormattingPage = @"Formatting page %@.";
+static NSString * const MADTextFormattingPage = @"\nFormatting page %@.";
 static NSString * const MADTextPageXofY = @"\nPage %1@ of %2@ pages.";
 
 static const CGFloat ToolbarFontPointSize = 8.0000f;
@@ -59,9 +59,7 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 }
 
 - (void)updateDisplay {
-    [self updateStatusLabel: self.statusMessage1
-         recordsReadMessage: self.statusMessage2
-    andNumberOfPagesMessage: self.statusMessage3];
+    [self updateStatusLabel: self.statusMessage1 recordsReadMessage: self.statusMessage2 andNumberOfPagesMessage: self.statusMessage3];
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
@@ -81,25 +79,19 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
 - (void)updateStatusWithRecordsRead:(NSString *)message {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
     self.statusMessage2 = attributedString;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self updateDisplay];
-    }];
+    [self updateDisplay];
 }
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:self.attributesStatusLabelLight];
     self.statusMessage3 = attributedString;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self updateDisplay];
-    }];
+    [self updateDisplay];
 }
 
 - (void)updateStatusWithTime:(NSString *)timeMessage {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:self.attributesStatusLabelBold];
     self.statusMessage1 = attributedString;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self updateDisplay];
-    }];
+    [self updateDisplay];
 }
 
 - (void)updateStatusLabel:(NSAttributedString *)timeMessage
@@ -118,7 +110,9 @@ static const CGFloat ToolbarFontPointSize = 8.0000f;
     NSDictionary *attributes = [MADLabelStatus attributesStatusLabelCentered];
     [status addAttributes:attributes range:NSMakeRange(0, status.length)];
     
-    self.attributedText = status;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        self.attributedText = status;
+    }];
 }
 
 + (NSDictionary *)attributesStatusLabelCentered {

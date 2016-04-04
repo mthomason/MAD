@@ -52,17 +52,17 @@
     NSUInteger identifier = 0;
     
     if (error == nil) {
-        RptqQueryTable *lastObject = [fetchResults lastObject];
+        RptqQueryTable *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     NSNumber *identifierObj = @(identifier);
     self.identifier = identifierObj;
     
-    NSNumber *x = @(CGPointZero.x);
-    NSNumber *y = @(CGPointZero.y);
-    NSNumber *w = @(CGSizeZero.width);
-    NSNumber *h = @(CGSizeZero.height);
-    NSNumber *yeah = @(YES);
+    NSNumber *x = [[NSNumber alloc] initWithFloat:CGPointZero.x];
+    NSNumber *y = [[NSNumber alloc] initWithFloat:CGPointZero.y];
+    NSNumber *w = [[NSNumber alloc] initWithFloat:CGSizeZero.width];
+    NSNumber *h = [[NSNumber alloc] initWithFloat:CGSizeZero.height];
+    NSNumber *yeah = [[NSNumber alloc] initWithBool:YES];
     self.designerOriginX = x;
     self.designerOriginY = y;
     self.designerSizeWidth = w;
@@ -92,6 +92,7 @@
     
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
                                                    inManagedObjectContext: [databaseSchemaTable managedObjectContext]];
+                                                   
     RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity
                                          insertIntoManagedObjectContext: [databaseSchemaTable managedObjectContext]];
 
