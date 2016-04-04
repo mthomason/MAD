@@ -289,7 +289,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self layoutSubviewSliderPagination];
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
     
@@ -332,17 +331,20 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     document.reportFormatter.didRefresh = NO;
     
     if (self.printPageRendererReport == nil) {
-        [document activeDocumentModel];    // Initalizes the report formatter, if not already done... Important!
+        [document activeDocumentModel];
+        
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
                                                                                                                            dataTable: document.mainDataTable];
         self.printPageRendererReport = prtingPageRendererReport;
     }
+    
+    [self.toolbarSlider setNeedsLayout];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self layoutSubviewSliderPagination];
     [self uiUpdateTimeSinceLastRefresh:self];
+    [self.toolbarSlider setNeedsLayout];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -376,24 +378,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    if (( (self.activityExporting == false) && [self shouldReprocess] )) {
-        [self reloadStepOne];
-        [self reloadStepTwo:self.document.paper.paperSize];
-        [self reloadStepThree];
-    }
-    
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self.navigationItem.titleView sizeToFit];
-        [self layoutSubviewSliderPagination];
-        [self.toolbarSlider setNeedsLayout];
+
         [self.navigationController.toolbar setNeedsLayout];
+        [self.navigationItem.titleView sizeToFit];
+        [self.toolbarSlider setNeedsLayout];
         
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
-        [self layoutSubviewSliderPagination];
         [self.toolbarSlider setNeedsLayout];
+        
     }];
 }
 
@@ -406,12 +402,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage { return [UIImage imageNamed:MADImageBarButtonItemMadViewer8]; }
-
-- (void)layoutSubviewSliderPagination {
-    MADPageSlider *toolbarSlider = self.toolbarSlider;
-    toolbarSlider.frame = CGRectMake(self.view.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.view.frame.size.height);
-    toolbarSlider.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.view.frame.size.height);
-}
 
 - (nullable MADReportPageViewController *)visiblePageViewController { return self.viewControllers.count > 0 ? self.viewControllers[0] : nil; }
 
@@ -474,7 +464,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)redrawWithFrame:(CGRect)frame {
     if ([self shouldReprocess]) {
         [self setDisplayActive];
-        [self reloadWithSize: self.document.paper.paperSize /*frame.size*/];
+        [self reloadWithSize: self.document.paper.paperSize];
     }
 }
 

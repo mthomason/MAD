@@ -10,6 +10,8 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import "MADSliderPageVertical.h"
 
+static const CGFloat MADSliderPaginationWidth = 40.0000f;
+static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 static NSString * const ConstTestStringValue = @"0";
 
 @interface MADPageSlider ()
@@ -103,6 +105,8 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
+    self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
 
     
     if (self.labels == nil) {
@@ -138,7 +142,7 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
             label.textAlignment = NSTextAlignmentRight;
             label.text = pageNumber;
             label.font = [UIFont boldSystemFontOfSize:9.0000f];
-            label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.8];
+            label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.80000000f];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             label.translatesAutoresizingMaskIntoConstraints = YES;
             label.tintColor = self.drawingColor;
