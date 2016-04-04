@@ -692,39 +692,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-/*- (void)addConnection:(MTDatabaseConnection *)connection status:(void (^)(NSString *status, float progress))status
-           completion:(void(^)(BOOL success, MADErrorContainer *error))completion {
-    
-    RptqDocument *rptqDocument = [self activeDocumentModel];
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:connection];
-    if (database) {
-        [self setMainDatabase:database];
-        
-        [rptqDocument addDatabase: self.mainDatabase forManagedObjectContext:managedObjectContext
-                           status: ^(NSString *message, float progress) {
-            status(message, progress);
-        } completion:^(BOOL success, MADErrorContainer *errorContainer) {
-            completion(success, errorContainer);
-        }];
-        
-    } else {
-        completion(NO, nil);
-    }
-}*/
-
 - (RptqDocument *)activeDocumentModel {
+
     RptqDocument *document = nil;
+
     if (self.documentObjectID == nil) {
-        /*
-        NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        bgContext.parentContext = self.managedObjectContext;
-        [bgContext performBlock:^{
-        
-            
-        }];
-        
-        */
-        
+
         document = [RptqDocument documentForManagedObjectContext: self.managedObjectContext];
         if (document == nil) {
             document = [RptqDocument newDocumentForManagedObjectContext: self.managedObjectContext];

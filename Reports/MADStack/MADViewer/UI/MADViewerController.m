@@ -51,7 +51,6 @@
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADTextNoCache = @"No Cache";
 
-static const CGFloat MADSliderPaginationWidth = 40.0000f;
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @interface MADViewerController ()
@@ -295,9 +294,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     MADocument *document = self.document;
     // MARK: Reporting feature (number of results in main query)
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-    RptqDocument *activeDocumentModel = [document activeDocumentModel];
-    [document initalizeMainQuery:activeDocumentModel];
 
+
+    RptqDocument *activeDocumentModel = [document activeDocumentModel];
+
+    [document initalizeMainQuery:activeDocumentModel];
     [document activeDocumentModel];
     [document prepareForQuery];
     document.reportFormatter.didRefresh = NO;
@@ -321,11 +322,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                                         pageAttributes: pageAttributes frame: self.view.bounds andDelegate: self];
     
     NSArray *viewControllers = @[pageOne];
-    
     [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward animated: NO completion: nil];
     
     self.refreshing = false;
     self.startedRefresh = false;
+    
     [self uiUpdateRecordsRead];
     
     document.reportFormatter.didRefresh = NO;
