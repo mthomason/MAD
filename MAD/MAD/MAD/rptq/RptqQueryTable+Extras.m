@@ -58,10 +58,10 @@
     NSNumber *identifierObj = @(identifier);
     self.identifier = identifierObj;
     
-    NSNumber *x = [[NSNumber alloc] initWithFloat:CGPointZero.x];
-    NSNumber *y = [[NSNumber alloc] initWithFloat:CGPointZero.y];
-    NSNumber *w = [[NSNumber alloc] initWithFloat:CGSizeZero.width];
-    NSNumber *h = [[NSNumber alloc] initWithFloat:CGSizeZero.height];
+    NSNumber *x = [[NSNumber alloc] initWithDouble:CGPointZero.x];
+    NSNumber *y = [[NSNumber alloc] initWithDouble:CGPointZero.y];
+    NSNumber *w = [[NSNumber alloc] initWithDouble:CGSizeZero.width];
+    NSNumber *h = [[NSNumber alloc] initWithDouble:CGSizeZero.height];
     NSNumber *yeah = [[NSNumber alloc] initWithBool:YES];
     self.designerOriginX = x;
     self.designerOriginY = y;
@@ -84,17 +84,17 @@
     NSInteger dupeCtr = 0;
     for (RptqQueryTable *queryTable in queryTables) {
         @autoreleasepool {
-            if ([[[queryTable databaseSchemaTable] objectID] isEqual:[databaseSchemaTable objectID]]) {
+            if ([queryTable.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {
                 dupeCtr++;
             }
         }
     }
     
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
-                                                   inManagedObjectContext: [databaseSchemaTable managedObjectContext]];
+                                                   inManagedObjectContext: databaseSchemaTable.managedObjectContext];
                                                    
     RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity
-                                         insertIntoManagedObjectContext: [databaseSchemaTable managedObjectContext]];
+                                         insertIntoManagedObjectContext: databaseSchemaTable.managedObjectContext];
 
     
     NSNumber *dropIndex = @(dupeCtr);
@@ -124,7 +124,6 @@
         YES :
         ([sender isKindOfClass:self.class] && [self.identifier isEqualToNumber:sender.identifier]);
 }
-
 
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];

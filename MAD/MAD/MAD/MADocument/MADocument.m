@@ -193,24 +193,22 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)dealloc {
     
     [_mainQuery database].delegate = nil;
-
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: self.managedObjectContext];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextObjectsDidChangeNotification
+                                                  object: self.managedObjectContext];
     
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextDidSaveNotification
-                           object: self.managedObjectContext];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextDidSaveNotification
+                                                  object: self.managedObjectContext];
     
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextWillSaveNotification
-                           object: self];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextWillSaveNotification
+                                                  object: self];
     
-    [defaultCenter removeObserver: self
-                             name: UIDocumentStateChangedNotification
-                           object: self];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIDocumentStateChangedNotification
+                                                  object: self];
 }
 
 #pragma mark - UIDocument
@@ -591,13 +589,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
 
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
-    UIPrintPaper *printPaper = printInteractionController.printPaper;
     self.printingReportFormatter.dataDelegate = self;
-    self.printingReportFormatter.layoutSize = printPaper.paperSize;
-    self.printingReportFormatter.marginUsingPrintableRect = printPaper.printableRect;
-    self.printingReportFormatter.didRefresh = YES;   //Force formatting
-    [self.printingReportFormatter formatForSize: printPaper.paperSize
-                                 contentChanged: NO];
+    self.printingReportFormatter.layoutSize = printInteractionController.printPaper.paperSize;
+    self.printingReportFormatter.marginUsingPrintableRect = printInteractionController.printPaper.printableRect;
+    self.printingReportFormatter.didRefresh = YES;
+    [self.printingReportFormatter formatForSize: printInteractionController.printPaper.paperSize contentChanged: NO];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
     self.printingReportFormatter = nil;
@@ -607,6 +603,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark NSManagedObjectContextObjectsDidChangeNotification
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
+    NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
+    
+    //NSPredicate *p = [[NSPredicate alloc] init
     self.documentStatus.needsSave = YES;
     self.documentStatus.contextChagned = YES;
 }
