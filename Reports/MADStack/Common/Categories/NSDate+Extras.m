@@ -79,11 +79,10 @@ static inline NSString *LocalizedFormatMilliseconds(NSInteger i) {
     
     NSMutableString *text = [[NSMutableString alloc] initWithString:@"Updated "];
     NSDate *now = [NSDate date];
-    NSCalendar *aCalender = [NSCalendar currentCalendar];
-    NSDateComponents *aDateComponents = [aCalender components: calUnitsAll()
-                                                     fromDate: now
-                                                       toDate: lastDate
-                                                      options: 0];
+    NSDateComponents *aDateComponents = [[NSCalendar currentCalendar] components: calUnitsAll()
+                                                                        fromDate: now
+                                                                          toDate: lastDate
+                                                                         options: 0];
     
     bool forceInclude = true;
     bool printedOne = false;

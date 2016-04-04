@@ -234,14 +234,19 @@ inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (void)setEnabled:(BOOL)enabled {
     [self.pageSlider setEnabled:enabled];
+    
+    UIColor *tintColor = nil;
     UIImage *thumbImage = nil;
     if (enabled) {
+        tintColor = [MADColorEverydayApps newColorRed];
         thumbImage = [MADSliderPageVertical sliderImageEnabled];
         [self setDisplayEnabled];
     } else {
+        tintColor = [UIColor lightGrayColor];
         thumbImage = [MADSliderPageVertical sliderImageDisabled];
         [self setDisplayDisabled];
     }
+    self.tintColor = tintColor;
     [self.pageSlider setThumbImage:thumbImage forState:UIControlStateNormal];
 }
 
