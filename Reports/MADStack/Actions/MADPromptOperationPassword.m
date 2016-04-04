@@ -45,6 +45,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 @implementation MADPromptOperationPassword
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+}
+
 - (NSString *)key {
     return self.passwordKey;
 }
@@ -61,6 +65,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 - (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController {
     if (self = [super init]) {
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _passwordKey = passwordKey.copy;
         _source = none;
         _alertDisplayed = false;
@@ -82,6 +87,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);

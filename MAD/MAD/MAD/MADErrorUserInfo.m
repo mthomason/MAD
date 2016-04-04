@@ -20,7 +20,7 @@
 @implementation MADErrorUserInfo
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithTitle:(NSString *)title andMessage:(NSString *)message {

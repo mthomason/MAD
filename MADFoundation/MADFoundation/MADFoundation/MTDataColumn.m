@@ -104,8 +104,7 @@
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
 
         _identifier = [[NSString alloc] initWithString:identifier];
         _caption = [[NSString alloc] initWithString:identifier];

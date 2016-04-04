@@ -27,12 +27,14 @@ static NSString * const TextNo = @"No";
 @implementation MADPromptOperationPolarQuestion
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+
         _viewController = viewController;
         _title = title.copy;
         _message = message.copy;
@@ -45,6 +47,7 @@ static NSString * const TextNo = @"No";
 }
 
 - (void)execute {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: self.title message: self.message
                                                                       preferredStyle: UIAlertControllerStyleAlert];

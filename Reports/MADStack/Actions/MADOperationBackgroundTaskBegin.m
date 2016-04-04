@@ -18,13 +18,13 @@
 @implementation MADOperationBackgroundTaskBegin
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADOperationBackgroundTaskBegin * __weak weakself = self;
     UIBackgroundTaskIdentifier identifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         MADOperationBackgroundTaskBegin *sself = weakself;

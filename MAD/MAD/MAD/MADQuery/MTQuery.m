@@ -244,6 +244,13 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return (index < self.fieldKeys.count) ? self.fieldKeys[index] : nil;
 }
 
+- (NSMutableDictionary *)fields {
+    return _fields == nil ? _fields = [NSMutableDictionary new] : _fields;
+}
+- (NSMutableArray *)fieldKeys {
+    return _fieldKeys == nil ? _fieldKeys = [NSMutableArray new] : _fieldKeys;
+}
+
 #pragma mark - Helper functions for the query cache
 // FIXME: These are not yet useable for anything but Sqlite3.
 

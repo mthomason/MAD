@@ -122,7 +122,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (id)connectWithConnection:(MTDatabaseConnection *)connection credentals:(MADCredential *)credentals {
     [self openDatabase];
-    return (__bridge id)(_database);
+    return nil;
 }
 
 - (BOOL)tableExist:(NSString *)tablename {
@@ -437,7 +437,8 @@ void sqliteLog(void *foo, const char* statement) {
         }
         NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
         
-        sqlite3_step(statement);
+        int sqlite3_step_result = sqlite3_step(statement);
+        
 //        sqlite3_reset(statement);
         
 
@@ -482,6 +483,7 @@ void sqliteLog(void *foo, const char* statement) {
         }
     }
     
+    int sqlite3_step_result = SQLITE_OK;
     if (returnsResults) {
         
         if (success) {
@@ -493,7 +495,8 @@ void sqliteLog(void *foo, const char* statement) {
             NSUInteger rowCounter = 0;
             
             //NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-            while (SQLITE_ROW == sqlite3_step(statement)) {
+            int sqlite3_step_result;
+            while (SQLITE_ROW == (sqlite3_step_result = sqlite3_step(statement))) {
                 
                 if (rowCounter == 0) {  //If first time around, calculate column information.
                     for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
@@ -552,10 +555,14 @@ void sqliteLog(void *foo, const char* statement) {
                 resultsForRow = nil;
                 rowCounter++;
             }
+            NSLog(@"%@", queryString);
+            NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
+
             [dataTable endBulkInsert];
             
         }
     } else {
+        NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
         // FIXME: Handle failures.
         sqlite3_step(statement);
     }

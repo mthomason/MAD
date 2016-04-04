@@ -17,13 +17,13 @@
 @implementation MADOperationBackgroundTaskEnd
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;
     NSArray<NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {

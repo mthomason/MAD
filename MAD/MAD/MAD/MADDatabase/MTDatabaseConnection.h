@@ -51,6 +51,8 @@ extern NSString * const MADIdentifierDatabaseSqlite3;
     - (NSString *)server;
     - (NSInteger)port;
 
+    - (bool)requiresCredientals;
+
 @end
 
 #endif

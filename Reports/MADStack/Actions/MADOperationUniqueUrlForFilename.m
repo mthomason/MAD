@@ -25,7 +25,7 @@
 @implementation MADOperationUniqueUrlForFilename
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
@@ -43,7 +43,7 @@
 }
 
 - (void)execute {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     NSURL *uniqueUrl = [MADFileUtilities uniqueUrlInDirectory:self.documentsDirectory
                                             withDesiredHandle:self.desiredFilename andExtension:self.pathExtension];
     if (uniqueUrl != nil) {

@@ -46,13 +46,15 @@ static NSString * const MADButtonCancel                = @"Cancel";
 @implementation MADPromptOperationCredentials
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithUsernameKey:(NSString *)usernameKey passwordKey:(NSString *)passwordKey
                                                       andViewController:(UIViewController *)viewController {
 
     if (self = [super init]) {
+
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _usernameKey = usernameKey.copy;
         _passwordKey = passwordKey.copy;
         _viewController = viewController;
@@ -81,6 +83,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     self.displayingPrompt = true;
 

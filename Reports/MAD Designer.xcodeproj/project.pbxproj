@@ -1089,6 +1089,9 @@
 		4CF6AFC01CAFB55C00D3AD11 /* MADRefreshReloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFBF1CAFB55C00D3AD11 /* MADRefreshReloadOperation.m */; };
 		4CF6AFC31CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC21CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.m */; };
 		4CF6AFC61CAFC14200D3AD11 /* MADRefreshOperationInitalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC51CAFC14200D3AD11 /* MADRefreshOperationInitalize.m */; };
+		4CF6AFC91CB1088B00D3AD11 /* MADRefreshOperationReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC81CB1088B00D3AD11 /* MADRefreshOperationReload.m */; };
+		4CF6AFCC1CB108C700D3AD11 /* MADRefreshOperationConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCB1CB108C700D3AD11 /* MADRefreshOperationConnect.m */; };
+		4CF6AFCF1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */; };
 		4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */; };
 		4CFEE7F61BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */; };
@@ -2458,6 +2461,12 @@
 		4CF6AFC21CAFBA4E00D3AD11 /* MADRefreshOperationInitalizeMainDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationInitalizeMainDataTable.m; sourceTree = "<group>"; };
 		4CF6AFC41CAFC14200D3AD11 /* MADRefreshOperationInitalize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperationInitalize.h; sourceTree = "<group>"; };
 		4CF6AFC51CAFC14200D3AD11 /* MADRefreshOperationInitalize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationInitalize.m; sourceTree = "<group>"; };
+		4CF6AFC71CB1088B00D3AD11 /* MADRefreshOperationReload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperationReload.h; sourceTree = "<group>"; };
+		4CF6AFC81CB1088B00D3AD11 /* MADRefreshOperationReload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationReload.m; sourceTree = "<group>"; };
+		4CF6AFCA1CB108C700D3AD11 /* MADRefreshOperationConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperationConnect.h; sourceTree = "<group>"; };
+		4CF6AFCB1CB108C700D3AD11 /* MADRefreshOperationConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationConnect.m; sourceTree = "<group>"; };
+		4CF6AFCD1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperationGetSQL.h; sourceTree = "<group>"; };
+		4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationGetSQL.m; sourceTree = "<group>"; };
 		4CF9D08C1AD0EF6500525A50 /* MADRowTypeKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeKeyValue.h; sourceTree = "<group>"; };
 		4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeKeyValue.m; sourceTree = "<group>"; };
 		4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryBuilderAddGroup.storyboard; sourceTree = "<group>"; };
@@ -4104,6 +4113,12 @@
 				4CF6AFC51CAFC14200D3AD11 /* MADRefreshOperationInitalize.m */,
 				4C5B55DB1C97C5FA005C19D9 /* MADRefreshOperation.h */,
 				4C5B55DC1C97C5FA005C19D9 /* MADRefreshOperation.m */,
+				4CF6AFC71CB1088B00D3AD11 /* MADRefreshOperationReload.h */,
+				4CF6AFC81CB1088B00D3AD11 /* MADRefreshOperationReload.m */,
+				4CF6AFCA1CB108C700D3AD11 /* MADRefreshOperationConnect.h */,
+				4CF6AFCB1CB108C700D3AD11 /* MADRefreshOperationConnect.m */,
+				4CF6AFCD1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.h */,
+				4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */,
 			);
 			name = Report;
 			sourceTree = "<group>";
@@ -6188,10 +6203,12 @@
 				4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */,
 				4C5C0DB91C9BFF7E00826BC2 /* MADPromptOperationPolarQuestion.m in Sources */,
 				4C26B9CA1BAF123A00456DC8 /* MADToolboxFormatViewController.m in Sources */,
+				4CF6AFC91CB1088B00D3AD11 /* MADRefreshOperationReload.m in Sources */,
 				4CA0C6BA1CA5483400222B8D /* MADCreateDocumentOperationCreateDocument.m in Sources */,
 				4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */,
 				4C26BA371BAF99BE00456DC8 /* Constants.m in Sources */,
 				4C40203C1BAE92F200BAE5FC /* MTGraph+RptqQuery.m in Sources */,
+				4CF6AFCF1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m in Sources */,
 				4C4020381BAE92F200BAE5FC /* MADDocumentInformationTableViewController+Designer.m in Sources */,
 				4C26B9C71BAF123A00456DC8 /* MADViewControllerSQL.m in Sources */,
 				4CA0C6B31CA51F7800222B8D /* MADPromptOperationDisplayError.m in Sources */,
@@ -6211,6 +6228,7 @@
 				4C26BA621BAF99F000456DC8 /* MTTableController.m in Sources */,
 				4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */,
 				4C26BA311BAF999800456DC8 /* MADUser.m in Sources */,
+				4CF6AFCC1CB108C700D3AD11 /* MADRefreshOperationConnect.m in Sources */,
 				4C4020F51BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C26BA001BAF14A500456DC8 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */,

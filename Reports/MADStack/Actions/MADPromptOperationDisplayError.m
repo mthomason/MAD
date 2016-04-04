@@ -25,7 +25,7 @@ static NSString * const TextYes = @"Dismiss";
 @implementation MADPromptOperationDisplayError
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithViewController:(UIViewController * __weak)viewController {
@@ -45,6 +45,7 @@ static NSString * const TextYes = @"Dismiss";
 - (instancetype)initWithError:(NSError *)error tagDependency:(NSUInteger)tagDependency
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
+        NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _tagDependency = tagDependency;
         _viewController = viewController;
         _error = error.copy;
@@ -78,6 +79,7 @@ static NSString * const TextYes = @"Dismiss";
 }
 
 - (void)execute {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     NSError *error = self.error;
     if (error == nil) { // Find the error in dependencies if it wasn't passed in.

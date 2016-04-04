@@ -14,7 +14,7 @@
 @class MADocument;
 
 @protocol MADRefreshOperationInitalizeMainDataTableProtocol <NSObject>
-    @property (readonly) MADocument *document;
+    @property (readonly, nonatomic, weak) MADocument *document;
 @end
 
 @interface MADRefreshOperationInitalizeMainDataTable : MADOperation

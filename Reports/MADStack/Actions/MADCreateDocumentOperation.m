@@ -29,7 +29,7 @@
 @implementation MADCreateDocumentOperation
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
 - (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
@@ -88,14 +88,21 @@
             MADGroupOperation *sself = wself;
             [sself finish];
         }];
-        
         [self addOperations:operations finishingOperation:finishingOperation];
     }
     
     return self;
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors { }
+- (void)execute {
+    [super execute];
+}
+
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+    //if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
+    //    [self finish];
+    //}
+}
 
 - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {
     [[MADNotificationProgress sharedObject] updateProgressOfObject:self withMessage:message progress:progress];

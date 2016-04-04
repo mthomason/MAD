@@ -32,8 +32,12 @@
 
 @implementation MADRefreshOperationInitalize
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+}
+
 - (instancetype)initWithDocument:(MADocument *)document {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
         _success = false;
@@ -44,15 +48,15 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    MADocument *doc;
-
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    MADocument *doc = _document;
+/*
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADRefreshOperationInitalizeMainDataTableProtocol)]) {
                 doc = ((id <MADRefreshOperationInitalizeMainDataTableProtocol>)dependency).document;
                 break;
             }
-        }
+        }*/
    
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = doc.managedObjectContext;
@@ -73,46 +77,45 @@
         //Initalize main database
         if (document.mainDatabase == nil) {
             RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
-            RptqQuery *query = rptqDatabase.hasQueries.anyObject;
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:query.inDatabase.ownedByUser];
+            RptqQuery *rquery = rptqDatabase.hasQueries.anyObject;
+            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:rquery.inDatabase.ownedByUser];
             MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
             document.mainDatabase = db;
         }
         
-        if (document.reportFormatter == nil) {
-            RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
-            RptqQuery *rquery = rptqDatabase.hasQueries.anyObject;
-            MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQueryObjectId:rquery.objectID andQueryLimit:NSNotFound];
-            madQuery.dataDelegate = document;
-            document.mainQuery = madQuery;
+        RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+        RptqQuery *rquery = rptqDatabase.hasQueries.anyObject;
+        MTQueryFull *madQuery = [[MTQueryFull alloc] initWithQueryObjectId:rquery.objectID andQueryLimit:NSNotFound];
+        madQuery.dataDelegate = document;
+        document.mainQuery = madQuery;
+        
+        NSArray *sortDescriptors = [rquery sortDescriptorsForDatabase:document.mainDatabase];
+        [document.mainDataTable sortUsingDescriptors:sortDescriptors];
+        
+        //Initalize the section layout manager... Not neede for creating the report.
+        NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
+        RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:rptqDocument];
+        for (RptqDocumentSection *reportSection in sectionEnumerator) {
             
-            NSArray *sortDescriptors = [rquery sortDescriptorsForDatabase:document.mainDatabase];
-            [document.mainDataTable sortUsingDescriptors:sortDescriptors];
+            MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
+            layoutManager.delegate = document;
+            [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
             
-            //Initalize the section layout manager... Not neede for creating the report.
-            NSMutableDictionary *sectionLayoutManagers = [NSMutableDictionary new];
-            RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:rptqDocument];
-            for (RptqDocumentSection *reportSection in sectionEnumerator) {
-                
-                MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-                layoutManager.delegate = document;
-                [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
-                
-            }
-            document.sectionLayoutManagers = sectionLayoutManagers;
-            
-            
-            MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: document.mainQuery
-                                                                                      layout: document
-                                                                                     options: MTReportFormatterOptionsNone];
-            reportFormatter.dataDelegate = document;
-            reportFormatter.cachedDelegate = document;
-            reportFormatter.datasource = document;
-            
-            document.reportFormatter = reportFormatter;
         }
-        [self finish];
+        document.sectionLayoutManagers = sectionLayoutManagers;
+        
+        
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: document.mainQuery
+                                                                                  layout: document
+                                                                                 options: MTReportFormatterOptionsNone];
+        reportFormatter.dataDelegate = document;
+        reportFormatter.cachedDelegate = document;
+        reportFormatter.datasource = document;
+        
+        document.reportFormatter = reportFormatter;
+        
     }];
+    [self finish];
     
 }
 

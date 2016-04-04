@@ -20,8 +20,12 @@
 
 @implementation MADRefreshOperationInitalizeMainDataTable
 
+- (void)dealloc {
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+}
+
 - (instancetype)initWithDocument:(MADocument *)document {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
         _success = false;
@@ -32,7 +36,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
     MADocument *document = self.document;
     NSNumber *typeKey = @(MTDataTableTypeOfTable);

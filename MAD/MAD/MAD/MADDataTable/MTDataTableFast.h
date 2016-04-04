@@ -18,16 +18,16 @@
 @interface MTDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>
 
-@property (nonatomic, strong, readonly) MTDatabaseCache *databaseForSelects;
+    @property (nonatomic, strong, readonly) MTDatabaseCache *databaseForSelects;
 
-@property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
-@property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
+    @property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
+    @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
-- (NSString *)tableName;
-- (NSString *)columnKeyForColumnName:(NSString *)columnName;
-- (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
+    - (NSString *)tableName;
+    - (NSString *)columnKeyForColumnName:(NSString *)columnName;
+    - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
-- (id)runSelectQuery:(MTQuery *)query;
+    - (id)runSelectQuery:(MTQuery *)query;
 
 @end
 

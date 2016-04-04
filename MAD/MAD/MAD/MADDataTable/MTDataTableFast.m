@@ -481,7 +481,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (NSDictionary *)createIndexParametersForIndexName:(NSString *)indexName tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors {
     NSDictionary *columns = [NSDictionary dictionaryWithDictionary: self.columns];
-    NSDictionary * __autoreleasing parameters = @{
+    NSDictionary * parameters = @{
                                                   @(MTQueryCacheIndexCreateIndexName)         : indexName,
                                                   @(MTQueryCacheIndexCreateTableName)         : tableName,
                                                   @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors,
@@ -589,12 +589,12 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     if (self.lastDataForCacheId != nil) {
         if (cacheId.unsignedIntegerValue == self.lastDataForCacheId.index) {
-            NSDictionary * __autoreleasing result = [NSDictionary dictionaryWithDictionary:self.lastDataForCacheId.object];
+            NSDictionary *result = [NSDictionary dictionaryWithDictionary:self.lastDataForCacheId.object];
             return result;
         }
     }
     
-    NSDictionary * __autoreleasing result = nil;
+    NSDictionary * result = nil;
     
     NSNumber *keyRowId = @(MTQuerySelectRowId);
     NSNumber *keyFieldKey = @(MTQuerySelectFieldKeys);
@@ -607,7 +607,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               keyFieldDef : self.columns
                               };
     
-    MTQuery * __autoreleasing query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
+    MTQuery * query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
@@ -621,7 +621,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         if (success) {
             result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
             
-            MADIndex * __autoreleasing lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
+            MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId.unsignedIntegerValue andObject:result];
             self.lastDataForCacheId = lastDataForCacheId;
             
         } else {
@@ -637,7 +637,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
     [self initalizeGroupKeys];
-    NSMutableArray * __autoreleasing whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
+    NSMutableArray * whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
     NSUInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
         @autoreleasepool {
@@ -657,7 +657,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
     [self initalizeGroupKeys];
 
-    NSMutableArray * __autoreleasing results = [[NSMutableArray alloc] init];
+    NSMutableArray * results = [[NSMutableArray alloc] init];
     NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSString *tableName = [self tableName];
     NSArray *sortDescriptors = self.sortDescriptors;
@@ -671,7 +671,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                   @(MTQuerySelectFieldDescriptors) : columns
                                   
                                   };
-    MTQuery * __autoreleasing query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
+    MTQuery * query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
@@ -706,7 +706,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
-    MTQuery * __autoreleasing query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefination];
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefination];
 
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:limit];
     if (row != NSNotFound && limit > 0) {
@@ -835,9 +835,13 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSArray *)columnKeysForSortDescriptors {
-    NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:[self.sortDescriptors count]];
-    for (NSSortDescriptor *sortDescriptor in self.sortDescriptors) {
-        [columnKeys addObject:[sortDescriptor key]];
+    NSArray *sortDescriptors = self.sortDescriptors;
+    NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count];
+    for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+        @autoreleasepool {
+            NSString *key = [[NSString alloc] initWithString:sortDescriptor.key];
+            [columnKeys addObject:key];
+        }
     }
     return columnKeys;
 }
@@ -848,13 +852,15 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     
     NSEnumerator *enumerator;
     NSArray *columnKeys = [self columnKeysForSortDescriptors];
-    if ([columnKeys count] == 0) {
+    if (columnKeys.count == 0) {
+    
         enumerator = [self enumeratorForAllObjectsSortedRowIdOnly];
+        
     } else {
+    
         MTQuery *query = [self queryForAllRowsWithKeys:columnKeys];
         
-        NSURL *urlFastCache = [self urlFastCache];
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
         enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                  columns: self.columns
                                                                               columnKeys: columnKeys
@@ -868,8 +874,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
     MTQuery *query = [self queryForAllItemsAllRows];
-    NSURL *urlFastCache = [self urlFastCache];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                                               columns: self.columns
                                                                                                            columnKeys: self.columnKeys

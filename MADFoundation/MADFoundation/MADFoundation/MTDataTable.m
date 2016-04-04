@@ -178,6 +178,7 @@ static NSString * const StringEmpty = @"";
 }
 
 - (bool)cacheWithUrl:(NSURL *)url {
+
     NSDictionary *plist = [self plist];
 
     NSError *error = nil;
@@ -187,10 +188,12 @@ static NSString * const StringEmpty = @"";
                                                                 error: &error];
     bool success = false;
     if (url) {
-        success = [cache writeToURL:url
-                            options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
-                              error:&error] ? true : false;
+        success = [cache writeToURL: url
+                            options: NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
+                              error: &error] ? true : false;
+
         NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+
     }
     return success;
 }

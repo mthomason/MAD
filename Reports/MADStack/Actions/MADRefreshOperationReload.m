@@ -7,7 +7,20 @@
 //
 
 #import "MADRefreshOperationReload.h"
+#import <MAD/MADocument.h>
+
+@interface MADRefreshOperationReload ()
+
+    @property (nonatomic, weak) MADocument *document;
+
+@end
 
 @implementation MADRefreshOperationReload
+
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)execute {
+    //[self.document reload];
+}
 
 @end

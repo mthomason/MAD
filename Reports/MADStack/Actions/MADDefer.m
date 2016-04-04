@@ -21,7 +21,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"Operation deallocated. %s", __PRETTY_FUNCTION__);
+    NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (_block)
         _block();
     [super dealloc];

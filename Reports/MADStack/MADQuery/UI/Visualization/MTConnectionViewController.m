@@ -66,7 +66,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    //@property (nonatomic, strong) UIBarButtonItem *holderButton;
     @property (nonatomic, strong) UIProgressView *progressView;
 
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;

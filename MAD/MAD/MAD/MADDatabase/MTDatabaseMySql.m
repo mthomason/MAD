@@ -20,7 +20,6 @@
 #import <MADMySQL/MysqlServer.h>
 #import <MADMySQL/MysqlFetch.h>
 #import <MADMySQL/MysqlFetchField.h>
-//#import <MADMySQL/MysqlException.h>
 #import <MADMySQL/MTDataTypeMySQL.h>
 
 #import "MTQuery.h"

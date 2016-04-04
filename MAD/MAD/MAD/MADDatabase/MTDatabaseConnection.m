@@ -185,4 +185,8 @@ NSString * const MADStringEmpty = @"";
 
 - (NSInteger)port { return 0; }
 
+- (bool)requiresCredientals {
+    return ![self.databaseTypeIdentifier isEqualToString:MADIdentifierDatabaseSqlite3];
+}
+
 @end

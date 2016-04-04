@@ -39,22 +39,28 @@
 
 
 - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations finishingOperation:(NSBlockOperation *)finishingOperation {
-    if (finishingOperation == nil) {
-        /*MADGroupOperation * __weak wself = self;
-        _finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-            MADGroupOperation *sself = wself;
-            [sself finish];
-        }];*/
-    } else {
-        _finishingOperation = finishingOperation;
+    _finishingOperation = finishingOperation;
+    if (_internalQueue == nil) {
+        _internalQueue = [MADOperationQueue new];
     }
-    _internalQueue = [MADOperationQueue new];
     _internalQueue.suspended = YES;
     _internalQueue.delegate = self;
     for (NSOperation *op in operations){
+        [_finishingOperation addDependency:op];
         [_internalQueue addOperation:op];
     }
-    
+    //[_internalQueue addOperation:_finishingOperation];
+}
+
+- (MADOperationQueue *)internalQueue {
+    if (_internalQueue == nil) {
+        MADOperationQueue *internalQueue = [MADOperationQueue new];
+        internalQueue.suspended = YES;
+        internalQueue.delegate = self;
+        return _internalQueue = internalQueue;
+    } else {
+        return _internalQueue;
+    }
 }
 
 - (void)cancel {

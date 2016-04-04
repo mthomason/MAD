@@ -122,8 +122,8 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 }
 
 - (void)initCommon {
-    NSString *classname = NSStringFromClass(self.class);
-    NSString *classnameConcurrentBackground = [classname stringByAppendingString:@"DispatchConcurrentBackground"];
+
+    NSString *classnameConcurrentBackground = [NSStringFromClass(self.class) stringByAppendingString:@"DispatchConcurrentBackground"];
     const char *queueName = [classnameConcurrentBackground cStringUsingEncoding:NSUTF8StringEncoding];
     self.textRepresentationQueue =  dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
     
@@ -283,16 +283,12 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 - (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [self drawWhiteCanvas: ctx
-                 pageRect: pageRect];
+    [self drawWhiteCanvas: ctx pageRect: pageRect];
     
-    [self drawPageAtIndex: index
-              withContext: ctx
-               inPageRect: pageRect];
+    [self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 
     if (self.showWaterMark) {
-        [self drawWatermarkWithContext: ctx
-                            inPageRect: pageRect];
+        [self drawWatermarkWithContext: ctx inPageRect: pageRect];
     }
 
 }
@@ -386,13 +382,18 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
     
 }
 
-- (MADReportSectionRepresentation *)drawSection:(RptqDocumentSection *)documentSection pageRect:(CGRect)pageRect
-                                    pageSection:(NSDictionary *)pageSection document:(RptqDocument *)document
-                                         onPage:(NSUInteger)pageIndex withDatabase:(MTDatabase *)database offset:(CGFloat *)originY
-                                  offsetElement:(NSUInteger *)offsetElement offsetCharacter:(NSUInteger *)offsetCharacter {
+- (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection
+                                       pageRect: (CGRect)pageRect
+                                    pageSection: (NSDictionary *)pageSection
+                                       document: (RptqDocument *)document
+                                         onPage: (NSUInteger)pageIndex
+                                   withDatabase: (MTDatabase *)database
+                                         offset: (CGFloat *)originY
+                                  offsetElement: (NSUInteger *)offsetElement
+                                offsetCharacter: (NSUInteger *)offsetCharacter {
     
     NSOrderedSet *rows = documentSection.hasRows;
-    MADReportSectionRepresentation * _Nonnull __autoreleasing sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
+    MADReportSectionRepresentation * _Nonnull sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:rows.count];
     sectionRepresentation.type = pageSection.sectionType;
     sectionRepresentation.elementOffset = *(offsetElement);
     
@@ -404,7 +405,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
         NSArray *groupLevelKeys = [self groupLevelKeysForDetailRow:pageSection.detailRowId];
         for (RptqDocumentSectionRows *row in rows) {
             NSOrderedSet *items = row.hasObjects;
-            MADReportSectionRowsRepresentation * _Nonnull __autoreleasing rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
+            MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:items.count];
                         
             for (RptqDocumentObject *item in items) {
                 @autoreleasepool {
@@ -427,7 +428,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
                         [drawingObject drawInRect:elementCanvasRect];
                     }
                     
-                    MADReportLineRepresentation * _Nonnull __autoreleasing line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
+                    MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject:drawingObject
                                                                                                                                  type:item.getType
                                                                                                                                 frame:elementCanvasRect];
                     [rowRepresentation addLine:line];

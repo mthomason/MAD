@@ -236,12 +236,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
         `finishWithError()` method.
     */
 - (void)finish {
-    NSLog(@"Finish: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     [self finish:nil];
 }
 
 - (void)finishWithError:(NSError *)error {
-    NSLog(@"Finish with error: %@ - %s", NSStringFromClass([super class]),  __PRETTY_FUNCTION__);
     if (error) {
         NSArray *errorArray = [[NSArray alloc] initWithObjects:error, nil];
         [self finish:errorArray];

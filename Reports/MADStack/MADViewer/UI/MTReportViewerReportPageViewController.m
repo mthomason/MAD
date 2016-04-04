@@ -90,8 +90,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
                                          frame:(CGRect)frame
                                    andDelegate:(id <MTPrintingProtocol>)delegate {
     
-    MADReportPageViewController *pageViewController = [[self alloc] initWithDocument: document
-                                                                  andPageAttributtes:pageAttributes];
+    MADReportPageViewController *pageViewController = [[self alloc] initWithDocument: document andPageAttributtes: pageAttributes];
     pageViewController.view.frame = frame;
     pageViewController.delegate = delegate;
     return pageViewController;
@@ -117,14 +116,16 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)loadView {
 
+    MADocument *document = self.document;
+    
     MADDocumentScroller *scrollView = [[MADDocumentScroller alloc] initWithFrame:CGRectZero];
-    scrollView.contentSize = self.document.paper.paperSize;
+    scrollView.contentSize = document.paper.paperSize;
     scrollView.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin, PageEdgeInsetMargin);
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     scrollView.translatesAutoresizingMaskIntoConstraints = YES;
     scrollView.delegate = self;
     
-    MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:self.document.paper.bounds];
+    MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:document.paper.bounds];
     renderedReportView.backgroundColor = [UIColor whiteColor];
     renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;

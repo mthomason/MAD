@@ -64,6 +64,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     <UIPopoverControllerDelegate,
         UIPrintInteractionControllerDelegate,
         UIStateRestoring,
+        MADOperationObserver,
         MADPageSliderProtocol,
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
@@ -116,6 +117,103 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @end
 
 @implementation MADViewerController
+
+#pragma mark - MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation { }
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    if ([operation isKindOfClass:[MADRefreshReloadOperation class]]) {
+        MADocument *operationDocument = ((MADRefreshReloadOperation *)operation).document;
+        [operationDocument finishRefresh:((MADRefreshReloadOperation *)operation).completedSuccessfully];
+        if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
+
+            CGSize paperSize = operationDocument.paper.paperSize;
+
+            MADocument * __weak weakDocument = operationDocument;
+            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                
+                MADocument *document = weakDocument;
+
+                self.lastCacheDate = [NSDate date];
+                [self setDisplayActive];
+/*
+                if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
+                    self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
+                }
+                
+                [self setDisplayInactive];
+                [document prepareForQuery];
+                
+                
+                [self watchFormatter: document.reportFormatter];
+                
+                document.reportFormatter.didRefresh = self.startedRefresh;
+                document.reportFormatter.cachedDelegate = document;
+                document.reportFormatter.dataDelegate = document;                  [document.reportFormatter formatForSize:paperSize contentChanged:YES];
+                
+                MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: document.reportFormatter
+                                                                                                                           dataTable: document.mainDataTable];
+                self.printPageRendererReport = printPageRender;
+                [self ignoreFormatter: document.reportFormatter];
+            
+
+
+                MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
+                pageAttributes.pageNumber = self.currentPageNumber;
+                pageAttributes.numberOfPages = document.reportFormatter.numberOfPages;
+                
+                // FIXME: Don't reset the display size to the paper size.
+                pageAttributes.contentSizeInital = document.paper.paperSize;
+                pageAttributes.zoomScaleInital = 1.0000f;
+                pageAttributes.contentScaleFactor = 0.0;
+                
+                MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
+                                                                                                    pageAttributes: pageAttributes
+                                                                                                             frame: self.view.bounds
+                                                                                                       andDelegate: self];
+                
+                NSArray *viewControllers = @[pageOne];
+                
+                [self setViewControllers: viewControllers
+                               direction: UIPageViewControllerNavigationDirectionForward
+                                animated: NO completion:^(BOOL finished) {
+                                    [pageOne.view setNeedsDisplay];
+                                }];
+                
+                self.refreshing = false;
+                self.startedRefresh = false;
+                
+                NSNumber *numberOfResults = @([document.mainDataTable numberOfRows]);
+                [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
+                
+                document.reportFormatter.didRefresh = NO;
+                if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
+                    
+                    UILocalNotification *notification = [[UILocalNotification alloc] init];
+                    if (self.didRefreshBeforeReaload) {
+                        notification.alertBody = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
+                        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                        self.didRefreshBeforeReaload = false;
+                    }
+                    
+                    NSNumber *bgtask = @(self.backgroundTaskIdRefresh);
+                    self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+                    [[UIApplication sharedApplication] handoffBackground:bgtask];
+                }*/
+[self reload];
+                [self timerDealloc];
+                [self uiUpdateTimeSinceLastRefresh: NULL];
+                [self setDisplayActive];
+
+            }];
+            //});
+        }
+    }
+}
 
 #pragma mark - Dealloc
 
@@ -622,7 +720,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self setDisplayInactive];
 
         MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:self.document viewController:self databaseConnection:self.document.mainDatabase.databaseConnection];
+        [refreshReloadOperation addObserver:self];
         [self.refreshQueue addOperation:refreshReloadOperation];
+        self.refreshReloadOperation = refreshReloadOperation;
         
         //[self.refreshQueue waitUntilAllOperationsAreFinished];
         
@@ -669,7 +769,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         //if (success) {
         
-            self.lastCacheDate = [NSDate date];
+        
            /*
         } else {
             
@@ -691,12 +791,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         
         
-        
-        
-//        [self setDisplayActive];
-//        [self reload];
-//        [self timerDealloc];
-//        [self uiUpdateTimeSinceLastRefresh: NULL];
         
     }
 }
@@ -784,9 +878,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     NSArray *viewControllers = @[pageOne];
     
-    [self setViewControllers: viewControllers
-                           direction: UIPageViewControllerNavigationDirectionForward
-                            animated: NO completion: nil];
+    [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward
+                    animated: NO completion: nil];
     
     self.refreshing = false;
     self.startedRefresh = false;
@@ -832,10 +925,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageAttributes.zoomScaleInital = 1.0000f;
     pageAttributes.contentScaleFactor = 0.0;
     
-    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document
-                                                                                        pageAttributes: pageAttributes
-                                                                                                 frame: self.view.bounds
-                                                                                           andDelegate: self];
+    MADReportPageViewController *pageOne = [MADReportPageViewController PageViewControllerWithDocument: document pageAttributes: pageAttributes
+                                                                                                 frame: self.view.bounds andDelegate: self];
     
     NSArray *viewControllers = @[pageOne];
     
@@ -869,20 +960,20 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     MADViewerController * __weak blockViewer = self;
 
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
+    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    //dispatch_async(queuePriorityBackground, ^{
         
         MADViewerController * __strong strongViewer = blockViewer;
         [strongViewer reloadStepTwo:viewBounds];
         MADViewerController * __weak blockViewer2 = strongViewer;
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
+    //    dispatch_sync(dispatch_get_main_queue(), ^{
             
             MADViewerController * __strong strongViewer2 = blockViewer2;
             [strongViewer2 reloadStepThree];
             
-        });
-    });
+   //     });
+   // });
 }
 
 #pragma mark - Post Report Notifications
