@@ -21,6 +21,6 @@
 @property (nonatomic, assign, readwrite) CGSize contentSizeInital;
 @property (nonatomic, assign, readwrite) CGFloat zoomScaleInital;
 @property (nonatomic, assign, readwrite) CGFloat contentScaleFactor;
-@property (nonatomic, strong) NSDate *reportLastCacheDate;
+@property (nonatomic, copy) NSDate *reportLastCacheDate;
 
 @end

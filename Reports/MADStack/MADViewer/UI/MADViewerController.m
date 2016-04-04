@@ -496,15 +496,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self setPageingEnabled:YES];
     
+    MADPageSlider *toolbarSlider = self.toolbarSlider;
     UIColor *red = [MADColorEverydayApps newColorRed];
-    self.toolbarSlider.tintColor = red;
+    toolbarSlider.tintColor = red;
+    toolbarSlider.enabled = YES;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = YES;
     }
     
-    self.toolbarSlider.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
     self.refreshing = false;
     self.updatingOfTimerIsPaused = false;
@@ -518,15 +519,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     [self setPageingEnabled:NO];
     
+    MADPageSlider *toolbarSlider = self.toolbarSlider;
     UIColor *tintColor = [UIColor lightGrayColor];
-    self.toolbarSlider.tintColor = tintColor;
+    toolbarSlider.tintColor = tintColor;
+    toolbarSlider.enabled = NO;
     
     NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
         item.enabled = NO;
     }
     
-    self.toolbarSlider.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
     self.refreshing = true;
     self.updatingOfTimerIsPaused = false;
@@ -547,9 +549,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSError *error = nil;
     MADocument *document = self.document;
     [document.managedObjectContext save:&error];
-    if (error != nil) {
-        [document.managedObjectContext save:&error];
-    }
+    if (error != nil) { [document.managedObjectContext save:&error]; }
     [self.viewControllerDelegate viewControllerDidFinish: self];
 }
 
@@ -648,78 +648,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.refreshing = true;
         [self setDisplayInactive];
 
-        MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:self.document viewController:self databaseConnection:self.document.mainDatabase.databaseConnection];
+        MADocument *document = self.document;
+        MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:document viewController:self databaseConnection:document.mainDatabase.databaseConnection];
         [refreshReloadOperation addObserver:self];
         [self.refreshQueue addOperation:refreshReloadOperation];
         self.refreshReloadOperation = refreshReloadOperation;
-        
-        //[self.refreshQueue waitUntilAllOperationsAreFinished];
-        
-        /*
-        MADocument *document = self.document;
-        MTDatabase *database = document.mainDatabase;
-        [self addObserverDidReadRowsToDatabase:database];
-        
-        NSString *connectionString = document.mainDatabase.databaseConnection.connectionString;
-        
-        NSError *error = nil;
-        
-        bool success = false;
-        
-        [document prepairForRefresh];
-        
-        
-        NSURL *cacheUrl = document.urlDataTableCache.copy;
-        MTQuery * __weak wMainQuery = document.mainQuery;
-        MTDatabase * __weak wMainDatabase = document.mainDatabase;
-        MTDataTableFast * __weak wMainDataTable = document.mainDataTable;
-        __block bool didRefresh = false;
-        
-        NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
-            
-            MTQuery *squery = wMainQuery;
-            MTDatabase *sdatabase = wMainDatabase;
-            
-            NSError * __autoreleasing eerror = NULL;
-            didRefresh = [sdatabase executeQuery:squery withError:&eerror];
-            [wMainDataTable cacheWithUrl:cacheUrl];
-            return;
-            
-        }];
-        
-        NSOperationQueue *queue = [NSOperationQueue new];
-        queue.maxConcurrentOperationCount = 1;
-        [queue addOperation:operationRefresh];
-        [queue waitUntilAllOperationsAreFinished];
-        */
-        //[self.document finishRefresh:YES];
-        
-        
-        
-        //if (success) {
-        
-        
-           /*
-        } else {
-            
-            MADViewerController * __weak weakself2 = self;
-            [NSError presentError: error
-                 onViewController: weakself2
-                       completion:^(BOOL presentErrorSuccess) {
-                           if (presentErrorSuccess) {
-                               __strong MADViewerController *strongself2 = weakself2;
-                               MADViewerController * __weak weakself3 = strongself2;
-                               [[MTKeyChain sharedObject] deleteKey: connectionString usingViewController: weakself3];
-                           }
-                       }];
-            
-        }*/
-        
-        //[self removeObserverDidReadRowsFromDatabase:database];
-        
-        
-        
-        
         
     }
 }
