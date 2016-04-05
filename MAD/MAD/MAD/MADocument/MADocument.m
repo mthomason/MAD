@@ -508,11 +508,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder; {
     RptqDocument *document = [self activeDocumentModel];
-    RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID
-                                                  managedObjectContext: self.managedObjectContext];
+    RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID managedObjectContext: self.managedObjectContext];
     
-    RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField
-                                                   andSort: sortOrder];
+    RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField andSort: sortOrder];
     
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;

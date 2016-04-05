@@ -1073,7 +1073,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark - NSManagedObjectContextObjectsDidChangeNotification
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
-    NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
+    NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     
     for (id updatedObject in updatedObjects) {
         
@@ -1139,7 +1139,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark - NSManagedObjectContextDidSaveNotification
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    NSArray *managedObjectsUpdated = notification.userInfo[NSUpdatedObjectsKey];
+    NSSet *managedObjectsUpdated = notification.userInfo[NSUpdatedObjectsKey];
     for (NSManagedObject *managedObject in managedObjectsUpdated) {
         MADDesignerElementView *elementView = [self elementViewForManagedObject:managedObject];
         [elementView updateForManagedObjectContent:managedObject.managedObjectContext];
@@ -1210,8 +1210,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (UIViewController *)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
     
     UIViewController *result;
-    if (style != UIModalPresentationPopover &&
-        [controller.presentedViewController isKindOfClass:[UINavigationController class]] == NO) {
+    if (style != UIModalPresentationPopover && [controller.presentedViewController isKindOfClass:[UINavigationController class]] == NO) {
+        
         UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(actionCancel:)];
         [controller.presentedViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
         controller.presentedViewController.view.backgroundColor = [UIColor clearColor];
@@ -1221,6 +1221,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         navigationController.navigationBar.backgroundColor = [UIColor clearColor];
         navigationController.view.backgroundColor = [UIColor clearColor];
         result = navigationController;
+        
     } else if ([controller.presentedViewController isKindOfClass:[UINavigationController class]]) {
         if ([((UINavigationController *)controller.presentedViewController).topViewController isKindOfClass:[MADDesignerElementPickerViewController class]]) {
             UINavigationController *navigationController = (UINavigationController *)controller.presentedViewController;
@@ -1278,7 +1279,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: cell.objectIdTag
                                                                   managedObjectContext: self.document.activeDocumentModel.managedObjectContext];
-    return documentObject.type.integerValue;
+    return documentObject.type.shortValue;
 }
 
 

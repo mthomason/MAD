@@ -26,20 +26,20 @@
         MTQueryBuilderSortTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (nonatomic, weak) id <MTQueryBuilderAddGroupDelegate> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MTQueryBuilderAddGroupDelegate> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellSort;
-@property (nonatomic, weak) IBOutlet UILabel *detailLabelField;
-@property (nonatomic, weak) IBOutlet UILabel *detailLabelSort;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;
+    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellSort;
+    @property (nonatomic, weak) IBOutlet UILabel *detailLabelField;
+    @property (nonatomic, weak) IBOutlet UILabel *detailLabelSort;
 
 
-@property (copy) NSString *fieldName;
-@property (assign) MNSSortOrder sortOrder;
+    @property (copy) NSString *fieldName;
+    @property (assign) MNSSortOrder sortOrder;
 
-- (IBAction)cancel:(id)sender;
-- (IBAction)save:(id)sender;
+    - (IBAction)cancel:(id)sender;
+    - (IBAction)save:(id)sender;
 
 @end
 
