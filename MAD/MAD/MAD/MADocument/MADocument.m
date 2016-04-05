@@ -526,9 +526,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark Query Building
 
 - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID {
+
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
-
     [private performBlockAndWait:^{
 
         RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
@@ -580,35 +580,47 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [newQueryFields removeAllObjects];
 
     }];
+    
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder; {
-    RptqDocument *document = [self activeDocumentModel];
-    RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID: queryFieldObjectID managedObjectContext: self.managedObjectContext];
-    
-    RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField andSort: sortOrder];
-    
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
-    [query addHasQueryGroupsObject: queryGroup];
-    
-    [self saveContext];
+
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.managedObjectContext;
+    [private performBlockAndWait:^{
+        
+        RptqQueryField *queryField = [private objectWithID:queryFieldObjectID];
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField andSort: sortOrder forManagedObjectContext:private];
+
+        RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
+        RptqQuery *query = database.hasQueries.anyObject;
+        [query addHasQueryGroupsObject: queryGroup];
+
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+        
+        [private refreshObject:query mergeChanges:NO];
+        [private refreshObject:database mergeChanges:NO];
+        [private refreshObject:queryGroup mergeChanges:NO];
+        [private refreshObject:rptqDocument mergeChanges:NO];
+        [private refreshObject:queryField mergeChanges:NO];
+
+    }];
 
 }
 
-- (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
+- (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
-                                                                   inManagedObjectContext:self.managedObjectContext];
-    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class])
-                                                                        inManagedObjectContext:self.managedObjectContext];
+    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext: managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: managedObjectContext];
     
-    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup
-                                         insertIntoManagedObjectContext:self.managedObjectContext];
+    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup insertIntoManagedObjectContext: managedObjectContext];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSError *error = nil;
-    NSUInteger groupCount = [self.managedObjectContext countForFetchRequest:request error:&error];
+    
+    NSUInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
     groupCount = (error) ? 0 : groupCount;
     
     queryGroup.hasField = queryField;
@@ -617,10 +629,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [queryGroup setWeight:@(newWeight)];
     
     RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                              inManagedObjectContext: self.managedObjectContext];
+                                                                              inManagedObjectContext: managedObjectContext];
     NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
     
-    RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:self.managedObjectContext];
+    //Create group header
+    RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
     dsHeader.type = HeaderType;
     dsHeader.hasRows = hasRows1;
@@ -629,10 +642,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [queryGroup addHasSectionObject:dsHeader];
     
     RptqDocumentSectionRows *footerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                              inManagedObjectContext: self.managedObjectContext];
+                                                                              inManagedObjectContext: managedObjectContext];
     NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
     
-    RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:self.managedObjectContext];
+    //Create group footer
+    RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
     dsFooter.type = type;
     dsFooter.hasRows = hasRows;
@@ -642,13 +656,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:dsHeader];
     layoutManagerHeader.delegate = self;
-    [self.sectionLayoutManagers setObject: layoutManagerHeader
-                                   forKey: dsHeader.objectID];
+    [self.sectionLayoutManagers setObject: layoutManagerHeader forKey: dsHeader.objectID];
     
     MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:dsFooter];
     layoutManagerFooter.delegate = self;
-    [self.sectionLayoutManagers setObject: layoutManagerFooter
-                                   forKey: dsFooter.objectID];
+    [self.sectionLayoutManagers setObject: layoutManagerFooter forKey: dsFooter.objectID];
     
     return queryGroup;
 }

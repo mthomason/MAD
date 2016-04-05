@@ -484,21 +484,24 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [self.tabBarController enableTabBarItems];
     }];
 
+
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   true];
     [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];
-    
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   false];
+
     [self performFetchGroups];
 }
 
 #pragma mark - MTQueryBuilderAddTableDelegate
 
-- (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)schemaTable {
+- (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectID {
 
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
     }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   true];
-    [self.document addQuerySelectTableForSchemeTableWithObjectID:       schemaTable.objectID];
+    [self.document addQuerySelectTableForSchemeTableWithObjectID:       objectID];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   false];
 
     [self performFetchTables];

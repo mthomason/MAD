@@ -38,7 +38,9 @@
     }
     
     RptqDatabaseSchemaTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
-    cell.textLabel.text = tablea.name;
+
+    NSString *name = tablea.name.copy;
+    cell.textLabel.text = name;
     
     return cell;
 }
@@ -49,7 +51,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqDatabaseSchemaTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
-    [self.delegate viewControllerSchemaAddTableDidSelectTable: tablea];
+    [self.delegate viewControllerSchemaAddTableDidSelectTable: tablea.objectID];
 }
 
 @end
