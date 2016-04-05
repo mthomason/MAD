@@ -1197,12 +1197,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 
-+ (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
-    return madUrl.lastPathComponent.stringByDeletingPathExtension;
-}
++ (NSString *)fileNameForMadUrl:(NSURL *)madUrl { return madUrl.lastPathComponent.stringByDeletingPathExtension; }
 
-- (NSString *)mimetype {
-    return MADMimeType;
-}
+- (NSString *)mimetype { return MADMimeType; }
 
 @end
