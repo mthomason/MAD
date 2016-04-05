@@ -75,11 +75,11 @@
     return (RptqQueryTable *)[managedObjectContext objectRegisteredForID:objectID];
 }
 
-+ (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
-                                           database:(RptqDatabase *)database NS_RETURNS_RETAINED {
++ (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable database:(RptqDatabase *)database
+                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
+
 
     RptqQuery *query = [database defaultQuery];
-    
     NSSet *queryTables = [query hasQueryTables];
     NSInteger dupeCtr = 0;
     for (RptqQueryTable *queryTable in queryTables) {
@@ -90,26 +90,23 @@
         }
     }
     
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
-                                                   inManagedObjectContext: databaseSchemaTable.managedObjectContext];
-                                                   
-    RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity
-                                         insertIntoManagedObjectContext: databaseSchemaTable.managedObjectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class]) inManagedObjectContext: managedObjectContext];
+    RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
 
-    
-    NSNumber *dropIndex = @(dupeCtr);
-    [queryTable setDropIndex:dropIndex];
-    
-    [queryTable setDatabaseSchemaTable:databaseSchemaTable];
-    [queryTable setAlias:[queryTable tableAlias]];
+    queryTable.databaseSchemaTable = databaseSchemaTable;
+    queryTable.inQuery = query;
 
-    [queryTable setInQuery:query];
+    NSNumber *dropIndex = [[NSNumber alloc] initWithInteger: dupeCtr];
+    queryTable.dropIndex = dropIndex;
+    
+    NSString *alias = [[NSString alloc] initWithString:queryTable.tableAlias];
+    queryTable.alias = alias;
+    
     return queryTable;
 }
 
 - (NSString *)tableAlias {
-    return self.dropIndex.unsignedIntegerValue == 0 ?
-                self.databaseSchemaTable.name : [self queryAlias];
+    return self.dropIndex.unsignedIntegerValue == 0 ? self.databaseSchemaTable.name : [self queryAlias];
 }
 
 - (NSString *)queryAlias {

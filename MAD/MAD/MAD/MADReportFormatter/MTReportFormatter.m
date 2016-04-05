@@ -151,7 +151,8 @@ NSString * const MTNullIdentifier = @"(null)";
                             UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
     
     MTReportFormatterState *machineState = [MTReportFormatterState new];
-    [self setMachineState:machineState];
+    self.machineState = machineState;
+
     [self initalizeStateMachine];
     
     MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];

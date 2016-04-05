@@ -15,8 +15,8 @@
 
 @interface MTReportFormatterPageDefinition : NSObject
 
-@property (nonatomic, assign) CGSize layoutSize;
-@property (nonatomic, assign) UIEdgeInsets margins;
+    @property (nonatomic, assign) CGSize layoutSize;
+    @property (nonatomic, assign) UIEdgeInsets margins;
 
 @end
 

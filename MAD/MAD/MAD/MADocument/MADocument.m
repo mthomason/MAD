@@ -525,9 +525,61 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #pragma mark - Reporting Functions
 #pragma mark Query Building
 
-- (void)addQuerySelectSchemeTable:(RptqDatabaseSchemaTable *)schemaTable {
-    RptqDocument *document = [self activeDocumentModel];
-    [document.defaultDatabase.defaultQuery addQueryTableBasedOnSchemaTable:schemaTable];
+- (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID {
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.managedObjectContext;
+
+    [private performBlockAndWait:^{
+
+        RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+        RptqQuery *query = rptqDatabase.hasQueries.anyObject;
+        
+        RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable:schemaTable database:rptqDatabase forManagedObjectContext:private];
+        newQueryTable.inQuery = query;
+        
+        NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: query.hasQueryTables];
+        NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
+        
+        for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
+            @autoreleasepool {
+                
+                RptqQueryField *newQueryField = [RptqQueryField newQueryFieldForManagedObjectContext:private];
+                newQueryField.inQueryTable = newQueryTable;
+                newQueryField.databaseSchemaField = field;
+                [newQueryFields addObject:newQueryField];
+                
+            }
+        }
+        newQueryTable.hasQueryFields = newQueryFields;
+        
+        [tablesInQuery addObject:newQueryTable];
+        query.hasQueryTables = tablesInQuery;
+        
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+        
+        [private refreshObject:newQueryTable mergeChanges:NO];
+        
+        for (RptqQueryField *field in newQueryFields) {
+            [private refreshObject:field.inQueryTable           mergeChanges:NO];
+            [private refreshObject:field.databaseSchemaField    mergeChanges:NO];
+            [private refreshObject:field                        mergeChanges:NO];
+        }
+
+        for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
+            [private refreshObject:field mergeChanges:NO];
+        }
+
+        [private refreshObject:query mergeChanges:NO];
+        [private refreshObject:rptqDatabase mergeChanges:NO];
+        [private refreshObject:rptqDocument mergeChanges:NO];
+
+        [tablesInQuery removeAllObjects];
+        [newQueryFields removeAllObjects];
+
+    }];
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder; {

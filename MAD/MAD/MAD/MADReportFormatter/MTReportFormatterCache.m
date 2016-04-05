@@ -12,8 +12,8 @@
 
 @interface MTReportFormatterCache ()
 
-@property (nonatomic, strong) NSMutableDictionary *layout;
-@property (nonatomic, strong) NSMutableDictionary *indexes;
+    @property (nonatomic, strong) NSMutableDictionary *layout;
+    @property (nonatomic, strong) NSMutableDictionary *indexes;
 
 @end
 
@@ -38,23 +38,23 @@
 
 - (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    [self layout][key] = layout;
-    [self indexes][key] = indexes;
+    self.layout[key] = layout;
+    self.indexes[key] = indexes;
 }
 
 - (id)layoutForSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    return [self layout][key];
+    return self.layout[key];
 }
 
 - (id)indexesForSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    return [self indexes][key];
+    return self.indexes[key];
 }
 
 - (void)dumpCache {
-    [[self layout] removeAllObjects];
-    [[self indexes] removeAllObjects];
+    [self.layout removeAllObjects];
+    [self.indexes removeAllObjects];
 }
 
 @end

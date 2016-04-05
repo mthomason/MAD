@@ -478,8 +478,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 #pragma mark - MTQueryBuilderAddGroupDelegate
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID
-                       andSortOrder:(MNSSortOrder)sortOrder {
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID andSortOrder:(MNSSortOrder)sortOrder {
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
@@ -498,11 +497,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: true];
-
-    [self.document addQuerySelectSchemeTable:schemaTable];
-
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: false];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   true];
+    [self.document addQuerySelectTableForSchemeTableWithObjectID:       schemaTable.objectID];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   false];
 
     [self performFetchTables];
 }

@@ -20,10 +20,10 @@
 
 @interface MADSectionLayoutManager ()
 
-@property (nonatomic, strong, readwrite) NSMutableDictionary *items;
-@property (nonatomic, weak) MADSectionLayoutAttributes *lastItem;
-@property (nonatomic, assign) BOOL lastOpperationWasAdditon;
-@property (nonatomic, assign) BOOL visibility;
+@property (nonatomic, strong, readwrite)    NSMutableDictionary *items;
+@property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
+@property (nonatomic, assign)               BOOL lastOpperationWasAdditon;
+@property (nonatomic, assign)               BOOL visibility;
 
 @end
 
@@ -193,6 +193,7 @@
 + (BOOL)isPointGoodLocation:(CGPoint )point forItem:(MADSectionLayoutAttributes *)attr1 givenPlacedItems:(NSArray *)placedItems {
     return attr1.frame.origin.y >= point.y - 0.5f && [attr1 validDropPoint:point givenPlacedItems:placedItems];
 }
+
 + (void)moveItem:(MADSectionLayoutAttributes *)itemToPlace alreadyPlacedItems:(NSArray *)alreadyPlacedItems {
     CGPoint dropPoint = CGPointZero;
     CGFloat distance = 0.00000000f, tmpDistance;//CGDistance(itemToPlace.frame.origin, dropPoint), tmpDistance;

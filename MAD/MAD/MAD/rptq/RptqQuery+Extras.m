@@ -234,15 +234,17 @@
     return sortedSortDescriptorsGroup;
 }
 
-- (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable {
+- (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+
+    RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable:schemaTable database:self.inDatabase forManagedObjectContext:managedObjectContext];
 
     NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: self.hasQueryTables];
-    RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable: schemaTable database: self.inDatabase];
     NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:schemaTable.hasFields.count];
-    for (RptqDatabaseSchemaField *field in [schemaTable hasFields]) {
+    
+    for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
         @autoreleasepool {
             
-            RptqQueryField *newQueryField = [RptqQueryField queryFieldFactory:schemaTable.managedObjectContext];
+            RptqQueryField *newQueryField = [RptqQueryField newQueryFieldForManagedObjectContext:managedObjectContext];
             newQueryField.inQueryTable = newQueryTable;
             newQueryField.databaseSchemaField = field;
             newQueryTable.inQuery = self;
@@ -254,7 +256,6 @@
     [tablesInQuery addObject:newQueryTable];
     
     self.hasQueryTables = tablesInQuery;
-    [schemaTable.managedObjectContext save:nil];
     
     return newQueryTable;
 }
