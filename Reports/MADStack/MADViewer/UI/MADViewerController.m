@@ -934,9 +934,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     MTDateResolution resolution;
     if (self.lastCacheDate == nil) {    // No Cache exist, so return quickly.
 
-        NSURL *cachedDataUrl = [self.document cachedDataUrl];
         NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataUrl.path error:&error];
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.document.urlDataTableCache.path error:&error];
         if (error == nil) {
             self.lastCacheDate = attributes.fileModificationDate;
         }

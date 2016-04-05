@@ -906,47 +906,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     self.didRefresh = success ? YES : NO;
 }
 
-- (bool)refreshWithError:(NSError * __autoreleasing *)error {
-    bool success = false;
-
-    [self initalizeMainDataTable];
-
-    RptqDocument *document = [self activeDocumentModel];
-    [self initalizeMainQuery:document];
-    [self initalizeReportFormatter];
-    self.mainQuery.database.delegate = self;
-    
-    MTDatabase * __weak wMainDatabase = self.mainDatabase;
-    self.mainQuery.dataTable = self.mainDataTable;
-    
-    MTQuery * __weak wMainQuery = self.mainQuery;
-    MTDataTableFast * __weak wMainDataTable = self.mainDataTable;
-    __block bool didRefresh = false;
-
-    NSURL *cacheUrl = self.urlDataTableCache.copy;
-    NSBlockOperation *operationRefresh = [NSBlockOperation blockOperationWithBlock:^{
-        
-        MTQuery *squery = wMainQuery;
-        MTDatabase *sdatabase = wMainDatabase;
-        
-        NSError * __autoreleasing eerror = NULL;
-        bool success = [sdatabase executeQuery:squery withError:&eerror];
-        [wMainDataTable cacheWithUrl:cacheUrl];
-        didRefresh = success ? true : false;
-        return;
-        
-    }];
-
-    NSOperationQueue *queue = [NSOperationQueue new];
-    queue.maxConcurrentOperationCount = 1;
-    [queue addOperation:operationRefresh];
-    [queue waitUntilAllOperationsAreFinished];
-    
-    self.didRefresh = didRefresh ? YES : NO;
-
-    return success;
-}
-
 - (NSURL *)cachedDataUrl { return self.urlDataTableCache; }
 
 - (NSString *)fileHandle {
@@ -1028,6 +987,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                 NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
                 return YES;
             };
+            
             NSArray *requestedKeys = @[NSURLIsDirectoryKey];
             NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: destinationUrl
                                                   includingPropertiesForKeys: requestedKeys

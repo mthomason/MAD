@@ -253,8 +253,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (NSDate * _Nullable)lastCacheDate {
     if (self.pageViewAttributes.reportLastCacheDate == nil) {
         NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: self.document.cachedDataUrl.path
-                                                                                    error: &error];
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: self.document.urlDataTableCache.path error: &error];
         if (error == nil) {
             NSDate *lastD = [attributes fileModificationDate];
             self.pageViewAttributes.reportLastCacheDate = lastD.copy;
