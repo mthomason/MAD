@@ -125,8 +125,8 @@ NSString * const MTDocumentTypeUtiMad                   = @"com.everydayapps.pro
 NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed to create report document.";
 NSString * const MNSInterfaceTitleProblem                           = @"Problem";
 
-NSString * const MADManagedObjectModelName = @"MAD";
-NSString * const MADManagedObjectModelExtention = @"momd";
+NSString * const MADManagedObjectModelName                  = @"MAD";
+NSString * const MADManagedObjectModelExtention             = @"momd";
 
 NSString * const MADDocumentErrorDomain = @"MADocument";
 
@@ -149,8 +149,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     @property (nonatomic, copy, readwrite) NSURL *urlMetaPlaylist;
 
     @property (nonatomic, assign) BOOL didRefresh;
-
-    @property (nonatomic, strong) UIImage *thumbnail;
 
 @end
 
