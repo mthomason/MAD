@@ -133,7 +133,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 [self timerDealloc];
                 [self uiUpdateTimeSinceLastRefresh: NULL];
                 [self setDisplayActive];
-                [self removeObserverDidReadRowsFromDatabase:self.document.mainDatabase];
+                [self removeObserverDidReadRowsFromDatabase:self.document.database];
 
 
             }];
@@ -660,9 +660,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
         MADocument *document = self.document;
 
-        [self addObserverDidReadRowsToDatabase:document.mainDatabase];
+        [self addObserverDidReadRowsToDatabase:document.database];
         
-        MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:document viewController:self databaseConnection:document.mainDatabase.databaseConnection];
+        MADRefreshReloadOperation *refreshReloadOperation = [[MADRefreshReloadOperation alloc] initWithDocument:document viewController:self databaseConnection:document.database.databaseConnection];
         [refreshReloadOperation addObserver:self];
         [self.refreshQueue addOperation:refreshReloadOperation];
         self.refreshReloadOperation = refreshReloadOperation;
@@ -962,7 +962,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
-                                                  target: self selector: @selector(uiUpdateTimeSinceLastRefresh:) userInfo:nil repeats: NO];
+                                                  target: self selector: @selector(uiUpdateTimeSinceLastRefresh:)
+                                                userInfo: nil repeats: NO];
     self.timerLabelTimeSinceRefreh = t;
 }
 

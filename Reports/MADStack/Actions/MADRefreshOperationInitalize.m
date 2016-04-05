@@ -75,12 +75,12 @@
         document.paper = paper;
         
         //Initalize main database
-        if (document.mainDatabase == nil) {
+        if (document.database == nil) {
             RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             RptqQuery *rquery = rptqDatabase.hasQueries.anyObject;
             MTDatabaseConnection *databaseConnection = [MTDatabaseConnection newDatabaseConnectionForObject:rquery.inDatabase.ownedByUser];
             MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
-            document.mainDatabase = db;
+            document.database = db;
         }
         
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
@@ -89,7 +89,7 @@
         madQuery.dataDelegate = document;
         document.mainQuery = madQuery;
         
-        NSArray *sortDescriptors = [rquery sortDescriptorsForDatabase:document.mainDatabase];
+        NSArray *sortDescriptors = [rquery sortDescriptorsForDatabase:document.database];
         [document.mainDataTable sortUsingDescriptors:sortDescriptors];
         
         //Initalize the section layout manager... Not neede for creating the report.

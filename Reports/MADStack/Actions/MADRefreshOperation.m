@@ -49,7 +49,7 @@ static const short errCache = 2;
     MADocument *document = self.document;
     MADCredential *credientals = nil;
     
-    if ([document.mainDatabase.databaseConnection requiresCredientals]) {
+    if ([document.database.databaseConnection requiresCredientals]) {
 
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)] &&
@@ -66,8 +66,8 @@ static const short errCache = 2;
     }
     
     NSError * __autoreleasing eerror = NULL;
-    MTDatabaseConnection *connectionSettings = [document.mainDatabase databaseConnection];
-    id dbconn = [document.mainDatabase connectWithConnection:connectionSettings credentals:credientals];
+    MTDatabaseConnection *connectionSettings = [document.database databaseConnection];
+    id dbconn = [document.database connectWithConnection:connectionSettings credentals:credientals];
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
@@ -82,7 +82,7 @@ static const short errCache = 2;
     NSLog(@"QueryString: %@", queryString);
     
     NSError *executeError = NULL;
-    BOOL success = [document.mainDatabase executeSql:queryString fieldKeys:query.fieldKeys onConnection:dbconn intoResultTable:document.mainDataTable withError:&executeError];
+    BOOL success = [document.database executeSql:queryString fieldKeys:query.fieldKeys onConnection:dbconn intoResultTable:document.mainDataTable withError:&executeError];
 
     if (!success) {
         NSLog(@"Failed to execute sql!");

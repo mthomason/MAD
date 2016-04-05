@@ -140,11 +140,11 @@
         [self setFieldRight: nil];
         [[[self tableViewCellRightSide] detailTextLabel] setText:[userInput lowercaseString]];
     }
-    [[self navigationController] popToViewController:self animated:YES];
+    [self.navigationController popToViewController:self animated:YES];
 }
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
-    [[self navigationController] popToViewController:self animated:YES];
+    [self.navigationController popToViewController:self animated:YES];
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
         [self setLeftValue: nil];
         [self setFieldLeft: queryField];
@@ -158,7 +158,7 @@
 }
 
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType {
-    [[self navigationController] popToViewController:self animated:YES];
+    [self.navigationController popToViewController:self animated:YES];
     NSString *label = nil;
     [self setPredicateOperator: operatorType];
     switch (operatorType) {

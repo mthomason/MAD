@@ -70,8 +70,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 
     @property (nonatomic, strong, readonly)     NSString *fileName;
     @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
-    @property (nonatomic, strong, readonly)     MTDatabase *mainDatabase;
-    @property (nonatomic, copy, readwrite)      NSURL *urlDataTableCache;
+    @property (readwrite)     MTDatabase *database;
 
     @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
 
@@ -80,6 +79,8 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
     @property (nonatomic, strong) MTPaper *paper;
+
+    @property (nonatomic, copy, readwrite)      NSURL *urlDataTableCache;
 
     - (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
 
@@ -116,8 +117,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)removeGuts; //Cleans any cache that may exist.
 
     - (NSString *)mimetype;
-
-    - (void)setMainDatabase:(MTDatabase *)mainDatabase;
     - (NSURL *)cacheUrlForFilename:(NSString *)filename;
 
 @end

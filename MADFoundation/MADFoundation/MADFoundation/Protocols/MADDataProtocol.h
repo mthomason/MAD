@@ -13,8 +13,8 @@
 
 @protocol MADDataProtocol <NSObject>
 
-- (NSArray *)sortDescriptors;
-- (MTDatabase *)database;
+    - (NSArray *)sortDescriptors;
+    - (MTDatabase *)database;
 
 @end
 

@@ -210,7 +210,7 @@
     return self.hasQueryTables.count;
 }
 
-- (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)mainDatabase {
+- (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database {
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
@@ -219,8 +219,8 @@
             RptqQueryField *groupField = [queryGroup hasField];
             
             NSString *queryTable = [groupField.inQueryTable queryAlias];
-            NSString *safeQueryTable = [mainDatabase safeIdentifier: queryTable];
-            NSString *safeFieldName = [mainDatabase safeIdentifier: groupField.databaseSchemaField.name];
+            NSString *safeQueryTable = [database safeIdentifier: queryTable];
+            NSString *safeFieldName = [database safeIdentifier: groupField.databaseSchemaField.name];
             NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             

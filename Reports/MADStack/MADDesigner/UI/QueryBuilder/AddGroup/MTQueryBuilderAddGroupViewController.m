@@ -16,11 +16,15 @@
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
+static NSString * const TextAccending = @"Accending";
+static NSString * const TextDecending = @"Decending";
+static NSString * const TextDefault = @"Default";
+
 @interface MTQueryBuilderAddGroupViewController ()
 
-@property (nonatomic, strong) RptqQueryField *field;
-@property (nonatomic, strong) NSManagedObjectID *fieldId;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
+    @property (nonatomic, strong) RptqQueryField *field;
+    @property (nonatomic, copy) NSManagedObjectID *fieldId;
+    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @end
 
@@ -46,11 +50,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self barButtonItemSave] setEnabled:NO];
-    [self setSortOrder:MNSSortOrderAccending];
+    self.barButtonItemSave.enabled = NO;
+    self.sortOrder = MNSSortOrderAccending;
     NSString *accending = NSLocalizedString(@"Accending", @"Accending");
-    NSString *lowercase = [accending lowercaseString];
-    [[self.tableViewCellSort detailTextLabel] setText: lowercase];
+    self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -93,39 +96,42 @@
 #pragma mark Choose Field
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
-    [[self navigationController] popToViewController:self animated:YES];
+    [self.navigationController popToViewController:self animated:YES];
+
     NSString *fieldName = [queryField tableFieldKey];
-    [self setFieldId:[queryField objectID]];
-    [self setField:queryField];
-    [self setFieldName:fieldName];
-    [[[self tableViewCellField] detailTextLabel] setText: [[queryField display] lowercaseString]];
-    [[self barButtonItemSave] setEnabled:YES];
+    self.fieldId = queryField.objectID;
+    self.field = queryField;
+    self.fieldName = fieldName;
+    self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
+    self.barButtonItemSave.enabled = YES;
 }
 
 #pragma mark Sort Type
 
 - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType {
-    [self setSortOrder:sortOrderType];
+    self.sortOrder = sortOrderType;
     NSString *label = nil;
     switch (sortOrderType) {
+
         case MNSSortOrderAccending:
-            label = NSLocalizedString(@"Accending", @"Accending");
-            [[self.tableViewCellSort detailTextLabel] setText: [label lowercaseString]];
-            [[self detailLabelSort] setText:label];
+            label = NSLocalizedString(TextAccending, TextAccending);
+            self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;;
+            self.detailLabelSort.text = label;
             break;
+
         case MNSSortOrderDecending:
-            label = NSLocalizedString(@"Decending", @"Decending");
-            [[self.tableViewCellSort detailTextLabel] setText: [label lowercaseString]];
-            [[self detailLabelSort] setText:label];
+            label = NSLocalizedString(TextDecending, TextDecending);
+            self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
+            self.detailLabelSort.text = label;
             break;
+
         default:
-            label = NSLocalizedString(@"Default", @"Default");
-            [[self.tableViewCellSort detailTextLabel] setText: [label lowercaseString]];
-            [[self detailLabelSort] setText:label];
+            label = NSLocalizedString(TextDefault, TextDefault);
+            self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
+            self.detailLabelSort.text = label;
             break;
     }
-    [[self navigationController] popToViewController:self animated:YES];
-    //[[self.tableViewCellSort detailTextLabel] setNeedsDisplay];
+    [self.navigationController popToViewController:self animated:YES];
 }
 
 #pragma mark - Actions
@@ -136,14 +142,13 @@
 
 - (IBAction)save:(id)sender {
     // FIXME: No validation???
-    [self.delegate addQueryGroupWithQueryField: self.fieldId
-                                  andSortOrder: self.sortOrder];
+    [self.delegate addQueryGroupWithQueryField: self.fieldId andSortOrder: self.sortOrder];
 }
 
 #pragma mark - Table View Sort Type Delegate
 
 - (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller {
-    [[self navigationController] popToViewController:self animated:YES];
+    [self.navigationController popToViewController:self animated:YES];
 }
 
 #pragma mark - Table view delegate

@@ -62,7 +62,7 @@
 
     if (database) {
     
-        [document setMainDatabase:database];
+        [document setDatabase:database];
         self.success = true;
         [self finish];
 

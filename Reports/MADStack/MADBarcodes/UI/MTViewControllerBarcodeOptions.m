@@ -788,7 +788,7 @@ static inline NSInteger tvs2dComponent(bool has2dComponent) {
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
                                       withField:(RptqQueryField *)field {
 
-    [[self navigationController] popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
     
     id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
     if  ([self selectingField1]) {

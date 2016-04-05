@@ -210,8 +210,7 @@ NSString * const MADPathComponentData       = @"Data";
 }
 
 + (NSURL *)localTemporaryDirectory {
-    NSString *homeDirectory = NSHomeDirectory();
-    NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
+    NSURL *fileUrlWithPath = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
     return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
 }
 
@@ -232,35 +231,28 @@ NSString * const MADPathComponentData       = @"Data";
 
 - (NSURL *)localApplicationSupportDirectory {
     NSBundle *mainBundle = [NSBundle mainBundle];
-    NSArray *possibleUrls = [self URLsForDirectory: NSApplicationSupportDirectory
-                                         inDomains: NSUserDomainMask];
+    NSArray *possibleUrls = [self URLsForDirectory: NSApplicationSupportDirectory inDomains: NSUserDomainMask];
     NSURL *appSupportDirectory = nil;
     NSURL *appSupportDirectoryForApp = nil;
+
     if (possibleUrls.count >= 1) {
         appSupportDirectory = possibleUrls[0];
         
         BOOL isDirectory;
-        BOOL fileExist = [self fileExistsAtPath: appSupportDirectory.path
-                                    isDirectory: &isDirectory];
+        BOOL fileExist = [self fileExistsAtPath: appSupportDirectory.path isDirectory: &isDirectory];
         if (fileExist == NO) {
             NSError *error = nil;
-            [self createDirectoryAtURL: appSupportDirectory
-           withIntermediateDirectories: YES
-                            attributes: nil
-                                 error: &error];
+            [self createDirectoryAtURL: appSupportDirectory withIntermediateDirectories: YES attributes: nil error: &error];
         }
         
         appSupportDirectoryForApp = [appSupportDirectory URLByAppendingPathComponent:mainBundle.bundleIdentifier];
+        fileExist = [self fileExistsAtPath: appSupportDirectoryForApp.path isDirectory: &isDirectory];
         
-        fileExist = [self fileExistsAtPath: appSupportDirectoryForApp.path
-                               isDirectory: &isDirectory];
         if (fileExist == NO) {
             NSError *error = nil;
-            [self createDirectoryAtURL: appSupportDirectoryForApp
-           withIntermediateDirectories: YES
-                            attributes: nil
-                                 error: &error];
+            [self createDirectoryAtURL: appSupportDirectoryForApp withIntermediateDirectories: YES attributes: nil error: &error];
         }
+        
     }
     return appSupportDirectoryForApp;
 }
@@ -271,33 +263,26 @@ NSString * const MADPathComponentData       = @"Data";
     NSURL *cachedDirectory = [NSFileManager localCachedDirectoryForFileUrl:documentUrl];
     NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL: cachedDirectory
                                                                      includingPropertiesForKeys: nil
-                                                                                        options: 0
-                                                                                          error: &error];
+                                                                                        options: 0 error: &error];
     for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }
     [defaultManager removeItemAtURL:cachedDirectory error:&error];
 }
 
-- (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl
-                       groupIdentifier:(NSString *)groupIdentifier {
-    NSURL *cachedDirectory = [self localCacheDirectoryForGroupIdentifier: groupIdentifier
-                                                                 fileURL: documentUrl];
+- (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl groupIdentifier:(NSString *)groupIdentifier {
+    NSURL *cachedDirectory = [self localCacheDirectoryForGroupIdentifier: groupIdentifier fileURL: documentUrl];
     return [self removeContentsOfDirectory:cachedDirectory];
 }
 
 - (BOOL)removeContentsOfDirectory:(NSURL *)directory {
     NSError *error = nil;
-    NSArray *files = [self contentsOfDirectoryAtURL: directory
-                         includingPropertiesForKeys: nil
-                                            options: 0
-                                              error: &error];
+    NSArray *files = [self contentsOfDirectoryAtURL: directory includingPropertiesForKeys: nil
+                                            options: 0 error: &error];
     for (NSURL *file in files) {
-        [self removeItemAtURL: file
-                        error: &error];
+        [self removeItemAtURL: file error: &error];
     }
-    [self removeItemAtURL: directory
-                    error: &error];
+    [self removeItemAtURL: directory error: &error];
     return YES;
 }
 

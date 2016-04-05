@@ -68,7 +68,7 @@
         RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
         
         MTDatabase *database = [MTDatabase newDatabaseWithConnection:self.databaseConnection];
-        doc.mainDatabase = database;
+        doc.database = database;
         
         
         [rptqDocument storeDatabaseConnectionDefination:database forManagedObjectContext:private];

@@ -109,7 +109,7 @@
 
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)queryField {
-    [[self navigationController] popToViewController: self animated: YES];
+    [self.navigationController popToViewController: self animated: YES];
     
     RptqQueryTable *queryTable = [queryField inQueryTable];
     NSString *tableFieldName = [queryField toString];
@@ -141,7 +141,7 @@
 
 - (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MADocument *)document {
     [self setJoinType:result];
-    [[self navigationController] popToViewController: self animated: YES];
+    [self.navigationController popToViewController: self animated: YES];
 }
 
 #pragma mark - Helper functions
