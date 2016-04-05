@@ -25,7 +25,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 @property (nonatomic, strong) MTViewControllerBarcodePreview *previewViewController;
 @property (nonatomic, strong, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
 
-@property (nonatomic, strong) NSString *barcodeInput;
+@property (nonatomic, copy) NSString *barcodeInput;
 
 @property (nonatomic, strong) NSArray *cachedData;
 @property (nonatomic, strong) NSArray *cachedDataMaxicode;
@@ -179,10 +179,13 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+
     if ([query isEqual:self.query]) {
-        return [self dataTableSampleData];
+        return self.dataTableSampleData;
+
     } else if ([query isEqual:self.query2]) {
-        return [self dataTableSampleData2];
+        return self.dataTableSampleData2;
+
     } else {
         NSAssert(false, @"Unknown query at %s.", __PRETTY_FUNCTION__);
         return nil;
@@ -205,20 +208,17 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     
     [self setEditModeBarcodeType:NO];
 
-    MTBarcode *barcode = [MTBarcode barcodeWithType:MTBarcodeTypeAztec];
+    MTBarcode *barcode = [MTBarcode newBarcodeWithType:MTBarcodeTypeAztec];
     [barcode setShowErrorMessages:YES];
     [self setBarcode:barcode];
 }
 
 - (void)updateBarcode {
-    [self.barcode setInput:[self barcodeInput]];
-    [[self previewViewController] update];
 
-    if (self.delegate != nil) {
-        [self.delegate didUpdateBarcode:self.barcode
-                             withFieldOne:[self queryField1]
-                              andFieldTwo:[self queryField2]];
-    }
+    self.barcode.input = self.barcodeInput;
+    [self.previewViewController update];
+    
+    [self.delegate didUpdateBarcodeWithObjectID:self.bartcodeToEditObjectID barcodeObject:self.barcode withFieldOne:self.queryField1 andFieldTwo:self.queryField2];
 }
 
 - (void)didSetField1:(RptqQueryField *)field {
@@ -233,23 +233,27 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 }
 
 - (RptqQueryField *)barcodeQueryField1 {
-    return [self queryField1];
+    return self.queryField1;
 }
 
 - (RptqQueryField *)barcodeQueryField2 {
-    return [self queryField2];
+    return self.queryField2;
 }
 
 - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject {
-    MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject];
-    [self setBarcode:barcode];
-    
-    RptqQueryField *field1 = [barcodeDocumentObject referencesField1];
-    RptqQueryField *field2 = [barcodeDocumentObject referencesField2];
-    [self setQueryField1:field1];
-    [self setQueryField2:field2];
-    [self setEditmode:YES];
 
+    MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject];
+    self.barcode = barcode;
+    
+    self.queryField1 = barcodeDocumentObject.referencesField1;
+    self.queryField2 = barcodeDocumentObject.referencesField2;
+    
+    self.editmode = YES;
+
+}
+
+- (void)setBarcodeObjectIDToEdit:(NSManagedObjectID *)objectID {
+    
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate
@@ -287,8 +291,8 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 }
 
 - (BOOL)didToggleHumanReadable {
-    BOOL humanReadable = ![self.barcode humanReadable];
-    [self.barcode setHumanReadable:humanReadable];
+    BOOL humanReadable = !self.barcode.humanReadable;
+    self.barcode.humanReadable = humanReadable;
     [self updateBarcode];
     return humanReadable;
 }
@@ -301,7 +305,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 }
 
 - (void)didChangeSymbolHeight:(NSInteger)symbolHeight {
-    [self.barcode setHeight:symbolHeight];
+    self.barcode.height = symbolHeight;
     [self updateBarcode];
 }
 
@@ -432,7 +436,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 #pragma mark - MTViewControllerBarcodePreviewDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType {
-    MTBarcode *barcode = [MTBarcode barcodeWithType:barcodeType];
+    MTBarcode *barcode = [MTBarcode newBarcodeWithType:barcodeType];
     
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
     NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));

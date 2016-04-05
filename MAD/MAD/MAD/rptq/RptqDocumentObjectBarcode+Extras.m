@@ -84,22 +84,22 @@
 
 + (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject {
     
-    MTBarcodeType type = [[documentObject type] unsignedIntegerValue];
-    MTBarcode *barcode = [MTBarcode barcodeWithType:type];
+    MTBarcodeType type = documentObject.type.unsignedIntegerValue;
+    MTBarcode *barcode = [MTBarcode newBarcodeWithType:type];
 
-    [barcode setHas2dComponentEnabled:[[documentObject add2dComponent] boolValue]];
-    [barcode setBorderStyle:        [[documentObject borderStyle] unsignedIntegerValue]];
-    barcode.borderWidth =         [[documentObject borderWidth] integerValue];
-    [barcode setHeight:             [[documentObject height] integerValue]];
-    [barcode setHumanReadable:      [[documentObject humanReadable] integerValue]];
-    [barcode setOption1:            [[documentObject option1] integerValue]];
-    [barcode setOption2:            [[documentObject option2] integerValue]];
-    [barcode setOption3:            [[documentObject option3] integerValue]];
-    [barcode setShowErrorMessages:  [[documentObject showErrorMessage] boolValue]];
-    [barcode setWhitespaceWidth:    [[documentObject whitespaceWidth] boolValue]];
-    [barcode setScale:              [[documentObject scale] floatValue]];
-    [barcode setInput:              @"Sample data"];
-    [barcode setPrimaryData:        @""];
+    barcode.has2dComponentEnabled =     documentObject.add2dComponent.boolValue;
+    barcode.borderStyle =               documentObject.borderStyle.unsignedCharValue;
+    barcode.borderWidth =               documentObject.borderWidth.integerValue;
+    barcode.height =                    documentObject.height.integerValue;
+    barcode.humanReadable =             documentObject.humanReadable.boolValue;
+    barcode.option1 =                   documentObject.option1.integerValue;
+    barcode.option2 =                   documentObject.option2.integerValue;
+    barcode.option3 =                   documentObject.option3.integerValue;
+    barcode.showErrorMessages =         documentObject.showErrorMessage.boolValue;
+    barcode.whitespaceWidth =           documentObject.whitespaceWidth.boolValue;
+    barcode.scale =                     documentObject.scale.floatValue;
+    barcode.input =                     @"Sample data";
+    barcode.primaryData =               @"";
     return barcode;
 }
 

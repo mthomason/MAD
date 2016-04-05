@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTBarcode.h"
 #import "MTBarcodeAusPostStandardCustomer.h"
 #import "MTBarcodeAusreDirect.h"
@@ -69,48 +73,49 @@
 #import "MTBarcodeUniversalProductCodeUpce.h"
 #import "MTBarcodeUspsIntelligentMail.h"
 
+#import <MADCocoaExtensions/MADColor.h>
+
 @interface MTBarcode ()
 
-@property (nonatomic, assign) CGFloat rotate;
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
+    @property (nonatomic, assign) CGFloat rotate;
 
-+ (instancetype)barcodeWithType:(MTBarcodeType)type;
+    @property (nonatomic, copy, readwrite) MADColor *backgroundColor;
+
+    @property (nonatomic, retain, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
+
+    + (instancetype)newBarcodeWithType:(MTBarcodeType)type;
 
 @end
 
 @implementation MTBarcode
 
-- (void)dealloc {
-    [_forgroundColor release];
-    [_backgroundColor release];
-    [_name release];
-    [_detailsSegueIdentifer release];
-    [_primaryData release];
-    [_input release];
-    [super dealloc];
-}
+- (void)dealloc { }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self commonInit];
+    if (self = [super init]) {
+        MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
+        MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
+        _forgroundColor = blackColor;
+        _backgroundColor = whiteColor;
+        _showErrorMessages = YES;
+        _humanReadable = YES;
+        _height = 50;
+        _borderWidth = 5;
+        _rotate = (90.0000f * M_PI / 180.0000f);
+        _option1 = NO;
+        _option2 = NO;
+        _option3 = NO;
+        _center = NO;
+        _scale = 1.0000f;
     }
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
-+ (instancetype)barcodeWithType:(MTBarcodeType)type {
++ (instancetype)newBarcodeWithType:(MTBarcodeType)type {
     id result = nil;
     switch (type) {
         case MTBarcodeTypeAuspost:
@@ -317,50 +322,42 @@
         default:
             break;
     }
-    
-    return [result autorelease];
+    return result;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super init];
+    if (self = [super init]) {
+        
+    }
+    return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     
-    [coder encodeFloat:[self rotate]                forKey:@""];
-    [coder encodeObject:self.name                 forKey:@""];
-    [coder encodeInteger:[self barcodeType]         forKey:@""];
-    [coder encodeBool:[self has2dComponent]         forKey:@""];
-    [coder encodeBool:[self hasOptionalInput]       forKey:@""];
-    [coder encodeObject:[self detailsSegueIdentifer]    forKey:@""];
-    [coder encodeObject:[self primaryData]          forKey:@""];
-    [coder encodeInteger:[self option1]             forKey:@""];
-    [coder encodeInteger:[self option2]             forKey:@""];
-    [coder encodeInteger:[self option3]             forKey:@""];
-    [coder encodeBool:[self center]                 forKey:@""];
-    [coder encodeObject:[self input]                forKey:@""];
+    [coder encodeFloat:     self.rotate                 forKey:@""];
+    [coder encodeObject:    self.name                   forKey:@""];
+    [coder encodeInteger:   self.barcodeType            forKey:@""];
+    [coder encodeBool:      self.has2dComponent         forKey:@""];
+    [coder encodeBool:      self.hasOptionalInput       forKey:@""];
+    [coder encodeObject:    self.detailsSegueIdentifer  forKey:@""];
+    [coder encodeObject:    self.primaryData            forKey:@""];
+    [coder encodeInteger:   self.option1                forKey:@""];
+    [coder encodeInteger:   self.option2                forKey:@""];
+    [coder encodeInteger:   self.option3                forKey:@""];
+    [coder encodeBool:      self.center                 forKey:@""];
+    [coder encodeObject:    self.input                  forKey:@""];
 
-    [coder encodeInteger:[self height]              forKey:@""];
-    [coder encodeInteger:[self width]               forKey:@""];
-    [coder encodeInteger:[self borderWidth]         forKey:@""];
-    [coder encodeInteger:[self whitespaceWidth]     forKey:@""];
-    [coder encodeBool:[self humanReadable]          forKey:@""];
-    [coder encodeInteger:[self borderStyle]         forKey:@""];
-    [coder encodeBool:[self showErrorMessages]      forKey:@""];
-    [coder encodeBool:[self has2dComponentEnabled]  forKey:@""];
-    [coder encodeInteger:[self has2dComponentType]  forKey:@""];
-    [coder encodeFloat:[self scale]                 forKey:@""];
-}
-
-- (void)commonInit {
-    [self setForgroundColor:[UIColor blackColor]];
-    self.backgroundColor = [UIColor whiteColor];
-    [self setShowErrorMessages:YES];
-    [self setHumanReadable:YES];
-    [self setHeight:50];
-    self.borderWidth = 5;
-    [self setRotate:(90.0000f * M_PI / 180.0000f)];
-    [self setOption1: NO];
-    [self setOption2: NO];
-    [self setOption3: NO];
-    [self setCenter: NO];
-    [self setScale:1.0000f];
+    [coder encodeInteger:   self.height                 forKey:@""];
+    [coder encodeInteger:   self.width                  forKey:@""];
+    [coder encodeInteger:   self.borderWidth            forKey:@""];
+    [coder encodeInteger:   self.whitespaceWidth        forKey:@""];
+    [coder encodeBool:      self.humanReadable          forKey:@""];
+    [coder encodeInteger:   self.borderStyle            forKey:@""];
+    [coder encodeBool:      self.showErrorMessages      forKey:@""];
+    [coder encodeBool:      self.has2dComponentEnabled  forKey:@""];
+    [coder encodeInteger:   self.has2dComponentType     forKey:@""];
+    [coder encodeFloat:     self.scale                  forKey:@""];
 }
 
 - (void)drawInRect:(CGRect)rect {
@@ -373,10 +370,10 @@
         
     } else {
 
-        if ([self has2dComponentEnabled] == NO) {
-            barcode->symbology = [self barcodeType];
+        if (self.has2dComponentEnabled == NO) {
+            barcode->symbology = self.barcodeType;
         } else {
-            switch ([self barcodeType]) {
+            switch (self.barcodeType) {
                 case MTBarcodeTypeEANX:
                     barcode->symbology = MTBarcodeTypeEanxCc;
                     break;
@@ -415,8 +412,8 @@
                     break;
             }
         }
-        NSString *forgroundColor = [[self forgroundColor] hexStringValue];
-        NSString *backgroundColor = [[self backgroundColor] hexStringValue];
+        NSString *forgroundColor = [self.forgroundColor hexStringValue];
+        NSString *backgroundColor = [self.backgroundColor hexStringValue];
         const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
         const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
         strcpy(barcode->fgcolour, fgcolor);
@@ -426,7 +423,7 @@
         barcode->border_width = (int)[self borderWidth];
         barcode->whitespace_width = (int)[self whitespaceWidth];
         barcode->show_hrt = [self humanReadable];
-        barcode->output_options = [self borderStyle];
+        barcode->output_options = self.borderStyle;
         barcode->scale = 1.0000f;
         barcode->input_mode = MTBarcodeDataTypeUnicode;
         
@@ -438,7 +435,7 @@
         }
         
         NSString *primaryInput = nil;
-        if ([self has2dComponentEnabled]) {
+        if (self.has2dComponentEnabled) {
             
             primaryInput = [self primaryData];
             barcode->option_1 = (int)[self has2dComponentType];
@@ -545,7 +542,7 @@
         
         CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
         CGAffineTransform affineTransformMoveOriginCenter = CGAffineTransformMakeTranslation(rect.size.width / 2.0000f, rect.size.height / 2.0000f);
-        CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation([self rotate]);
+        CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation(self.rotate);
         
         //Scale to fit
         CGContextRef context = UIGraphicsGetCurrentContext();

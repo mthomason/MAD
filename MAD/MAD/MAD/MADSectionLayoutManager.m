@@ -20,7 +20,7 @@
 
 @interface MADSectionLayoutManager ()
 
-@property (nonatomic, strong, readwrite)    NSMutableDictionary *items;
+@property (nonatomic, strong, readwrite)    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
 @property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
 @property (nonatomic, assign)               BOOL lastOpperationWasAdditon;
 @property (nonatomic, assign)               BOOL visibility;
@@ -32,21 +32,20 @@
 - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section {
 
     if (self = [super init]) {
-                
         NSMutableDictionary *items = [NSMutableDictionary dictionary];
         self.items = items;
         self.visibility = section.visibility.boolValue;
         
         RptqDocumentSectionRows *rows = section.hasRows.firstObject;
-        RptqDocumentObject *object;
-        MADSectionLayoutAttributes *layout;
         NSInteger itemCounter = 0;
-        for (object in rows.hasObjects) {
+        
+        for (RptqDocumentObject *object in rows.hasObjects) {
+        
             NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
-            layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-            layout.objectID = object.objectID;
             CGSize size = object.size;
-            layout.frame = CGRectMake(object.originx.floatValue, object.originy.floatValue, size.width, size.height);
+            MADSectionLayoutAttributes *layout = [[MADSectionLayoutAttributes alloc] initWithIndexPath:path objectID:object.objectID andRect:CGRectMake(object.originx.floatValue, object.originy.floatValue, size.width, size.height)];
+
+            
             [self addItem:layout];
             itemCounter++;
         }
@@ -171,8 +170,7 @@
     return results;
 }
 
-+ (NSArray *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute
-                             withAttributes: (NSArray *)placedItems {
++ (NSArray *)allValidLocationsForAttributes: (MADSectionLayoutAttributes *)attribute withAttributes: (NSArray *)placedItems {
     
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: 4 * placedItems.count + 1];
     NSValue *origin = [NSValue valueWithCGPoint:CGPointZero];

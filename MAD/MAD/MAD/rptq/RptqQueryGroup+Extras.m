@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqQueryGroup+Extras.h"
+#import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 
@@ -31,6 +32,21 @@
 #import "RptqQuery+Extras.h"
 
 @implementation RptqQueryGroup (Extras)
+
++ (instancetype)newQueryGroupQueryWithSortOrder:(MNSSortOrder)sortOrder
+                        andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+
+    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext: managedObjectContext];
+    RptqQueryGroup *queryGroup = [[self alloc] initWithEntity:entityDescriptionQueryGroup insertIntoManagedObjectContext: managedObjectContext];
+    
+    NSNumber *sort = [[NSNumber alloc] initWithUnsignedInteger:sortOrder];
+    queryGroup.sort = sort;
+    
+    NSNumber *weight = [[NSNumber alloc] initWithInteger: ([queryGroup lastWeightWithManagedObjectContext:managedObjectContext] + 1)];
+    queryGroup.weight = weight;
+
+    return queryGroup;
+}
 
 #pragma mark - Overrides
 
@@ -92,18 +108,18 @@
 
 #pragma mark - Member functions
 
-- (NSInteger)lastWeight {
+- (NSInteger)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight"
-                                                                     ascending: NO];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending: NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     request.sortDescriptors = sortDescriptors;
     request.fetchLimit = 1;
+
     NSError *error = nil;
-    NSArray *queryGroupLast = [self.managedObjectContext executeFetchRequest: request
-                                                                       error: &error];
+    NSArray *queryGroupLast = [managedObjectContext executeFetchRequest: request error: &error];
+
     NSInteger weight = 0;
     if (queryGroupLast.count > 0) {
         RptqQueryGroup *lastGroup = queryGroupLast[0];

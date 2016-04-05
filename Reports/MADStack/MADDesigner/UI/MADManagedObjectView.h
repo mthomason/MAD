@@ -15,24 +15,24 @@
 
 @protocol MADManagedObjectViewProtocol <NSObject>
 @required;
-    @property (nonatomic, strong) NSManagedObjectID *objectIdTag;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
 @end
 
 @interface MADManagedObjectView : UIView
         <MADManagedObjectViewProtocol>
-    @property (nonatomic, strong) NSManagedObjectID *objectIdTag;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
 
 @end
 
 @interface MADManagedObjectCollectionView : UICollectionView
         <MADManagedObjectViewProtocol>
-    @property (nonatomic, strong) NSManagedObjectID *objectIdTag;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
 
 @end
 
 @interface MADManagedObjectCollectionViewCell : UICollectionViewCell
         <MADManagedObjectViewProtocol>
-    @property (nonatomic, strong) NSManagedObjectID *objectIdTag;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdTag;
 
 @end
 

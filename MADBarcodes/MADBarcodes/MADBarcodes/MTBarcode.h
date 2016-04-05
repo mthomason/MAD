@@ -33,45 +33,48 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
     MTBarcodeDataTypeGs1 = GS1_MODE
 };
 
+@class MADColor;
+
 @interface MTBarcode : NSObject
     <MTBarcodeProtocol>
 
-@property (nonatomic, retain, readwrite) UIColor *forgroundColor;
-@property (nonatomic, retain, readwrite) UIColor *backgroundColor;
+    + (instancetype)newBarcodeWithType:(MTBarcodeType)type;
 
-@property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
-@property (nonatomic, retain, readonly) NSString *name;
-@property (nonatomic, retain, readonly) NSString *detailsSegueIdentifer;
-@property (nonatomic, retain) NSString *primaryData;
+    @property (nonatomic, copy, readwrite) MADColor *forgroundColor;
+    @property (nonatomic, copy, readonly) MADColor *backgroundColor;
 
-@property (nonatomic, assign, readonly) BOOL has2dComponent;
-@property (nonatomic, assign, readonly) BOOL hasOptionalInput;
+    @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
+    @property (nonatomic, retain, readonly) NSString *name;
+    @property (nonatomic, retain, readonly) NSString *detailsSegueIdentifer;
+    @property (nonatomic, retain) NSString *primaryData;
 
-@property (nonatomic, assign) NSInteger option1;
-@property (nonatomic, assign) NSInteger option2;
-@property (nonatomic, assign) NSInteger option3;
+    @property (nonatomic, assign, readonly) BOOL has2dComponent;
+    @property (nonatomic, assign, readonly) BOOL hasOptionalInput;
 
-@property (nonatomic, assign) BOOL center;
+    @property (nonatomic, assign) NSInteger option1;
+    @property (nonatomic, assign) NSInteger option2;
+    @property (nonatomic, assign) NSInteger option3;
 
-@property (nonatomic, retain) NSString *input;
-@property (nonatomic, assign) NSInteger height;
-@property (nonatomic, assign) NSInteger width;
-@property (nonatomic, assign) NSInteger borderWidth;
-@property (nonatomic, assign) NSInteger whitespaceWidth;
-@property (nonatomic, assign) BOOL humanReadable;
-@property (nonatomic, assign) MTBarcodeBorderStyle borderStyle;
-@property (nonatomic, assign) BOOL showErrorMessages;
+    @property (nonatomic, assign) BOOL center;
 
-@property (nonatomic, assign) BOOL has2dComponentEnabled;
-@property (nonatomic, assign) NSInteger has2dComponentType;
+    @property (nonatomic, retain) NSString *input;
+    @property (nonatomic, assign) NSInteger height;
+    @property (nonatomic, assign) NSInteger width;
+    @property (nonatomic, assign) NSInteger borderWidth;
+    @property (nonatomic, assign) NSInteger whitespaceWidth;
+    @property (nonatomic, assign) BOOL humanReadable;
+    @property (nonatomic, assign) MTBarcodeBorderStyle borderStyle;
+    @property (nonatomic, assign) BOOL showErrorMessages;
 
-@property (nonatomic, assign) CGFloat scale;
+    @property (nonatomic, assign) BOOL has2dComponentEnabled;
+    @property (nonatomic, assign) NSInteger has2dComponentType;
 
-- (void)drawInRect:(CGRect)rect;
+    @property (nonatomic, assign) CGFloat scale;
 
-+ (NSString *)barcodeNameForType:(MTBarcodeType)type;
-+ (NSDictionary *)names;
-+ (instancetype)barcodeWithType :(MTBarcodeType)type;
+    - (void)drawInRect:(CGRect)rect;
+
+    + (NSString *)barcodeNameForType:(MTBarcodeType)type;
+    + (NSDictionary *)names;
 
 @end
 

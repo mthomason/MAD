@@ -14,14 +14,14 @@
 
 @interface MTConnectorView : MADManagedObjectView
 
-@property (nonatomic, strong) UIView *anchorViewLeft;
-@property (nonatomic, strong) UIView *anchorViewRight;
-@property (nonatomic, strong) NSNumber *topLeftToBottomRight;
-@property (nonatomic, strong) NSString *linkDescription;
+    @property (nonatomic, strong) UIView *anchorViewLeft;
+    @property (nonatomic, strong) UIView *anchorViewRight;
+    @property (nonatomic, strong) NSNumber *topLeftToBottomRight;
+    @property (nonatomic, strong) NSString *linkDescription;
 
-@property (nonatomic, assign) BOOL leftViewIsInital;
+    @property (nonatomic, assign) BOOL leftViewIsInital;
 
-- (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
+    - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 
 @end
 

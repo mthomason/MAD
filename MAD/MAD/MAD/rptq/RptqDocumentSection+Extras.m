@@ -339,6 +339,18 @@
     return result;
 }
 
++ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+
+    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: managedObjectContext];
+
+    RptqDocumentSection *section = [[self alloc] initWithEntity: entityDescriptionDocumentSection insertIntoManagedObjectContext: managedObjectContext];
+    NSNumber *sectionType = @(type);
+    section.type = sectionType;
+    section.visibility = @YES;
+    
+    return section;
+}
+
 #pragma mark - Handling Rows
 
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {

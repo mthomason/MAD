@@ -37,6 +37,10 @@
 #import "RptqDatabase+Extras.h"
 
 #import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+
+#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+Extras.h"
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
@@ -591,7 +595,42 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         RptqQueryField *queryField = [private objectWithID:queryFieldObjectID];
         RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
-        RptqQueryGroup *queryGroup = [self createQueryGroupFor: queryField andSort: sortOrder forManagedObjectContext:private];
+        
+        
+        RptqQueryGroup *queryGroup = [RptqQueryGroup newQueryGroupQueryWithSortOrder:sortOrder andManagedObjectContext:private];
+        
+        queryGroup.hasField = queryField;   //Retain cycle
+        
+        
+        //Create group header (contains a retain cycle)
+        RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupHeader forManagedObjectContext: private];
+        RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
+        headerSectionRow.inSection = headerSection;
+        
+        NSMutableOrderedSet *headerSectionRows = [[NSMutableOrderedSet alloc] initWithObject: headerSectionRow];
+        headerSection.hasRows = headerSectionRows;
+        
+        [queryGroup addHasSectionObject:headerSection];
+        
+        //Create group footer (contains a retain cycle)
+        RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType: MNSDocumentSectionTypeGroupFooter forManagedObjectContext: private];
+        RptqDocumentSectionRows *footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
+        footerSectionRow.inSection = footerSection;
+        
+        NSMutableOrderedSet *footerSectionRows = [[NSMutableOrderedSet alloc] initWithObject: footerSectionRow];
+        footerSection.hasRows = footerSectionRows;
+        
+        [queryGroup addHasSectionObject:footerSection];
+        
+        
+        MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:headerSection];
+        layoutManagerHeader.delegate = self;
+        [self.sectionLayoutManagers setObject: layoutManagerHeader forKey: headerSection.objectID];
+        
+        MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:footerSection];
+        layoutManagerFooter.delegate = self;
+        [self.sectionLayoutManagers setObject: layoutManagerFooter forKey: footerSection.objectID];
+
 
         RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *query = database.hasQueries.anyObject;
@@ -600,70 +639,28 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSError * __autoreleasing *error = NULL;
         [private save:error];
         
+        [private refreshObject:queryGroup.hasField mergeChanges:NO];
+        [private refreshObject:queryGroup mergeChanges:NO];
+        [private refreshObject:headerSectionRow.inSection mergeChanges:NO];
+        [private refreshObject:footerSectionRow.inSection mergeChanges:NO];
+        [private refreshObject:headerSectionRow mergeChanges:NO];
+        [private refreshObject:footerSectionRow mergeChanges:NO];
+        [private refreshObject:headerSection mergeChanges:NO];
+        [private refreshObject:footerSection mergeChanges:NO];
+        
         [private refreshObject:query mergeChanges:NO];
         [private refreshObject:database mergeChanges:NO];
         [private refreshObject:queryGroup mergeChanges:NO];
         [private refreshObject:rptqDocument mergeChanges:NO];
         [private refreshObject:queryField mergeChanges:NO];
 
+        [headerSectionRows removeAllObjects];
+        [footerSectionRows removeAllObjects];
+
     }];
 
 }
 
-- (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext: managedObjectContext];
-    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: managedObjectContext];
-    
-    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup insertIntoManagedObjectContext: managedObjectContext];
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSError *error = nil;
-    
-    NSUInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
-    groupCount = (error) ? 0 : groupCount;
-    
-    queryGroup.hasField = queryField;
-    queryGroup.sort = @(sortOrder);
-    NSInteger newWeight = [queryGroup lastWeight] + 1;
-    [queryGroup setWeight:@(newWeight)];
-    
-    RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                              inManagedObjectContext: managedObjectContext];
-    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
-    
-    //Create group header
-    RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
-    NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
-    dsHeader.type = HeaderType;
-    dsHeader.hasRows = hasRows1;
-    dsHeader.visibility = @YES;
-    [headerSectionRow setInSection:dsHeader];
-    [queryGroup addHasSectionObject:dsHeader];
-    
-    RptqDocumentSectionRows *footerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                              inManagedObjectContext: managedObjectContext];
-    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
-    
-    //Create group footer
-    RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
-    NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
-    dsFooter.type = type;
-    dsFooter.hasRows = hasRows;
-    dsFooter.visibility = @YES;
-    footerSectionRow.inSection = dsFooter;
-    [queryGroup addHasSectionObject:dsFooter];
-    
-    MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:dsHeader];
-    layoutManagerHeader.delegate = self;
-    [self.sectionLayoutManagers setObject: layoutManagerHeader forKey: dsHeader.objectID];
-    
-    MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:dsFooter];
-    layoutManagerFooter.delegate = self;
-    [self.sectionLayoutManagers setObject: layoutManagerFooter forKey: dsFooter.objectID];
-    
-    return queryGroup;
-}
 
 #pragma mark - UIPrintInteractionControllerDelegate
 

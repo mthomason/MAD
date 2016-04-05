@@ -165,8 +165,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 @property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
 @property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
 
-@property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
+//@property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
+@property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
+
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
+@property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
 @property (nonatomic, assign) CGFloat zoomScaleRestore;
 @property (nonatomic, assign) CGRect boundsOnDisappear;
@@ -933,40 +936,52 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
-    NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
+    NSUInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     
-    [self.document.activeDocumentModel setNewPageAfter: newPageAfter
-                                       forSectionAtRow: selectedSectionNumber];
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.document.managedObjectContext;
+    [private performBlock:^{
+        RptqDocument *document = [RptqDocument documentForManagedObjectContext: private];
+        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqQuery *query =  database.hasQueries.anyObject;
+        
+        RptqDocumentSection *section = [query documentSectionForRow: selectedSectionNumber];
+        [section setProducesFormFeed:newPageAfter];
+        
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+        
+    }];
     
-    /*
-     RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-     RptqQuery *query = [database.hasQueries anyObject];
-     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: selectedSectionNumber
-     query: query];
-     
-     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
-     UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
-     documentSectionView.backgroundColor = color;
-     */
-    
-    [self.document saveContext];
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
-    NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
+    NSUInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.document.managedObjectContext;
     
-    [self.document.activeDocumentModel setVisibility:isVisible forSectionAtRow:selectedSectionNumber];
+    [private performBlock:^{
     
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
-    RptqDocumentSection *documentSection = [query documentSectionForRow: selectedSectionNumber];
-    
-    MADDesignerSectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
-    documentSectionView.visible = isVisible;
-    [self.document saveContext];
+        RptqDocument *document = [RptqDocument documentForManagedObjectContext: private];
+        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqQuery *query =  database.hasQueries.anyObject;
+        
+        RptqDocumentSection *section = [query documentSectionForRow: selectedSectionNumber];
+        NSString *key = section.sectionKey;
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            MADDesignerSectionView *documentSectionView = self.sectionViews[key];
+            documentSectionView.visible = isVisible;
+        }];
+
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+
+    }];
 }
 
+//FIXME: Unused... used to allow user to change the height of the sections.
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
@@ -975,7 +990,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [documentSection setInterfaceHeight: collectionViewContentSize.height];
-        [documentSection.managedObjectContext save:nil];
+ 
+    [documentSection.managedObjectContext save:nil];
     
     NSString *key = [documentSection sectionKey];
     UICollectionView *collectionView = self.sectionViews[key];
@@ -988,8 +1004,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
 }
 
-// FIXME: Used for multiple rows in the document section... currently unused
-
+// FIXME: Unused... Used for multiple rows in the document section... currently unused
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
@@ -1027,45 +1042,46 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         
     }
     
-    [documentSection setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
-    UICollectionView *collectionView = self.sectionViews[[documentSection sectionKey]];
+    NSNumber *numberOfRowsObject = [[NSNumber alloc] initWithUnsignedInteger:numberOfRows];
+    documentSection.numberOfRows = numberOfRowsObject;
+    
+    UICollectionView *collectionView = self.sectionViews[documentSection.sectionKey];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
     NSError *error = nil;
     [self.document.managedObjectContext save:&error];
-    [self.document saveToURL: self.document.fileURL
-            forSaveOperation: UIDocumentSaveForOverwriting
-           completionHandler: ^(BOOL success) {
+    [self.document saveToURL: self.document.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                
-               if (insertNewSection) {
-                   NSInteger index = numberOfRows - 1;
-                   NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
-                   [documentSectionView insertSections:indexSet];
-               } else if (deleteLastSection) {
-                   NSInteger index = numberOfRows;
-                   NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
-                   [documentSectionView deleteSections:indexSet];
-               }
-               
-           }];
+        if (insertNewSection) {
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:numberOfRows - 1];
+            [documentSectionView insertSections:indexSet];
+        } else if (deleteLastSection) {
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:numberOfRows];
+            [documentSectionView deleteSections:indexSet];
+        }
+
+    }];
     
 }
 
 #pragma mark - MTDocumentSectionViewDelegate
 
+// FIXME: Unused... What's this for?
 - (void)didUpdateLayout:(MADDesignerSectionView *)sectionView {
     
+    MADocument *document = self.document;
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
+                                                                    inManagedObjectContext: document.managedObjectContext];
     NSNumber *height = @(sectionView.bounds.size.height);
     documentSection.height = height;
     [self relayoutSectionView:sectionView];
-    [self.document.managedObjectContext save:nil];
+    [document.managedObjectContext save:nil];
 }
 
 #pragma mark - MTReportDesignerToolBoxDelegate
 
+// FIXME: Unused... What's this for?
 - (void)toolboxHeightChanged:(CGFloat)newHeight {
     self.navigationControllerToolbox.preferredContentSize = CGSizeMake(320.0000f, newHeight);
 }
@@ -1291,99 +1307,137 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     
-    NSManagedObjectID *elementViewId = [cell objectIdTag];
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
-                                                                  managedObjectContext: self.document.managedObjectContext];
+    NSUInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+
+    NSManagedObjectID *elementViewId = cell.objectIdTag.copy;
+    private.parentContext = self.document.managedObjectContext;
     
-    RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
-    MADDesignerSectionView *svSection = [self getSectionViewForDocumentSection:section];
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: svSection.objectIdTag
-                                                                    inManagedObjectContext: self.document.managedObjectContext];
-    
-    BOOL found = NO;
-    
-    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+    [private performBlock:^{
+
+        RptqDocumentObject *documentObject = [private objectWithID:elementViewId];
+        RptqDocumentSection *section = documentObject.inSectionRow.inSection;
+        MADDesignerSectionView *svSection = [self getSectionViewForDocumentSection:section];
+        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: svSection.objectIdTag inManagedObjectContext: private];
+        BOOL found = NO;
         
-        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
-        NSUInteger i = 0;
-        for (RptqDocumentObject *object in hasObjects) {
-            if ([object.objectID isEqual: elementViewId]) {
-                found = YES;
-                break;
+        NSOrderedSet *documentSectionHasRows = documentSection.hasRows;
+        for (RptqDocumentSectionRows *row in documentSectionHasRows) {
+            
+            NSMutableOrderedSet *hasObjects = row.hasObjects.mutableCopy;
+
+            NSUInteger i = 0;
+            
+            for (RptqDocumentObject *object in hasObjects) {
+                if ([object.objectID isEqual: elementViewId]) {
+                    found = YES;
+                    break;
+                }
+                i++;
             }
-            i++;
+            
+            if (found) {
+                
+                RptqDocumentObject *objectToEdit = hasObjects[i];
+                
+                switch (objectToEdit.type.shortValue) {
+                        
+                    case MTDocumentObjectTypeAggregate:
+                        [self editDocumentObjectAggregateWithID: objectToEdit.objectID];
+                        break;
+                        
+                    case MTDocumentObjectTypeBarcode:
+                        [self editDocumentObjectBarcodeWithID: objectToEdit.objectID andBarcodeID:objectToEdit.isBarcode.objectID];
+                        break;
+                        
+                    case MTDocumentObjectTypeImage:
+                        [self editDocumentObjectImage:objectToEdit];
+                        break;
+                        
+                    case MTDocumentObjectTypeLabelDynamic:
+                        [self editDocumentObjectLabelDynamic:objectToEdit];
+                        break;
+                        
+                    case MTDocumentObjectTypeLabelStatic:
+                        [self editDocumentObjectLabelStatic:objectToEdit];
+                        break;
+                        
+                    case MTDocumentObjectTypeWhtiespace:
+                        break;
+                        
+                    default:
+                        break;
+                        
+                }
+            }
         }
+
         
-        if (found) {
-            
-            RptqDocumentObject *objectToEdit = hasObjects[i];
-            
-            switch ([[objectToEdit type] integerValue]) {
-                    
-                case MTDocumentObjectTypeAggregate:
-                    [self editDocumentObjectAggregate:objectToEdit];
-                    break;
-                    
-                case MTDocumentObjectTypeBarcode:
-                    [self editDocumentObjectBarcode:objectToEdit];
-                    break;
-                    
-                case MTDocumentObjectTypeImage:
-                    [self editDocumentObjectImage:objectToEdit];
-                    break;
-                    
-                case MTDocumentObjectTypeLabelDynamic:
-                    [self editDocumentObjectLabelDynamic:objectToEdit];
-                    break;
-                    
-                case MTDocumentObjectTypeLabelStatic:
-                    [self editDocumentObjectLabelStatic:objectToEdit];
-                    break;
-                    
-                case MTDocumentObjectTypeWhtiespace:
-                    break;
-                    
-                default:
-                    break;
-                    
-            }
-        }
-    }
+    }];
+    
 }
 
 #pragma mark MTCollectionViewCellElement Helpers
 
-- (void)editDocumentObjectAggregate:(RptqDocumentObject *)object {
-    self.aggregateToEdit = object.isAggregate;
+- (void)editDocumentObjectAggregateWithID:(NSManagedObjectID *)objectID {
+    self.aggregateToEditObjectID = objectID.copy;
     self.editAggregate = true;
-    
-    UIView *viewToEdit = [self viewForObjectID: object.objectID];
-    
-    UINavigationController *navigationController = [UINavigationController aggregateAdd];
-    
-    MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
-    aggregateViewController.document = self.document;
-    aggregateViewController.delegate = self;
-    [aggregateViewController setAggregateObjectToEdit:self.aggregateToEdit];
-    
-    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionCancel:)];
-    [aggregateViewController.navigationItem setRightBarButtonItem:dismiss animated:NO];
-    [aggregateViewController.navigationItem setLeftBarButtonItem:nil animated:NO];
-    
-    navigationController.modalPresentationStyle = UIModalPresentationPopover;
-    navigationController.preferredContentSize = sizePopoverFonts();
-    
-    UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
-    popoverController.delegate = self;
-    popoverController.sourceRect = [viewToEdit convertRect:viewToEdit.bounds
-                                                    toView:self.scroller.container];
-    popoverController.sourceView = self.scroller.container;
-    popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    [self presentViewController:navigationController animated:YES completion:nil];
-    [self setDisplayInactive];
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+        UIView *viewToEdit = [self viewForObjectID: objectID];
+        UINavigationController *navigationController = [UINavigationController aggregateAdd];
+        
+        MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
+        aggregateViewController.document = self.document;
+        aggregateViewController.delegate = self;
+        [aggregateViewController setAggregateObjectToEdit:self.aggregateToEdit];
+        
+        UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionCancel:)];
+        [aggregateViewController.navigationItem setRightBarButtonItem:dismiss animated:NO];
+        [aggregateViewController.navigationItem setLeftBarButtonItem:nil animated:NO];
+        
+        navigationController.modalPresentationStyle = UIModalPresentationPopover;
+        navigationController.preferredContentSize = sizePopoverFonts();
+        
+        UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
+        popoverController.delegate = self;
+        popoverController.sourceRect = [viewToEdit convertRect:viewToEdit.bounds toView:self.scroller.container];
+        popoverController.sourceView = self.scroller.container;
+        popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+        [self presentViewController:navigationController animated:YES completion:nil];
+        [self setDisplayInactive];
+
+    }];
     
 }
+
+- (void)editDocumentObjectBarcodeWithID:(NSManagedObjectID *)objectID andBarcodeID:(NSManagedObjectID *)barcodeID {
+    
+    self.barcodeToEditObjectID = barcodeID.copy;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        UIView *viewToEdit = [self viewForObjectID:objectID];
+
+        MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
+        barcodeViewController.document = self.document;
+        barcodeViewController.delegate = self;
+        barcodeViewController.preferredContentSize = sizePopoverFonts();
+        barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
+        barcodeViewController.bartcodeToEditObjectID = barcodeID;
+
+        UIPopoverPresentationController *popoverController = barcodeViewController.popoverPresentationController;
+        popoverController.delegate = self;
+        popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds toView: self.scroller.container];
+        popoverController.sourceView = self.scroller.container;
+        popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+        [self presentViewController:barcodeViewController animated:YES completion:nil];
+        [self setDisplayInactive];
+    }];
+    
+
+    
+}
+
 
 - (void)editDocumentObjectBarcode:(RptqDocumentObject *)object {
     
@@ -1393,9 +1447,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     barcodeViewController.document = self.document;
     barcodeViewController.delegate = self;
     
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
-    barcodeViewController.barcodeToEdit = documentObject.isBarcode;
-    self.barcodeToEdit = documentObject.isBarcode;
+    //RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
+    //barcodeViewController.barcodeToEdit = documentObject.isBarcode;
+    //self.barcodeToEdit = documentObject.isBarcode;
     
     barcodeViewController.preferredContentSize = sizePopoverFonts();
     barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
@@ -1454,11 +1508,21 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark -
 #pragma mark - MTViewControllerBarcodeDelegate
 
-- (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo {
+- (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID barcodeObject:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo {
     
-    if (self.barcodeToEdit != nil) {
-        [self.barcodeToEdit updateWithBarcode: barcode fieldOne: fieldOne fieldTwo: fieldTwo];
-    }
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.document.managedObjectContext;
+    
+    NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
+    [private performBlock:^{
+        RptqDocumentObjectBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
+        [barcodeToEdit updateWithBarcode: barcode fieldOne: fieldOne fieldTwo: fieldTwo];
+
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+
+    }];
+    
 }
 
 #pragma mark -
@@ -1828,7 +1892,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
     __block MTCollectionViewLayoutLiquidAttributes *item;
-    [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MTCollectionViewLayoutLiquidAttributes *object, BOOL *stop) {
+    [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *object, BOOL *stop) {
         if (object.indexPath.item == indexPath.item && object.indexPath.section == indexPath.section) {
             item = object;
             *stop = YES;
@@ -2299,9 +2363,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return [self.scroller.container popoverRectForSelectedViews:views];
 }
 
-- (UIView *)viewForObjectID:(NSManagedObjectID *)objectID {
-    return [self.scroller.container viewWithTag: objectID.hash];
-}
+- (UIView *)viewForObjectID:(NSManagedObjectID *)objectID { return [self.scroller.container viewWithTag: objectID.hash]; }
 
 - (void)adjustContextOffsetForOpenPopover {
     if ([self padLike]) {
@@ -2339,8 +2401,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
         
         self.sectionSettingsVisible = false;
-        [self dismissViewControllerAnimated: YES
-                                 completion: NULL];
+        [self dismissViewControllerAnimated: YES completion: NULL];
         [self removeBorderFromAllSectionViews];
         [self.document.managedObjectContext save:nil];
         
@@ -2383,7 +2444,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     }];
 
     [self.scroller.container bringSubviewToFront: piece];
-
 
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
@@ -2655,7 +2715,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionViews[[documentSection sectionKey]];
+    return self.sectionViews[documentSection.sectionKey];
 }
 
 - (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {

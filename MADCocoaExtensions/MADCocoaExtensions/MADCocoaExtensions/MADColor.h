@@ -6,7 +6,12 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MADCocoaExtensions_MADColor_h
+#define MADCocoaExtensions_MADColor_h
+
 #import <UIKit/UIColor.h>
+#import <Foundation/Foundation.h>
+#import <CoreGraphics/CGBase.h>
 
 extern const CGFloat MADF255;
 
@@ -22,5 +27,23 @@ static inline UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, 
 
 @interface MADColor : NSObject
 
+    - (instancetype)initWithColor:(UIColor *)color;
+
+    @property (nonatomic, copy, readonly) UIColor *color;
+
+    @property (nonatomic, readonly) NSString *hexStringValue;
+
+    @property (nonatomic, readonly) bool canProvideRGBComponents;
+    @property (nonatomic, readonly) bool usesMonochromeColorspace;
+    @property (nonatomic, readonly) bool usesRGBColorspace;
+    @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
+
+    @property (nonatomic, readonly) Byte redByte;
+    @property (nonatomic, readonly) Byte greenByte;
+    @property (nonatomic, readonly) Byte blueByte;
+    @property (nonatomic, readonly) Byte alphaByte;
+    @property (nonatomic, readonly) Byte whiteByte;
 
 @end
+
+#endif

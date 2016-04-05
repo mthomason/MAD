@@ -11,6 +11,21 @@
 
 @implementation MADSectionLayoutAttributes
 
+- (instancetype)initWithIndexPath:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID
+                          andRect:(CGRect)rect {
+    
+    if (self = [super init]) {
+
+        NSIndexPath *path = indexPath.copy;
+        self.indexPath = path;
+        self.frame = rect;
+
+        _objectID = objectID.copy;
+
+    }
+    return self;
+}
+
 - (BOOL)intersectsAnItemInArray:(NSArray *)items {
     return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
 }
@@ -69,10 +84,12 @@
 - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems {
     BOOL valid = YES;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {
+    
         if (CGRectIntersectsRect(CGRectMake(dropPoint.x, dropPoint.y, self.frame.size.width, self.frame.size.height), placedItem.frame)) {
             valid = NO;
             break;
         }
+    
     }
     return valid;
 }

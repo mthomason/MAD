@@ -24,13 +24,11 @@
 @class RptqDocumentObjectBarcode;
 
 @protocol MTViewControllerBarcodeDelegate
-- (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo;
+- (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID barcodeObject:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo;
 @end
 
 @interface MTViewControllerBarcode : MADViewController
-    <MTViewControllerBarcodePreviewDelegate,
-        MTViewControllerBarcodeOptionsDelegate,
-        MTUnwindProtocol>
+    <MTViewControllerBarcodePreviewDelegate, MTViewControllerBarcodeOptionsDelegate, MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerBarcodeDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;
@@ -44,6 +42,10 @@
 - (void)updateBarcode;
 
 - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject;
+
+@property (nonatomic, copy) NSManagedObjectID *bartcodeToEditObjectID;
+@property (nonatomic, copy) NSManagedObjectID *queryField1ObjectID;
+@property (nonatomic, copy) NSManagedObjectID *queryField2ObjectID;
 
 @end
 

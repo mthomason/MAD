@@ -12,21 +12,19 @@
 #import <MADBarcodes/MADBarcodes.h>
 
 @protocol MTElementCanvasDelegate <NSObject>
-
-- (id)displayObject;
-
+    - (id)displayObject;
 @end
 
 @interface MTElementCanvas : UIView
 
-@property (nonatomic, weak) id <MTElementCanvasDelegate>canvasDelegate;
-@property (nonatomic, strong) UIFont *displayFont;
-@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
-@property (nonatomic, strong) NSNumber *underlineStyle;
-@property (nonatomic, strong) NSNumber *strikeThroughStyle;
-@property (nonatomic, assign) CGRect drawingRect;
+    @property (nonatomic, weak) id <MTElementCanvasDelegate>canvasDelegate;
+    @property (nonatomic, strong) UIFont *displayFont;
+    @property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
+    @property (nonatomic, strong) NSNumber *underlineStyle;
+    @property (nonatomic, strong) NSNumber *strikeThroughStyle;
+    @property (nonatomic, assign) CGRect drawingRect;
 
-@property (readonly) NSStringDrawingOptions drawingOptions;
+    @property (readonly) NSStringDrawingOptions drawingOptions;
 
 @end
 

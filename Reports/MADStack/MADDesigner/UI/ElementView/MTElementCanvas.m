@@ -7,7 +7,7 @@
 //
 
 #import "MTElementCanvas.h"
-
+#import <MADCocoaExtensions/MADColor.h>
 @implementation MTElementCanvas
 
 static const CGFloat kDashedBorderWidth     = (0.5f);
@@ -20,7 +20,8 @@ static size_t const kDashedCount            = (2.0f);
     id displayObject = [self.canvasDelegate displayObject];
     if ([displayObject isKindOfClass: [MTBarcode class]]) {
         [displayObject initSampleData];
-        [displayObject setForgroundColor:[UIColor lightGrayColor]];
+        MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
+        ((MTBarcode *)displayObject).forgroundColor = color;
     }
     
     if ([displayObject isKindOfClass: [NSAttributedString class]]) {

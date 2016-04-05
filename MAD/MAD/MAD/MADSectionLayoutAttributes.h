@@ -16,7 +16,9 @@
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
 
-    @property (nonatomic, assign) NSManagedObjectID *objectID;
+    - (instancetype)initWithIndexPath:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID
+                              andRect:(CGRect)rect;
+    @property (nonatomic, copy) NSManagedObjectID *objectID;
 
     - (BOOL)intersectsAnItemInArray:(NSArray *)items;
     - (BOOL)moveOnScreen;

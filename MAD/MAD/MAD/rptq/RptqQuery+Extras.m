@@ -122,29 +122,30 @@
         switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
                 
             case MNSDocumentSectionTypeReportHeader:
-                resultSection = [document hasReportHeaderSection];
+                resultSection = document.hasReportHeaderSection;
                 break;
                 
             case MNSDocumentSectionTypePageHeader:
-                resultSection = [document hasPageHeaderSection];
+                resultSection = document.hasPageHeaderSection;
                 break;
                 
             case MNSDocumentSectionTypeBody:
-                resultSection = [document hasDetailSection];
+                resultSection = document.hasDetailSection;
                 break;
                 
             case MNSDocumentSectionTypePageFooter:
-                resultSection = [document hasPageFooterSection];
+                resultSection = document.hasPageFooterSection;
                 break;
                 
             case MNSDocumentSectionTypeReportFooter:
-                resultSection = [document hasReportFooterSection];
+                resultSection = document.hasReportFooterSection;
                 break;
                 
             case MNSDocumentSectionTypeGroupHeader: {
                 NSUInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
                 RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
-                resultSection = [self headerSectionInSections:[group hasSection]];
+                NSSet *groupHasSection = group.hasSection;
+                resultSection = [self headerSectionInSections:groupHasSection];
                 break;
             }
                 
@@ -153,7 +154,8 @@
                 NSUInteger indentLevel   = body - (row - body);
                 NSUInteger groupNumber   = indentLevel - 2;
                 RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
-                resultSection = [self footerSectionInSections:[group hasSection]];
+                NSSet *groupHasSection = group.hasSection;
+                resultSection = [self footerSectionInSections:groupHasSection];
                 break;
             }
                 
@@ -201,16 +203,16 @@
 
 - (NSArray *)sortedQueryGroups {
     NSString *weight = NSStringFromSelector(@selector(weight));
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    return [self.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:weight ascending:YES];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    NSArray *sortedArray = [self.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+    return sortedArray;
 }
 
-- (NSUInteger)numberOfTables {
-    return self.hasQueryTables.count;
-}
+- (NSUInteger)numberOfTables { return self.hasQueryTables.count; }
 
 - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database {
+
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {

@@ -12,12 +12,22 @@
 
 #import "RptqDocumentSectionRows+Extras.h"
 #import "RptqDocumentSection.h"
+#import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+#import "MADReportSectionRepresentation.h"
 
 @implementation RptqDocumentSectionRows (Extras)
+
++ (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+
+    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSectionRows class])
+                                                                        inManagedObjectContext: managedObjectContext];
+    id sectionRow = [[self alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
+    return sectionRow;
+}
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
@@ -64,22 +74,32 @@
 }
 
 - (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value {
-    if ([[self hasObjects] isKindOfClass:[NSMutableOrderedSet class]]) {
-        [(NSMutableOrderedSet *)[self hasObjects] addObject:value];
+
+    if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
+
+        [(NSMutableOrderedSet *)self.hasObjects addObject:value];
+
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasObjects];
+
+        NSMutableOrderedSet* tempSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.hasObjects];
         [tempSet addObject:value];
-        [self setHasObjects: tempSet];
+        self.hasObjects = tempSet;
+
     }
 }
 
 - (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value {
-    if ([[self hasObjects] isKindOfClass:[NSMutableOrderedSet class]]) {
-        [(NSMutableOrderedSet *)[self hasObjects] removeObject:value];
+
+    if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
+        
+        [(NSMutableOrderedSet *)self.hasObjects removeObject:value];
+        
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasObjects]];
+    
+        NSMutableOrderedSet* tempSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.hasObjects];
         [tempSet removeObject:value];
-        [self setHasObjects: tempSet];
+        self.hasObjects = tempSet;
+        
     }
 }
 

@@ -16,12 +16,15 @@
 
 @interface RptqQueryGroup (Extras)
 
++ (instancetype)newQueryGroupQueryWithSortOrder:(MNSSortOrder)sortOrder
+                        andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
     + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;
 
     - (NSString *)fieldNameNice;
     - (NSString *)fieldNameQuery;
     - (NSString *)sortDisplayNice;
-    - (NSInteger)lastWeight;
+    - (NSInteger)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (NSInteger)location;
 
 @end

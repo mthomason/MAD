@@ -171,24 +171,19 @@ static NSNumberFormatter *currencyNumberFormatter;
            self.paddingBottom.floatValue;
 }
 
-- (CGSize)size {
-    CGFloat width = self.paddingLeft.floatValue +
-                    self.borderWidthLeft.floatValue +
-                    self.marginLeft.floatValue +
-                    self.sizewidth.floatValue +
-                    self.marginRight.floatValue +
-                    self.borderWidthRight.floatValue +
-                    self.paddingRight.floatValue;
-    
-    CGFloat height = self.paddingTop.floatValue +
-                    self.borderHeightTop.floatValue +
-                    self.marginTop.floatValue +
-                    self.sizeheight.floatValue +
-                    self.marginBottom.floatValue +
-                    self.borderHeightBottom.floatValue +
-                    self.paddingBottom.floatValue;
-    return CGSizeMake(width, height);
+- (CGFloat)sizeWidthCalculated {
+    return self.paddingLeft.floatValue + self.borderWidthLeft.floatValue + self.marginLeft.floatValue +
+            self.sizewidth.floatValue + self.marginRight.floatValue + self.borderWidthRight.floatValue +
+            self.paddingRight.floatValue;
 }
+
+- (CGFloat)sizeHeightCalculated {
+    return self.paddingTop.floatValue + self.borderHeightTop.floatValue + self.marginTop.floatValue +
+            self.sizeheight.floatValue + self.marginBottom.floatValue + self.borderHeightBottom.floatValue +
+            self.paddingBottom.floatValue;
+}
+
+- (CGSize)size { return CGSizeMake([self sizeWidthCalculated], [self sizeHeightCalculated]); }
 
 - (CGSize)sizeContentView {
     return CGSizeMake(self.sizewidth.floatValue, self.sizeheight.floatValue);

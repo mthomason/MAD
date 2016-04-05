@@ -7,11 +7,12 @@
 //
 
 #import "MTConnectorView.h"
+#import <MADCocoaExtensions/MADColor.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface MTConnectorView ()
 
-@property (nonatomic, strong) UIColor *forgroundColor;
+@property (nonatomic, strong) MADColor *forgroundColor;
 
 @property (nonatomic, assign) CGSize shadowSize;
 @property (nonatomic, assign) CGSize smallCircleSize;
@@ -44,7 +45,8 @@
         anchorRight.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         
         UIColor *color = [MADColorEverydayApps newColorRed];
-        [self setForgroundColor:color];
+        MADColor *foregroundColor = [[MADColor alloc] initWithColor:color];
+        [self setForgroundColor:foregroundColor];
         
         [self setAnchorViewLeft:anchorLeft];
         [self setAnchorViewRight:anchorRight];
@@ -136,7 +138,7 @@
         CGPoint origin, destination;
         CGPoint tangent[2];
         
-        [self.forgroundColor set];
+        [self.forgroundColor.color set];
         
         if (self.topLeftToBottomRight.boolValue) {
             

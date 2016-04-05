@@ -26,6 +26,9 @@ typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
 
 @property (nonatomic, retain, readonly) NSString *sectionKey;
 
++ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+//+ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid inManagedObjectContext:(NSManagedObjectContext *)moc;
 
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row withNumberOfGroups:(NSUInteger)numberOfGroups;
