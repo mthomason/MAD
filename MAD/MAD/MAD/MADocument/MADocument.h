@@ -55,32 +55,28 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
         MTReportFormatterDataSource, MTDatabaseProtocol,
         MTCacheProtocol, MADDataProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
 
-    @property (nonatomic, assign) BOOL limitResultsDesignMode;
-
-    @property (nonatomic, weak) id <MADocumentDelegate> documentDelegate;
-
-    @property (nonatomic, strong) MTReportFormatter *reportFormatter;
-
-    @property (nonatomic, copy) NSManagedObjectID *documentObjectID;
-    @property (readonly) RptqDocument *activeDocumentModel;
-
-    @property (nonatomic, strong) NSMutableDictionary *sectionLayoutManagers;
+    @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
 
     @property (nonatomic, strong, readwrite)    MTDataTableFast *mainDataTable;
-
-    @property (nonatomic, strong, readonly)     NSString *fileName;
-    @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
-    @property (readwrite)     MTDatabase *database;
+    @property (readwrite)                       MTDatabase *database;
+    @property (nonatomic, strong)               MADActivityIndicator *statusLabel;
 
     @property (nonatomic, strong, readwrite)    MADocumentState *documentStatus;
 
-    @property (nonatomic, strong) MADActivityIndicator *statusLabel;
+    @property (nonatomic, weak)                 id <MADocumentDelegate> documentDelegate;
 
-    @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
+    @property (nonatomic, copy)                 NSManagedObjectID *documentObjectID;
+    @property (readonly)                        RptqDocument *activeDocumentModel;
 
-    @property (nonatomic, strong) MTPaper *paper;
+    @property (nonatomic, strong)               NSMutableDictionary *sectionLayoutManagers;
+    @property (readonly)                        NSString *filename;
+    @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
 
-    @property (nonatomic, copy, readwrite)      NSURL *urlDataTableCache;
+
+    @property (nonatomic, weak)                 id <MADActivityProtocol> activityDelegate;
+    @property (nonatomic, strong)               MTPaper *paper;
+    @property (nonatomic, copy, readonly)       NSURL *urlDataTableCache;
+    @property (nonatomic, assign)               BOOL limitResultsDesignMode;
 
     - (MTReportViewerPrintPageRenderer *)printerPrintPageRender;
 
@@ -96,9 +92,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
     - (UIImage *)fullyRenderedThumbnail;
-
-    - (void)prepairForRefresh;
-    - (void)finishRefresh:(bool)success;
 
     - (void)initalizeMainDataTable;
     - (void)initalizeMainQuery:(RptqDocument *)document;
@@ -117,7 +110,6 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)removeGuts; //Cleans any cache that may exist.
 
     - (NSString *)mimetype;
-    - (NSURL *)cacheUrlForFilename:(NSString *)filename;
 
 @end
 

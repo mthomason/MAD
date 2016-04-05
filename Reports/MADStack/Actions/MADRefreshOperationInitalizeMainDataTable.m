@@ -42,15 +42,13 @@
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypePhysical);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(document.fileName.hash);
+    NSString *filename = document.filename;
+    NSNumber *objectIdV =  @(filename.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
     
     MTDataTableFast *datatable = [MTDataTableFast dataTableFactory:parameters];
     datatable.cacheDelegate = document;
-    NSString *filename = [datatable filenameMDCache];
-    NSURL *cacheUrl = [document cacheUrlForFilename:filename].copy;
-    document.urlDataTableCache = cacheUrl;
-    [datatable loadFromCacheWithUrl:cacheUrl];
+    [datatable loadFromCacheWithUrl:document.urlDataTableCache];
     document.mainDataTable = datatable;
     
     

@@ -121,8 +121,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     if ([operation isKindOfClass:[MADRefreshReloadOperation class]]) {
 
-        MADocument *operationDocument = ((MADRefreshReloadOperation *)operation).document;
-        [operationDocument finishRefresh:((MADRefreshReloadOperation *)operation).completedSuccessfully];
         if (((MADRefreshReloadOperation *)operation).completedSuccessfully) {
 
             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {

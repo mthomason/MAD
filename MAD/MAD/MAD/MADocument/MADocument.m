@@ -145,6 +145,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
     @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 
+    @property (nonatomic, copy, readwrite) NSURL *urlDataTableCache;
     @property (nonatomic, copy, readwrite) NSURL *urlGuts;
     @property (nonatomic, copy, readwrite) NSURL *urlMetaPlaylist;
 
@@ -158,21 +159,46 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [[UIScreen mainScreen] scale] > 1.5;
 }
 
++ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
+    NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
+    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
+    return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName isDirectory: YES];
+}
+
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
+    NSString *filenameId = [MADFilename newFilenameId:filename.hash];
+    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
+}
+
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-
-    return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
-                      andRetinaDisplay: [self isRetnaDisplay]];
-
+    
+    return [self thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [self isRetnaDisplay]];
+    
 }
 
 + (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
     NSString *name = [self isRetnaDisplay] ? [handle stringByAppendingString:@"@2x"] : handle;
-    
-    NSString *fileName = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
-    
+    NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
     NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
-    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
+    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+}
+
+- (NSURL *)thumbnailURL {
+    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension andRetinaDisplay: [MADocument isRetnaDisplay]];
+}
+
+- (NSURL *)urlDataTableCache {
+    NSString *filename = [self filename];
+    return [self cacheUrlForFilename:filename];
+}
+- (NSURL *)cachedFilesDirectory {
+    NSString *filename = [self filename];
+    return [MADocument cacheFilesDirectoryForFilename:filename];
+}
+
+- (NSURL *)cacheUrlForFilename:(NSString *)filename {
+    return [self.cachedFilesDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 #pragma mark - Property Overrides
@@ -644,13 +670,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     */
 }
 
-#pragma mark - MTCacheProtocol
-
-- (NSURL *)cachedFilesDirectory {
-    NSString *filename = [self filename];
-    return [MADocument cacheFilesDirectoryForFilename:filename];
-}
-
 #pragma mark - MTDatabaseProtocol
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
@@ -817,20 +836,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (NSURL *)cacheUrlForFilename:(NSString *)filename {
-    return [self.cachedFilesDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-}
-
 - (void)initalizeMainDataTable {
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypePhysical);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(self.fileName.hash);
+    NSString *filename = self.filename;
+    NSNumber *objectIdV =  @(filename.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
     MTDataTableFast *datatable = (MTDataTableFast *)[MTDataTable dataTableFactory:parameters];
     datatable.cacheDelegate = self;
-    NSString *filename = [datatable filenameMDCache];
-    NSURL *cacheUrl = [self cacheUrlForFilename:filename];
+    NSString *cacheName = [datatable filenameMDCache];
+    NSURL *cacheUrl = [self cacheUrlForFilename:cacheName];
     self.urlDataTableCache = cacheUrl;
     [datatable loadFromCacheWithUrl:cacheUrl];
     self.mainDataTable = datatable;
@@ -883,29 +899,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                                            waitUntilDone: NO];
 }
 
-- (void)prepairForRefresh {
-    [self initalizeMainDataTable];
-    
-    RptqDocument *document = [self activeDocumentModel];
-    [self initalizeMainQuery:document];
-    [self initalizeReportFormatter];
-    self.mainQuery.database.delegate = self;
-    
-    self.mainQuery.dataTable = self.mainDataTable;
-    
-}
-
-- (void)finishRefresh:(bool)success {
-    self.didRefresh = success ? YES : NO;
-}
-
-- (NSURL *)cachedDataUrl { return self.urlDataTableCache; }
-
-- (NSString *)fileHandle {
-    return self.thumbnailURL.path.lastPathComponent;
-}
-
-// FIXME: Only ever called when creating of report failes
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
         if (successClosingReport) {
@@ -932,7 +925,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (void)regenThumbnail {
     [[NSFileManager defaultManager] fileExistsAtPath: self.thumbnailURL.path];
-    BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
+    BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned) && [self.reportFormatter numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.thumbnailURL.path] == NO) {
         UIImage *thumbnail = [self fullyRenderedThumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
@@ -1112,11 +1105,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return success;
 }
 
-- (NSURL *)thumbnailURL {
-    return [MADocument thumbnailUrlForHandle: self.fileURL.lastPathComponent.stringByDeletingPathExtension
-                            andRetinaDisplay: [MADocument isRetnaDisplay]];
-}
-
 #pragma mark File Name
 
 - (void)removeGuts {
@@ -1134,17 +1122,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:self.urlGuts error:&error];
     
-}
-
-+ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension:MADFileExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
-    return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName isDirectory: YES];
-}
-
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [MADFilename newFilenameId:filename.hash];
-    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl { return madUrl.lastPathComponent.stringByDeletingPathExtension; }
