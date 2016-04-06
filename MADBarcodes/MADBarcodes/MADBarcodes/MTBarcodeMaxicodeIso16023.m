@@ -10,28 +10,27 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
-//@property (nonatomic, retain, readwrite) NSString *primaryData;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeMaxicodeIso16023
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeMaxicodeIso16023 type]];
-        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasMaxicode"];
-        [self setName: @"Maxicode (ISO 16023)"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
-        [self setOption1:-1];
+        self.barcodeType = MTBarcodeTypeMaxicode;
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMaxicode";
+        self.name = @"Maxicode (ISO 16023)";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
+        self.option1 = -1;
         
     }
     return self;
@@ -43,15 +42,16 @@
 
 - (void)setPrimaryDataString:(NSString *)primaryData {
     if (primaryData) {
-        [self setPrimaryData:primaryData];
+        NSString *pdata = primaryData.copy;
+        self.primaryData = pdata;
     } else {
-        [self setPrimaryData:@""];
+        self.primaryData = @"";
     }
 }
 
 - (void)setEncodingMode:(NSInteger)encodingMode {
     if (encodingMode == -1 || encodingMode == 2 || encodingMode == 3 || encodingMode == 4 || encodingMode == 5 || encodingMode == 6) {
-        [self setOption1:encodingMode];
+        self.option1 = encodingMode;
     }
 }
 

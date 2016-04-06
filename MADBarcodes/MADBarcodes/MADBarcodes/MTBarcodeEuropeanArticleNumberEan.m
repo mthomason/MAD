@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -23,10 +23,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeEuropeanArticleNumberEan type]];
-        [self setName: @"European Article Number (EAN)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeEuropeanArticleNumberEan type];
+        self.name = @"European Article Number (EAN)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;

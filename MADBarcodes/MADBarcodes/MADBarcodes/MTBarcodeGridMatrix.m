@@ -10,8 +10,8 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
+@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
@@ -25,11 +25,11 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeGridMatrix type]];
-        [self setName: @"Grid Matrix"];
-        [self setDetailsSegueIdentifer: @"MTIdentiferSegueBarcodeExtrasGridMatrix"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        self.barcodeType = [MTBarcodeGridMatrix type];
+        self.name = @"Grid Matrix";
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasGridMatrix";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
         
     }
     return self;

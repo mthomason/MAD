@@ -10,25 +10,26 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
+
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeDataMatrixIso16022
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeDataMatrixIso16022 type]];
-        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasDataMatrix"];
-        [self setName: @"Data Matrix (ISO 16022)"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        self.barcodeType = [MTBarcodeDataMatrixIso16022 type];
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasDataMatrix";
+        self.name = @"Data Matrix (ISO 16022)";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
         
     }
     return self;

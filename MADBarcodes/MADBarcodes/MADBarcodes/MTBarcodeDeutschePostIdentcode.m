@@ -10,23 +10,23 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeDeutschePostIdentcode
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeDeutschePostIdentcode type]];
-        [self setName: @"Deutsche Post Identcode"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeDeutschePostIdentcode type];
+        self.name = @"Deutsche Post Identcode";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -23,18 +23,16 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodePlanet type]];
-        [self setName: @"PLANET"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = MTBarcodeTypePlanet;
+        self.name = @"PLANET";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;
 }
 
-+ (MTBarcodeType)type {
-    return MTBarcodeTypePlanet;
-}
++ (MTBarcodeType)type { return MTBarcodeTypePlanet; }
 
 - (void)initSampleData {
     [self setInput:              @"1231231231231"];

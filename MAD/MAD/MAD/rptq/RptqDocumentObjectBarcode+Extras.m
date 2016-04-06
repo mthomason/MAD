@@ -66,7 +66,7 @@
 - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
 
     [self setAdd2dComponent:    @([barcode has2dComponent])];
-    [self setBorderStyle:       @([barcode borderStyle])];
+    self.borderStyle =       @([barcode borderStyle]);
     self.borderWidth =        @([barcode borderWidth]);
     [self setType:              @([barcode barcodeType])];
     [self setHeight:            @([barcode height])];

@@ -75,7 +75,7 @@
         
         int success = ZBarcode_Encode(barcode, (unsigned char *)input, inputLen);
         
-        [self setBarcode:barcode];
+        self.barcode:barcode];
         
         NSString *errorMessage = nil;
         

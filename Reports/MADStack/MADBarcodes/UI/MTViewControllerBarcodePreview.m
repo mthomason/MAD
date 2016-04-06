@@ -29,34 +29,30 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         NSDictionary *namesByType = [MTBarcode names];
-        [self setBarcodeNamesByType:namesByType];
+        self.barcodeNamesByType = namesByType;
         
         NSArray *allNames = [[self barcodeNamesByType] allValues];
         NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-        [self setBarcodeNamesOrdered: allNamesSorted];
+        self.barcodeNamesOrdered = allNamesSorted;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self barcodeView].backgroundColor = [UIColor groupTableViewBackgroundColor];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    self.barcodeView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 }
 
 - (void)setBarcodeToPreview:(MTBarcode *)barcode {
-    [self setBarcode:barcode];
-    [[self barcodeView] setBarcode:barcode];
+    self.barcode = barcode;
+    [self.barcodeView setBarcode:barcode];
 }
 
 - (void)update {
-    if ([[self barcodeView] barcode] == nil) {
-        [[self barcodeView] setBarcode:[self barcode]];
+    if ([self.barcodeView barcode] == nil) {
+        [self.barcodeView setBarcode:[self barcode]];
     }
-    [[self barcodeView] setNeedsDisplay];
+    [self.barcodeView setNeedsDisplay];
 }
 
 @end

@@ -10,23 +10,23 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeFlattermarken
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeFlattermarken type]];
-        [self setName: @"Flattermarken"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeFlattermarken type];
+        self.name = @"Flattermarken";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

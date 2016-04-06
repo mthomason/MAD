@@ -33,13 +33,13 @@
 - (BOOL)didToggleShowErrorMessages;
 - (void)didChangeSymbolHeight:(NSInteger)symbolHeight;
 - (void)setInput:(NSString *)input;
-- (void)setBorderWidth:(NSUInteger)borderWidth;
+- (void)setBorderWidth:(NSInteger)borderWidth;
 - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle;
 - (void)setSampleData:(NSArray *)sampleData;
 
 - (void)barcodeAztecDidEnableAutomaticResizing;
-- (void)barcodeAztecDidSetSize:(NSInteger)size;
-- (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection;
+- (void)barcodeAztecDidSetSize:(NSUInteger)size;
+- (void)barcodeAztecDidSetErrorCorrection:(NSUInteger)errorCorrection;
 
 - (void)barcodeGridMatrixDidEnableAutomaticResizing;
 - (void)barcodeGridMatrixDidSetSize:(NSInteger)size;

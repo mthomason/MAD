@@ -40,13 +40,14 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
 
     + (instancetype)newBarcodeWithType:(MTBarcodeType)type;
 
+    @property (nonatomic, readonly, strong) NSString *name;
+    @property (nonatomic, readonly, strong) NSString *detailsSegueIdentifer;
+    @property (nonatomic, copy)             NSString *primaryData;
+
     @property (nonatomic, copy, readwrite) MADColor *forgroundColor;
     @property (nonatomic, copy, readonly) MADColor *backgroundColor;
 
     @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
-    @property (nonatomic, retain, readonly) NSString *name;
-    @property (nonatomic, retain, readonly) NSString *detailsSegueIdentifer;
-    @property (nonatomic, retain) NSString *primaryData;
 
     @property (nonatomic, assign, readonly) BOOL has2dComponent;
     @property (nonatomic, assign, readonly) BOOL hasOptionalInput;

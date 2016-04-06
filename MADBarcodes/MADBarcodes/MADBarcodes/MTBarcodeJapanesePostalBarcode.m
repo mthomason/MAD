@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -23,18 +23,16 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:MTBarcodeTypeJapanPost];
-        [self setName: @"Japanese Postal Barcode"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = MTBarcodeTypeJapanPost;
+        self.name = @"Japanese Postal Barcode";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;
 }
 
-+ (MTBarcodeType)type {
-    return [MTBarcodeJapanesePostalBarcode type];
-}
++ (MTBarcodeType)type { return MTBarcodeTypeJapanPost; }
 
 - (void)initSampleData {
     [self setInput:              @"Japanese-Postal-Barcode"];

@@ -10,23 +10,23 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeCode32ItalianPharmacode
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeCode32ItalianPharmacode type]];
-        [self setName: @"Code 32 (Italian Pharmacode)"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode32ItalianPharmacode type];
+        self.name = @"Code 32 (Italian Pharmacode)";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

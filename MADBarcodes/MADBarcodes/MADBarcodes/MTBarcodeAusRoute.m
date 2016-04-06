@@ -10,31 +10,28 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeAusRoute
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeAusRoute type]];
-        [self setName: @"Australia Post Routing Code"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = MTBarcodeTypeAusroute;
+        self.name = @"Australia Post Routing Code";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;
 }
 
-+ (MTBarcodeType)type {
-    return MTBarcodeTypeAusroute;
-}
++ (MTBarcodeType)type { return MTBarcodeTypeAusroute; }
 
 - (void)initSampleData {
     [self setInput:              @"39549554"];

@@ -10,12 +10,12 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -25,11 +25,11 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeMicroQrCode type]];
-        [self setName: @"Micro QR Code"];
-        [self setDetailsSegueIdentifer: @"MTIdentiferSegueBarcodeExtrasQrCode"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        self.barcodeType = [MTBarcodeMicroQrCode type];
+        self.name = @"Micro QR Code";
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasQrCode";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
         
     }
     return self;

@@ -10,7 +10,7 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -23,18 +23,16 @@
     self = [super init];
     if (self) {
 
-        [self setBarcodeType:[MTBarcodeAusreDirect type]];
-        [self setName: @"Australia Post Redirect Code"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeAusreDirect type];
+        self.name = @"Australia Post Redirect Code";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;
 }
 
-+ (MTBarcodeType)type {
-    return MTBarcodeTypeAusreDirect;
-}
++ (MTBarcodeType)type { return MTBarcodeTypeAusreDirect; }
 
 - (void)initSampleData {
     [self setInput:              @"39549554"];

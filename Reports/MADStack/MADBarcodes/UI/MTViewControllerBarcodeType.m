@@ -41,11 +41,11 @@
 
 - (void)customInit {
     NSDictionary *namesByType = [MTBarcode names];
-    [self setBarcodeNamesByType:namesByType];
+    self.barcodeNamesByType = namesByType;
     
     NSArray *allNames = [[self barcodeNamesByType] allValues];
     NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    [self setBarcodeNamesOrdered: allNamesSorted];
+    self.barcodeNamesOrdered = allNamesSorted;
     
 }
 

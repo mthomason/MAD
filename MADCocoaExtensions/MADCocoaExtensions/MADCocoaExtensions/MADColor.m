@@ -25,6 +25,11 @@ const CGFloat MADF255 = 255.00000000f;
     return self;
 }
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    id copy = [[MADColor alloc] initWithColor:self.color];
+    return copy;
+}
+
 - (NSString *)hexStringValue {
     NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -hexStringValue");
     NSString *result;

@@ -10,7 +10,7 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -23,10 +23,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodePharmacode2Track type]];
-        [self setName: @"Pharmacode 2-track"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodePharmacode2Track type];
+        self.name = @"Pharmacode 2-track";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

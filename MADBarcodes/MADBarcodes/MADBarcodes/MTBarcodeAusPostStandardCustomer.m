@@ -10,7 +10,7 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -20,13 +20,12 @@
 @implementation MTBarcodeAusPostStandardCustomer
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeAusPostStandardCustomer type]];
-        [self setName: @"Australia Post Standard Customer"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeAusPostStandardCustomer type];
+        self.name = @"Australia Post Standard Customer";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

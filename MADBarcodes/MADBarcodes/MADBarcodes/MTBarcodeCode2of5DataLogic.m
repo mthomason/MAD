@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -23,10 +23,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode2of5DataLogic type]];
-        [self setName: @"Code 2 of 5 Data Logic"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode2of5DataLogic type];
+        self.name = @"Code 2 of 5 Data Logic";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

@@ -8,39 +8,37 @@
 
 #import "MTBarcodePdf417Iso15438.h"
 
-NSString * const MADStringDisplayPdf417 = @"PDF417 (ISO 15438)";
-NSString * const MADStringDisplayPdfTrunc = @"PDF417 Trunc";
-NSString * const MADStringDisplayPdfHibc = @"HIBC PDF";
+NSString * const MADStringDisplayPdf417     = @"PDF417 (ISO 15438)";
+NSString * const MADStringDisplayPdfTrunc   = @"PDF417 Trunc";
+NSString * const MADStringDisplayPdfHibc    = @"HIBC PDF";
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodePdf417Iso15438
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodePdf417Iso15438 type]];
-        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasPdf417"];
-        [self setName: MADStringDisplayPdf417];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        self.barcodeType = MTBarcodeTypePdf417;
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasPdf417";
+        self.name = MADStringDisplayPdf417;
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
         
     }
     return self;
 }
 
-+ (MTBarcodeType)type {
-    return MTBarcodeTypePdf417;
-}
++ (MTBarcodeType)type { return MTBarcodeTypePdf417; }
 
 - (NSInteger)format {
     return self.barcodeType;

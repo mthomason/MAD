@@ -26,6 +26,7 @@ static inline UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, 
 }
 
 @interface MADColor : NSObject
+    <NSCopying>
 
     - (instancetype)initWithColor:(UIColor *)color;
 

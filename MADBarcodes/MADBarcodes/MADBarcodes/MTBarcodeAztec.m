@@ -10,25 +10,25 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeAztec
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeAztec type]];
-        [self setName: @"Aztec Code (ISO 24778)"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
-        [self setDetailsSegueIdentifer: @"MTIdentiferSegueBarcodeExtrasAztec"];
+        self.barcodeType = [MTBarcodeAztec type];
+        self.name = @"Aztec Code (ISO 24778)";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
+        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasAztec";
         
     }
     return self;

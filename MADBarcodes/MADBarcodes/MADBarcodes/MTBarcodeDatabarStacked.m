@@ -10,23 +10,23 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeDatabarStacked
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeDatabarStacked type]];
-        [self setName: @"Databar Stacked"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeDatabarStacked type];
+        self.name = @"Databar Stacked";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;

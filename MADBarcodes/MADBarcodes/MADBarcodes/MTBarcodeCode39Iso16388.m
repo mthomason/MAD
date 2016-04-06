@@ -10,43 +10,35 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeCode39Iso16388
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeCode39Iso16388 type]];
-        [self setName: @"Code 39 (ISO 16388)"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        self.barcodeType = MTBarcodeTypeCODE39;
+        self.name = @"Code 39 (ISO 16388)";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
         
     }
     return self;
 }
 
-+ (MTBarcodeType)type {
-    return MTBarcodeTypeCODE39;
-}
++ (MTBarcodeType)type { return MTBarcodeTypeCODE39; }
 
 - (void)setMod43CheckDigitEnabled:(BOOL)enabled {
-    if (enabled) {
-        [self setOption2:1];
-    } else {
-        [self setOption2:0];
-    }
+    self.option2 = enabled ? 1 : 0;
 }
 
 - (BOOL)mod43CheckDigitEnabled {
-    return [self option2] == 1;
+    return self.option2 == 1;
 }
 
 @end
@@ -54,13 +46,12 @@
 @implementation MTBarcodeCode39Hbic
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeCode39Iso16388 type]];
-        [self setName: @"Code 39 (HBIC)"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = MTBarcodeTypeHibc39;
+        self.name = @"Code 39 (HBIC)";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = NO;
         
     }
     return self;

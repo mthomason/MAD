@@ -486,7 +486,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
             
             CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document pageRect:pageRect numberOfPages:numberOfPages pageIndex:pageIndex offset:&originY];
             
-            [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
+            self.backgroundColorForDocumentSection:documentSection inRect:sectionRect];
             
             NSArray *groupLevelKeys = [self groupLevelKeysForDetailRow:pageSection.detailRowId];
             if (pageSection.sectionType == MNSDocumentSectionTypeGroupFooter && pageSection.groupLevel == self.reportFormatter.numberOfGroups - 1) {

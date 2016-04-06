@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
-@property (nonatomic, assign, readwrite) BOOL has2dComponent;
-@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+    @property (nonatomic, strong, readwrite) NSString *name;
+    @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
+    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -23,10 +23,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode128Iso15417 type]];
-        [self setName: @"Code 128 (ISO 15417)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode128Iso15417 type];
+        self.name = @"Code 128 (ISO 15417)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;
@@ -49,10 +49,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode128SubsetB type]];
-        [self setName: @"Code 128 (Subset C Suppression)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode128SubsetB type];
+        self.name = @"Code 128 (Subset C Suppression)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;
@@ -75,10 +75,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode128Ean14 type]];
-        [self setName: @"Code 128 (EAN-14)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode128Ean14 type];
+        self.name = @"Code 128 (EAN-14)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;
@@ -101,10 +101,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode128Nve18 type]];
-        [self setName: @"Code 128 (HBIC)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode128Nve18 type];
+        self.name = @"Code 128 (HBIC)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;
@@ -127,10 +127,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode128Hibc type]];
-        [self setName: @"Code 128 (GS1-128)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode128Hibc type];
+        self.name = @"Code 128 (GS1-128)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;
@@ -153,10 +153,10 @@
     self = [super init];
     if (self) {
         
-        [self setBarcodeType:[MTBarcodeCode128Hibc type]];
-        [self setName: @"Code 128 (GS1-128)"];
-        [self setHas2dComponent: YES];
-        [self setHasOptionalInput: NO];
+        self.barcodeType = [MTBarcodeCode128Hibc type];
+        self.name = @"Code 128 (GS1-128)";
+        self.has2dComponent = YES;
+        self.hasOptionalInput = NO;
         
     }
     return self;

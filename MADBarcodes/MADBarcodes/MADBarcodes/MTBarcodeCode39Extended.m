@@ -10,7 +10,7 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -20,13 +20,13 @@
 @implementation MTBarcodeCode39Extended
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+
+    if (self = [super init]) {
         
-        [self setBarcodeType:[MTBarcodeCode39Extended type]];
-        [self setName: @"Code 39 Extended"];
-        [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        self.barcodeType = MTBarcodeTypeEXCODE39;
+        self.name = @"Code 39 Extended";
+        self.has2dComponent = NO;
+        self.hasOptionalInput = YES;
         
     }
     return self;
