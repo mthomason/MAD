@@ -29,10 +29,15 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 extern NSString * const MTDocumentObjectDefinationField1;
 extern NSString * const MTDocumentObjectDefinationField2;
 
+@class MADSectionLayoutManager;
+
 @interface RptqDocumentObject (Extras) <MTProtocolLog, RptqDocumentObjectFactory>
 
     + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
-    
+
+    + (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromParentSection:(RptqDocumentSection *)section
+               withLayoutManager:(MADSectionLayoutManager *)layoutManager;
+
     @property (readonly) MTDocumentObjectType getType;
 
     - (CGSize)size;

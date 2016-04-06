@@ -33,6 +33,7 @@
 #import <CoreData/NSEntityDescription.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSBundle.h>
+#import "MADSectionLayoutManager.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
@@ -182,6 +183,8 @@ static NSNumberFormatter *currencyNumberFormatter;
     }
 }
 
+
+
 - (CGFloat)spacingLeft {
     return self.marginLeft.floatValue + self.borderWidthLeft.floatValue + self.paddingLeft.floatValue;
 }
@@ -246,6 +249,31 @@ static NSNumberFormatter *currencyNumberFormatter;
     NSNumber *y = [[NSNumber alloc] initWithFloat: origin.y];
     self.originx = x;
     self.originy = y;
+}
+
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromParentSection:(RptqDocumentSection *)section withLayoutManager:(MADSectionLayoutManager *)layoutManager {
+    
+    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+    
+    NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
+    NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
+    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: documentObject.inSectionRow.hasObjects];
+    [hasObjects removeObjectAtIndex:deleteIndex];
+    
+    [layoutManager removeItemWithID:documentObject.objectID];
+    [layoutManager layout];
+    
+    
+    sectionRow.hasObjects = hasObjects;
+    documentObject.inSectionRow = nil;
+    
+    CGFloat h = layoutManager.size.height;
+    
+    CFNumberRef height = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &h);
+    section.height = (__bridge NSNumber *)(height);
+    CFRelease(height);
+    
 }
 
 #pragma mark - Member

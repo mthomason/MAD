@@ -815,8 +815,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [private performBlockAndWait:^{
 
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: private];
-        [self removeDocumentObjectFromParentSection:documentObject];
-        
+        RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
+        MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
+        [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
+
         NSError * __autoreleasing *error = NULL;
         [private save:error];
 
@@ -833,7 +835,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
         for (RptqDocumentObject *documentObject in objectsToDelete) {
-            [self removeDocumentObjectFromParentSection:documentObject];
+        
+            RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
+            MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
+            [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
             [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:context];
         }
     }
@@ -850,75 +855,60 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (fetchError == nil) {
         
         for (RptqDocumentObject *documentObject in objectsToDelete) {
+            RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
             
-            [self removeDocumentObjectFromParentSection:documentObject];
+            MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
+            [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
             [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:context];
         }
     }
 }
 
-- (void)removeDocumentObjectFromParentSection:(RptqDocumentObject *)documentObject {
-    
-        RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
-        RptqDocumentSection *section = sectionRow.inSection;
-    
-        NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
-        NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
-        
-        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
-        [hasObjects removeObjectAtIndex:deleteIndex];
-        
-        MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[section.objectID];
-        [layoutManager removeItemWithID:documentObject.objectID];
-        [layoutManager layout];
-        
-        
-        sectionRow.hasObjects = hasObjects;
-        documentObject.inSectionRow = nil;
-    
-        CGFloat h = layoutManager.size.height;
-    
-        CFNumberRef height = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &h);
-        section.height = (__bridge NSNumber *)(height);
-        CFRelease(height);
-    
-}
+- (void)removeGroup:(RptqQueryGroup *)group fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = managedObjectContext;
 
-    if (groupToRemove) {
-        RptqQuery *query = [groupToRemove inQuery];
+    void (^removeRptqGroup)(RptqQueryGroup *group);
+    removeRptqGroup = ^(RptqQueryGroup *group) {
 
-        NSArray *sections = groupToRemove.hasSection.allObjects;
-        NSAssert(sections.count == 2, @"Expecting a header and footer.");
-        
-        RptqDocumentSection *section0 = sections[0];
-        RptqDocumentSection *section1 = sections[1];
-        [self.sectionLayoutManagers removeObjectForKey:section0.objectID];
-        [self.sectionLayoutManagers removeObjectForKey:section1.objectID];
-    
-        [groupToRemove removeHasSectionObject: section0];
-        [groupToRemove removeHasSectionObject: section1];
-        
-        [query.managedObjectContext deleteObject: groupToRemove];
-        [query removeHasQueryGroupsObject: groupToRemove];
-        
-        [self saveContext];
-        
-        //Reweight Groups
-        NSString *weight = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        NSArray *sortDescriptors = @[sortDescriptor];
-        NSArray *sortedQueryGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
-        NSUInteger counter = 0;
-        for (RptqQueryGroup *group in sortedQueryGroups) {
-            NSNumber *counterWrapper = @(counter);
-            group.weight = counterWrapper;
-            counter++;
+        if (group) {
+            RptqQuery *query = group.inQuery;
+            
+            NSArray *sections = group.hasSection.allObjects;
+            NSAssert(sections.count == 2, @"Expecting a header and footer.");
+            
+            RptqDocumentSection *section0 = sections[0];
+            RptqDocumentSection *section1 = sections[1];
+            [self.sectionLayoutManagers removeObjectForKey:section0.objectID];
+            [self.sectionLayoutManagers removeObjectForKey:section1.objectID];
+            
+            [group removeHasSectionObject: section0];
+            [group removeHasSectionObject: section1];
+            
+            [query.managedObjectContext deleteObject: group];
+            [query removeHasQueryGroupsObject: group];
+            
+            //Reweight Groups
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight)) ascending:YES];
+            NSArray *sortDescriptors = @[sortDescriptor];
+            NSArray *sortedQueryGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+            NSUInteger counter = 0;
+            for (RptqQueryGroup *group in sortedQueryGroups) {
+                NSNumber *counterWrapper = [[NSNumber alloc] initWithUnsignedInteger:counter];
+                group.weight = counterWrapper;
+                counter++;
+            }
+
+            NSError * __autoreleasing * error = NULL;
+            [private save:error];
+
         }
-        
-        [self saveContext];
-    }
+    };
+    
+    [private performBlockAndWait:removeRptqGroup];
+    
+
 }
 
 - (void)initalizeMainQuery:(RptqDocument *)document {
