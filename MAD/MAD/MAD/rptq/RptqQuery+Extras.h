@@ -21,7 +21,6 @@
     - (NSArray *)sortedQueryGroups;
     - (NSUInteger)numberOfTables;
     - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
-    - (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (NSUInteger)sectionCount;
 
 @end

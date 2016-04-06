@@ -243,32 +243,6 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     return sortedSortDescriptorsGroup;
 }
 
-- (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-
-    RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable:schemaTable database:self.inDatabase forManagedObjectContext:managedObjectContext];
-
-    NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet: self.hasQueryTables];
-    NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:schemaTable.hasFields.count];
-    
-    for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
-        @autoreleasepool {
-            
-            RptqQueryField *newQueryField = [RptqQueryField newQueryFieldForManagedObjectContext:managedObjectContext];
-            newQueryField.inQueryTable = newQueryTable;
-            newQueryField.databaseSchemaField = field;
-            newQueryTable.inQuery = self;
-            [newQueryFields addObject:newQueryField];
-            
-        }
-    }
-    newQueryTable.hasQueryFields = newQueryFields;
-    [tablesInQuery addObject:newQueryTable];
-    
-    self.hasQueryTables = tablesInQuery;
-    
-    return newQueryTable;
-}
-
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];
