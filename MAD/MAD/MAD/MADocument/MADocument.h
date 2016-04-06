@@ -53,7 +53,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 @interface MADocument : UIManagedDocument
     <UIPrintInteractionControllerDelegate,
         MTReportFormatterDataSource, MTDatabaseProtocol,
-        MTCacheProtocol, MADDataProtocol, MADReportDesignerSectionElementLayoutManagerDelegate>
+        MTCacheProtocol, MADDataProtocol>
 
     @property (nonatomic, strong)               MTReportFormatter *reportFormatter;
 

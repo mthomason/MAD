@@ -97,7 +97,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     MTReportDesignerSectionLayoutSettingsDelegate,
     MTQueryBuilderChooseFieldDelegate,
     MTTabBarImageProtocol,
-    MADReportDesignerSectionElementLayoutManagerDelegate,
     UIPopoverPresentationControllerDelegate,
     UICollectionViewDataSource,
     UICollectionViewDelegate,
@@ -586,17 +585,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonAddReportObject animated:NO];
 
-}
-
-- (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
-    
-    NSManagedObjectContext *objectContext = self.document.managedObjectContext;
-    RptqDocumentObject *documentObject;
-    documentObject = (RptqDocumentObject *)[objectContext objectWithID:attributes.objectID];
-    documentObject.originx = @(attributes.frame.origin.x);
-    documentObject.originy = @(attributes.frame.origin.y);
-    [objectContext save:nil];
-    
 }
 
 - (BOOL)prefersStatusBarHidden {

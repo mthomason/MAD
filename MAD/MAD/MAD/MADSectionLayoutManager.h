@@ -17,7 +17,6 @@
     @interface MADSectionLayoutManager : NSObject
 
     @property (nonatomic, strong, readonly) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
-    @property (nonatomic, weak) id <MADReportDesignerSectionElementLayoutManagerDelegate>delegate;
 
     - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
 

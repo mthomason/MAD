@@ -624,11 +624,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         
         MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:headerSection];
-        layoutManagerHeader.delegate = self;
         [self.sectionLayoutManagers setObject: layoutManagerHeader forKey: headerSection.objectID];
         
         MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:footerSection];
-        layoutManagerFooter.delegate = self;
         [self.sectionLayoutManagers setObject: layoutManagerFooter forKey: footerSection.objectID];
 
 
@@ -803,7 +801,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-        layoutManager.delegate = self;
         [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
     }
     

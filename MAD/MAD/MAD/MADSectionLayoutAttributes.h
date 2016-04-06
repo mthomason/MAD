@@ -12,7 +12,6 @@
 #import <UIKit/UICollectionViewLayout.h>
 
 @class MADSectionLayoutManager;
-@protocol MADReportDesignerSectionElementLayoutManagerDelegate;
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
 
@@ -26,11 +25,5 @@
     - (BOOL)validDropPoint:(CGPoint)dropPoint givenPlacedItems:(NSArray *)placedItems;
     - (NSArray *)dropPointsHorizontal;
     - (NSArray *)dropPoints;
-
-@end
-
-@protocol MADReportDesignerSectionElementLayoutManagerDelegate <NSObject>
-
-    - (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)item;
 
 @end

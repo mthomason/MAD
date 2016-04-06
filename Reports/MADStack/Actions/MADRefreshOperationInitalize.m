@@ -98,7 +98,6 @@
         for (RptqDocumentSection *reportSection in sectionEnumerator) {
             
             MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-            layoutManager.delegate = document;
             [sectionLayoutManagers setObject:layoutManager forKey:reportSection.objectID];
             
         }
