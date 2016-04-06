@@ -2331,7 +2331,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-        [self.document removeDocumentObject: objectId fromSection: sectionView.objectIdTag];
+        [self.document removeDocumentObjectWithObjectID: objectId];
     } animationComplete:^(BOOL finished) {
         if (finished) {
             [self.scroller.container invalidateIntrinsicContentSize];
@@ -2451,7 +2451,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: piece.objectIdTag];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-        [self.document removeDocumentObject: piece.objectIdTag fromSection: sectionView.objectIdTag];
+        [self.document removeDocumentObjectWithObjectID: piece.objectIdTag];
     } animationComplete:^(BOOL finished) {
         if (finished) {
             [self.scroller.container invalidateIntrinsicContentSize];

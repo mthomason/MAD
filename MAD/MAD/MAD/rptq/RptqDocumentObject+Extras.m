@@ -311,7 +311,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
     
-    MTDocumentObjectType objectType = (MTDocumentObjectType)documentObject.type.unsignedIntegerValue;
+    MTDocumentObjectType objectType = (MTDocumentObjectType)documentObject.type.shortValue;
     NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
     
     switch (objectType) {

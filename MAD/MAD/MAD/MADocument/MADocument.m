@@ -808,14 +808,24 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID {
+- (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.managedObjectContext;
     [private performBlockAndWait:^{
 
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: private];
+        [self removeDocumentObject:documentObject];
         
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+
+    }];
+    
+}
+
+- (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
+    
         RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
         RptqDocumentSection *section = sectionRow.inSection;
         NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
@@ -824,8 +834,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
         [hasObjects removeObjectAtIndex:deleteIndex];
         
-        MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
-        [layoutManager removeItemWithID:objectID];
+        MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[section.objectID];
+        [layoutManager removeItemWithID:documentObject.objectID];
         [layoutManager layout];
         
         
@@ -833,12 +843,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         documentObject.inSectionRow = nil;
         
         section.height = @(layoutManager.size.height);
-
-        
-        NSError * __autoreleasing *error = NULL;
-        [private save:error];
-
-    }];
     
 }
 

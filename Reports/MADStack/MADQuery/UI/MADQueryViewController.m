@@ -1494,16 +1494,20 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 // MARK: Deleting items from table view
 
 - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
-    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
-    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+
+    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentObject class])];
     NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
     fetchReqest.predicate = documentObjectsPredicate;
+    
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
     if (fetchError == nil) {
+
         MADocument *doc = self.document;
         for (RptqDocumentObject *documentObject in objectsToDelete) {
-            [doc removeDocumentObject:documentObject.objectID fromSection:documentObject.inSectionRow.inSection.objectID];
+        
+            [doc removeDocumentObject:documentObject];
+            
             [doc.activeDocumentModel removeDocumentObject:documentObject];
         }
     }
@@ -1519,7 +1523,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     if (fetchError == nil) {
         MADocument *doc = self.document;
         for (RptqDocumentObject *documentObject in objectsToDelete) {
-            [doc removeDocumentObject:documentObject.objectID fromSection:documentObject.inSectionRow.inSection.objectID];
+            [doc removeDocumentObject:documentObject];
             [doc.activeDocumentModel removeDocumentObject:documentObject];
         }
     }
@@ -1723,57 +1727,70 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     self.suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
 
-    MADocument *doc = self.document;
-    NSManagedObjectContext *managedObjectContext = doc.managedObjectContext;
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.document.managedObjectContext;
+    [private performBlockAndWait:^{
+        
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: private];
+        RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+        RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
+        
+        NSInteger numberOfTables = (NSInteger)[rptqQuery numberOfTables];
+        
+        NSDictionary *oldTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];
+        NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:oldTableLayoutResult];
+        
+        NSIndexPath *tableIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
+        RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: tableIndex];
+        
+        NSManagedObjectID *deleatedTableObjectId = table.objectID;
+        [rptqQuery removeHasQueryTablesObject:table];
+        numberOfTables--;
+        
+        NSDictionary *newTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];
+        
+        NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: newTableLayoutResult];
+        
+        NSArray *oldLayoutSectionTypes = oldTableLayout[MTTableSectionSectionsKey];
+        NSArray *newLayoutSectionTypes = newTableLayout[MTTableSectionSectionsKey];
+        
+        NSIndexSet *deleteSections = [self deleteSections:oldLayoutSectionTypes newSections:newLayoutSectionTypes];
+        
+        [tableView beginUpdates];
+        
+        [self deleteDatafieldsRelatedToTable:deleatedTableObjectId inContent:private];
+        [self deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:private];
+        
+        NSArray *cellsToDelete = [self deleteLinksGroupsPredicatesRelatedToTable: deleatedTableObjectId
+                                                                     inTableView: tableView
+                                                                  numberOfTables: numberOfTables
+                                                                       inContext: private];
 
-    RptqQuery *query = doc.activeDocumentModel.defaultDatabase.defaultQuery;
-    NSInteger numberOfTables = (NSInteger)[query numberOfTables];
+        NSError *error = nil;
+        [private save:&error];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+            NSArray *indexPaths = @[indexPath];
+            if (deleteSections != nil) {
+                [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
+                [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else {
+                [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+            if (cellsToDelete.count) {
+                [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+            [tableView endUpdates];
+            
+            self.suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
     
-    NSDictionary *oldTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];
-    NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:oldTableLayoutResult];
-    
-    NSIndexPath *tableIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
-    RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: tableIndex];
-    
-    NSManagedObjectID *deleatedTableObjectId = table.objectID;
-    [query removeHasQueryTablesObject:table];
-    numberOfTables--;
-    
-    NSDictionary *newTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];
-    NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: newTableLayoutResult];
-    NSArray *oldLayoutSectionTypes = oldTableLayout[MTTableSectionSectionsKey];
-    NSArray *newLayoutSectionTypes = newTableLayout[MTTableSectionSectionsKey];
-    
-    NSIndexSet *deleteSections = [self deleteSections:oldLayoutSectionTypes newSections:newLayoutSectionTypes];
+        }];
+        
+    }];
 
-    [tableView beginUpdates];
-
-    [self deleteDatafieldsRelatedToTable:deleatedTableObjectId inContent:managedObjectContext];
-    [self deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:managedObjectContext];
-    
-    NSArray *cellsToDelete = [self deleteLinksGroupsPredicatesRelatedToTable: deleatedTableObjectId
-                                                                 inTableView: tableView
-                                                              numberOfTables: numberOfTables
-                                                                   inContext: managedObjectContext];
-    
-    NSError *error = nil;
-    [managedObjectContext save:&error];
-    
-    NSArray *indexPaths = @[indexPath];
-    if (deleteSections != nil) {
-        [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
-        [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-    } else {
-        [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    
-    if (cellsToDelete.count) {
-        [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    
-    [tableView endUpdates];
-    
-    self.suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
 }
 
 - (void)deleteQueryLinksFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {

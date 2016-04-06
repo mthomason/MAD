@@ -100,7 +100,10 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
     - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID andSortOrder:(MNSSortOrder)sortOrder;
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
-    - (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID;
+
+    - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID;
+    - (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
+
     - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 
     - (void)initalizeSectionLayoutManagers:(RptqDocument *)document;

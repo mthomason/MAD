@@ -719,7 +719,7 @@
 
 - (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
 
-    MTDocumentObjectType objectType = documentObject.type.unsignedIntegerValue;
+    MTDocumentObjectType objectType = documentObject.type.shortValue;
     NSManagedObjectContext *managedObjectContext = documentObject.managedObjectContext;
     
     switch (objectType) {
