@@ -102,7 +102,10 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
 
     - (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID;
-    - (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
+    - (void)removeDocumentObjectFromParentSection:(RptqDocumentObject *)documentObject;
+
+    - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
+    - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context;
 
     - (void)removeGroup:(RptqQueryGroup *)groupToRemove;
 

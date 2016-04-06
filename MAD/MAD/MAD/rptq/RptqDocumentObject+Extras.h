@@ -31,28 +31,26 @@ extern NSString * const MTDocumentObjectDefinationField2;
 
 @interface RptqDocumentObject (Extras) <MTProtocolLog, RptqDocumentObjectFactory>
 
-+ (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
+    + (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
+    
+    @property (readonly) MTDocumentObjectType getType;
 
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
+    - (CGSize)size;
+    - (NSString *)designerRepresentationText;
+    - (CGRect)paddingViewFrame;
+    - (CGRect)boundsContentView;
+    - (CGRect)elementViewFrame;
+    - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+    - (CGSize)sizeContentView;
+    - (void)setOrigin:(CGPoint)origin;
+    - (void)dropAtRect:(CGRect)rect;
 
-@property (readonly) MTDocumentObjectType getType;
+    - (CGFloat)spacingLeft;
+    - (CGFloat)spacingTop;
+    - (CGFloat)spacingBottom;
+    - (CGFloat)spacingRight;
 
-- (CGSize)size;
-- (NSString *)designerRepresentationText;
-- (CGRect)paddingViewFrame;
-- (CGRect)boundsContentView;
-- (CGRect)elementViewFrame;
-- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
-- (CGSize)sizeContentView;
-- (void)setOrigin:(CGPoint)origin;
-- (void)dropAtRect:(CGRect)rect;
-
-- (CGFloat)spacingLeft;
-- (CGFloat)spacingTop;
-- (CGFloat)spacingBottom;
-- (CGFloat)spacingRight;
-
-- (NSDictionary *)attributesForDrawingText;
+    - (NSDictionary *)attributesForDrawingText;
 
 @end
 

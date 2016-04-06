@@ -717,12 +717,9 @@
     return documentObject;
 }
 
-- (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    MTDocumentObjectType objectType = documentObject.type.shortValue;
-    NSManagedObjectContext *managedObjectContext = documentObject.managedObjectContext;
-    
-    switch (objectType) {
+    switch (documentObject.type.shortValue) {
             
         case MTDocumentObjectTypeLabelDynamic: {
             [managedObjectContext deleteObject:documentObject.isLabelDataField];
@@ -758,7 +755,6 @@
             
     }
     [managedObjectContext deleteObject: documentObject];
-    [managedObjectContext save:nil];
 }
 
 - (id)debugQuickLookObject {

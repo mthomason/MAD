@@ -22,6 +22,8 @@
     + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext NS_RETURNS_RETAINED;
     + (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
+    + (void)removeDocumentObject:(RptqDocumentObject *)documentObject fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
     - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
     - (void)storeDatabaseConnectionDefination:(MTDatabase *)database forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables fieldsByTable:(NSDictionary *)fieldsByTable andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
@@ -37,7 +39,6 @@
     - (void)addQueryLink:(RptqQueryLinks *)queryLink;
     - (void)addPredicate:(RptqQueryPredicate *)predicate;
     - (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination;
-    - (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
     - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
 
     - (MTPaperType)paperType;

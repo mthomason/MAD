@@ -815,7 +815,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [private performBlockAndWait:^{
 
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: private];
-        [self removeDocumentObject:documentObject];
+        [self removeDocumentObjectFromParentSection:documentObject];
         
         NSError * __autoreleasing *error = NULL;
         [private save:error];
@@ -824,10 +824,44 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
+- (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
+    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
+    [fetchReqest setPredicate:documentObjectsPredicate];
+    NSError *fetchError = nil;
+    NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
+    if (fetchError == nil) {
+        for (RptqDocumentObject *documentObject in objectsToDelete) {
+            [self removeDocumentObjectFromParentSection:documentObject];
+            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:context];
+        }
+    }
+}
+
+- (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
+    
+    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentObject class])];
+    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
+    fetchReqest.predicate = documentObjectsPredicate;
+    
+    NSError *fetchError = nil;
+    NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
+    if (fetchError == nil) {
+        
+        for (RptqDocumentObject *documentObject in objectsToDelete) {
+            
+            [self removeDocumentObjectFromParentSection:documentObject];
+            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:context];
+        }
+    }
+}
+
+- (void)removeDocumentObjectFromParentSection:(RptqDocumentObject *)documentObject {
     
         RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
         RptqDocumentSection *section = sectionRow.inSection;
+    
         NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
         NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
         
@@ -841,8 +875,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         sectionRow.hasObjects = hasObjects;
         documentObject.inSectionRow = nil;
-        
-        section.height = @(layoutManager.size.height);
+    
+        CGFloat h = layoutManager.size.height;
+    
+        CFNumberRef height = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &h);
+        section.height = (__bridge NSNumber *)(height);
+        CFRelease(height);
     
 }
 

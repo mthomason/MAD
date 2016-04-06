@@ -2341,7 +2341,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         if (finished) {
             [self redrawAllElementViewsInCollectionView:sectionView];
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
-            [self.document.activeDocumentModel removeDocumentObject:documentObject];
+            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:self.document.managedObjectContext];
+            [self.document.managedObjectContext save:nil];
         }
     }];
 }

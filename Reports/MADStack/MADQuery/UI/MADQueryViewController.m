@@ -1491,56 +1491,16 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 }
 
-// MARK: Deleting items from table view
-
-- (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
-
-    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentObject class])];
-    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
-    fetchReqest.predicate = documentObjectsPredicate;
-    
-    NSError *fetchError = nil;
-    NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
-    if (fetchError == nil) {
-
-        MADocument *doc = self.document;
-        for (RptqDocumentObject *documentObject in objectsToDelete) {
-        
-            [doc removeDocumentObject:documentObject];
-            
-            [doc.activeDocumentModel removeDocumentObject:documentObject];
-        }
-    }
-}
-
-- (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {
-    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
-    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
-    [fetchReqest setPredicate:documentObjectsPredicate];
-    NSError *fetchError = nil;
-    NSArray *objectsToDelete = [context executeFetchRequest:fetchReqest error:&fetchError];
-    if (fetchError == nil) {
-        MADocument *doc = self.document;
-        for (RptqDocumentObject *documentObject in objectsToDelete) {
-            [doc removeDocumentObject:documentObject];
-            [doc.activeDocumentModel removeDocumentObject:documentObject];
-        }
-    }
-    [context save:nil];
-    
-
-}
-
-- (NSArray *)deleteLinksRelatedToSection:(MTQuerySections)querySection
-                            sectionIndex:(NSInteger)section
-                                   table:(NSManagedObjectID *)deleatedTableObjectId
-                             inTableView:(UITableView *)tableView
-                          numberOfTables:(NSInteger)numberOfTables
-                               inContext:(NSManagedObjectContext *)context {
+- (NSArray *)deleteLinksRelatedToSectionIndex:(NSInteger)section
+                                        table:(NSManagedObjectID *)deleatedTableObjectId
+                                  inTableView:(UITableView *)tableView
+                               numberOfTables:(NSInteger)numberOfTables
+                                    inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
-    NSFetchedResultsController *fetchedLinkes = [self queryLinksController];
+    
+    NSFetchedResultsController *fetchedLinkes = self.queryLinksController;
+    
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
     
     for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
@@ -1571,12 +1531,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return cellsToDelete;
 }
 
-- (NSArray *)deleteGroupsRelatedToSection:(MTQuerySections)querySection
-                             sectionIndex:(NSInteger)section
-                                    table:(NSManagedObjectID *)deleatedTableObjectId
-                              inTableView:(UITableView *)tableView
-                           numberOfTables:(NSInteger)numberOfTables
-                                inContext:(NSManagedObjectContext *)context {
+- (NSArray *)deleteGroupsRelatedToSectionIndex:(NSInteger)section
+                                         table:(NSManagedObjectID *)deleatedTableObjectId
+                                   inTableView:(UITableView *)tableView
+                                numberOfTables:(NSInteger)numberOfTables
+                                     inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
@@ -1603,12 +1562,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return cellsToDelete;
 }
 
-- (NSArray *)deletePredicateRelatedToSection:(MTQuerySections)querySection
-                                sectionIndex:(NSInteger)section
-                                       table:(NSManagedObjectID *)deleatedTableObjectId
-                                 inTableView:(UITableView *)tableView
-                              numberOfTables:(NSInteger)numberOfTables
-                                   inContext:(NSManagedObjectContext *)context {
+- (NSArray *)deletePredicateRelatedToSectionIndex:(NSInteger)section
+                                            table:(NSManagedObjectID *)deleatedTableObjectId
+                                      inTableView:(UITableView *)tableView
+                                   numberOfTables:(NSInteger)numberOfTables
+                                        inContext:(NSManagedObjectContext *)context {
 
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
@@ -1653,34 +1611,31 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     for (NSUInteger section = 0; section < (NSUInteger)tableView.numberOfSections; section++) {
         
         NSArray *cells;
-        MTQuerySections querySection = [self tableSectionTypeForIndexPathSection: section
-                                                              withNumberOfTables: numberOfTables + 1];
+        MTQuerySections querySection = [self tableSectionTypeForIndexPathSection: section withNumberOfTables: numberOfTables + 1];
+
         if (querySection == MTQuerySectionsLinks) {
             
-            cells = [self deleteLinksRelatedToSection: querySection
-                                         sectionIndex: (NSInteger)section
-                                                table: deleatedTableObjectId
-                                          inTableView: tableView
-                                       numberOfTables: numberOfTables
-                                            inContext: context];
+            cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section
+                                                     table: deleatedTableObjectId
+                                               inTableView: tableView
+                                            numberOfTables: numberOfTables
+                                                 inContext: context];
             
         } else if (querySection == MTQuerySectionsGroups) {
 
-            cells = [self deleteGroupsRelatedToSection: querySection
-                                          sectionIndex: (NSInteger)section
-                                                 table: deleatedTableObjectId
-                                           inTableView: tableView
-                                        numberOfTables: numberOfTables
-                                             inContext: context];
+            cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section
+                                                      table: deleatedTableObjectId
+                                                inTableView: tableView
+                                             numberOfTables: numberOfTables
+                                                  inContext: context];
             
         } else if (querySection == MTQuerySectionsPredicate) {
             
-            cells = [self deletePredicateRelatedToSection: querySection
-                                             sectionIndex: (NSInteger)section
-                                                    table: deleatedTableObjectId
-                                              inTableView: tableView
-                                           numberOfTables: numberOfTables
-                                                inContext: context];
+            cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section
+                                                         table: deleatedTableObjectId
+                                                   inTableView: tableView
+                                                numberOfTables: numberOfTables
+                                                     inContext: context];
             
         }
         [cellsToDelete addObjectsFromArray:cells];
@@ -1743,7 +1698,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         NSIndexPath *tableIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
         RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: tableIndex];
         
-        NSManagedObjectID *deleatedTableObjectId = table.objectID;
+        NSManagedObjectID *deleatedTableObjectId = table.objectID.copy;
         [rptqQuery removeHasQueryTablesObject:table];
         numberOfTables--;
         
@@ -1758,13 +1713,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         
         [tableView beginUpdates];
         
-        [self deleteDatafieldsRelatedToTable:deleatedTableObjectId inContent:private];
-        [self deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:private];
+        [self.document deleteDatafieldsRelatedToTable:deleatedTableObjectId inContent:private];
+        [self.document deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:private];
         
-        NSArray *cellsToDelete = [self deleteLinksGroupsPredicatesRelatedToTable: deleatedTableObjectId
-                                                                     inTableView: tableView
-                                                                  numberOfTables: numberOfTables
-                                                                       inContext: private];
+        NSArray *cellsToDelete = [self deleteLinksGroupsPredicatesRelatedToTable: deleatedTableObjectId inTableView: tableView
+                                                                  numberOfTables: numberOfTables inContext: private];
 
         NSError *error = nil;
         [private save:&error];

@@ -309,42 +309,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     return result;
 }
 
-+ (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
-    
-    MTDocumentObjectType objectType = (MTDocumentObjectType)documentObject.type.shortValue;
-    NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
-    
-    switch (objectType) {
-        case MTDocumentObjectTypeLabelDynamic: {
-            [managedObjectContext deleteObject:[documentObject isLabelDataField]];
-            break;
-        }
-        case MTDocumentObjectTypeLabelStatic: {
-            [managedObjectContext deleteObject:[documentObject isLabel]];
-            break;
-        }
-        case MTDocumentObjectTypeAggregate: {
-            [managedObjectContext deleteObject:[documentObject isAggregate]];
-            break;
-        }
-        case MTDocumentObjectTypeImage: {
-            [managedObjectContext deleteObject:[documentObject isImage]];
-            break;
-        }
-        case MTDocumentObjectTypeWhtiespace: {
-            break;
-        }
-        case MTDocumentObjectTypeBarcode: {
-            [managedObjectContext deleteObject:[documentObject isBarcode]];
-            break;
-        }
-        default:
-            break;
-    }
-    [managedObjectContext deleteObject: documentObject];
-    [managedObjectContext save:nil];
-}
-
 + (instancetype)documentObjectForObjectID:(NSManagedObjectID *)objid managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objid];
     return (RptqDocumentObject *)result;
