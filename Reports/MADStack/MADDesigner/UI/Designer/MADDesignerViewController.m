@@ -945,7 +945,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         
-        RptqDocumentSection *section = [query documentSectionForRow: selectedSectionNumber];
+        RptqDocumentSection *section = [query documentSectionForSelectedIndex: selectedSectionNumber];
         [section setProducesFormFeed:newPageAfter];
         
         NSError * __autoreleasing *error = NULL;
@@ -967,7 +967,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
         
-        RptqDocumentSection *section = [query documentSectionForRow: selectedSectionNumber];
+        RptqDocumentSection *section = [query documentSectionForSelectedIndex: selectedSectionNumber];
         NSString *key = section.sectionKey;
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -986,7 +986,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = [database.hasQueries anyObject];
-    RptqDocumentSection *documentSection = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [documentSection setInterfaceHeight: collectionViewContentSize.height];
@@ -1009,7 +1009,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    RptqDocumentSection *documentSection = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
     
     BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.unsignedIntegerValue;
     BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.unsignedIntegerValue;
@@ -1649,7 +1649,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     //RptqDocument *document = [self.document activeDocumentModel];
     //RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
     //RptqQuery *query = [database.hasQueries anyObject];
-    //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: selectedSectionNumber query: query];
+    //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForSelectedIndex: selectedSectionNumber query: query];
     //NSInteger qc = [query sectionCount];
     
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
@@ -2220,7 +2220,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
     RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
-    RptqDocumentSection *documentSection = [query documentSectionForRow: reportDesigner.lastSelectedSectionControlPanel];
+    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: reportDesigner.lastSelectedSectionControlPanel];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
     if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
         [self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
@@ -2271,7 +2271,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag {
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    RptqDocumentSection *section = [query documentSectionForRow: self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
     return section;
 }
 

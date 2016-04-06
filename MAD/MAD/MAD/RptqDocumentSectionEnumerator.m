@@ -55,7 +55,7 @@
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(total - current)];
     for (; self.current<total; self.current++) {
         @autoreleasepool {
-            RptqDocumentSection *section = [query documentSectionForRow: current];
+            RptqDocumentSection *section = [query documentSectionForSelectedIndex: current];
             [result addObject:section];
         }
     }
@@ -68,7 +68,7 @@
     RptqQuery *query = database.hasQueries.anyObject;
 
     NSInteger current = self.current;
-    id result = [query documentSectionForRow: current];
+    id result = [query documentSectionForSelectedIndex: current];
     current++;
     self.current = current;
     return result;

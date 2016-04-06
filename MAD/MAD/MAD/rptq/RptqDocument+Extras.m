@@ -270,13 +270,13 @@
 
 - (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     [section setLayoutHeight: @(height)];
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     
     if (section.numberOfRows.unsignedIntegerValue == numberOfRows) {
         
@@ -310,26 +310,26 @@
 
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     section.layoutHeight = @(height);
 }
 
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     NSNumber *visibility = @(isVisible);
     section.visibility = visibility;
 }
 
 - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     [section setProducesFormFeed:newPageAfter];
 }
 
 - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex: sectionRow];
     return [section producesFormFeed];
 }
 

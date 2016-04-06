@@ -14,26 +14,24 @@
 
 @interface MTViewControllerBarcodeType ()
 
-@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+    @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
-@property (nonatomic, strong) NSDictionary *barcodeNamesByType;
-@property (nonatomic, strong) NSArray *barcodeNamesOrdered;
+    @property (nonatomic, strong) NSDictionary *barcodeNamesByType;
+    @property (nonatomic, strong) NSArray *barcodeNamesOrdered;
 
 @end
 
 @implementation MTViewControllerBarcodeType
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [self customInit];
     }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         [self customInit];
     }
     return self;
@@ -43,7 +41,7 @@
     NSDictionary *namesByType = [MTBarcode names];
     self.barcodeNamesByType = namesByType;
     
-    NSArray *allNames = [[self barcodeNamesByType] allValues];
+    NSArray *allNames = [self.barcodeNamesByType allValues];
     NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     self.barcodeNamesOrdered = allNamesSorted;
     
@@ -51,9 +49,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSString *barcodeName = [self barcodeNamesByType][@([self initalKey])];
-    NSInteger index = [[self barcodeNamesOrdered] indexOfObject:barcodeName];
-    [[self pickerView] selectRow:index inComponent:0 animated:animated];
+    NSNumber *initalKey = @([self initalKey]);
+    NSString *barcodeName = self.barcodeNamesByType[initalKey];
+    NSUInteger index = [self.barcodeNamesOrdered indexOfObject:barcodeName];
+    [self.pickerView selectRow:(NSInteger)index
+                   inComponent:0 animated:animated];
 }
 
 #pragma mark - UIPickerView Data Source
@@ -64,14 +64,14 @@
 
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return [[self barcodeNamesOrdered] count];
+    return (NSInteger)self.barcodeNamesOrdered.count;
 }
 
 #pragma mark - UIPickerView Delegate
 
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    NSArray *names = [self barcodeNamesOrdered];
-    NSString *tableName = names[row];
+    NSArray *names = self.barcodeNamesOrdered;
+    NSString *tableName = names[(NSUInteger)row];
     UIColor *strokeColor = [UIColor whiteColor];
     UIColor *forgroundColor = [UIColor blackColor];
     NSMutableParagraphStyle *paragraph = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -86,11 +86,11 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    NSString *barcodeName = [self barcodeNamesOrdered][row];
-    NSArray *keys = [[self barcodeNamesByType] allKeysForObject:barcodeName];
-    if ([keys count] > 0) {
+    NSString *barcodeName = self.barcodeNamesOrdered[(NSUInteger)row];
+    NSArray *keys = [self.barcodeNamesByType allKeysForObject:barcodeName];
+    if (keys.count > 0) {
         NSNumber *key = keys[0];
-        MTBarcodeType resultType = [key integerValue];
+        MTBarcodeType resultType = [key unsignedIntegerValue];
         [self.delegate didChangeBarcodeType:resultType];
     }
 }

@@ -57,10 +57,6 @@
 
 #pragma mark - Overrides
 
-//+ (RptqQuery *)RptqQueryForDocument:(RptqDocument *)document {
-//    return [[[document.hasDatabaseSchemas anyObject] hasQueries] anyObject];
-//}
-
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -68,13 +64,15 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: @[sortDescriptor]];
-    [request setFetchLimit:1];
-    NSError *error = nil;
-    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    request.sortDescriptors =  sortDescriptors;
+    request.fetchLimit = 1;
+
+    NSError * __autoreleasing *error = nil;
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:error];
     NSUInteger identifier = 0;
     if (error == nil) {
-        RptqQuery *lastObject = [fetchResults lastObject];
+        RptqQuery *lastObject = fetchResults.lastObject;
         identifier = lastObject.identifier.unsignedIntegerValue + 1;
     }
     NSNumber *identifierObj = @(identifier);
@@ -106,20 +104,35 @@
 }
 
 
-- (NSUInteger)sectionCount {
-    return 5 + self.hasQueryGroups.count * 2;
-}
+- (NSUInteger)sectionCount { return 5 + self.hasQueryGroups.count * 2; }
 
 #pragma mark - Actions
 
-- (RptqDocumentSection *)documentSectionForRow:(NSUInteger)row {
+static inline bool validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+static inline bool validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+    return selectedIndex < (numberOfGroups * 2) + 5;
+}
+
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
+    return selectedIndex - 2;
+}
+
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+    return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
+}
+
+- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex {
+
     NSUInteger numberOfGroups = self.hasQueryGroups.count;
     RptqDocumentSection *resultSection = nil;
-    if (row < (numberOfGroups * 2) + 5) {
+
+    if (validateSelectedIndexWithGroupCount(selectedIndex, numberOfGroups)) {
         
         RptqDocument *document = self.inDatabase.ownedByQueryAsStaticResource;
         
-        switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
+        switch ([RptqDocumentSection getSectionTypeforRow:selectedIndex withNumberOfGroups:numberOfGroups]) {
                 
             case MNSDocumentSectionTypeReportHeader:
                 resultSection = document.hasReportHeaderSection;
@@ -142,18 +155,14 @@
                 break;
                 
             case MNSDocumentSectionTypeGroupHeader: {
-                NSUInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
-                RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
+                RptqQueryGroup *group = [self queryGroupForIndex: queryGroupIndexForSelectedIndexOfTypeHeader(selectedIndex)];
                 NSSet *groupHasSection = group.hasSection;
                 resultSection = [self headerSectionInSections:groupHasSection];
                 break;
             }
                 
             case MNSDocumentSectionTypeGroupFooter: {
-                NSUInteger body          = 2 + numberOfGroups;
-                NSUInteger indentLevel   = body - (row - body);
-                NSUInteger groupNumber   = indentLevel - 2;
-                RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
+                RptqQueryGroup *group = [self queryGroupForIndex:queryGroupIndexForSelectedIndexOfTypeFooter(selectedIndex, numberOfGroups)];
                 NSSet *groupHasSection = group.hasSection;
                 resultSection = [self footerSectionInSections:groupHasSection];
                 break;
@@ -164,15 +173,15 @@
         }
         
     }
-    
     return resultSection;
-
 }
+
+
 
 - (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;
     for (RptqDocumentSection *section in sections) {
-        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+        if (section.type.integerValue == MNSDocumentSectionTypeGroupFooter) {
             resultSection = section;
             break;
         }
@@ -183,7 +192,7 @@
 - (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;
     for (RptqDocumentSection *section in sections) {
-        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+        if (section.type.integerValue == MNSDocumentSectionTypeGroupHeader) {
             resultSection = section;
             break;
         }
@@ -227,9 +236,7 @@
             NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
             
             SEL sel = [MADDataType selectorForSorting: groupField.databaseSchemaField.dataType.unsignedIntegerValue];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                           ascending: sortAscending
-                                                                            selector: sel];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: sortAscending selector: sel];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
         }
     }

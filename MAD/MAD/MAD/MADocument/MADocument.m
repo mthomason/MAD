@@ -822,28 +822,41 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID {
+
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.managedObjectContext;
+    [private performBlockAndWait:^{
+
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: private];
+        
+        RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+        RptqDocumentSection *section = sectionRow.inSection;
+        NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
+        NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
+        
+        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
+        [hasObjects removeObjectAtIndex:deleteIndex];
+        
+        MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
+        [layoutManager removeItemWithID:objectID];
+        [layoutManager layout];
+        
+        
+        sectionRow.hasObjects = hasObjects;
+        documentObject.inSectionRow = nil;
+        
+        section.height = @(layoutManager.size.height);
+
+        
+        NSError * __autoreleasing *error = NULL;
+        [private save:error];
+
+    }];
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: self.managedObjectContext];
-    
-    RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
-    RptqDocumentSection *section = sectionRow.inSection;
-    NSUInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
-    
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: sectionRow.hasObjects];
-    [hasObjects removeObjectAtIndex:deleteIndex];
-    
-    MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[sectionID];
-    [layoutManager removeItemWithID:objectID];
-    [layoutManager layout];
-    
-    sectionRow.hasObjects = hasObjects;
-    documentObject.inSectionRow = nil;
-    
-    section.height = @(layoutManager.size.height);
-    [self saveContext];
 }
 
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove {
+
     if (groupToRemove) {
         RptqQuery *query = [groupToRemove inQuery];
 
@@ -952,6 +965,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];
     NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
+    
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [[NSString alloc] initWithFormat:formatString, decimalString];
@@ -1093,9 +1107,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     // retrieve the store URL
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    NSPersistentStoreCoordinator *persistentStoreCoordinator = [managedObjectContext persistentStoreCoordinator];
-    NSArray *persistentStores = [persistentStoreCoordinator persistentStores];
-    NSPersistentStore *persistentStore = [persistentStores lastObject];
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;
+    NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
     NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
     
     [managedObjectContext performBlockAndWait:^{

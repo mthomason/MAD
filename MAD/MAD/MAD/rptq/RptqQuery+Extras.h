@@ -15,14 +15,14 @@
 
 @interface RptqQuery (Extras)
 
-- (RptqDocumentSection *)documentSectionForRow:(NSUInteger)row;
-- (RptqQueryGroup *)firstQueryGroup;
-- (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
-- (NSArray *)sortedQueryGroups;
-- (NSUInteger)numberOfTables;
-- (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
-- (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-- (NSUInteger)sectionCount;
+    - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex;
+    - (RptqQueryGroup *)firstQueryGroup;
+    - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
+    - (NSArray *)sortedQueryGroups;
+    - (NSUInteger)numberOfTables;
+    - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
+    - (RptqQueryTable *)addQueryTableBasedOnSchemaTable:(RptqDatabaseSchemaTable *)schemaTable forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (NSUInteger)sectionCount;
 
 @end
 

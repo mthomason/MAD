@@ -12,14 +12,14 @@
 #import <MADBarcodes/MADBarcodes.h>
 
 @protocol MTViewControllerBarcodeTypeDelegate
-- (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
+    - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
 @end
 
 @interface MTViewControllerBarcodeType : UIViewController
     <UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic, weak) id <MTViewControllerBarcodeTypeDelegate> delegate;
-@property (nonatomic, assign) NSInteger initalKey;
+    @property (nonatomic, weak) id <MTViewControllerBarcodeTypeDelegate> delegate;
+    @property (nonatomic, assign) NSInteger initalKey;
 
 @end
 
