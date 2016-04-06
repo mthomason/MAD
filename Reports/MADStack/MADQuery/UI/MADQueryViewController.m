@@ -1281,8 +1281,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                                                        forKeys: sections];
             
             NSArray *headersSection = reportingEnabled ? @[h2, h3, h7] : @[h2, h3];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
-                                                                                 forKeys: sections];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
             NSNumber *height1 = @(50.0000f);
             NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
             NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1] : @[height1, height2]; 

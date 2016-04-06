@@ -21,16 +21,6 @@
 #import <MAD/MTQueryFull.h>
 #import <MAD/MADSectionLayoutManager.h>
 
-typedef NS_ENUM(NSUInteger, MTQuerySections) {
-    MTQuerySectionsDocumentGroups = 0,
-    MTQuerySectionsDatasource = 1,
-    MTQuerySectionsTables = 2,
-    MTQuerySectionsLinks = 3,
-    MTQuerySectionsGroups = 4,
-    MTQuerySectionsPredicate = 5,
-    MTQuerySectionsSql = 6,
-    MTQuerySectionsNumberOfQueryResults = 7
-};
 
 extern NSString * const MADMimeType;
 extern NSString * const MTDocumentInfoKeyThumbnail;
