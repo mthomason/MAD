@@ -185,8 +185,8 @@
 }
 
 - (void)setInterfaceHeight:(CGFloat)height {
-    NSNumber *layoutHeightWrapper = @(height);
-    NSNumber *heightWrapper = @(height + 44.0000f);
+    NSNumber *layoutHeightWrapper = [[NSNumber alloc] initWithFloat: height];
+    NSNumber *heightWrapper =       [[NSNumber alloc] initWithFloat: height + 44.0000f];
     self.layoutHeight = layoutHeightWrapper;
     self.height = heightWrapper;
 }

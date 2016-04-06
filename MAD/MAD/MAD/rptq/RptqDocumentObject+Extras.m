@@ -48,7 +48,6 @@ NSString * const MTDocumentObjectDefinationField2 = @"MTDocumentObjectDefination
 
 static NSNumberFormatter *currencyNumberFormatter;
 
-
 @implementation RptqDocumentObject (Extras)
 
 #pragma mark - Overrides
@@ -73,52 +72,88 @@ static NSNumberFormatter *currencyNumberFormatter;
         idNumber = [[lastObject identifier] unsignedIntegerValue] + 1;
         lastDropIndex = [[lastObject dropIndex] unsignedIntegerValue] + 1;
     }
-    NSNumber *identifier = @(idNumber);
-    NSString *fontname = [MADFont defaultFamily];
-    NSNumber *fontSize = @([MADFont defaultSize]);
-    NSNumber *bold = @NO;
-    NSNumber *italic = @NO;
-    NSNumber *underline = @NO;
-    NSNumber *strike = @NO;
-    NSNumber *marginBottom = @(CGSizeZero.height);
-    NSNumber *marginTop = @(CGSizeZero.height);
-    NSNumber *marginLeft = @(CGSizeZero.width);
-    NSNumber *marginRigth = @(CGSizeZero.width);
-    NSNumber *paddingBottom = @(CGSizeZero.height);
-    NSNumber *paddingTop = @(CGSizeZero.height);
-    NSNumber *paddingLeft = @(CGSizeZero.width);
-    NSNumber *paddingRight = @(CGSizeZero.width);
-    NSNumber *borderHeightBottom = @(CGSizeZero.width);
-    NSNumber *borderWidthLeft = @(CGSizeZero.width);
-    NSNumber *borderWidthRight = @(CGSizeZero.width);
-    NSNumber *borderHeightTop = @(CGSizeZero.width);
-    NSNumber *verticalAlignment = @(MTVerticalAlignmentTop);
-    NSNumber *horizontalAlignment = @(MTHorizontalAlignmentLeft);
-    NSNumber *sectionRowNumber = @(1);
-    NSNumber *dropIndex = @(lastDropIndex);
-
-    self.identifier = identifier;
+    
+    NSString *fontname = [[NSString alloc] initWithString:[MADFont defaultFamily]];
     self.fontname = fontname;
-    self.fontsize = fontSize;
+
+    NSNumber *bold = @NO;
     self.bold = bold;
+
+    NSNumber *italic = @NO;
     self.italic = italic;
+
+    NSNumber *underline = @NO;
     self.underline = underline;
+
+    NSNumber *strike = @NO;
     self.strike = strike;
-    self.marginBottom = marginBottom;
-    self.marginTop = marginTop;
-    self.marginLeft = marginLeft;
-    self.marginRight = marginRigth;
-    self.paddingBottom = paddingBottom;
-    self.paddingTop = paddingTop;
-    self.paddingLeft = paddingLeft;
-    self.paddingRight = paddingRight;
-    self.borderHeightBottom = borderHeightBottom;
-    self.borderWidthLeft = borderWidthLeft;
-    self.borderWidthRight = borderWidthRight;
-    self.borderHeightTop = borderHeightTop;
+
+    CGFloat fontPointSize = [MADFont defaultSize];
+    CFNumberRef fontSize = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &fontPointSize);
+    self.fontsize = (__bridge NSNumber *)(fontSize);
+    CFRelease(fontSize);
+
+    NSNumber *identifier = [[NSNumber alloc] initWithUnsignedInteger: idNumber];
+    self.identifier = identifier;
+
+    CFNumberRef marginBottom = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
+    self.marginBottom = (__bridge NSNumber *)(marginBottom);
+    CFRelease(marginBottom);
+
+    CFNumberRef marginTop = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
+    self.marginTop = (__bridge NSNumber *)(marginTop);
+    CFRelease(marginTop);
+
+    CFNumberRef marginLeft = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
+    self.marginLeft = (__bridge NSNumber *)(marginLeft);
+    CFRelease(marginLeft);
+
+    CFNumberRef marginRight = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
+    self.marginRight = (__bridge NSNumber *)(marginRight);
+    CFRelease(marginRight);
+
+    CFNumberRef paddingBottom = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
+    self.paddingBottom = (__bridge NSNumber *)(paddingBottom);
+    CFRelease(paddingBottom);
+
+    CFNumberRef paddingTop = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
+    self.paddingTop = (__bridge NSNumber *)(paddingTop);
+    CFRelease(paddingTop);
+
+    CFNumberRef paddingLeft = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
+    self.paddingLeft = (__bridge NSNumber *)(paddingLeft);
+    CFRelease(paddingLeft);
+
+    CFNumberRef paddingRight = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
+    self.paddingRight = (__bridge NSNumber *)(paddingRight);
+    CFRelease(paddingRight);
+
+    CFNumberRef borderHeightBottom = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
+    self.borderHeightBottom = (__bridge NSNumber *)(borderHeightBottom);
+    CFRelease(borderHeightBottom);
+    
+    CFNumberRef borderHeightTop = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.height);
+    self.borderHeightTop = (__bridge NSNumber *)(borderHeightTop);
+    CFRelease(borderHeightTop);
+    
+    CFNumberRef borderWidthLeft = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
+    self.borderWidthLeft = (__bridge NSNumber *)(borderWidthLeft);
+    CFRelease(borderWidthLeft);
+    
+    CFNumberRef borderWidthRight = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &CGSizeZero.width);
+    self.borderWidthRight = (__bridge NSNumber *)(borderWidthRight);
+    CFRelease(borderWidthRight);
+    
+    NSNumber *verticalAlignment = [[NSNumber alloc] initWithUnsignedInteger:MTVerticalAlignmentTop];
     self.verticalAlignment = verticalAlignment;
+    
+    NSNumber *horizontalAlignment = [[NSNumber alloc] initWithUnsignedInteger:MTHorizontalAlignmentLeft];
     self.horizontalAlignment = horizontalAlignment;
+
+    NSNumber *sectionRowNumber = [[NSNumber alloc] initWithUnsignedInteger: 1];
     self.sectionRowNumber = sectionRowNumber;
+
+    NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger: lastDropIndex];
     self.dropIndex = dropIndex;
     
 }
@@ -148,27 +183,19 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 - (CGFloat)spacingLeft {
-    return self.marginLeft.floatValue +
-           self.borderWidthLeft.floatValue +
-           self.paddingLeft.floatValue;
+    return self.marginLeft.floatValue + self.borderWidthLeft.floatValue + self.paddingLeft.floatValue;
 }
 
 - (CGFloat)spacingRight {
-    return self.marginRight.floatValue +
-           self.borderWidthRight.floatValue +
-           self.paddingRight.floatValue;
+    return self.marginRight.floatValue + self.borderWidthRight.floatValue + self.paddingRight.floatValue;
 }
 
 - (CGFloat)spacingTop {
-    return self.marginTop.floatValue +
-           self.borderHeightTop.floatValue +
-           self.paddingTop.floatValue;
+    return self.marginTop.floatValue + self.borderHeightTop.floatValue + self.paddingTop.floatValue;
 }
 
 - (CGFloat)spacingBottom {
-    return self.marginBottom.floatValue +
-           self.borderHeightBottom.floatValue +
-           self.paddingBottom.floatValue;
+    return self.marginBottom.floatValue + self.borderHeightBottom.floatValue + self.paddingBottom.floatValue;
 }
 
 - (CGFloat)sizeWidthCalculated {
@@ -211,15 +238,12 @@ static NSNumberFormatter *currencyNumberFormatter;
 
 - (CGRect)elementViewFrame {
     CGRect elementViewBounds = [self elementViewBounds];
-    CGFloat originX = CGPointZero.x + [[self paddingLeft] floatValue];
-    CGFloat originY = CGPointZero.y + [[self paddingTop] floatValue];
-    CGFloat sizeWidth = elementViewBounds.size.width;
-    CGFloat sizeHeight = elementViewBounds.size.height;
-    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
+    return CGRectMake(CGPointZero.x + self.paddingLeft.floatValue, CGPointZero.y + self.paddingTop.floatValue, elementViewBounds.size.width, elementViewBounds.size.height);
 }
 
 - (void)setOrigin:(CGPoint)origin {
-    NSNumber *x = @(origin.x), *y = @(origin.y);
+    NSNumber *x = [[NSNumber alloc] initWithFloat: origin.x];
+    NSNumber *y = [[NSNumber alloc] initWithFloat: origin.y];
     self.originx = x;
     self.originy = y;
 }

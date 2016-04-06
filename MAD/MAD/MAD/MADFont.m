@@ -16,12 +16,8 @@ static NSString * const MTFontFamilyHelveticaNeue = @"Helvetica Neue";
 
 @implementation MADFont
 
-+ (NSString *)defaultFamily {
-    return MTFontFamilyHelveticaNeue;
-}
++ (NSString *)defaultFamily { return MTFontFamilyHelveticaNeue; }
 
-+ (CGFloat)defaultSize {
-    return 9.0000f;
-}
++ (CGFloat)defaultSize { return 9.0000f; }
 
 @end
