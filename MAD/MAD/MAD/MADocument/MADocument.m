@@ -808,16 +808,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)layoutManager:(MADSectionLayoutManager *)layoutManager itemNeedsUpdate:(MADSectionLayoutAttributes *)attributes {
-    
-    RptqDocumentObject *documentObject;
-    documentObject = (RptqDocumentObject *)[self.managedObjectContext objectWithID:attributes.objectID];
-    documentObject.originx = @(attributes.frame.origin.x);
-    documentObject.originy = @(attributes.frame.origin.y);
-    [self.managedObjectContext save:nil];
-    
-}
-
 - (void)removeDocumentObject:(NSManagedObjectID *)objectID fromSection:(NSManagedObjectID *)sectionID {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
