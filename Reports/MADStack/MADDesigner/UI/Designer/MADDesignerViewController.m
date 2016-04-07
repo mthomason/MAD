@@ -108,18 +108,25 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
-    @property (nonatomic, strong) NSSet <__kindof MADDesignerSectionView *> *passthroughContainers;
-    @property (nonatomic, strong) NSArray <__kindof MADDesignerSectionView *>  *sectionViewsArray;
-    @property (nonatomic, strong) NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray;
+    @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerSectionView *>                         *passthroughContainers;
+    @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionView *>                         *sectionViewsArray;
+    @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionLabel *>                        *sectionControlViewsArray;
 
-    @property (nonatomic, strong) NSArray <__kindof NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
-    @property (nonatomic, strong) NSArray <__kindof NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
+    @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionView *>    *sectionViews;
+    @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionLabel *>   *sectionControlViews;
+
+    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerScrollViewConstraints;
+    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerContentViewConstraints;
 
     @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
     @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
     @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
 
     @property (nonatomic, strong) NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
+
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSNumber *, __kindof NSNumber *> *borderAppliedToView;
+
+    @property (nonatomic, strong) NSSet <MADDesignerElementView *> *visibleElementViews;
 
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
@@ -144,10 +151,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
     @property (nonatomic, strong) MADDesignerElementView *lastElementViewToShowMenu;
-
-    @property (nonatomic, strong) NSMutableDictionary *sectionViews;
-    @property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
-    @property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
 
     @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
 
@@ -179,14 +182,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
     @property (nonatomic, weak) UILabel *lastSelectedLabel;
 
-    @property (nonatomic, strong) NSSet *visibleElementViews;
-
 @end
 
 @implementation MADDesignerViewController
 
 - (void)dealloc {
-    _document = nil;
+
 }
 
 #pragma mark - Exit
@@ -495,8 +496,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             sectionViewLabel.tag = sectionCounter;
             NSString *lastKey = reportSectionKeyTracker.lastObject;
-            id constraintItem =  sectionCounter == 0 ? self.ruler :
-            self.sectionViews[lastKey];
+            id constraintItem =  sectionCounter == 0 ? self.ruler : self.sectionViews[lastKey];
             
             sectionView.showsVerticalScrollIndicator = YES;
             
@@ -553,7 +553,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
     }
     
-    self.passthroughContainers = [NSSet setWithSet: passthroughContainers];
+    self.passthroughContainers = passthroughContainers;
     
     self.sectionViewsArray = sectionViewsArray;
     self.sectionControlViewsArray = sectionControlViewsArray;
