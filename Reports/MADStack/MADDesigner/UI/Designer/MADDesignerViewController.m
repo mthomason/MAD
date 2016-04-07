@@ -108,6 +108,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
+    @property (nonatomic, strong) NSSet <__kindof MADDesignerSectionView *> *passthoughContainers;
+
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
     @property (nonatomic, strong) MTRulerView *ruler;
@@ -174,8 +176,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
     @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
-
-    @property (nonatomic, strong) NSSet *passthoughContainers;
 
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
     @property (nonatomic, weak) UILabel *lastSelectedLabel;
