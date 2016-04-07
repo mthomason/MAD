@@ -11,15 +11,14 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
+
 #import <MAD/MADConstants.h>
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTLinkedList.h>
 
 #import "MADManagedObjectView.h"
-
 #import "MADViewControllerSQL.h"
-
 #import "MADConnectorView.h"
 
 #import "MADQueryVisualizationSchemaViewController.h"
@@ -47,15 +46,6 @@
 #import "MADQueryVisualizationContentView.h"
 #import "MADQueryVisualizationScrollView.h"
 
-NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
-
-NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundryLandscapeTop";
-NSString * const MTIdentifierCollisionBoundryRight = @"MTIdentifierCollisionBoundryLandscapeRight";
-NSString * const MTIdentifierCollisionBoundryBottom = @"MTIdentifierCollisionBoundryLandscapeBottom";
-NSString * const MTIdentifierCollisionBoundryLeft = @"MTIdentifierCollisionBoundryLandscapeLeft";
-
-static NSString * const CacheExt = @"qvvc";
-
 typedef void(^MTBlockResultVoid)(void);
 
 @interface MADQueryVisualizationViewController ()
@@ -66,15 +56,15 @@ typedef void(^MTBlockResultVoid)(void);
         MADQueryVisualizationSchemaDelegate,
         MTViewControllerProtocol>
 
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID;
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID;
+
+    @property (nonatomic, strong) NSMutableSet <__kindof NSManagedObjectID *> *rootTables;
+
     @property (nonatomic, weak) IBOutlet UIView *backgroundContainer;
 
     @property (nonatomic, strong) MADQueryVisualizationCacheData *cacheData;
-
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
-
-    @property (nonatomic, strong) NSMutableSet *rootTables;
-
-    @property (nonatomic, strong) NSMutableDictionary *controllersByObjectID; //Only query links
 
     @property (nonatomic, strong) NSOperationQueue *operationQueueCache;
 
@@ -89,9 +79,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - UIContainerViewControllerCallbacks
 
-- (BOOL)shouldAutomaticallyForwardAppearanceMethods {
-    return NO;
-}
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods { return NO; }
 
 - (void)willMoveToParentViewController:(nullable UIViewController *)parent {
     [super willMoveToParentViewController:parent];
@@ -154,10 +142,13 @@ typedef void(^MTBlockResultVoid)(void);
     queue.underlyingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     self.operationQueueCache = queue;
     
-    NSMutableDictionary *controllersByObjectID = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADQueryVisualizationSchemaViewController *> *controllersByObjectID = [[NSMutableDictionary alloc] init];
     self.controllersByObjectID = controllersByObjectID;
+
+    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
+    self.connectionViewsByObjectID = connectionViewsByObjectID;
     
-    NSMutableSet *rootTables = [[NSMutableSet alloc] init];
+    NSMutableSet <__kindof NSManagedObjectID *> *rootTables = [[NSMutableSet alloc] init];
     self.rootTables = rootTables;
 
 }
@@ -184,8 +175,7 @@ typedef void(^MTBlockResultVoid)(void);
 
     [self.backgroundContainer addSubview:scrollView];
     
-    NSDictionary *viewDictionary = @{@"sv" : scrollView,
-                                     @"bg" : self.backgroundContainer};
+    NSDictionary *viewDictionary = @{@"sv" : scrollView, @"bg" : self.backgroundContainer};
     
     NSMutableArray *constraints = [NSMutableArray new];
     NSArray *constraints5 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary];
@@ -248,6 +238,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self.connectionViewsByObjectID removeAllObjects];
     [self.controllersByObjectID removeAllObjects];
     [self.rootTables removeAllObjects];
 }
@@ -279,7 +270,8 @@ typedef void(^MTBlockResultVoid)(void);
                 [self.cacheData addTableDefination:tableDefination forObjectID:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
             }
             if (tableDefination.root) {
-                [self.rootTables addObject:((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId];
+                NSManagedObjectID *objectID = ((MADQueryVisualizationSchemaViewController *)childContoller).tableObjectId.copy;
+                [self.rootTables addObject: objectID];
             }
             childContoller.view.frame = CGRectMake(tableDefination.center.x - childContoller.view.frame.size.width / 2,
                                                    tableDefination.center.y - childContoller.view.frame.size.height / 2,
@@ -329,7 +321,9 @@ typedef void(^MTBlockResultVoid)(void);
         } else if ([insertedObject isKindOfClass:[RptqQueryTable class]]) {
             
             //Going to assume that it's a top level table.
-            [self.rootTables addObject:((RptqQueryTable *)insertedObject).objectID];
+            NSManagedObjectID *objectID = ((RptqQueryTable *)insertedObject).objectID.copy;
+            [self.rootTables addObject: objectID];
+
             CGPoint insertTableAnchorPoint = CGPointMake(CGPointZero.x + 500, self.scrollView.contentView.bounds.size.height / (self.rootTables.count + 2) * (self.rootTables.count + 1));
             [self addSchemaViewControllerForTable:insertedObject center:insertTableAnchorPoint root:YES animated:YES];
             [self.view layoutIfNeeded];
@@ -353,9 +347,9 @@ typedef void(^MTBlockResultVoid)(void);
                 if (![updatedTable.inQuery.objectID isEqual:updatedQuery.objectID]) {
 
                     //Table was remvoed from query... so remove it from screen.
-                    id updatedItem = self.controllersByObjectID[updatedTable.objectID];
+                    MADQueryVisualizationSchemaViewController *updatedItem = self.controllersByObjectID[updatedTable.objectID];
                     
-                    if ([updatedItem isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
+                    if (updatedItem != nil) {
                         
                         [self.rootTables removeObject:updatedTable.objectID];
                         [self.cacheData removeTableDefinationForObjectID:updatedTable.objectID];
@@ -364,8 +358,10 @@ typedef void(^MTBlockResultVoid)(void);
                         for (RptqQueryLinks *link in updatedQuery.hasQueryLinks) {
                             if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
                                 [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
-                                MADConnectorView * __weak connectorView = self.controllersByObjectID[link.objectID];
+                                
+                                MADConnectorView * __weak connectorView = self.connectionViewsByObjectID[link.objectID];
                                 [connectorView removeFromSuperview];
+                                
                                 [self.view setNeedsLayout];
                                 [self.view layoutIfNeeded];
                             }
@@ -500,6 +496,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)insertQueryLink:(RptqQueryLinks *)insertedQueryLinks {
     MADQueryVisualizationSchemaViewController * __weak leftTableViewController = self.controllersByObjectID[insertedQueryLinks.hasLeftField.inQueryTable.objectID];
     MADQueryVisualizationSchemaViewController * __weak rightTableViewController = self.controllersByObjectID[insertedQueryLinks.hasRightField.inQueryTable.objectID];
+    
     [self.rootTables removeObject:insertedQueryLinks.hasLeftField.inQueryTable.objectID];
     if ([leftTableViewController isEqual:rightTableViewController] == NO) {
         [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];
@@ -517,6 +514,7 @@ typedef void(^MTBlockResultVoid)(void);
         [self clearScreen];
         [self.rootTables removeAllObjects];
         [self.controllersByObjectID removeAllObjects];
+        [self.connectionViewsByObjectID removeAllObjects];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.localCacheFileUrl.path]) {
             MADQueryVisualizationCacheData *schemaLocations = [self loadCache];
@@ -544,7 +542,8 @@ typedef void(^MTBlockResultVoid)(void);
                 RptqQueryTable *table = (RptqQueryTable *)[self.document.managedObjectContext objectWithID:tableIdVertext.object];
                 BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
                 if (topLevel) {
-                    [self.rootTables addObject:table.objectID];
+                    NSManagedObjectID *objectID = table.objectID.copy;
+                    [self.rootTables addObject: objectID];
                 }
 
                 MADQueryVisualizationTableDefination *tableDef = [cacheData tableDefinationForObjectID:table.objectID];
@@ -564,9 +563,12 @@ typedef void(^MTBlockResultVoid)(void);
 
 // FIXME: Display query with a layout... this method is called when there is NO CACHE...
 //          Right now, views end up in the center...
+
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
+
     MADQueryVisualizationDefination *queryDef = [[MADQueryVisualizationDefination alloc] initWithQuery:query];
     NSInteger tableCounter = 0;
+
     for (MTPair *pair in queryDef.topologicallySortedTables) {
         MTVertex *tableIdVertext = pair.former;
         if (tableIdVertext.object != nil) {
@@ -574,7 +576,8 @@ typedef void(^MTBlockResultVoid)(void);
             BOOL topLevel = [queryDef.startingPoints containsObject: table.objectID.URIRepresentation];
             [self addSchemaViewControllerForTable:table center:self.scrollView.contentView.center root:topLevel animated:animated];
             if (topLevel) {
-                [self.rootTables addObject:table.objectID.URIRepresentation];
+                NSManagedObjectID *objectID = table.objectID.copy;
+                [self.rootTables addObject: objectID];
             }
             tableCounter++;
         }
@@ -623,15 +626,18 @@ typedef void(^MTBlockResultVoid)(void);
     for (RptqQueryTable *table in orphanedQueryTables) {
         MADQueryVisualizationTableDefination *tableDefination = [self.cacheData tableDefinationForObjectID:table.objectID];
         tableDefination.root = YES;
-        [self.rootTables addObject: table.objectID];
+        
+        NSManagedObjectID *objectID = table.objectID.copy;
+        [self.rootTables addObject: objectID];
+        
     }
     
-    MADConnectorView * __weak connectorView = self.controllersByObjectID[deletedLink.objectID];
+    MADConnectorView * __weak connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
     [connectorView removeFromSuperview];
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
-    [self.controllersByObjectID removeObjectForKey:deletedLink.objectID];
+    [self.connectionViewsByObjectID removeObjectForKey:deletedLink.objectID];
 }
 
 #pragma mark - View Controller Container Data
@@ -645,10 +651,8 @@ typedef void(^MTBlockResultVoid)(void);
     [self.view layoutIfNeeded];
 }
 
-- (void)addSchemaViewControllerForTable:(RptqQueryTable *)table
-                                 center:(CGPoint)center
-                                   root:(BOOL)root
-                               animated:(BOOL)animated {
+- (void)addSchemaViewControllerForTable:(RptqQueryTable *)table center:(CGPoint)center
+                                   root:(BOOL)root animated:(BOOL)animated {
     
     MADQueryVisualizationSchemaViewController *viewController = [MADQueryVisualizationSchemaViewController newAdvancedSchemaViewController];
     viewController.document = self.document;
@@ -677,7 +681,7 @@ typedef void(^MTBlockResultVoid)(void);
     connectorView.userInteractionEnabled = NO;
     connectorView.objectIdTag = link.objectID;
     
-    self.controllersByObjectID[link.objectID] = connectorView;
+    self.connectionViewsByObjectID[link.objectID] = connectorView;
     
     if (animated == NO) {
         [self layoutQueryLinkViewController:link];
@@ -737,7 +741,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
 
-    MADConnectorView *connectorView = self.controllersByObjectID[queryLink.objectID];
+    MADConnectorView *connectorView = self.connectionViewsByObjectID[queryLink.objectID];
     const CGFloat paddingLeft = 44.0000f;
     
     MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersByObjectID[queryLink.hasLeftField.inQueryTable.objectID];
