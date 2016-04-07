@@ -473,8 +473,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
             
-            MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection
-                                                                                        delegate: self];
+            MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection delegate: self];
             sectionView.delegate = self;
             sectionView.sectionDelegate = self;
             sectionView.dataSource = self;
@@ -635,19 +634,15 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     // FIXME: This is not choosing the correct scroll inset...
     
     if (self.toolboxTransitioningDelegate.presentationController.presentedView.superview != nil &&
-        self.presentedViewController.childViewControllers.count > 0 &&
-        self.toolboxTransitioningDelegate.presentationController != nil &&
-        [self showOnSide] == NO) {
+        self.presentedViewController.childViewControllers.count > 0 && self.toolboxTransitioningDelegate.presentationController != nil &&
+        ![self showOnSide]) {
         
-        insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                  CGSizeZero.width,
-                                  self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
-                                  CGSizeZero.width);
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                  self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height, CGSizeZero.width);
         
     } else if (self.settingsTransitioningDelegate.presentationController.presentedView.superview != nil &&
-               self.presentedViewController.childViewControllers.count > 0 &&
-               self.settingsTransitioningDelegate.presentationController != nil &&
-               [self showOnSide] == NO) {
+               self.presentedViewController.childViewControllers.count > 0 && self.settingsTransitioningDelegate.presentationController != nil &&
+               ![self showOnSide]) {
         
         insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                                   self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height, CGSizeZero.width);
@@ -2402,48 +2397,75 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)beginPanPiece:(MADManagedObjectView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
     
     [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
+    
     if (self.presentedViewController != nil) {
         [self hideToolbox];
     }
+    
     [self setScrollersEnabled: NO];
     
     [UIView animateWithDuration:0.2 animations:^{
         piece.alpha = 0.80000f;
     }];
-
     [self.scroller.container bringSubviewToFront: piece];
 
     MADocument *doc = self.document;
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: doc.managedObjectContext];
-    MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-
-    CGRect b = [self.view convertRect:piece.frame fromView:sectionView];
-    piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
     
-    [self.view addSubview: piece];
-
-    [UIView animateWithDuration:0.2 animations:^{
-        piece.alpha = 0.80000f;
-    }];
-
-    transition();
     
-    MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[sectionView.objectIdTag];
-    MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: piece.objectIdTag];
     
-    [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-        [self.document removeDocumentObjectWithObjectID: piece.objectIdTag];
-    } animationComplete:^(BOOL finished) {
-        if (finished) {
-            [self.scroller.container invalidateIntrinsicContentSize];
-            [self.view setNeedsUpdateConstraints];
-        }
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [self redrawAllElementViewsInCollectionView:sectionView];
-            completion();
-        }
+    NSManagedObjectID *pieceObjectIDTag = piece.objectIdTag;
+    
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = doc.managedObjectContext;
+    [private performBlock:^{
+        
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: pieceObjectIDTag managedObjectContext: private];
+        NSString *documentObjectSectionKey = documentObject.inSectionRow.inSection.sectionKey;
+        
+
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+           
+            
+            MADDesignerSectionView *sectionView = self.sectionViews[documentObjectSectionKey];
+            CGRect b = [self.view convertRect:piece.frame fromView:sectionView];
+            piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
+            [self.view addSubview: piece];
+            [UIView animateWithDuration:0.2 animations:^{
+                piece.alpha = 0.80000f;
+            }];
+            
+            transition();
+            
+            
+            MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[sectionView.objectIdTag];
+            MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: pieceObjectIDTag];
+            
+            MADDesignerViewController * __weak weakself = self;
+            [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
+                
+                [weakself.document removeDocumentObjectWithObjectID: pieceObjectIDTag];
+                
+            } animationComplete:^(BOOL finished) {
+                if (finished) {
+                    MADDesignerViewController *strongself = weakself;
+                    [strongself.scroller.container invalidateIntrinsicContentSize];
+                    [strongself.view setNeedsUpdateConstraints];
+                }
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    [weakself redrawAllElementViewsInCollectionView:sectionView];
+                    completion();
+                }
+            }];
+    
+            
+            
+        }];
+        
+        [private refreshObject:documentObject mergeChanges:NO];
+        
     }];
 }
 
@@ -2822,7 +2844,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return CGSizeMake(self.view.bounds.size.width, height);
 }
 
-- (BOOL)showOnSide {
+- (bool)showOnSide {
     return self.presentingViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
 }
 

@@ -104,8 +104,8 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
         if (finished) {
             [UIView animateWithDuration:0.6666f animations:^{
                 [self invalidateIntrinsicContentSize];
-            } completion:^(BOOL finished) {
-                if (animationComplete != nil) animationComplete(finished);
+            } completion:^(BOOL animateFinished) {
+                if (animationComplete != nil) animationComplete(animateFinished);
             }];
         }
         if (completion != nil) { completion(YES); }
@@ -113,25 +113,22 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 }
 
 - (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion {
-    
     [self performBatchUpdates:^(void) {
         if (update != nil) update();
         NSArray *indexPathsInserted = @[path];
         [self insertItemsAtIndexPaths: indexPathsInserted];
-        
     } completion:^(BOOL finished) {
         if (finished) {
             [UIView animateWithDuration:0.6666f animations:^{
                 [self invalidateIntrinsicContentSize];
-            } completion:^(BOOL finished) {
+            } completion:^(BOOL animateFinished) {
                 if (finished) {
-                    if (animationComplete != nil) animationComplete(finished);
+                    if (animationComplete != nil) animationComplete(animateFinished);
                 }
             }];
         }
         if (completion != nil) { completion(YES); }
     }];
-
 }
 
 - (void)setBorderState:(MADBorderState)borderState {
