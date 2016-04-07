@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTConnectorView.h"
+#import "MADConnectorView.h"
 #import <MADCocoaExtensions/MADColor.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-@interface MTConnectorView ()
+@interface MADConnectorView ()
 
     @property (nonatomic, strong) MADColor *forgroundColor;
     @property (nonatomic, assign) CGSize shadowSize;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation MTConnectorView
+@implementation MADConnectorView
 
 - (instancetype)init {
     return [self initWithFrame:CGRectZero];

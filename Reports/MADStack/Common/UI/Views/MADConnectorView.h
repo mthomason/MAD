@@ -11,7 +11,7 @@
 
 #import "MADManagedObjectView.h"
 
-@interface MTConnectorView : MADManagedObjectView
+@interface MADConnectorView : MADManagedObjectView
 
     @property (nonatomic, strong) UIView *anchorViewLeft;
     @property (nonatomic, strong) UIView *anchorViewRight;
