@@ -1651,7 +1651,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)collectionView: (UICollectionView *)collectionView willDisplayCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    MADDesignerElementView *elementView = [cell.contentView viewWithTag:(NSInteger)cell.objectIdTag.hash];
+    id elementView = nil;
+    for (UIView *view in cell.contentView.subviews) {
+        if ([view isKindOfClass:[MADDesignerElementView class]]) {
+            elementView = view;
+            break;
+        }
+    }
+    NSAssert(elementView != nil, @"We need an element view people.");
     [self.visibleElementViews addObject:elementView];
     [self adjustPassthroughViews];
     
@@ -1659,8 +1666,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)collectionView: (UICollectionView *)collectionView didEndDisplayingCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    MADDesignerElementView *elementView = [cell.contentView viewWithTag:(NSInteger)cell.objectIdTag.hash];
-    [self.visibleElementViews removeObject:elementView];
+    //MADDesignerElementView *elementView = [cell.contentView viewWithTag:(NSInteger)cell.objectIdTag.hash];
+    NSSet <__kindof MADDesignerElementView *> *elementViewSet = [self.visibleElementViews objectsPassingTest:^BOOL(__kindof MADDesignerElementView * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj.objectIdTag isEqual:cell.objectIdTag]) {
+            *stop = YES;
+            return YES;
+        } else {
+            return NO;
+        }
+    }];
+    [self.visibleElementViews minusSet:elementViewSet];
     [self adjustPassthroughViews];
     
 }
@@ -2276,7 +2291,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [layoutManager layout];
         
         NSArray *indexPathsInserted = @[path];
-        [section addDocumentObject: documentObject withDropPoint: la.frame.origin];
+        [section addDocumentObject: documentObject withDropPoint: la.frame.origin managedObjectContext:section.managedObjectContext];
         
         [detailSection insertItemsAtIndexPaths: indexPathsInserted];
         [section.managedObjectContext save:nil];
@@ -2300,7 +2315,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
     
-        [self.document removeDocumentObjectWithObjectID: objectId];
+        MADocument *maDocument = self.document;
+        [maDocument removeDocumentObjectWithObjectID: objectId managedObjectContext:maDocument.managedObjectContext];
     
     } animationComplete:^(BOOL finished) {
 
@@ -2411,19 +2427,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     MADocument *doc = self.document;
     
-    
-    
-    
     NSManagedObjectID *pieceObjectIDTag = piece.objectIdTag;
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = doc.managedObjectContext;
-    [private performBlock:^{
+    [private performBlockAndWait:^{
         
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: pieceObjectIDTag managedObjectContext: private];
+        RptqDocumentObject *documentObject = [private objectWithID:pieceObjectIDTag];
         NSString *documentObjectSectionKey = documentObject.inSectionRow.inSection.sectionKey;
-        
-
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
            
@@ -2442,20 +2453,21 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[sectionView.objectIdTag];
             MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: pieceObjectIDTag];
             
-            MADDesignerViewController * __weak weakself = self;
             [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
+            
+                NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
                 
-                [weakself.document removeDocumentObjectWithObjectID: pieceObjectIDTag];
+                
+                [self.document removeDocumentObjectWithObjectID: pieceObjectIDTag managedObjectContext:managedObjectContext];
                 
             } animationComplete:^(BOOL finished) {
                 if (finished) {
-                    MADDesignerViewController *strongself = weakself;
-                    [strongself.scroller.container invalidateIntrinsicContentSize];
-                    [strongself.view setNeedsUpdateConstraints];
+                    [self.scroller.container invalidateIntrinsicContentSize];
+                    [self.view setNeedsUpdateConstraints];
                 }
             } completion:^(BOOL finished) {
                 if (finished) {
-                    [weakself redrawAllElementViewsInCollectionView:sectionView];
+                    [self redrawAllElementViewsInCollectionView:sectionView];
                     completion();
                 }
             }];
@@ -2463,8 +2475,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             
         }];
-        
-        [private refreshObject:documentObject mergeChanges:NO];
         
     }];
 }
@@ -2475,7 +2485,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
-    //CGPoint locationInSection = CGPointZero;
+
     for (UIView *subview in self.scroller.container.subviews) {
         if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
             CGPoint location = [self.view convertPoint:gesture.view.frame.origin toView:subview];
@@ -2517,43 +2527,84 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     if (sectionView != nil) {
         
-        [self relayoutSectionView:sectionView];
-        
-        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag inManagedObjectContext: managedObjectContext];
-        MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
-        NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
-        
-        [sectionView insertItemAtIndex:path update:^(){
-            MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-            la.objectID = piece.objectIdTag;
+        NSManagedObjectID *sectionViewObjectIdTag = sectionView.objectIdTag;
+        NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        private.parentContext = self.document.managedObjectContext;
+        [private performBlockAndWait:^{
+
             
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: managedObjectContext];
+            RptqDocumentSection *documentSection = [private objectRegisteredForID:sectionViewObjectIdTag];
+            NSString *documentSectionKey = [documentSection sectionKey];
+            CGFloat documentSectionHeight = documentSection.height.floatValue;
             
-            la.frame = CGRectMake(locationInSection.x, locationInSection.y, documentObject.size.width, documentObject.size.height);
-            [layoutManager addItem:la];
-            [layoutManager layout];
-            
-            [piece removeFromSuperview];
-            [documentSection addDocumentObject: documentObject withDropPoint: locationInSection];
-            [documentSection.managedObjectContext save:nil];
-            
-        } animationComplete:^(BOOL finished) {
-            if (finished) {
-                [self.scroller.container invalidateIntrinsicContentSize];
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[documentSectionKey];
+                layoutConstraint.constant = documentSectionHeight;
                 [self.view setNeedsUpdateConstraints];
-            }
-        } completion:^(BOOL finished) {
-            NSNumber *height = @([sectionView intrinsicContentSize].height);
-            documentSection.height = height;
-            [managedObjectContext save:nil];    // FIXME: Triggers a collection view invalidate layout...
-            [self redrawAllElementViewsInCollectionView:sectionView];
-            [self.view setNeedsLayout];
+                
+
+
+
+
+
+
+                MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionViewObjectIdTag];
+                NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count inSection: 0];
+                [sectionView insertItemAtIndex:path update:^(){
+                    
+                    MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+                    la.objectID = piece.objectIdTag;
+                    
+
+
+                        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+                        RptqDocumentSection *documentSectionBlock = [managedObjectContext objectRegisteredForID:sectionViewObjectIdTag];
+                        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: managedObjectContext];
+                        
+                        CGSize documentObjectSize = documentObject.size;
+
+                        //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                            la.frame = CGRectMake(locationInSection.x, locationInSection.y, documentObjectSize.width, documentObjectSize.height);
+                            [layoutManager addItem:la];
+                            [layoutManager layout];
+                            [piece removeFromSuperview];
+                        //}];
+                        
+                        [documentSectionBlock addDocumentObject: documentObject withDropPoint: locationInSection managedObjectContext:managedObjectContext];
+                        NSError * __autoreleasing *error = nil;
+                        [managedObjectContext save:error];
+
+                    
+                } animationComplete:^() {
+                    
+                    [self.scroller.container invalidateIntrinsicContentSize];
+                    [self.view setNeedsUpdateConstraints];
+                    
+                } completion:^(BOOL finished) {
+                    
+                    NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+                    
+
+                    RptqDocumentSection *documentSectionBlock = [managedObjectContext objectRegisteredForID:sectionViewObjectIdTag];
+                    CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
+                    CFNumberRef h = CFNumberCreate(kCFAllocatorDefault, kCFNumberCGFloatType, &sectionViewIntrinsicContentSizeHeight);
+                    documentSectionBlock.height = (__bridge NSNumber *)(h);
+                    CFRelease(h);
+                    
+                    NSError * __autoreleasing *error = nil;
+                    [managedObjectContext save:error];
+                    
+                    
+                    [self redrawAllElementViewsInCollectionView:sectionView];
+                    [self.view setNeedsLayout];
+                    
+                    
+                }];
+            }];
         }];
     }
-    
-    [piece setNeedsDisplay];
     [self setScrollersEnabled: YES];
+    [piece setNeedsDisplay];
 }
 
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
@@ -2571,11 +2622,21 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)relayoutSectionView:(MADDesignerSectionView *)documentSectionView {
     
+    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    private.parentContext = self.document.managedObjectContext;
+    
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: self.document.managedObjectContext];
-    NSString *key = [documentSection sectionKey];
+    __block NSString *key = nil;
+    __block CGFloat height;
+
+    [private performBlockAndWait:^{
+        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: objectId inManagedObjectContext: private];
+        key = [documentSection sectionKey];
+        height = documentSection.height.floatValue;
+    }];
+    
     NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];
-    layoutConstraint.constant = documentSection.height.floatValue;
+    layoutConstraint.constant = height;
     [self.view setNeedsUpdateConstraints];
 }
 

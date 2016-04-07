@@ -808,22 +808,21 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
 }
 
-- (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID {
+- (void)removeDocumentObjectWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = self.managedObjectContext;
+    private.parentContext = managedObjectContext;
     [private performBlockAndWait:^{
 
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectID managedObjectContext: private];
+        RptqDocumentObject *documentObject = [private objectWithID:objectID];
         RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
         MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[parentSection.objectID];
         [RptqDocumentObject removeDocumentObject:documentObject fromParentSection:parentSection withLayoutManager:layoutManager];
 
         NSError * __autoreleasing *error = NULL;
         [private save:error];
-
     }];
-    
+
 }
 
 - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId inContent:(NSManagedObjectContext *)context {

@@ -140,15 +140,15 @@
     return self.objectID.key;
 }
 
-- (NSUInteger)nextDropIndexForSection {
+- (NSUInteger)nextDropIndexForSectionWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex))
-                                                                     ascending: NO];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO];
     request.sortDescriptors = @[sortDescriptor];
     request.fetchLimit = 1;
+
     NSError *error = nil;
-    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest: request
-                                                                     error: &error];
+    NSArray *fetchResults = [managedObjectContext executeFetchRequest: request error: &error];
     NSUInteger dropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = fetchResults.lastObject;
@@ -159,29 +159,21 @@
     return dropIndex;
 }
 
-- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject
-                     withDropPoint:(CGPoint)origin {
+- (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    [documentObject setOrigin:origin];
+    [documentObject setOrigin: origin];
     
     NSUInteger sectionZero = 0;
     RptqDocumentSectionRows *sectionRow = self.hasRows.firstObject;
-    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:(NSInteger)sectionRow.hasObjects.count
-                                                   inSection:(NSInteger)sectionZero];
     
-    NSNumber *dropIndex = @([self nextDropIndexForSection]);
-    [documentObject setDropIndex:dropIndex];
+    NSIndexPath *indexPathForInsert = [NSIndexPath indexPathForItem:(NSInteger)sectionRow.hasObjects.count inSection:(NSInteger)sectionZero];
     
-    NSOrderedSet *documentObjects = [sectionRow hasObjects];
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
+    NSNumber *dropIndex = [[NSNumber alloc] initWithUnsignedInteger:[self nextDropIndexForSectionWithManagedObjectContext:managedObjectContext]];
+    documentObject.dropIndex = dropIndex;
     
-    [hasObjects insertObject: documentObject
-                     atIndex: (NSUInteger)indexInsert.item];
-    [sectionRow setHasObjects:hasObjects];
-    
-    [self.managedObjectContext save:nil];
-    return indexInsert;
-    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:sectionRow.hasObjects];
+    [hasObjects insertObject: documentObject atIndex: (NSUInteger)indexPathForInsert.item];
+    sectionRow.hasObjects = hasObjects;
 }
 
 - (void)setInterfaceHeight:(CGFloat)height {

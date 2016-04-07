@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 
 - (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
 
-- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
+- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)(BOOL finished))completion;
 
 @end
 

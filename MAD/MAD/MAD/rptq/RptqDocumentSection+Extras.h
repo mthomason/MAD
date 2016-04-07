@@ -24,28 +24,26 @@ typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
 
 @interface RptqDocumentSection (Extras)
 
-@property (nonatomic, retain, readonly) NSString *sectionKey;
+    @property (nonatomic, retain, readonly) NSString *sectionKey;
 
-+ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-//+ (instancetype)newDocumentSectionOfType:(MNSDocumentSectionType)type forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid inManagedObjectContext:(NSManagedObjectContext *)moc;
+    + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid inManagedObjectContext:(NSManagedObjectContext *)moc;
 
-+ (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row withNumberOfGroups:(NSUInteger)numberOfGroups;
-+ (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
-+ (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
+    + (MNSDocumentSectionType)getSectionTypeforRow:(NSUInteger)row withNumberOfGroups:(NSUInteger)numberOfGroups;
+    + (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
+    + (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
 
-- (CGFloat)layoutHeightCalculated;
-- (NSString *)localizedDisplayName;
-- (NSString *)sectionKey;
-- (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
-- (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
-- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin;
-- (void)setInterfaceHeight:(CGFloat)height;
-- (MNSDocumentSectionType)getDocumentSectionType;
-- (NSUInteger)nextDropIndexForSection;
-- (BOOL)producesFormFeed;
-- (void)setProducesFormFeed:(BOOL)producesFormFeed;
+    - (CGFloat)layoutHeightCalculated;
+    - (NSString *)localizedDisplayName;
+    - (NSString *)sectionKey;
+    - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
+    - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
+    - (void)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)setInterfaceHeight:(CGFloat)height;
+    - (MNSDocumentSectionType)getDocumentSectionType;
+    - (BOOL)producesFormFeed;
+    - (void)setProducesFormFeed:(BOOL)producesFormFeed;
 
 @end
 
