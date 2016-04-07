@@ -13,12 +13,9 @@
 
 @interface MADConnectorView : MADManagedObjectView
 
-    @property (nonatomic, strong) UIView *anchorViewLeft;
-    @property (nonatomic, strong) UIView *anchorViewRight;
-    @property (nonatomic, strong) NSNumber *topLeftToBottomRight;
     @property (nonatomic, strong) NSString *linkDescription;
-
-    @property (nonatomic, assign) BOOL leftViewIsInital;
+    @property (nonatomic, assign) bool topLeftToBottomRight;
+    @property (nonatomic, assign) bool leftViewIsInital;
 
     - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 

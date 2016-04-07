@@ -770,27 +770,27 @@ typedef void(^MTBlockResultVoid)(void);
     rightCellAnchorPoint.x -= paddingLeft;
     rightCellAnchorPoint.y += -2.0000f;
     
-    NSNumber *topLeftToBottomRight;
+    bool topLeftToBottomRight;
     CGFloat extraInset = 0.0000f;
     if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            topLeftToBottomRight = @(YES);
+            topLeftToBottomRight = true;
         } else {
-            topLeftToBottomRight = @(NO);
+            topLeftToBottomRight = false;
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
-        connectorView.leftViewIsInital = YES;
+        connectorView.leftViewIsInital = true;
     } else {
         extraInset = -20.0000f;
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            topLeftToBottomRight = @(NO);
+            topLeftToBottomRight = false;
         } else {
-            topLeftToBottomRight = @(YES);
+            topLeftToBottomRight = true;
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
-        connectorView.leftViewIsInital = NO;
+        connectorView.leftViewIsInital = false;
     }
     connectorView.topLeftToBottomRight = topLeftToBottomRight;
     

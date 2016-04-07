@@ -10,8 +10,6 @@
 
 @interface MTResizeHandleView()
 
-//@property (nonatomic, strong) __attribute__((NSObject)) CGGradientRef gradient;
-
 @end
 
 @implementation MTResizeHandleView
@@ -23,8 +21,8 @@ static const CGFloat colors[] = {
 };
 
 - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompusDirection)position {
-    self = [self initWithFrame:frame];
-    if (self) {
+
+    if (self = [self initWithFrame:frame]) {
 
         self.initalPoint = self.center;
         self.type = position;
@@ -44,8 +42,8 @@ static const CGFloat colors[] = {
     CGFloat startRadius, endRadius;
     start = end = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
 	CGFloat r = rect.size.width < rect.size.height ? rect.size.width : rect.size.height;
-	startRadius = r * 0.0625;
-	endRadius = r * 0.25;
+	startRadius = r * 0.06250f;
+	endRadius = r * 0.2500f;
     
     [[UIColor clearColor] setFill];
     CGContextDrawPath(currentContext, kCGPathFillStroke);

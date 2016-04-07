@@ -12,6 +12,8 @@
 
 @interface MADConnectorView ()
 
+    @property (nonatomic, strong) UIView *anchorViewLeft;
+    @property (nonatomic, strong) UIView *anchorViewRight;
     @property (nonatomic, strong) MADColor *forgroundColor;
     @property (nonatomic, assign) CGSize shadowSize;
     @property (nonatomic, assign) CGSize smallCircleSize;
@@ -75,23 +77,24 @@
 }
 
 - (CGRect)rectForOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
+
     CGFloat originX, originY, sizeWidth, sizeHeight;
-    BOOL topLeftToBottomRight;
-    
+    bool topLeftToBottomRight;
+
     if (originPoint.x < destinationPoint.x && originPoint.y < destinationPoint.y) {
-        topLeftToBottomRight = YES;
+        topLeftToBottomRight = true;
         originX = originPoint.x;
         originY = originPoint.y;
         sizeWidth = destinationPoint.x - originPoint.x;
         sizeHeight = destinationPoint.y - originPoint.y;
     } else if (originPoint.x > destinationPoint.x && originPoint.y > destinationPoint.y) {
-        topLeftToBottomRight = YES;
+        topLeftToBottomRight = true;
         originX = destinationPoint.x;
         originY = destinationPoint.y;
         sizeWidth = originPoint.x - destinationPoint.x;
         sizeHeight = originPoint.y - destinationPoint.y;
     } else {
-        topLeftToBottomRight = NO;
+        topLeftToBottomRight = false;
         if (originPoint.x < destinationPoint.x) {
             originX = originPoint.x;
             originY = destinationPoint.y;
@@ -105,8 +108,7 @@
         }
     }
 
-    NSNumber *topLeftToBottomRightWrapper = @(topLeftToBottomRight);
-    [self setTopLeftToBottomRight:topLeftToBottomRightWrapper];
+    self.topLeftToBottomRight = topLeftToBottomRight;
     
     [self setNeedsDisplay];
     
@@ -137,7 +139,7 @@
         
         [self.forgroundColor.color set];
         
-        if (self.topLeftToBottomRight.boolValue) {
+        if (self.topLeftToBottomRight) {
             
             
             origin = CGPointMake(rect.origin.x, rect.origin.y);
@@ -184,7 +186,7 @@
             UIBezierPath *path = [UIBezierPath bezierPath];
             CGPoint pathOrigin = connectorNobRectDestination.origin;
             pathOrigin.y += 3.0000f;
-            if (self.topLeftToBottomRight.boolValue) {
+            if (self.topLeftToBottomRight) {
                 if (self.leftViewIsInital) {
                     pathOrigin.x -= 5.0000f;
                     [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
