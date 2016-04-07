@@ -765,7 +765,7 @@
 		4C8DE2621BAFA96300AD1111 /* MADSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE25D1BAFA96300AD1111 /* MADSearchBar.m */; };
 		4C8DE2631BAFA96300AD1111 /* MTBarButtonItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE25F1BAFA96300AD1111 /* MTBarButtonItemTitle.m */; };
 		4C8DE2641BAFA96300AD1111 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2611BAFA96300AD1111 /* UILabelStrikethrough.m */; };
-		4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2661BAFA98B00AD1111 /* MTClipboardView.m */; };
+		4C8DE26B1BAFA98B00AD1111 /* MADClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */; };
 		4C8DE26C1BAFA98B00AD1111 /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2681BAFA98B00AD1111 /* MTConnectorView.m */; };
 		4C8DE26D1BAFA98B00AD1111 /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE26A1BAFA98B00AD1111 /* MTResizeHandleView.m */; };
 		4C8DE26F1BAFA9A900AD1111 /* MADTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */; };
@@ -1991,8 +1991,8 @@
 		4C8DE25F1BAFA96300AD1111 /* MTBarButtonItemTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarButtonItemTitle.m; sourceTree = "<group>"; };
 		4C8DE2601BAFA96300AD1111 /* UILabelStrikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelStrikethrough.h; sourceTree = "<group>"; };
 		4C8DE2611BAFA96300AD1111 /* UILabelStrikethrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelStrikethrough.m; sourceTree = "<group>"; };
-		4C8DE2651BAFA98B00AD1111 /* MTClipboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTClipboardView.h; sourceTree = "<group>"; };
-		4C8DE2661BAFA98B00AD1111 /* MTClipboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTClipboardView.m; sourceTree = "<group>"; };
+		4C8DE2651BAFA98B00AD1111 /* MADClipboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADClipboardView.h; sourceTree = "<group>"; };
+		4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADClipboardView.m; sourceTree = "<group>"; };
 		4C8DE2671BAFA98B00AD1111 /* MTConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectorView.h; sourceTree = "<group>"; };
 		4C8DE2681BAFA98B00AD1111 /* MTConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectorView.m; sourceTree = "<group>"; };
 		4C8DE2691BAFA98B00AD1111 /* MTResizeHandleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTResizeHandleView.h; sourceTree = "<group>"; };
@@ -3659,8 +3659,8 @@
 				4C401F731BAE7EB500BAE5FC /* MADTableViewHeader.m */,
 				4C539C351CB65634002E4CD5 /* MADViewTableHeader+QueryViewSectionTypes.h */,
 				4C539C361CB65634002E4CD5 /* MADViewTableHeader+QueryViewSectionTypes.m */,
-				4C8DE2651BAFA98B00AD1111 /* MTClipboardView.h */,
-				4C8DE2661BAFA98B00AD1111 /* MTClipboardView.m */,
+				4C8DE2651BAFA98B00AD1111 /* MADClipboardView.h */,
+				4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */,
 				4C8DE2671BAFA98B00AD1111 /* MTConnectorView.h */,
 				4C8DE2681BAFA98B00AD1111 /* MTConnectorView.m */,
 				4C8DE2691BAFA98B00AD1111 /* MTResizeHandleView.h */,
@@ -6371,7 +6371,7 @@
 				4C59BDAD1C9A88900031BC6C /* MADBackgroundObserver.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
 				4C5B56071C9931BA005C19D9 /* MADKeyChainOperationGet.m in Sources */,
-				4C8DE26B1BAFA98B00AD1111 /* MTClipboardView.m in Sources */,
+				4C8DE26B1BAFA98B00AD1111 /* MADClipboardView.m in Sources */,
 				4C4020EA1BAE988900BAE5FC /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C26B9541BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m in Sources */,
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,

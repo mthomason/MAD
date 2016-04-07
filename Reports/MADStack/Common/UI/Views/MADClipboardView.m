@@ -1,5 +1,5 @@
 //
-//  UIViewClipboard.m
+//  MADClipboardView.m
 //  Reports
 //
 //  Created by Michael Thomason on 3/5/12.
