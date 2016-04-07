@@ -25,13 +25,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 @interface MADDesignerViewController : MADViewController
     <MADViewControllerDocumentProtocol, MADViewControllerProtocol>
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, assign) BOOL hidesStatusBar;
+    @property (nonatomic, assign) bool hidesStatusBar;
 
-
-- (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
+    - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
 
 @end
 

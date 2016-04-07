@@ -318,7 +318,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.scroller.minimumZoomScale = 0.3000f;
     self.scroller.bouncesZoom = NO;
     
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
     
     MADToolboxTransitioningDelegate *transitioningDelegate = [[MADToolboxTransitioningDelegate alloc] init];
     transitioningDelegate.popoverPresentationControllerDelegate = self;
@@ -413,10 +413,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     self.scroller.container.backgroundColor = [UIColor clearColor];
     self.scroller.backgroundColor = [UIColor clearColor];
-}
-
-- (void)setHidesStatusBar:(BOOL)hidesStatusBar {
-    _hidesStatusBar = hidesStatusBar;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -1181,7 +1177,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     if (selectedImage != nil) {
         MADDesignerViewController *reportDesigner = self;
-        self.hidesStatusBar = NO;
+        self.hidesStatusBar = false;
         [self dismissViewControllerAnimated:YES completion:^{
             NSNumber *type = @(MTDocumentObjectTypeImage);
             NSDictionary *defination = @{MTDocumentObjectDefinationType: type,
@@ -1194,7 +1190,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:NULL];
     [self setDisplayActive];
 }
@@ -1750,7 +1746,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)viewControllerDidFinish:(id)sender {
     [self setDisplayActive];
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -1761,7 +1757,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self insertDocumentObjectWithDefination:
      @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
        MTDocumentObjectDefinationObject : [field objectID]}];
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -1786,7 +1782,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                                                };
     
     [self insertDocumentObjectWithDefination: documentObjectDefination];
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
 }
 
 
@@ -2841,10 +2837,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     if (self.presentedViewController != nil) {
         UIView *sectionView = [self detailSectionView];
         CGRect rect = sectionView.frame;
-        self.hidesStatusBar = NO;
-        //[self dismissViewControllerAnimated:YES completion:^{
-            [self.scroller scrollRectToVisible:rect animated:YES];
-        //}];
+        self.hidesStatusBar = false;
+        [self.scroller scrollRectToVisible:rect animated:YES];
     }
 }
 
@@ -2990,7 +2984,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (IBAction)actionCancel:(id)sender {
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:^{
         [self setDisplayActive];
     }];
@@ -3002,7 +2996,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (IBAction)hideToolbox {
-    self.hidesStatusBar = NO;
+    self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:^{
         [self actionDismiss];
         [self setDisplayActive];
