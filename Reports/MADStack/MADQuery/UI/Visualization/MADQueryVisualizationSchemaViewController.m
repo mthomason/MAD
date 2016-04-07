@@ -11,7 +11,7 @@
 #endif
 
 #import "MADQueryVisualizationSchemaViewController.h"
-#import "MTConnectorView.h"
+#import "MADConnectorView.h"
 #import "MTTitleView.h"
 #import "MTSchemaFieldCell.h"
 #import "NSLayoutConstraint+QueryVisualization.h"

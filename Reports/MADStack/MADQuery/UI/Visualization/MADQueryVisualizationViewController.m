@@ -20,7 +20,7 @@
 
 #import "MADViewControllerSQL.h"
 
-#import "MTConnectorView.h"
+#import "MADConnectorView.h"
 
 #import "MADQueryVisualizationSchemaViewController.h"
 #import "MADQueryVisualizationSchemaViewController+Designer.h"
@@ -364,7 +364,7 @@ typedef void(^MTBlockResultVoid)(void);
                         for (RptqQueryLinks *link in updatedQuery.hasQueryLinks) {
                             if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
                                 [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
-                                MTConnectorView * __weak connectorView = self.controllersByObjectID[link.objectID];
+                                MADConnectorView * __weak connectorView = self.controllersByObjectID[link.objectID];
                                 [connectorView removeFromSuperview];
                                 [self.view setNeedsLayout];
                                 [self.view layoutIfNeeded];
@@ -626,7 +626,7 @@ typedef void(^MTBlockResultVoid)(void);
         [self.rootTables addObject: table.objectID];
     }
     
-    MTConnectorView * __weak connectorView = self.controllersByObjectID[deletedLink.objectID];
+    MADConnectorView * __weak connectorView = self.controllersByObjectID[deletedLink.objectID];
     [connectorView removeFromSuperview];
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
@@ -673,7 +673,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
 
-    MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectZero];
+    MADConnectorView *connectorView = [[MADConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;
     connectorView.objectIdTag = link.objectID;
     
@@ -737,7 +737,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
 
-    MTConnectorView *connectorView = self.controllersByObjectID[queryLink.objectID];
+    MADConnectorView *connectorView = self.controllersByObjectID[queryLink.objectID];
     const CGFloat paddingLeft = 44.0000f;
     
     MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersByObjectID[queryLink.hasLeftField.inQueryTable.objectID];
