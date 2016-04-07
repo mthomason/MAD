@@ -110,6 +110,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, strong) NSSet <__kindof MADDesignerSectionView *> *passthroughContainers;
     @property (nonatomic, strong) NSArray <__kindof MADDesignerSectionView *>  *sectionViewsArray;
+    @property (nonatomic, strong) NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray;
+
+    @property (nonatomic, strong) NSArray <__kindof NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
+    @property (nonatomic, strong) NSArray <__kindof NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
+
+    @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
+    @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
+
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
 
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
@@ -117,19 +127,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
     @property (nonatomic, strong) MADPromptManager *promptManager;
 
-    @property (nonatomic, strong) NSArray *sectionControlViewsArray;
-
-    @property (nonatomic, strong) NSArray *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
-    @property (nonatomic, strong) NSArray *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
-
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
-
-    @property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelHeightContainer;
-    @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsSidesBorder;
-    @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsVerticalBuffer;
-
-    @property (nonatomic, strong) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
     @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
     @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
@@ -435,7 +434,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     RptqDocumentSectionEnumerator *sectionEnumerator = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.document.activeDocumentModel];
     
     NSInteger sectionCounter = 0;
-    NSInteger numberOfSections = [sectionEnumerator count];
+    NSUInteger numberOfSections = [sectionEnumerator count];
     
     NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
@@ -615,10 +614,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [super viewDidDisappear:animated];
     
     [self removeObservers];
-
-// ???: Unused?
-    NSArray *viewsToRemove = [self.sectionViewsArray arrayByAddingObjectsFromArray:self.sectionControlViewsArray];
-    viewsToRemove = [self.sectionViewsArray arrayByAddingObject:self.ruler];
     
     NSArray *subviews = self.scroller.container.subviews;
     for (id view in subviews) {

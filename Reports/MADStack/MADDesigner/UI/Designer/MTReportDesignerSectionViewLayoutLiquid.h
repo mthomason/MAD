@@ -17,32 +17,32 @@
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate
 
-- (void)collectionView: (UICollectionView *)collectionView
-         prepareLayout: (UICollectionViewLayout *)collectionViewLayout;
+    - (void)collectionView: (UICollectionView *)collectionView
+             prepareLayout: (UICollectionViewLayout *)collectionViewLayout;
 
-- (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView
-                                                    layout: (UICollectionViewLayout *)collectionViewLayout
-                        layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath;
+    - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView
+                                                        layout: (UICollectionViewLayout *)collectionViewLayout
+                            layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath;
 
-- (CGSize)collectionView: (UICollectionView *)collectionView
-           sizeForLayout: (UICollectionViewLayout *)collectionViewLayout;
+    - (CGSize)collectionView: (UICollectionView *)collectionView
+               sizeForLayout: (UICollectionViewLayout *)collectionViewLayout;
 
-- (NSUInteger)numberOfItemsInSection: (NSUInteger)section
-                    ofCollectionView: (UICollectionView *)collectionView;
+    - (NSUInteger)numberOfItemsInSection: (NSUInteger)section
+                        ofCollectionView: (UICollectionView *)collectionView;
 
-- (NSArray *)collectionView: (UICollectionView *)collectionView
-        attributesForLayout: (UICollectionViewLayout *)collectionViewLayout;
+    - (NSArray *)collectionView: (UICollectionView *)collectionView
+            attributesForLayout: (UICollectionViewLayout *)collectionViewLayout;
 
-- (void)collectionViewDidFinishUpdates: (UICollectionView *)collectionView;
+    - (void)collectionViewDidFinishUpdates: (UICollectionView *)collectionView;
 
 @end
 
 @interface MTReportDesignerSectionViewLayoutLiquid : UICollectionViewLayout
 
-@property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+    @property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 
-@property (nonatomic, assign) CGSize contentSize;
-@property (nonatomic, assign) NSUInteger tag;
+    @property (nonatomic, assign) CGSize contentSize;
+    @property (nonatomic, assign) NSInteger tag;
 
 @end
 
