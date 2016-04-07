@@ -12,12 +12,9 @@
 
 @interface MTConnectorView ()
 
-@property (nonatomic, strong) MADColor *forgroundColor;
-
-@property (nonatomic, assign) CGSize shadowSize;
-@property (nonatomic, assign) CGSize smallCircleSize;
-
-- (instancetype)init;
+    @property (nonatomic, strong) MADColor *forgroundColor;
+    @property (nonatomic, assign) CGSize shadowSize;
+    @property (nonatomic, assign) CGSize smallCircleSize;
 
 @end
 
@@ -46,17 +43,17 @@
         
         UIColor *color = [MADColorEverydayApps newColorRed];
         MADColor *foregroundColor = [[MADColor alloc] initWithColor:color];
-        [self setForgroundColor:foregroundColor];
+        self.forgroundColor = foregroundColor;
         
-        [self setAnchorViewLeft:anchorLeft];
-        [self setAnchorViewRight:anchorRight];
 
-        [self addSubview:[self anchorViewLeft]];
-        [self addSubview:[self anchorViewRight]];
+        [self addSubview:self.anchorViewLeft];
+        [self addSubview:self.anchorViewRight];
         
+        self.anchorViewLeft = anchorLeft;
+        self.anchorViewRight = anchorRight;
         
-        [self setClipsToBounds:NO];
-        [[self layer] setMasksToBounds:NO];
+        self.clipsToBounds = NO;
+        self.layer.masksToBounds = NO;
         self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;

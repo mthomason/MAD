@@ -9,7 +9,6 @@
 #ifndef Reports_MTConnectorView_h
 #define Reports_MTConnectorView_h
 
-#import <UIKit/UIKit.h>
 #import "MADManagedObjectView.h"
 
 @interface MTConnectorView : MADManagedObjectView
