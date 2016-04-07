@@ -106,82 +106,81 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UIScrollViewDelegate,
     UIImagePickerControllerDelegate>
 
-@property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
+    @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
-@property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
+    @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-@property (nonatomic, strong) MTRulerView *ruler;
-@property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
-@property (nonatomic, strong) MADPromptManager *promptManager;
+    @property (nonatomic, strong) MTRulerView *ruler;
+    @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
+    @property (nonatomic, strong) MADPromptManager *promptManager;
 
-@property (nonatomic, strong) NSArray *sectionViewsArray;
-@property (nonatomic, strong) NSArray *sectionControlViewsArray;
+    @property (nonatomic, strong) NSArray *sectionViewsArray;
+    @property (nonatomic, strong) NSArray *sectionControlViewsArray;
 
-@property (nonatomic, strong) NSArray *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
-@property (nonatomic, strong) NSArray *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
+    @property (nonatomic, strong) NSArray *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
+    @property (nonatomic, strong) NSArray *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
 
-@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
-@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
+    @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
+    @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 
-@property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelHeightContainer;
-@property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsSidesBorder;
-@property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsVerticalBuffer;
+    @property (nonatomic, strong) NSMutableArray *layoutConstraintSectionLabelHeightContainer;
+    @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsSidesBorder;
+    @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsVerticalBuffer;
 
-@property (nonatomic, strong) NSMutableDictionary *layoutConstraintsReportSectionHeight;
+    @property (nonatomic, strong) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
-@property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
-@property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
+    @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
+    @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
 
-@property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
-@property (nonatomic, strong) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
+    @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
+    @property (nonatomic, strong) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
 
-@property (nonatomic, assign) NSUInteger lastSelectedSectionControlPanel;
+    @property (nonatomic, assign) NSUInteger lastSelectedSectionControlPanel;
 
-@property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
-@property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
+    @property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
+    @property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
 
-@property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
+    @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
-@property (nonatomic, strong) MADDesignerElementView *lastElementViewToShowMenu;
+    @property (nonatomic, strong) MADDesignerElementView *lastElementViewToShowMenu;
 
-@property (nonatomic, strong) NSMutableDictionary *sectionViews;
-@property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
-@property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
+    @property (nonatomic, strong) NSMutableDictionary *sectionViews;
+    @property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
+    @property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
 
-@property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
+    @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
 
-@property (nonatomic, strong) NSMutableSet *selectedObjectIds;
+    @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
 
-@property (nonatomic, assign) bool editAggregate;
-@property (nonatomic, assign) bool toolboxVisible;
-@property (nonatomic, assign) bool sectionSettingsVisible;
-@property (nonatomic, assign) bool insetsSetup;
-@property (nonatomic, assign) bool shownAndHidden;
-@property (nonatomic, assign) bool lastMenuItemSelectRequiresElementView;
+    @property (nonatomic, assign) bool editAggregate;
+    @property (nonatomic, assign) bool toolboxVisible;
+    @property (nonatomic, assign) bool sectionSettingsVisible;
+    @property (nonatomic, assign) bool insetsSetup;
+    @property (nonatomic, assign) bool shownAndHidden;
+    @property (nonatomic, assign) bool lastMenuItemSelectRequiresElementView;
 
-@property (nonatomic, copy) NSManagedObjectID *objectIdEditDynamicLabel;
-@property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
-@property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
-@property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdEditDynamicLabel;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
+    @property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
+    @property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
 
-//@property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
-@property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
+    @property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
 
-@property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
-@property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
+    @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
+    @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
-@property (nonatomic, assign) CGFloat zoomScaleRestore;
-@property (nonatomic, assign) CGRect boundsOnDisappear;
+    @property (nonatomic, assign) CGFloat zoomScaleRestore;
+    @property (nonatomic, assign) CGRect boundsOnDisappear;
 
-@property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
-@property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
+    @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
+    @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
 
-@property (nonatomic, strong) NSSet *passthoughContainers;
+    @property (nonatomic, strong) NSSet *passthoughContainers;
 
-@property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
-@property (nonatomic, weak) UILabel *lastSelectedLabel;
+    @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
+    @property (nonatomic, weak) UILabel *lastSelectedLabel;
 
-@property (nonatomic, strong) NSSet *visibleElementViews;
+    @property (nonatomic, strong) NSSet *visibleElementViews;
 
 @end
 
