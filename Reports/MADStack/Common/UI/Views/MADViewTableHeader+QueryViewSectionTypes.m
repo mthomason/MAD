@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTViewTableHeader+QueryViewSectionTypes.h"
+#import "MADViewTableHeader+QueryViewSectionTypes.h"
 #import "MADQueryViewControllerLayout.h"
 
 @implementation MADTableViewHeader (QueryViewSectionTypes)

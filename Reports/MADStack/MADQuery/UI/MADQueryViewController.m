@@ -33,7 +33,7 @@
 
 #import "MADDesignerViewController.h"
 
-#import "MTViewTableHeader.h"
+#import "MADTableViewHeader.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MADNavigationController.h"
@@ -45,7 +45,7 @@
 
 #import "MADQueryViewControllerLayout.h"
 
-#import "MTViewTableHeader+QueryViewSectionTypes.h"
+#import "MADViewTableHeader+QueryViewSectionTypes.h"
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
@@ -139,11 +139,10 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)dealloc {
     [MADQueryViewController deleteCoreDataCache];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextObjectsDidChangeNotification
+    [[NSNotificationCenter defaultCenter] removeObserver: self name: NSManagedObjectContextObjectsDidChangeNotification
                                                   object: _document.managedObjectContext];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: UIContentSizeCategoryDidChangeNotification
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self name: UIContentSizeCategoryDidChangeNotification
                                                   object: nil];
 }
 
@@ -902,7 +901,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [MTViewTableHeader newTableViewHeaderWithType: [self.datamodel layoutAtIndex:(short)section]
+    return [MADTableViewHeader newTableViewHeaderWithType: [self.datamodel layoutAtIndex:(short)section]
                                                 andFrame: CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight) target:self];
 }
 

@@ -1,5 +1,5 @@
 //
-//  MTViewTableHeader.m
+//  MADViewTableHeader.m
 //  Reports
 //
 //  Created by Michael Thomason on 1/27/13.
@@ -8,7 +8,7 @@
 
 #import "MADTableViewHeader.h"
 
-@implementation MTViewTableHeader
+@implementation MADTableViewHeader
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
