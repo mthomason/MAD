@@ -17,17 +17,17 @@
 
 @protocol MTCollectionViewCellElementDelegate
 
-- (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
-- (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
-- (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
-- (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell;
+    - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+    - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+    - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+    - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell;
 
 @end
 
 @interface MTCollectionViewCellElement : MADManagedObjectCollectionViewCell
 
-@property (nonatomic, weak) id <MTCollectionViewCellElementDelegate> delegate;
-- (void)addElementView:(MADDesignerElementView *)elementView;
+    @property (nonatomic, weak) id <MTCollectionViewCellElementDelegate> delegate;
+    - (void)addElementView:(MADDesignerElementView *)elementView;
 
 @end
 

@@ -238,7 +238,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
         self.numberFormatterPercentage = numberFormatter;
         
-        NSSet *emptySet = [NSSet set];
+        NSMutableSet *emptySet = [NSMutableSet new];
         self.visibleElementViews = emptySet;
 
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
@@ -984,7 +984,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 // FIXME: Unused... Used for multiple rows in the document section... currently unused
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
+    MADocument *doc = self.document;
+    RptqDatabase *database = doc.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
     RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
     
@@ -1001,7 +1002,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                                inManagedObjectContext: self.document.managedObjectContext];
+                                                                                inManagedObjectContext: doc.managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
         newRowToAppend.inSection = documentSection;
         [hasRows addObject:newRowToAppend];
@@ -1027,8 +1028,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
     NSError *error = nil;
-    [self.document.managedObjectContext save:&error];
-    [self.document saveToURL: self.document.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    [doc.managedObjectContext save:&error];
+    [doc saveToURL: doc.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                
         if (insertNewSection) {
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:numberOfRows - 1];
@@ -1144,12 +1145,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)willHideMenuNotification:(NSNotification *)notification { }
 - (void)didHideMenuNotification:(NSNotification *)notification {
     if ([self lastMenuItemSelectRequiresElementView] == false) {
-        if (self.lastElementViewToShowMenu) {
-            [self deselectElementView: self.lastElementViewToShowMenu animated: YES];
-            [self.selectedObjectIds removeObject: self.lastElementViewToShowMenu.objectIdTag];
+        MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
+        if (lastElementViewToShowMenu) {
+            [self deselectElementView: lastElementViewToShowMenu animated: YES];
+            [self.selectedObjectIds removeObject: lastElementViewToShowMenu.objectIdTag];
             [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
-            self.lastElementViewToShowMenu = nil;
         }
+        self.lastElementViewToShowMenu = nil;
     }
     self.lastMenuItemSelectRequiresElementView = false;
 }
@@ -1157,8 +1159,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)willShowMenuNotification:(NSNotification *)notification { }
 
 - (BOOL)padLike {
-    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular &&
-                self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular && self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -1285,9 +1286,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     
-    NSUInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-
     NSManagedObjectID *elementViewId = cell.objectIdTag.copy;
     private.parentContext = self.document.managedObjectContext;
     
@@ -1412,10 +1411,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [self setDisplayInactive];
     }];
     
-
-    
 }
-
 
 - (void)editDocumentObjectBarcode:(RptqDocumentObject *)object {
     
@@ -1424,10 +1420,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode main];
     barcodeViewController.document = self.document;
     barcodeViewController.delegate = self;
-    
-    //RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
-    //barcodeViewController.barcodeToEdit = documentObject.isBarcode;
-    //self.barcodeToEdit = documentObject.isBarcode;
     
     barcodeViewController.preferredContentSize = sizePopoverFonts();
     barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
@@ -1457,6 +1449,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     chooseFieldViewController.modalPresentationStyle = UIModalPresentationPopover;
     chooseFieldViewController.preferredContentSize = sizePopoverFonts();
+    
     UIPopoverPresentationController *popoverController = chooseFieldViewController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
@@ -1473,10 +1466,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         textField.text = object.isLabel.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
     } completion:^(UIAlertAction *action, NSString *text) {
-        
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
+        NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:object.objectID];
         documentObject.isLabel.text = text;
-        [self.document.managedObjectContext save:nil];
+        [managedObjectContext save:nil];
     }];
     
     [self presentViewController:alert animated:YES completion:nil];
@@ -1516,7 +1509,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                                                         inputType: MTAggregateFunctionInputTypeField
                                                         groupType: groupType
                                                   aggregateObject: (RptqQueryField *)inputObject
-                                                      groupNumber: labs((long)[groupNumber integerValue])];
+                                                      groupNumber: (NSUInteger)labs(groupNumber.longValue)];
 }
 
 #pragma mark -
@@ -1623,15 +1616,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (NSInteger)collectionView: (MADDesignerSectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
-    
-    //RptqDocument *document = [self.document activeDocumentModel];
-    //RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
-    //RptqQuery *query = [database.hasQueries anyObject];
-    //RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForSelectedIndex: selectedSectionNumber query: query];
-    //NSInteger qc = [query sectionCount];
-    
     MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
-    return layoutManager.items.count;
+    return (NSInteger)layoutManager.items.count;
 }
 
 - (UICollectionReusableView *)collectionView: (UICollectionView *)collectionView
@@ -1670,22 +1656,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)collectionView: (UICollectionView *)collectionView willDisplayCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
-    NSSet *visibleElementViews = [self.visibleElementViews setByAddingObject:elementView];
-    self.visibleElementViews = visibleElementViews;
+    MADDesignerElementView *elementView = [cell.contentView viewWithTag:(NSInteger)cell.objectIdTag.hash];
+    [self.visibleElementViews addObject:elementView];
     [self adjustPassthroughViews];
     
 }
 
 - (void)collectionView: (UICollectionView *)collectionView didEndDisplayingCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    UIView *elementView = [cell.contentView viewWithTag:cell.objectIdTag.hash];
-    NSMutableSet *elementViews = [NSMutableSet setWithSet:self.visibleElementViews];
-    if (elementView != nil) {
-        [elementViews removeObject:elementView];
-    }
-    NSSet *elementViewsUpdated = [NSSet setWithSet: elementViews];
-    self.visibleElementViews = elementViewsUpdated;
+    MADDesignerElementView *elementView = [cell.contentView viewWithTag:(NSInteger)cell.objectIdTag.hash];
+    [self.visibleElementViews removeObject:elementView];
     [self adjustPassthroughViews];
     
 }
@@ -1703,14 +1683,14 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)collectionView: (MADDesignerSectionView *)collectionView performAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
     
-    NSUInteger row = indexPath.row;
+    NSInteger row = indexPath.row;
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
                                                                     inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [documentSection.hasRows[indexPath.section] hasObjects];
+    NSOrderedSet *objects = [documentSection.hasRows[(NSUInteger)indexPath.section] hasObjects];
     
-    if (objects.count > row) {
-        RptqDocumentObject *documentObject = objects[row];
+    if ((NSInteger)objects.count > row) {
+        RptqDocumentObject *documentObject = objects[(NSUInteger)row];
         
         if (action == @selector(delete:)) {
             [self delete:documentObject];
@@ -1939,7 +1919,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
         case UIGestureRecognizerStateBegan: {
             
-            [self beginPanPiece:gestureRecognizer.view transition:^{
+            [self beginPanPiece:(MADManagedObjectView *)gestureRecognizer.view transition:^{
                 [self translatePanGesture:gestureRecognizer];
             } completion:^{
                 [self translatePanGesture:gestureRecognizer];
@@ -2280,17 +2260,19 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     [self setDisplayActive];
     
-    RptqDocumentSection *section = self.document.activeDocumentModel.hasDetailSection;
+    MADocument *document = self.document;
+    RptqDocument *rptqDocument = document.activeDocumentModel;
+    RptqDocumentSection *section = rptqDocument.hasDetailSection;
     
-    MADDesignerSectionView *detailSection = [self getSectionViewForDocumentSection:self.document.activeDocumentModel.hasDetailSection];
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[detailSection.objectIdTag];
+    MADDesignerSectionView *detailSection = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
+    MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[detailSection.objectIdTag];
     
     [detailSection performBatchUpdates:^{
         
-        RptqDocumentObject *documentObject = [self.document.activeDocumentModel addDocumentObject:documentObjectDefination];
+        RptqDocumentObject *documentObject = [rptqDocument addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
         
-        NSIndexPath *path = [NSIndexPath indexPathForItem: layoutManager.items.count inSection: 0];
+        NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count inSection: 0];
         MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
         la.objectID = documentObject.objectID;
         self.objectIdJustDisplayed = la.objectID.copy;
@@ -2314,26 +2296,33 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     NSManagedObjectID *objectId = cell.objectIdTag;
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
+    MADocument *document = self.document;
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: document.managedObjectContext];
     
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[sectionView.objectIdTag];
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey:objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
+    
         [self.document removeDocumentObjectWithObjectID: objectId];
+    
     } animationComplete:^(BOOL finished) {
+
         if (finished) {
             [self.scroller.container invalidateIntrinsicContentSize];
             [self.view setNeedsUpdateConstraints];
         }
+
     } completion:^(BOOL finished) {
+
         if (finished) {
             [self redrawAllElementViewsInCollectionView:sectionView];
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
-            [RptqDocument removeDocumentObject:documentObject fromManagedObjectContext:self.document.managedObjectContext];
-            [self.document.managedObjectContext save:nil];
+            RptqDocumentObject *documentObjectFinished = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: document.managedObjectContext];
+            [RptqDocument removeDocumentObject:documentObjectFinished fromManagedObjectContext:document.managedObjectContext];
+            [document.managedObjectContext save:nil];
         }
+
     }];
 }
 
@@ -2342,7 +2331,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return [self.scroller.container popoverRectForSelectedViews:views];
 }
 
-- (UIView *)viewForObjectID:(NSManagedObjectID *)objectID { return [self.scroller.container viewWithTag: objectID.hash]; }
+- (UIView *)viewForObjectID:(NSManagedObjectID *)objectID { return [self.scroller.container viewWithTag: (NSInteger)objectID.hash]; }
 
 - (void)adjustContextOffsetForOpenPopover {
     if ([self padLike]) {
@@ -2410,7 +2399,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [gestureRecognizer setTranslation:CGPointZero inView:self.view];
 }
 
-- (void)beginPanPiece:(MADDesignerElementView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
+- (void)beginPanPiece:(MADManagedObjectView *)piece transition:(void (^)(void))transition completion:(void (^)(void))completion {
     
     [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
     if (self.presentedViewController != nil) {
@@ -2424,7 +2413,9 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     [self.scroller.container bringSubviewToFront: piece];
 
-    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: self.document.managedObjectContext];
+    MADocument *doc = self.document;
+    
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: piece.objectIdTag managedObjectContext: doc.managedObjectContext];
     MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:documentObject.inSectionRow.inSection];
 
     CGRect b = [self.view convertRect:piece.frame fromView:sectionView];
@@ -2438,7 +2429,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     transition();
     
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionView.objectIdTag];
+    MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[sectionView.objectIdTag];
     MADSectionLayoutAttributes *itemToRemove = [layoutManager.items objectForKey: piece.objectIdTag];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
@@ -2458,7 +2449,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {
 
-    MADDesignerElementView *piece = gesture.view;
+    MADDesignerElementView *piece = (MADDesignerElementView *)gesture.view;
     
     //Get drop section
     MADDesignerSectionView *sectionView = nil;
@@ -2625,10 +2616,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
         MADDesignerSectionView *documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
 
-        for (NSUInteger section = 0; (NSInteger)section < documentSectionView.numberOfSections; section++) {
+        for (NSInteger section = 0; section < documentSectionView.numberOfSections; section++) {
+        
             NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
             
-            for (NSUInteger item = 0; (NSInteger)item < numberOfItemsInSection; item++) {
+            for (NSInteger item = 0; item < numberOfItemsInSection; item++) {
                 
                 NSIndexPath *path = [NSIndexPath indexPathForItem:item inSection:section];
                 MADDesignerElementView *elementView = [self elementViewAtIndexPath: path inCollectionView: documentSectionView];
@@ -2644,9 +2636,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (MADDesignerSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
     MADDesignerSectionView *documentSectionView = nil;
-    for (id subview in [self.scroller.container subviews]) {
-        if ([subview tag] == identifer && [subview isKindOfClass:[MADDesignerSectionView class]]) {
-            documentSectionView = subview;
+    NSArray<__kindof UIView *> *subviews = self.scroller.container.subviews;
+    for (UIView *subview in subviews) {
+        if (subview.tag == identifer && [subview isKindOfClass:[MADDesignerSectionView class]]) {
+            documentSectionView = (MADDesignerSectionView *)subview;
             break;
         }
     }
@@ -2858,76 +2851,64 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 #pragma mark NSNotificationCenter Helpers
 
 - (void)addObservers {
-    
+
+    MADocument *document = self.document;
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(managedObjectContextDidChange:)
+    [defaultCenter addObserver: self selector: @selector(managedObjectContextDidChange:)
                           name: NSManagedObjectContextObjectsDidChangeNotification
-                        object: self.document.managedObjectContext];
+                        object: document.managedObjectContext];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(managedObjectContextDidSave:)
+    [defaultCenter addObserver: self selector: @selector(managedObjectContextDidSave:)
                           name: NSManagedObjectContextDidSaveNotification
-                        object: self.document.managedObjectContext];
+                        object: document.managedObjectContext];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(didHideMenuNotification:)
+    [defaultCenter addObserver: self selector: @selector(didHideMenuNotification:)
                           name: UIMenuControllerDidHideMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(willHideMenuNotification:)
+    [defaultCenter addObserver: self selector: @selector(willHideMenuNotification:)
                           name: UIMenuControllerWillHideMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(didShowMenuNotification:)
+    [defaultCenter addObserver: self selector: @selector(didShowMenuNotification:)
                           name: UIMenuControllerDidShowMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(willShowMenuNotification:)
+    [defaultCenter addObserver: self selector: @selector(willShowMenuNotification:)
                           name: UIMenuControllerWillShowMenuNotification
                         object: nil];
     
-    [defaultCenter addObserver: self
-                      selector: @selector(documentStateChanged)
+    [defaultCenter addObserver: self selector: @selector(documentStateChanged)
                           name: UIDocumentStateChangedNotification
-                        object: self.document];
+                        object: document];
 }
 
 - (void)removeObservers {
     
+    MADocument *document = self.document;
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: self.document.managedObjectContext];
+    [defaultCenter removeObserver: self name: NSManagedObjectContextObjectsDidChangeNotification
+                           object: document.managedObjectContext];
     
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextDidSaveNotification
-                           object: self.document.managedObjectContext];
+    [defaultCenter removeObserver: self name: NSManagedObjectContextDidSaveNotification
+                           object: document.managedObjectContext];
     
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidHideMenuNotification
+    [defaultCenter removeObserver: self name: UIMenuControllerDidHideMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidShowMenuNotification
+    [defaultCenter removeObserver: self name: UIMenuControllerDidShowMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerWillHideMenuNotification
+    [defaultCenter removeObserver: self name: UIMenuControllerWillHideMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerWillShowMenuNotification
+    [defaultCenter removeObserver: self name: UIMenuControllerWillShowMenuNotification
                            object: nil];
     
-    [defaultCenter removeObserver: self
-                             name: UIDocumentStateChangedNotification
-                           object: self.document];
+    [defaultCenter removeObserver: self name: UIDocumentStateChangedNotification
+                           object: document];
 }
 
 #pragma mark - Creators

@@ -38,14 +38,12 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         UIMenuController *menu = [UIMenuController sharedMenuController];
-        NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
+        NSMutableArray <UIMenuItem *> *menuItems = menu.menuItems.mutableCopy;
         if (menuItems == nil) {
-            menuItems = [[NSMutableArray alloc] init];
+            menuItems = [NSMutableArray new];
         }
-        UIMenuItem *menuItemEdit = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Edit", @"Edit")
-                                                              action: @selector(edit:)];
-        UIMenuItem *menuItemFormat = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Format", @"Format")
-                                                                action: @selector(format:)];
+        UIMenuItem *menuItemEdit = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Edit", @"Edit") action: @selector(edit:)];
+        UIMenuItem *menuItemFormat = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Format", @"Format") action: @selector(format:)];
         [menuItems addObject:menuItemEdit];
         [menuItems addObject:menuItemFormat];
         [menu setMenuItems:menuItems];
