@@ -108,6 +108,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
+    @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerElementView *>                         *visibleElementViews;
     @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerSectionView *>                         *passthroughContainers;
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionView *>                         *sectionViewsArray;
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionLabel *>                        *sectionControlViewsArray;
@@ -117,16 +118,18 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerScrollViewConstraints;
     @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerContentViewConstraints;
+    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *layoutConstraintSectionLabelHeightContainer;
+    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *layoutConstraintsSectionsSidesBorder;
+    @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *layoutConstraintsSectionsVerticalBuffer;
 
-    @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
-    @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
-    @property (nonatomic, strong) NSMutableArray <__kindof NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *>          *layoutConstraintsReportSectionHeight;
 
-    @property (nonatomic, strong) NSMutableDictionary <__kindof NSString *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
+    @property (nonatomic, strong) NSMutableDictionary <__kindof NSNumber *, __kindof NSNumber *>                    *borderAppliedToView;
 
-    @property (nonatomic, strong) NSMutableDictionary <__kindof NSNumber *, __kindof NSNumber *> *borderAppliedToView;
+    @property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
 
-    @property (nonatomic, strong) NSSet <MADDesignerElementView *> *visibleElementViews;
+    @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
+    @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
 
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
@@ -138,10 +141,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 
     @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
-    @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
-
-    @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
     @property (nonatomic, strong) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
+
+    @property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
+    @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
+
 
     @property (nonatomic, assign) NSUInteger lastSelectedSectionControlPanel;
 
@@ -149,8 +153,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
 
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
-
-    @property (nonatomic, strong) MADDesignerElementView *lastElementViewToShowMenu;
 
     @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
 
@@ -169,15 +171,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
 
     @property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
+    @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
     @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
-    @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
     @property (nonatomic, assign) CGFloat zoomScaleRestore;
     @property (nonatomic, assign) CGRect boundsOnDisappear;
-
-    @property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
-    @property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
 
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
     @property (nonatomic, weak) UILabel *lastSelectedLabel;
@@ -1153,6 +1152,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [self deselectElementView: self.lastElementViewToShowMenu animated: YES];
             [self.selectedObjectIds removeObject: self.lastElementViewToShowMenu.objectIdTag];
             [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
+            self.lastElementViewToShowMenu = nil;
         }
     }
     self.lastMenuItemSelectRequiresElementView = false;
