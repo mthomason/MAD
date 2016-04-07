@@ -34,10 +34,10 @@
     
 }
 
-- (void)setPassthoughContainers:(NSSet *)passthoughContainers {
+- (void)setPassthroughContainers:(NSSet *)passthroughContainers {
     
-    if (_passthoughContainers != passthoughContainers) {
-        _passthoughContainers = passthoughContainers;
+    if (_passthroughContainers != passthroughContainers) {
+        _passthroughContainers = passthroughContainers;
         [self updatePassthroughViews];
     }
     
@@ -65,16 +65,16 @@
     if (self.popoverStyle) {
         
         NSArray *allElementViews =  self.passthroughViews.allObjects;
-        NSArray *allContainerObjects = self.passthoughContainers.allObjects;
-        NSArray *passthoughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
-        NSArray *passthoughViewsWithBackground = [passthoughViews arrayByAddingObject:self.passthroughContainer];
-        NSArray *passthroughViewsAll = [passthoughViewsWithBackground arrayByAddingObjectsFromArray:passthoughViewsWithBackground];
+        NSArray *allContainerObjects = self.passthroughContainers.allObjects;
+        NSArray *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
+        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:self.passthroughContainer];
+        NSArray *passthroughViewsAll = [passthroughViewsWithBackground arrayByAddingObjectsFromArray:passthroughViewsWithBackground];
         ((UIPopoverPresentationController *)self.presentationController).passthroughViews = passthroughViewsAll;
         
         
     } else {
         
-        ((MADToolboxPresentationController *)self.presentationController).passthroughContainers = self.passthoughContainers;
+        ((MADToolboxPresentationController *)self.presentationController).passthroughContainers = self.passthroughContainers;
         ((MADToolboxPresentationController *)self.presentationController).passthroughViews = self.passthroughViews;
         ((MADToolboxPresentationController *)self.presentationController).passthroughContainer = self.passthroughContainer;
         
@@ -97,10 +97,10 @@
         ((UIPopoverPresentationController *)presentationController).sourceRect = self.sourceRect;
 
         NSArray *allElementViews =  self.passthroughViews.allObjects;
-        NSArray *allContainerObjects = self.passthoughContainers.allObjects;
-        NSArray *passthoughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
-        NSArray *passthoughViewsWithBackground = [passthoughViews arrayByAddingObject:self.passthroughContainer];
-        ((UIPopoverPresentationController *)presentationController).passthroughViews = [passthoughViewsWithBackground arrayByAddingObjectsFromArray:passthoughViewsWithBackground];
+        NSArray *allContainerObjects = self.passthroughContainers.allObjects;
+        NSArray *passthroughViews = [allElementViews arrayByAddingObjectsFromArray:allContainerObjects];
+        NSArray *passthroughViewsWithBackground = [passthroughViews arrayByAddingObject:self.passthroughContainer];
+        ((UIPopoverPresentationController *)presentationController).passthroughViews = [passthroughViewsWithBackground arrayByAddingObjectsFromArray:passthroughViewsWithBackground];
         ((UIPopoverPresentationController *)presentationController).permittedArrowDirections = self.permittedArrowDirections;
         ((UIPopoverPresentationController *)presentationController).delegate = self.popoverPresentationControllerDelegate;
 
@@ -110,7 +110,7 @@
                                                                                   presentingViewController: presenting];
         
         ((MADToolboxPresentationController *)presentationController).container = self.container;
-        ((MADToolboxPresentationController *)presentationController).passthroughContainers = self.passthoughContainers;
+        ((MADToolboxPresentationController *)presentationController).passthroughContainers = self.passthroughContainers;
         ((MADToolboxPresentationController *)presentationController).passthroughViews = self.passthroughViews;
         ((MADToolboxPresentationController *)presentationController).passthroughContainer = self.passthroughContainer;
         ((MADToolboxPresentationController *)presentationController).popoverPresentationControllerDelegate = self.popoverPresentationControllerDelegate;

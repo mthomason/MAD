@@ -419,7 +419,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 - (IBAction)info:(id)sender {
     UINavigationController *infoViewController = [UINavigationController AppInformation];
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
@@ -438,7 +438,7 @@ NSString * const MADUtiType                                     = @"com.everyday
         
         UITableViewController *aboutViewController = [UITableViewController About];
         UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
+        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
         ppc.backgroundColor = [UIColor clearColor];
         ppc.delegate = self;
         ppc.barButtonItem = sender;
@@ -460,7 +460,7 @@ NSString * const MADUtiType                                     = @"com.everyday
     MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController DocumentInformation];
     documentInformation.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthoughViews]];
+    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:[self defaultPassthroughViews]];
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
@@ -506,7 +506,7 @@ NSString * const MADUtiType                                     = @"com.everyday
 
 #pragma mark - Convenience
 
-- (NSArray *)defaultPassthoughViews {
+- (NSArray *)defaultPassthroughViews {
     return @[self.navigationController.navigationBar, self.navigationController.toolbar];
 }
 

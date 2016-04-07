@@ -15,8 +15,8 @@
 
 @property (nonatomic, weak) UIView *container;
 @property (nonatomic, weak) UIView *passthroughContainer;
-@property (nonatomic, strong) NSSet *passthoughContainers;
-@property (nonatomic, strong) NSSet *passthoughViews;
+@property (nonatomic, strong) NSSet *passthroughContainers;
+@property (nonatomic, strong) NSSet *passthroughViews;
 
 @end
 

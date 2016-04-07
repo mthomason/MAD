@@ -984,7 +984,7 @@ const CGFloat MADSectionHeaderHeight                            = 32.0000f;
 
 #pragma mark - Convenience
 
-- (NSArray *)defaultPassthoughViews {
+- (NSArray *)defaultPassthroughViews {
     return @[self.navigationController.navigationBar, self.navigationController.toolbar];
 }
 

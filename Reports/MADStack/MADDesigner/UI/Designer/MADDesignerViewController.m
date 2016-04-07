@@ -108,7 +108,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, weak) IBOutlet MADBackgroundScrollView *scroller;
 
-    @property (nonatomic, strong) NSSet <__kindof MADDesignerSectionView *> *passthoughContainers;
+    @property (nonatomic, strong) NSSet <__kindof MADDesignerSectionView *> *passthroughContainers;
+    @property (nonatomic, strong) NSArray <__kindof MADDesignerSectionView *>  *sectionViewsArray;
 
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
@@ -116,7 +117,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
     @property (nonatomic, strong) MADPromptManager *promptManager;
 
-    @property (nonatomic, strong) NSArray *sectionViewsArray;
     @property (nonatomic, strong) NSArray *sectionControlViewsArray;
 
     @property (nonatomic, strong) NSArray *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
@@ -554,7 +554,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
     }
     
-    self.passthoughContainers = [NSSet setWithSet: passthroughContainers];
+    self.passthroughContainers = [NSSet setWithSet: passthroughContainers];
     
     self.sectionViewsArray = sectionViewsArray;
     self.sectionControlViewsArray = sectionControlViewsArray;
@@ -2372,12 +2372,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)adjustPassthroughViews {
     
     if (self.sectionSettingsVisible) {
-        self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-        self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
+        self.settingsTransitioningDelegate.passthroughContainers = self.passthroughContainers;
+        self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
         self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     } else if (self.toolboxVisible) {
-        self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-        self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
+        self.toolboxTransitioningDelegate.passthroughContainers = self.passthroughContainers;
+        self.toolboxTransitioningDelegate.passthroughViews = [self passthroughViews];
         self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
     }
     
@@ -3023,8 +3023,8 @@ static const inline CGSize sizePopoverFonts() {
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
     self.toolboxTransitioningDelegate.container = self.scroller.container;
-    self.toolboxTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-    self.toolboxTransitioningDelegate.passthroughViews = [self passthoughViews];
+    self.toolboxTransitioningDelegate.passthroughContainers = self.passthroughContainers;
+    self.toolboxTransitioningDelegate.passthroughViews = [self passthroughViews];
     self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
     
     self.viewControllerToolbox.clearsBackground = [self padLike];
@@ -3052,8 +3052,8 @@ static const inline CGSize sizePopoverFonts() {
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
     self.settingsTransitioningDelegate.container = self.scroller.container;
-    self.settingsTransitioningDelegate.passthoughContainers = self.passthoughContainers;
-    self.settingsTransitioningDelegate.passthroughViews = [self passthoughViews];
+    self.settingsTransitioningDelegate.passthroughContainers = self.passthroughContainers;
+    self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
     self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
     
     if (self.sectionSettingsVisible == false) {
@@ -3068,7 +3068,7 @@ static const inline CGSize sizePopoverFonts() {
     
 }
 
-- (NSSet *)passthoughViews {
+- (NSSet *)passthroughViews {
     NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsArray];
     NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
     return passthroughViews;

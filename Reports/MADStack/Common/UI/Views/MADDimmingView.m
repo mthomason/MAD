@@ -29,7 +29,7 @@
     CGPoint pointNormalized = [self.container convertPoint: point fromView: self];
     CGRect rectNormalized;
     
-    for (UIView *foundView in self.passthoughViews) {
+    for (UIView *foundView in self.passthroughViews) {
         
         rectNormalized = [foundView convertRect: foundView.bounds
                                          toView: self.container];
@@ -44,7 +44,7 @@
     
     if (hitview == nil) {
         
-        for (UIView *passthroughContainer in self.passthoughContainers) {
+        for (UIView *passthroughContainer in self.passthroughContainers) {
             rectNormalized = [passthroughContainer convertRect: passthroughContainer.bounds
                                                       toView: self.container];
             if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
