@@ -1,5 +1,5 @@
 //
-//  MTViewTableHeader+QueryViewSectionTypes.m
+//  MADTableViewHeader+QueryViewSectionTypes.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/7/16.
@@ -9,11 +9,11 @@
 #import "MTViewTableHeader+QueryViewSectionTypes.h"
 #import "MADQueryViewControllerLayout.h"
 
-@implementation MTViewTableHeader (QueryViewSectionTypes)
+@implementation MADTableViewHeader (QueryViewSectionTypes)
 
 + (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout andFrame:(CGRect)frame target:(nullable id)target {
 
-    MTViewTableHeader *view = [[self alloc] initWithFrame:frame];
+    MADTableViewHeader *view = [[self alloc] initWithFrame:frame];
     switch (layout.querySection) {
 
         case MTQuerySectionsDatasource:
