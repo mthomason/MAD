@@ -1698,50 +1698,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     }
 }
 
-- (NSIndexSet *)deleteSections:(NSArray <__kindof NSNumber *> *)oldLayoutSectionTypes
-                   newSections:(NSArray <__kindof NSNumber *> *)newLayoutSectionTypes {
-    
-    NSIndexSet *deleteSections = nil;
-    if (oldLayoutSectionTypes.count > newLayoutSectionTypes.count) {
-    
-        NSInteger secctr = 0;
-        bool startIndexSet = false;
-        NSInteger startIndex = -1;
-        NSInteger lengtho = (NSInteger)(oldLayoutSectionTypes.count - newLayoutSectionTypes.count);
-
-        for (NSNumber *typenum in oldLayoutSectionTypes) {
-            
-            if (secctr < (NSInteger)newLayoutSectionTypes.count) {
-                
-                if ((MTQuerySections)typenum.unsignedIntegerValue == ((NSNumber *)newLayoutSectionTypes[(NSUInteger)secctr]).integerValue) {
-                    
-                    secctr++;
-                    
-                } else {
-                    if (!startIndexSet) {
-                        startIndex = secctr;
-                        startIndexSet = true;
-                    }
-                }
-            } else {
-                if (!startIndexSet) {
-                    startIndex = secctr;
-                    startIndexSet = true;
-                }
-                secctr++;
-            }
-        }
-        
-        if (startIndex >= 0 && lengtho > 0) {
-            NSRange sectionRange = NSMakeRange((NSUInteger)startIndex, (NSUInteger)lengtho);
-            deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
-        }
-
-    }
-    return deleteSections;
-}
-
-
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     self.suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
     
