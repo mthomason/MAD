@@ -14,8 +14,8 @@
 
 @interface MTViewTableHeader : UIView
 
-    @property (nonatomic, strong) IBOutlet UIButton *buttonAdd;
-    @property (nonatomic, strong) IBOutlet UILabel *labelTitle;
+    @property (nonatomic, weak) IBOutlet UIButton *buttonAdd;
+    @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 
 @end
 

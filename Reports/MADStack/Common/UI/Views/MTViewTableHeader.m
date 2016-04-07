@@ -11,19 +11,16 @@
 @implementation MTViewTableHeader
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
         
-        NSArray *nibContents =[[NSBundle mainBundle] loadNibNamed: @"MTViewTableHeader"
-                                                            owner: self
-                                                          options: nil];
+        NSArray *nibContents =  [[NSBundle mainBundle] loadNibNamed: @"MTViewTableHeader" owner: self options: nil];
         UIView *view = nibContents.firstObject;
         view.frame = self.frame;
         
         self.labelTitle.textColor = [MADColorEverydayApps newColorRed];
         self.buttonAdd.tintColor = [MADColorEverydayApps newColorBlue];
 
-        [self addSubview:nibContents.firstObject];
+        [self addSubview:view];
         self.labelTitle.numberOfLines = 0;
         self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];
