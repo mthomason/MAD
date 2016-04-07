@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTViewTableHeader.h"
+#import "MADTableViewHeader.h"
 
 @implementation MTViewTableHeader
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        NSArray *nibContents =  [[NSBundle mainBundle] loadNibNamed: @"MTViewTableHeader" owner: self options: nil];
+        NSArray *nibContents =  [[NSBundle mainBundle] loadNibNamed: @"MADTableViewHeader" owner: self options: nil];
         UIView *view = nibContents.firstObject;
         view.frame = self.frame;
         

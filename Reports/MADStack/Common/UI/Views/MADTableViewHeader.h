@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <MADCocoaExtensions/MADCocoaExtensions.h>
 
-@interface MTViewTableHeader : UIView
+@interface MADTableViewHeader : UIView
 
     @property (nonatomic, weak) IBOutlet UIButton *buttonAdd;
     @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
