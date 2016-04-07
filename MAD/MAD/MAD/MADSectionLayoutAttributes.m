@@ -11,19 +11,20 @@
 
 @implementation MADSectionLayoutAttributes
 
-- (instancetype)initWithIndexPath:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID
-                          andRect:(CGRect)rect {
-    
-    if (self = [super init]) {
+- (id)copyWithZone:(nullable NSZone *)zone {
+    NSIndexPath *path = [self.indexPath copyWithZone:zone];
+    MADSectionLayoutAttributes *copy = [[self class] layoutAttributesForCellWithIndexPath:path];
+    copy.objectID = [self.objectID copyWithZone:zone];
+    copy.frame = self.frame;
+    return copy;
+}
 
-        NSIndexPath *path = indexPath.copy;
-        self.indexPath = path;
-        self.frame = rect;
-
-        _objectID = objectID.copy;
-
-    }
-    return self;
++ (instancetype)sectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID andRect:(CGRect)rect {
+    MADSectionLayoutAttributes *instance = [self layoutAttributesForCellWithIndexPath:indexPath];
+    NSManagedObjectID *managedObjectID = objectID.copy;
+    instance.objectID = managedObjectID;
+    instance.frame = rect;
+    return instance;
 }
 
 - (BOOL)intersectsAnItemInArray:(NSArray *)items {

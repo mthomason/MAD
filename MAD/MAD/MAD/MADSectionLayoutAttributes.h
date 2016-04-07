@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADSectionLayoutAttributes_h
+#define Reports_MADSectionLayoutAttributes_h
+
 #import <Foundation/NSArray.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <CoreData/NSManagedObjectID.h>
@@ -14,9 +17,9 @@
 @class MADSectionLayoutManager;
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
-
-    - (instancetype)initWithIndexPath:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID
-                              andRect:(CGRect)rect;
+    <NSCopying>
+    
+    + (instancetype)sectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath objectID:(NSManagedObjectID *)objectID andRect:(CGRect)rect;
     @property (nonatomic, copy) NSManagedObjectID *objectID;
 
     - (BOOL)intersectsAnItemInArray:(NSArray *)items;
@@ -27,3 +30,5 @@
     - (NSArray *)dropPoints;
 
 @end
+
+#endif

@@ -20,10 +20,10 @@
 
 @interface MADSectionLayoutManager ()
 
-@property (nonatomic, strong, readwrite)    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
-@property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
-@property (nonatomic, assign)               BOOL lastOpperationWasAdditon;
-@property (nonatomic, assign)               BOOL visibility;
+    @property (nonatomic, strong, readwrite)    NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
+    @property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
+    @property (nonatomic, assign)               BOOL lastOpperationWasAdditon;
+    @property (nonatomic, assign)               BOOL visibility;
 
 @end
 
@@ -43,9 +43,8 @@
         
             NSIndexPath *path = [NSIndexPath indexPathForItem:itemCounter inSection:0];
             CGSize size = object.size;
-            MADSectionLayoutAttributes *layout = [[MADSectionLayoutAttributes alloc] initWithIndexPath:path objectID:object.objectID andRect:CGRectMake(object.originx.floatValue, object.originy.floatValue, size.width, size.height)];
-
-            
+            MADSectionLayoutAttributes *layout = [MADSectionLayoutAttributes sectionLayoutAttributesWithIndex:path objectID:object.objectID andRect:CGRectMake(object.originx.floatValue, object.originy.floatValue, size.width, size.height)];
+            layout = layout.copy;
             [self addItem:layout];
             itemCounter++;
         }

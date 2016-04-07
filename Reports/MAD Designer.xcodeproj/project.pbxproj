@@ -3655,6 +3655,8 @@
 		4C401F591BAE7EB500BAE5FC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4C401F721BAE7EB500BAE5FC /* MADTableViewHeader.h */,
+				4C401F731BAE7EB500BAE5FC /* MADTableViewHeader.m */,
 				4C539C351CB65634002E4CD5 /* MADViewTableHeader+QueryViewSectionTypes.h */,
 				4C539C361CB65634002E4CD5 /* MADViewTableHeader+QueryViewSectionTypes.m */,
 				4C8DE2651BAFA98B00AD1111 /* MTClipboardView.h */,
@@ -3687,8 +3689,6 @@
 				4C401F6D1BAE7EB500BAE5FC /* MTRulerView.m */,
 				4C401F6E1BAE7EB500BAE5FC /* MTTextView.h */,
 				4C401F6F1BAE7EB500BAE5FC /* MTTextView.m */,
-				4C401F721BAE7EB500BAE5FC /* MADTableViewHeader.h */,
-				4C401F731BAE7EB500BAE5FC /* MADTableViewHeader.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";

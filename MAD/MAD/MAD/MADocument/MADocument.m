@@ -241,10 +241,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (NSDictionary *)layoutHeightsBySectionKey {
     __block NSMutableDictionary *dictionary = [NSMutableDictionary new];
-    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADSectionLayoutManager *secManager, BOOL *stop) {
+    [self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSManagedObjectID *key, MADSectionLayoutManager *sectionLayoutManager, BOOL *stop) {
         
         NSString *k = [key key];
-        dictionary[k] = @(secManager.size.height);
+        dictionary[k] = @(sectionLayoutManager.size.height);
         
     }];
     return dictionary;

@@ -14,7 +14,7 @@
 
 @class MADSectionLayoutManager, RptqDocumentSection, NSManagedObjectID;
 
-    @interface MADSectionLayoutManager : NSObject
+@interface MADSectionLayoutManager : NSObject
 
     @property (nonatomic, strong, readonly) NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutAttributes *> *items;
 

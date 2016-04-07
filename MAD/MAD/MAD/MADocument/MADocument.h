@@ -58,7 +58,7 @@ extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
     @property (nonatomic, copy)                 NSManagedObjectID *documentObjectID;
     @property (readonly)                        RptqDocument *activeDocumentModel;
 
-    @property (nonatomic, strong)               NSMutableDictionary *sectionLayoutManagers;
+    @property (nonatomic, strong)               NSMutableDictionary <__kindof NSManagedObjectID *, __kindof MADSectionLayoutManager *> *sectionLayoutManagers;
     @property (readonly)                        NSString *filename;
     @property (nonatomic, strong, readwrite)    MTQueryFull *mainQuery;
 
