@@ -17,18 +17,12 @@ CGMutablePathRef createRoundedRectForRect(CGRect rect, CGFloat radius);
 CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-
-    }
+    if (self = [super initWithFrame:frame]) { }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-
-    }
+    if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
@@ -79,8 +73,8 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
 
 void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse) {
 
-	CGColorRef highlightStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.35].CGColor;
-	CGColorRef highlightEnd = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1].CGColor;
+	CGColorRef highlightStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.3500f].CGColor;
+	CGColorRef highlightEnd = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f].CGColor;
     
     if (reverse) {
 		CGRect half = CGRectMake(rect.origin.x, rect.origin.y+rect.size.height/2, rect.size.width, rect.size.height/2);
@@ -94,13 +88,13 @@ void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse) {
 
 void drawCurvedGloss(CGContextRef context, CGRect rect, CGFloat radius) {
     
-	CGColorRef glossStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.6].CGColor;
-	CGColorRef glossEnd = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1].CGColor;
+	CGColorRef glossStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.6000f].CGColor;
+	CGColorRef glossEnd = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f].CGColor;
     
 	CGMutablePathRef glossPath = CGPathCreateMutable();
 	CGContextSaveGState(context);
     CGPathMoveToPoint(glossPath, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect)-radius+rect.size.height/2);
-	CGPathAddArc(glossPath, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect)-radius+rect.size.height/2, radius, 0.75f*M_PI, 0.25f*M_PI, YES);	
+	CGPathAddArc(glossPath, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect)-radius+rect.size.height/2, radius, (CGFloat)(0.75*M_PI), (CGFloat)(0.25*M_PI), YES);
 	CGPathCloseSubpath(glossPath);
 	CGContextAddPath(context, glossPath);
 	CGContextClip(context);
