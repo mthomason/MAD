@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTClipboardView.h"
+#import "MADClipboardView.h"
 
-@implementation MTClipboardView
+@implementation MADClipboardView
 
 void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef  endColor);
 void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse);

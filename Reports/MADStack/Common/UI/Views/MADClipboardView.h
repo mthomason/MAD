@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTClipboardView : UIView
+@interface MADClipboardView : UIView
 
 @end
 
