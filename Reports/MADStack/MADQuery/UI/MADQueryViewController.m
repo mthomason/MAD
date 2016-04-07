@@ -103,7 +103,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
     @property (nonatomic, strong) MADQueryViewControllerLayout *datamodel;
 
-    - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
     - (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
 @end
@@ -526,7 +525,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [document saveContext];
     NSInteger suspectedSection = 2;
     
-    MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection:(NSUInteger)suspectedSection];
+    MTQuerySections tableSection = [self.datamodel sectionAtIndex:(short)suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
         [self.tableView reloadSections: linksSection withRowAnimation: UITableViewRowAnimationAutomatic];
@@ -609,7 +608,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    MTQuerySections sectionType = [self tableSectionTypeForIndexPathSection: (NSUInteger)indexPath.section];
+    MTQuerySections sectionType = [self.datamodel sectionAtIndex:(short)indexPath.section];
 	return (sectionType == MTQuerySectionsTables ||
             sectionType == MTQuerySectionsGroups ||
             sectionType == MTQuerySectionsPredicate ||
@@ -617,12 +616,12 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self tableSectionTypeForIndexPathSection:(NSUInteger)indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
+    return ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:(NSUInteger)indexPath.section];
+    MTQuerySections querySection = [self.datamodel sectionAtIndex:(short)indexPath.section];
 
     switch (editingStyle) {
 
@@ -642,7 +641,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: (NSUInteger)toIndexPath.section];
+    MTQuerySections ts = [self.datamodel sectionAtIndex:(short)toIndexPath.section];
     switch (ts) {
         case MTQuerySectionsGroups: {
 
@@ -673,7 +672,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     UITableViewCell *result = nil;
 
     NSInteger row = indexPath.row;
-    MTQuerySections section = [self tableSectionTypeForIndexPathSection: (NSUInteger)indexPath.section];
+    MTQuerySections section = [self.datamodel sectionAtIndex:(short)indexPath.section];
 
     switch (section) {
 
@@ -911,7 +910,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self tableSectionTypeForIndexPathSection:(NSUInteger) indexPath.section] == MTQuerySectionsTables) {
+    if ([self.datamodel sectionAtIndex:(short)indexPath.section] == MTQuerySectionsTables) {
         [self displayTableSampleDataForIndexPath:indexPath];
     }
 }
@@ -1743,23 +1742,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [private save:error];
 
     }];
-}
-
-// MARK: Modal helper
-
-- (MTQuerySections)tableSectionTypeForIndexPathSection:(MTQuerySections)section withNumberOfTables:(NSInteger)numberOfTables {
-    MTQuerySections result = section;
-    NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
-    NSArray *sectionTypes = dataModel[MTTableSectionSectionsKey];
-    if (sectionTypes.count >= section) {
-        NSNumber *sectionType = sectionTypes[section];
-        result = sectionType.unsignedIntegerValue;
-    }
-    return result;
-}
-
-- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section {
-    return [self.datamodel sectionAtIndex:(short)section];
 }
 
 - (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec {
