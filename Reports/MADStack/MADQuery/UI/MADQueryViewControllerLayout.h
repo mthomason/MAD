@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CGBase.h>
 
-typedef NS_ENUM(NSUInteger, MTQuerySections) {
+typedef NS_ENUM(short, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
     MTQuerySectionsDatasource = 1,
     MTQuerySectionsTables = 2,
@@ -19,11 +20,23 @@ typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsNumberOfQueryResults = 7
 };
 
+@interface MADQueryViewControllerLayoutSection : NSObject
+    @property (nonatomic, assign, readonly) MTQuerySections querySection;
+    @property (readonly) NSString   *name;
+    @property (readonly) NSUInteger count;
+    @property (readonly) NSInteger  numberOfRows;
+    @property (readonly) CGFloat    height;
+@end
+
 @interface MADQueryViewControllerLayout : NSObject
 
-    @property (nonatomic, readonly, strong) NSArray *sections;
-    @property (nonatomic, readonly, strong) NSDictionary *headerSectionKeys;
-    @property (nonatomic, readonly, strong) NSDictionary *sectionRowKey;
-    @property (nonatomic, readonly, strong) NSDictionary *sectionRowHeightKey;
+    - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables reportingEnabled:(bool)reportingEnabled;
+    @property (nonatomic, readonly, assign) short count;
+    @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewControllerLayoutSection *> *sections;
 
+    - (NSSet <NSNumber *> *)sectionTypes;
+    - (NSIndexSet *)sectionTypesIndexs;
+    - (MTQuerySections)sectionAtIndex:(short)index;
+    - (MADQueryViewControllerLayoutSection *)layoutAtIndex:(short)index;
+    
 @end

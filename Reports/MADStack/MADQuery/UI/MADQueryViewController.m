@@ -43,6 +43,8 @@
 
 #import "NSParagraphStyle+CommonStyles.h"
 
+#import "MADQueryViewControllerLayout.h"
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -96,6 +98,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
     @property (nonatomic, assign) CGFloat headerSectionHeight;
 
+    @property (nonatomic, strong) MADQueryViewControllerLayout *datamodel;
+
     - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
     - (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
@@ -136,9 +140,12 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 #pragma mark - NSObject
 
 - (void)dealloc {
-    _document = nil;
     [MADQueryViewController deleteCoreDataCache];
-    [[NSNotificationCenter defaultCenter] removeObserver: self name: UIContentSizeCategoryDidChangeNotification
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextObjectsDidChangeNotification
+                                                  object: _document.managedObjectContext];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
                                                   object: nil];
 }
 
@@ -149,6 +156,52 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return self;
 }
 
+- (void)managedObjectContextDidChange:(NSNotification *)notification {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
+    NSLog(@"Updated objects: %@", [updatedObjects debugDescription]);
+
+    for (id updatedObject in updatedObjects) {
+        
+        // Update the query view controller data model when number of tables change.
+        if ([updatedObject isKindOfClass:[RptqQuery class]]) {
+            RptqQuery *query = updatedObject;
+
+            
+            NSDictionary <NSString *, id> *changes = [query changedValues];
+            NSLog(@"Changed values: %@", [changes debugDescription]);
+            for (id change in changes) {
+                if ([change isEqualToString:NSStringFromSelector(@selector(hasQueryTables))]) {
+                    
+                    MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:query.numberOfTables reportingEnabled:[[MTStoreKitController sharedObject] isReportingEnabled]];
+                    self.datamodel = datamodel;
+                }
+            }
+        }
+    }
+    
+    
+}
+
+- (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSManagedObjectContextObjectsDidChangeNotification
+                                                  object: managedObjectContext];
+}
+
+- (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)managedObjectContext {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(managedObjectContextDidChange:)
+                                                 name: NSManagedObjectContextObjectsDidChangeNotification
+                                               object: managedObjectContext];
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (_document == nil) {
+        [self observeManagedObjectContextChanges:document.managedObjectContext];
+    }
+    _document = document;
+}
 #pragma mark - NSNotificationCenter
 
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
@@ -215,6 +268,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     self.tableView.backgroundView = watermarkView;
     
     [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleContentSizeCategoryDidChangeNotification:)
@@ -509,22 +564,18 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 #pragma mark - Table View Data Source Protocol
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    id queryBuilderDataModel = [self datamodel];
-    NSInteger numberOfSections = (NSInteger)[queryBuilderDataModel[MTTableHeaderSectionKey] count];
-    return numberOfSections;
-}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return (NSInteger)self.datamodel.count; }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: (NSUInteger)section];
     
-    NSDictionary *rowsDict = [self datamodel][MTTableSectionRowKey];
-    NSInteger numberOfRows = 0;
-    numberOfRows = [rowsDict[[NSNumber numberWithInt: ts]] intValue];
-    id<NSFetchedResultsSectionInfo> sectionData;
-    if (numberOfRows < 0) {
-        switch (ts) {
+    MADQueryViewControllerLayout *datamodel = self.datamodel;
+    MADQueryViewControllerLayoutSection *layoutSection = [datamodel layoutAtIndex:(short)section];
+    
+    NSInteger numberOfRows = 1;
+    if (layoutSection.numberOfRows == NSNotFound) {
+        id<NSFetchedResultsSectionInfo> sectionData;
+        switch (layoutSection.querySection) {
             case MTQuerySectionsTables: {
                 sectionData = self.queryTablesController.sections[0];
                 numberOfRows = (NSInteger)sectionData.numberOfObjects;
@@ -1243,14 +1294,18 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     }
 }
 
-- (NSMutableDictionary *)datamodel {
-    
-    RptqDatabase *database = [self.document.activeDocumentModel defaultDatabase];
-    RptqQuery *query = [database defaultQuery];
-    
-    NSDictionary *datamodelForNumberOfTables = [self datamodelForNumberOfTables:(NSInteger)query.hasQueryTables.count];
-    NSMutableDictionary * __autoreleasing result = [[NSMutableDictionary alloc] initWithDictionary:datamodelForNumberOfTables];
-    return result;
+- (MADQueryViewControllerLayout *)datamodel {
+
+    if (_datamodel == nil) {
+        RptqDocument *rptqDocument = [RptqDocument documentForManagedObjectContext: self.document.managedObjectContext];
+        RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+        RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
+        
+        MADQueryViewControllerLayout *datamodel = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables: rptqQuery.numberOfTables
+                                                                                              reportingEnabled: [[MTStoreKitController sharedObject] isReportingEnabled]];
+        _datamodel = datamodel;
+    }
+    return _datamodel;
 }
 
 - (NSDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
@@ -1270,7 +1325,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     NSNumber *tables = @(MTQuerySectionsTables);
     NSNumber *resultCount = @(MTQuerySectionsNumberOfQueryResults);
 
-    BOOL reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
+    bool reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
     switch (numberOfTables) {
         case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
             
@@ -1285,8 +1340,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             NSNumber *height1 = @(50.0000f);
             NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
             NSArray *heightRowsForSection = reportingEnabled ? @[height1, height2, height1] : @[height1, height2]; 
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
-                                                                                                 forKeys: sections];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection forKeys: sections];
             result = @{MTTableSectionSectionsKey : sections,
                        MTTableHeaderSectionKey : headersSectionDictionary,
                        MTTableSectionRowKey : countRowsForSectionDictionary,
@@ -1489,8 +1543,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 }
 
-- (NSArray <__kindof NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section table:(NSManagedObjectID *)deleatedTableObjectId
-                                                           inTableView:(UITableView *)tableView numberOfTables:(NSInteger)numberOfTables
+- (NSArray <__kindof NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section
+                                                                 table:(NSManagedObjectID *)deleatedTableObjectId
+                                                           inTableView:(UITableView *)tableView
                                                              inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
@@ -1529,7 +1584,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (NSArray <__kindof NSIndexPath *> *)deleteGroupsRelatedToSectionIndex:(NSInteger)section table:(NSManagedObjectID *)deleatedTableObjectId
-                                                            inTableView:(UITableView *)tableView numberOfTables:(NSInteger)numberOfTables
+                                                            inTableView:(UITableView *)tableView
                                                               inContext:(NSManagedObjectContext *)context {
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
@@ -1559,7 +1614,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (NSArray <__kindof NSIndexPath *> *)deletePredicateRelatedToSectionIndex:(NSInteger)section table:(NSManagedObjectID *)deleatedTableObjectId
-                                                               inTableView:(UITableView *)tableView numberOfTables:(NSInteger)numberOfTables
+                                                               inTableView:(UITableView *)tableView
                                                                  inContext:(NSManagedObjectContext *)context {
 
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
@@ -1624,68 +1679,24 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
             
             cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
                                                inTableView: tableView
-                                            numberOfTables: numberOfTables
                                                  inContext: private];
             
         } else if (querySection == MTQuerySectionsGroups) {
 
             cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
                                                 inTableView: tableView
-                                             numberOfTables: numberOfTables
                                                   inContext: private];
             
         } else if (querySection == MTQuerySectionsPredicate) {
             
             cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
                                                    inTableView: tableView
-                                                numberOfTables: numberOfTables
                                                      inContext: private];
             
         }
         [cellsToDelete addObjectsFromArray:cells];
     }
     return cellsToDelete;
-}
-
-- (NSIndexSet *)deleteSections:(NSArray *)oldLayoutSectionTypes newSections:(NSArray *)newLayoutSectionTypes {
-
-    NSIndexSet *deleteSections = nil;
-    if (oldLayoutSectionTypes.count > newLayoutSectionTypes.count) {
-        NSInteger secctr = 0;
-        bool startIndexSet = false;
-        NSInteger startIndex = -1;
-        
-        NSInteger lengtho = (NSInteger)(oldLayoutSectionTypes.count - newLayoutSectionTypes.count);
-        for (NSNumber *typenum in oldLayoutSectionTypes) {
-        
-            MTQuerySections stsection = typenum.unsignedIntegerValue;
-            if (secctr < (NSInteger)newLayoutSectionTypes.count) {
-            
-                if (stsection == ((NSNumber *)newLayoutSectionTypes[(NSUInteger)secctr]).integerValue) {
-                
-                    secctr++;
-                    
-                } else {
-                    if (!startIndexSet) {
-                        startIndex = secctr;
-                        startIndexSet = true;
-                    }
-                }
-            } else {
-                if (!startIndexSet) {
-                    startIndex = secctr;
-                    startIndexSet = true;
-                }
-                secctr++;
-            }
-        }
-        
-        if (startIndex >= 0 && lengtho > 0) {
-            NSRange sectionRange = NSMakeRange((NSUInteger)startIndex, (NSUInteger)lengtho);
-            deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
-        }
-    }
-    return deleteSections;
 }
 
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
@@ -1722,10 +1733,57 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     }
 }
 
+- (NSIndexSet *)deleteSections:(NSArray <__kindof NSNumber *> *)oldLayoutSectionTypes
+                   newSections:(NSArray <__kindof NSNumber *> *)newLayoutSectionTypes {
+    
+    NSIndexSet *deleteSections = nil;
+    if (oldLayoutSectionTypes.count > newLayoutSectionTypes.count) {
+    
+        NSInteger secctr = 0;
+        bool startIndexSet = false;
+        NSInteger startIndex = -1;
+        NSInteger lengtho = (NSInteger)(oldLayoutSectionTypes.count - newLayoutSectionTypes.count);
+
+        for (NSNumber *typenum in oldLayoutSectionTypes) {
+            
+            if (secctr < (NSInteger)newLayoutSectionTypes.count) {
+                
+                if ((MTQuerySections)typenum.unsignedIntegerValue == ((NSNumber *)newLayoutSectionTypes[(NSUInteger)secctr]).integerValue) {
+                    
+                    secctr++;
+                    
+                } else {
+                    if (!startIndexSet) {
+                        startIndex = secctr;
+                        startIndexSet = true;
+                    }
+                }
+            } else {
+                if (!startIndexSet) {
+                    startIndex = secctr;
+                    startIndexSet = true;
+                }
+                secctr++;
+            }
+        }
+        
+        if (startIndex >= 0 && lengtho > 0) {
+            NSRange sectionRange = NSMakeRange((NSUInteger)startIndex, (NSUInteger)lengtho);
+            deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
+        }
+
+    }
+    return deleteSections;
+}
+
+
 - (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     self.suspendAutomaticTrackingOfChangesInManagedObjectContext = true;
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    
+    [self observeManagedObjectContextChanges:private];
+    
     private.parentContext = self.document.managedObjectContext;
     [private performBlockAndWait:^{
         
@@ -1733,26 +1791,47 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
         
-        NSInteger numberOfTables = (NSInteger)rptqQuery.hasQueryTables.count;
+        NSUInteger numberOfTables = rptqQuery.hasQueryTables.count;
         
-        NSDictionary *oldTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];
-        NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:oldTableLayoutResult];
+        bool reportingEnabled = [[MTStoreKitController sharedObject] isReportingEnabled];
+        MADQueryViewControllerLayout *oldQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:numberOfTables      reportingEnabled:reportingEnabled];
+        MADQueryViewControllerLayout *newQueryLayout = [[MADQueryViewControllerLayout alloc] initWithNumberOfTables:numberOfTables - 1  reportingEnabled:reportingEnabled];
+
+        NSIndexSet *oldIndexesSectionTypes = oldQueryLayout.sectionTypesIndexs;
+        NSMutableIndexSet *oldIndexes = oldIndexesSectionTypes.mutableCopy;
+        [oldIndexes removeIndexes:newQueryLayout.sectionTypesIndexs];
+        
+        NSMutableSet *deletedSectionTypes = oldQueryLayout.sectionTypes.mutableCopy;
+        [deletedSectionTypes minusSet:newQueryLayout.sectionTypes];
         
         NSIndexPath *tableIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 0];
         RptqQueryTable *table = [self.queryTablesController objectAtIndexPath: tableIndex];
         
         NSManagedObjectID *deleatedTableObjectId = table.objectID.copy;
-        [rptqQuery removeHasQueryTablesObject:table];
+        
+        NSMutableSet *hasQueryTables = rptqQuery.hasQueryTables.mutableCopy;
+        __block id objectToDelete = nil;
+        [hasQueryTables enumerateObjectsUsingBlock:^(RptqQueryTable * _Nonnull hasTable, BOOL * _Nonnull stop) {
+            if (table.identifier.unsignedIntegerValue == hasTable.identifier.unsignedIntegerValue) {
+                objectToDelete = hasTable;
+            }
+        }];
+        [hasQueryTables removeObject:objectToDelete];
+        rptqQuery.hasQueryTables = hasQueryTables.copy;
+        
+//        NSMutableSet *queryTablesToRemove = [[NSMutableSet alloc] initWithCapacity:];
+        
+        //[rptqQuery removeHasQueryTablesObject:table];
         numberOfTables--;
-        
-        NSDictionary *newTableLayoutResult = [self datamodelForNumberOfTables: numberOfTables];
-        
-        NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: newTableLayoutResult];
-        
-        NSArray *oldLayoutSectionTypes = oldTableLayout[MTTableSectionSectionsKey];
-        NSArray *newLayoutSectionTypes = newTableLayout[MTTableSectionSectionsKey];
-        
-        NSIndexSet *deleteSections = [self deleteSections:oldLayoutSectionTypes newSections:newLayoutSectionTypes];
+    
+        __block short ctr = 0;
+        NSMutableIndexSet *indexesToRemove = [[NSMutableIndexSet alloc] init];
+        [oldIndexesSectionTypes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([oldIndexes containsIndex:idx]) {
+                [indexesToRemove addIndex:(NSUInteger)ctr];
+            }
+            ctr++;
+        }];
         
         [tableView beginUpdates];
         
@@ -1761,58 +1840,61 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         [document deleteAggregateFieldRelatedToTable:deleatedTableObjectId inContent:private];
         
         NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
-        for (NSUInteger section = 0; section < (NSUInteger)tableView.numberOfSections; section++) {
+
+        short numberOfSections = self.datamodel.count;
+        
+        for (short section = 0; section < numberOfSections; section++) {
             
             NSArray *cells;
-            MTQuerySections querySection = [self tableSectionTypeForIndexPathSection: section withNumberOfTables: numberOfTables + 1];
             
-            if (querySection == MTQuerySectionsLinks) {
-                
-                cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                   inTableView: tableView
-                                                numberOfTables: numberOfTables
-                                                     inContext: private];
-                
-            } else if (querySection == MTQuerySectionsGroups) {
-                
-                cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                    inTableView: tableView
-                                                 numberOfTables: numberOfTables
-                                                      inContext: private];
-                
-            } else if (querySection == MTQuerySectionsPredicate) {
-                
-                cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                       inTableView: tableView
-                                                    numberOfTables: numberOfTables
-                                                         inContext: private];
-                
+            switch ([self.datamodel sectionAtIndex:section]) {
+                case MTQuerySectionsLinks:
+                    cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
+                                                       inTableView: tableView inContext: private];
+                    break;
+
+                case MTQuerySectionsGroups:
+                    cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
+                                                        inTableView: tableView inContext: private];
+                    break;
+
+                case MTQuerySectionsPredicate:
+                    cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
+                                                           inTableView: tableView inContext: private];
+                    break;
+                    
+                default:
+                    break;
             }
             [cellsToDelete addObjectsFromArray:cells];
         }
         
         NSError * __autoreleasing *error = nil;
-        [private save:error];
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            NSArray *indexPaths = @[indexPath];
-            if (deleteSections != nil) {
-                [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
-                [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-            } else {
-                [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            
-            if (cellsToDelete.count) {
-                [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            
-            [tableView endUpdates];
-            
-            self.suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
-            
-        }];
+        BOOL success = [private save:error];
+        if (success) {
+
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                
+                NSArray *indexPaths = @[indexPath];
+                if (indexesToRemove.count > 0) {
+                    [tableView deleteSections: indexesToRemove withRowAnimation: UITableViewRowAnimationAutomatic];
+                    [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+                } else {
+                    [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+                
+                if (cellsToDelete.count) {
+                    [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+                
+                [tableView endUpdates];
+                
+                [self ingnoreManagedObjectContextChanges:private];
+                
+                self.suspendAutomaticTrackingOfChangesInManagedObjectContext = false;
+                
+            }];
+        }
         
     }];
 }
@@ -1859,7 +1941,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     MTQuerySections result = section;
     NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
     NSArray *sectionTypes = dataModel[MTTableSectionSectionsKey];
-    if ([sectionTypes count] >= section) {
+    if (sectionTypes.count >= section) {
         NSNumber *sectionType = sectionTypes[section];
         result = sectionType.unsignedIntegerValue;
     }
@@ -1867,14 +1949,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section {
-    MTQuerySections result = section;
-    NSDictionary *datamodel = [self datamodel];
-    NSArray *sectionTypes = datamodel[MTTableSectionSectionsKey];
-    if (sectionTypes.count >= section) {
-        NSNumber *sectionType = sectionTypes[section];
-        result = sectionType.unsignedIntegerValue;
-    }
-    return result;
+    return [self.datamodel sectionAtIndex:(short)section];
 }
 
 - (MTQuerySections)sectionPositionForTableSectionType:(MTQuerySections)sec {
