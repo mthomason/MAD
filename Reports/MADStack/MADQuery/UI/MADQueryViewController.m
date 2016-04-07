@@ -1664,41 +1664,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return cellsToDelete;
 }
 
-- (NSArray *)deleteLinksGroupsPredicatesRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
-                                           inTableView:(UITableView *)tableView
-                                        numberOfTables:(NSInteger)numberOfTables
-                                             inContext:(NSManagedObjectContext *)private {
-    
-    NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
-    for (NSUInteger section = 0; section < (NSUInteger)tableView.numberOfSections; section++) {
-        
-        NSArray *cells;
-        MTQuerySections querySection = [self tableSectionTypeForIndexPathSection: section withNumberOfTables: numberOfTables + 1];
-
-        if (querySection == MTQuerySectionsLinks) {
-            
-            cells = [self deleteLinksRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                               inTableView: tableView
-                                                 inContext: private];
-            
-        } else if (querySection == MTQuerySectionsGroups) {
-
-            cells = [self deleteGroupsRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                inTableView: tableView
-                                                  inContext: private];
-            
-        } else if (querySection == MTQuerySectionsPredicate) {
-            
-            cells = [self deletePredicateRelatedToSectionIndex: (NSInteger)section table: deleatedTableObjectId
-                                                   inTableView: tableView
-                                                     inContext: private];
-            
-        }
-        [cellsToDelete addObjectsFromArray:cells];
-    }
-    return cellsToDelete;
-}
-
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     MADocument *document = self.document;
     MADTableViewCellQueryPredicate *cell = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
