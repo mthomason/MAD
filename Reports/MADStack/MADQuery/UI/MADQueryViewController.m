@@ -45,6 +45,8 @@
 
 #import "MADQueryViewControllerLayout.h"
 
+#import "MTViewTableHeader+QueryViewSectionTypes.h"
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -71,6 +73,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     <UITableViewDataSource,
         UITableViewDelegate,
         NSFetchedResultsControllerDelegate,
+        MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
         MTQueryBuilderAddTableDelegate,
         MTQueryBuilderAddGroupDelegate,
@@ -111,15 +114,11 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
-                         withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     return action == @selector(unwindToQueryBuilder:);
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     
     return action == @selector(unwindToQueryBuilder:) ?
                         self :
@@ -155,6 +154,19 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     }
     return self;
 }
+
+#pragma mark - Property Overrides
+
+- (void)setDocument:(MADocument *)document {
+    if (_document == nil) {
+        [self observeManagedObjectContextChanges:document.managedObjectContext];
+    }
+    _document = document;
+}
+
+#pragma mark - CoreData
+
+#pragma mark NSManagedObjectContext Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -196,12 +208,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                object: managedObjectContext];
 }
 
-- (void)setDocument:(MADocument *)document {
-    if (_document == nil) {
-        [self observeManagedObjectContextChanges:document.managedObjectContext];
-    }
-    _document = document;
-}
 #pragma mark - NSNotificationCenter
 
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
@@ -320,11 +326,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
                                                   object: self.document];
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
-              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
-
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
@@ -616,8 +620,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     return ([self tableSectionTypeForIndexPathSection:(NSUInteger)indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-                                            forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:(NSUInteger)indexPath.section];
 
@@ -900,40 +903,9 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-
-    
-    switch ([self tableSectionTypeForIndexPathSection: (NSUInteger)section]) {
-            
-        case MTQuerySectionsDatasource:
-            return [self tableHeaderDatabaseInfo];
-            break;
-            
-        case MTQuerySectionsTables:
-            return [self tableHeaderTablesToSelect];
-            break;
-            
-        case MTQuerySectionsLinks:
-            return [self tableHeaderTableJoins];
-            break;
-            
-        case MTQuerySectionsGroups:
-            return [self tableHeaderGroupedBy];
-            break;
-            
-        case MTQuerySectionsPredicate:
-            return [self tableHeaderPredicate];
-            break;
-
-        case MTQuerySectionsNumberOfQueryResults:
-            return [self tableHeaderNumberOfQueryResults];
-            break;
-        
-        default:
-            return [self tableHeaderDatabaseInfo];
-            break;
-    }
+    return [MTViewTableHeader newTableViewHeaderWithType: [self.datamodel layoutAtIndex:(short)section]
+                                                andFrame: CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight) target:self];
 }
-
 
 #pragma mark - UITableViewDelegate
 
@@ -1005,10 +977,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 
 }
 
-- (void)controller: (NSFetchedResultsController *)controller
-  didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
-		   atIndex: (NSUInteger)sectionIndex
-	 forChangeType: (NSFetchedResultsChangeType)type {
+- (void)controller: (NSFetchedResultsController *)controller didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex: (NSUInteger)sectionIndex forChangeType: (NSFetchedResultsChangeType)type {
 
     
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
@@ -1043,9 +1013,8 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 
-- (void)controller: (NSFetchedResultsController *)controller didChangeObject: (id)anObject
-	   atIndexPath: (NSIndexPath *)indexPath forChangeType: (NSFetchedResultsChangeType)type
-	  newIndexPath: (NSIndexPath *)newIndexPath {
+- (void)controller: (NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath
+     forChangeType: (NSFetchedResultsChangeType)type newIndexPath: (NSIndexPath *)newIndexPath {
     
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
@@ -1125,7 +1094,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [self.tableView reloadData];
 }
 
-
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
@@ -1166,8 +1134,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
 }
 
 - (void)addLink:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController
-                              sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
     [self.tabBarController disableTabBarItems];
 }
 
@@ -1415,84 +1382,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         }
     }
     return result;
-}
-
-- (MTViewTableHeader *)tableHeaderDatabaseInfo {
-    MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = NSLocalizedString(@"Database Information", @"Database Information");
-    header.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    header.buttonAdd.hidden = YES;
-    header.buttonAdd.isAccessibilityElement = NO;
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderTablesToSelect {
-    NSString *title = NSLocalizedString(@"Tables", @"Tables");
-    MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = title;
-    [header.buttonAdd addTarget: self
-                         action: @selector(addTable:)
-               forControlEvents: UIControlEventTouchUpInside];
-    header.buttonAdd.isAccessibilityElement = YES;
-    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table.", @"Adds a new table.");
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderTableJoins {
-    NSString *title = NSLocalizedString(@"Joins", @"Joins");
-    MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = title;
-    [header.buttonAdd addTarget: self
-                         action: @selector(addLink:)
-               forControlEvents: UIControlEventTouchUpInside];
-    header.buttonAdd.isAccessibilityElement = YES;
-    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table join.", @"Adds a new table join.");
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderGroupedBy {
-    SEL selector = @selector(addGroup:);
-    NSString *title = NSLocalizedString(@"Grouped By", @"Grouped By");
-    MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = title;
-    [header.buttonAdd addTarget: self
-                         action: selector
-               forControlEvents: UIControlEventTouchUpInside];
-    header.buttonAdd.isAccessibilityElement = YES;
-    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new query grouping.", @"Adds a new query grouping.");
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderNumberOfQueryResults {
-    NSString *title = NSLocalizedString(@"Limit Query Results", @"Limit Query Reuslts");
-    MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = title;
-    header.buttonAdd.enabled = NO;
-    header.buttonAdd.hidden = YES;
-    [header.labelTitle sizeToFit];
-    header.buttonAdd.isAccessibilityElement = NO;
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderPredicate {
-    SEL selector = @selector(addPredicate:);
-    NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Having Specified Criteria");
-    MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = title;
-    [header.buttonAdd addTarget: self action: selector forControlEvents: UIControlEventTouchUpInside];
-    [header.labelTitle sizeToFit];
-    header.buttonAdd.isAccessibilityElement = YES;
-    header.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
-    header.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a predicate to filter the query results.", @"Adds a predicate to filter the query results.");
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeader {
-    MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight)];
-    return tableHeader;
 }
 
 - (MTTableController *)tableControllerForTable:(RptqQueryTable *)table {

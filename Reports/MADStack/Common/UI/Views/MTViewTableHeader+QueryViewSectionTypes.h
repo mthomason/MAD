@@ -8,6 +8,11 @@
 
 #import "MTViewTableHeader.h"
 
+@class MADQueryViewControllerLayoutSection;
+
 @interface MTViewTableHeader (QueryViewSectionTypes)
+
++ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout andFrame:(CGRect)frame
+                                            target:(nullable id)target;
 
 @end

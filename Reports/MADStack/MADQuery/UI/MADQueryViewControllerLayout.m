@@ -112,6 +112,10 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
     return [MADQueryViewControllerLayoutSection heightForSection:_querySection];
 }
 
+- (SEL)selector {
+    return [MADQueryViewControllerLayoutSection selectorForSection:_querySection];
+}
+
 + (NSInteger)numberOfRowsForSection:(MTQuerySections)section {
     switch (section) {
             
@@ -182,6 +186,26 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
         case MTQuerySectionsSql:
         default:
             return 44.0000f;
+            break;
+    }
+}
+
++ (SEL)selectorForSection:(MTQuerySections)section {
+    switch (section) {
+        case MTQuerySectionsTables:
+            return @selector(addTable:);
+            break;
+        case MTQuerySectionsLinks:
+            return @selector(addLink:);
+            break;
+        case MTQuerySectionsGroups:
+            return @selector(addGroup:);
+            break;
+        case MTQuerySectionsPredicate:
+            return @selector(addPredicate:);
+            break;
+        default:
+            return nil;
             break;
     }
 }

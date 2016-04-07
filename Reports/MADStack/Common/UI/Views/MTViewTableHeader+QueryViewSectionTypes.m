@@ -7,7 +7,69 @@
 //
 
 #import "MTViewTableHeader+QueryViewSectionTypes.h"
+#import "MADQueryViewControllerLayout.h"
 
 @implementation MTViewTableHeader (QueryViewSectionTypes)
+
++ (nonnull instancetype)newTableViewHeaderWithType:(nonnull MADQueryViewControllerLayoutSection *)layout andFrame:(CGRect)frame target:(nullable id)target {
+
+    MTViewTableHeader *view = [[self alloc] initWithFrame:frame];
+    switch (layout.querySection) {
+
+        case MTQuerySectionsDatasource:
+            view.labelTitle.text = layout.name;
+            view.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+            view.buttonAdd.hidden = YES;
+            view.buttonAdd.isAccessibilityElement = NO;
+            break;
+
+        case MTQuerySectionsTables:
+            view.labelTitle.text = layout.name;
+            [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
+            view.buttonAdd.isAccessibilityElement = YES;
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table.", @"Adds a new table.");
+            break;
+            
+        case MTQuerySectionsLinks:
+            view.labelTitle.text = layout.name;
+            [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
+            view.buttonAdd.isAccessibilityElement = YES;
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new table join.", @"Adds a new table join.");
+            break;
+            
+        case MTQuerySectionsDocumentGroups:
+        case MTQuerySectionsGroups:
+            view.labelTitle.text = layout.name;
+            [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
+            view.buttonAdd.isAccessibilityElement = YES;
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a new query grouping.", @"Adds a new query grouping.");
+            break;
+            
+        case MTQuerySectionsPredicate:
+            view.labelTitle.text = layout.name;
+            [view.buttonAdd addTarget: target action: layout.selector forControlEvents: UIControlEventTouchUpInside];
+            [view.labelTitle sizeToFit];
+            view.buttonAdd.isAccessibilityElement = YES;
+            view.buttonAdd.accessibilityLabel = NSLocalizedString(@"Add", @"Add");
+            view.buttonAdd.accessibilityHint = NSLocalizedString(@"Adds a predicate to filter the query results.", @"Adds a predicate to filter the query results.");
+            break;
+            
+        case MTQuerySectionsNumberOfQueryResults:
+            view.labelTitle.text = layout.name;
+            view.buttonAdd.enabled = NO;
+            view.buttonAdd.hidden = YES;
+            [view.labelTitle sizeToFit];
+            view.buttonAdd.isAccessibilityElement = NO;
+            break;
+            
+        case MTQuerySectionsSql:
+        default:
+            break;
+    }
+    return view;
+}
 
 @end

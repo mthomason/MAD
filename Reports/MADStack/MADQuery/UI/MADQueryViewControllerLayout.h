@@ -20,12 +20,25 @@ typedef NS_ENUM(short, MTQuerySections) {
     MTQuerySectionsNumberOfQueryResults = 7
 };
 
+@protocol MADQueryViewControllerLayoutSectionSelectorProtocol <NSObject>
+
+    - (void)addConnection:(id)sender;
+    - (void)addTable:(id)sender;
+    - (void)addLink:(id)sender;
+    - (void)addPredicate:(id)sender;
+    - (void)addGroup:(id)sender;
+
+@end
+
 @interface MADQueryViewControllerLayoutSection : NSObject
+
     @property (nonatomic, assign, readonly) MTQuerySections querySection;
     @property (readonly) NSString   *name;
     @property (readonly) NSUInteger count;
     @property (readonly) NSInteger  numberOfRows;
     @property (readonly) CGFloat    height;
+    @property (readonly) SEL        selector;
+
 @end
 
 @interface MADQueryViewControllerLayout : NSObject
