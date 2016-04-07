@@ -110,6 +110,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerElementView *>                         *visibleElementViews;
     @property (nonatomic, strong) NSMutableSet          <__kindof MADDesignerSectionView *>                         *passthroughContainers;
+    @property (nonatomic, strong) NSMutableSet          <__kindof NSManagedObjectID *>                              *selectedObjectIds;
+
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionView *>                         *sectionViewsArray;
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionLabel *>                        *sectionControlViewsArray;
 
@@ -155,8 +157,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
     @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
-
-    @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
 
     @property (nonatomic, assign) bool editAggregate;
     @property (nonatomic, assign) bool toolboxVisible;
@@ -3020,10 +3020,9 @@ static const inline CGSize sizePopoverFonts() {
     self.viewControllerToolbox.document = self.document;
     [self adjustToolboxLocation];
     
-    [self presentViewController: self.navigationControllerToolbox animated: YES
-                     completion: ^{
-                         [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeElement];
-                     }];
+    [self presentViewController: self.navigationControllerToolbox animated: YES completion: ^{
+        [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeElement];
+    }];
     
 }
 
