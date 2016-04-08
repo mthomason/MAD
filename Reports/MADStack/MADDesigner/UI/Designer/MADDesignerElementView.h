@@ -16,25 +16,24 @@
 @interface MADDesignerElementView : MADManagedObjectView
     <UIGestureRecognizerDelegate>
 
-@property (assign) BOOL displayWobbling;
-@property (assign) BOOL displayHighlighted;
+    @property (assign, getter=isWobbling) bool displayWobbling;
+    @property (assign) bool displayHighlighted;
 
-@property (nonatomic, strong) NSAttributedString *displayStringAttributed;
-@property (nonatomic, strong) UIImage *displayImage;
-@property (nonatomic, strong) MTBarcode *displayBarcode;
+    @property (nonatomic, strong) NSAttributedString *displayStringAttributed;
+    @property (nonatomic, strong) UIImage *displayImage;
+    @property (nonatomic, strong) MTBarcode *displayBarcode;
 
-@property (nonatomic, assign, readwrite, getter=isResizingEnabled) BOOL enableResizing;
+    @property (nonatomic, assign, readwrite, getter=isResizingEnabled) BOOL enableResizing;
 
-+ (NSStringDrawingOptions)drawingOptions;
+    + (NSStringDrawingOptions)drawingOptions;
 
-- (void)setWobbleRunning:(BOOL)running;
-- (BOOL)isWobbleRunning;
-- (void)flash:(void (^)(BOOL finished))completion;
+    - (void)setWobbleRunning:(BOOL)running;
+    - (void)flash:(void (^)(BOOL finished))completion;
 
-- (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
+    - (instancetype)initWithDocumentObject:(RptqDocumentObject *)documentObject;
 
-- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
-- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
+    - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+    - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 
 @end
 

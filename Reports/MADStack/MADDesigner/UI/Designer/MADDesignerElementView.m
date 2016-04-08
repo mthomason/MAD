@@ -114,12 +114,12 @@
         
         [self addSubview:canvasView];
         self.canvasView = canvasView;
-                
-        self.displayHighlighted = NO;
-        self.objectIdTag = documentObject.objectID;
+        
+        NSManagedObjectID *objectIdTag = documentObject.objectID.copy;
+        self.objectIdTag = objectIdTag;
         self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.displayWobbling = NO;
-        self.displayHighlighted = NO;
+        self.displayWobbling = false;
+        self.displayHighlighted = false;
         
         self.backgroundColor = [UIColor clearColor];
         
@@ -136,7 +136,6 @@
         
         self.clipsToBounds = NO;
         
-        self.tag = documentObject.objectID.hash;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self updateForManagedObjectContent:documentObject.managedObjectContext];
@@ -219,7 +218,7 @@
 - (void)flash:(void (^)(BOOL finished))completion {
     [UIView animateWithDuration: 0.6666f delay: 0.3333f options: UIViewAnimationOptionAutoreverse
                      animations: ^{
-                         self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333];
+                         self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];
                      } completion:^(BOOL finished) {
                          if (finished) self.backgroundColor = [UIColor clearColor];
                          completion(finished);
@@ -227,33 +226,25 @@
 }
 
 - (void)setWobbleRunning:(BOOL)running {
-    [self setDisplayWobbling:running];
+    [self setDisplayWobbling:running ? true : false];
     if (running) {
         NSInteger randomInt = arc4random() % 500;
         float r = (randomInt / 500.0000f) + 0.5000f;
         
-        self.transform = CGAffineTransformMakeRotation(degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
-        CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
+        self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
+        CGAffineTransform rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
         
         self.layer.anchorPoint = CGPointMake(0.5000f, 0.5000f);
         
-        [UIView animateWithDuration:0.3500
-                              delay:0
-                            options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
-                         animations:^{
-                             [UIView setAnimationRepeatCount:NSNotFound];
-                             self.transform = rightWobble;
-                         }
-                         completion:nil];
+        [UIView animateWithDuration:0.3500 delay:0 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse animations:^{
+            [UIView setAnimationRepeatCount:NSNotFound];
+            self.transform = rightWobble;
+        } completion:nil];
         
     } else {
         [self.layer removeAllAnimations];
         self.transform = CGAffineTransformIdentity;
     }
-}
-
-- (BOOL)isWobbleRunning {
-    return [self displayWobbling];
 }
 
 - (id)debugQuickLookObject {

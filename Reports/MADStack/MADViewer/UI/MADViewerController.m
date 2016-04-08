@@ -426,20 +426,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         pageOne.view.frame = self.view.bounds;
         pageOne.view.backgroundColor = self.view.backgroundColor;
         pageOne.delegate = self;
-        
-        __block MADViewerController *reportViewer = self;
-        
+    
         [self.view bringSubviewToFront: self.toolbarSlider];
  
         NSArray *viewControllers = @[pageOne];
+        self.updatingOfTimerIsPaused = false;
+        self.refreshing = false;
         [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward animated: NO completion:^(BOOL finished) {
         
             if (finished) {
-                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSlider];
                 [pageOne.view setNeedsDisplay];
-                reportViewer.updatingOfTimerIsPaused = false;
-                reportViewer.refreshing = false;
-                reportViewer = nil;
             }
 
         }];
@@ -708,8 +704,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return self;
 }
 
-- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
-                  withCompletionHandler:(void (^)(BOOL))completionHandler {
+- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
     
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         completionHandler(YES);
@@ -765,8 +760,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         NSArray *viewControllers = @[pageOne];
         
-        [self setViewControllers: viewControllers
-                       direction: UIPageViewControllerNavigationDirectionForward
+        [self setViewControllers: viewControllers direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO completion: nil];
         
     }];
@@ -804,22 +798,19 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - Post Report Notifications
 
 - (void)watchFormatter:(MTReportFormatter *)formatter {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reportFormatterDidFormatPage:)
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reportFormatterDidFormatPage:)
                                                  name: MADNotificationDidFormatPagesName
                                                object: formatter];
 }
 
 - (void)ignoreFormatter:(MTReportFormatter *)formatter {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationDidFormatPagesName
+    [[NSNotificationCenter defaultCenter] removeObserver: self name: MADNotificationDidFormatPagesName
                                                   object: formatter];
 }
 
 #pragma mark - UIPageViewControllerDataSrouce
 
-- (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
-       viewControllerAfterViewController:(MADReportPageViewController *)pageViewControllerLast {
+- (UIViewController *)pageViewController:(MADViewerController *)viewerViewController viewControllerAfterViewController:(MADReportPageViewController *)pageViewControllerLast {
     
     MADReportPageViewController *result = nil;
     if (viewerViewController.pageIsAnimating == false) {
@@ -896,8 +887,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - UIPageViewControllerDelegate
 
-- (void)pageViewController:(MADViewerController *)pageViewController didFinishAnimating:(BOOL)finished
-   previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+- (void)pageViewController:(MADViewerController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
     
     if (completed || finished) {
         pageViewController.pageIsAnimating = false;

@@ -34,14 +34,10 @@ static const CGFloat PageEdgeInsetMargin = 3.0000f;
 
 #pragma mark - Static Helpers
 
-+ (void)centerDocumentView:(UIView *)documentView
-          insideScrollView:(UIScrollView *)scrollView
-            topLayoutGuide:(id <UILayoutSupport>)topLayoutGuide
-         bottomLayoutGuide:(id <UILayoutSupport>)bottomLayoutGuide
-                    margin:(const CGFloat)margin {
++ (void)centerDocumentView:(UIView *)documentView insideScrollView:(UIScrollView *)scrollView
+            topLayoutGuide:(id <UILayoutSupport>)topLayoutGuide bottomLayoutGuide:(id <UILayoutSupport>)bottomLayoutGuide margin:(const CGFloat)margin {
     documentView.center = documentCenterPoint(scrollView.bounds.size, scrollView.contentSize, margin);
-    scrollView.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: scrollView
-                                                                                               insets: boundsInsets(topLayoutGuide, bottomLayoutGuide)];
+    scrollView.scrollIndicatorInsets = [MADReportPageViewController ScrollIndicatorInsetForScrollView: scrollView insets: boundsInsets(topLayoutGuide, bottomLayoutGuide)];
 }
 
 static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
@@ -104,7 +100,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 - (instancetype)initWithDocument:(MADocument *)document andPageAttributtes:(MADPageViewAttributes *)pageAttributes {
-    if (self = [super initWithNibName:nil bundle:nil]) {
+    if (self = [super init]) {
         self.document = document;
         _initalLayout = true;
         _pageViewAttributes = pageAttributes.copy;
