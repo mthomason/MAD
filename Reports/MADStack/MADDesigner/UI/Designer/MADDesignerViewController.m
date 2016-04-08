@@ -97,7 +97,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     MTReportDesignerSectionViewLayoutLiquidDelegate,
     MADDesignerElementPickerDelegate,
     MTViewControllerProtocol,
-    MTDocumentSectionViewDelegate,
     MTReportDesignerSectionLayoutSettingsDelegate,
     MTQueryBuilderChooseFieldDelegate,
     MTTabBarImageProtocol,
@@ -188,11 +187,30 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 @implementation MADDesignerViewController
 
+#pragma mark - Static Helpers
+
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
+    return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
+}
+
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
+    return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
+}
+
++ (NSString *)MADDesigner {
+    NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
+    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
+}
+
+#pragma mark - NSObject
+
 - (void)dealloc {
 
 }
 
-#pragma mark - Exit
+#pragma mark - Unwind Segue
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
     
@@ -237,13 +255,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
         self.numberFormatterPercentage = numberFormatter;
         
-        NSMutableSet *emptySet = [NSMutableSet new];
-        self.visibleElementViews = emptySet;
+        NSMutableSet <__kindof MADDesignerElementView *> *visibleElementViews = [NSMutableSet new];
+        self.visibleElementViews = visibleElementViews;
 
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
         self.ruler = viewRuler;
         
-        NSMutableDictionary *borderAppliedToView = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary <__kindof NSNumber *, __kindof NSNumber *> *borderAppliedToView = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         
         MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
@@ -266,6 +284,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [super decodeRestorableStateWithCoder:coder];
 }
 
+#pragma mark - UITraitCollection
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     BOOL animate = previousTraitCollection != nil;
@@ -284,11 +304,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (NSString *)title { return [MADDesignerViewController MADDesigner]; }
 
-+ (NSString *)MADDesigner {
-    NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
-    return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
 }
@@ -298,6 +313,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     MADocument *document = self.document;
     NSAssert(document != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
+    
     self.scroller.scrollsToTop = YES;
     self.scroller.scrollEnabled = YES;
     self.scroller.userInteractionEnabled = YES;
@@ -362,19 +378,15 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     self.scroller.delegate = self;
     
-    NSMutableArray *constraints = [[NSMutableArray alloc] init];
     NSLayoutConstraint *constraintContentLeft = [NSLayoutConstraint view:self.view containerLeft:self.scroller.container];
     constraintContentLeft.priority = 999;
+    
     NSLayoutConstraint *constraintContentRight = [NSLayoutConstraint view:self.view containerRight:self.scroller.container];
     constraintContentRight.priority = 999;
+    
     NSLayoutConstraint *constraintContentTop = [NSLayoutConstraint view:self.scroller containerTop:self.scroller.container];
     NSLayoutConstraint *constraintScrollerBottom = [NSLayoutConstraint scroller:self.scroller bottom:self.bottomLayoutGuide];
     NSLayoutConstraint *constraintWidth = [NSLayoutConstraint content: self.scroller.container width: self.view.frame.size.width / self.scroller.zoomScale];
-    [constraints addObject:constraintContentLeft];
-    [constraints addObject:constraintContentRight];
-    [constraints addObject:constraintContentTop];
-    [constraints addObject:constraintScrollerBottom];
-    [constraints addObject:constraintWidth];
     
     self.layoutConstraintContainerWidth = constraintWidth;
     
@@ -386,17 +398,18 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewControllerSectionLayoutSettings];
     navigationController.transitioningDelegate = settingsTransitioningDelegate;
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
+    
     self.navigationControllerSectionLayoutSettings = navigationController;
     self.navigationControllerSectionLayoutSettings.preferredContentSize =  CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
     
     self.settingsTransitioningDelegate = settingsTransitioningDelegate;
     
     NSLayoutConstraint *viewScrollerTop = [NSLayoutConstraint viewScrollerTop: self.scroller view: self.topLayoutGuide];
-    [constraints addObject: viewScrollerTop];
-    
+
     NSMutableSet *selectedObjectIds = [NSMutableSet new];
     self.selectedObjectIds = selectedObjectIds;
     
+    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom, constraintWidth, viewScrollerTop];
     [self.view addConstraints:constraints];
     
     self.scroller.container.backgroundColor = [UIColor clearColor];
@@ -460,7 +473,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection delegate: self];
             sectionView.delegate = self;
-            sectionView.sectionDelegate = self;
             sectionView.dataSource = self;
             sectionView.layer.borderWidth = borderWidthThin;
             sectionView.showsVerticalScrollIndicator = YES;
@@ -594,6 +606,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
     [self.scroller.container removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
     
+    [self.visibleElementViews removeAllObjects];
     [self.viewDidAppearDesignerContentViewConstraints removeAllObjects];
     [self.viewDidAppearDesignerScrollViewConstraints removeAllObjects];
     [self.layoutConstraintsSectionsSidesBorder removeAllObjects];
@@ -745,16 +758,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     }
 }
 
-static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
-static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
-    return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
-}
-
-static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
-static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
-    return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
-}
-
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     
     if ([scrollView isEqual:self.scroller]) {
@@ -773,8 +776,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
         MADDesignerSectionLabel *controlView;
         for (controlView in sectionControlViewsArray) {
-            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1
-                                                                      attributes:attributes context:nil];
+            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1 attributes:attributes context:nil];
             
             controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
             controlView.font = font;
@@ -791,6 +793,46 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         
     }
     
+}
+
+- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
+    [self handledScrollViewDidEndZooming:scrollView withView:view atScale:scale];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if ([scrollView isEqual:self.scroller]) {
+        [self adjustScroller];
+    }
+    self.statusLabelZoomScale.frame = [self detailDisplayFrame];
+    NSString *formatter = NSLocalizedString(@"Scrolled to %@.", @"Scrolled to %@.");
+    NSString *message = [NSString stringWithFormat: formatter, NSStringFromCGPoint(scrollView.contentOffset)];
+    UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, message);
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    
+}
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
+    return YES;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.scroller.container;
+}
+
+#pragma mark ScrollView helpers
+
+- (void)adjustScroller {
+    
+    [self adjustContextOffsetForOpenPopover];
+    
+    if (self.scroller.contentOffset.x != 0) {
+        CGPoint offset = self.scroller.contentOffset;
+        offset.x = CGPointZero.x;
+        self.scroller.contentOffset = offset;
+        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
+    }
 }
 
 - (void)handledScrollViewDidEndZooming:(UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
@@ -828,47 +870,10 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self adjustContextOffsetForOpenPopover];
 }
 
-- (void)scrollViewDidEndZooming: (UIScrollView *)scrollView withView: (UIView *)view atScale: (CGFloat)scale {
-    [self handledScrollViewDidEndZooming:scrollView withView:view atScale:scale];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([scrollView isEqual:self.scroller]) {
-        [self adjustScroller];
-    }
-    self.statusLabelZoomScale.frame = [self detailDisplayFrame];
-    NSString *formatter = NSLocalizedString(@"Scrolled to %@.", @"Scrolled to %@.");
-    NSString *message = [NSString stringWithFormat: formatter, NSStringFromCGPoint(scrollView.contentOffset)];
-    UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, message);
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    
-}
-
-- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
-    return YES;
-}
-
 - (void)updateDisplayDetailZoomValue {
     NSNumber *number = @(self.scroller.zoomScale);
-    [self.statusLabelZoomScale setText: [self.numberFormatterPercentage stringFromNumber:number]];
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.scroller.container;
-}
-
-- (void)adjustScroller {
-    
-    [self adjustContextOffsetForOpenPopover];
-    
-    if (self.scroller.contentOffset.x != 0) {
-        CGPoint offset = self.scroller.contentOffset;
-        offset.x = CGPointZero.x;
-        self.scroller.contentOffset = offset;
-        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
-    }
+    NSString *zoomScaleText = [self.numberFormatterPercentage stringFromNumber:number];
+    [self.statusLabelZoomScale setText: zoomScaleText];
 }
 
 #pragma mark - UIDocumentStateChangedNotification
@@ -1024,27 +1029,6 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
     }];
     
-}
-
-#pragma mark - MTDocumentSectionViewDelegate
-
-// FIXME: Unused... What's this for?
-- (void)didUpdateLayout:(MADDesignerSectionView *)sectionView {
-    
-    MADocument *document = self.document;
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionView.objectIdTag
-                                                                    inManagedObjectContext: document.managedObjectContext];
-    NSNumber *height = @(sectionView.bounds.size.height);
-    documentSection.height = height;
-    [self relayoutSectionView:sectionView];
-    [document.managedObjectContext save:nil];
-}
-
-#pragma mark - MTReportDesignerToolBoxDelegate
-
-// FIXME: Unused... What's this for?
-- (void)toolboxHeightChanged:(CGFloat)newHeight {
-    self.navigationControllerToolbox.preferredContentSize = CGSizeMake(320.0000f, newHeight);
 }
 
 #pragma mark - NSManagedObjectContextObjectsDidChangeNotification
@@ -1986,7 +1970,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                 self.viewControllerSectionLayoutSettings.initalHeightValue = section.height.floatValue;
                 self.viewControllerSectionLayoutSettings.initalVisibility = section.visibility.boolValue;
                 self.viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
-                self.viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows.integerValue;
+                self.viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows.unsignedIntegerValue;
                 [self.viewControllerSectionLayoutSettings updateDisplay];
                 
                 UIEdgeInsets ei = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
@@ -2837,14 +2821,14 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark Constraints Helpers
 
 - (void)contentViewRemoveAllConstraints {
-    NSArray *constraints = [self.scroller.container constraints];
+    NSArray<__kindof NSLayoutConstraint *> *constraints = self.scroller.container.constraints;
     if (constraints.count > 0) {
         [self.scroller.container removeConstraints:constraints];
     }
 }
 
 - (void)scrollerRemoveAllConstraints {
-    NSArray *constraints = [self.scroller constraints];
+    NSArray<__kindof NSLayoutConstraint *> *constraints = self.scroller.constraints;
     if (constraints.count > 0) {
         [self.scroller removeConstraints:constraints];
     }

@@ -12,8 +12,6 @@
 #import <UIKit/UIKit.h>
 #import "MADManagedObjectView.h"
 
-@protocol MTDocumentSectionViewDelegate;
-
 @class MADDesignerSectionLabel;
 
 typedef NS_ENUM(NSUInteger, MADBorderState) {
@@ -25,21 +23,14 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 @interface MADDesignerSectionView : MADManagedObjectCollectionView
     <UIGestureRecognizerDelegate>
 
-@property (nonatomic, weak) id <MTDocumentSectionViewDelegate> sectionDelegate;
-@property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
+    @property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
 
-@property (nonatomic, assign) BOOL visible;
-@property (nonatomic, assign) BOOL selected;
+    @property (nonatomic, assign) BOOL visible;
+    @property (nonatomic, assign) BOOL selected;
 
-- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
+    - (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
+    - (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
 
-- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
-
-@end
-
-@protocol MTDocumentSectionViewDelegate
-@optional
-- (void)didUpdateLayout:(MADDesignerSectionView *)sectionView;
 @end
 
 #endif
