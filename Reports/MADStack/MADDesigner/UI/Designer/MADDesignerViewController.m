@@ -115,8 +115,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionView *>                         *sectionViewsArray;
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionLabel *>                        *sectionControlViewsArray;
 
-    @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionView *>    *sectionViews;
-    @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionLabel *>   *sectionControlViews;
+    @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionView *>    *sectionViewsDictionary;
+    @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionLabel *>   *sectionControlViewsDictionary;
 
     @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerScrollViewConstraints;
     @property (nonatomic, strong) NSMutableArray        <__kindof NSLayoutConstraint *>                             *viewDidAppearDesignerContentViewConstraints;
@@ -149,7 +149,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
 
 
-    @property (nonatomic, assign) NSUInteger lastSelectedSectionControlPanel;
+    @property (nonatomic, assign) NSInteger lastSelectedSectionControlPanel;
 
     @property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
     @property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
@@ -437,8 +437,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
 
     self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
-    self.sectionViews = dictionarySections;
-    self.sectionControlViews = dictionarySectionControls;
+    self.sectionViewsDictionary = dictionarySections;
+    self.sectionControlViewsDictionary = dictionarySectionControls;
     
     [self.scroller.container addSubview:self.ruler];
     
@@ -490,7 +490,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             
             sectionViewLabel.tag = sectionCounter;
             NSString *lastKey = reportSectionKeyTracker.lastObject;
-            id constraintItem =  sectionCounter == 0 ? self.ruler : self.sectionViews[lastKey];
+            id constraintItem =  sectionCounter == 0 ? self.ruler : self.sectionViewsDictionary[lastKey];
             
             sectionView.showsVerticalScrollIndicator = YES;
             
@@ -533,8 +533,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [sectionControlViewsArray addObject:sectionViewLabel];
             
             NSString *collectionViewKey = [reportSection sectionKey];
-            [self.sectionViews setValue:sectionView forKey:collectionViewKey];
-            [self.sectionControlViews setValue:sectionViewLabel forKey:collectionViewKey];
+            [self.sectionViewsDictionary setValue:sectionView forKey:collectionViewKey];
+            [self.sectionControlViewsDictionary setValue:sectionViewLabel forKey:collectionViewKey];
             
             [reportSectionKeyTracker addObject:collectionViewKey];
             
@@ -679,13 +679,13 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     if (presentedRect.origin.x > CGPointZero.x) {
         
         
-        for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+        for (UICollectionView *sectionView in self.sectionViewsDictionary.objectEnumerator) {
             sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
             sectionView.scrollIndicatorInsets = sectionView.contentInset;
         }
         
     } else {
-        for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+        for (UICollectionView *sectionView in self.sectionViewsDictionary.objectEnumerator) {
             sectionView.contentInset = UIEdgeInsetsZero;
             sectionView.scrollIndicatorInsets = UIEdgeInsetsZero;
         }
@@ -767,39 +767,46 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     }
 }
 
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
+    return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
+}
+
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
+    return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
+}
+
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     
     if ([scrollView isEqual:self.scroller]) {
         
         [self updateDisplayDetailZoomValue];
         self.statusLabelZoomScale.frame = [self detailDisplayFrame];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.ruler setNeedsDisplay];
+        }];
         
-        [self.ruler setNeedsDisplay];
-        UIFont *captionFont = [MADDesignerViewController captionFont];
-        CGFloat pointsize = captionFont.pointSize;
-        UIFont *font = [captionFont fontWithSize:(pointsize / scrollView.zoomScale)];
-        NSDictionary *attributes = @{NSFontAttributeName : font};
-        
-        NSArray *sectionControlViewsArray = self.sectionControlViewsArray;
-        MADDesignerSectionLabel *controlView;
-        for (controlView in sectionControlViewsArray) {
-            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size
-                                                                         options:-1
-                                                                      attributes:attributes
-                                                                         context:nil];
-            controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
-            controlView.font = font;
-            controlView.scale = self.scroller.zoomScale;
-            controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
-            [controlView setNeedsDisplay];
-        }
+        NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsDictionary.allValues;
+        UIFontDescriptor *captionFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
+        CGFloat pointSize = captionFontDescriptor.pointSize / scrollView.zoomScale;
+        [sectionControlViewsArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(__kindof MADDesignerSectionLabel * _Nonnull controlView, NSUInteger idx, BOOL * _Nonnull stop) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                UIFont *font = [UIFont fontWithDescriptor:captionFontDescriptor size:pointSize];
+                NSDictionary *attributes = @{NSFontAttributeName : font};
+                CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1
+                                                                          attributes:attributes context:nil];
+                controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
+                controlView.font = font;
+                controlView.scale = self.scroller.zoomScale;
+                controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
+                [controlView setNeedsDisplay];
+            }];
+        }];
         
         [self adjustScroller];
         [self.scroller.container invalidateIntrinsicContentSize];
-        CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
-        CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
-        self.scroller.container.center = CGPointMake(scrollView.contentSize.width * 0.5000f + offsetX,
-                                                     scrollView.contentSize.height * 0.5000f + offsetY);
+        self.scroller.container.center = CGPointMake(ScrollViewCenterX(scrollView), ScrollViewCenterY(scrollView));
         
         [self.view setNeedsUpdateConstraints];
         
@@ -820,15 +827,17 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
         UIFont *captionFont = [MADDesignerViewController captionFont];
         CGFloat pointsize = captionFont.pointSize;
-        NSArray *sectionControlViewsArray = self.sectionControlViewsArray;
-        MADDesignerSectionLabel *controlView;
-        for (controlView in sectionControlViewsArray) {
-            controlView.font = [captionFont fontWithSize:pointsize / scale];
-            controlView.contentScaleFactor = scaleWithScreen;
-            [controlView setNeedsDisplay];
-        }
         
-        for (UICollectionView *section in self.sectionViews.objectEnumerator) {
+        NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsArray;
+        [sectionControlViewsArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(__kindof MADDesignerSectionLabel * _Nonnull controlView, NSUInteger idx, BOOL * _Nonnull stop) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                controlView.font = [captionFont fontWithSize:pointsize / scale];
+                controlView.contentScaleFactor = scaleWithScreen;
+                [controlView setNeedsDisplay];
+            }];
+        }];
+        
+        for (UICollectionView *section in self.sectionViewsDictionary.objectEnumerator) {
             section.contentScaleFactor = scale;
         }
         
@@ -943,7 +952,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         NSString *key = section.sectionKey;
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            MADDesignerSectionView *documentSectionView = self.sectionViews[key];
+            MADDesignerSectionView *documentSectionView = self.sectionViewsDictionary[key];
             documentSectionView.visible = isVisible;
         }];
 
@@ -966,7 +975,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [documentSection.managedObjectContext save:nil];
     
     NSString *key = [documentSection sectionKey];
-    UICollectionView *collectionView = self.sectionViews[key];
+    UICollectionView *collectionView = self.sectionViewsDictionary[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
     [documentSection setInterfaceHeight: collectionViewContentSize.height];
@@ -1018,7 +1027,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     NSNumber *numberOfRowsObject = [[NSNumber alloc] initWithUnsignedInteger:numberOfRows];
     documentSection.numberOfRows = numberOfRowsObject;
     
-    UICollectionView *collectionView = self.sectionViews[documentSection.sectionKey];
+    UICollectionView *collectionView = self.sectionViewsDictionary[documentSection.sectionKey];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
@@ -1986,6 +1995,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                 
                 [self deselectAllElementsAnimated:YES];
                 
+                
                 self.lastSelectedSectionControlPanel = label.tag;
                 self.lastSelectedLabel = label;
                 RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
@@ -2001,11 +2011,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
                 [self.viewControllerSectionLayoutSettings updateDisplay];
                 
                 UIEdgeInsets ei = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
-                self.viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left,
-                                                                                                   CGSizeZero.height, ei.right);
-                
-                self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left,
-                                                                                                            CGSizeZero.height, ei.right);
+                self.viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+                self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
                 [self showSectionSettingsFromLabel:label];
                 
             }
@@ -2152,7 +2159,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (NSUInteger)removeBorderFromAllSectionViews {
     NSUInteger deselectedSectionViewCounter = 0;
-    for (id view in self.sectionControlViews.allValues) {
+    for (id view in self.sectionControlViewsDictionary.allValues) {
         deselectedSectionViewCounter += [self removeBorderFromView: view] ? 1 : 0;
     }
     return deselectedSectionViewCounter;
@@ -2197,7 +2204,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)repositionSectionViews:(CGRect)presentedRect {
     if (presentedRect.origin.x > CGPointZero.x) {
         
-        for (UICollectionView *sectionView in self.sectionViews.objectEnumerator) {
+        for (UICollectionView *sectionView in self.sectionViewsDictionary.objectEnumerator) {
             sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
             sectionView.scrollIndicatorInsets = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width, CGSizeZero.height, presentedRect.size.width - MTReportDesignerBorderPaddingSides);
         }
@@ -2239,11 +2246,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView {
+
     for (NSIndexPath *indexPath in collectionView.indexPathsForVisibleItems) {
-        MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath
-                                                          inCollectionView: collectionView];
+        MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath inCollectionView: collectionView];
         [elementView setNeedsDisplay];
     }
+
 }
 
 - (MADDesignerElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView {
@@ -2251,6 +2259,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (MADDesignerElementView *)elementViewForCollectionViewCell:(UICollectionViewCell *)cell {
+
     MADDesignerElementView *result = nil;
     for (id elementView in [cell.contentView subviews]) {
         if ([elementView isKindOfClass:[MADDesignerElementView class]]) {
@@ -2259,6 +2268,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
     }
     return result;
+
 }
 
 - (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
@@ -2430,7 +2440,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
            
             
-            MADDesignerSectionView *sectionView = self.sectionViews[documentObjectSectionKey];
+            MADDesignerSectionView *sectionView = self.sectionViewsDictionary[documentObjectSectionKey];
             CGRect b = [self.view convertRect:piece.frame fromView:sectionView];
             piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
             [self.view addSubview: piece];
@@ -2748,11 +2758,11 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionViews[documentSection.sectionKey];
+    return self.sectionViewsDictionary[documentSection.sectionKey];
 }
 
 - (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionControlViews[[documentSection sectionKey]];
+    return self.sectionControlViewsDictionary[[documentSection sectionKey]];
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
@@ -2784,12 +2794,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (void)displaySectionViewsRemoveBorder {
     
     //Remove border from the section views
-    [self.sectionControlViews enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
+    [self.sectionControlViewsDictionary enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
         [view normalView];
     }];
     
     //Remove border from the section views
-    [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
+    [self.sectionViewsDictionary enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
         view.selected = NO;
     }];
     
@@ -2897,7 +2907,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 }
 
 - (UIView *)detailSectionView {
-    return (UIView *)[self.sectionControlViews objectForKey:self.document.activeDocumentModel.hasDetailSection.objectID.key];
+    return (UIView *)[self.sectionControlViewsDictionary objectForKey:self.document.activeDocumentModel.hasDetailSection.objectID.key];
 }
 
 - (void)adjustSettingsLocation {
