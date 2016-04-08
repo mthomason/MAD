@@ -20,9 +20,9 @@
     - (void)collectionView: (UICollectionView *)collectionView
              prepareLayout: (UICollectionViewLayout *)collectionViewLayout;
 
-    - (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView
-                                                        layout: (UICollectionViewLayout *)collectionViewLayout
-                            layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath;
+    - (MADSectionLayoutAttributes *)collectionView: (UICollectionView *)collectionView
+                                            layout: (UICollectionViewLayout *)collectionViewLayout
+                layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath;
 
     - (CGSize)collectionView: (UICollectionView *)collectionView
                sizeForLayout: (UICollectionViewLayout *)collectionViewLayout;

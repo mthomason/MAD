@@ -337,11 +337,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     return result;
 }
 
-+ (instancetype)documentObjectForObjectID:(NSManagedObjectID *)objid managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objid];
-    return (RptqDocumentObject *)result;
-}
-
 - (void)dropAtRect:(CGRect)rect {
     NSNumber *sizeWidth = @(nearbyint(rect.size.width));
     NSNumber *sizeHeight = @(nearbyint(rect.size.height));

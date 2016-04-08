@@ -73,11 +73,6 @@
 
 #pragma mark - RptqDocumentObjectFactory
 
-+ (instancetype)documentObjectForObjectID:(NSManagedObjectID *)objectId managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
-    return (RptqDocumentObjectFormula *)result;
-}
-
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])

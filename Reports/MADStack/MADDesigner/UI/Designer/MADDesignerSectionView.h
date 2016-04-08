@@ -31,9 +31,9 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 @property (nonatomic, assign) BOOL visible;
 @property (nonatomic, assign) BOOL selected;
 
-- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion;
+- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
 
-- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)(BOOL finished))completion;
+- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion;
 
 @end
 

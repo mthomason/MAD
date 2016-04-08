@@ -95,7 +95,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
     return CGSizeMake(intrinsicContentSize.width, intrinsicContentSize.height + MTDefaultFingerSizeHeight);
 }
 
-- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)(BOOL finished))animationComplete completion:(void (^)(BOOL finished))completion {
+- (void)removeItemAtIndex:(NSIndexPath *)deletePath update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion {
     [self performBatchUpdates:^{
         if (update != nil) update();
         NSArray *indexPaths = @[deletePath];
@@ -105,14 +105,16 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
             [UIView animateWithDuration:0.6666f animations:^{
                 [self invalidateIntrinsicContentSize];
             } completion:^(BOOL animateFinished) {
-                if (animationComplete != nil) animationComplete(animateFinished);
+                if (animateFinished) {
+                    if (animationComplete != nil) animationComplete(animateFinished);
+                }
             }];
+            if (completion != nil) { completion(); }
         }
-        if (completion != nil) { completion(YES); }
     }];
 }
 
-- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)(BOOL finished))completion {
+- (void)insertItemAtIndex:(NSIndexPath *)path update:(void (^)())update animationComplete:(void (^)())animationComplete completion:(void (^)())completion {
     [self performBatchUpdates:^(void) {
         
         if (update != nil) update();
@@ -125,13 +127,13 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
             [UIView animateWithDuration:0.6666f animations:^{
                 [self invalidateIntrinsicContentSize];
             } completion:^(BOOL animateFinished) {
-                if (finished) {
+                if (animateFinished) {
                     if (animationComplete != nil) animationComplete();
                 }
             }];
+            
+            if (completion != nil) { completion(); }
         }
-        
-        if (completion != nil) { completion(YES); }
         
     }];
 }

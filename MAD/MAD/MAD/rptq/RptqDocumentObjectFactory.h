@@ -16,8 +16,6 @@
 
 @required
 
-+ (instancetype)documentObjectForObjectID:(NSManagedObjectID *)objectId managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
 @optional
 
 @end

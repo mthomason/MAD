@@ -506,8 +506,7 @@ static const CGFloat BorderWidth = 1.0000f;
             NSInteger numberNotBold = 0, numberNotItalic = 0, numberNotStrike = 0, numberNotUnderline = 0;
             
             for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-                RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
-                                                                              managedObjectContext:self.document.managedObjectContext];
+                RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
                 
                 if (documentObject != nil) {
                     
@@ -769,7 +768,7 @@ static const CGFloat BorderWidth = 1.0000f;
     
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
+        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *boldWrapper = @(ControlStateIsOn(self.controlStateBold));
         documentObject.bold = boldWrapper;
     }
@@ -795,7 +794,7 @@ static const CGFloat BorderWidth = 1.0000f;
 
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
+        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *italic = @(ControlStateIsOn(self.controlStateItalic));
         documentObject.italic = italic;
     }
@@ -821,7 +820,7 @@ static const CGFloat BorderWidth = 1.0000f;
     
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
+        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *strike = @(ControlStateIsOn(self.controlStateStrike));
         documentObject.strike = strike;
     }
@@ -848,7 +847,7 @@ static const CGFloat BorderWidth = 1.0000f;
     
     MADocument *doc = self.document;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:doc.managedObjectContext];
+        RptqDocumentObject *documentObject = [doc.managedObjectContext objectWithID:objectId];
         NSNumber *underline = @(ControlStateIsOn(self.controlStateUnderline));
         documentObject.underline = underline;
     }
@@ -864,8 +863,7 @@ static const CGFloat BorderWidth = 1.0000f;
     self.labelFontSize.attributedText = attributedString;
     NSNumber *value = @(pointSize);
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.fontsize = value.copy;
         [documentObject saveContext];
     }
@@ -876,8 +874,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:value];
     self.labelSizeHeight.attributedText = displayHeight;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.sizeheight = value.copy;
         [documentObject saveContext];
     }
@@ -888,8 +885,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:value];
     self.labelSizeWidth.attributedText = displayWidth;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.sizewidth = value.copy;
         [documentObject saveContext];
     }
@@ -899,8 +895,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSNumber *value = @(index);
     [self.segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.horizontalAlignment = value.copy;
         [documentObject saveContext];
     }
@@ -910,8 +905,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSNumber *value = @(index);
     [self.segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.verticalAlignment = value.copy;
         [documentObject saveContext];
     }
@@ -922,8 +916,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:value];
     self.labelPaddingTop.attributedText = display;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.paddingTop = value.copy;
         [documentObject saveContext];
     }
@@ -934,8 +927,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *labelPaddingBottomAttributedText = [MADToolboxStrings newMarginBottomForValue:value];
     self.labelPaddingBottom.attributedText = labelPaddingBottomAttributedText;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.paddingBottom = value.copy;
         [documentObject saveContext];
     }
@@ -945,8 +937,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *labelPaddingLeftAttributedText = [MADToolboxStrings newMarginLeftForValue:value];
     self.labelPaddingLeft.attributedText = labelPaddingLeftAttributedText;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.paddingLeft = value;
         [documentObject saveContext];
     }
@@ -956,8 +947,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *labelPaddingRight = [MADToolboxStrings newMarginRightForValue:value];
     self.labelPaddingRight.attributedText = labelPaddingRight;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.paddingRight = value.copy;
         [documentObject saveContext];
     }
@@ -968,8 +958,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: value];
     self.labelMarginTop.attributedText = display;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.marginTop = value.copy;
         [documentObject saveContext];
     }
@@ -979,8 +968,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:value];
     self.labelMarginBottom.attributedText = display;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.marginBottom = value.copy;
         [documentObject saveContext];
     }
@@ -990,8 +978,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *labelMarginLeftAttributedText = [MADToolboxStrings newMarginLeftForValue: value];
     self.labelMarginLeft.attributedText = labelMarginLeftAttributedText;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.marginLeft = value.copy;
         [documentObject saveContext];
     }
@@ -1001,8 +988,7 @@ static const CGFloat BorderWidth = 1.0000f;
     NSAttributedString *labelMarginRight = [MADToolboxStrings newMarginRightForValue: value];
     self.labelMarginRight.attributedText = labelMarginRight;
     for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                      managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         documentObject.marginRight = value.copy;
         [documentObject saveContext];
     }
@@ -1084,8 +1070,7 @@ static const CGFloat BorderWidth = 1.0000f;
         ((MADFontSelectorViewController *)segue.destinationViewController).clearsBackground = self.clearsBackground;
         NSString *fontname = nil;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
-                                                                          managedObjectContext:self.document.managedObjectContext];
+            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             fontname = documentObject.fontname;
             break;
         }

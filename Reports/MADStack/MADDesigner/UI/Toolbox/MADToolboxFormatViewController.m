@@ -85,7 +85,7 @@
     
     for (NSManagedObjectID *objectId in objectIds) {
 
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
+        RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
         MTDataType dataType = documentObject.isLabelDataField.referencesQueryField.databaseSchemaField.dataType.integerValue;
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
@@ -123,8 +123,7 @@
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                          managedObjectContext: self.document.managedObjectContext];
+            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             
             if (documentObject.formatNumericCurrency.boolValue) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
@@ -136,8 +135,7 @@
         if ([self.userSelectedObjectIds count] == 1) {
 
             NSManagedObjectID *objectId = [self.userSelectedObjectIds anyObject];
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                          managedObjectContext: self.document.managedObjectContext];
+            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
             [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
             [self.stepperNumberOfDecimals setValue:numberOfDec];
@@ -148,8 +146,7 @@
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
             for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-                RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
-                                                                              managedObjectContext: self.document.managedObjectContext];
+                RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
                 NSInteger currentInteger = [[documentObject formatNumericDecimals] integerValue];
                 if (counter > 0) {
                     if (lastInteger == currentInteger && allTheSame) {
@@ -189,7 +186,7 @@
         [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]]];
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: self.document.managedObjectContext];
+            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             [documentObject setFormatNumericDecimals:valueThatChanged];
             [documentObject.managedObjectContext save:nil];
         }
@@ -234,8 +231,7 @@
     if (indexPath.row == 1 && indexPath.section == 0) {
         
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
-                                                                          managedObjectContext:self.document.managedObjectContext];
+            RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:objectId];
             BOOL isCurrency = [documentObject.formatNumericCurrency boolValue];
             BOOL isCurrencyNow = !isCurrency;
             [documentObject setFormatNumericCurrency:@(isCurrencyNow)];

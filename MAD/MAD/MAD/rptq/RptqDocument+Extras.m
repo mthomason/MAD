@@ -652,8 +652,7 @@
                     break;
                 }
                 case MTAggregateFunctionInputTypeFormula: {
-                    RptqDocumentObjectFormula *formula =  [RptqDocumentObjectFormula documentObjectForObjectID: objectId
-                                                                                          managedObjectContext: mangedObjectContext];
+                    RptqDocumentObjectFormula *formula =  [mangedObjectContext objectWithID: objectId];
                     [reportObject setAggregateField:nil];
                     [reportObject setAggregateFunction:formula];
                     break;
