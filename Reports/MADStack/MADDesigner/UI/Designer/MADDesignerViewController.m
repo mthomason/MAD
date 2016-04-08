@@ -971,7 +971,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     MADocument *doc = self.document;
     RptqDatabase *database = doc.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedSectionControlPanel];
     
     BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.unsignedIntegerValue;
     BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.unsignedIntegerValue;
@@ -1106,8 +1106,9 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark - Menu Notifications
 
 - (void)willHideMenuNotification:(NSNotification *)notification { }
+
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    if ([self lastMenuItemSelectRequiresElementView] == false) {
+    if (self.lastMenuItemSelectRequiresElementView == false) {
         MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
@@ -2060,7 +2061,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
                                                                 inputType: MTAggregateFunctionInputTypeField
                                                                 groupType: viewController.aggregateGroupByType
                                                           aggregateObject: viewController.fieldObject
-                                                              groupNumber: viewController.groupTypeSectionNumber];
+                                                              groupNumber: (NSUInteger)viewController.groupTypeSectionNumber];
         }
     } else {
         if ([viewController fieldObjectId] != nil) {
@@ -2148,7 +2149,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
     RptqQuery *query = self.document.activeDocumentModel.defaultDatabase.defaultQuery;
-    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: reportDesigner.lastSelectedSectionControlPanel];
+    RptqDocumentSection *documentSection = [query documentSectionForSelectedIndex: (NSUInteger)reportDesigner.lastSelectedSectionControlPanel];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
     if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
         [self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
@@ -2199,7 +2200,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag {
     RptqDatabase *database = self.document.activeDocumentModel.hasDatabaseSchemas.anyObject;
     RptqQuery *query = database.hasQueries.anyObject;
-    RptqDocumentSection *section = [query documentSectionForSelectedIndex: self.lastSelectedSectionControlPanel];
+    RptqDocumentSection *section = [query documentSectionForSelectedIndex:(NSUInteger)self.lastSelectedSectionControlPanel];
     return section;
 }
 

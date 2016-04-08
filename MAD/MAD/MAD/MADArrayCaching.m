@@ -131,7 +131,7 @@ static NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY 
         self.numberOrRows = 0;
     }
     [self prepareStatements];
-    self.numberOrRows = [self count];
+    self.numberOrRows = (int)[self count];
 }
 
 - (void)beginBulkInserts {
