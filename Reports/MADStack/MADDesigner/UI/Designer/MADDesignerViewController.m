@@ -1525,7 +1525,8 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (UICollectionViewCell *)collectionView: (MADDesignerSectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[collectionView.objectIdTag];
+    MADocument *document = self.document;
+    MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[collectionView.objectIdTag];
     
     __block MADSectionLayoutAttributes *attributes;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *object, BOOL *stop) {
@@ -1536,13 +1537,12 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
         }
     }];
     
-    RptqDocumentObject *documentObject = [self.document.managedObjectContext objectWithID:attributes.objectID];
-    
+
+    RptqDocumentObject *documentObject = [document.managedObjectContext objectWithID:attributes.objectID];
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
-    NSString * resuseId = [MTCollectionViewCellElement reuseIdentifier];
+    NSString *resuseId = [MTCollectionViewCellElement reuseIdentifier];
     
-    MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
-                                                                                  forIndexPath:indexPath];
+    MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId forIndexPath:indexPath];
     cell.delegate = self;
     
     CGSize documentObjectSize = [documentObject size];
@@ -1742,7 +1742,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     [self setDisplayActive];
     [self insertDocumentObjectWithDefination:
      @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-       MTDocumentObjectDefinationObject : [field objectID]}];
+       MTDocumentObjectDefinationObject : field.objectID}];
     self.hidesStatusBar = false;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -2150,10 +2150,10 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     return [self.selectedObjectIds containsObject:elementView.objectIdTag];
 }
 
-- (NSInteger)removeBorderFromAllSectionViews {
+- (NSUInteger)removeBorderFromAllSectionViews {
     NSUInteger deselectedSectionViewCounter = 0;
     for (id view in self.sectionControlViews.allValues) {
-        deselectedSectionViewCounter += [self  removeBorderFromView: view] ? 1 : 0;
+        deselectedSectionViewCounter += [self removeBorderFromView: view] ? 1 : 0;
     }
     return deselectedSectionViewCounter;
 }
@@ -2207,7 +2207,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 - (void)selectElementView:(MADDesignerElementView *)elementView {
     
-    NSInteger numberOfViewsDeselected = [self removeBorderFromAllSectionViews];
+    NSUInteger numberOfViewsDeselected = [self removeBorderFromAllSectionViews];
     
     if (numberOfViewsDeselected == 0) {
         
