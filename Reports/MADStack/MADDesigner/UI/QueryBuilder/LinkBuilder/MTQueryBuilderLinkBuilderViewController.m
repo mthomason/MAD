@@ -16,16 +16,13 @@
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 
-@property (nonatomic, strong) RptqQueryTable *firstTable;
-@property (nonatomic, strong) RptqQueryTable *secondTable;
+    @property (nonatomic, strong) RptqQueryTable *firstTable;
+    @property (nonatomic, strong) RptqQueryTable *secondTable;
 
-@property (nonatomic, strong) RptqQueryField *firstField;
-@property (nonatomic, strong) RptqQueryField *secondField;
+    @property (nonatomic, strong) RptqQueryField *firstField;
+    @property (nonatomic, strong) RptqQueryField *secondField;
 
-@property (nonatomic, strong) IBOutlet UILabel *labelRightField;
-
-//- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
-//- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+    @property (nonatomic, strong) IBOutlet UILabel *labelRightField;
 
 @end
 
@@ -61,12 +58,12 @@
         
         if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldOne"]) {
             
-            [self setCurrentlyEditingPart: MNSLinkLeft];
+            self.currentlyEditingPart = MNSLinkLeft;
             
             MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             
             if (dvc != nil) {
-                [dvc setExcludeTables: ([[self secondTable] alias] ? @[[[self secondTable] alias]] : @[])];
+                dvc.excludeTables = self.secondTable.alias ? @[self.secondTable.alias] : @[];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }
@@ -77,7 +74,7 @@
             
             MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
-                [dvc setExcludeTables: ([[self firstTable] alias] ? @[[[self firstTable] alias]] : @[])];
+                dvc.excludeTables = self.firstTable.alias ? @[self.firstTable.alias] : @[];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }
@@ -89,8 +86,8 @@
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
-    if ([self firstField] && [self secondField]) {
-        RptqQueryLinks *queryLink = [RptqQueryLinks queryLinkFactoryWithLeftField:[self firstField] rightField:[self secondField] joinType:[self linkType]];
+    if (self.firstField && self.secondField) {
+        RptqQueryLinks *queryLink = [RptqQueryLinks newQueryLinksWithLeftField:self.firstField rightField:self.secondField joinType:[self linkType] managedObjectContext:self.document.managedObjectContext];
         [self.delegate viewControllerSchemaAddLinkDidAdd:queryLink];
     } else {
         [self cancel:sender];
@@ -115,22 +112,23 @@
     NSString *tableFieldName = [queryField toString];
     switch ([self currentlyEditingPart]) {
         case MNSLinkLeft: {
-            [[[self tableViewCellTableFieldOne] detailTextLabel] setText: [tableFieldName lowercaseString]];
-            [self setFirstTable:queryTable];
-            [self setFirstField:queryField];
+
+            self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.lowercaseString;
+            self.firstTable = queryTable;
+            self.firstField = queryField;
             
             [self updateRightLabelState];
 
             
             NSString *required = [NSLocalizedString(@"Required", @"Shows that this field is required.") lowercaseString];
-            [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: required];
-            [[self tableViewCellTableFieldTwo] setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+            self.tableViewCellTableFieldTwo.detailTextLabel.text = required;
+            self.tableViewCellTableFieldTwo.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         }
         case MNSLinkRight: {
-            [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: [tableFieldName lowercaseString]];
-            [self setSecondTable:queryTable];
-            [self setSecondField:queryField];
+            self.tableViewCellTableFieldTwo.detailTextLabel.text = tableFieldName.lowercaseString;
+            self.secondTable = queryTable;
+            self.secondField = queryField;
             break;
         }
         default:
@@ -153,26 +151,28 @@
 }
 
 - (BOOL)firstFieldSet {
-    return [self firstField] != nil;
+    return self.firstField != nil;
 }
 
 - (BOOL)secondFieldSet {
-    return [self secondField] != nil && [[self firstField] isEqual:[self secondField]] == NO;
+    return self.secondField != nil && [self.firstField isEqual:self.secondField] == NO;
 }
 
 - (void)updateRightLabelState {
+
     BOOL enabled = [self firstFieldSet];
-    [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:enabled];
-    [[[self tableViewCellTableFieldTwo] textLabel] setEnabled:enabled];
-    [[[self tableViewCellTableFieldTwo] detailTextLabel] setEnabled:enabled];
-    [[self labelRightField] setEnabled:enabled];
+    self.tableViewCellTableFieldTwo.userInteractionEnabled = enabled;
+    self.tableViewCellTableFieldTwo.textLabel.enabled = enabled;
+    self.tableViewCellTableFieldTwo.detailTextLabel.enabled = enabled;
+    self.labelRightField.enabled = enabled;
+    
     UIColor *darkTextColor = enabled ? [UIColor blackColor] : [UIColor darkTextColor];
-    [[self labelRightField] setTextColor:darkTextColor];
+    self.labelRightField.textColor = darkTextColor;
 }
 
 - (void)updateSaveButtonState {
-    BOOL enabled = [self firstFieldSet] && [self secondField];
-    [[self.navigationItem rightBarButtonItem] setEnabled:enabled];
+    BOOL enabled = [self firstFieldSet] && self.secondField;
+    self.navigationItem.rightBarButtonItem.enabled = enabled;
 }
 
 @end

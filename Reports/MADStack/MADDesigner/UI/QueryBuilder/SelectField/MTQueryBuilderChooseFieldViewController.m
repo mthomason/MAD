@@ -20,14 +20,14 @@
 // Private TableViewController properties and methods.
 @interface MTQueryBuilderChooseFieldViewController ()
 
-@property (nonatomic, strong) NSMutableArray *sectionInfoArray;
-@property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
-@property (nonatomic, strong) NSArray *dataTables;
+    @property (nonatomic, strong) NSMutableArray *sectionInfoArray;
+    @property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
+    @property (nonatomic, strong) NSArray *dataTables;
 
-@property (nonatomic, assign) NSInteger openSectionIndex;
-@property (nonatomic, assign) CGFloat initialPinchHeight;
+    @property (nonatomic, assign) NSInteger openSectionIndex;
+    @property (nonatomic, assign) CGFloat initialPinchHeight;
 
-@property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end
 
@@ -47,20 +47,14 @@
     return self;
 }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
-                         withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     return NO;
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     UIViewController *viewController = self.unwindViewController;
     return viewController ? viewController :
-                        [super viewControllerForUnwindSegueAction: action
-                                               fromViewController: fromViewController
-                                                       withSender: sender];
+                        [super viewControllerForUnwindSegueAction: action fromViewController: fromViewController withSender: sender];
 }
 
 #pragma mark Initialization and configuration
@@ -122,8 +116,8 @@
 			sectionInfo.open = NO;
 			
             NSNumber *defaultRowHeight = @DEFAULT_ROW_HEIGHT;
-			NSInteger countOfQuotations = sectionInfo.table.hasQueryFields.count;
-			for (NSInteger i = 0; i < countOfQuotations; i++) {
+			NSUInteger countOfQuotations = sectionInfo.table.hasQueryFields.count;
+			for (NSUInteger i = 0; i < countOfQuotations; i++) {
 				[sectionInfo insertObject:defaultRowHeight inRowHeightsAtIndex:i];
 			}
 			
@@ -141,12 +135,12 @@
 #pragma mark Table view data source and delegate
 
 - (NSUInteger)numberOfRowsInSection:(NSInteger)section {
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)section];
     return sectionInfo.open ? sectionInfo.table.hasQueryFields.count : 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
-    return self.dataTables.count;
+    return (NSInteger)self.dataTables.count;
 }
 
 

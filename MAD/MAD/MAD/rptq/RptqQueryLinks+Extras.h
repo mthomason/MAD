@@ -36,7 +36,7 @@ extern NSString * const MTLinkSqlLeftOuterJoin;
 extern NSString * const MTLinkSqlRightOuterJoin;
 extern NSString * const MTLinkSqlFullOuterJoin;
 
-typedef NS_ENUM(unsigned char, MNSLinkType) {
+typedef NS_ENUM(short, MNSLinkType) {
     MNSLinkTypeInnerJoin = 0,
     MNSLinkTypeEquiJoin = 1,
     MNSLinkTypeNaturalJoin = 2,
@@ -47,17 +47,14 @@ typedef NS_ENUM(unsigned char, MNSLinkType) {
     MNSLinkTypeUnknown = 7,
 };
 
-//#define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(/*@"⟕"*/@"", @"Inner-Join"), NSLocalizedString(/*@"θ-join"*/@"", @"Equi-Join"), NSLocalizedString(/*@"⋈"*/@"", @"Natural Join"), NSLocalizedString(/*@"Cross Join"*/@"", @"Cross Join"), NSLocalizedString(/*@"⟕"*/@"", @"Left Outer Join"), NSLocalizedString(/*@"⟖"*/, @"Right Outer Join"), NSLocalizedString(/*@"⟗"*/, @"Full Outer Join"), nil]
-
-//#define MNSLinkTypeSymbolsDesired [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
-
 @class RptqDocument, RptqQueryLinks;
 
 @interface RptqQueryLinks (Extras) <MTProtocolLog>
 
-+ (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
-                                   rightField:(RptqQueryField *)fieldRight
-                                     joinType:(MNSLinkType)joinType NS_RETURNS_RETAINED;
++ (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
+                                rightField:(RptqQueryField *)fieldRight
+                                  joinType:(MNSLinkType)joinType
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)linkDescription;
 

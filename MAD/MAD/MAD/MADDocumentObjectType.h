@@ -41,7 +41,6 @@ extern NSString * const MADDocumentObjectTypeAddDetailBarcode;
 @interface MADDocumentObjectType : NSObject
 
     + (NSString *)humanReadableStringForType:(MTDocumentObjectType)type;
-
     + (NSString *)localizedStringForType:(MTDocumentObjectType)type;
     + (NSString *)localizedDetailStringForType:(MTDocumentObjectType)type;
     + (NSString *)localizedAddDetailStringForType:(MTDocumentObjectType)type;

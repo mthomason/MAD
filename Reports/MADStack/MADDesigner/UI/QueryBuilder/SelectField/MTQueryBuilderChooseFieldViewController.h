@@ -24,11 +24,11 @@
         MADSectionHeaderViewDelegate,
         MTUnwindProtocol>
 
-@property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
-@property (nonatomic, weak) MADocument *document;
+    @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
+    @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, strong) RptqQueryField *queryField;
-@property (nonatomic, strong) NSArray *excludeTables;
+    @property (nonatomic, strong) RptqQueryField *queryField;
+    @property (nonatomic, strong) NSArray *excludeTables;
 
 @end
 

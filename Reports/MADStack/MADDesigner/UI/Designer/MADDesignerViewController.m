@@ -158,8 +158,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
     @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 
-    @property (nonatomic, strong) UIBarButtonItem *barButtonAddReportObject;
-
     @property (nonatomic, assign) bool editAggregate;
     @property (nonatomic, assign) bool toolboxVisible;
     @property (nonatomic, assign) bool sectionSettingsVisible;
@@ -171,7 +169,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditBarcode;     //Never set a value... never used????
     @property (nonatomic, copy) NSManagedObjectID *objectIdEditImage;
     @property (nonatomic, copy) NSManagedObjectID *objectIdJustDisplayed;
-
     @property (nonatomic, copy) NSManagedObjectID *barcodeToEditObjectID;
     @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
@@ -206,9 +203,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 #pragma mark - NSObject
 
-- (void)dealloc {
-
-}
+- (void)dealloc { }
 
 #pragma mark - Unwind Segue
 
@@ -267,9 +262,6 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
         self.statusLabelZoomScale = detailDisplay;
         
-        UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionAdd:)];
-        self.barButtonAddReportObject = barButtonItemAdd;
-                
     }
     return self;
 }
@@ -558,7 +550,8 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self.scroller addConstraints: scrollerLayoutConstraints];
     [self.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
     
-    [self.tabBarController.navigationItem setRightBarButtonItem:self.barButtonAddReportObject animated:NO];
+    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionAdd:)];
+    [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItemAdd animated:NO];
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
@@ -1242,7 +1235,6 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     return documentObject.type.shortValue;
 }
 
-
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     [self deselectAllElementsAnimated:YES];
     self.lastMenuItemSelectRequiresElementView = true;
@@ -1480,11 +1472,12 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 #pragma mark -
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
-                                      withField: (RptqQueryField *)field {
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
+- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller withField: (RptqQueryField *)field {
+
+    RptqDocumentObject *documentObject = [field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
     documentObject.isLabelDataField.referencesQueryField = field;
     [field.managedObjectContext save:nil];
+    
 }
 
 #pragma mark -
@@ -2595,13 +2588,13 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
     [self setHidesStatusBar: NO];
     self.sectionSettingsVisible = false;
     self.toolboxVisible = false;
-    self.barButtonAddReportObject.enabled = YES;
+    self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
     [self.tabBarController enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
-    self.barButtonAddReportObject.enabled = NO;
+    self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
     [self.tabBarController disableTabBarItems];
 }
@@ -2841,8 +2834,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 - (CGRect)detailDisplayFrame {
     return CGRectMake(self.view.frame.size.width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail,
                       CGPointZero.y + self.topLayoutGuide.length + MTReportDesignerBorderPaddingDetail,
-                      MADSizeWidthViewDetailDisplay,
-                      MADSizeHeightViewDetailDisplay);
+                      MADSizeWidthViewDetailDisplay, MADSizeHeightViewDetailDisplay);
 }
 
 - (CGSize)designerContentViewSize {

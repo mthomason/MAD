@@ -273,8 +273,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     
     [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
     
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleContentSizeCategoryDidChangeNotification:)
                                                  name: UIContentSizeCategoryDidChangeNotification
@@ -529,8 +527,7 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
         [self.tableView reloadSections: linksSection withRowAnimation: UITableViewRowAnimationAutomatic];
     }
-    [document saveToURL: document.fileURL
-            forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
+    [document saveToURL: document.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
 #pragma mark - MTQueryBuilderAddGroupDelegate
@@ -540,7 +537,6 @@ static NSString * const NSFetchedResultsCachePredicates                    = @"N
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
     }];
-
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   true];
     [self.document addQueryGroupWithQueryField:queryFieldID andSortOrder:sortOrder];

@@ -113,15 +113,14 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 #pragma mark - Static
 
-+ (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
-                                   rightField:(RptqQueryField *)fieldRight
-                                     joinType:(MNSLinkType)joinType NS_RETURNS_RETAINED {
++ (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
+                                rightField:(RptqQueryField *)fieldRight
+                                  joinType:(MNSLinkType)joinType
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSManagedObjectContext *managedObjectContext = [fieldLeft managedObjectContext];
     NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:managedObjectContext];
     
-    RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
-                                         insertIntoManagedObjectContext: managedObjectContext];
+    RptqQueryLinks *queryLinks = [[self alloc] initWithEntity: rqtEd insertIntoManagedObjectContext: managedObjectContext];
     
     queryLinks.hasLeftField     = fieldLeft;
     queryLinks.hasRightField    = fieldRight;
@@ -130,8 +129,9 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     queryLinks.tableright       = fieldRight.inQueryTable.alias;
     queryLinks.fieldright       = fieldRight.databaseSchemaField.name;
     queryLinks.jointype         = [RptqQueryLinks ReuseIdForLinkType:joinType];
-    NSNumber *joinTypeSafe      = @(joinType);
-    queryLinks.jointypeenum     = joinTypeSafe;
+
+    NSNumber *jointypeenum      = [[NSNumber alloc] initWithShort: joinType];
+    queryLinks.jointypeenum     = jointypeenum;
 
     return queryLinks;
 }
