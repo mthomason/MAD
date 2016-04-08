@@ -789,20 +789,21 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         
         NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsDictionary.allValues;
         UIFontDescriptor *captionFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
-        CGFloat pointSize = captionFontDescriptor.pointSize / scrollView.zoomScale;
-        [sectionControlViewsArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(__kindof MADDesignerSectionLabel * _Nonnull controlView, NSUInteger idx, BOOL * _Nonnull stop) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                UIFont *font = [UIFont fontWithDescriptor:captionFontDescriptor size:pointSize];
-                NSDictionary *attributes = @{NSFontAttributeName : font};
-                CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1
-                                                                          attributes:attributes context:nil];
-                controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
-                controlView.font = font;
-                controlView.scale = self.scroller.zoomScale;
-                controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
-                [controlView setNeedsDisplay];
-            }];
-        }];
+        
+        UIFont *font = [UIFont fontWithDescriptor: captionFontDescriptor size: captionFontDescriptor.pointSize / scrollView.zoomScale];
+        NSDictionary *attributes = @{NSFontAttributeName : font};
+
+        MADDesignerSectionLabel *controlView;
+        for (controlView in sectionControlViewsArray) {
+            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1
+                                                                      attributes:attributes context:nil];
+            
+            controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
+            controlView.font = font;
+            controlView.scale = self.scroller.zoomScale;
+            controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
+            [controlView setNeedsDisplay];
+        }
         
         [self adjustScroller];
         [self.scroller.container invalidateIntrinsicContentSize];
