@@ -108,6 +108,7 @@
 
 #pragma mark - Actions
 
+
 static inline bool validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
 static inline bool validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
     return selectedIndex < (numberOfGroups * 2) + 5;
@@ -124,10 +125,10 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 }
 
 - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex {
-
+    
     NSUInteger numberOfGroups = self.hasQueryGroups.count;
     RptqDocumentSection *resultSection = nil;
-
+    
     if (validateSelectedIndexWithGroupCount(selectedIndex, numberOfGroups)) {
         
         RptqDocument *document = self.inDatabase.ownedByQueryAsStaticResource;
@@ -175,8 +176,6 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     }
     return resultSection;
 }
-
-
 
 - (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
     RptqDocumentSection *resultSection = nil;

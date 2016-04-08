@@ -113,7 +113,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     @property (nonatomic, strong) NSMutableSet          <__kindof NSManagedObjectID *>                              *selectedObjectIds;
 
     @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionView *>                         *sectionViewsArray;
-    @property (nonatomic, strong) NSMutableArray        <__kindof MADDesignerSectionLabel *>                        *sectionControlViewsArray;
 
     @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionView *>    *sectionViewsDictionary;
     @property (nonatomic, strong) NSMutableDictionary   <__kindof NSString *, __kindof MADDesignerSectionLabel *>   *sectionControlViewsDictionary;
@@ -461,7 +460,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     NSMutableArray *reportSectionKeyTracker = [[NSMutableArray alloc] init];
-    NSMutableArray *sectionControlViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     NSMutableArray *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
     NSMutableSet *passthroughContainers = [[NSMutableSet alloc] initWithCapacity:sectionEnumerator.count];
@@ -530,8 +528,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
             [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:collectionViewConstraints];
             
             [sectionViewsArray addObject:sectionView];
-            [sectionControlViewsArray addObject:sectionViewLabel];
-            
+
             NSString *collectionViewKey = [reportSection sectionKey];
             [self.sectionViewsDictionary setValue:sectionView forKey:collectionViewKey];
             [self.sectionControlViewsDictionary setValue:sectionViewLabel forKey:collectionViewKey];
@@ -550,7 +547,6 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     self.passthroughContainers = passthroughContainers;
     
     self.sectionViewsArray = sectionViewsArray;
-    self.sectionControlViewsArray = sectionControlViewsArray;
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
@@ -829,7 +825,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
         UIFont *captionFont = [MADDesignerViewController captionFont];
         CGFloat pointsize = captionFont.pointSize;
         
-        NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsArray;
+        NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.sectionControlViewsDictionary.allValues;
         [sectionControlViewsArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(__kindof MADDesignerSectionLabel * _Nonnull controlView, NSUInteger idx, BOOL * _Nonnull stop) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 controlView.font = [captionFont fontWithSize:pointsize / scale];
@@ -918,7 +914,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 }
 
 - (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
-    NSUInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
+    NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
@@ -939,7 +935,7 @@ static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
-    NSUInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
+    NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     
@@ -3110,7 +3106,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (NSSet *)passthroughViews {
-    NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsArray];
+    NSSet *sectionLabels = [NSSet setWithArray:self.sectionControlViewsDictionary.allValues];
     NSSet *passthroughViews = [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
     return passthroughViews;
 }

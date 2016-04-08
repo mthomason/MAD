@@ -196,7 +196,7 @@
     NSUInteger pageFooter        = 3 + (2 * numberOfGroups); //11
     NSUInteger documentFooter    = 4 + (2 * numberOfGroups); //12
     MNSDocumentSectionType result;
-
+    
     if (row == documentHeader) {
         result = MNSDocumentSectionTypeReportHeader;
     } else if (row == pageHeader) {
