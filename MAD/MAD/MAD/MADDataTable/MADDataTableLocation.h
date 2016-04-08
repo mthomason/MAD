@@ -11,13 +11,13 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MTDataTableLocation : NSObject
+@interface MADDataTableLocation : NSObject
     <NSCoding>
 
-@property (nonatomic, assign) NSUInteger column;
-@property (nonatomic, assign) NSUInteger row;
+    @property (nonatomic, assign) NSUInteger column;
+    @property (nonatomic, assign) NSUInteger row;
 
-+ (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column NS_RETURNS_RETAINED;
+    + (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column NS_RETURNS_RETAINED;
 
 @end
 

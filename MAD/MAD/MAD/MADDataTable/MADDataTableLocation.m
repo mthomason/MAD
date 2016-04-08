@@ -10,19 +10,19 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataTableLocation.h"
+#import "MADDataTableLocation.h"
 #import <Foundation/NSValue.h>
 #import <Foundation/NSCoder.h>
 
-@interface MTDataTableLocation ()
+@interface MADDataTableLocation ()
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column NS_DESIGNATED_INITIALIZER;
+    - (instancetype)init NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column NS_DESIGNATED_INITIALIZER;
 
 @end
 
-@implementation MTDataTableLocation
+@implementation MADDataTableLocation
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -36,18 +36,16 @@
     
     NSNumber *row = @(self.row);
     NSNumber *column = @(self.column);
-    [encoder encodeObject: row
-                    forKey: [MTDataTableLocation keyRow]];
     
-    [encoder encodeObject: column
-                    forKey: [MTDataTableLocation keyColumn]];
+    [encoder encodeObject: row forKey: [MADDataTableLocation keyRow]];
+    [encoder encodeObject: column forKey: [MADDataTableLocation keyColumn]];
     
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
-        NSNumber *row = [decoder decodeObjectForKey: [MTDataTableLocation keyRow]];
-        NSNumber *column = [decoder decodeObjectForKey: [MTDataTableLocation keyColumn]];
+        NSNumber *row = [decoder decodeObjectForKey: [MADDataTableLocation keyRow]];
+        NSNumber *column = [decoder decodeObjectForKey: [MADDataTableLocation keyColumn]];
         self.row = row.unsignedIntegerValue;
         self.column = column.unsignedIntegerValue;
     }
@@ -65,12 +63,12 @@
 }
 
 + (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column NS_RETURNS_RETAINED {
-    id result = [[MTDataTableLocation alloc] initWithRow:row inColumn:column];
+    id result = [[MADDataTableLocation alloc] initWithRow:row inColumn:column];
     return result;
 }
 
 + (NSString *)keyRow {
-    return NSStringFromSelector(@selector(identifier));
+    return NSStringFromSelector(@selector(row));
 }
 
 + (NSString *)keyColumn {
