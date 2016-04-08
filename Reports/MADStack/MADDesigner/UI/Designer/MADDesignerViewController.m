@@ -70,12 +70,16 @@
 static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
 static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
-static NSString * const MADImageBarButtonItemMadDesigner8                  = @"UIBarButtonItemMadDesigner8";
-static NSString * const MADImageBarButtonItemMadDesigner                   = @"UIBarButtonItemMadDesigner";
-static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
-static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
-static NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
-static NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
+static NSString * const MADImageBarButtonItemMadDesigner8                   = @"UIBarButtonItemMadDesigner8";
+static NSString * const MADImageBarButtonItemMadDesigner                    = @"UIBarButtonItemMadDesigner";
+static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer    = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
+static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer   = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
+static NSString * const MTSegueChooseWhitespaceSaveIdentifer                = @"MTSegueChooseWhitespaceSaveIdentifer";
+static NSString * const MTSegueChooseImageSaveIdentifer                     = @"MTSegueChooseImageSaveIdentifer";
+
+static NSString * const MTIdentifierSegueEditFieldExit                      = @"MTIdentifierSegueEditFieldExit";
+static NSString * const MTSegueNewDocumentObjectAggregateLabelSaveIdentifer = @"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer";
+static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer        = @"MTSegueNewDocumentObjectBarcodeSaveIdentifer";
 
 static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
 static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
@@ -198,17 +202,16 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
     } else if ([action.identifier isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
         [self saveWhiteSpace];
         
-    } else if ([action.identifier isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
-        [self tableViewControllerChooseFieldDidFinish: action.sourceViewController
-                                            withField: [action.sourceViewController queryField]];
+    } else if ([action.identifier isEqualToString:MTIdentifierSegueEditFieldExit]) {
+        [self tableViewControllerChooseFieldDidFinish: action.sourceViewController withField: [action.sourceViewController queryField]];
         
     } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         [self saveDynamicLabel: action.sourceViewController];
         
-    } else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
+    } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectAggregateLabelSaveIdentifer]) {
         [self saveAggregateLabel: action.sourceViewController];
         
-    } else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
+    } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectBarcodeSaveIdentifer]) {
         [self saveBarcodeLabel: action.sourceViewController];
         
     }
@@ -223,10 +226,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     
     return action == @selector(unwindToDesigner:) ?
-    self :
-    [super viewControllerForUnwindSegueAction: action
-                           fromViewController: fromViewController
-                                   withSender: sender];
+            self : [super viewControllerForUnwindSegueAction: action fromViewController: fromViewController withSender: sender];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -291,9 +291,7 @@ static const CGFloat MTReportDesignerSectionLabelPaddingRight   = 8.0000f;
 
 #pragma mark - UIViewController
 
-- (NSString *)title {
-    return [MADDesignerViewController MADDesigner];
-}
+- (NSString *)title { return [MADDesignerViewController MADDesigner]; }
 
 + (NSString *)MADDesigner {
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
